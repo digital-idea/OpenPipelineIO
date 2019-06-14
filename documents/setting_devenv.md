@@ -27,7 +27,7 @@ export PATH="$PATH:$GOROOT/bin:$GOBIN:/dept/rnd/bin"
 
 #### 라이브러리
 사용되는 라이브러리는 아래와 같습니다.
-~/gopath/src/ 폴더에 해당 라이브러리가 있는지 체크합니다.
 
-- [~/gopath/src/di/dipath](http://gogs.idea.co.kr/di/dipath)
-- [~/gopath/src/di/gopkg.in/mgo.v2](http://gogs.idea.co.kr/gopkg.in/mgo.v2)
+- [dipath](https://github.com/digital-idea/dipath)
+- [ditime](https://github.com/digital-idea/ditime)
+- [mgo](https://github.com/go-mgo/mgo)

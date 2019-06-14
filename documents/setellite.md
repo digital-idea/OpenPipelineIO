@@ -84,15 +84,7 @@ CSV 파일은 아무리 커도 3메가를 넘기 힘듭니다. 해외 느린 인
 
 #### 리눅스 터미널에서 CSV 추가하는 방법
 
-Setellite CSV파일은 CSI의 ![UploadSetellite](http://10.0.90.251/uploadsetellite) 메뉴를 통해서 업로드 할 수 있습니다.
-하지만 사용자가 원한다면, 수동으로 터미널에서 setellite2csv 명령어를 이용할 수도 있습니다.
-setellite2csv 명령어의 코드 레포지터리는 http://gogs.idea.co.kr/di/setellite2csv 입니다.
-
-터미널 사용법
-
-```
-$ setellite2csi -project [프로젝트명] -csv [csvfilename.csv] -overwrite [true|false]
-```
+Setellite CSV파일은 CSI의 ![UploadSetellite](http://127.0.0.1/uploadsetellite) 메뉴를 통해서 업로드 할 수 있습니다.
 
 #### 소프트웨어 유지비
 - 2018년 기준. 슈퍼바이저 20명 기준 년 약 400만원 선
@@ -106,7 +98,7 @@ $ setellite2csi -project [프로젝트명] -csv [csvfilename.csv] -overwrite [tr
 
 #### History
 - 2018.01 ~ : Setellite2 와 CSI의 연동부분 개발시작
-- 2018.01 : TakeD 프로젝트는 향후 발전을 위해서 OpenSource로 변경함. https://github.com/didev/taked
+- 2018.01 : TakeD 프로젝트는 향후 발전을 위해서 OpenSource로 변경함. https://github.com/digital-idea/taked 개발중단.
 - 2017.12 : TakeD 개발자 퇴사로 Setellite로 변경.
-- 2017.05 : 아이패드용 현장툴 프로젝트 TakeD 시작. http://gogs.idea.co.kr/legacy/taked
+- 2017.05 : 아이패드용 현장툴 프로젝트 TakeD 시작.
 - 2017.03 : 슈퍼바이저팀 요청. 아이패드 현장툴
