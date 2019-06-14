@@ -660,6 +660,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
+			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 일괄 생성하는 경우가 있다.
 			err = dipath.Ideapath(targetdir)
 			if err != nil {
 				log.Println(err)
