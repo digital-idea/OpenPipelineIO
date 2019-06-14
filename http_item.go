@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime"
 	"net/http"
@@ -632,44 +631,71 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Env.Date = ToFullTime(r.FormValue("EnvDate"))
 	NewItem.Env.Mov = dipath.Win2lin(r.FormValue("EnvMov"))
 
-	file, fileHandle, fileErr := r.FormFile("Thumbnail")
+	file, fileHandler, fileErr := r.FormFile("Thumbnail")
 	if fileErr == nil {
+		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
 		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
-		defer file.Close()
-		mediatype, fileParams, err := mime.ParseMediaType(fileHandle.Header.Get("Content-Disposition"))
+		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
+		if err != nil {
+			log.Println(err)
+		}
 		if *flagDebug {
 			fmt.Println(mediatype)
 			fmt.Println(fileParams)
 			fmt.Println()
 		}
+		tempPath := os.TempDir() + fileHandler.Filename
+		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
+			return
 		}
-		f, err := ioutil.TempFile(os.TempDir(), "")
-		if err != nil {
-			log.Println(err)
-		}
-		defer os.Remove(f.Name())
-		io.Copy(f, io.LimitReader(file, MaxFileSize))
-		target := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.Slug)
-		targetdir := filepath.Dir(target)
+		// 사용자가 업로드한 파일을 tempFile에 복사한다.
+		io.Copy(tempFile, io.LimitReader(file, MaxFileSize))
+		tempFile.Close()
+		defer os.Remove(tempPath)
+		//fmt.Println(tempPath)
+		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.Slug)
+		thumbnailDir := filepath.Dir(thumbnailPath)
 		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
-		_, err = os.Stat(targetdir)
+		_, err = os.Stat(thumbnailDir)
 		if os.IsNotExist(err) {
-			err := os.MkdirAll(targetdir, 0775)
+			err := os.MkdirAll(thumbnailDir, 0775)
 			if err != nil {
 				log.Println(err)
 			}
 			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 일괄 생성하는 경우가 있다.
-			err = dipath.Ideapath(targetdir)
+			err = dipath.Ideapath(thumbnailDir)
 			if err != nil {
 				log.Println(err)
 			}
 		}
-		argv := []string{f.Name(), "-resize", "410x222", "-gravity", "center", "-background", "black", "-extent", "410x222+0+0", "-border", "1", target}
-		convertcmd := "/usr/bin/convert"
+		// 이미지변환
+		/*
+			tempf, err := os.Open(tempPath)
+			if err != nil {
+				log.Println(err)
+			}
+
+			img, err := jpeg.Decode(bufio.NewReader(tempf))
+			if err != nil {
+				log.Fatal(err)
+			}
+			m := resize.Resize(410, 0, img, resize.Lanczos3)
+			out, err := os.Create(thumbnailPath)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer out.Close()
+			jpeg.Encode(out, m, nil)
+		*/
+		argv := []string{tempFile.Name(), "-resize", "410x222", "-gravity", "center", "-background", "black", "-extent", "410x222+0+0", "-border", "1", thumbnailPath}
+		convertcmd := "/usr/local/bin/convert" // macOS
+		//convertcmd := "/usr/bin/convert"       // CentOS7
 		if _, err := os.Stat(convertcmd); err != nil {
-			log.Println("ImageMagick Convert 명령어가 존재하지 않습니다. 서버에서 관리자로 yum install ImageMagick을 타이핑해주세요.")
+			log.Println("ImageMagick Convert 명령어가 존재하지 않습니다.")
+			log.Println("Linux: yum install ImageMagick")
+			log.Println("macOS: brew install imagemagick")
 		}
 		if *flagDebug {
 			fmt.Println(convertcmd, strings.Join(argv, " "))
@@ -678,7 +704,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		err = dipath.Ideapath(target)
+		err = dipath.Ideapath(thumbnailPath)
 		if err != nil {
 			log.Println(err)
 		}
