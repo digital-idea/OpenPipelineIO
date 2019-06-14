@@ -1,0 +1,186 @@
+{{define "help"}}
+<!DOCTYPE html>
+<head>
+<title>CSI</title>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="/assets/css/help.css">
+<link rel="icon" href="/assets/img/csi.png">
+</head>
+<body>
+{{template "head"}}
+<!--div id="wrapper"-->
+<!--좌측 네비게이션-->
+<div class="navbar">
+	<ul>
+	<li><a href="#top">CSI</a></li>
+	<li><a href="#Search">Search</a></li>
+	<li><a href="#Deadline/Tag">Deadline/Tag</a></li>
+	<li><a href="#Asset Tags">Asset Tags</a></li>
+	<li><a href="#Basic">Basic</a></li>
+	<li><a href="#Send Mail">Send Mail</a></li>
+	<li><a href="#Neutral Grade">Neutral Grade</a></li>
+	<li><a href="#Status">Status</a></li>
+	<li><a href="#Note">Note</a></li>
+	<li><a href="#일정설명">일정설명</a></li>
+	<li><a href="#Statistics">Statistics</a></li>
+	<li><a href="#For Developer">For Developer</a></li>
+	<li><a href="#기능요청방법">기능요청방법</a></li>
+	<li><a href="#보안사고 대응방법">보안사고 대응방법</a></li>
+	<li><a href="#데이터복원">데이터복원</a></li>
+	</ul>
+</div>
+<!--좌측 네비게이션 종료-->
+<!--content 영역 시작-->
+<div class="content">
+<div class="title">CSI</div>
+<div class="text">디지털아이디어의 검색방식을 가진 프로젝트 매니징 툴입니다.<br>
+빠른속도, 교육의 최소화가 컨셉 입니다.<br>
+프로젝트를 진행하면서 기능 및 형태가 수정될 수 있습니다.<br>
+
+<div class="title"><a name="Search"></a>Search</div>
+<div class="text">
+<img src="/assets/img/help/searchbar.jpg"><br>
+검색영역에서는 검색어, 상태, 정렬방식을 설정할 수 있습니다.<br>
+<tag>검색어1 검색어2 ...</tag> : 검색어를 연속을 입력하면, 각 검색어가 포함된 결과가 검색됩니다.<br>
+<tag>팀코드 아티스트명</tag> : 아티스트명으로 검색합니다.<br>
+<tag>model</tag>,<tag>mm</tag>,<tag>layout</tag>,<tag>ani</tag>,<tag>fx</tag>,<tag>mg</tag>,<tag>fursim</tag>,<tag>sim</tag>,<tag>crowd</tag>,<tag>light</tag>,<tag>comp</tag>,<tag>matte</tag>,<tag>env</tag> : 각팀의 테스크를 검색합니다.<br>
+<tag>all</tag>,<tag>올</tag>,<tag>전체</tag> : 전체가 검색됩니다.(샷+에셋)<br>
+<tag>shot</tag>, <tag>샷</tag>, <tag>전샷</tag>, <tag>전체샷</tag> : 샷만 검색합니다.<br>
+<tag>asset</tag>, <tag>assets</tag>, <tag>에셋</tag> : 에셋리스트를 보여줍니다.<br>
+<tag>1208</tag> : 당일 마감되어야 하는 테스크를 검색합니다.<br>
+<tag>2016-11-24</tag> : 해당 날짜의 데일리 mov를 검색합니다.<br>
+<tag>전권</tag> : 영화는 보통 1~8권으로 이루어져 있습니다. <tag>전권</tag>,<tag>1권</tag>..<tag>8권</tag>도 검색됩니다.<br>
+<tag>#태그명</tag> : #태그명으로 태그검색이 가능합니다.<br>
+<tag>2D</tag>,<tag>3D</tag> : 각각 2D, 3D샷이 검색됩니다.<br>
+<tag>texture</tag>, <tag>텍스쳐</tag> : 에셋리스트를 보여줍니다.<br>
+<tag>00:12:23:12</tag> : 키코드를 검색합니다.(스캔키코드, 작업키코드)<br>
+<tag>task:model</tag> &nbsp; <tag>1208</tag> : 각팀의 테스크별 마감일자를 검색합니다. ((ex) task:matte 1208, task:ani,light 1208)<br>
+<tag>task:model</tag> &nbsp; <tag>2017-12-08</tag> : 각팀의 테스크별 데일리를 검색합니다. ((ex) task:matte 2017-12-08, task:ani,light 2017-12-08)<br>
+</div>
+
+<div class="title"><a name="Deadline/Tag"></a>Deadline / Tag</div>
+<div class="text">
+<img src="/assets/img/help/tag.jpg"><br>
+마감일, 프로젝트 태그모습입니다. 클릭하면 관련 아이템이 검색됩니다.<br>
+빨강색이면 이번주, 주황색이면 다음주 관련 항목을 나타냅니다.
+</div>
+
+<div class="title"><a name="Asset Tags"></a>Asset Tags</div>
+<div class="text">
+<img src="/assets/img/help/assemblytag.png"><br>
+에셋의 타입은 <tag>char(케릭터)</tag>, <tag>env(환경)</tag>, <tag>prop(소품)</tag>, <tag>comp(합성에셋)</tag>, <tag>plant(식물)</tag>, <tag>vehicle(탈것)</tag> 이 있습니다.<br>
+에셋의 형태는 <tag>assembly</tag>와 <tag>component</tag>가 있습니다.<br>
+<tag>assembly</tag>는 2개이상의 집합으로 이루어진 에셋입니다. assembly는 assembly를 포함할 수 있습니다.<br>
+<tag>component</tag>는 더이상 나눌수 없는 최소단위의 에셋입니다.<br>
+어셈블리 태그 앞에는 링크아이콘이 붙어 있습니다. 링크아이콘을 누르면 이 어셈블리가 포함하고 있는 모든 에셋이 검색됩니다.<br>
+에셋태그를 수정할 때는 편집아이콘을 누르고 assettags 항목을 수정해주세요.<br>
+규칙1 : 부모 에셋의 이름을 넣으면 에셋이 연결됩니다.<br>
+규칙2 : 자신이 assembly 라면 자신의 이름도 assettags에 들어가야 합니다.<br>
+</div>
+
+<div class="title"><a name="Basic"></a>Basic</div>
+<div class="text">
+<img src="/assets/img/help/thumbnail.jpg"><br>
+기본 정보입니다.
+<tag>롤넘버(BO270)</tag>, <tag>샷이름(S036_0010)</tag>, <tag>타입(org)</tag>를 보여줍니다.<br>
+<tag>샷타입(2D)</tag>, <tag>렌즈디스토션사이즈(2112 x 1188)</tag>, <tag>2D,3D마감일</tag>과 <tag>핸들IN/OUT</tag>을 보여줍니다.<br>
+선택항목, 수정, Plate폴더열기, 샷 로그를 볼 수 있는 아이콘이 하단에 배치되어 있습니다.<br>
+썸네일을 클릭하면 영상이 플레이됩니다.
+</div>
+
+<div class="title"><a name="Send Mail"></a>Send Mail</div>
+<div class="text">
+<img src="/assets/img/help/sendmail.png"><br>
+메일프로그램과 웹브라우저 설정이 잘 되어있다면 샷 이름을 클릭시 프로젝트명과 샷이름이 적힌 메일창이 열립니다.<br>
+이 기능이 작동되기 위해서는 여러분의 브라우져에 메일프로그램 등록이 필요합니다.<br>
+firefox : <tag>편집 > 환경변수 > 프로그램탭 > mailto</tag><br>
+위 항목을 Thunderbird 메일로 바꾸어주세요.<br>
+Thunderbird는 <tag>/usr/bin/thunderbird</tag> 경로에 존재합니다.
+</div>
+
+<div class="title"><a name="Neutral Grade"></a>Neutral Grade</div>
+<div class="text">
+<img src="/assets/img/help/ocio.png"><br>
+플레이트를 CG작업에 유리한 컬러로 바꿀 때 사용합니다.<br>
+참고 : 브라우저 버전이 낮다면 청색 라인만 표시됩니다.<br>
+플레이트의 컬러를 바꾸면 당연히 Color작업과 관련된 팀을 위해서 표시가 되어야합니다.<br>
+CSI는 썸네일이미지 주변에 뉴트럴그레이드 표시가 생성됩니다.<br>
+이 기능은 뉴크와 연동되며 뉴크상 단축키는 다음과 같습니다. 컬러 저장하기:alt+[, 컬러 불러오기 alt+]<br>
+개념은 OCIO의 cc파일이 DB에 저장되고 아티스트간 공유하는 개념입니다.<br>
+</div>
+
+<div class="title"><a name="Status"></a>Status</div>
+<div class="text">
+<img src="/assets/img/help/statusbox.jpg"><br>
+작업내용이 각 Task별로 추적되는 상태박스 입니다.<br>
+<tag>팀명</tag>, <tag>▶ 표시</tag>, <tag>아티스트명</tag>, <tag>마감일</tag>이 적혀있습니다.<br>
+▶ 표시를 클릭하면 최근 등록된 mov가 재생됩니다.<br>
+아티스트명을 클릭하면 작업폴더로 바로 연결되는 <a href="{{.Wfs}}" class="blue">WFS(Web File System)</a>이 실행됩니다.
+</div>
+
+<div class="title"><a name="Note"></a>Note</div>
+<div class="text">
+<img src="/assets/img/help/description.jpg"><br>
+작업에 필요한 기본정보, 레퍼런스, 소스, 수정내용, 태그리스트 순으로 적혀있습니다.
+</div>
+
+<div class="title"><a name="일정설명"></a>일정설명</div>
+<div class="text">
+<guide>편집아이콘을 누르면 각 Task에 일정설정부분이 보입니다.</guide><br>
+<img src="/assets/img/help/date.jpg"><br>
+<tag>사람아이콘</tag> : 아티스트명을 적습니다.<br>
+<tag>S</tag> : 작업시작일 입니다.<br>
+<tag>?</tag> : 작업예상일 입니다.<br>
+<tag>1</tag> : 1차마감일 입니다. 1차 렌더이미지, 테스트데이터..등등 최종 마감전 팀간 교환할 데이터의 마감일이 존재할 때 사용합니다.<br>
+<tag>2</tag> : 2차마감일 입니다. PM과 약속하는 최종 마감일이며 PM입력기와 연동됩니다.<br>
+<tag>퀵타임</tag> : 작업 Mov파일 경로를 입력하는 곳입니다.<br>
+</div>
+
+<div class="title"><a name="For Developer"></a>For Developer</div>
+<div class="text">
+개발자라면 파이썬을 이용해서 CSI의 정보를 가지고 오거나 바꿀 수 있습니다.<br>
+<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_project.md" class="blue">프로젝트 관련 API</a><br>
+<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_item.md" class="blue">샷,에셋 관련 API</a>
+</div>
+
+<div class="title"><a name="기능요청방법"></a>기능요청방법</div>
+<div class="text">
+우선순위를 가지고 개발을 하게됩니다.<br>
+자신의 의견을 이슈에 등록해주세요.<br>
+<a href="https://github.com/digital-idea/csi3/issues" class="blue">CSI3 Github Issue Page</a><br>
+</div>
+
+<div class="title"><a name="보안사고 대응방법"></a>보안사고 대응방법</div>
+
+<div class="subtext">
+<ol>
+<li>보안팀(IT팀)에게 사고내용 보고</li>
+<li>운영진(PD,PM,파이프라인팀,부문장,본부장,CEO)에게 알림</li>
+<li>보안문제 파급효과 및 우선대처상황 분석 회의소집</li>
+<li>처리가능한 문제부터 처리</li>
+<li>클라이언트에게 상황전달</li>
+<li>영향을 받는 사업파트너 통지</li>
+<li>사법당국 통지 : 1007, 10th Fl, Monaco Bldg, 1316-5 Seocho-dong, Seocho-gu, Seoul 137-856, Korea</li>
+<li>온라인신고 : http://www.mpaa.org/contact-us/</li>
+<li>저작권침해 24시간 제보전화 : 싱가포르(아시아태평양지역) +65 6253-1033</li>
+<li>추후 발생하는 사고 세부사항 보고</li>
+</ol>
+</div>
+
+<div class="title"><a name="데이터복원"></a>서버 재해시 데이터복원에 필요한 파일</div>
+<div class="text">
+소스코드는 아래 리포지터리중 하나라도 남아있다면 CSI를 복원시킬 수 있다.<br>
+DB는 한달을 백업한다. 최대 30일 이전까지 되돌릴 수 있다.<br>
+각 공간별 작은 화재시 소스데이터는 분산되어있기 때문에 복구할 수 있다.<br>
+DB데이터는 /lustre/INHouse/Tool/DBbackup 경로가 손상되면 복구할 수 없다.<br>
+원격백업서버는 없다. 지진등으로 건물전체가 무너지면 데이터 복구가 힘들다.<br>
+</div>
+<div class="subtext">
+<ul>
+	<li>한달기준 DB백업경로 : /lustre/INHouse/Tool/DBbackup</li>
+	<li>소스 경로 : https://github.com/digital-idea/csi3</li>
+</ul>
+</div>
+
+{{template "footer" }}
+{{end}}

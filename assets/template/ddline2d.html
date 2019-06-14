@@ -1,0 +1,8 @@
+{{define "ddline2d"}}
+<div class="taggroup"><b>2D마감</b> {{range .Ddline2d -}}
+	{{if eq . $.Searchop.Searchword -}}
+		<a href="/ddline/2d/{{$.Searchop.Project}}/{{.}}"><div class="date_select">{{.}}</div></a>&nbsp;
+	{{- else -}}
+		<a href="/ddline/2d/{{$.Searchop.Project}}/{{.}}"><div class="date{{CheckDdline .}}">{{.}}</div></a>&nbsp;
+	{{- end}}
+{{- end}}</div>{{end}}

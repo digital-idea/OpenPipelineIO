@@ -1,0 +1,254 @@
+{{define "setellite" }}
+{{template "head"}}
+<div id="content">
+<div class="setelliteSearch">
+    <form action="/setellite" method="POST"  class="searchbox">
+        <select name="project" class="selectproject">
+            {{range .Projectlist}}<option value="{{.}}" {{if eq $.Project .}}selected{{end}}>{{.}}</option>{{end}}
+        </select>
+        <input class="searchform" type="text" size="45" maxlength="256" name="searchWord" value="{{$.Searchword}}">
+        <button class="button" id="button">SEARCH</button>
+    </form>
+</div>
+<div>{{if .Error}}{{.Error}}{{end}}</div>
+<!--Setellite 정보-->
+    <div><p><strong>Setellite Info</strong></p></div>
+        <div id="contentSetellite">
+            <div class="divTable">
+                <div class="divTableBody">
+                    <!--Items 제목-->
+                    <div class="itemsHead">
+                        <div class="divTableCell">Take</div>
+                        <div class="divTableCell">기본정보</div>
+                        <div class="divTableCell">카메라정보</div>
+                        <div class="divTableCell">렌즈정보</div>
+                        <!--{{range .Items}}{{if .StereoConvergence -}}-->
+                        <div class="divTableCell">입체정보</div>
+                        <!--{{- end}}{{end}}-->
+                        <div class="divTableCell">사용자기록</div>
+                    </div>
+{{range .Items}}
+                    <div class="divTableRowItems">
+                        <!--Take-->
+                        <div class="divTableCell setelliteTake" takeStatus="{{.TakeName}}">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="divTableRowTake">
+                                        <div>Take {{.TakeNumber}}</div>
+                                    </div>
+                                    <div class="divTableRowTake">
+                                        <div>{{.TakeName}}</div>
+                                    </div>
+                                    <div class="divTableRowTake">
+                                        <div><a href="/setellite?project={{$.Project}}&searchword={{.RollMedia}}">{{.RollMedia}}</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--기본정보-->
+                        <div class="divTableCell setelliteBasic">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="itemsSubhead">기본정보</div>
+                                    <div class="divTableRow">
+                                        <info>{{.ShootDay}}회차(ShootDay) / {{.TimestampStart}}~{{.TimestampStop}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>슬레이트넘버(SlateNumber) : </subtitle>{{.SlateNumber}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>씬넘버(SceneNumber) : </subtitle>{{.SceneNumber}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>스토리보드넘버(StoryboardNumber) : </subtitle>{{.StoryboardNumber}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>장소(SetLocation) : </subtitle>{{.SetLocation}} / <subtitle>실내/실외(InteriorExterior) : </subtitle>{{.InteriorExterior}} / <subtitle>날씨(Weather) : </subtitle>{{.Weather}} / <subtitle>시간대(ScriptTime) : </subtitle>{{.ScriptTime}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>작성자(Wrangler) : </subtitle>{{.Wrangler}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>작성장소(ScriptLocation) : </subtitle>{{.ScriptLocation}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>작성시간(Timestamp) : </subtitle>{{.Timestamp}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        {{if .Episode}}
+                                        <info><subtitle>에피소드명(Episode) : </subtitle>{{.Episode}}</info>
+                                        {{end}}
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>촬영유닛(Unit) : </subtitle>{{.Unit}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>작업내용(VFXShot) : </subtitle>{{.VFXShot}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>작업요소(VFXWork) : </subtitle>{{.VFXWork}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>샷설명(ShotDescription) : </subtitle>
+                                        {{.ShotDescription}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>CG요소(ElementType) : </subtitle>{{.ElementType}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>추가소스(SetMedia) : </subtitle>{{.SetMedia}}</info>
+                                    </div>
+                                    {{if .HDRiFilename}}
+                                    <div class="divTableRow">
+                                        <info><subtitle>HDRi파일명(HDRiFilename) : </subtitle>{{.HDRiFilename}}</info>
+                                    </div>
+                                        {{end}}
+                                </div>
+                            </div>
+                        </div>
+                        <!--카메라정보-->
+                        <div class="divTableCell setelliteCamera">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="itemsSubhead">카메라정보</div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>모델명(Model) : </subtitle>{{.CameraModel}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>이름(Name) : </subtitle>{{.CameraName}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>헤드(Head) : </subtitle>{{.CameraHead}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>그립(Grip) : </subtitle>{{.CameraGrip}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>움직임(Movement) : </subtitle>{{.CameraMovement}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>F-Stop(FStop) : </subtitle>{{.CameraFStop}} ( {{.CameraFStopStart}} - {{.CameraFStopStop}} )</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>틸트(Tilt) : </subtitle>{{.CameraTilt}} ( {{.CameraTiltStart}} - {{.CameraTiltStop}} )</info>
+                                    </div>
+                                    {{if .CameraDutch}}
+                                    <div class="divTableRow">
+                                        <info><subtitle>더치(Dutch) : </subtitle>{{.CameraDutch}}</info>
+                                    </div>{{end}}
+                                    <div class="divTableRow">
+                                        <info><subtitle>FPS : </subtitle>{{.Framerate}} / <subtitle>ISO : </subtitle>{{.ISORating}} / <subtitle>ShutterAngle : </subtitle>{{.ShutterAngle}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>색온도(ColorTemperature) : </subtitle>{{.ColorTemperature}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>포멧방식(FormatStock) : </subtitle>{{.FormatStock}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>해상도(Resolution) : </subtitle>{{.Resolution}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>화면비(AspectRatio) : </subtitle>{{.AspectRatio}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>픽셀비(PixelAspectRatio) : </subtitle>{{.PixelAspectRatio}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>압축비(CompressionRatio) : </subtitle>{{.CompressionRatio}}</info>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--렌즈정보-->
+                        <div class="divTableCell setelliteLens">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="itemsSubhead">렌즈정보</div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>Model : </subtitle>{{.LensModel}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>Type : </subtitle>{{.LensType}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>필터(Filter) : </subtitle>{{.Filter}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>FocalLength : </subtitle>{{.LensFocalLength}} ( {{.LensFocalLengthStart}} - {{.LensFocalLengthStop}} )</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>높이(Height) : </subtitle>{{.LensHeight}} ( {{.LensHeightStart}} - {{.LensHeightStop}} ) {{.LensHeightUnit}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>F-Stop(FStop) : </subtitle>{{.CameraFStop}} ( {{.CameraFStopStart}} - {{.CameraFStopStop}} )</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>포커스(Focus) : </subtitle>{{.LensFocus}} ( {{.LensFocusStart}} - {{.LensFocusStop}} ) {{.LensFocusUnit}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>피사체거리(SubjectDistance) : </subtitle>{{.SubjectDistance}} ( {{.SubjectDistanceStart}} - {{.SubjectDistanceStop}} ) {{.SubjectDistanceUnit}}</info>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--입체정보-->
+                        {{if .StereoConvergence -}}
+                        <div class="divTableCell setelliteStereo">
+                            <div class="divTable">
+                                <div class="divTableBody">
+                                    <div class="itemsSubhead">입체정보</div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoConvergence -}}StereoConvergence : </subtitle>{{.StereoConvergence}}{{- end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoIA}}StereoIA : </subtitle>{{.StereoIA}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoCameraModel}}카메라명(StereoCameraModel) : </subtitle>{{.StereoCameraModel}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoRigOrientation}}StereoRigOrientation : </subtitle>{{.StereoRigOrientation}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoThruCamEye}}기준Eye(StereoThruCamEye) : </subtitle>{{.StereoThruCamEye}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoCameraHead}}카메라헤드(StereoCameraHead) : </subtitle>{{.StereoCameraHead}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoLensModel}}렌즈모델(StereoLensModel) : </subtitle>{{.StereoLensModel}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoLensFocalLength}}StereoLensFocalLength : </subtitle>{{.StereoLensFocalLength}}{{end}}</info>
+                                    </div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>{{if .StereoLensType}}StereoLensType : </subtitle>{{.StereoLensType}}{{end}}</info>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{- end}}
+                        <!--사용자기록-->
+                        <div class="divTableCell Notes">
+                            <div class="divTable">
+                                 <div class="divTableBody">
+                                    <div class="itemsSubhead">사용자기록</div>
+                                    <div class="divTableRow">
+                                        <info><subtitle>사용자기록(Notes) : </subtitle>{{if .Notes}}{{.Notes}}{{end}}</info>
+                                    </div>
+                                    <!--등록시간-->
+                                    <div class="divTableRow">
+                                        <p class="setelliteUpdatetime">DB등록시간(Updatetime) : {{.Updatetime}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+{{end}}
+                </div>
+            </div>
+        </div>
+</div>
+{{template "footer"}}
+{{end}}

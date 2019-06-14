@@ -1,0 +1,29 @@
+{{define "ddline"}}
+<div class="ddline">
+    <div class="projectSearch">
+        <b>[<span id="projectId">{{.Project.ID}}</span>]</b>
+        {{$total := Minus .Infobarnum.Total .Infobarnum.None }}
+        ({{Add .Infobarnum.Done .Infobarnum.Hold}} / {{Minus $total .Infobarnum.Omit}}) /
+        <b>검색 {{.Searchnum.Search}}건</b> /
+        2D({{.Searchnum.Shot2d}}),
+        3D({{.Searchnum.Shot3d}}),
+        Shot({{.Searchnum.Shot}}),
+        Assets({{.Searchnum.Assets}})
+    </div>
+    <div class="ddlineInfo">
+        <b>2D마감: </b>{{range .Ddline2d -}}
+        {{if eq . $.Searchop.Searchword -}}
+        <a href="/ddline/2d/{{$.Searchop.Project}}/{{.}}"><div class="date_select">{{.}}</div></a>&nbsp;
+        {{- else -}}
+        <a href="/ddline/2d/{{$.Searchop.Project}}/{{.}}"><div class="date{{CheckDdline .}}">{{.}}</div></a>&nbsp;
+        {{- end}}
+        {{- end}}/ <b>3D마감: </b>{{range .Ddline3d -}}
+        {{if eq . $.Searchop.Searchword -}}
+        <a href="/ddline/3d/{{$.Searchop.Project}}/{{.}}"><div class="date_select">{{.}}</div></a>&nbsp;
+        {{- else -}}
+        <a href="/ddline/3d/{{$.Searchop.Project}}/{{.}}"><div class="date{{CheckDdline .}}">{{.}}</div></a>&nbsp;
+        {{- end}}
+        {{- end}}
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,13 @@
+{{define "userinfo" }}
+{{template "head"}}
+<div id="content">
+유저 정보리스트입니다.<br>
+<br>
+{{range .Users}}<p> 
+	{{.ID}} 
+	{{.Name}}
+	{{.Email}} 
+</p>{{end}}
+</div>
+{{template "footer"}}
+{{end}}

@@ -1,0 +1,888 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"mime"
+	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
+
+	"github.com/digital-idea/dipath"
+	"gopkg.in/mgo.v2"
+)
+
+// handleSearch 함수는 검색결과를 반환하는 페이지다.
+func handleSearch(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Projectlist []string
+		Project     Project
+		Searchop    SearchOption
+		Infobarnum  Infobarnum
+		Searchnum   Infobarnum
+		Items       []Item
+		Ddline3d    []string
+		Ddline2d    []string
+		Tags        []string
+		Assettags   []string
+		Dilog       string
+		Wfs         string
+	}
+	rcp := recipe{}
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Dilog = *flagDILOG
+	rcp.Wfs = *flagWFS
+	//옵션불러오기.
+	rcp.Searchop.Project = r.FormValue("Project")
+	rcp.Searchop.Searchword = r.FormValue("Searchword")
+	rcp.Searchop.Assign = str2bool(r.FormValue("Assign"))
+	rcp.Searchop.Ready = str2bool(r.FormValue("Ready"))
+	rcp.Searchop.Wip = str2bool(r.FormValue("Wip"))
+	rcp.Searchop.Confirm = str2bool(r.FormValue("Confirm"))
+	rcp.Searchop.Done = str2bool(r.FormValue("Done"))
+	rcp.Searchop.Omit = str2bool(r.FormValue("Omit"))
+	rcp.Searchop.Hold = str2bool(r.FormValue("Hold"))
+	rcp.Searchop.Out = str2bool(r.FormValue("Out"))
+	rcp.Searchop.None = str2bool(r.FormValue("None"))
+	rcp.Searchop.Sortkey = r.FormValue("Sortkey")
+	rcp.Searchop.Template = r.FormValue("Template")
+
+	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
+	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
+	cookie := http.Cookie{Name: "project", Value: rcp.Searchop.Project, MaxAge: 0}
+	http.SetCookie(w, &cookie)
+
+	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
+		rcp.Items, err = Search(session, rcp.Searchop)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+	}
+	rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Project, err = getProject(session, r.FormValue("Project"))
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	if len(rcp.Items) == 0 {
+		err = templates.ExecuteTemplate(w, "searchno", rcp)
+		if err != nil {
+			log.Println("Template Execution Error: ", err)
+			return
+		}
+		return
+	}
+	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleAssettags는 에셋태그 페이지이다.
+func handleAssettags(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Projectlist []string
+		Project     Project
+		Searchop    SearchOption
+		Infobarnum  Infobarnum
+		Searchnum   Infobarnum
+		Items       []Item
+		Ddline3d    []string
+		Ddline2d    []string
+		Tags        []string
+		Assettags   []string
+		Dilog       string
+		Wfs         string
+	}
+	rcp := recipe{}
+	rcp.Dilog = *flagDILOG
+	rcp.Wfs = *flagWFS
+	rcp.Searchop.Template = "csi3"
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	// 옵션불러오기 및 초기화.
+	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[2])
+	mode := strings.Split(r.URL.Path, "/")[1] // assettags 또는 assettree 문자열이다.
+
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+
+	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[2]
+	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
+	rcp.Searchop.setStatusDefault()
+	rcp.Searchop.Sortkey = "slug"
+	rcp.Searchop.Template = "csi3"
+
+	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
+		rcp.Searchop.setStatusAll() // 에셋태그 검색시 전체상태를 검색한다.
+		if mode == "assettree" {
+			rcp.Items, err = SearchAssetTree(session, rcp.Searchop)
+		} else {
+			rcp.Items, err = SearchAssettags(session, rcp.Searchop)
+		}
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+	}
+	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
+	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
+	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleEdit 함수는 Item 편집페이지이다.
+func handleEdit(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	q := r.URL.Query()
+	editType := q.Get("type")
+	project := q.Get("project")
+	slug := q.Get("slug")
+	id := q.Get("id") // 프로젝트id에 사용할 것
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	switch editType {
+	case "item":
+		type recipe struct {
+			Project Project
+			Item    Item
+		}
+		rcp := recipe{}
+		defer session.Close()
+		rcp.Project, err = getProject(session, project)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Item, err = getItem(session, project, slug)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		err = templates.ExecuteTemplate(w, "editItem", rcp)
+		if err != nil {
+			log.Println("Template Execution Error: ", err)
+			return
+		}
+		return
+	case "project":
+		rcp, err := getProject(session, id)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		err = templates.ExecuteTemplate(w, "editProject", rcp)
+		if err != nil {
+			log.Println("Template Execution Error: ", err)
+			return
+		}
+		return
+	default:
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+}
+
+// handleTags 함수는 태그 클릭시 출력되는 페이지이다.
+func handleTags(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Projectlist []string
+		Project     Project
+		Searchop    SearchOption
+		Infobarnum  Infobarnum
+		Searchnum   Infobarnum
+		Items       []Item
+		Ddline3d    []string
+		Ddline2d    []string
+		Tags        []string
+		Assettags   []string
+		Dilog       string
+		Wfs         string
+	}
+	rcp := recipe{}
+	rcp.Dilog = *flagDILOG
+	rcp.Wfs = *flagWFS
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	// 옵션불러오기 및 초기화.
+	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[2])
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[2]
+	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
+	rcp.Searchop.setStatusDefault()
+	rcp.Searchop.Sortkey = "slug"
+	rcp.Searchop.Template = "csi3"
+	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
+		rcp.Searchop.setStatusAll() //태그검색은 전체상태를 검색한다.
+		rcp.Items, err = SearchTag(session, rcp.Searchop)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+	}
+	// 태그는 전체 검색을 하고 #으로 시작한다.
+	// Search 박스의 상태 옵션은 기본형이어야 한다
+	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword
+	rcp.Searchop.setStatusDefault()
+	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다.
+func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	//var logstring string
+	//기존 Item의 값을 가지고 온다.
+	project := r.FormValue("project")
+	slug := r.FormValue("slug")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	CurrentItem, err := getItem(session, project, slug)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
+	NewItem := CurrentItem //과거값을 먼저 복사한다.
+	NewItem.Rollmedia = r.FormValue("Rollmedia")
+	NewItem.Platesize = r.FormValue("Platesize")
+	NewItem.Dsize = r.FormValue("Dsize")
+	NewItem.Rendersize = r.FormValue("Rendersize")
+	NewItem.Thummov = r.FormValue("thummov")
+	NewItem.Beforemov = r.FormValue("Beforemov")
+	NewItem.Aftermov = r.FormValue("Aftermov")
+	NewItem.Retimeplate = r.FormValue("retimeplate")
+	if CurrentItem.Type == "org" || CurrentItem.Type == "left" { // 일반상황과 입체상황을 체크한다.
+		NewItem.Rnum = strings.ToUpper(r.FormValue("Rnum"))
+		NewItem.OCIOcc = r.FormValue("OCIOcc")
+		NewItem.PlateIn, err = strconv.Atoi(r.FormValue("PlateIn"))
+		if err != nil {
+			NewItem.PlateIn = CurrentItem.PlateIn // 에러가 나면 과거값으로 놔둔다.
+		}
+		NewItem.PlateOut, err = strconv.Atoi(r.FormValue("PlateOut"))
+		if err != nil {
+			NewItem.PlateOut = CurrentItem.PlateOut // 에러가 나면 과거값으로 놔둔다.
+		}
+		NewItem.JustIn, err = strconv.Atoi(r.FormValue("JustIn"))
+		if err != nil {
+			NewItem.JustIn = CurrentItem.JustIn // 에러가 나면 과거값으로 놔둔다.
+		}
+		NewItem.JustOut, err = strconv.Atoi(r.FormValue("JustOut"))
+		if err != nil {
+			NewItem.JustOut = CurrentItem.JustOut // 에러가 나면 과거값으로 놔둔다.
+		}
+	}
+	NewItem.ObjectidIn, err = strconv.Atoi(r.FormValue("ObjectidIn"))
+	if err != nil {
+		NewItem.ObjectidIn = CurrentItem.ObjectidIn // 에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.ObjectidOut, err = strconv.Atoi(r.FormValue("ObjectidOut"))
+	if err != nil {
+		NewItem.ObjectidOut = CurrentItem.ObjectidOut // 에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Ddline2d = ToFullTime(r.FormValue("Ddline2d"))
+	NewItem.Ddline3d = ToFullTime(r.FormValue("Ddline3d"))
+	NewItem.Tag = Str2Tags(r.FormValue("Tag"))
+	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
+	// 카메라 퍼블리쉬 관련 셋팅
+	NewItem.ProductionCam.PubTask = r.FormValue("ProductionCamPubTask")
+	NewItem.ProductionCam.PubPath = r.FormValue("ProductionCamPubPath")
+	NewItem.ProductionCam.Projection = str2bool(r.FormValue("ProductionCamProjection"))
+	//concept
+	NewItem.Concept.Status = r.FormValue("ConceptStatus")
+	NewItem.Concept.User = r.FormValue("ConceptUser")
+	NewItem.Concept.UserNote = r.FormValue("ConceptUserNote")
+	NewItem.Concept.Startdate = ToFullTime(r.FormValue("ConceptStartdate"))
+	NewItem.Concept.Due, err = strconv.Atoi(r.FormValue("ConceptDue"))
+	if err != nil {
+		NewItem.Concept.Due = CurrentItem.Concept.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Concept.Predate = ToFullTime(r.FormValue("ConceptPredate"))
+	NewItem.Concept.Date = ToFullTime(r.FormValue("ConceptDate"))
+	NewItem.Concept.Mov = dipath.Win2lin(r.FormValue("ConceptMov"))
+	//model
+	NewItem.Model.Status = r.FormValue("ModelStatus")
+	NewItem.Model.User = r.FormValue("ModelUser")
+	NewItem.Model.UserNote = r.FormValue("ModelUserNote")
+	NewItem.Model.Startdate = ToFullTime(r.FormValue("ModelStartdate"))
+	NewItem.Model.Due, err = strconv.Atoi(r.FormValue("ModelDue"))
+	if err != nil {
+		NewItem.Model.Due = CurrentItem.Model.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Model.Predate = ToFullTime(r.FormValue("ModelPredate"))
+	NewItem.Model.Date = ToFullTime(r.FormValue("ModelDate"))
+	NewItem.Model.Mov = dipath.Win2lin(r.FormValue("ModelMov"))
+	//mm
+	NewItem.Mm.Status = r.FormValue("MmStatus")
+	NewItem.Mm.User = r.FormValue("MmUser")
+	NewItem.Mm.UserNote = r.FormValue("MmUserNote")
+	NewItem.Mm.Startdate = ToFullTime(r.FormValue("MmStartdate"))
+	NewItem.Mm.Due, err = strconv.Atoi(r.FormValue("MmDue"))
+	if err != nil {
+		NewItem.Mm.Due = CurrentItem.Mm.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Mm.Predate = ToFullTime(r.FormValue("MmPredate"))
+	NewItem.Mm.Date = ToFullTime(r.FormValue("MmDate"))
+	NewItem.Mm.Mov = r.FormValue("MmMov")
+	//layout
+	NewItem.Layout.Status = r.FormValue("LayoutStatus")
+	NewItem.Layout.User = r.FormValue("LayoutUser")
+	NewItem.Layout.UserNote = r.FormValue("LayoutUserNote")
+	NewItem.Layout.Startdate = ToFullTime(r.FormValue("LayoutStartdate"))
+	NewItem.Layout.Due, err = strconv.Atoi(r.FormValue("LayoutDue"))
+	if err != nil {
+		NewItem.Layout.Due = CurrentItem.Layout.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Layout.Predate = ToFullTime(r.FormValue("LayoutPredate"))
+	NewItem.Layout.Date = ToFullTime(r.FormValue("LayoutDate"))
+	NewItem.Layout.Mov = r.FormValue("LayoutMov")
+	//ani
+	NewItem.Ani.Status = r.FormValue("AniStatus")
+	NewItem.Ani.User = r.FormValue("AniUser")
+	NewItem.Ani.UserNote = r.FormValue("AniUserNote")
+	NewItem.Ani.Startdate = ToFullTime(r.FormValue("AniStartdate"))
+	NewItem.Ani.Due, err = strconv.Atoi(r.FormValue("AniDue"))
+	if err != nil {
+		NewItem.Ani.Due = CurrentItem.Ani.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Ani.Predate = ToFullTime(r.FormValue("AniPredate"))
+	NewItem.Ani.Date = ToFullTime(r.FormValue("AniDate"))
+	NewItem.Ani.Mov = r.FormValue("AniMov")
+	//fx
+	NewItem.Fx.Status = r.FormValue("FxStatus")
+	NewItem.Fx.User = r.FormValue("FxUser")
+	NewItem.Fx.UserNote = r.FormValue("FxUserNote")
+	NewItem.Fx.Startdate = ToFullTime(r.FormValue("FxStartdate"))
+	NewItem.Fx.Due, err = strconv.Atoi(r.FormValue("FxDue"))
+	if err != nil {
+		NewItem.Fx.Due = CurrentItem.Fx.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Fx.Predate = ToFullTime(r.FormValue("FxPredate"))
+	NewItem.Fx.Date = ToFullTime(r.FormValue("FxDate"))
+	NewItem.Fx.Mov = r.FormValue("FxMov")
+	//mg
+	NewItem.Mg.Status = r.FormValue("MgStatus")
+	NewItem.Mg.User = r.FormValue("MgUser")
+	NewItem.Mg.UserNote = r.FormValue("MgUserNote")
+	NewItem.Mg.Startdate = ToFullTime(r.FormValue("MgStartdate"))
+	NewItem.Mg.Due, err = strconv.Atoi(r.FormValue("MgDue"))
+	if err != nil {
+		NewItem.Mg.Due = CurrentItem.Mg.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Mg.Predate = ToFullTime(r.FormValue("MgPredate"))
+	NewItem.Mg.Date = ToFullTime(r.FormValue("MgDate"))
+	NewItem.Mg.Mov = dipath.Win2lin(r.FormValue("MgMov"))
+	//temp1
+	NewItem.Temp1.Title = r.FormValue("Temp1Title")
+	NewItem.Temp1.Status = r.FormValue("Temp1Status")
+	NewItem.Temp1.User = r.FormValue("Temp1User")
+	NewItem.Temp1.UserNote = r.FormValue("Temp1UserNote")
+	NewItem.Temp1.Startdate = ToFullTime(r.FormValue("Temp1Startdate"))
+	NewItem.Temp1.Due, err = strconv.Atoi(r.FormValue("Temp1Due"))
+	if err != nil {
+		NewItem.Temp1.Due = CurrentItem.Temp1.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Temp1.Predate = ToFullTime(r.FormValue("Temp1Predate"))
+	NewItem.Temp1.Date = ToFullTime(r.FormValue("Temp1Date"))
+	NewItem.Temp1.Mov = r.FormValue("Temp1Mov")
+	//previz
+	NewItem.Previz.Status = r.FormValue("PrevizStatus")
+	NewItem.Previz.User = r.FormValue("PrevizUser")
+	NewItem.Previz.UserNote = r.FormValue("PrevizUserNote")
+	NewItem.Previz.Startdate = ToFullTime(r.FormValue("PrevizStartdate"))
+	NewItem.Previz.Due, err = strconv.Atoi(r.FormValue("PrevizDue"))
+	if err != nil {
+		NewItem.Previz.Due = CurrentItem.Previz.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Previz.Predate = ToFullTime(r.FormValue("PrevizPredate"))
+	NewItem.Previz.Date = ToFullTime(r.FormValue("PrevizDate"))
+	NewItem.Previz.Mov = r.FormValue("PrevizMov")
+	//fur
+	NewItem.Fur.Status = r.FormValue("FurStatus")
+	NewItem.Fur.User = r.FormValue("FurUser")
+	NewItem.Fur.UserNote = r.FormValue("FurUserNote")
+	NewItem.Fur.Startdate = ToFullTime(r.FormValue("FurStartdate"))
+	NewItem.Fur.Due, err = strconv.Atoi(r.FormValue("FurDue"))
+	if err != nil {
+		NewItem.Fur.Due = CurrentItem.Fur.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Fur.Predate = ToFullTime(r.FormValue("FurPredate"))
+	NewItem.Fur.Date = ToFullTime(r.FormValue("FurDate"))
+	NewItem.Fur.Mov = r.FormValue("FurMov")
+	//sim
+	NewItem.Sim.Status = r.FormValue("SimStatus")
+	NewItem.Sim.User = r.FormValue("SimUser")
+	NewItem.Sim.UserNote = r.FormValue("SimUserNote")
+	NewItem.Sim.Startdate = ToFullTime(r.FormValue("SimStartdate"))
+	NewItem.Sim.Due, err = strconv.Atoi(r.FormValue("SimDue"))
+	if err != nil {
+		NewItem.Sim.Due = CurrentItem.Sim.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Sim.Predate = ToFullTime(r.FormValue("SimPredate"))
+	NewItem.Sim.Date = ToFullTime(r.FormValue("SimDate"))
+	NewItem.Sim.Mov = r.FormValue("SimMov")
+	//crowd
+	NewItem.Crowd.Status = r.FormValue("CrowdStatus")
+	NewItem.Crowd.User = r.FormValue("CrowdUser")
+	NewItem.Crowd.UserNote = r.FormValue("CrowdUserNote")
+	NewItem.Crowd.Startdate = ToFullTime(r.FormValue("CrowdStartdate"))
+	NewItem.Crowd.Due, err = strconv.Atoi(r.FormValue("CrowdDue"))
+	if err != nil {
+		NewItem.Crowd.Due = CurrentItem.Crowd.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Crowd.Predate = ToFullTime(r.FormValue("CrowdPredate"))
+	NewItem.Crowd.Date = ToFullTime(r.FormValue("CrowdDate"))
+	NewItem.Crowd.Mov = r.FormValue("CrowdMov")
+	//light
+	NewItem.Light.Status = r.FormValue("LightStatus")
+	NewItem.Light.User = r.FormValue("LightUser")
+	NewItem.Light.UserNote = r.FormValue("LightUserNote")
+	NewItem.Light.Startdate = ToFullTime(r.FormValue("LightStartdate"))
+	NewItem.Light.Due, err = strconv.Atoi(r.FormValue("LightDue"))
+	if err != nil {
+		NewItem.Light.Due = CurrentItem.Light.Due //에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Light.Predate = ToFullTime(r.FormValue("LightPredate"))
+	NewItem.Light.Date = ToFullTime(r.FormValue("LightDate"))
+	NewItem.Light.Mov = r.FormValue("LightMov")
+	//comp
+	NewItem.Comp.Status = r.FormValue("CompStatus")
+	NewItem.Comp.User = r.FormValue("CompUser")
+	NewItem.Comp.UserNote = r.FormValue("CompUserNote")
+	NewItem.Comp.Startdate = ToFullTime(r.FormValue("CompStartdate"))
+	NewItem.Comp.Due, err = strconv.Atoi(r.FormValue("CompDue"))
+	if err != nil {
+		NewItem.Comp.Due = CurrentItem.Comp.Due // 에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Comp.Predate = ToFullTime(r.FormValue("CompPredate"))
+	NewItem.Comp.Date = ToFullTime(r.FormValue("CompDate"))
+	NewItem.Comp.Mov = r.FormValue("CompMov")
+	//matte
+	NewItem.Matte.Status = r.FormValue("MatteStatus")
+	NewItem.Matte.User = r.FormValue("MatteUser")
+	NewItem.Matte.UserNote = r.FormValue("MatteUserNote")
+	NewItem.Matte.Startdate = ToFullTime(r.FormValue("MatteStartdate"))
+	NewItem.Matte.Due, err = strconv.Atoi(r.FormValue("MatteDue"))
+	if err != nil {
+		NewItem.Matte.Due = CurrentItem.Matte.Due // 에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Matte.Predate = ToFullTime(r.FormValue("MattePredate"))
+	NewItem.Matte.Date = ToFullTime(r.FormValue("MatteDate"))
+	NewItem.Matte.Mov = dipath.Win2lin(r.FormValue("MatteMov"))
+	//env
+	NewItem.Env.Status = r.FormValue("EnvStatus")
+	NewItem.Env.User = r.FormValue("EnvUser")
+	NewItem.Env.UserNote = r.FormValue("EnvUserNote")
+	NewItem.Env.Startdate = ToFullTime(r.FormValue("EnvStartdate"))
+	NewItem.Env.Due, err = strconv.Atoi(r.FormValue("EnvDue"))
+	if err != nil {
+		NewItem.Env.Due = CurrentItem.Env.Due // 에러가 나면 과거값으로 놔둔다.
+	}
+	NewItem.Env.Predate = ToFullTime(r.FormValue("EnvPredate"))
+	NewItem.Env.Date = ToFullTime(r.FormValue("EnvDate"))
+	NewItem.Env.Mov = dipath.Win2lin(r.FormValue("EnvMov"))
+
+	file, fileHandle, fileErr := r.FormFile("Thumbnail")
+	if fileErr == nil {
+		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
+		defer file.Close()
+		mediatype, fileParams, err := mime.ParseMediaType(fileHandle.Header.Get("Content-Disposition"))
+		if *flagDebug {
+			fmt.Println(mediatype)
+			fmt.Println(fileParams)
+			fmt.Println()
+		}
+		if err != nil {
+			log.Println(err)
+		}
+		f, err := ioutil.TempFile(os.TempDir(), "")
+		if err != nil {
+			log.Println(err)
+		}
+		defer os.Remove(f.Name())
+		io.Copy(f, io.LimitReader(file, MaxFileSize))
+		target := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.Slug)
+		targetdir := filepath.Dir(target)
+		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
+		_, err = os.Stat(targetdir)
+		if os.IsNotExist(err) {
+			err := os.MkdirAll(targetdir, 0775)
+			if err != nil {
+				log.Println(err)
+			}
+			err = dipath.Ideapath(targetdir)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+		argv := []string{f.Name(), "-resize", "410x222", "-gravity", "center", "-background", "black", "-extent", "410x222+0+0", "-border", "1", target}
+		convertcmd := "/usr/bin/convert"
+		if _, err := os.Stat(convertcmd); err != nil {
+			log.Println("ImageMagick Convert 명령어가 존재하지 않습니다. 서버에서 관리자로 yum install ImageMagick을 타이핑해주세요.")
+		}
+		if *flagDebug {
+			fmt.Println(convertcmd, strings.Join(argv, " "))
+		}
+		err = exec.Command(convertcmd, argv...).Run()
+		if err != nil {
+			log.Println(err)
+		}
+		err = dipath.Ideapath(target)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	//DB업데이트
+	NewItem.updateMdate(&CurrentItem) //팀의 mov를 비교하고 달라졌다면 mov 업데이트 날짜를 변경한다.
+	err = setItem(session, project, NewItem)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	//로그를 추후 처리한다.
+	// logging(CurrentItem, NewItem)
+	err = templates.ExecuteTemplate(w, "edited", nil)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
+func handleDdline(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+
+	type recipe struct {
+		Projectlist []string
+		Project     Project
+		Searchop    SearchOption
+		Infobarnum  Infobarnum
+		Searchnum   Infobarnum
+		Items       []Item
+		Ddline3d    []string
+		Ddline2d    []string
+		Tags        []string
+		Assettags   []string
+		Dilog       string
+		Wfs         string
+	}
+	rcp := recipe{}
+	rcp.Dilog = *flagDILOG
+	rcp.Wfs = *flagWFS
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	//옵션불러오기.
+	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[3]) //project
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	part := strings.Split(r.URL.Path, "/")[2]                   //2d,3d,_
+	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[3]    //project
+	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[4] //date
+	rcp.Searchop.setStatusDefault()
+	rcp.Searchop.Sortkey = "slug"
+	rcp.Searchop.Template = "csi3"
+	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
+		rcp.Searchop.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
+		rcp.Items, err = SearchDdline(session, rcp.Searchop, part)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+	}
+	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
+	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleIndex 함수는 index 페이지이다.
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Projectlist []string
+		Searchop    SearchOption
+	}
+	rcp := recipe{}
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	//검색바 초기셋팅
+	cookieProject, err := r.Cookie("project")
+	if err != nil {
+		rcp.Searchop.Project = ""
+	} else {
+		rcp.Searchop.Project = cookieProject.Value
+	}
+	rcp.Searchop.Assign = true
+	rcp.Searchop.Ready = true
+	rcp.Searchop.Wip = true
+	rcp.Searchop.Confirm = true
+	rcp.Searchop.Sortkey = "slug"
+	rcp.Searchop.Template = "csi3"
+	err = templates.ExecuteTemplate(w, "index", rcp)
+	if err != nil {
+		log.Println("Template Execution Error: ", err)
+		return
+	}
+}
+
+// handleDetail 함수는 Item의 디테일한 정보페이지다.
+func handleDetail(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	q := r.URL.Query()
+	editType := q.Get("type")
+	project := q.Get("project")
+	slug := q.Get("slug")
+	id := q.Get("id") // 프로젝트id에 사용할 것
+	var err error
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+	defer session.Close()
+	switch editType {
+	case "item":
+		type recipe struct {
+			Project Project
+			Item    Item
+		}
+		rcp := recipe{}
+		defer session.Close()
+		rcp.Project, err = getProject(session, project)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		rcp.Item, err = getItem(session, project, slug)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		err = templates.ExecuteTemplate(w, "detailItem", rcp)
+		if err != nil {
+			log.Println("Template Execution Error: ", err)
+			return
+		}
+		return
+	case "project":
+		rcp, err := getProject(session, id)
+		if err != nil {
+			templates.ExecuteTemplate(w, "dberr", nil)
+			return
+		}
+		err = templates.ExecuteTemplate(w, "detailProject", rcp)
+		if err != nil {
+			log.Println("Template Execution Error: ", err)
+			return
+		}
+		return
+	default:
+		templates.ExecuteTemplate(w, "dberr", nil)
+		return
+	}
+}

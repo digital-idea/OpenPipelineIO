@@ -1,0 +1,315 @@
+{{define "editProject" }}
+{{template "head"}}
+<div id="content">
+<form action="/edit_project_submit" method="POST" enctype="multipart/form-data">
+<input type="text" name="Id" value={{.ID}} style="display:none">
+프로젝트코드 : <span id="editProjectTitle">{{.ID}}</span>
+<select name="Status">
+	<option value="0" {{if eq .Status 0}}selected{{end}}>Unknown</option>
+	<option value="1" {{if eq .Status 1}}selected{{end}}>준비중</option>
+	<option value="2" {{if eq .Status 2}}selected{{end}}>진행중</option>
+	<option value="3" {{if eq .Status 3}}selected{{end}}>중단</option>
+	<option value="4" {{if eq .Status 4}}selected{{end}}>백업중</option>
+	<option value="5" {{if eq .Status 5}}selected{{end}}>종료</option>
+	<option value="6" {{if eq .Status 6}}selected{{end}}>소송중</option>
+</select>
+<br>
+프로젝트 한글명 : <input type="text" name="Name" value={{.Name}}><br>
+메일헤더 : <input type="text" name="MailHead" value={{.MailHead}}><br>
+스타일 : 
+<select name="Style">
+	<option value="영화" {{if eq .Style "영화"}}selected{{end}}>영화</option>
+	<option value="애니메이션" {{if eq .Style "애니메이션"}}selected{{end}}>애니메이션</option>
+	<option value="광고" {{if eq .Style "광고"}}selected{{end}}>광고</option>
+	<option value="VR" {{if eq .Style "VR"}}selected{{end}}>VR</option>
+</select>
+<br>
+
+이슈 : <input type="text" name="Issue" value={{.Issue}}><br>
+
+입체 : <input type="checkbox" name="Stereo" value="true" {{if eq .Stereo true}}checked{{end}}><br>
+스크린X : <input type="checkbox" name="Screenx" value="true" {{if eq .Screenx true}}checked{{end}} onchange="checkScreenx(event)"><br>
+Netapp 사용: <input type="checkbox" name="Netapp" value="true" {{if eq .Netapp true}}checked{{end}}><br>
+
+감독 : <input type="text" name="Director" value={{.Director}}><br>
+
+슈퍼바이져 : <input type="text" name="Super" value={{.Super}}><br>
+
+CG슈퍼바이저 : <input type="text" name="CgSuper" value={{.CgSuper}}><br>
+
+PD : <input type="text" name="Pd" value={{.Pd}}><br>
+
+PM : <input type="text" name="Pm" value={{.Pm}}><br>
+
+PA : <input type="text" name="Pa" value={{.Pa}}><br>
+
+공지사항 : <input type="text" name="Message" size="60" value={{.Message}}><br>
+
+위키주소 : <input type="text" name="Wiki" size="60" value={{.Wiki}}><br>
+
+편집본 경로 : <input type="text" name="Edit" size="58" value={{.Edit}}><br>
+
+노트내 강조 단어 설정 : <input type="text" name="NoteHighlight" size="50" value="{{.NoteHighlight}}"><br>
+
+픽셀 AspectRatio : <input type="text" size="2" name="AspectRatio" value={{.AspectRatio}}><br>
+
+Crop AspectRatio : <input type="text" size="3" name="CropAspectRatio" value={{.CropAspectRatio}}><br>
+
+시작프레임 : <input type="text" size="4" name="StartFrame" value={{.StartFrame}}><br>
+시퀀스 자릿수 : <input type="text" size="2" name="SeqNum" value={{.SeqNum}}><br>
+버전 자릿수 : <input type="text" size="2" name="VersionNum" value={{.VersionNum}}><br>
+
+
+플레이트 아웃풋 사이즈 : <input type="text" size="4" name="PlateWidth" value={{.PlateWidth}}> x <input type="text" size="4" name="PlateHeight" value={{.PlateHeight}}><br>
+플레이트 아웃풋 리사이즈 타입 :
+<select name="ResizeType">
+	<option value="fill" {{if eq .ResizeType "" "fill"}}selected{{end}}>fill</option>
+	<option value="width" {{if eq .ResizeType "width"}}selected{{end}}>width</option>
+	<option value="none" {{if eq .ResizeType "none"}}selected{{end}}>none</option>
+</select>
+<br>
+
+아웃풋 확장자 : 
+<select name="PlateExt">
+	<option value="exr" {{if eq .PlateExt "exr"}}selected{{end}}>exr</option>
+	<option value="dpx" {{if eq .PlateExt "dpx"}}selected{{end}}>dpx</option>
+	<option value="mov" {{if eq .PlateExt "mov"}}selected{{end}}>mov</option>
+	<option value="tga" {{if eq .PlateExt "tga"}}selected{{end}}>tga</option>
+</select>
+<br>
+
+카메라 : <input type="text" name="Camera" value={{.Camera}}><br>
+
+플레이트 IN 컬러스페이스 : 
+<select name="PlateInColorspace">
+	<option value="linear" {{if eq .PlateInColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .PlateInColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .PlateInColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .PlateInColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .PlateInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .PlateInColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .PlateInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .PlateInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .PlateInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="Output-Rec.709" {{if eq .PlateInColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+	<option value="default" {{if eq .PlateInColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+<br>
+
+플레이트 OUT 컬러스페이스 : 
+<select name="PlateOutColorspace">
+	<option value="linear" {{if eq .PlateOutColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .PlateOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .PlateOutColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .PlateOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .PlateOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .PlateOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .PlateOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .PlateOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .PlateOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="Output-Rec.709" {{if eq .PlateOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+	<option value="default" {{if eq .PlateOutColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+<br>
+
+프록시 OUT 컬러스페이스 :
+<select name="ProxyOutColorspace">
+	<option value="linear" {{if eq .ProxyOutColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .ProxyOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .ProxyOutColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .ProxyOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .ProxyOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .ProxyOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .ProxyOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .ProxyOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .ProxyOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="Output-Rec.709" {{if eq .ProxyOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+	<option value="default" {{if eq .ProxyOutColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+<br>
+
+NukeGizmo : <input type="text" name="NukeGizmo" size="50" value={{.NukeGizmo}}> &nbsp;<blue> ex) slate_default</blue><br>
+MayaCropMask Size : <input type="text" name="MayaCropMaskSize" size="43" value="{{.MayaCropMaskSize}}" onkeyup="star2mult(event)"> &nbsp;<blue> ex) 1920x1080, 2048x1152, 2048x1080....</blue><br>
+Fx Element : <input type="text" name="FxElement" size="50" value="{{.FxElement}}"> &nbsp;&nbsp;<blue> ex) fire, water, splash....</blue><br>
+Houdini Import Scale : <input type="text" name="HoudiniImportScale" size="5" value="{{.HoudiniImportScale}}" title="후디니에서 오브젝트를 불러올 때 적용될 스케일값 입니다."> &nbsp;&nbsp;<blue> ※기본값은 0.1입니다.</blue><br>
+ScreenxOverlay : <input type="text" id='screenxoverlay' name="ScreenxOverlay" size="5" value="{{.ScreenxOverlay}}" title="ScreenX의 카메라 Overlay값 입니다."  {{if eq .Screenx false}}readOnly{{end}}> &nbsp;&nbsp;<blue> ※기본값은 1.0입니다.</blue><br>
+
+<br>
+
+색상과 상관없는 작업에 사용할 가벼운 코덱 : 
+<select name="PostProductionProxyCodec">
+	<option value="Apple_Prores_422HQ" {{if eq .PostProductionProxyCodec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
+	<option value="Apple_Prores_4444" {{if eq .PostProductionProxyCodec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
+	<option value="Apple_Prores_422" {{if eq .PostProductionProxyCodec "Apple_Prores_422"}}selected{{end}}>Apple_Prores_422</option>
+	<option value="Apple_Prores_422LT" {{if eq .PostProductionProxyCodec "Apple_Prores_422LT"}}selected{{end}}>Apple_Prores_422LT</option>
+	<option value="Apple_Prores_422Proxy" {{if eq .PostProductionProxyCodec "Apple_Prores_422Proxy"}}selected{{end}}>Apple_Prores_422Proxy</option>
+	<option value="H.264" {{if eq .PostProductionProxyCodec "H.264"}}selected{{end}}>H.264</option>
+	<option value="Avid_DNxHD_Codec" {{if eq .PostProductionProxyCodec "Avid_DNxHD_Codec"}}selected{{end}}>Avid_DNxHD_Codec</option>
+</select>
+<br>
+
+아웃풋 Mov 포멧 : <br>
+<input type="text" size="4" name="OutputMov.Width" value={{.OutputMov.Width}}> x <input type="text" size="4" name="OutputMov.Height" value={{.OutputMov.Height}}>
+Codec : 
+<select name="OutputMov.Codec">
+	<option value="Apple_Prores_422HQ" {{if eq .OutputMov.Codec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
+	<option value="Apple_Prores_4444" {{if eq .OutputMov.Codec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
+	<option value="Apple_Prores_422" {{if eq .OutputMov.Codec "Apple_Prores_422"}}selected{{end}}>Apple_Prores_422</option>
+	<option value="Apple_Prores_422LT" {{if eq .OutputMov.Codec "Apple_Prores_422LT"}}selected{{end}}>Apple_Prores_422LT</option>
+	<option value="Apple_Prores_422Proxy" {{if eq .OutputMov.Codec "Apple_Prores_422Proxy"}}selected{{end}}>Apple_Prores_422Proxy</option>
+	<option value="H.264" {{if eq .OutputMov.Codec "H.264"}}selected{{end}}>H.264</option>
+	<option value="Avid_DNxHD_Codec" {{if eq .OutputMov.Codec "Avid_DNxHD_Codec"}}selected{{end}}>Avid_DNxHD_Codec</option>
+</select>
+
+Fps : 
+<select name="OutputMov.Fps">
+	<option value="0" {{if eq .OutputMov.Fps 0.0}}selected{{end}}>unknown</option>
+	<option value="23.98" {{if eq .OutputMov.Fps 23.98}}selected{{end}}>23.98</option>
+	<option value="24" {{if eq .OutputMov.Fps 24.0}}selected{{end}}>24</option>
+	<option value="25" {{if eq .OutputMov.Fps 25.0}}selected{{end}}>25</option>
+	<option value="29.97" {{if eq .OutputMov.Fps 29.97}}selected{{end}}>29.97</option>
+	<option value="30" {{if eq .OutputMov.Fps 30.0}}selected{{end}}>30</option>
+	<option value="59.94" {{if eq .OutputMov.Fps 59.94}}selected{{end}}>59.94</option>
+	<option value="60" {{if eq .OutputMov.Fps 60.0}}selected{{end}}>60</option>
+</select>
+<br>
+
+InColorspace :
+<select name="OutputMov.InColorspace">
+	<option value="linear" {{if eq .OutputMov.InColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .OutputMov.InColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .OutputMov.InColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .OutputMov.InColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .OutputMov.InColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .OutputMov.InColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .OutputMov.InColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .OutputMov.InColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .OutputMov.InColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="default" {{if eq .OutputMov.InColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+
+OutColorspace :
+<select name="OutputMov.OutColorspace">
+	<option value="linear" {{if eq .OutputMov.OutColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .OutputMov.OutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .OutputMov.OutColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .OutputMov.OutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .OutputMov.OutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .OutputMov.OutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .OutputMov.OutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .OutputMov.OutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .OutputMov.OutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="Output-Rec.709" {{if eq .OutputMov.OutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+	<option value="default" {{if eq .OutputMov.OutColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+<br><br>
+
+
+
+편집실 Mov 포멧 : <br>
+<input type="text" size="4" name="EditMov.Width" value={{.EditMov.Width}}> x <input type="text" size="4" name="EditMov.Height" value={{.EditMov.Height}}>
+Codec : 
+<select name="EditMov.Codec">
+	<option value="Apple_Prores_422HQ" {{if eq .EditMov.Codec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
+	<option value="Apple_Prores_4444" {{if eq .EditMov.Codec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
+	<option value="Apple_Prores_422" {{if eq .EditMov.Codec "Apple_Prores_422"}}selected{{end}}>Apple_Prores_422</option>
+	<option value="Apple_Prores_422LT" {{if eq .EditMov.Codec "Apple_Prores_422LT"}}selected{{end}}>Apple_Prores_422LT</option>
+	<option value="Apple_Prores_422Proxy" {{if eq .EditMov.Codec "Apple_Prores_422Proxy"}}selected{{end}}>Apple_Prores_422Proxy</option>
+	<option value="H.264" {{if eq .EditMov.Codec "H.264"}}selected{{end}}>H.264</option>
+	<option value="Avid_DNxHD_Codec" {{if eq .EditMov.Codec "Avid_DNxHD_Codec"}}selected{{end}}>Avid_DNxHD_Codec</option>
+	<option value="" {{if eq .EditMov.Codec ""}}selected{{end}}>unknown</option>
+</select>
+
+Fps :
+<select name="EditMov.Fps">
+	<option value="0" {{if eq .EditMov.Fps 0.0}}selected{{end}}>unknown</option>
+	<option value="23.98" {{if eq .EditMov.Fps 23.98}}selected{{end}}>23.98</option>
+	<option value="24" {{if eq .EditMov.Fps 24.0}}selected{{end}}>24</option>
+	<option value="25" {{if eq .EditMov.Fps 25.0}}selected{{end}}>25</option>
+	<option value="29.97" {{if eq .EditMov.Fps 29.97}}selected{{end}}>29.97</option>
+	<option value="30" {{if eq .EditMov.Fps 30.0}}selected{{end}}>30</option>
+	<option value="59.94" {{if eq .OutputMov.Fps 59.94}}selected{{end}}>59.94</option>
+	<option value="60" {{if eq .EditMov.Fps 60.0}}selected{{end}}>60</option>
+</select>
+<br>
+
+InColorspace :
+<select name="EditMov.InColorspace">
+	<option value="linear" {{if eq .EditMov.InColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .EditMov.InColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .EditMov.InColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .EditMov.InColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .EditMov.InColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .EditMov.InColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .EditMov.InColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .EditMov.InColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .EditMov.InColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="default" {{if eq .EditMov.InColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+
+OutColorspace :
+<select name="EditMov.OutColorspace">
+	<option value="linear" {{if eq .EditMov.OutColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .EditMov.OutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .EditMov.OutColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .EditMov.OutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .EditMov.OutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .EditMov.OutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .EditMov.OutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .EditMov.OutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .EditMov.OutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+	<option value="Output-Rec.709" {{if eq .EditMov.OutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+	<option value="default" {{if eq .EditMov.OutColorspace "" "default"}}selected{{end}}>default</option>
+</select>
+<br><br>
+
+마일스톤<br>
+제목 : <input type="text" size="20" name="Milestones.Name">
+날짜 : <input type="text" size="20" class="DatePicker" maxlength="25" name="Milestones.Date">
+<br>
+
+
+<!--lut In,Out 컬러스페이스는 default값이 없다. 뉴크에서 lut를 적용할 때 사용하는 Vectorfield 노드에 default 값이 없기 때문이다.-->
+LUT<br>
+LUT 경로 : <input type="text" name="Lut" value={{.Lut}}>
+LUT IN 컬러스페이스 :
+<select name="LutInColorspace">
+	<option value="linear" {{if eq .LutInColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .LutInColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .LutInColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .LutInColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .LutInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .LutInColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .LutInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .LutInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .LutInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+</select>
+
+LUT OUT 컬러스페이스 :
+<select name="LutOutColorspace">
+	<option value="linear" {{if eq .LutOutColorspace "linear"}}selected{{end}}>linear</option>
+	<option value="sRGB" {{if eq .LutOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+	<option value="rec709" {{if eq .LutOutColorspace "rec709"}}selected{{end}}>rec709</option>
+	<option value="Cineon" {{if eq .LutOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+	<option value="AlexaV3LogC" {{if eq .LutOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+	<option value="REDLog" {{if eq .LutOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+	<option value="Gamma2.2" {{if eq .LutOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+	<option value="ACEScg" {{if eq .LutOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+	<option value="ACES2065-1" {{if eq .LutOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+</select>
+<br>
+
+기타<br>
+<textarea name="Description" rows="10" cols="64">{{.Description}}</textarea>
+<br>
+
+
+<button id="button">수정</button>
+</form>
+
+<br><br>
+<a href="/cmd?funcname=rmoverlaponsetnote&project={{.ID}}"><default_button>작업내용 중복값 제거</default_button></a>
+</div>
+
+{{template "footer"}}
+{{end}}

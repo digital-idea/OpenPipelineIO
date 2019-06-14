@@ -1,0 +1,27 @@
+{{define "signup" }}
+{{template "head"}}
+<form method="post" action="/signup_submit">
+<div id="content">
+<center>
+이 사이트는 디지털아이디어 사내 소프트웨어입니다.<br>
+관리자의 업무처리를 위해서 가입시 몇몇 개인정보 입력이 필요합니다.<br>
+입력된 개인정보 검토후 가입처리가 완료됩니다.<br>
+<p><input type="text" name="Id" placeholder="ID" class="inputtext"></p>
+<p><input type="text" name="Name" placeholder="Name(한글명)" class="inputtext"></p>
+<p><input type="text" name="NameEng" placeholder="English Name(영문명)" class="inputtext"></p>
+<p><input type="text" name="Num" placeholder="사번" class="inputtext"></p>
+<p><input type="text" name="Phone" placeholder="Phone(핸드폰)" class="inputtext"></p>
+<p><input type="text" name="Email" placeholder="Email(이메일)" class="inputtext"></p>
+<br>
+추후 이 자리에는 외부사이트 오픈전<br>
+캡챠(Capchar)가 들어가야한다.<br>
+<br>
+대문자, 소문자, 숫자, 특수문자가 포함된 8자 이상의 패스워드를 사용해주세요.
+<p><input type="password" name="Pass" placeholder="PASSWORD" class="inputtext"></p>
+<p><input type="password" name="PassCheck" placeholder="PASSWORD Check" class="inputtext"></p>
+<p><button type="submit" class="button">SIGNUP</button></p>
+</form>
+</center>
+</div>
+{{template "footer"}}
+{{end}}

@@ -1,0 +1,34 @@
+{{define "uploadSetellite" }}
+{{template "head"}}
+<div id="content">
+    <div class="uploadSetellite">
+        <div class="logoLink">
+          <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8"><img class="logo" src="/assets/img/setellite.svg"></a>
+        </div>
+        <div class="textLink">
+          <h1>Setellite 2</h1>
+          <h4><a href="https://www.setellite.nl" class="appLink">https://www.setellite.nl</a></h4>
+          <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8"><button class="downloadButton">다운로드</button></a>
+        </div>
+        <p>&#x21E3</p>
+        <hr>
+        <div class="message">{{.Message}}</div>
+        <form action="/uploadsetellite" method="POST" enctype="multipart/form-data">
+            <select name="project" class="selectproject slForm" onchange="changeProject(this);">
+            {{range .Projectlist}}<option value="{{.}}">{{.}}</option>{{end}}
+            </select>
+            <input class="importform slForm" type="file" size="45" maxlength="256" name="csv">
+            <button class="button slForm"><img class="icon" src="/assets/img/upload-icon.svg"> UPLOAD</button>
+        </form>
+        <div class="message">{{range .Errors}}{{.}}<br>{{end}}</div>
+        <hr>
+        <p>&#x21E3</p>
+        <img src="/assets/img/csi.svg">
+        <div>
+            <button onclick="location.href='/setellite'" type="button" class="button slSearch">
+            <img class="icon" src="/assets/img/search-icon.svg"> Setellite 검색하기</button>
+        </div>
+    </div>
+</div>
+{{template "footer"}}
+{{end}}

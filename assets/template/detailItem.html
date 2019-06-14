@@ -1,0 +1,18 @@
+{{define "detailItem"}}
+{{template "head"}}
+<div id="content">
+<input type="text" name="project" value={{.Project.ID}} style="display:none">
+<input type="text" name="slug" value={{.Item.Slug}} style="display:none">
+<!--프로젝트, 아이템 정보-->
+<table class="detail">
+	<tr>
+		<td class=detailtitle colspan=6 bgcolor={{.Item.Status|itemStatus2color}} height=40><span id="projectTitle">{{.Project.ID}}</span> | <b><span id="slugTitle">{{.Item.Name}}({{.Item.Type}})</span></b> | {{.Item.Status|statusnum2string}}</td>
+	</tr>
+</table>
+<p>{{.Item.Rnum}}</p>
+<p>{{.Item.PlateIn}}</p>
+<p>{{.Item.PlateOut}}</p>
+</div>
+{{template "footer"}}
+{{end}}
+

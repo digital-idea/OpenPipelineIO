@@ -1,0 +1,31 @@
+{{define "head"}}<!DOCTYPE html>
+<html>
+<head>
+<title>CSI{{if $.Searchop.Project}} : {{$.Searchop.Project}}{{end}}</title>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="/assets/css/style.css"/>
+<link rel="stylesheet" href="/assets/js/jquery-ui-1.12.1/jquery-ui.min.css"/>
+<link href="/assets/fontawesome-free-5.1.0-web/css/all.css" rel="stylesheet">
+<link rel="icon" href="/assets/img/csi.png">
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script src="/assets/js/csi.js"></script>
+</head>
+<body onload="onload()">
+<div id="wrapper">
+  <div id="topNav">
+    <ul>
+      <li><a href="/"><dilogo>CSI</dilogo></a></li>
+      <li><a href="/projectinfo">ProjectInfo</a></li>
+      <li><a href="/uploadsetellite">UploadSetellite</a></li>
+      <li><a href="/help">Help</a></li>
+      <li><a href="https://github.com/digital-idea/csi3" target="_blank">Issue</a></li>
+      <li><a href="/user">User <i class="fas fa-angle-down"></i></a>
+      <ul>
+	 			<li><a href="/signup">SignUp</a></li>
+	 			<li><a href="/signin">SignIn</a></li>
+      </ul>
+     </li>
+    </ul>
+  </div>
+{{end}}

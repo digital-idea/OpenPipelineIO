@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+nohup.out
+.DS_Store
+/data
+/bin
+/thumbnail
+assets_vfsdata.go

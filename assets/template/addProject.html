@@ -1,0 +1,10 @@
+{{define "addProject" }}
+{{template "head"}}
+<div id="content">
+<form action="/api/addproject" method="GET">
+<input type="text" name="id" placeholder="프로젝트코드명" oninput="removeWhiteSpace(this)">
+<button id="button">프로젝트생성</button>
+</form>
+</div>
+{{template "footer"}}
+{{end}}

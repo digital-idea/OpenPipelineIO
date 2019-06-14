@@ -1,0 +1,28 @@
+{{define "assettags"}}
+<div class="staffAssettag">
+  <div class="assettags textbold">
+  {{range .Assettags }}
+	{{if eq . "" -}}
+	{{- else -}}
+		{{if eq . "char" "env" "global" "prop" "comp" "plant" "vehicle" "assembly" "component" -}}
+			<a href="/assettags/{{$.Searchop.Project}}/{{.}}">
+			<assettag>{{if eq . $.Searchop.Searchword}}<b>{{end}}{{.}}{{if eq . $.Searchop.Searchword}}</b>{{end}}</assettag></a>
+		{{- else -}}
+			<a href="/assettree/{{$.Searchop.Project}}/{{.}}">
+			<assettreeHead><img src="/assets/img/linkicon.svg" class="tagicon"></assettreeHead></a>
+			<a href="/assettags/{{$.Searchop.Project}}/{{.}}">
+			<assettreeTail>{{if eq . $.Searchop.Searchword}}<b>{{end}}{{.}}{{if eq . $.Searchop.Searchword}}</b>{{end}}</assettreeTail></a>
+		{{- end}}
+        {{- end}}
+    {{end}}
+  </div>
+  <div class="projectStaff">
+    {{if .Project.Director}} 감독 : {{.Project.Director}}{{end}}
+    {{if .Project.Super}} / 슈퍼바이저 : {{.Project.Super}}{{end}}
+    {{if .Project.CgSuper}} / CG슈퍼바이저 : {{.Project.CgSuper}}{{end}}
+    {{if .Project.Pd}} / PD : {{.Project.Pd}}{{end}}
+    {{if .Project.Pm}} / PM : {{.Project.Pm}}{{end}}
+    {{if .Project.Pa}} / PA : {{.Project.Pa}}{{end}}
+  </div>
+</div>
+{{end}}

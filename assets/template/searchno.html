@@ -1,0 +1,13 @@
+{{define "searchno" }}
+{{template "head"}}
+<div id="content">
+{{template "searchbox" .}}
+{{template "ddline" .}}
+{{template "tags" .}}
+{{template "assettags" .}}
+{{template "info" .}}
+<center>검색결과가 없습니다.</center>
+<br><br>
+</div>
+{{template "footer"}}
+{{end}}

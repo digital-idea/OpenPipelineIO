@@ -1,0 +1,1322 @@
+package main
+
+import (
+	"errors"
+	"fmt"
+	"log"
+	"sort"
+	"strings"
+
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+)
+
+func addItem(session *mgo.Session, project string, i Item) error {
+	session.SetMode(mgo.Monotonic, true)
+	// 프로젝트가 존재하는지 체크합니다.
+	c := session.DB("projectinfo").C(project)
+	num, err := c.Find(bson.M{"id": project}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 1 {
+		log.Println("프로젝트가 존제하지 않습니다.")
+		return errors.New("프로젝트가 존재하지 않습니다")
+	}
+	//문서의 중복이 있는지 체크합니다.
+	c = session.DB("project").C(project)
+	num, err = c.Find(bson.M{"name": i.Name, "type": i.Type}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		return fmt.Errorf("%s 프로젝트에 이미 %s_%s 샷은 존재합니다", project, i.Name, i.Type)
+	}
+	err = c.Insert(i)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func setItem(session *mgo.Session, project string, i Item) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	num, err := c.Find(bson.M{"slug": i.Slug}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	i.Updatetime = Now()
+	i.updateStatus()
+	i.setRnumTag()
+	err = c.Update(bson.M{"slug": i.Slug}, i)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func getItem(session *mgo.Session, project string, slug string) (Item, error) {
+	if project == "" || slug == "" {
+		return Item{}, nil
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var result Item
+	err := c.Find(bson.M{"slug": slug}).One(&result)
+	if err != nil {
+		log.Println(err)
+		return Item{}, err
+	}
+	return result, nil
+}
+
+// Shot 함수는 프로젝트명, 샷이름을 이용해서 샷정보를 반환한다.
+func Shot(session *mgo.Session, project string, name string) (Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var result Item
+	// org, left 갯수를 구한다.
+	orgnum, err := c.Find(bson.M{"slug": name + "_org"}).Count()
+	if err != nil {
+		log.Println(err)
+		return Item{}, err
+	}
+	leftnum, err := c.Find(bson.M{"slug": name + "_left"}).Count()
+	if err != nil {
+		log.Println(err)
+		return Item{}, err
+	}
+	q := bson.M{"slug": name + "_org"}
+	if leftnum == 1 && orgnum == 0 {
+		q = bson.M{"slug": name + "_left"}
+	}
+	err = c.Find(q).One(&result)
+	if err != nil {
+		log.Println(err)
+		return Item{}, err
+	}
+	return result, nil
+}
+
+// SearchName 함수는 입력된 문자열이 'name'키 값에 포함되어 있다면 해당 아이템을 반환한다.
+func SearchName(session *mgo.Session, project string, name string) ([]Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	results := []Item{}
+	err := c.Find(bson.M{"name": &bson.RegEx{Pattern: name, Options: "i"}}).Sort("name").All(&results)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return results, nil
+}
+
+// Seqs 함수는 프로젝트 이름을 받아서 seq 리스트를 반환한다.
+func Seqs(session *mgo.Session, project string) ([]string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var results []Item
+	err := c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}}).Select(bson.M{"seq": 1}).All(&results)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	keys := make(map[string]bool)
+	for _, result := range results {
+		seq := result.Seq
+		keys[seq] = true
+	}
+	seqs := []string{}
+	for k := range keys {
+		seqs = append(seqs, k)
+	}
+	sort.Strings(seqs)
+	return seqs, nil
+}
+
+// Shots 함수는 프로젝트 이름과 입력된 시퀀스가 'name'키 값에 포함되어 있다면 shots 리스트를 반환한다.
+func Shots(session *mgo.Session, project string, seq string) ([]string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var results []Item
+	query := bson.M{"name": &bson.RegEx{Pattern: seq, Options: "i"}, "type": bson.M{"$in": []string{"org", "left"}}}
+	err := c.Find(query).Select(bson.M{"name": 1}).All(&results)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	keys := make(map[string]bool)
+	for _, result := range results {
+		shot := strings.Split(result.Name, "_")[1]
+		keys[shot] = true
+	}
+	shots := []string{}
+	for k := range keys {
+		shots = append(shots, k)
+	}
+	sort.Strings(shots)
+	return shots, nil
+}
+
+func rmItem(session *mgo.Session, project string, name string, typ string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	num, err := c.Find(bson.M{"name": name, "type": typ}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num == 0 {
+		log.Println("삭제할 아이템이 없습니다.")
+		return errors.New("삭제할 아이템이 없습니다")
+	}
+	err = c.Remove(bson.M{"name": name, "type": typ})
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// Distinct 함수는 프로젝트, dict key를 받아서 key에 사용되는 모든 문자열을 반환한다. 예) 태그
+func Distinct(session *mgo.Session, project string, key string) ([]string, error) {
+	var result []string
+	if project == "" || key == "" {
+		return result, nil
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Find(bson.M{}).Distinct(key, &result)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
+// DistinctDdline 함수는 프로젝트, dict key를 받아서 key에 사용되는 모든 마감일을 반환한다. 예) 태그
+func DistinctDdline(session *mgo.Session, project string, key string) ([]string, error) {
+	var result []string
+	if project == "" || key == "" {
+		return result, nil
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Find(bson.M{}).Distinct(key, &result)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	//result로 datelist를 만든다.
+	sort.Strings(result)
+	if *flagDebug {
+		fmt.Println("DB에서 가지고온 마감일 리스트")
+		fmt.Println(result)
+		fmt.Println()
+	}
+	var before string
+	var datelist []string
+	for _, r := range result {
+		if r != "" {
+			shortdate := ToShortTime(r)
+			if shortdate == before {
+				break
+			} else {
+				datelist = append(datelist, shortdate)
+			}
+			before = shortdate
+		}
+	}
+	sort.Strings(datelist) //기존 CSI2의 4자리 수를 위하여 정렬한다. 추후 이 줄은 사라진다.
+	if *flagDebug {
+		fmt.Println("마감일을 Tag형태로 바꾼 리스트")
+		fmt.Println(datelist)
+		fmt.Println()
+	}
+	return datelist, nil
+}
+
+// Search 함수는 csi 검색함수이다.
+func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(op.Project)
+	hasTeamName := false
+	wordQueries := []bson.M{}
+
+	// 'task:' 로 시작하는 검색어는 검색어 뒤에 붙은 task만 검색한다.
+	// '#태그명' 형태로 들어왔을때 해당 태그명에 대한 검색이다.
+	searchword := SearchwordParser(op.Searchword)
+	if len(searchword.tags) > 0 && len(searchword.words) == 1 && searchword.words[0] == "''" {
+		op.setStatusAll() // 모든 상태를 검색한다.
+		searchword.words[0] = searchword.tags[0]
+	}
+	for _, word := range searchword.words {
+		query := []bson.M{}
+		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
+			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
+			if len(searchword.tasks) == 0 {
+				for _, task := range TASKS {
+					query = append(query, bson.M{strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
+					query = append(query, bson.M{strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
+				}
+			} else {
+				for _, task := range searchword.tasks {
+					query = append(query, bson.M{strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
+					query = append(query, bson.M{strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
+				}
+			}
+			query = append(query, bson.M{"name": &bson.RegEx{Pattern: word}}) // 샷 이름에 숫자가 포함되는 경우도 검색한다.
+		} else if MatchNormalTime.MatchString(word) {
+			// 데일리 날짜를 검색한다.
+			// 2016-11-21 형태는 데일리로 간주합니다.
+			// jquery 달력의 기본형식이기도 합니다.
+			regFullTime := fmt.Sprintf(`^%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word)
+			if len(searchword.tasks) == 0 {
+				for _, task := range TASKS {
+					query = append(query, bson.M{strings.ToLower(task) + ".mdate": &bson.RegEx{Pattern: regFullTime}})
+				}
+			} else {
+				for _, task := range searchword.tasks {
+					query = append(query, bson.M{strings.ToLower(task) + ".mdate": &bson.RegEx{Pattern: regFullTime}})
+				}
+			}
+		} else {
+			switch word {
+			case "all", "ALL", "올", "미ㅣ", "dhf", "전체":
+				query = append(query, bson.M{})
+			case "shot", "SHOT", "샷", "전샷", "전체샷":
+				query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
+			case "asset", "ASSET", "assets", "ASSETS", "에셋", "texture", "텍스쳐":
+				query = append(query, bson.M{"type": "asset"})
+			case "2d", "2D":
+				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "2d", Options: "i"}})
+			case "3d", "3D":
+				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "3d", Options: "i"}})
+			case "전권":
+				query = append(query, bson.M{"tag": "1권"})
+				query = append(query, bson.M{"tag": "2권"})
+				query = append(query, bson.M{"tag": "3권"})
+				query = append(query, bson.M{"tag": "4권"})
+				query = append(query, bson.M{"tag": "5권"})
+				query = append(query, bson.M{"tag": "6권"})
+				query = append(query, bson.M{"tag": "7권"})
+				query = append(query, bson.M{"tag": "8권"})
+			case "model", "mm", "layout", "ani", "fx", "mg", "fur", "sim", "crowd", "light", "comp", "matte", "env", "concept", "previz", "temp1":
+				hasTeamName = true
+				if op.Assign {
+					query = append(query, bson.M{word + ".status": ASSIGN})
+				}
+				if op.Ready {
+					query = append(query, bson.M{word + ".status": READY})
+				}
+				if op.Wip {
+					query = append(query, bson.M{word + ".status": WIP})
+				}
+				if op.Confirm {
+					query = append(query, bson.M{word + ".status": CONFIRM})
+				}
+				if op.Done {
+					query = append(query, bson.M{word + ".status": DONE})
+				}
+				if op.Omit {
+					query = append(query, bson.M{word + ".status": OMIT})
+				}
+				if op.Hold {
+					query = append(query, bson.M{word + ".status": HOLD})
+				}
+				if op.Out {
+					query = append(query, bson.M{word + ".status": OUT})
+				}
+				if op.None {
+					query = append(query, bson.M{word + ".status": NONE})
+				}
+			default:
+				query = append(query, bson.M{"slug": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
+				// #태그명으로 검색시 검색어를 패턴 검색하지 않는다.
+				if len(searchword.tags) > 0 {
+					query = append(query, bson.M{"tag": word})
+					query = append(query, bson.M{"assettags": word})
+				} else {
+					query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
+					query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
+				}
+				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"justkeycodein": word})  // 삭제예정
+				query = append(query, bson.M{"justkeycodeout": word}) // 삭제예정
+				query = append(query, bson.M{"scankeycodein": word})  // 삭제예정
+				query = append(query, bson.M{"scankeycodeout": word}) // 삭제예정
+				query = append(query, bson.M{"justtimecodein": word})
+				query = append(query, bson.M{"justtimecodeout": word})
+				query = append(query, bson.M{"scantimecodein": word})
+				query = append(query, bson.M{"scantimecodeout": word})
+				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
+				if len(searchword.tasks) == 0 {
+					for _, task := range TASKS {
+						query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
+					}
+				} else {
+					for _, task := range searchword.tasks {
+						query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
+					}
+				}
+			}
+		}
+		wordQueries = append(wordQueries, bson.M{"$or": query})
+	}
+
+	results := []Item{}
+	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
+		// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
+		return results, nil
+	}
+	statusQueries := []bson.M{}
+	if !hasTeamName {
+		if op.Assign {
+			statusQueries = append(statusQueries, bson.M{"status": ASSIGN})
+		}
+		if op.Ready {
+			statusQueries = append(statusQueries, bson.M{"status": READY})
+		}
+		if op.Wip {
+			statusQueries = append(statusQueries, bson.M{"status": WIP})
+		}
+		if op.Confirm {
+			statusQueries = append(statusQueries, bson.M{"status": CONFIRM})
+		}
+		if op.Done {
+			statusQueries = append(statusQueries, bson.M{"status": DONE})
+		}
+		if op.Omit {
+			statusQueries = append(statusQueries, bson.M{"status": OMIT})
+		}
+		if op.Hold {
+			statusQueries = append(statusQueries, bson.M{"status": HOLD})
+		}
+		if op.Out {
+			statusQueries = append(statusQueries, bson.M{"status": OUT})
+		}
+		if op.None {
+			statusQueries = append(statusQueries, bson.M{"status": NONE})
+		}
+	}
+
+	queries := []bson.M{
+		bson.M{"$and": wordQueries},
+	}
+	if len(statusQueries) != 0 {
+		queries = append(queries, bson.M{"$or": statusQueries})
+	}
+	q := bson.M{"$and": queries}
+	if *flagDebug {
+		fmt.Println("검색에 사용한 쿼리리스트")
+		fmt.Println(q)
+		fmt.Println()
+	}
+	switch op.Sortkey {
+	// 스캔길이, 스캔날짜는 역순으로 정렬한다.
+	// 스캔길이는 보통 난이도를 결정하기 때문에 역순(긴 길이순)을 매니저인 팀장,실장은 우선적으로 봐야한다.
+	// 스캔날짜는 IO팀에서 최근 등록한 데이터를 많이 검토하기 때문에 역순(최근등록순)으로 봐야한다.
+	case "scanframe", "scantime":
+		op.Sortkey = "-" + op.Sortkey
+	case "":
+		op.Sortkey = "slug"
+	}
+	err := c.Find(q).Sort(op.Sortkey).All(&results)
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return nil, err
+	}
+	return results, nil
+}
+
+// SearchTag 함수는 태그를 검색할때 사용한다.
+// SearchTags라고 이름을 붙히지 않은 이유는 CSI 자료구조의 필드명이 Tag이기 때문이다.
+// 미래에 Tag필드를  Tags 필드로 바꾼후 이 함수의 이름을 SearchTags로 바꿀 예정이다.
+func SearchTag(session *mgo.Session, op SearchOption) ([]Item, error) {
+	return SearchKey(session, op, "tag")
+}
+
+// SearchAssettags 함수는 검색옵션으로 에셋태그를 검색할때 사용한다.
+func SearchAssettags(session *mgo.Session, op SearchOption) ([]Item, error) {
+	return SearchKey(session, op, "assettags")
+}
+
+// SearchAssetTree 함수는 에셋이름을 하나 받아서 관련된 모든 에셋을 구하는 함수이다.
+func SearchAssetTree(session *mgo.Session, op SearchOption) ([]Item, error) {
+	if op.Searchword == "" { // 검색어가 없다면 종료한다.
+		return []Item{}, nil
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(op.Project)
+	var allAssets []Item
+	err := c.Find(bson.M{"type": "asset"}).Sort(op.Sortkey).All(&allAssets)
+	if err != nil {
+		if err == mgo.ErrNotFound {
+			return []Item{}, nil
+		}
+		log.Println("DB Find Err : ", err)
+		return nil, err
+	}
+
+	var result []Item
+	var waittags []string
+	var donetags []string
+	waittags = append(waittags, op.Searchword) // 최초 검색단어를 대기리스트에 넣는다.
+	for len(waittags) > 0 {
+		// fmt.Println("-------------------------------------------------------------") // 디버그 구분선
+		hasDone := false
+		for _, donetag := range donetags {
+			if donetag == waittags[0] {
+				// fmt.Printf("%s는 이미 과거에 처리되었습니다.\n", waittags[0]) // 디버그를 위해서 놔둔다.
+				hasDone = true
+			}
+		}
+		for _, item := range allAssets {
+			if item.Name == waittags[0] {
+				// fmt.Printf("%s은 자기자신입니다.\n", item.Name) // 디버그를 위해서 놔둔다.
+				donetags = append(donetags, item.Name)
+				if !hasDone {
+					result = append(result, item)
+				}
+			} else {
+				for _, tag := range item.Assettags {
+					if tag == waittags[0] {
+						// fmt.Printf("%s는 %s와 연결되어 있습니다.\n", item.Name, tag) // 디버그를 위해서 놔둔다.
+						waittags = append(waittags, item.Name)
+					}
+				}
+			}
+		}
+		// fmt.Println("디버그:", waittags) // 디버그를 위해서 놔둔다.
+		// fmt.Println("디버그:", donetags) // 디버그를 위해서 놔둔다.
+		waittags = waittags[1:] // 처리한 값은 뺀다.
+	}
+	return result, nil
+}
+
+// SearchKey 함수는 Item.{key} 필드의 값과 검색어가 정확하게 일치하는 항목들만 검색한다.
+func SearchKey(session *mgo.Session, op SearchOption, key string) ([]Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(op.Project)
+	query := []bson.M{}
+	// 아래 단어는 CSI에 버튼으로 되어있는 태그단어를 클릭시 작동되는 예약어이다.
+	switch op.Searchword {
+	case "2d", "2D":
+		query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "2d", Options: "i"}})
+	case "3d", "3D":
+		query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "3d", Options: "i"}})
+	case "asset":
+		query = append(query, bson.M{"type": &bson.RegEx{Pattern: "asset", Options: "i"}})
+	case "assign":
+		query = append(query, bson.M{"status": ASSIGN})
+	case "ready":
+		query = append(query, bson.M{"status": READY})
+	case "wip":
+		query = append(query, bson.M{"status": WIP})
+	case "confirm":
+		query = append(query, bson.M{"status": CONFIRM})
+	case "done":
+		query = append(query, bson.M{"status": DONE})
+	case "omit":
+		query = append(query, bson.M{"status": OMIT})
+	case "hold":
+		query = append(query, bson.M{"status": HOLD})
+	case "out":
+		query = append(query, bson.M{"status": OUT})
+	case "none":
+		query = append(query, bson.M{"status": NONE})
+	default:
+		query = append(query, bson.M{key: op.Searchword})
+	}
+
+	var results []Item
+	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
+		// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
+		return results, nil
+	}
+	status := []bson.M{}
+	if op.Assign {
+		status = append(status, bson.M{"status": ASSIGN})
+	}
+	if op.Ready {
+		status = append(status, bson.M{"status": READY})
+	}
+	if op.Wip {
+		status = append(status, bson.M{"status": WIP})
+	}
+	if op.Confirm {
+		status = append(status, bson.M{"status": CONFIRM})
+	}
+	if op.Done {
+		status = append(status, bson.M{"status": DONE})
+	}
+	if op.Omit {
+		status = append(status, bson.M{"status": OMIT})
+	}
+	if op.Hold {
+		status = append(status, bson.M{"status": HOLD})
+	}
+	if op.Out {
+		status = append(status, bson.M{"status": OUT})
+	}
+	if op.None {
+		status = append(status, bson.M{"status": NONE})
+	}
+
+	q := bson.M{}
+	q = bson.M{"$and": []bson.M{
+		bson.M{"$or": query},
+		bson.M{"$or": status},
+	}}
+	err := c.Find(q).Sort(op.Sortkey).All(&results)
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return nil, err
+	}
+	return results, nil
+}
+
+// SearchDdline 함수는 검색옵션, 파트정보(2d,3d)를 받아서 쿼리한다.
+func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(op.Project)
+	query := []bson.M{}
+	switch part {
+	case "2d":
+		query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: "....-" + op.Searchword[0:2] + "-" + op.Searchword[2:4]}})
+	case "3d":
+		query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: "....-" + op.Searchword[0:2] + "-" + op.Searchword[2:4]}})
+	default:
+		query = append(query, bson.M{})
+	}
+
+	status := []bson.M{}
+	if op.Assign {
+		status = append(status, bson.M{"status": ASSIGN})
+	}
+	if op.Ready {
+		status = append(status, bson.M{"status": READY})
+	}
+	if op.Wip {
+		status = append(status, bson.M{"status": WIP})
+	}
+	if op.Confirm {
+		status = append(status, bson.M{"status": CONFIRM})
+	}
+	if op.Done {
+		status = append(status, bson.M{"status": DONE})
+	}
+	if op.Omit {
+		status = append(status, bson.M{"status": OMIT})
+	}
+	if op.Hold {
+		status = append(status, bson.M{"status": HOLD})
+	}
+	if op.Out {
+		status = append(status, bson.M{"status": OUT})
+	}
+	if op.None {
+		status = append(status, bson.M{"status": NONE})
+	}
+
+	q := bson.M{}
+	q = bson.M{"$and": []bson.M{
+		bson.M{"$or": query},
+		bson.M{"$or": status},
+	}}
+	var results []Item
+	err := c.Find(q).Sort(op.Sortkey).All(&results)
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return nil, err
+	}
+	return results, nil
+}
+
+// Searchnum 함수는 검색된 결과(search, ddline, tag)의 상태별 갯수를 검색한다.
+func Searchnum(project string, items []Item) (Infobarnum, error) {
+	var results Infobarnum
+	results.Search = len(items)
+	for _, item := range items {
+		if item.Shottype == "2D" {
+			results.Shot2d++
+		}
+		if item.Shottype == "3D" {
+			results.Shot3d++
+		}
+		if item.Type == "asset" {
+			results.Assets++
+		}
+		if item.Type == "org" || item.Type == "left" {
+			results.Shot++
+			switch item.Status {
+			case ASSIGN:
+				results.Assign++
+			case READY:
+				results.Ready++
+			case WIP:
+				results.Wip++
+			case CONFIRM:
+				results.Confirm++
+			case DONE:
+				results.Done++
+			case OMIT:
+				results.Omit++
+			case HOLD:
+				results.Hold++
+			case OUT:
+				results.Out++
+			case NONE:
+				results.None++
+			}
+		}
+	}
+	return results, nil
+}
+
+// Resultnum 함수는 프로젝트의 전체 샷에 대한 상태별 갯수를 검색한다.
+func Resultnum(session *mgo.Session, project string) (Infobarnum, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+
+	var results Infobarnum
+	//진행률 출력.
+	assign := bson.M{}
+	assign = bson.M{"$and": []bson.M{
+		bson.M{"status": ASSIGN},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var assignnum int
+	assignnum, err := c.Find(assign).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	ready := bson.M{}
+	ready = bson.M{"$and": []bson.M{
+		bson.M{"status": READY},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var readynum int
+	readynum, err = c.Find(ready).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	wip := bson.M{}
+	wip = bson.M{"$and": []bson.M{
+		bson.M{"status": WIP},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var wipnum int
+	wipnum, err = c.Find(wip).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	confirm := bson.M{}
+	confirm = bson.M{"$and": []bson.M{
+		bson.M{"status": CONFIRM},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var confirmnum int
+	confirmnum, err = c.Find(confirm).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	done := bson.M{}
+	done = bson.M{"$and": []bson.M{
+		bson.M{"status": DONE},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var donenum int
+	donenum, err = c.Find(done).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	omit := bson.M{}
+	omit = bson.M{"$and": []bson.M{
+		bson.M{"status": OMIT},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var omitnum int
+	omitnum, err = c.Find(omit).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	hold := bson.M{}
+	hold = bson.M{"$and": []bson.M{
+		bson.M{"status": HOLD},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var holdnum int
+	holdnum, err = c.Find(hold).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	out := bson.M{}
+	out = bson.M{"$and": []bson.M{
+		bson.M{"status": OUT},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var outnum int
+	outnum, err = c.Find(out).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	none := bson.M{}
+	none = bson.M{"$and": []bson.M{
+		bson.M{"status": NONE},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	var nonenum int
+	nonenum, err = c.Find(none).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	var totalnum int
+	totalnum, err = c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}}).Count()
+	if err != nil {
+		log.Println("DB Find Err : ", err)
+		return Infobarnum{}, err
+	}
+
+	results.Assign = assignnum
+	results.Ready = readynum
+	results.Wip = wipnum
+	results.Confirm = confirmnum
+	results.Done = donenum
+	results.Omit = omitnum
+	results.Hold = holdnum
+	results.Out = outnum
+	results.None = nonenum
+	results.Total = totalnum
+
+	return results, nil
+}
+
+// RmOverlapOnsetnote 함수는 PM이 입력한 작업내용에 중복되어있다면 중복값을 삭제하는 함수이다.
+func RmOverlapOnsetnote(session *mgo.Session, project string) error {
+	// 프로젝트가 존재하는지 체크한다.
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	var items []Item
+	err = c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}}).All(&items)
+	if err != nil {
+		return err
+	}
+	for _, i := range items {
+		// note 리스트를 맵으로 바꾼다.
+		aftermap := make(map[string]string)
+		for _, n := range i.Onsetnote {
+			key := strings.SplitN(n, ";", 2)[1]
+			value := strings.SplitN(n, ";", 2)[0]
+			aftermap[key] = value
+		}
+		// 맵을 다시 리스트로 바꾼다.
+		var after []string
+		for key, value := range aftermap {
+			after = append(after, value+";"+key)
+		}
+		sort.Strings(after) // 시간순으로 정렬한다.
+
+		// notes를 업데이트 한다.
+		err = c.Update(bson.M{"slug": i.Slug}, bson.M{"$set": bson.M{"onsetnote": after}})
+		if err != nil {
+			log.Println(err)
+		}
+	}
+	return nil
+}
+
+// setMov함수는 해당 샷에 mov를 설정하는 함수이다.
+func setMov(session *mgo.Session, project, name, task, mov string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	var items []Item
+	err = c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+	if err != nil {
+		return err
+	}
+	if len(items) == 0 {
+		return errors.New(name + "을 DB에서 찾을 수 없습니다.")
+	}
+	if len(items) != 1 {
+		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
+	}
+	typestr := items[0].Type
+	err = c.Update(bson.M{"slug": name + "_" + typestr}, bson.M{"$set": bson.M{task + ".mov": mov, task + ".mdate": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Type 함수는 이름을 이용해서 Type값을 반환한다.
+// 일반샷은 org를 반환한다.
+// 입체샷인경우 left를 반환한다.
+// 에셋은 asset을 반환한다.
+func Type(session *mgo.Session, project, name string) (string, error) {
+	c := session.DB("project").C(project)
+	var items []Item
+	err := c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+	if err != nil {
+		return "", err
+	}
+	if len(items) == 0 {
+		return "", errors.New(name + "에 해당하는 org,left,asset 타입을 DB에서 찾을 수 없습니다.")
+	}
+	if len(items) != 1 {
+		return "", errors.New(name + "값이 DB에서 고유하지 않습니다.")
+	}
+	return items[0].Type, nil
+}
+
+// SetImageSize 함수는 해당 샷의 이미지 사이즈를 설정한다.
+// key 설정값 : platesize, distortionsize, rendersize
+func SetImageSize(session *mgo.Session, project, name, key, size string) error {
+	if !(key == "platesize" || key == "dsize" || key == "rendersize") {
+		return errors.New("잘못된 key값입니다")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetTimecode 함수는 item에 Timecode를 설정한다.
+// ScanTimecodeIn,ScanTimecodeOut,JustTimecodeIn,JustTimecodeOut 문자를 key로 사용할 수 있다.
+func SetTimecode(session *mgo.Session, project, name, key, timecode string) error {
+	key = strings.ToLower(key)
+	if !(key == "scantimecodein" ||
+		key == "scantimecodeout" ||
+		key == "justtimecodein" ||
+		key == "justtimecodeout") {
+		return errors.New("scantimecodein, scantimecodeout, justtimecodein, justtimecodeout 키값만 사용가능")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	// 우리회사는 현재 timecode와 keycode를 혼용해서 사용중이다.
+	// 원래는 Timecode가 맞지만 현재 DB가 keycode로 되어있어 아직은 아래줄이 필요하다.
+	key = strings.Replace(key, "timecode", "keycode", -1)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetUseType 함수는 item에 UseType string을 설정한다.
+func SetUseType(session *mgo.Session, project, name, usetype string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetFrame 함수는 item에 프레임을 설정한다.
+// ScanIn,ScanOut,ScanFrame,PlateIn,PlateOut,JustIn,JustOut,HandleIn,HandleOut 문자를 key로 사용할 수 있다.
+func SetFrame(session *mgo.Session, project, name, key string, frame int) error {
+	key = strings.ToLower(key)
+	if !(key == "scanin" ||
+		key == "scanout" ||
+		key == "scanframe" ||
+		key == "platein" ||
+		key == "plateout" ||
+		key == "justin" ||
+		key == "justout" ||
+		key == "handlein" ||
+		key == "handleout") {
+		return errors.New("scanin, scanout, scanframe, platein, plateout, justin, justout, handlein, handleout 키값만 사용가능합니다")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: frame, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetCameraPubPath 함수는 해당 카메라 퍼블리쉬 경로를 설정한다.
+func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetCameraPubTask 함수는 해당 카메라 퍼블리쉬 팀을 설정한다.
+func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
+	if !(task == "" || task == "mm" || task == "layout" || task == "ani") {
+		return errors.New("none(빈문자열), mm, layout, ani 팀만 카메라 publish가 가능합니다")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetCameraProjection 함수는 샷에 Projection 카메라 사용여부를 체크한다.
+func SetCameraProjection(session *mgo.Session, project, name string, has bool) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": has, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetThummov 함수는 item에 Thummov값을 셋팅한다.
+func SetThummov(session *mgo.Session, project, name, typ, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	if typ == "" {
+		typ, err = Type(session, project, name)
+		if err != nil {
+			return err
+		}
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": Now()}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetStatus 함수는 item에 task의 status 값을 셋팅한다.
+func SetStatus(session *mgo.Session, project, name, task, status string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	slug := name + "_" + typ
+	item, err := getItem(session, project, slug)
+	if err != nil {
+		return err
+	}
+	hasStatus := ""
+	switch strings.ToLower(status) {
+	case READY, "ready":
+		hasStatus = READY
+	case ASSIGN, "assign":
+		hasStatus = ASSIGN
+	case WIP, "wip":
+		hasStatus = WIP
+	case CONFIRM, "confirm":
+		hasStatus = CONFIRM
+	case DONE, "done":
+		hasStatus = DONE
+	case OMIT, "omit":
+		hasStatus = OMIT
+	case HOLD, "hold":
+		hasStatus = HOLD
+	case OUT, "out":
+		hasStatus = OUT
+	case NONE, "none":
+		hasStatus = NONE
+	}
+	if hasStatus == "" {
+		return errors.New("올바른 status가 아닙니다")
+	}
+
+	hasTask := true
+	switch strings.ToLower(task) {
+	case "model":
+		item.Model.Status = hasStatus
+	case "mm":
+		item.Mm.Status = hasStatus
+	case "layout":
+		item.Layout.Status = hasStatus
+	case "ani":
+		item.Ani.Status = hasStatus
+	case "fx":
+		item.Fx.Status = hasStatus
+	case "mg":
+		item.Mg.Status = hasStatus
+	case "fur":
+		item.Fur.Status = hasStatus
+	case "sim":
+		item.Sim.Status = hasStatus
+	case "crowd":
+		item.Crowd.Status = hasStatus
+	case "light":
+		item.Light.Status = hasStatus
+	case "comp":
+		item.Comp.Status = hasStatus
+	case "matte":
+		item.Matte.Status = hasStatus
+	case "env":
+		item.Env.Status = hasStatus
+	case "concept":
+		item.Concept.Status = hasStatus
+	case "previz":
+		item.Previz.Status = hasStatus
+	case "temp1":
+		item.Temp1.Status = hasStatus
+	default:
+		hasTask = false
+	}
+	if !hasTask {
+		return errors.New("올바른 task가 아닙니다")
+	}
+	c := session.DB("project").C(project)
+	item.Updatetime = Now()
+	item.updateStatus()
+	err = c.Update(bson.M{"slug": item.Slug}, item)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
+func SetStartdate(session *mgo.Session, project, name, task, startdate string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	slug := name + "_" + typ
+	item, err := getItem(session, project, slug)
+	if err != nil {
+		return err
+	}
+	hasTask := true
+	switch strings.ToLower(task) {
+	case "model":
+		item.Model.Startdate = startdate
+	case "mm":
+		item.Mm.Startdate = startdate
+	case "layout":
+		item.Layout.Startdate = startdate
+	case "ani":
+		item.Ani.Startdate = startdate
+	case "fx":
+		item.Fx.Startdate = startdate
+	case "mg":
+		item.Mg.Startdate = startdate
+	case "fur":
+		item.Fur.Startdate = startdate
+	case "sim":
+		item.Sim.Startdate = startdate
+	case "crowd":
+		item.Crowd.Startdate = startdate
+	case "light":
+		item.Light.Startdate = startdate
+	case "comp":
+		item.Comp.Startdate = startdate
+	case "matte":
+		item.Matte.Startdate = startdate
+	case "env":
+		item.Env.Startdate = startdate
+	case "concept":
+		item.Concept.Startdate = startdate
+	case "previz":
+		item.Previz.Startdate = startdate
+	case "temp1":
+		item.Temp1.Startdate = startdate
+	default:
+		hasTask = false
+	}
+	if !hasTask {
+		return errors.New("올바른 task가 아닙니다")
+	}
+	c := session.DB("project").C(project)
+	item.Updatetime = Now()
+	err = c.Update(bson.M{"slug": item.Slug}, item)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// SetPredate 함수는 item에 task의 predate 값을 셋팅한다.
+func SetPredate(session *mgo.Session, project, name, task, predate string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	slug := name + "_" + typ
+	item, err := getItem(session, project, slug)
+	if err != nil {
+		return err
+	}
+	hasTask := true
+	switch strings.ToLower(task) {
+	case "model":
+		item.Model.Predate = predate
+	case "mm":
+		item.Mm.Predate = predate
+	case "layout":
+		item.Layout.Predate = predate
+	case "ani":
+		item.Ani.Predate = predate
+	case "fx":
+		item.Fx.Predate = predate
+	case "mg":
+		item.Mg.Predate = predate
+	case "fur":
+		item.Fur.Predate = predate
+	case "sim":
+		item.Sim.Predate = predate
+	case "crowd":
+		item.Crowd.Predate = predate
+	case "light":
+		item.Light.Predate = predate
+	case "comp":
+		item.Comp.Predate = predate
+	case "matte":
+		item.Matte.Predate = predate
+	case "env":
+		item.Env.Predate = predate
+	case "concept":
+		item.Concept.Predate = predate
+	case "previz":
+		item.Previz.Predate = predate
+	case "temp1":
+		item.Temp1.Predate = predate
+	default:
+		hasTask = false
+	}
+	if !hasTask {
+		return errors.New("올바른 task가 아닙니다")
+	}
+	c := session.DB("project").C(project)
+	item.Updatetime = Now()
+	err = c.Update(bson.M{"slug": item.Slug}, item)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
