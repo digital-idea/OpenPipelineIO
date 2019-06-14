@@ -690,6 +690,9 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 
 // Resultnum 함수는 프로젝트의 전체 샷에 대한 상태별 갯수를 검색한다.
 func Resultnum(session *mgo.Session, project string) (Infobarnum, error) {
+	if project == "" {
+		return Infobarnum{}, nil
+	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)
 

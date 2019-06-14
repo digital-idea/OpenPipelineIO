@@ -69,7 +69,6 @@ func getProject(session *mgo.Session, id string) (Project, error) {
 		if err == mgo.ErrNotFound {
 			return p, errors.New(id + " 프로젝트가 존재하지 않습니다.")
 		}
-		log.Println(err)
 		return p, err
 	}
 	return p, nil
