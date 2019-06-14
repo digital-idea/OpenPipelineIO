@@ -664,7 +664,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
-			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 일괄 생성하는 경우가 있다.
+			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 폴더에 생성하는 경우가 있다.
 			err = dipath.Ideapath(thumbnailDir)
 			if err != nil {
 				log.Println(err)
@@ -680,6 +680,11 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		err = imaging.Save(dst, thumbnailPath)
 		if err != nil {
 			log.Printf("failed to open image: %v\n", err)
+		}
+		// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 수정하는 경우도 있다.
+		err = dipath.Ideapath(thumbnailPath)
+		if err != nil {
+			log.Println(err)
 		}
 	}
 
