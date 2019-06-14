@@ -4,5 +4,6 @@ nohup.out
 .DS_Store
 /data
 /bin
-/thumbnail
+/thumbnail/*.jpg
+/thumbnail/*.png
 assets_vfsdata.go

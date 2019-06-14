@@ -56,8 +56,7 @@
 </select>
 
 <select name="Template" class="sortbox">
-<option value="csi2" {{if eq .Searchop.Template "csi2"}}selected{{end}}>양식 : csi2</option>
-<option value="csi3" {{if eq .Searchop.Template "csi3"}}selected{{end}}>양식 : csi3</option>
+    <option value="csi3" {{if eq .Searchop.Template "csi3"}}selected{{end}}>양식 : csi3</option> <!--template 이름을 그대로 사용한다.-->
 </select>
 
 </form>
