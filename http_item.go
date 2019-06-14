@@ -7,12 +7,12 @@ import (
 	"mime"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/digital-idea/dipath"
+	"github.com/disintegration/imaging"
 	"gopkg.in/mgo.v2"
 )
 
@@ -671,42 +671,15 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		// 이미지변환
-		/*
-			tempf, err := os.Open(tempPath)
-			if err != nil {
-				log.Println(err)
-			}
-
-			img, err := jpeg.Decode(bufio.NewReader(tempf))
-			if err != nil {
-				log.Fatal(err)
-			}
-			m := resize.Resize(410, 0, img, resize.Lanczos3)
-			out, err := os.Create(thumbnailPath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer out.Close()
-			jpeg.Encode(out, m, nil)
-		*/
-		argv := []string{tempFile.Name(), "-resize", "410x222", "-gravity", "center", "-background", "black", "-extent", "410x222+0+0", "-border", "1", thumbnailPath}
-		convertcmd := "/usr/local/bin/convert" // macOS
-		//convertcmd := "/usr/bin/convert"       // CentOS7
-		if _, err := os.Stat(convertcmd); err != nil {
-			log.Println("ImageMagick Convert 명령어가 존재하지 않습니다.")
-			log.Println("Linux: yum install ImageMagick")
-			log.Println("macOS: brew install imagemagick")
-		}
-		if *flagDebug {
-			fmt.Println(convertcmd, strings.Join(argv, " "))
-		}
-		err = exec.Command(convertcmd, argv...).Run()
+		src, err := imaging.Open(tempPath)
 		if err != nil {
-			log.Println(err)
+			log.Printf("failed to open image: %v\n", err)
 		}
-		err = dipath.Ideapath(thumbnailPath)
+		// Resize the cropped image to width = 200px preserving the aspect ratio.
+		dst := imaging.Fill(src, 410, 222, imaging.Center, imaging.Lanczos)
+		err = imaging.Save(dst, thumbnailPath)
 		if err != nil {
-			log.Println(err)
+			log.Printf("failed to open image: %v\n", err)
 		}
 	}
 
