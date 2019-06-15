@@ -86,8 +86,10 @@ func main() {
 	}
 	if *flagAdd == "project" && *flagName != "" { //프로젝트 추가
 		addProjectCmd(*flagName)
+		return
 	} else if *flagRm == "project" && *flagName != "" { //프로젝트 삭제
 		rmProjectCmd(*flagName)
+		return
 	} else if *flagAdd == "item" && *flagName != "" && *flagProject != "" && *flagType != "" { //아이템 추가
 		switch *flagType {
 		case "org", "left": // 일반영상은 org가 샷 타입이다. 입체프로젝트는 left가 샷타입이다.
