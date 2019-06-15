@@ -33,6 +33,9 @@ func addProject(session *mgo.Session, p Project) error {
 	if p.ID == "" {
 		return errors.New("빈 문자열입니다. 프로젝트를 생성할 수 없습니다")
 	}
+	if p.ID == "user" {
+		return errors.New("user 이름으로 프로젝트를 생성할 수 없습니다")
+	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("projectinfo").C(p.ID)
 	num, err := c.Find(bson.M{"id": p.ID}).Count()
