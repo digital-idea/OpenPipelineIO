@@ -27,6 +27,8 @@ var (
 	TEMPLATEPATH = "assets/template"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MAILDNS = "lazypic.org"
+	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
+	COMPANY = "lazypic"
 
 	// 주요서비스 인수
 	flagDBIP         = flag.String("dbip", DBIP, "mongodb ip")
@@ -34,7 +36,8 @@ var (
 	flagThumbPath    = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagTemplatePath = flag.String("templatepath", TEMPLATEPATH, "template path") // template HTML 이 모여있는 경로.
 	flagDebug        = flag.Bool("debug", false, "디버그모드 활성화")
-	flagHTTPPort     = flag.String("http", "", "Web Service Port number.") // 웹서버 포트
+	flagHTTPPort     = flag.String("http", "", "Web Service Port number.")      // 웹서버 포트
+	flagCompany      = flag.String("http", COMPANY, "Web Service Port number.") // 회사이름
 	// RV
 	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
 	flagPlay = flag.Bool("play", false, "Play RV")

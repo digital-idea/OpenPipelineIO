@@ -455,7 +455,13 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	NewItem.Concept.Predate = ToFullTime(r.FormValue("ConceptPredate"))
 	NewItem.Concept.Date = ToFullTime(r.FormValue("ConceptDate"))
-	NewItem.Concept.Mov = dipath.Win2lin(r.FormValue("ConceptMov"))
+	if *flagCompany == "digitalidea" {
+		// Concept Team은 윈도우즈를 사용한다.
+		NewItem.Concept.Mov = dipath.Win2lin(r.FormValue("ConceptMov"))
+	} else {
+		NewItem.Concept.Mov = r.FormValue("ConceptMov")
+	}
+
 	//model
 	NewItem.Model.Status = r.FormValue("ModelStatus")
 	NewItem.Model.User = r.FormValue("ModelUser")
@@ -467,7 +473,12 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	NewItem.Model.Predate = ToFullTime(r.FormValue("ModelPredate"))
 	NewItem.Model.Date = ToFullTime(r.FormValue("ModelDate"))
-	NewItem.Model.Mov = dipath.Win2lin(r.FormValue("ModelMov"))
+	if *flagCompany == "digitalidea" {
+		// 모델링팀 일부는 ZBrush로 인해 윈도우즈를 사용한다.
+		NewItem.Model.Mov = dipath.Win2lin(r.FormValue("ModelMov"))
+	} else {
+		NewItem.Model.Mov = r.FormValue("ModelMov")
+	}
 	//mm
 	NewItem.Mm.Status = r.FormValue("MmStatus")
 	NewItem.Mm.User = r.FormValue("MmUser")
@@ -527,7 +538,13 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	NewItem.Mg.Predate = ToFullTime(r.FormValue("MgPredate"))
 	NewItem.Mg.Date = ToFullTime(r.FormValue("MgDate"))
-	NewItem.Mg.Mov = dipath.Win2lin(r.FormValue("MgMov"))
+	if *flagCompany == "digitalidea" {
+		// 모션그래픽팀은 에프터이펙트로 인해 윈도우즈를 사용한다.
+		NewItem.Mg.Mov = dipath.Win2lin(r.FormValue("MgMov"))
+	} else {
+		NewItem.Mg.Mov = r.FormValue("MgMov")
+	}
+
 	//temp1
 	NewItem.Temp1.Title = r.FormValue("Temp1Title")
 	NewItem.Temp1.Status = r.FormValue("Temp1Status")
@@ -624,7 +641,12 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	NewItem.Matte.Predate = ToFullTime(r.FormValue("MattePredate"))
 	NewItem.Matte.Date = ToFullTime(r.FormValue("MatteDate"))
-	NewItem.Matte.Mov = dipath.Win2lin(r.FormValue("MatteMov"))
+	if *flagCompany == "digitalidea" {
+		// 매트팀은 포토샵등의 툴로 인해 윈도우즈를 사용한다.
+		NewItem.Matte.Mov = dipath.Win2lin(r.FormValue("MatteMov"))
+	} else {
+		NewItem.Matte.Mov = r.FormValue("MatteMov")
+	}
 	//env
 	NewItem.Env.Status = r.FormValue("EnvStatus")
 	NewItem.Env.User = r.FormValue("EnvUser")
@@ -636,7 +658,12 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	NewItem.Env.Predate = ToFullTime(r.FormValue("EnvPredate"))
 	NewItem.Env.Date = ToFullTime(r.FormValue("EnvDate"))
-	NewItem.Env.Mov = dipath.Win2lin(r.FormValue("EnvMov"))
+	if *flagCompany == "digitalidea" {
+		// 환경팀은 간혹 윈도우즈를 사용한다.
+		NewItem.Env.Mov = dipath.Win2lin(r.FormValue("EnvMov"))
+	} else {
+		NewItem.Env.Mov = r.FormValue("EnvMov")
+	}
 
 	file, fileHandler, fileErr := r.FormFile("Thumbnail")
 	if fileErr == nil {
@@ -672,9 +699,11 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 폴더에 생성하는 경우가 있다.
-			err = dipath.Ideapath(thumbnailDir)
-			if err != nil {
-				log.Println(err)
+			if *flagCompany == "digitalidea" {
+				err = dipath.Ideapath(thumbnailDir)
+				if err != nil {
+					log.Println(err)
+				}
 			}
 		}
 		// 이미지변환
@@ -689,9 +718,11 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			log.Printf("failed to open image: %v\n", err)
 		}
 		// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 수정하는 경우도 있다.
-		err = dipath.Ideapath(thumbnailPath)
-		if err != nil {
-			log.Println(err)
+		if *flagCompany == "digitalidea" {
+			err = dipath.Ideapath(thumbnailPath)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 
