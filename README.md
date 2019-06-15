@@ -2,7 +2,7 @@
 
 ![travisCI](https://secure.travis-ci.org/digital-idea/csi3.png)
 
-프로젝트 매니징 웹 파이프라인툴 입니다.
+프로젝트 매니징을 도와주는 웹 어플리케이션 입니다.
 
 ### 다운로드
 웹서버를 안정적으로 운용하기 위해 리눅스, 맥용만 배포합니다.
@@ -91,6 +91,10 @@ $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프
 ### 썸네일 경로
 - 썸네일주소 : `/thumbnail/{projectname}/{slug}.jpg`
 - 사용자이미지 : `/thumbnail/user/{id}.jpg`
+
+### RestAPI
+- [Project](documents/rest_project.md)
+- [Item](documents/rest_item.md)
 
 ### Process
 - [디자인 프로세스](documents/process_designer.md)
