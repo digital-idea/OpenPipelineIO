@@ -6,10 +6,19 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/shurcooL/httpfs/html/vfstemplate"
 )
 
 // MaxFileSize 사이즈는 웹에서 전송할 수 있는 최대 사이즈를 2기가로 제한한다.(인트라넷)
 const MaxFileSize = 2000 * 1000 * 1024
+
+// LoadTemplates 함수는 템플릿을 로딩합니다.
+func LoadTemplates() (*template.Template, error) {
+	t := template.New("").Funcs(funcMap)
+	t, err := vfstemplate.ParseGlob(assets, t, "/template/*.html")
+	return t, err
+}
 
 //템플릿 함수를 로딩합니다.
 var funcMap = template.FuncMap{
@@ -40,14 +49,21 @@ var funcMap = template.FuncMap{
 
 // 도움말 페이지 입니다.
 func handleHelp(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	type recipy struct {
 		Wfs string
 	}
 	rcp := recipy{}
 	rcp.Wfs = *flagWFS
-	err := templates.ExecuteTemplate(w, "help", rcp)
+	err = t.ExecuteTemplate(w, "help", rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }

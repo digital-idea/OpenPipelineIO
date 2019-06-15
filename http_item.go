@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"mime"
@@ -14,13 +13,12 @@ import (
 
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
-	"github.com/shurcooL/httpfs/html/vfstemplate"
 	"gopkg.in/mgo.v2"
 )
 
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
-	t, err := loadTemplates()
+	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -131,7 +129,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(rcp.Items) == 0 {
-		err = templates.ExecuteTemplate(w, "searchno", rcp)
+		err = t.ExecuteTemplate(w, "searchno", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -147,16 +145,15 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func loadTemplates() (*template.Template, error) {
-	t := template.New("").Funcs(funcMap)
-	t, err := vfstemplate.ParseGlob(assets, t, "/template/*.html")
-	return t, err
-}
-
 // handleAssettags는 에셋태그 페이지이다.
 func handleAssettags(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -257,7 +254,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
 	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
-	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -267,13 +264,18 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 
 // handleEdit 함수는 Item 편집페이지이다.
 func handleEdit(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
 	editType := q.Get("type")
 	project := q.Get("project")
 	slug := q.Get("slug")
 	id := q.Get("id") // 프로젝트id에 사용할 것
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -301,7 +303,7 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = templates.ExecuteTemplate(w, "editItem", rcp)
+		err = t.ExecuteTemplate(w, "editItem", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -315,7 +317,7 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = templates.ExecuteTemplate(w, "editProject", rcp)
+		err = t.ExecuteTemplate(w, "editProject", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -331,8 +333,13 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 
 // handleTags 함수는 태그 클릭시 출력되는 페이지이다.
 func handleTags(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -426,7 +433,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	// Search 박스의 상태 옵션은 기본형이어야 한다
 	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword
 	rcp.Searchop.setStatusDefault()
-	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -436,6 +443,12 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 
 // handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다.
 func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	//var logstring string
 	//기존 Item의 값을 가지고 온다.
@@ -725,7 +738,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	if fileErr == nil {
 		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
 			log.Println("업로드 파일이 jpeg 또는 png 파일이 아닙니다.")
-			err = templates.ExecuteTemplate(w, "edited", nil)
+			err = t.ExecuteTemplate(w, "edited", nil)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -816,7 +829,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	//로그를 추후 처리한다.
 	// logging(CurrentItem, NewItem)
-	err = templates.ExecuteTemplate(w, "edited", nil)
+	err = t.ExecuteTemplate(w, "edited", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -826,8 +839,13 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
 func handleDdline(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -920,7 +938,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
-	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -930,8 +948,13 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 
 // handleIndex 함수는 index 페이지이다.
 func handleIndex(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -963,7 +986,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Confirm = true
 	rcp.Searchop.Sortkey = "slug"
 	rcp.Searchop.Template = "csi3"
-	err = templates.ExecuteTemplate(w, "index", rcp)
+	err = t.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -974,13 +997,18 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 // handleItemDetail 함수는 Item의 디테일한 정보페이지다.
 // 이 페이지는 만들다가 만것같다.
 func handleItemDetail(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
 	editType := q.Get("type")
 	project := q.Get("project")
 	slug := q.Get("slug")
 	id := q.Get("id") // 프로젝트id에 사용할 것
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -1008,7 +1036,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = templates.ExecuteTemplate(w, "detailItem", rcp)
+		err = t.ExecuteTemplate(w, "detailItem", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1022,7 +1050,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		err = templates.ExecuteTemplate(w, "detailProject", rcp)
+		err = t.ExecuteTemplate(w, "detailProject", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)

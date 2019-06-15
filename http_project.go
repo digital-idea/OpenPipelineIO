@@ -10,20 +10,34 @@ import (
 
 // handleAddProject 함수는 프로젝트를 추가하는 페이지이다.
 func handleAddProject(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	err := templates.ExecuteTemplate(w, "addProject", nil)
+	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "addProject", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
 // handleProjectinfo 함수는 프로젝트 자료구조 페이지이다.
 func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -35,28 +49,38 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	rcp.MailDNS = *flagMailDNS
 	rcp.Projects, err = getProjects(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = templates.ExecuteTemplate(w, "projectinfo", rcp)
+	err = t.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
 // handleEditProjectSubmit 함수는 Projectinfo의  수정정보를 처리하는 페이지이다.
 func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	current, err := getProject(session, r.FormValue("Id"))
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	renewal := current //과거 프로젝트 값을 셋팅한다.
@@ -182,12 +206,14 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	// 새로 변경된 정보를 DB에 저장한다.
 	err = setProject(session, renewal)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = templates.ExecuteTemplate(w, "edited", nil)
+	err = t.ExecuteTemplate(w, "edited", nil)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }

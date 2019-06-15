@@ -15,8 +15,19 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 
 // handleSignup 함수는 회원가입 페이지이다.
 func handleSignup(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	templates.ExecuteTemplate(w, "signup", nil)
+	err = t.ExecuteTemplate(w, "signup", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleSignin 함수는 로그인 페이지이다.
@@ -26,10 +37,17 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 
 // handleUsersInfo 함수는 유저 자료구조 페이지이다.
 func handleUserinfo(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -39,12 +57,14 @@ func handleUserinfo(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	rcp.Users, err = getUsers(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = templates.ExecuteTemplate(w, "userinfo", rcp)
+	err = t.ExecuteTemplate(w, "userinfo", rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 

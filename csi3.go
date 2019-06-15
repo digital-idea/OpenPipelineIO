@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
 	"log"
 	"os"
 	"os/exec"
@@ -23,8 +22,6 @@ var (
 	DILOG = "http://127.0.0.1:8080"
 	// THUMBPATH 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	THUMBPATH = "thumbnail"
-	// TEMPLATEPATH 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	TEMPLATEPATH = "assets/template"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MAILDNS = "lazypic.org"
 	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -35,22 +32,20 @@ var (
 	MINVER = ""
 
 	// 주요서비스 인수
-	flagDBIP         = flag.String("dbip", DBIP, "mongodb ip")
-	flagMailDNS      = flag.String("maildns", MAILDNS, "mail DNS name")
-	flagThumbPath    = flag.String("thumbpath", THUMBPATH, "thumbnail path")
-	flagTemplatePath = flag.String("templatepath", TEMPLATEPATH, "template path") // template HTML 이 모여있는 경로.
-	flagDebug        = flag.Bool("debug", false, "디버그모드 활성화")
-	flagHTTPPort     = flag.String("http", "", "Web Service Port number.")         // 웹서버 포트
-	flagCompany      = flag.String("company", COMPANY, "Web Service Port number.") // 회사이름
-	flagVersion      = flag.Bool("version", false, "Print Version")                // 버전
+	flagDBIP      = flag.String("dbip", DBIP, "mongodb ip")
+	flagMailDNS   = flag.String("maildns", MAILDNS, "mail DNS name")
+	flagThumbPath = flag.String("thumbpath", THUMBPATH, "thumbnail path")
+	flagDebug     = flag.Bool("debug", false, "디버그모드 활성화")
+	flagHTTPPort  = flag.String("http", "", "Web Service Port number.")         // 웹서버 포트
+	flagCompany   = flag.String("company", COMPANY, "Web Service Port number.") // 회사이름
+	flagVersion   = flag.Bool("version", false, "Print Version")                // 버전
 	// RV
 	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
 	flagPlay = flag.Bool("play", false, "Play RV")
 	// Etc Service
 	flagDILOG = flag.String("dilog", DILOG, "dilog webserver url and port. ex) "+DILOG)
 	flagWFS   = flag.String("wfs", WFS, "wfs webserver url and port. ex) "+WFS)
-	// 템플릿 셋팅
-	templates = template.New("main")
+
 	// Commandline Args
 	flagAdd       = flag.String("add", "", "add project, add item(shot, asset)")
 	flagRm        = flag.String("rm", "", "remove project, shot, asset")
@@ -198,8 +193,6 @@ func main() {
 			}
 		}
 		session.Close()
-		// 템플릿을 로딩하고 웹서버를 실행한다.
-		templates = template.Must(template.New("main").Funcs(funcMap).ParseGlob(*flagTemplatePath + "/*"))
 		ip, err := serviceIP()
 		if err != nil {
 			log.Fatal(err)
