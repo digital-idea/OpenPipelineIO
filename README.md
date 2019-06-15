@@ -5,13 +5,21 @@
 프로젝트 매니징 웹 파이프라인툴 입니다.
 
 ### 다운로드
+웹서버를 안정적으로 운용하기 위해 리눅스, 맥용만 배포합니다.
+
 - [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v1.0/csi3_linux_x86-64.tgz)
 - [Linux 64bit Digitalidea](https://github.com/digital-idea/csi3/releases/download/v1.0/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 - [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v1.0/csi3_darwin_x86-64.tgz)
 - [macOS 64bit Digitalidea](https://github.com/digital-idea/csi3/releases/download/v1.0/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- Windows 64bit: 필요시 진행합니다.
-- Windows 64bit Digitalidea: 필요시 진행합니다.
 
+윈도우즈는 일반 OS의 경우 동시접속자수가 제한되어 있습니다.
+
+### Roadmap
+- [ ] 빌드환경 구축 ![build](http://progressed.io/bar/80?title=progress)
+- [ ] 유저자료구조 추가
+- [ ] CSI2 restAPI 추가
+- [ ] multi Task 기능추가
+- [ ] 3D 파이프라인과 필요한 자료구조 및 API 생성(샷트레킹, 버전)
 
 ### mongoDB 설치, 실행
 
