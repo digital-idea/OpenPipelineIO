@@ -20,11 +20,17 @@ import (
 
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
+	t, err := loadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html")
-	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -46,7 +52,8 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Dilog = *flagDILOG
@@ -76,68 +83,66 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
 		rcp.Items, err = Search(session, rcp.Searchop)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 	rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Project, err = getProject(session, r.FormValue("Project"))
 	if err != nil {
-		t, err := loadTemplates()
-		if err != nil {
-			log.Println("loadTemplates:", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		err = t.ExecuteTemplate(w, "dberr", nil)
-		if err != nil {
-			log.Println("t.Execute:", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if len(rcp.Items) == 0 {
 		err = templates.ExecuteTemplate(w, "searchno", rcp)
 		if err != nil {
-			log.Println("Template Execution Error: ", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		return
 	}
-	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -154,7 +159,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -180,7 +186,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Template = "csi3"
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// 옵션불러오기 및 초기화.
@@ -188,7 +195,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	mode := strings.Split(r.URL.Path, "/")[1] // assettags 또는 assettree 문자열이다.
 
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -206,37 +214,44 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 			rcp.Items, err = SearchAssettags(session, rcp.Searchop)
 		}
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
@@ -244,7 +259,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
 	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -260,7 +276,8 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -274,34 +291,40 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 		defer session.Close()
 		rcp.Project, err = getProject(session, project)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Item, err = getItem(session, project, slug)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		err = templates.ExecuteTemplate(w, "editItem", rcp)
 		if err != nil {
-			log.Println("Template Execution Error: ", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		return
 	case "project":
 		rcp, err := getProject(session, id)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		err = templates.ExecuteTemplate(w, "editProject", rcp)
 		if err != nil {
-			log.Println("Template Execution Error: ", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		return
 	default:
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -312,7 +335,8 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -337,13 +361,15 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	rcp.MailDNS = *flagMailDNS
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// 옵션불러오기 및 초기화.
 	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[2])
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[2]
@@ -355,37 +381,44 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 		rcp.Searchop.setStatusAll() //태그검색은 전체상태를 검색한다.
 		rcp.Items, err = SearchTag(session, rcp.Searchop)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
@@ -395,7 +428,8 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.setStatusDefault()
 	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -409,13 +443,15 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	slug := r.FormValue("slug")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	CurrentItem, err := getItem(session, project, slug)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
@@ -691,7 +727,8 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			log.Println("업로드 파일이 jpeg 또는 png 파일이 아닙니다.")
 			err = templates.ExecuteTemplate(w, "edited", nil)
 			if err != nil {
-				log.Println("Template Execution Error: ", err)
+				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 			return
@@ -701,6 +738,8 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
 		if err != nil {
 			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		if *flagDebug {
 			fmt.Println(mediatype)
@@ -711,7 +750,8 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		tempPath := os.TempDir() + fileHandler.Filename
 		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		// 사용자가 업로드한 파일을 tempFile에 복사한다.
@@ -727,31 +767,41 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			err := os.MkdirAll(thumbnailDir, 0775)
 			if err != nil {
 				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 폴더에 생성하는 경우가 있다.
 			if *flagCompany == "digitalidea" {
 				err = dipath.Ideapath(thumbnailDir)
 				if err != nil {
 					log.Println(err)
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
 				}
 			}
 		}
 		// 이미지변환
 		src, err := imaging.Open(tempPath)
 		if err != nil {
-			log.Printf("failed to open image: %v\n", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		// Resize the cropped image to width = 200px preserving the aspect ratio.
 		dst := imaging.Fill(src, 410, 222, imaging.Center, imaging.Lanczos)
 		err = imaging.Save(dst, thumbnailPath)
 		if err != nil {
-			log.Printf("failed to open image: %v\n", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 수정하는 경우도 있다.
 		if *flagCompany == "digitalidea" {
 			err = dipath.Ideapath(thumbnailPath)
 			if err != nil {
 				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 		}
 	}
@@ -760,14 +810,16 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.updateMdate(&CurrentItem) //팀의 mov를 비교하고 달라졌다면 mov 업데이트 날짜를 변경한다.
 	err = setItem(session, project, NewItem)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	//로그를 추후 처리한다.
 	// logging(CurrentItem, NewItem)
 	err = templates.ExecuteTemplate(w, "edited", nil)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -778,7 +830,8 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -804,13 +857,15 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 	rcp.MailDNS = *flagMailDNS
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	//옵션불러오기.
 	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[3]) //project
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	part := strings.Split(r.URL.Path, "/")[2]                   //2d,3d,_
@@ -823,44 +878,52 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		rcp.Searchop.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
 		rcp.Items, err = SearchDdline(session, rcp.Searchop, part)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
 	err = templates.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -871,7 +934,8 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -882,7 +946,8 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	//검색바 초기셋팅
@@ -900,7 +965,8 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Template = "csi3"
 	err = templates.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
-		log.Println("Template Execution Error: ", err)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -917,7 +983,8 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	var err error
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
@@ -931,34 +998,40 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		defer session.Close()
 		rcp.Project, err = getProject(session, project)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		rcp.Item, err = getItem(session, project, slug)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		err = templates.ExecuteTemplate(w, "detailItem", rcp)
 		if err != nil {
-			log.Println("Template Execution Error: ", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		return
 	case "project":
 		rcp, err := getProject(session, id)
 		if err != nil {
-			templates.ExecuteTemplate(w, "dberr", nil)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		err = templates.ExecuteTemplate(w, "detailProject", rcp)
 		if err != nil {
-			log.Println("Template Execution Error: ", err)
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		return
 	default:
-		templates.ExecuteTemplate(w, "dberr", nil)
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
