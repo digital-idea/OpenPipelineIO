@@ -166,8 +166,12 @@ http://10.0.90.251:28017/project/projectname/
 - 디자인 프로세스
 - 개발 프로세스
 
+### Developer
+- Maintainer: HanwoongKim(hello@lazypic.org)
+- Committer: 
+- Contributors: 
+
 ### Infomation
 - [History](documents/history.md): csi의 역사
 - License: BSD 3-Clause License
-
-# csi3
+- 회사 전용 빌드문의: hello@lazypic.org
