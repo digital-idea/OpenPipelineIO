@@ -2,7 +2,7 @@
 
 ![travisCI](https://secure.travis-ci.org/digital-idea/csi3.png)
 
-디지털아이디어 프로젝트 매니징 파이프라인툴 입니다.
+프로젝트 매니징 웹 파이프라인툴 입니다.
 
 ### 다운로드
 - [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v1.0/csi3_linux_x86-64.tgz)
@@ -132,13 +132,13 @@ $ mongorestore --drop -d projectinfo -c adventure /dbbackup/projectinfo/18/proje
 ```
 
 #### DB체크 : DB 부하체크하기
-- http://10.0.90.251:28017/
+- http://127.0.0.1:28017
 
 #### DB체크 : DB에 들어간 값을 RestAPI를 이용해서 관찰하기
 - db시작시 --rest 옵션을 붙히면 웹에서 json데이터를 관찰할 수 있다.
 
 ```
-http://10.0.90.251:28017/project/projectname/
+http://127.0.0.1:28017/project/projectname/
 ```
 
 ### Onset툴 Setellite 와 CSI의 연동
