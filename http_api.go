@@ -17,18 +17,19 @@ import (
 
 // handleAPIAddproject 함수는 프로젝트를 추가한다.
 func handleAPIAddproject(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
 		return
 	}
-	q := r.URL.Query()
-	id := q.Get("id")
+
+	id := r.FormValue("id")
 	p := *NewProject(id)
 	err = addProject(session, p)
 	if err != nil {
@@ -51,9 +52,6 @@ func handleAPIProject(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
-	}
-	if r.Method != http.MethodGet {
-		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
