@@ -68,7 +68,6 @@ func webserver(port string) {
 	http.HandleFunc("/search", handleSearch)
 	http.HandleFunc("/tag/", handleTags)
 	http.HandleFunc("/assettags/", handleAssettags)
-	http.HandleFunc("/assettree/", handleAssettags)
 	http.HandleFunc("/ddline/", handleDdline)
 	http.HandleFunc("/edit", handleEdit)
 	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)
@@ -77,7 +76,7 @@ func webserver(port string) {
 	http.HandleFunc("/projectinfo", handleProjectinfo)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
-	http.HandleFunc("/detail", handleItemDetail)
+	http.HandleFunc("/detail", handleItemDetail) // 리펙토링이 필요해보임.
 
 	// Add
 	http.HandleFunc("/addproject", handleAddProject)
@@ -118,7 +117,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/items", handleAPIItems)
 
 	// Web Cmd
-	http.HandleFunc("/cmd", handleCmd)
+	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
 
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
