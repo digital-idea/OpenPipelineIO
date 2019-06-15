@@ -152,7 +152,7 @@
 			<option value="0" {{if eq .Item.Concept.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ConceptUser" value="{{.Item.Concept.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ConceptUser" value="{{.Item.Concept.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="ConceptUserNote">{{.Item.Concept.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="ConceptStartdate" value="{{.Item.Concept.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="ConceptDue" value="{{.Item.Concept.Due}}"><br>
@@ -171,7 +171,7 @@
 			<option value="0" {{if eq .Item.Model.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ModelUser" value="{{.Item.Model.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ModelUser" value="{{.Item.Model.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="ModelUserNote">{{.Item.Model.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="ModelStartdate" value="{{.Item.Model.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="ModelDue" value="{{.Item.Model.Due}}"><br>
@@ -190,7 +190,7 @@
 			<option value="0" {{if eq .Item.Mm.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MmUser" value="{{.Item.Mm.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MmUser" value="{{.Item.Mm.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MmUserNote">{{.Item.Mm.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MmStartdate" value="{{.Item.Mm.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MmDue" value="{{.Item.Mm.Due}}"><br>
@@ -209,7 +209,7 @@
 			<option value="0" {{if eq .Item.Layout.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LayoutUser" value="{{.Item.Layout.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LayoutUser" value="{{.Item.Layout.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="LayoutUserNote">{{.Item.Layout.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="LayoutStartdate" value="{{.Item.Layout.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="LayoutDue" value="{{.Item.Layout.Due}}"><br>
@@ -229,7 +229,7 @@
 			<option value="0" {{if eq .Item.Ani.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="AniUser" value="{{.Item.Ani.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="AniUser" value="{{.Item.Ani.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="AniUserNote">{{.Item.Ani.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="AniStartdate" value="{{.Item.Ani.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="AniDue" value="{{.Item.Ani.Due}}"><br>
@@ -248,7 +248,7 @@
 			<option value="0" {{if eq .Item.Fx.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="40" name="FxUser" value="{{.Item.Fx.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="40" name="FxUser" value="{{.Item.Fx.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="FxUserNote">{{.Item.Fx.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="FxStartdate" value="{{.Item.Fx.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="FxDue" value="{{.Item.Fx.Due}}"><br>
@@ -267,7 +267,7 @@
 			<option value="0" {{if eq .Item.Mg.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MgUser" value="{{.Item.Mg.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MgUser" value="{{.Item.Mg.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MgUserNote">{{.Item.Mg.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MgStartdate" value="{{.Item.Mg.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MgDue" value="{{.Item.Mg.Due}}"><br>
@@ -286,7 +286,7 @@
 			<option value="0" {{if eq .Item.Temp1.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="Temp1User" value="{{.Item.Temp1.User}}" oninput="removeWhiteSpace(this)"}><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="Temp1User" value="{{.Item.Temp1.User}}" onfocusout="removeWhiteSpace(this)"}><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="Temp1UserNote">{{.Item.Temp1.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="Temp1Startdate" value="{{.Item.Temp1.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="Temp1Due" value="{{.Item.Temp1.Due}}"><br>
@@ -315,7 +315,7 @@
 			<option value="0" {{if eq .Item.Previz.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="PrevizUser" value="{{.Item.Previz.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="PrevizUser" value="{{.Item.Previz.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="PrevizUserNote">{{.Item.Previz.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="PrevizStartdate" value="{{.Item.Previz.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="PrevizDue" value="{{.Item.Previz.Due}}"><br>
@@ -334,7 +334,7 @@
 			<option value="0" {{if eq .Item.Fur.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="FurUser" value="{{.Item.Fur.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="FurUser" value="{{.Item.Fur.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="FurUserNote">{{.Item.Fur.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="FurStartdate" value={{.Item.Fur.Startdate}}><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="FurDue" value="{{.Item.Fur.Due}}"><br>
@@ -353,7 +353,7 @@
 			<option value="0" {{if eq .Item.Sim.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="SimUser" value="{{.Item.Sim.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="SimUser" value="{{.Item.Sim.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="SimUserNote">{{.Item.Sim.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="SimStartdate" value="{{.Item.Sim.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="SimDue" value="{{.Item.Sim.Due}}"><br>
@@ -372,7 +372,7 @@
 			<option value="0" {{if eq .Item.Crowd.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CrowdUser" value="{{.Item.Crowd.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CrowdUser" value="{{.Item.Crowd.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="CrowdUserNote">{{.Item.Crowd.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="CrowdStartdate" value="{{.Item.Crowd.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="CrowdDue" value="{{.Item.Crowd.Due}}"><br>
@@ -391,7 +391,7 @@
 			<option value="0" {{if eq .Item.Light.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LightUser" value="{{.Item.Light.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LightUser" value="{{.Item.Light.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="LightUserNote">{{.Item.Light.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="LightStartdate" value="{{.Item.Light.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="LightDue" value="{{.Item.Light.Due}}"><br>
@@ -411,7 +411,7 @@
 			<option value="0" {{if eq .Item.Comp.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CompUser" value="{{.Item.Comp.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CompUser" value="{{.Item.Comp.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="CompUserNote">{{.Item.Comp.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="CompStartdate" value="{{.Item.Comp.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="CompDue" value="{{.Item.Comp.Due}}"><br>
@@ -430,7 +430,7 @@
 			<option value="0" {{if eq .Item.Matte.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MatteUser" value="{{.Item.Matte.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MatteUser" value="{{.Item.Matte.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MatteUserNote">{{.Item.Matte.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MatteStartdate" value="{{.Item.Matte.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MatteDue" value="{{.Item.Matte.Due}}"><br>
@@ -449,7 +449,7 @@
 			<option value="0" {{if eq .Item.Env.Status "" "0"}}selected{{end}}>none</option>
 		</select>
 		<br>
-		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="EnvUser" value="{{.Item.Env.User}}" oninput="removeWhiteSpace(this)"><br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="EnvUser" value="{{.Item.Env.User}}" onfocusout="removeWhiteSpace(this)"><br>
 		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="EnvUserNote">{{.Item.Env.UserNote}}</textarea><br>
 		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="EnvStartdate" value="{{.Item.Env.Startdate}}"><br>
 		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="EnvDue" value="{{.Item.Env.Due}}"><br>
