@@ -19,8 +19,8 @@
 > 윈도우즈 경우 Server OS가 아닌면 동시접속자수가 제한되어 있습니다. 빌드 가치가 적어서 빌드하지 않습니다.
 
 ### Roadmap
-- [x] 빌드환경 구축 ![build](http://progressed.io/bar/100?title=progress)
-- [ ] 유저자료구조 추가
+- [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
+- [ ] 유저자료구조 추가 ![user](http://progressed.io/bar/5)
 - [ ] CSI2 restAPI 추가
 - [ ] multi Task 기능추가
 - [ ] 3D 파이프라인과 필요한 자료구조 및 API 생성(샷트레킹, 버전)
