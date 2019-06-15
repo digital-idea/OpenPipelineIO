@@ -3,6 +3,7 @@ module github.com/digital-idea/csi3
 go 1.12
 
 require (
+	github.com/GeertJohan/go.rice v1.0.0
 	github.com/digital-idea/dipath v0.0.0-20190606073246-5cc149f252b0
 	github.com/digital-idea/ditime v0.0.0-20190606072845-9258d383539f
 	github.com/disintegration/imaging v1.6.0

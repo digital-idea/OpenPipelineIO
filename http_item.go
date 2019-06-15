@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"mime"
@@ -11,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
 	"gopkg.in/mgo.v2"
@@ -110,7 +112,25 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Project, err = getProject(session, r.FormValue("Project"))
 	if err != nil {
-		templates.ExecuteTemplate(w, "dberr", nil)
+		fmt.Println("rice test")
+		// find a rice.Box
+		templateBox, err := rice.FindBox("assets/template")
+		if err != nil {
+			log.Fatal(err)
+		}
+		// get file contents as string
+		templateString, err := templateBox.String("dberr.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		// parse and execute the template
+		tmplError, err := template.New("error").Parse(templateString)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tmplError.Execute(w, nil)
+
+		//templates.ExecuteTemplate(w, "dberr", nil)
 		return
 	}
 	if len(rcp.Items) == 0 {
