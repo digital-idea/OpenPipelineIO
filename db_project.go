@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 
+	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -57,6 +58,11 @@ func addProject(session *mgo.Session, p Project) error {
 	err = c.EnsureIndexKey("slug")
 	if err != nil {
 		return err
+	}
+	//Add(dbip, ip, logstr, project, slug, tool, user string, keep int) error {
+	err = dilog.Add(*flagDBIP, "", p.ID+"프로젝트가 생성되었습니다.", p.ID, "", "csi", "root", 180)
+	if err != nil {
+		log.Println(err)
 	}
 	return nil
 }
