@@ -12,9 +12,9 @@ import (
 	"strconv"
 	"strings"
 
-	rice "github.com/GeertJohan/go.rice"
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
+	"github.com/shurcooL/httpfs/html/vfstemplate"
 	"gopkg.in/mgo.v2"
 )
 
@@ -112,25 +112,19 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Project, err = getProject(session, r.FormValue("Project"))
 	if err != nil {
-		fmt.Println("rice test")
-		// find a rice.Box
-		templateBox, err := rice.FindBox("assets/template")
+		t, err := loadTemplates()
 		if err != nil {
-			log.Fatal(err)
+			log.Println("loadTemplates:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		// get file contents as string
-		templateString, err := templateBox.String("dberr.html")
-		if err != nil {
-			log.Fatal(err)
-		}
-		// parse and execute the template
-		tmplError, err := template.New("error").Parse(templateString)
-		if err != nil {
-			log.Fatal(err)
-		}
-		tmplError.Execute(w, nil)
 
-		//templates.ExecuteTemplate(w, "dberr", nil)
+		err = t.ExecuteTemplate(w, "dberr", nil)
+		if err != nil {
+			log.Println("t.Execute:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		return
 	}
 	if len(rcp.Items) == 0 {
@@ -146,6 +140,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		log.Println("Template Execution Error: ", err)
 		return
 	}
+}
+
+func loadTemplates() (*template.Template, error) {
+	t := template.New("").Funcs(funcMap)
+	t, err := vfstemplate.ParseGlob(assets, t, "/template/*.html")
+	return t, err
 }
 
 // handleAssettags는 에셋태그 페이지이다.
