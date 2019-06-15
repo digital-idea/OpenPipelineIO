@@ -62,6 +62,9 @@ func addProject(session *mgo.Session, p Project) error {
 }
 
 func getProject(session *mgo.Session, id string) (Project, error) {
+	if id == "" {
+		return Project{}, errors.New("프로젝트 id가 빈 문자열 입니다")
+	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("projectinfo").C(id)
 	var p Project
