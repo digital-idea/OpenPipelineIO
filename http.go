@@ -77,7 +77,7 @@ func webserver(port string) {
 	http.HandleFunc("/projectinfo", handleProjectinfo)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
-	http.HandleFunc("/detail", handleDetail)
+	http.HandleFunc("/detail", handleItemDetail)
 
 	// Add
 	http.HandleFunc("/addproject", handleAddProject)

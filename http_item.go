@@ -844,8 +844,9 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleDetail 함수는 Item의 디테일한 정보페이지다.
-func handleDetail(w http.ResponseWriter, r *http.Request) {
+// handleItemDetail 함수는 Item의 디테일한 정보페이지다.
+// 이 페이지는 만들다가 만것같다.
+func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
 	editType := q.Get("type")
