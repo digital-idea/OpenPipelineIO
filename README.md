@@ -2,6 +2,8 @@
 
 ![travisCI](https://secure.travis-ci.org/digital-idea/csi3.png)
 
+![screenshot](figures/screenshot.png)
+
 프로젝트 매니징을 도와주는 웹 어플리케이션 입니다.
 
 속도, 간결함(검색어 Based), 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
