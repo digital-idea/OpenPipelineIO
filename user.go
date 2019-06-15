@@ -49,6 +49,7 @@ type User struct {
 	Updatetime   string      `json:"updatetime"`   // 업데이트 시간.
 	Createtime   string      `json:"createtime"`   // 계정생성 시간.
 	IsLeave      bool        `json:"isleave"`      // 퇴사여부. 약자로 BSR(빤스런) 이라고 불린다.
+	LastIP       string      `json:"lastip"`       // 최근 접속IP
 }
 
 // NewUser 는 새로운 유저를 생성할 때 사용한다.
