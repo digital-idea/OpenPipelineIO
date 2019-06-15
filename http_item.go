@@ -39,6 +39,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		Assettags   []string
 		Dilog       string
 		Wfs         string
+		MailDNS     string
 	}
 	rcp := recipe{}
 	rcp.Projectlist, err = Projectlist(session)
@@ -48,6 +49,8 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
+	rcp.MailDNS = *flagMailDNS
+
 	//옵션불러오기.
 	rcp.Searchop.Project = r.FormValue("Project")
 	rcp.Searchop.Searchword = r.FormValue("Searchword")
@@ -148,10 +151,12 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 		Assettags   []string
 		Dilog       string
 		Wfs         string
+		MailDNS     string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
+	rcp.MailDNS = *flagMailDNS
 	rcp.Searchop.Template = "csi3"
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
@@ -304,10 +309,12 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 		Assettags   []string
 		Dilog       string
 		Wfs         string
+		MailDNS     string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
+	rcp.MailDNS = *flagMailDNS
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		templates.ExecuteTemplate(w, "dberr", nil)
@@ -728,10 +735,12 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		Assettags   []string
 		Dilog       string
 		Wfs         string
+		MailDNS     string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
+	rcp.MailDNS = *flagMailDNS
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		templates.ExecuteTemplate(w, "dberr", nil)

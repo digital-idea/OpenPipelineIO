@@ -5,7 +5,7 @@
     </div>
     <div class="infobutton">
         {{if .Project.Wiki -}}<a href="{{.Project.Wiki}}" title="위키"><default_button>위키</default_button></a>{{- end}}
-        <a href="mailto:{{.Project.ID}}@idea.co.kr?subject=[{{if .Project.MailHead -}}{{.Project.MailHead}}{{- else -}}{{.Project.ID}}{{- end}}]" title="{{if .Project.ID}}{{.Project.ID}}@idea.co.kr 로 메일보내기{{end}}"><default_button>프로젝트_메일보내기</default_button></a>
+        <a href="mailto:{{.Project.ID}}@{{.MailDNS}}?subject=[{{if .Project.MailHead -}}{{.Project.MailHead}}{{- else -}}{{.Project.ID}}{{- end}}]" title="{{if .Project.ID}}{{.Project.ID}}@{{.MailDNS}} 로 메일보내기{{end}}"><default_button>프로젝트_메일보내기</default_button></a>
         <a href="dilink:///show/{{.Project.ID}}/product/daily" title="데일리 폴더 열기"><default_button>데일리폴더</default_button></a>
         <a href="dilink://{{if .Project.Edit}}{{.Project.Edit}}{{else}}/show/{{.Project.ID}}/product/edit{{end}}" title="편집본 폴더 열기"><default_button>편집본폴더</default_button></a>
     </div>

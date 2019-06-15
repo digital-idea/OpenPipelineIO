@@ -25,9 +25,12 @@ var (
 	THUMBPATH = "thumbnail"
 	// TEMPLATEPATH 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	TEMPLATEPATH = "assets/template"
+	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
+	MAILDNS = "lazypic.org"
 
-	// DBIP 인수
+	// 주요서비스 인수
 	flagDBIP         = flag.String("dbip", DBIP, "mongodb ip")
+	flagMailDNS      = flag.String("maildns", MAILDNS, "mail DNS name")
 	flagThumbPath    = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagTemplatePath = flag.String("templatepath", TEMPLATEPATH, "template path") // template HTML 이 모여있는 경로.
 	flagDebug        = flag.Bool("debug", false, "디버그모드 활성화")

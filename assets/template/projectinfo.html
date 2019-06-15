@@ -23,7 +23,7 @@
 	<div class="projectinfoTitle">
 	<a href="/edit?type=project&id={{.ID}}">{{if .Name}}{{.ID}}{{else}}{{.ID}}{{end}}</a>
 	<span>{{if .Name}}({{.Name}}){{else}}{{end}}</span>
-	<a href="mailto:{{.ID}}@idea.co.kr?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]"><img class="smallicon" src="/assets/img/mail.svg"></a>
+	<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]"><img class="smallicon" src="/assets/img/mail.svg"></a>
 	<div class="projectinfoicon">
 	{{if eq .Stereo true}}<img src="/assets/img/stereoscope.svg" class="widesmallicon">{{end}}
 	{{if eq .Screenx true}}<img src="/assets/img/screenx.svg" class="smallicon">{{end}}

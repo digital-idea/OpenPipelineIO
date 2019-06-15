@@ -29,8 +29,10 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	type recipe struct {
 		Projects []Project
+		MailDNS  string
 	}
 	rcp := recipe{}
+	rcp.MailDNS = *flagMailDNS
 	rcp.Projects, err = getProjects(session)
 	if err != nil {
 		templates.ExecuteTemplate(w, "dberr", nil)
