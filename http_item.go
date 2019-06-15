@@ -667,6 +667,15 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 	file, fileHandler, fileErr := r.FormFile("Thumbnail")
 	if fileErr == nil {
+		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
+			log.Println("업로드 파일이 jpeg 또는 png 파일이 아닙니다.")
+			err = templates.ExecuteTemplate(w, "edited", nil)
+			if err != nil {
+				log.Println("Template Execution Error: ", err)
+				return
+			}
+			return
+		}
 		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
 		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
 		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
@@ -676,6 +685,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		if *flagDebug {
 			fmt.Println(mediatype)
 			fmt.Println(fileParams)
+			fmt.Println(fileHandler.Header.Get("Content-Type"))
 			fmt.Println()
 		}
 		tempPath := os.TempDir() + fileHandler.Filename

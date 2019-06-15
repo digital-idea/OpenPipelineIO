@@ -4,5 +4,5 @@ nohup.out
 .DS_Store
 /data
 /bin
-/thumbnail/*.jpg
-/thumbnail/*.png
+thumbnail/**
+!thumbnail/Readme.md
