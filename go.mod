@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/daaku/go.zipexe v1.0.1 // indirect
+	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/digital-idea/dilog v1.0.4
 	github.com/digital-idea/dipath v0.0.0-20190606073246-5cc149f252b0
 	github.com/digital-idea/ditime v0.0.0-20190606072845-9258d383539f

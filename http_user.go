@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dchest/captcha"
 	"gopkg.in/mgo.v2"
 )
 
@@ -22,7 +23,8 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "signup", nil)
+	captcha := struct{ CaptchaID string }{captcha.New()}
+	err = t.ExecuteTemplate(w, "signup", captcha)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

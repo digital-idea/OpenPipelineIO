@@ -1,27 +1,121 @@
 {{define "signup" }}
-{{template "head"}}
-<form method="post" action="/signup_submit">
-<div id="content">
-<center>
-이 사이트는 디지털아이디어 사내 소프트웨어입니다.<br>
-관리자의 업무처리를 위해서 가입시 몇몇 개인정보 입력이 필요합니다.<br>
-입력된 개인정보 검토후 가입처리가 완료됩니다.<br>
-<p><input type="text" name="Id" placeholder="ID" class="inputtext"></p>
-<p><input type="text" name="Name" placeholder="Name(한글명)" class="inputtext"></p>
-<p><input type="text" name="NameEng" placeholder="English Name(영문명)" class="inputtext"></p>
-<p><input type="text" name="Num" placeholder="사번" class="inputtext"></p>
-<p><input type="text" name="Phone" placeholder="Phone(핸드폰)" class="inputtext"></p>
-<p><input type="text" name="Email" placeholder="Email(이메일)" class="inputtext"></p>
-<br>
-추후 이 자리에는 외부사이트 오픈전<br>
-캡챠(Capchar)가 들어가야한다.<br>
-<br>
-대문자, 소문자, 숫자, 특수문자가 포함된 8자 이상의 패스워드를 사용해주세요.
-<p><input type="password" name="Pass" placeholder="PASSWORD" class="inputtext"></p>
-<p><input type="password" name="PassCheck" placeholder="PASSWORD Check" class="inputtext"></p>
-<p><button type="submit" class="button">SIGNUP</button></p>
-</form>
-</center>
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <form method="post" action="/signup_submit">
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" name="ID" class="form-control" placeholder="ID">
+                <small class="form-text text-muted">자신의 사번이 있다면 사번을 입력해주세요.</small>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="Password" class="form-control" placeholder="Password">
+                <small class="form-text text-muted">대소문자,숫자,특수문자 포함,8자리 이상을 권장합니다.</small>
+            </div>
+            <div class="form-group">
+                <label>Password Check</label>
+                <input type="password" name="RePassword" class="form-control" placeholder="Password">
+                <small class="form-text text-muted">다시한번 패스워드를 입력해주세요.</small>
+            </div>
+            <label>Name / 이름</label>
+            <div class="form-row">
+                <div class="col-4">
+                    <input type="text" name="FirstNameKor" class="form-control" placeholder="이름">
+                </div>
+                <div class="col-8">
+                    <input type="text" name="LastNameKor" class="form-control" placeholder="성">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">한글이름</small>
+            <div class="form-row">
+                <div class="col-8">
+                    <input type="text" name="FirstNameEng" class="form-control" placeholder="FirstName">
+                </div>
+                <div class="col-4">
+                    <input type="text" name="LastNameEng" class="form-control" placeholder="LastName">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
+            <div class="form-row">
+                <div class="col-4">
+                    <input type="text" name="FirstNameChn" class="form-control" placeholder="성(한자)">
+                </div>
+                <div class="col-8">
+                    <input type="text" name="LastNameChn" class="form-control" placeholder="이름(한자)">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">중국영화 크레딧 제작시 한자이름을 요구하는 경우가 있습니다.</small>
+
+            <div class="form-group">
+                <label>E-mail / 사내 이메일</label>
+                <input type="email" name="Email" class="form-control" placeholder="E-mail">
+                <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label >E-mail / 외부 이메일</label>
+                <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail">
+                <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label>Phone / 휴대폰 번호</label>
+                <input type="tel" name="Phone" class="form-control" placeholder="Phone number">
+                <small class="form-text text-muted">휴대폰 번호를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Hotline / 사내 전화번호</label>
+                <input type="tel" name="Hotline" class="form-control" placeholder="Hotline number">
+                <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Parts / 부서,직책정보</label>
+                <input type="text" name="Parts" class="form-control" placeholder="Parts">
+                <small class="form-text text-muted">부서, 본부, 팀, 세부팀, 직함을 입력해주세요.</small>
+                <small class="form-text text-muted">조직은 변화되기 때문에 Tag로 관리됩니다.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Location / 사내 위치정보</label>
+                <input type="text" name="Location" class="form-control" placeholder="층수,블럭정보">
+                <small class="form-text text-muted">회사위치, 층수, 블럭정보를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Timezone / 시간대</label>
+                <select name="Timezone" class="form-control">
+                    <option value="Asia/Seoul" selected>한국 Asia/Seoul</option>
+                    <option value="Asia/Beijing">중국 Asia/Beijing</option>
+                </select>
+                <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
+            </div>
+
+            <div class="form-group pt-4">
+                <label>Captcha</label>
+                <p>
+                    <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
+                </p>
+                <input type=hidden name="CaptchaNum" value="{{.CaptchaID}}">
+                <input type="text" name="CaptchaID" class="form-control" placeholder="000000">
+                <small class="form-text text-muted">위 이미지에 보이는 숫자를 입력해주세요.</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">SIGN UP / 가입하기</button>
+    </div>
+    </form>
 </div>
-{{template "footer"}}
+
+{{template "footerBootstrap"}}
+</body>
+</html>
 {{end}}

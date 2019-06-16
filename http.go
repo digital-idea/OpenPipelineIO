@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/shurcooL/httpfs/html/vfstemplate"
+	"github.com/dchest/captcha"
 )
 
 // MaxFileSize 사이즈는 웹에서 전송할 수 있는 최대 사이즈를 2기가로 제한한다.(인트라넷)
@@ -134,6 +135,9 @@ func webserver(port string) {
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
+
+	// Captcha
+	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight))
 
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
