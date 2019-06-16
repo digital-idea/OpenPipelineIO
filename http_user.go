@@ -55,7 +55,16 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	if !captcha.VerifyString(r.FormValue("CaptchaNum"), r.FormValue("CaptchaID")) {
 		err := errors.New("CaptchaNum 값과 CaptchaID 값이 다릅니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		http.Redirect(w, r, "/", 301)
+		return
+	}
+	if r.FormValue("ID") == "" {
+		err := errors.New("ID가 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if r.FormValue("Password") != r.FormValue("RePassword") {
+		err := errors.New("입력받은 2개의 패스워드가 서로 다릅니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	id := r.FormValue("ID")
