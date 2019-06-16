@@ -16,7 +16,7 @@ require (
 	github.com/nkovacs/streamquote v1.0.0 // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190527155220-6a4d4a70508b
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
-	golang.org/x/crypto v0.0.0-20190611184440-5c40567a22f8 // indirect
+	golang.org/x/crypto v0.0.0-20190611184440-5c40567a22f8
 	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980 // indirect
 	golang.org/x/sys v0.0.0-20190614160838-b47fdc937951 // indirect
 	golang.org/x/text v0.3.2 // indirect

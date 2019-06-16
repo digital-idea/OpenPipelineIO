@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -52,13 +53,19 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	*/
 	// 가입이 정상적으로 되면 index로 이동한다.
 	if !captcha.VerifyString(r.FormValue("CaptchaNum"), r.FormValue("CaptchaID")) {
-		log.Println("CaptchaNum 값과 CaptchaID 값이 다릅니다.")
+		err := errors.New("CaptchaNum 값과 CaptchaID 값이 다릅니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		http.Redirect(w, r, "/", 301)
 		return
 	}
 	id := r.FormValue("ID")
 	u := *NewUser(id)
-	u.Password = r.FormValue("Password")
+	pw, err := Encrypt(r.FormValue("Password"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u.Password = pw
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = r.FormValue("FirstNameEng")
