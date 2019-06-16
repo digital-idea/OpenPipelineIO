@@ -34,7 +34,19 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 
 // handleSignin 함수는 로그인 페이지이다.
 func handleSignin(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "로그인")
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "signin", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleUsersInfo 함수는 유저 자료구조 페이지이다.

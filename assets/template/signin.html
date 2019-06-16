@@ -1,0 +1,35 @@
+{{define "signin" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <form method="post" action="/signin_submit">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading">SignIn</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" name="ID" class="form-control" placeholder="ID">
+                <small class="form-text text-muted">자신의 사번이 있다면 사번을 입력해주세요.</small>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="Password" class="form-control" placeholder="Password">
+                <small class="form-text text-muted">대소문자,숫자,특수문자 포함,8자리 이상을 권장합니다.</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">SIGN IN / 로그인</button>
+    </div>
+    </form>
+</div>
+
+
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}
