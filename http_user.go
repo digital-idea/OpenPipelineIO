@@ -58,7 +58,12 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.FormValue("ID") == "" {
-		err := errors.New("ID가 빈 문자열 입니다")
+		err := errors.New("ID 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if r.FormValue("Password") == "" {
+		err := errors.New("Password 값이 빈 문자열 입니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
