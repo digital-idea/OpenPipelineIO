@@ -27,10 +27,10 @@
             <label>Name / 이름</label>
             <div class="form-row">
                 <div class="col-4">
-                    <input type="text" name="FirstNameKor" class="form-control" placeholder="이름">
+                    <input type="text" name="FirstNameKor" class="form-control" placeholder="성">
                 </div>
                 <div class="col-8">
-                    <input type="text" name="LastNameKor" class="form-control" placeholder="성">
+                    <input type="text" name="LastNameKor" class="form-control" placeholder="이름">
                 </div>
             </div>
             <small class="form-text text-muted pb-3">한글이름</small>
@@ -107,7 +107,7 @@
                     <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
                 </p>
                 <input type=hidden name="CaptchaNum" value="{{.CaptchaID}}">
-                <input type="text" name="CaptchaID" class="form-control" placeholder="000000">
+                <input type="text" name="CaptchaID" class="form-control" placeholder="">
                 <small class="form-text text-muted">위 이미지에 보이는 숫자를 입력해주세요.</small>
             </div>
         </div>

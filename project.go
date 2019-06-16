@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 // Projectinfo DB에 들어가는 자료구조이다.
 
 // ProjectStatus 는 숫자이다.
@@ -87,7 +89,7 @@ type Project struct {
 func NewProject(name string) *Project {
 	return &Project{
 		ID:                       name,
-		Updatetime:               Now(),
+		Updatetime:               time.Now().Format(time.RFC3339),
 		AspectRatio:              1.0,
 		CropAspectRatio:          1.0,
 		StartFrame:               1001,

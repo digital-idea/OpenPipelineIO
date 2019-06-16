@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 // AccessLevel 사용자의 엑세스 레벨이다.
 type AccessLevel int
 
@@ -38,9 +40,9 @@ type User struct {
 	LastNameEng   string      `json:"lastnameeng"`   // 영문이름, Lastname
 	FirstNameChn  string      `json:"firstnamechn"`  // 한자이름: 이름, 중국에서 한자명으로 엔딩크레딧 요청이 있다
 	LastNameChn   string      `json:"lastnamechn"`   // 한자이름: 성, 중국에서 한자명으로 엔딩크레딧 요청이 있다
-	Email         string      `json:"email"`         // 사내 메일, 개인정보보호
-	EmailExternal string      `json:"emailexternal"` // 외부 이메일, 개인정보보호
-	Phone         string      `json:"phone"`         // 핸드폰, 개인정보보호
+	Email         string      `json:"email"`         // 사내 메일
+	EmailExternal string      `json:"emailexternal"` // 외부 이메일
+	Phone         string      `json:"phone"`         // 핸드폰
 	Hotline       string      `json:"hotline"`       // 사내전화
 	Location      string      `json:"location"`      // 사내위치: 여러층에 나누어져 있을 때 층수, 대략의 위치정보
 	Parts         []string    `json:"parts"`         // 부문, 본부, 팀, 세부팀, 직책
@@ -49,15 +51,17 @@ type User struct {
 	Updatetime    string      `json:"updatetime"`    // 업데이트 시간.
 	Createtime    string      `json:"createtime"`    // 계정생성 시간.
 	IsLeave       bool        `json:"isleave"`       // 퇴사여부. 약자로 BSR(빤스런) 이라고 불린다.
-	LastIP        string      `json:"lastip"`        // 최근 접속IP
+	LastIP        string      `json:"lastip"`        // 최근 접속 IP
+	LastPort      string      `json:"lastport"`      // 최근 접속 Port
 }
 
 // NewUser 는 새로운 유저를 생성할 때 사용한다.
 func NewUser(id string) *User {
-	email := id + "@idea.co.kr"
 	return &User{
-		ID:         id,
-		Updatetime: Now(),
-		Email:      email,
+		ID:          id,
+		AccessLevel: ArtistAccessLevel,
+		Updatetime:  time.Now().Format(time.RFC3339),
+		Createtime:  time.Now().Format(time.RFC3339),
+		IsLeave:     false,
 	}
 }

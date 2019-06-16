@@ -29,7 +29,7 @@ func addProjectCmd(name string) {
 		Type:       "asset",
 		Slug:       "temp_asset",
 		ID:         "temp_asset",
-		Updatetime: Now(),
+		Updatetime: time.Now().Format(time.RFC3339),
 		Status:     NONE,
 	}
 	err = addItem(session, name, i)
@@ -141,7 +141,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		Slug:       name + "_" + typ,
 		ID:         name + "_" + typ,
 		Status:     NONE,
-		Updatetime: Now(),
+		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
 		Assettags:  []string{},
 	}

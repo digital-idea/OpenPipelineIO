@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"log"
+	"time"
 
 	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
@@ -163,7 +164,7 @@ func setProject(session *mgo.Session, p Project) error {
 	if num != 1 {
 		return errors.New("해당 아이템이 존재하지 않습니다")
 	}
-	p.Updatetime = Now()
+	p.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": p.ID}, p)
 	if err != nil {
 		log.Println(err)

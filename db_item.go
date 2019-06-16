@@ -6,6 +6,7 @@ import (
 	"log"
 	"sort"
 	"strings"
+	"time"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -53,7 +54,7 @@ func setItem(session *mgo.Session, project string, i Item) error {
 	if num != 1 {
 		return errors.New("해당 아이템이 존재하지 않습니다")
 	}
-	i.Updatetime = Now()
+	i.Updatetime = time.Now().Format(time.RFC3339)
 	i.updateStatus()
 	i.setRnumTag()
 	err = c.Update(bson.M{"slug": i.Slug}, i)
@@ -885,7 +886,7 @@ func setMov(session *mgo.Session, project, name, task, mov string) error {
 		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
 	}
 	typestr := items[0].Type
-	err = c.Update(bson.M{"slug": name + "_" + typestr}, bson.M{"$set": bson.M{task + ".mov": mov, task + ".mdate": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typestr}, bson.M{"$set": bson.M{task + ".mov": mov, task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -928,7 +929,7 @@ func SetImageSize(session *mgo.Session, project, name, key, size string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -955,14 +956,14 @@ func SetTimecode(session *mgo.Session, project, name, key, timecode string) erro
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
 	// 우리회사는 현재 timecode와 keycode를 혼용해서 사용중이다.
 	// 원래는 Timecode가 맞지만 현재 DB가 keycode로 되어있어 아직은 아래줄이 필요하다.
 	key = strings.Replace(key, "timecode", "keycode", -1)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -981,7 +982,7 @@ func SetUseType(session *mgo.Session, project, name, usetype string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1013,7 +1014,7 @@ func SetFrame(session *mgo.Session, project, name, key string, frame int) error 
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: frame, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: frame, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1032,7 +1033,7 @@ func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1054,7 +1055,7 @@ func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1073,7 +1074,7 @@ func SetCameraProjection(session *mgo.Session, project, name string, has bool) e
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": has, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": has, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1094,7 +1095,7 @@ func SetThummov(session *mgo.Session, project, name, typ, path string) error {
 		}
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": Now()}})
+	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1183,7 +1184,7 @@ func SetStatus(session *mgo.Session, project, name, task, status string) error {
 		return errors.New("올바른 task가 아닙니다")
 	}
 	c := session.DB("project").C(project)
-	item.Updatetime = Now()
+	item.Updatetime = time.Now().Format(time.RFC3339)
 	item.updateStatus()
 	err = c.Update(bson.M{"slug": item.Slug}, item)
 	if err != nil {
@@ -1249,7 +1250,7 @@ func SetStartdate(session *mgo.Session, project, name, task, startdate string) e
 		return errors.New("올바른 task가 아닙니다")
 	}
 	c := session.DB("project").C(project)
-	item.Updatetime = Now()
+	item.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"slug": item.Slug}, item)
 	if err != nil {
 		log.Println(err)
@@ -1315,7 +1316,7 @@ func SetPredate(session *mgo.Session, project, name, task, predate string) error
 		return errors.New("올바른 task가 아닙니다")
 	}
 	c := session.DB("project").C(project)
-	item.Updatetime = Now()
+	item.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"slug": item.Slug}, item)
 	if err != nil {
 		log.Println(err)

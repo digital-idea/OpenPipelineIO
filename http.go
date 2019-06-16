@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/shurcooL/httpfs/html/vfstemplate"
 	"github.com/dchest/captcha"
+	"github.com/shurcooL/httpfs/html/vfstemplate"
 )
 
 // MaxFileSize 사이즈는 웹에서 전송할 수 있는 최대 사이즈를 2기가로 제한한다.(인트라넷)
@@ -99,6 +99,7 @@ func webserver(port string) {
 	http.HandleFunc("/addproject", handleAddProject)
 	// User
 	http.HandleFunc("/signup", handleSignup)
+	http.HandleFunc("/signup_submit", handleSignupSubmit)
 	http.HandleFunc("/signin", handleSignin)
 	http.HandleFunc("/user", handleUser)
 	http.HandleFunc("/userinfo", handleUserinfo)

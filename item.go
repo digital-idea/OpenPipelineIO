@@ -2,6 +2,7 @@ package main
 
 import (
 	"sort"
+	"time"
 )
 
 // TASKS 는 작업에 사용되는 테스크 리스트이다.
@@ -265,45 +266,45 @@ func (item *Item) setRnumTag() {
 // 팀의 mov가 업데이트 되었다면 업데이트된 시간을 DB에 저장한다.
 func (item *Item) updateMdate(olditem *Item) {
 	if item.Model.Mov != olditem.Model.Mov {
-		item.Model.Mdate = Now()
+		item.Model.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Mm.Mov != olditem.Mm.Mov {
-		item.Mm.Mdate = Now()
+		item.Mm.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Layout.Mov != olditem.Layout.Mov {
-		item.Layout.Mdate = Now()
+		item.Layout.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Ani.Mov != olditem.Ani.Mov {
-		item.Ani.Mdate = Now()
+		item.Ani.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Fx.Mov != olditem.Fx.Mov {
-		item.Fx.Mdate = Now()
+		item.Fx.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Mg.Mov != olditem.Mg.Mov {
-		item.Mg.Mdate = Now()
+		item.Mg.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Temp1.Mov != olditem.Temp1.Mov {
-		item.Temp1.Mdate = Now()
+		item.Temp1.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Fur.Mov != olditem.Fur.Mov {
-		item.Fur.Mdate = Now()
+		item.Fur.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Sim.Mov != olditem.Sim.Mov {
-		item.Sim.Mdate = Now()
+		item.Sim.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Crowd.Mov != olditem.Crowd.Mov {
-		item.Crowd.Mdate = Now()
+		item.Crowd.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Light.Mov != olditem.Light.Mov {
-		item.Light.Mdate = Now()
+		item.Light.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Comp.Mov != olditem.Comp.Mov {
-		item.Comp.Mdate = Now()
+		item.Comp.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Matte.Mov != olditem.Matte.Mov {
-		item.Matte.Mdate = Now()
+		item.Matte.Mdate = time.Now().Format(time.RFC3339)
 	}
 	if item.Env.Mov != olditem.Env.Mov {
-		item.Env.Mdate = Now()
+		item.Env.Mdate = time.Now().Format(time.RFC3339)
 	}
 }

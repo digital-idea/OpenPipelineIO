@@ -5,6 +5,7 @@ package main
 import (
 	"errors"
 	"log"
+	"time"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -30,7 +31,7 @@ func addUser(session *mgo.Session, u User) error {
 		log.Println(err)
 		return err
 	}
-	u.Createtime = Now()
+	u.Createtime = time.Now().Format(time.RFC3339)
 	err = c.Insert(u)
 	if err != nil {
 		log.Println(err)
@@ -91,7 +92,7 @@ func setUser(session *mgo.Session, u User) error {
 	if num != 1 {
 		return errors.New("해당 유저가 존재하지 않습니다")
 	}
-	u.Updatetime = Now()
+	u.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": u.ID}, u)
 	if err != nil {
 		log.Println(err)

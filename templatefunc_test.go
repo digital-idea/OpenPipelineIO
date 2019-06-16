@@ -113,7 +113,7 @@ func TestCheckUpdate(t *testing.T) {
 		in:   "2016-10-28T18:42:25Z",
 		want: false,
 	}, {
-		in:   Now(),
+		in:   time.Now().Format(time.RFC3339),
 		want: true,
 	}}
 	for _, c := range cases {

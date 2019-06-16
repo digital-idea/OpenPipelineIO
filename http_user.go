@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 
 	"github.com/dchest/captcha"
@@ -30,6 +31,53 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+// handleSignupSubmit 함수는 회원가입 페이지이다.
+func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
+	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	/*
+		t, err := LoadTemplates()
+		if err != nil {
+			log.Println("loadTemplates:", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html")
+	*/
+	// 가입이 정상적으로 되면 index로 이동한다.
+	if !captcha.VerifyString(r.FormValue("CaptchaNum"), r.FormValue("CaptchaID")) {
+		log.Println("CaptchaNum 값과 CaptchaID 값이 다릅니다.")
+		http.Redirect(w, r, "/", 301)
+		return
+	}
+	id := r.FormValue("ID")
+	u := *NewUser(id)
+	u.Password = r.FormValue("Password")
+	u.FirstNameKor = r.FormValue("FirstNameKor")
+	u.LastNameKor = r.FormValue("LastNameKor")
+	u.FirstNameEng = r.FormValue("FirstNameEng")
+	u.LastNameEng = r.FormValue("LastNameEng")
+	u.FirstNameChn = r.FormValue("FirstNameChn")
+	u.LastNameChn = r.FormValue("LastNameChn")
+	u.Email = r.FormValue("Email")
+	u.EmailExternal = r.FormValue("EmailExternal")
+	u.Phone = r.FormValue("Phone")
+	u.Hotline = r.FormValue("Hotline")
+	u.Location = r.FormValue("Location")
+	u.Parts = Str2Tags(r.FormValue("Parts"))
+	u.Timezone = r.FormValue("Timezone")
+	u.LastIP = host
+	u.LastPort = port
+	fmt.Println(u)
+	// 이 데이터가 DB로 들어가야 한다.
+
+	http.Redirect(w, r, "/", 301)
 }
 
 // handleSignin 함수는 로그인 페이지이다.
