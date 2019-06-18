@@ -11,6 +11,9 @@ $ brew install go
 $ brew install mongodb
 ```
 
+### 테스트서버
+http://csi.lazypic.org
+
 ### TravisCI
 테스트를 위해서 TravisCI 툴을 사용합니다.
 
