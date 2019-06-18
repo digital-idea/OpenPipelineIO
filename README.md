@@ -27,26 +27,22 @@
 
 ### mongoDB 설치, 실행
 
+CentOS
 ```bash
-$ sudo yum install mongodb mongodb-server // CentOS
-$ brew install mongodb // macOS
+$ sudo yum install mongodb mongodb-server
+$ sudo service mongod start
 ```
 
-mongodb를 실행합니다.
+macOS
+```bash
+$ brew install mongodb
+$ brew services start mongodb
 ```
-# service mongod start // CentOS
-$ brew services start mongodb // macOS
-```
-
-- 참고: [CentOS7에서 mongoDB 설치](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
 
 ### CSI 실행
-기본적으로 해당 리포지터리의 media, template를 사용합니다. 리포지터리로 이동하여 실행해주세요.
-신뢰할 수 있는 네트워크망에서 사용하세요.
 
-```
-# csi3 -http :80 // CentOS
-$ csi3 -http :80 // macOS
+```bash
+$ sudo csi3 -http :80
 ```
 
 > macOS는 아파치 서버가 Built-in 되어있습니다. 80포트를 사용하기 위해서는 `$ sudo apachectl stop` 명령어를 입력해주세요.
@@ -115,3 +111,4 @@ $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프
 - [History](documents/history.md): csi의 역사
 - License: BSD 3-Clause License
 - 회사 전용 빌드문의: hello@lazypic.org
+- 참고: [CentOS7에서 mongoDB 설치](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
