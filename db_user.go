@@ -125,16 +125,13 @@ func getUsers(session *mgo.Session) ([]User, error) {
 func vaildUser(session *mgo.Session, id, pw string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
-	num, err := c.Find(bson.M{"id": id}).Count()
+	q := bson.M{"id": id}
+	num, err := c.Find(q).Count()
 	if err != nil {
 		return err
 	}
 	if num != 1 {
 		return errors.New("해당 유저가 존재하지 않습니다")
-	}
-	q := bson.M{"id": id}
-	if err != nil {
-		return err
 	}
 	u := User{}
 	err = c.Find(q).One(&u)
