@@ -109,6 +109,36 @@ func initPassUser(session *mgo.Session, id string) error {
 	return nil
 }
 
+// updatePasswordUser 함수는 사용자 패스워드를 수정하는 함수이다.
+func updatePasswordUser(session *mgo.Session, id, pw, newPw string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	q := bson.M{"id": id}
+	// 과거의 패스워드로 로그인가능했는지 체크한다.
+	err = vaildUser(session, id, pw)
+	if err != nil {
+		return err
+	}
+	// 새로운 패스워드로 업데이트 한다.
+	encryptPass, err := Encrypt(newPw)
+	if err != nil {
+		return err
+	}
+	change := bson.M{"$set": bson.M{"password": encryptPass, "updatetime": time.Now().Format(time.RFC3339)}}
+	err = c.Update(q, change)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // getUsers 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
 func getUsers(session *mgo.Session) ([]User, error) {
 	session.SetMode(mgo.Monotonic, true)

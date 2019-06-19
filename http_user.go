@@ -275,6 +275,58 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleUpdatePasswordSubmit 함수는 회원가입 페이지이다.
+func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("OldPassword") == "" {
+		err := errors.New("Password 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if r.FormValue("NewPassword") == "" {
+		err := errors.New("Password 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if r.FormValue("NewPassword") != r.FormValue("ConfirmNewPassword") {
+		err := errors.New("Password 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// ID는 저장된 쿠키에서 불러옵니다.
+	var id string
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			id = cookie.Value
+		}
+	}
+	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	if id == "" {
+		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+	}
+	pw := r.FormValue("OldPassword")
+	newPw := r.FormValue("NewPassword")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	err = updatePasswordUser(session, id, pw, newPw)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 기존 쿠키를 제거하고 새로 다시 로그인을 합니다.
+	cookie := http.Cookie{
+		Name:   "ID",
+		Value:  "",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+}
+
 // handleUsersInfo 함수는 유저 자료구조 페이지이다.
 func handleUserinfo(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
