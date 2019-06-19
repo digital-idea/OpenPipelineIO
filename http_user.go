@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -15,7 +14,37 @@ import (
 
 // handleUser 함수는 유저리스트 페이지이다.
 func handleUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "진행예정2순위 : '17.5.15~'17.6.30")
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	id := q.Get("id")
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		User
+	}
+	rcp := recipe{}
+	// 쿠키에 저장된 ID를 이용해서 사용자의 정보를 불러온다.
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User, err = getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "user", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
@@ -90,8 +119,8 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Password = pw
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
-	u.FirstNameEng = r.FormValue("FirstNameEng")
-	u.LastNameEng = r.FormValue("LastNameEng")
+	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
+	u.LastNameEng = strings.Title(strings.ToLower(r.FormValue("LastNameEng")))
 	u.FirstNameChn = r.FormValue("FirstNameChn")
 	u.LastNameChn = r.FormValue("LastNameChn")
 	u.Email = r.FormValue("Email")

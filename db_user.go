@@ -44,7 +44,7 @@ func addUser(session *mgo.Session, u User) error {
 // getUser 함수는 사용자를 가지고오는 함수이다.
 func getUser(session *mgo.Session, id string) (User, error) {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("user").C("acitive")
+	c := session.DB("user").C("users")
 	u := User{}
 	err := c.Find(bson.M{"id": id}).One(&u)
 	if err != nil {

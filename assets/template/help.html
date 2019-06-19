@@ -157,7 +157,7 @@ CSI는 썸네일이미지 주변에 뉴트럴그레이드 표시가 생성됩니
 <li>보안팀(IT팀)에게 사고내용 보고</li>
 <li>운영진(PD,PM,파이프라인팀,부문장,본부장,CEO)에게 알림</li>
 <li>보안문제 파급효과 및 우선대처상황 분석 회의소집</li>
-<li>처리가능한 문제부터 처리</li>
+<li>처리가능한 문제부터 우선처리</li>
 <li>클라이언트에게 상황전달</li>
 <li>영향을 받는 사업파트너 통지</li>
 <li>사법당국 통지 : 1007, 10th Fl, Monaco Bldg, 1316-5 Seocho-dong, Seocho-gu, Seoul 137-856, Korea</li>
@@ -169,17 +169,8 @@ CSI는 썸네일이미지 주변에 뉴트럴그레이드 표시가 생성됩니
 
 <div class="title"><a name="데이터복원"></a>서버 재해시 데이터복원에 필요한 파일</div>
 <div class="text">
-소스코드는 아래 리포지터리중 하나라도 남아있다면 CSI를 복원시킬 수 있다.<br>
-DB는 한달을 백업한다. 최대 30일 이전까지 되돌릴 수 있다.<br>
-각 공간별 작은 화재시 소스데이터는 분산되어있기 때문에 복구할 수 있다.<br>
-DB데이터는 /lustre/INHouse/Tool/DBbackup 경로가 손상되면 복구할 수 없다.<br>
-원격백업서버는 없다. 지진등으로 건물전체가 무너지면 데이터 복구가 힘들다.<br>
-</div>
-<div class="subtext">
-<ul>
-	<li>한달기준 DB백업경로 : /lustre/INHouse/Tool/DBbackup</li>
-	<li>소스 경로 : https://github.com/digital-idea/csi3</li>
-</ul>
+	CSI 소스코드는 <a href="https://github.com/digital-idea/csi3">Github 리포지터리</a>를 이용해서 복원시킬 수 있습니다.<br>
+	DB는 매일 백업해주세요.
 </div>
 
 {{template "footer" }}

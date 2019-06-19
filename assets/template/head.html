@@ -14,14 +14,14 @@
 <div id="wrapper">
   <div id="topNav">
     <ul>
-      <li><a href="/"><dilogo>CSI</dilogo></a></li>
-      <li><a href="/projectinfo">ProjectInfo</a></li>
-      <li><a href="/uploadsetellite">UploadSetellite</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/projectinfo">Projects</a></li>
+      <li><a href="/users">Users</a></li>
+      <li><a href="/uploadsetellite">Setellite</a></li>
       <li><a href="/help">Help</a></li>
-      <li><a href="https://github.com/digital-idea/csi3" target="_blank">Issue</a></li>
-      <li><a href="/user">User</a></li>
+      <li><a href="https://github.com/digital-idea/csi3" target="_blank">Github Issue</a></li>
       {{if $.ID}}
-        <li><a href="/user?={{$.ID}}">{{$.ID}}</a></li>
+        <li><a href="/user?id={{$.ID}}">{{$.ID}}</a></li>
         <li><a href="/signout">SignOut</a></li>
       {{else}}
         <li><a href="/signup">SignUp</a></li>

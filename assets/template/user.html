@@ -1,0 +1,41 @@
+{{define "user" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading text-center">ID: {{.User.ID}}</h2>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center p-3">
+            {{.User.FirstNameKor}} {{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}} {{.User.LastNameChn}}){{end}}<br>
+            {{.User.FirstNameEng}} {{.User.LastNameEng}}
+        </div>
+        <div class="col-12 text-center p-3">
+            내부메일: <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
+            외부메일: <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
+            내선번호: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a><br>
+            핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
+        </div>
+        <div class="col-12 text-center p-3">
+            Location: {{.User.Location}}, {{.User.Timezone}}<br>
+            {{range .User.Parts}}
+                <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
+            {{end}}<br>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="/edituser?id=test" class="btn btn-primary mt-5">정보수정</a>
+        <a href="/editpass?id=test" class="btn btn-primary mt-5">패스워드 변경</a>
+    </div>
+    <div class="text-center">
+        <a href="/" class="btn btn-primary mt-5">CSI 홈으로 이동하기</a>
+    </div>
+</div>
+
+
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}

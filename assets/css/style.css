@@ -58,10 +58,6 @@ a:hover {text-decoration:underline;color:#222222;cursor:pointer;}
 }
 
 /*head.html 부분 시작*/
-dilogo {
-	text-decoration: none;
-	font-weight: 700;
-}
 
 #topNav {
 	font-size: 13px;
