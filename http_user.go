@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dchest/captcha"
@@ -26,8 +27,16 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	captcha := struct{ CaptchaID string }{captcha.New()}
-	err = t.ExecuteTemplate(w, "signup", captcha)
+	type recipe struct {
+		Company   string
+		CaptchaID string
+		MailDNS   string
+	}
+	rcp := recipe{}
+	rcp.Company = strings.Title(*flagCompany)
+	rcp.MailDNS = *flagMailDNS
+	rcp.CaptchaID = captcha.New()
+	err = t.ExecuteTemplate(w, "signup", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -132,7 +141,12 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "signin", nil)
+	type recipe struct {
+		Company string
+	}
+	rcp := recipe{}
+	rcp.Company = strings.Title(*flagCompany)
+	err = t.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
