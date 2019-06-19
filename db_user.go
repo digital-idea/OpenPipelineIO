@@ -84,6 +84,31 @@ func setUser(session *mgo.Session, u User) error {
 	return nil
 }
 
+// initPassUser 함수는 사용자 정보를 수정하는 함수이다.
+func initPassUser(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	q := bson.M{"id": id}
+	initpass := "Welcome2csi!"
+	encryptPass, err := Encrypt(initpass)
+	if err != nil {
+		return err
+	}
+	change := bson.M{"$set": bson.M{"password": encryptPass, "updatetime": time.Now().Format(time.RFC3339)}}
+	err = c.Update(q, change)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // getUsers 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
 func getUsers(session *mgo.Session) ([]User, error) {
 	session.SetMode(mgo.Monotonic, true)

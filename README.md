@@ -20,7 +20,7 @@
 
 ### Roadmap
 - [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
-- [ ] 유저자료구조 추가 ![user](http://progressed.io/bar/5)
+- [ ] 유저자료구조 추가 ![user](http://progressed.io/bar/20)
 - [ ] CSI2 restAPI 추가
 - [ ] multi Task 기능추가
 - [ ] 3D 파이프라인과 필요한 자료구조 및 API 생성(샷트레킹, 버전)
@@ -88,10 +88,17 @@ $ csi3 -date 2016-12-05 -play -project [projectname] &
 $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프로젝트의 model 테스크만 보기
 ```
 
+- 사용자 패스워드 초기화
+초기화 되는 패스워드는 `Welcome2csi!` 입니다.
+
+```bash
+$ sudo csi3 -initpass -id [userid]
+```
+
 - 사용자 제거
 
 ```bash
-$ csi3 -rm user -id [userid]
+$ sudo csi3 -rm user -id [userid]
 ```
 
 ### 썸네일 경로
