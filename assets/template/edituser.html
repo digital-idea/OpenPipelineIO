@@ -1,0 +1,104 @@
+{{define "edituser" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <form method="post" action="/edituser_submit">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
+    </div>
+    <div class="row">   
+        <div class="col-sm">
+            <label>Name / 이름</label>
+            <div class="form-row">
+                <div class="col-4">
+                    <input type="text" name="FirstNameKor" class="form-control" placeholder="성" value="{{.User.FirstNameKor}}">
+                </div>
+                <div class="col-8">
+                    <input type="text" name="LastNameKor" class="form-control" placeholder="이름" value="{{.User.LastNameKor}}">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">한글이름</small>
+            <div class="form-row">
+                <div class="col-8">
+                    <input type="text" name="FirstNameEng" class="form-control" placeholder="FirstName" value="{{.User.FirstNameEng}}">
+                </div>
+                <div class="col-4">
+                    <input type="text" name="LastNameEng" class="form-control" placeholder="LastName" value="{{.User.LastNameEng}}">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
+            <div class="form-row">
+                <div class="col-4">
+                    <input type="text" name="FirstNameChn" class="form-control" placeholder="성(한자)" value="{{.User.FirstNameChn}}">
+                </div>
+                <div class="col-8">
+                    <input type="text" name="LastNameChn" class="form-control" placeholder="이름(한자)" value="{{.User.LastNameChn}}">
+                </div>
+            </div>
+            <small class="form-text text-muted pb-3">중국영화 크레딧 제작시 한자이름을 요구하는 경우가 있습니다.</small>
+
+            <div class="form-group">
+                <label>E-mail / 사내 이메일</label>
+                <input type="email" name="Email" class="form-control" placeholder="사번@{{.MailDNS}}" value="{{.User.Email}}">
+                <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label >E-mail / 외부 이메일</label>
+                <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail" value="{{.User.EmailExternal}}">
+                <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label>Phone / 휴대폰 번호</label>
+                <input type="tel" name="Phone" id="Phone" class="form-control" placeholder="Phone number" value="{{.User.Phone}}">
+                <small class="form-text text-muted">휴대폰 번호를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Hotline / 사내 전화번호</label>
+                <input type="tel" name="Hotline" id="Hotline" class="form-control" placeholder="Hotline number" value="{{.User.Hotline}}">
+                <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Parts / 부서, 직책정보</label>
+                <input type="text" name="Parts" class="form-control" placeholder="부서,팀,1팀,직함" value="{{Tags2str .User.Parts}}">
+                <small class="form-text text-muted">부서, 본부, 팀, 세부팀, 직함을 입력해주세요.</small>
+                <small class="form-text text-muted">조직은 변화되기 때문에 Tag로 관리됩니다.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Location / 사내 위치정보</label>
+                <input type="text" name="Location" class="form-control" placeholder="층수,블럭정보" value="{{.User.Location}}">
+                <small class="form-text text-muted">회사위치, 층수, 블럭정보를 입력해주세요.</small>
+            </div>
+
+            <div class="form-group">
+                <label>Timezone / 시간대</label>
+                <select name="Timezone" class="form-control">
+                    <option value="Asia/Seoul" {{if eq .User.Timezone "Asia/Seoul"}}selected{{end}}>한국 Asia/Seoul</option>
+                    <option value="Asia/Beijing" {{if eq .User.Timezone "Asia/Beijing"}}selected{{end}}>중국 Asia/Beijing</option>
+                </select>
+                <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">UPDATE</button>
+    </div>
+    </form>
+</div>
+
+
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/signup.js"></script>
+</html>
+{{end}}

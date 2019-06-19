@@ -12,7 +12,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleUser 함수는 유저리스트 페이지이다.
+// handleUser 함수는 유저정보를 출력하는 페이지이다.
 func handleUser(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
@@ -39,6 +39,43 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = t.ExecuteTemplate(w, "user", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
+
+// handleEditUser 함수는 유저정보를 수정하는 페이지이다.
+func handleEditUser(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	id := q.Get("id")
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		MailDNS string
+		User
+	}
+	rcp := recipe{}
+	rcp.MailDNS = *flagMailDNS
+	// 쿠키에 저장된 ID를 이용해서 사용자의 정보를 불러온다.
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User, err = getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "edituser", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
