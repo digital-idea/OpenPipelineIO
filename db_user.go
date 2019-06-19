@@ -64,13 +64,12 @@ func rmUser(session *mgo.Session, id string) error {
 	return nil
 }
 
-// setUser 함수는 사용자 정보를 수정하는 함수이다.
+// setUser 함수는 사용자 정보를 업데이트하는 함수이다.
 func setUser(session *mgo.Session, u User) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
 	num, err := c.Find(bson.M{"id": u.ID}).Count()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if num != 1 {
@@ -79,7 +78,6 @@ func setUser(session *mgo.Session, u User) error {
 	u.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": u.ID}, u)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil

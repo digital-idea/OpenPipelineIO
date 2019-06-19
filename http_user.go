@@ -27,7 +27,6 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		User
 	}
 	rcp := recipe{}
-	// 쿠키에 저장된 ID를 이용해서 사용자의 정보를 불러온다.
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,7 +63,6 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.MailDNS = *flagMailDNS
-	// 쿠키에 저장된 ID를 이용해서 사용자의 정보를 불러온다.
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -81,7 +79,55 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
 
+// handleEditUserSubmit 함수는 회원정보를 수정받는 페이지이다.
+func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
+	// ID는 저장된 쿠키에서 불러옵니다.
+	var id string
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			id = cookie.Value
+		}
+	}
+	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	if id == "" {
+		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+	}
+	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 유저 정보를 가지고 온다.
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, id)
+	u.FirstNameKor = r.FormValue("FirstNameKor")
+	u.LastNameKor = r.FormValue("LastNameKor")
+	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
+	u.LastNameEng = strings.Title(strings.ToLower(r.FormValue("LastNameEng")))
+	u.FirstNameChn = r.FormValue("FirstNameChn")
+	u.LastNameChn = r.FormValue("LastNameChn")
+	u.Email = r.FormValue("Email")
+	u.EmailExternal = r.FormValue("EmailExternal")
+	u.Phone = r.FormValue("Phone")
+	u.Hotline = r.FormValue("Hotline")
+	u.Location = r.FormValue("Location")
+	u.Parts = Str2Tags(r.FormValue("Parts"))
+	u.Timezone = r.FormValue("Timezone")
+	u.LastIP = host
+	u.LastPort = port
+	err = setUser(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/user?id="+id, http.StatusMovedPermanently)
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
