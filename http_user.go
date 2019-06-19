@@ -105,6 +105,16 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 쿠키설정
+	expire := time.Now().Add(1 * 4 * time.Hour) //MPAA기준이 4시간이다.
+	cookie := http.Cookie{
+		Name:    "ID",
+		Value:   u.ID,
+		Expires: expire,
+	}
+	http.SetCookie(w, &cookie)
+
+	// 가입완료 페이지로 이동
 	err = t.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {
 		log.Println(err)
@@ -123,6 +133,65 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	err = t.ExecuteTemplate(w, "signin", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleSigninSubmit 함수는 회원가입 페이지이다.
+func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("ID") == "" {
+		err := errors.New("ID 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if r.FormValue("Password") == "" {
+		err := errors.New("Password 값이 빈 문자열 입니다")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	id := r.FormValue("ID")
+	pw := r.FormValue("Password")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	err = vaildUser(session, id, pw)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
+	expire := time.Now().Add(1 * 4 * time.Hour) //MPAA기준이 4시간이다.
+	cookie := http.Cookie{
+		Name:    "ID",
+		Value:   id,
+		Expires: expire,
+	}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+}
+
+// handleSignout 함수는 로그아웃 페이지이다.
+func handleSignout(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	cookie := http.Cookie{
+		Name:   "ID",
+		Value:  "",
+		MaxAge: -1,
+	}
+	http.SetCookie(w, &cookie)
+	err = t.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

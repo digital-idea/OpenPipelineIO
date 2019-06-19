@@ -33,6 +33,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
+		ID          string
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
@@ -48,6 +49,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		MailDNS     string
 	}
 	rcp := recipe{}
+	// 쿠키값을 rcp로 보낸다.
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			rcp.ID = cookie.Value
+		}
+	}
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -75,7 +82,11 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
 	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
-	cookie := http.Cookie{Name: "project", Value: rcp.Searchop.Project, MaxAge: 0}
+	cookie := http.Cookie{
+		Name:   "Project",
+		Value:  rcp.Searchop.Project,
+		MaxAge: 0,
+	}
 	http.SetCookie(w, &cookie)
 
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
@@ -162,6 +173,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
+		ID          string
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
@@ -286,6 +298,7 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 	switch editType {
 	case "item":
 		type recipe struct {
+			ID      string
 			Project Project
 			Item    Item
 		}
@@ -348,6 +361,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
+		ID          string
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
@@ -855,6 +869,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 
 	type recipe struct {
+		ID          string
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
@@ -963,10 +978,20 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
+		ID          string
 		Projectlist []string
 		Searchop    SearchOption
 	}
 	rcp := recipe{}
+	// 쿠키에 저장된 값이 있다면 rcp에 저장한다.
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			rcp.ID = cookie.Value
+		}
+		if cookie.Name == "Project" {
+			rcp.Searchop.Project = cookie.Value
+		}
+	}
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -974,12 +999,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//검색바 초기셋팅
-	cookieProject, err := r.Cookie("project")
-	if err != nil {
-		rcp.Searchop.Project = ""
-	} else {
-		rcp.Searchop.Project = cookieProject.Value
-	}
 	rcp.Searchop.Assign = true
 	rcp.Searchop.Ready = true
 	rcp.Searchop.Wip = true
@@ -1019,6 +1038,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	switch editType {
 	case "item":
 		type recipe struct {
+			ID      string
 			Project Project
 			Item    Item
 		}

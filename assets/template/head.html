@@ -19,12 +19,14 @@
       <li><a href="/uploadsetellite">UploadSetellite</a></li>
       <li><a href="/help">Help</a></li>
       <li><a href="https://github.com/digital-idea/csi3" target="_blank">Issue</a></li>
-      <li><a href="/user">User</a>
-      <ul>
-	 			<li><a href="/signup">SignUp</a></li>
-	 			<li><a href="/signin">SignIn</a></li>
-      </ul>
-     </li>
+      <li><a href="/user">User</a></li>
+      {{if $.ID}}
+        <li><a href="/user?={{$.ID}}">{{$.ID}}</a></li>
+        <li><a href="/signout">SignOut</a></li>
+      {{else}}
+        <li><a href="/signup">SignUp</a></li>
+        <li><a href="/signin">SignIn</a></li>  
+      {{end}}
     </ul>
   </div>
 {{end}}

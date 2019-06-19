@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -118,4 +119,31 @@ func getUsers(session *mgo.Session) ([]User, error) {
 		return result, err
 	}
 	return result, nil
+}
+
+// vaildUser 함수는 사용자의 id, pw를 받아서 유효한 사용자인지 체크한다.
+func vaildUser(session *mgo.Session, id, pw string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	q := bson.M{"id": id}
+	if err != nil {
+		return err
+	}
+	u := User{}
+	err = c.Find(q).One(&u)
+	if err != nil {
+		return err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pw))
+	if err != nil {
+		return err
+	}
+	return nil
 }

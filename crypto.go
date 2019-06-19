@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"fmt"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -56,4 +58,9 @@ func Encrypt(s string) (string, error) {
 		return "", err
 	}
 	return string(hashed), nil
+}
+
+// Str2md5 함수는 문자를 받아서 md5로 암호화된 문자를 반환한다.
+func Str2md5(str string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(str)))
 }
