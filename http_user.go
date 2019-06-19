@@ -94,7 +94,6 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
-	fmt.Println(u)
 	// 이 데이터가 DB로 들어가야 한다.
 	session, err := mgo.DialWithTimeout(*flagDBIP, 2*time.Second)
 	if err != nil {

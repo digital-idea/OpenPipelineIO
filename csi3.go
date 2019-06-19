@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -49,7 +50,7 @@ var (
 
 	// Commandline Args
 	flagAdd       = flag.String("add", "", "add project, add item(shot, asset)")
-	flagRm        = flag.String("rm", "", "remove project, shot, asset")
+	flagRm        = flag.String("rm", "", "remove project, shot, asset, user")
 	flagProject   = flag.String("project", "", "project name")
 	flagName      = flag.String("name", "", "name")
 	flagType      = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
@@ -57,6 +58,8 @@ var (
 	flagAssettype = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
 	flagHelp      = flag.Bool("help", false, "자세한 도움말을 봅니다.")
 	flagDate      = flag.String("date", "", "Date. ex) 2016-12-06")
+	// Commandline Args: User
+	flagID = flag.String("id", "", "user id")
 	// scan정보 추가. plate scan tool에서 데이터를 등록할 때 활용되는 옵션
 	flagPlatesize       = flag.String("platesize", "", "스캔 플레이트 사이즈")
 	flagTask            = flag.String("task", "", "태스크 이름. 예) model,mm.layout,ani,fx,mg,fur,sim,crowd,light,comp,matte,env")
@@ -94,6 +97,20 @@ func main() {
 		return
 	} else if *flagRm == "project" && *flagName != "" { //프로젝트 삭제
 		rmProjectCmd(*flagName)
+		return
+	} else if *flagRm == "user" && *flagID != "" {
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmUser(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return
 	} else if *flagAdd == "item" && *flagName != "" && *flagProject != "" && *flagType != "" { //아이템 추가
 		switch *flagType {

@@ -249,16 +249,3 @@ func rmItemCmd(project, name, typ string) {
 		log.Fatal(err)
 	}
 }
-
-func addUserCmd(id string) {
-	u := *NewUser(id)
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-	err = addUser(session, u)
-	if err != nil {
-		log.Fatal(err)
-	}
-}

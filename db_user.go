@@ -53,28 +53,11 @@ func getUser(session *mgo.Session, id string) (User, error) {
 }
 
 // rmUser 함수는 사용자를 삭제하는 함수이다.
-// 삭제 과정은 실제, 사용자 문서를 active 컬렉션에서 inactive 컬렉션으로 옮깁니다.
 func rmUser(session *mgo.Session, id string) error {
 	session.SetMode(mgo.Monotonic, true)
-	u := User{}
-	// 사용자 정보를 active 컬렉션에서 볼러온다.
-	c := session.DB("user").C("acitive")
-	err := c.Find(bson.M{"id": id}).One(&u)
+	c := session.DB("user").C("users")
+	err := c.Remove(bson.M{"id": id})
 	if err != nil {
-		return err
-	}
-	err = c.Remove(bson.M{"id": id})
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	// 불러온 사용자를 inactive에 추가한다.
-	c = session.DB("user").C("inactive") // 비활성화계정으로 커서 변경.
-	// inactive 컬렉션에 넣기전 사용자의 모든 권한을 해제한다.
-	u.AccessLevel = UnknownAccessLevel
-	err = c.Insert(u)
-	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil
@@ -83,7 +66,7 @@ func rmUser(session *mgo.Session, id string) error {
 // setUser 함수는 사용자 정보를 수정하는 함수이다.
 func setUser(session *mgo.Session, u User) error {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("user").C("active")
+	c := session.DB("user").C("users")
 	num, err := c.Find(bson.M{"id": u.ID}).Count()
 	if err != nil {
 		log.Println(err)
@@ -101,10 +84,10 @@ func setUser(session *mgo.Session, u User) error {
 	return nil
 }
 
-// 전체 유저 정보를 가지고오는 함수입니다.
+// getUsers 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
 func getUsers(session *mgo.Session) ([]User, error) {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("user").C("active")
+	c := session.DB("user").C("users")
 	var result []User
 	err := c.Find(bson.M{}).All(&result)
 	if err != nil {

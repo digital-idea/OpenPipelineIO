@@ -88,6 +88,12 @@ $ csi3 -date 2016-12-05 -play -project [projectname] &
 $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프로젝트의 model 테스크만 보기
 ```
 
+- 사용자 제거
+
+```bash
+$ csi3 -rm user -id [userid]
+```
+
 ### 썸네일 경로
 - 썸네일주소 : `/thumbnail/{projectname}/{slug}.jpg`
 - 사용자이미지 : `/thumbnail/user/{id}.jpg`
