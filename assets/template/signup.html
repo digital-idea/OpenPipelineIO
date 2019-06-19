@@ -69,13 +69,13 @@
         <div class="col-sm">
             <div class="form-group">
                 <label>Phone / 휴대폰 번호</label>
-                <input type="tel" name="Phone" class="form-control" placeholder="Phone number">
+                <input type="tel" name="Phone" id="Phone" class="form-control" placeholder="Phone number">
                 <small class="form-text text-muted">휴대폰 번호를 입력해주세요.</small>
             </div>
 
             <div class="form-group">
                 <label>Hotline / 사내 전화번호</label>
-                <input type="tel" name="Hotline" class="form-control" placeholder="Hotline number">
+                <input type="tel" name="Hotline" id="Hotline" class="form-control" placeholder="Hotline number">
                 <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
             </div>
 
@@ -107,7 +107,7 @@
                     <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
                 </p>
                 <input type=hidden name="CaptchaNum" value="{{.CaptchaID}}">
-                <input type="text" name="CaptchaID" class="form-control" placeholder="">
+                <input type="text" name="CaptchaID" id="CaptchaID" class="form-control" placeholder="">
                 <small class="form-text text-muted">위 이미지에 보이는 숫자를 입력해주세요.</small>
             </div>
         </div>
@@ -122,5 +122,6 @@
 
 {{template "footerBootstrap"}}
 </body>
+<script src="/assets/js/signup.js"></script>
 </html>
 {{end}}
