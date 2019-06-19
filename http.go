@@ -105,6 +105,7 @@ func webserver(port string) {
 	http.HandleFunc("/signout", handleSignout)
 	http.HandleFunc("/user", handleUser)
 	http.HandleFunc("/userinfo", handleUserinfo)
+	http.HandleFunc("/updatepassword", handleUpdatePassword)
 
 	// rest API / API2
 	http.HandleFunc("/api/project", handleAPIProject)

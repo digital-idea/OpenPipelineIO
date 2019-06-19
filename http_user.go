@@ -104,7 +104,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if r.FormValue("Password") != r.FormValue("RePassword") {
+	if r.FormValue("Password") != r.FormValue("ConfirmPassword") {
 		err := errors.New("입력받은 2개의 패스워드가 서로 다릅니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -235,6 +235,39 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &cookie)
 	err = t.ExecuteTemplate(w, "signout", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleUpdatePassword 함수는 사용자의 패스워드를 수정하는 페이지이다.
+func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	id := q.Get("id")
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		User
+	}
+	rcp := recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User, err = getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "updatepassword", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

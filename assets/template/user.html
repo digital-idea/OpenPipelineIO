@@ -1,5 +1,6 @@
 {{define "user" }}
 {{template "headBootstrap"}}
+{{template "navbar" .}}
 <body>
 
 <div class="container p-5">
@@ -24,18 +25,13 @@
             {{end}}<br>
         </div>
     </div>
-    <div class="text-center">
-        <a href="/edituser?id=test" class="btn btn-primary mt-5">정보수정</a>
-        <a href="/editpass?id=test" class="btn btn-primary mt-5">패스워드 변경</a>
-    </div>
-    <div class="text-center">
-        <a href="/" class="btn btn-primary mt-5">CSI 홈으로 이동하기</a>
-    </div>
 </div>
 
 
 
 {{template "footerBootstrap"}}
 </body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 </html>
 {{end}}
