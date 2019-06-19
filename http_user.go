@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"time"
 
 	"github.com/dchest/captcha"
 	"gopkg.in/mgo.v2"
@@ -42,16 +43,14 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	/*
-		t, err := LoadTemplates()
-		if err != nil {
-			log.Println("loadTemplates:", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html")
-	*/
-	// 가입이 정상적으로 되면 index로 이동한다.
+
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
 	if !captcha.VerifyString(r.FormValue("CaptchaNum"), r.FormValue("CaptchaID")) {
 		err := errors.New("CaptchaNum 값과 CaptchaID 값이 다릅니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -97,8 +96,22 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.LastPort = port
 	fmt.Println(u)
 	// 이 데이터가 DB로 들어가야 한다.
-
-	http.Redirect(w, r, "/", 301)
+	session, err := mgo.DialWithTimeout(*flagDBIP, 2*time.Second)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = addUser(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "signup_success", u)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleSignin 함수는 로그인 페이지이다.

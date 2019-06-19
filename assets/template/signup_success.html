@@ -1,0 +1,24 @@
+{{define "signup_success" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading text-center">Sign Up Success!</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm text-center">
+            {{.ID}} 로 가입이 완료되었습니다.
+        </div>
+    </div>     
+    <div class="text-center">
+        <a href="/" class="btn btn-primary mt-5">CSI 홈으로 이동하기</a>
+    </div>
+</div>
+
+
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}

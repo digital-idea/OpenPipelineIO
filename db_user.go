@@ -19,7 +19,7 @@ func addUser(session *mgo.Session, u User) error {
 		return err
 	}
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("user").C("active") // inactive(비활성화계정), active(활성화계정)
+	c := session.DB("user").C("users")
 
 	num, err := c.Find(bson.M{"id": u.ID}).Count()
 	if err != nil {
@@ -27,7 +27,7 @@ func addUser(session *mgo.Session, u User) error {
 		return err
 	}
 	if num != 0 {
-		err = errors.New(u.ID + " ID가 DB에 이미 존재합니다.")
+		err = errors.New(u.ID + " ID를 가진 사용자가 이밎 DB에 존재합니다.")
 		log.Println(err)
 		return err
 	}
