@@ -108,6 +108,7 @@ $ sudo csi3 -rm user -id [userid]
 ### RestAPI
 - [Project](documents/rest_project.md)
 - [Item](documents/rest_item.md)
+- [User](documents/rest_user.md)
 
 ### Process
 - [디자인 프로세스](documents/process_designer.md)

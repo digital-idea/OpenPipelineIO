@@ -25,7 +25,7 @@ func handleAPIAddproject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 
@@ -56,7 +56,7 @@ func handleAPIProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -87,7 +87,7 @@ func handleAPIProjectTags(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -182,7 +182,7 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -213,7 +213,7 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -243,7 +243,7 @@ func handleAPIItems(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -294,7 +294,7 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 
@@ -347,7 +347,7 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -360,6 +360,39 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Data = result
+	err = json.NewEncoder(w).Encode(rcp)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+// handleAPIUser 함수는 사용자의 id를 받아서 사용자 정보를 반환한다.
+func handleAPIUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	q := r.URL.Query()
+	id := q.Get("id")
+	user, err := getUser(session, id)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	type recipe struct {
+		Data User `json:"data"`
+	}
+	rcp := recipe{}
+	// 불필요한 정보는 초기화 시킨다.
+	user.Password = ""
+	rcp.Data = user
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
 		log.Println(err)
@@ -379,7 +412,7 @@ func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -414,7 +447,7 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -1224,7 +1257,7 @@ func handleAPISetelliteItems(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
@@ -1255,7 +1288,7 @@ func handleAPISetelliteSearch(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintln(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}")
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
