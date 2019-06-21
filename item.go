@@ -201,6 +201,7 @@ type Task struct {
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다.
 func (item *Item) updateStatus() {
 	tasks := []Task{
+		item.Concept,
 		item.Model,
 		item.Fur,
 		item.Mm,
