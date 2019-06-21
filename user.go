@@ -53,6 +53,7 @@ type User struct {
 	IsLeave       bool        `json:"isleave"`       // 퇴사여부. 약자로 BSR(빤스런) 이라고 불린다.
 	LastIP        string      `json:"lastip"`        // 최근 접속 IP
 	LastPort      string      `json:"lastport"`      // 최근 접속 Port
+	Thumbnail     bool        `json:"thumbnail"`     // 썸네일 유무
 }
 
 // NewUser 는 새로운 유저를 생성할 때 사용한다.

@@ -3,12 +3,16 @@
 <body>
 
 <div class="container p-5">
-    <form method="post" action="/edituser_submit">
+    <form action="/edituser_submit"  method="POST" enctype="multipart/form-data">
     <div class="pt-3 pb-5">
         <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
     </div>
-    <div class="row">   
+    <div class="row">
         <div class="col-sm">
+            <div class="form-group">
+                <label>Upload Photo</label>
+                <input type="file" class="form-control-file" name="Photo">
+            </div>
             <label>Name / 이름</label>
             <div class="form-row">
                 <div class="col-4">

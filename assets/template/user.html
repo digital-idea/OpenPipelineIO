@@ -9,6 +9,11 @@
     </div>
     <div class="row">
         <div class="col-12 text-center p-3">
+            {{if .User.Thumbnail}}
+            <img src="/thumbnail/user/{{.User.ID}}.jpg">
+            {{end}}
+        </div>
+        <div class="col-12 text-center p-3">
             {{.User.FirstNameKor}} {{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}} {{.User.LastNameChn}}){{end}}<br>
             {{.User.FirstNameEng}} {{.User.LastNameEng}}
         </div>

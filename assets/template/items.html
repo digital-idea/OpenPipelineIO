@@ -55,7 +55,7 @@
 	{{- else -}}
 	<a href="dilink://{{.Thummov}}">
 	{{- end}}
-	<img class="thumbimg{{if.OCIOcc}}OCIOcc{{end}}" src="/shotimg/{{$.Searchop.Project}}/{{.Slug}}.jpg" onerror="this.src='/assets/img/none.jpg'" align="middle"></a>
+	<img class="thumbimg{{if.OCIOcc}}OCIOcc{{end}}" src="/thumbnail/{{$.Searchop.Project}}/{{.Slug}}.jpg" onerror="this.src='/assets/img/none.jpg'" align="middle"></a>
 	</center>
   {{if eq .Type "asset" -}}
   {{- else -}}

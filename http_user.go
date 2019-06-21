@@ -2,13 +2,19 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"io"
 	"log"
+	"mime"
 	"net"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/dchest/captcha"
+	"github.com/disintegration/imaging"
 	"gopkg.in/mgo.v2"
 )
 
@@ -122,6 +128,69 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
+	file, fileHandler, fileErr := r.FormFile("Photo")
+	if fileErr == nil {
+		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
+			err := errors.New("업로드 파일이 jpeg 또는 png 파일이 아닙니다")
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
+		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
+		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if *flagDebug {
+			fmt.Println(mediatype)
+			fmt.Println(fileParams)
+			fmt.Println(fileHandler.Header.Get("Content-Type"))
+			fmt.Println()
+		}
+		tempPath := os.TempDir() + fileHandler.Filename
+		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 사용자가 업로드한 파일을 tempFile에 복사한다.
+		io.Copy(tempFile, io.LimitReader(file, MaxFileSize))
+		tempFile.Close()
+		defer os.Remove(tempPath)
+		//fmt.Println(tempPath)
+		thumbnailPath := fmt.Sprintf("%s/user/%s.jpg", *flagThumbPath, u.ID)
+		thumbnailDir := filepath.Dir(thumbnailPath)
+		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
+		_, err = os.Stat(thumbnailDir)
+		if os.IsNotExist(err) {
+			err := os.MkdirAll(thumbnailDir, 0775)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+		// 이미지변환
+		src, err := imaging.Open(tempPath)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Resize the cropped image to width = 200px preserving the aspect ratio.
+		dst := imaging.Fill(src, 200, 280, imaging.Center, imaging.Lanczos)
+		err = imaging.Save(dst, thumbnailPath)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		u.Thumbnail = true
+	}
 	err = setUser(session, u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
