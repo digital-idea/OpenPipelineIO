@@ -12,7 +12,7 @@ $ brew install mongodb
 ```
 
 #### 에디터
-[MS Visual Code](https://code.visualstudio.com)를 사용하며 툴내부 마켓플레이스에서 Go와 관련된 모든 편리한 기능을 인스톨 하고 사용하고 있습니다.
+[MS Visual Code](https://code.visualstudio.com)를 사용하며 툴내부 마켓플레이스에서 Go와 관련된 모든 편리한 기능을 설치, 사용하고 있습니다.
 디버그, 실수방지, 개발 속도를 많이 올릴 수 있으니 협업시에는 위 셋팅을 추천합니다.
 
 ### 테스트서버
