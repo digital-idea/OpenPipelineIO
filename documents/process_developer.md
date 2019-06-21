@@ -11,17 +11,15 @@ $ brew install go
 $ brew install mongodb
 ```
 
+#### 에디터
+[MS Visual Code](https://code.visualstudio.com)를 사용하며 툴내부 마켓플레이스에서 Go와 관련된 모든 편리한 기능을 인스톨 하고 사용하고 있습니다.
+디버그, 실수방지, 개발 속도를 많이 올릴 수 있으니 협업시에는 위 셋팅을 추천합니다.
+
 ### 테스트서버
-http://csi.lazypic.org
+- http://csi.lazypic.org
 
 ### TravisCI
-테스트를 위해서 TravisCI 툴을 사용합니다.
+테스트를 위해서 [TravisCI](https://docs.travis-ci.com) 를 사용합니다.
 
-- mongoDB setting: https://docs.travis-ci.com/user/database-setup/
-
-### 라이브러리
-사용되는 라이브러리는 아래와 같습니다.
-
-- [dipath](https://github.com/digital-idea/dipath)
-- [ditime](https://github.com/digital-idea/ditime)
-- [mgo](https://github.com/go-mgo/mgo)
+### 배포
+항상 바이너리 파일 하나를 지향합니다.
