@@ -17,6 +17,7 @@ $ brew install mongodb
 
 ### 테스트서버
 - http://csi.lazypic.org
+- 내부 임시서버: 10.0.95.175
 
 ### TravisCI
 테스트를 위해서 [TravisCI](https://docs.travis-ci.com) 를 사용합니다.
