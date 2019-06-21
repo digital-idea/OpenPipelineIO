@@ -160,14 +160,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -195,7 +193,6 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Template = "csi3"
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
