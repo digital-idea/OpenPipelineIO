@@ -137,8 +137,8 @@ func updatePasswordUser(session *mgo.Session, id, pw, newPw string) error {
 	return nil
 }
 
-// getUsers 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
-func getUsers(session *mgo.Session) ([]User, error) {
+// allUsers 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
+func allUsers(session *mgo.Session) ([]User, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
 	var result []User
@@ -147,6 +147,39 @@ func getUsers(session *mgo.Session) ([]User, error) {
 		return result, err
 	}
 	return result, nil
+}
+
+// searchUsers 함수는 검색을 입력받고 해당 검색어가 있는 사용자 정보를 가지고 옵니다.
+func searchUsers(session *mgo.Session, words []string) ([]User, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	var results []User
+
+	wordsQueries := []bson.M{}
+	for _, word := range words {
+		wordQueries := []bson.M{}
+		wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"lastnameeng": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"firstnamechn": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"lastnamechn": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"email": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"emailexternal": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"parts": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
+		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
+	}
+	q := bson.M{"$and": wordsQueries}
+	err := c.Find(q).Sort("id").All(&results)
+	if err != nil {
+		return results, err
+	}
+	return results, nil
 }
 
 // vaildUser 함수는 사용자의 id, pw를 받아서 유효한 사용자인지 체크한다.

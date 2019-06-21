@@ -499,7 +499,7 @@ func handleUserinfo(w http.ResponseWriter, r *http.Request) {
 		Users []User
 	}
 	rcp := recipe{}
-	rcp.Users, err = getUsers(session)
+	rcp.Users, err = allUsers(session)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

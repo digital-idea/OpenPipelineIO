@@ -137,6 +137,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setstartdate", handleAPISetStartdate)
 	http.HandleFunc("/api/setpredate", handleAPISetPredate)
 	http.HandleFunc("/api/user", handleAPIUser)
+	http.HandleFunc("/api/users", handleAPISearchUser)
 
 	// Deprecated: 사용하지 않는 API, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/api/items", handleAPIItems)

@@ -399,6 +399,41 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPISearchUser 함수는 단어를 받아서 조건에 맞는 사용자 정보를 반환한다.
+func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	q := r.URL.Query()
+	searchword := q.Get("searchword")
+	users, err := searchUsers(session, strings.Split(searchword, ","))
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	type recipe struct {
+		Data []User `json:"data"`
+	}
+	rcp := recipe{}
+	// 불필요한 정보는 초기화 시킨다.
+	for _, user := range users {
+		user.Password = ""
+		rcp.Data = append(rcp.Data, user)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err = json.NewEncoder(w).Encode(rcp)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 // handleAPISeqs 함수는 프로젝트의 시퀀스를 가져온다.
 func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
