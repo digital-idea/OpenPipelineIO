@@ -479,8 +479,14 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
 }
 
-// handleUsers 함수는 유저리스트를 출력하는 페이지이다.
+// handleUsers 함수는 유저리스트를 검색하는 페이지이다.
 func handleUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		searchword := r.FormValue("searchword")
+		http.Redirect(w, r, "/users?search="+searchword, http.StatusMovedPermanently)
+	}
+	q := r.URL.Query()
+	searchword := q.Get("search")
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -507,17 +513,20 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
-		User  // 로그인한 사용자 정보
-		Users []User
-		Tags  []string // 부서,파트 태그
+		User                // 로그인한 사용자 정보
+		Users      []User   // 검색된 사용자를 담는 리스트
+		Tags       []string // 부서,파트 태그
+		Searchword string   // searchform에 들어가는 문자
 	}
 	rcp := recipe{}
+	rcp.Searchword = searchword
 	rcp.User, err = getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Users, err = allUsers(session)
+	searchwords := strings.Split(strings.ReplaceAll(searchword, " ", ","), ",")
+	rcp.Users, err = searchUsers(session, searchwords)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

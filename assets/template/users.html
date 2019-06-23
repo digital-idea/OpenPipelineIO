@@ -8,7 +8,7 @@
     <div class="row justify-content-center align-items-center p-3">
         <form action="/users" method="POST" name="checkboxs" class="editform text-center">
         <div class="input-group">
-            <input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" size=50 name="searchword" autofocus="autofocus" value="">
+            <input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" size=50 name="searchword" autofocus="autofocus" value="{{.Searchword}}">
             <div class="input-group-append">
             <button class="btn btn-primary" id="button">Search</button>
             </div>
@@ -21,6 +21,7 @@
 {{range .Tags}}
     <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
 {{end}}
+<a href="/replacepart" class="btn btn-danger btn-sm">부서이름변경</a>
 </div>
 
 {{range .Users}}
