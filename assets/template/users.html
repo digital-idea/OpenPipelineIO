@@ -19,41 +19,33 @@
 
 <div class="text-center">
 {{range .Tags}}
-    <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
+    <a href="/users?search={{.}}" class="btn btn-secondary btn-sm p-1 mt-1">{{.}}</a>
 {{end}}
-<a href="/replacepart" class="btn btn-danger btn-sm">부서이름변경</a>
+<a href="/replacepart" class="btn btn-danger btn-sm p-1 mt-1">부서이름변경</a>
 </div>
 
-{{range .Users}}
-    <div class="container p-5">
-        <div class="pt-3 pb-5">
-            <h2 class="section-heading text-center">ID: {{.ID}}</h2>
-        </div>
-        <div class="row">
-            <div class="col-12 text-center p-3">
-                {{if .Thumbnail}}
-                <img src="/thumbnail/user/{{.ID}}.jpg">
+<div class="p-3">
+    <div class="row">
+        {{range .Users}}
+        <div class="card w-10 mx-auto m-3">
+            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}">
+            <div class="card-body text-center">
+                <h4 class="card-title">{{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
+                <p class="card-text">
+                    내부: <a href="mailto:{{.Email}}">{{.Email}}</a><br>
+                    외부: <a href="mailto:{{.EmailExternal}}">{{.EmailExternal}}</a><br>
+                    내선: <a href="tel:{{.Hotline}}">{{.Hotline}}</a>{{if .Location}} / {{.Location}}{{end}}<br>
+                    핸드폰: <a href="tel:{{.Phone}}">{{.Phone}}</a><br>
+                </p>
+                {{range .Parts}}
+                    <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
                 {{end}}
             </div>
-            <div class="col-12 text-center p-3">
-                {{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}<br>
-                {{.FirstNameEng}} {{.LastNameEng}}
-            </div>
-            <div class="col-12 text-center p-3">
-                내부메일: <a href="mailto:{{.Email}}">{{.Email}}</a><br>
-                외부메일: <a href="mailto:{{.EmailExternal}}">{{.EmailExternal}}</a><br>
-                내선번호: <a href="tel:{{.Hotline}}">{{.Hotline}}</a>{{if .Location}} / {{.Location}}{{end}}<br>
-                핸드폰: <a href="tel:{{.Phone}}">{{.Phone}}</a><br>
-            </div>
-            <div class="col-12 text-center p-3">
-                {{range .Parts}}
-                    <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
-                {{end}}<br>
-            </div>
         </div>
+        {{end}}
     </div>
-{{end}}
-
+</div>
 
 {{template "footerBootstrap"}}
 </body>

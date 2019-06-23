@@ -3,35 +3,26 @@
 {{template "navbar" .}}
 <body>
 
-<div class="container p-5">
-    <div class="pt-3 pb-5">
-        <h2 class="section-heading text-center">ID: {{.User.ID}}</h2>
-    </div>
+<div class="p-3">
     <div class="row">
-        <div class="col-12 text-center p-3">
-            {{if .User.Thumbnail}}
-            <img src="/thumbnail/user/{{.User.ID}}.jpg">
-            {{end}}
-        </div>
-        <div class="col-12 text-center p-3">
-            {{.User.FirstNameKor}}{{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}}{{.User.LastNameChn}}){{end}}<br>
-            {{.User.FirstNameEng}} {{.User.LastNameEng}}
-        </div>
-        <div class="col-12 text-center p-3">
-            내부메일: <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
-            외부메일: <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
-            내선번호: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
-            핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
-        </div>
-        <div class="col-12 text-center p-3">
-            {{range .User.Parts}}
-                <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
-            {{end}}<br>
+        <div class="card w-10 mx-auto m-3">
+            <img class="card-img-top" src="{{if .User.Thumbnail}}/thumbnail/user/{{.User.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.User.ID}}">
+            <div class="card-body text-center">
+                <h4 class="card-title">{{.User.FirstNameKor}}{{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}}{{.User.LastNameChn}}){{end}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{.User.FirstNameEng}} {{.User.LastNameEng}}<br>{{.User.ID}}</h6>
+                <p class="card-text">
+                    내부: <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
+                    외부: <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
+                    내선: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
+                    핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
+                </p>
+                {{range .User.Parts}}
+                    <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
+                {{end}}
+            </div>
         </div>
     </div>
 </div>
-
-
 
 {{template "footerBootstrap"}}
 </body>

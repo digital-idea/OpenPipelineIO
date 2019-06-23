@@ -484,6 +484,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		searchword := r.FormValue("searchword")
 		http.Redirect(w, r, "/users?search="+searchword, http.StatusMovedPermanently)
+		return
 	}
 	q := r.URL.Query()
 	searchword := q.Get("search")
@@ -503,6 +504,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
 	if id == "" {
 		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+		return
 	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
