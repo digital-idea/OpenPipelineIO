@@ -14,17 +14,16 @@
             {{end}}
         </div>
         <div class="col-12 text-center p-3">
-            {{.User.FirstNameKor}} {{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}} {{.User.LastNameChn}}){{end}}<br>
+            {{.User.FirstNameKor}}{{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}}{{.User.LastNameChn}}){{end}}<br>
             {{.User.FirstNameEng}} {{.User.LastNameEng}}
         </div>
         <div class="col-12 text-center p-3">
             내부메일: <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
             외부메일: <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
-            내선번호: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a><br>
+            내선번호: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}{{if .User.Location}}/ {{.User.Location}}{{end}}</a><br>
             핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
         </div>
         <div class="col-12 text-center p-3">
-            Location: {{.User.Location}}, {{.User.Timezone}}<br>
             {{range .User.Parts}}
                 <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
             {{end}}<br>

@@ -1,0 +1,56 @@
+{{define "users" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<!--searchbox-->
+<div class="container p-3">
+    <div class="row justify-content-center align-items-center p-3">
+        <form action="/users" method="POST" name="checkboxs" class="editform text-center">
+        <div class="input-group">
+            <input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" size=50 name="searchword" autofocus="autofocus" value="">
+            <div class="input-group-append">
+            <button class="btn btn-primary" id="button">Search</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{range .Users}}
+    <div class="container p-5">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading text-center">ID: {{.ID}}</h2>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center p-3">
+                {{if .Thumbnail}}
+                <img src="/thumbnail/user/{{.ID}}.jpg">
+                {{end}}
+            </div>
+            <div class="col-12 text-center p-3">
+                {{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}<br>
+                {{.FirstNameEng}} {{.LastNameEng}}
+            </div>
+            <div class="col-12 text-center p-3">
+                내부메일: <a href="mailto:{{.Email}}">{{.Email}}</a><br>
+                외부메일: <a href="mailto:{{.EmailExternal}}">{{.EmailExternal}}</a><br>
+                내선번호: <a href="tel:{{.Hotline}}">{{.Hotline}}</a>{{if .Location}}/ {{.Location}}{{end}}<br>
+                핸드폰: <a href="tel:{{.Phone}}">{{.Phone}}</a><br>
+            </div>
+            <div class="col-12 text-center p-3">
+                {{range .Parts}}
+                    <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
+                {{end}}<br>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}

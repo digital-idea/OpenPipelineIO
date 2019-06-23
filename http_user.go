@@ -479,13 +479,24 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
 }
 
-// handleUsersInfo 함수는 유저 자료구조 페이지이다.
-func handleUserinfo(w http.ResponseWriter, r *http.Request) {
+// handleUsers 함수는 유저리스트를 출력하는 페이지이다.
+func handleUsers(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	// ID는 저장된 쿠키에서 불러옵니다.
+	var id string
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			id = cookie.Value
+		}
+	}
+	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	if id == "" {
+		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
 	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
@@ -496,18 +507,22 @@ func handleUserinfo(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
+		User  // 로그인한 사용자
 		Users []User
 	}
 	rcp := recipe{}
-	rcp.Users, err = allUsers(session)
+	rcp.User, err = getUser(session, id)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "userinfo", rcp)
+	rcp.Users, err = allUsers(session)
 	if err != nil {
-		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "users", rcp)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

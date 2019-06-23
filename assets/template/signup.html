@@ -10,18 +10,18 @@
     <div class="row">   
         <div class="col-sm">
             <div class="form-group">
-                <label>ID *</label>
+                <label>ID <span class="text-danger">*</span></label>
                 <input type="text" name="ID" class="form-control" placeholder="ID">
                 <small class="form-text text-muted">자신의 사번이 있다면 사번을 입력해주세요.</small>
             </div>
             <div class="form-group">
-                <label>Password *</label>
+                <label>Password <span class="text-danger">*</span></label>
                 <input type="password" name="Password" class="form-control" placeholder="Password">
                 <small class="form-text text-muted">대소문자,숫자,특수문자 포함,8자리 이상을 권장합니다.</small>
             </div>
             <div class="form-group">
-                <label>Confirm Password *</label>
-                <input type="password" name="ConfirmPassword" class="form-control" placeholder="Password">
+                <label>Confirm Password <span class="text-danger">*</span></label>
+                <input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm Password">
                 <small class="form-text text-muted">다시한번 패스워드를 입력해주세요.</small>
             </div>
             <label>Name / 이름</label>
@@ -36,10 +36,10 @@
             <small class="form-text text-muted pb-3">한글이름</small>
             <div class="form-row">
                 <div class="col-8">
-                    <input type="text" name="FirstNameEng" class="form-control" placeholder="FirstName">
+                    <input type="text" name="FirstNameEng" class="form-control" placeholder="First">
                 </div>
                 <div class="col-4">
-                    <input type="text" name="LastNameEng" class="form-control" placeholder="LastName">
+                    <input type="text" name="LastNameEng" class="form-control" placeholder="Last">
                 </div>
             </div>
             <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
@@ -102,7 +102,7 @@
             </div>
 
             <div class="form-group pt-4">
-                <label>Captcha *</label>
+                <label>Captcha <span class="text-danger">*</span></label>
                 <p>
                     <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
                 </p>

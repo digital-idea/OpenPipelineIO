@@ -104,7 +104,7 @@ func webserver(port string) {
 	http.HandleFunc("/signin_submit", handleSigninSubmit)
 	http.HandleFunc("/signout", handleSignout)
 	http.HandleFunc("/user", handleUser)
-	http.HandleFunc("/userinfo", handleUserinfo)
+	http.HandleFunc("/users", handleUsers)
 	http.HandleFunc("/updatepassword", handleUpdatePassword)
 	http.HandleFunc("/updatepassword_submit", handleUpdatePasswordSubmit)
 	http.HandleFunc("/edituser", handleEditUser)
