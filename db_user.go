@@ -235,6 +235,7 @@ func ReplacePart(session *mgo.Session, old, new string) error {
 		for _, part := range u.Parts {
 			if part == old {
 				newParts = append(newParts, new)
+				continue
 			}
 			newParts = append(newParts, part)
 		}
