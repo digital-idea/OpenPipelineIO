@@ -296,11 +296,10 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 쿠키설정
-	expire := time.Now().Add(1 * 4 * time.Hour) //MPAA기준이 4시간이다.
 	cookie := http.Cookie{
 		Name:    "ID",
 		Value:   u.ID,
-		Expires: expire,
+		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
 	http.SetCookie(w, &cookie)
 
@@ -362,11 +361,10 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
-	expire := time.Now().Add(1 * 4 * time.Hour) //MPAA기준이 4시간이다.
 	cookie := http.Cookie{
 		Name:    "ID",
 		Value:   id,
-		Expires: expire,
+		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
 	http.SetCookie(w, &cookie)
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)

@@ -41,6 +41,7 @@ var (
 	flagHTTPPort  = flag.String("http", "", "Web Service Port number.")         // 웹서버 포트
 	flagCompany   = flag.String("company", COMPANY, "Web Service Port number.") // 회사이름
 	flagVersion   = flag.Bool("version", false, "Print Version")                // 버전
+	flagCookieAge = flag.Int64("cookieage", 4, "cookie age (hour)")             // MPAA 기준 4시간이다.
 	// RV
 	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
 	flagPlay = flag.Bool("play", false, "Play RV")
