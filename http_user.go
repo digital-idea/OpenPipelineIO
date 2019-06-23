@@ -507,8 +507,9 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
-		User  // 로그인한 사용자
+		User  // 로그인한 사용자 정보
 		Users []User
+		Tags  []string // 부서,파트 태그
 	}
 	rcp := recipe{}
 	rcp.User, err = getUser(session, id)
@@ -517,6 +518,11 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Users, err = allUsers(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Tags, err = UserTags(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

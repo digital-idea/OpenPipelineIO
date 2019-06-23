@@ -5,6 +5,7 @@ package main
 import (
 	"errors"
 	"log"
+	"sort"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -204,4 +205,17 @@ func vaildUser(session *mgo.Session, id, pw string) error {
 		return err
 	}
 	return nil
+}
+
+// UserTags 함수는 전체 사용자에 등록된 Parts(부서,소속) 분석하여 하나의 Parts(부서,소속) 태그리스트를 반환합니다.
+func UserTags(session *mgo.Session) ([]string, error) {
+	var parts []string
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	err := c.Find(bson.M{}).Distinct("parts", &parts)
+	if err != nil {
+		return nil, err
+	}
+	sort.Strings(parts)
+	return parts, nil
 }

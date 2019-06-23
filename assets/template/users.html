@@ -17,6 +17,12 @@
     </div>
 </div>
 
+<div class="text-center">
+{{range .Tags}}
+    <a href="/users?search={{.}}" class="btn btn-secondary btn-sm">{{.}}</a>
+{{end}}
+</div>
+
 {{range .Users}}
     <div class="container p-5">
         <div class="pt-3 pb-5">
