@@ -376,7 +376,6 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 func handleSignout(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -388,7 +387,6 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	err = t.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -398,7 +396,6 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -421,7 +418,6 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.ExecuteTemplate(w, "updatepassword", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -487,10 +483,10 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	q := r.URL.Query()
-	searchword := q.Get("search")
+	var searchword string
+	searchword = q.Get("search")
 	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -509,7 +505,6 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -519,6 +514,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		Users      []User   // 검색된 사용자를 담는 리스트
 		Tags       []string // 부서,파트 태그
 		Searchword string   // searchform에 들어가는 문자
+		Usernum    int      // 검색된 인원수
 	}
 	rcp := recipe{}
 	rcp.Searchword = searchword
@@ -533,6 +529,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Usernum = len(rcp.Users)
 	rcp.Tags, err = UserTags(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
