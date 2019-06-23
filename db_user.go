@@ -219,3 +219,31 @@ func UserTags(session *mgo.Session) ([]string, error) {
 	sort.Strings(parts)
 	return parts, nil
 }
+
+// ReplacePart 함수는 전체 사용자에 등록된 Parts(부서,소속) 의 이름을 변경한다.
+func ReplacePart(session *mgo.Session, old, new string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	var users []User
+	q := bson.M{"parts": &bson.RegEx{Pattern: old}}
+	err := c.Find(q).All(&users)
+	if err != nil {
+		return err
+	}
+	for _, u := range users {
+		var newParts []string
+		for _, part := range u.Parts {
+			if part == old {
+				newParts = append(newParts, new)
+			}
+			newParts = append(newParts, part)
+		}
+		u.Parts = newParts
+		err = c.Update(bson.M{"id": u.ID}, u)
+		if err != nil {
+			return err
+		}
+	}
+	// 각 유저를 체크하면서 태그이름을 변경한다.
+	return nil
+}

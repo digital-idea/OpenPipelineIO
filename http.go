@@ -109,6 +109,8 @@ func webserver(port string) {
 	http.HandleFunc("/updatepassword_submit", handleUpdatePasswordSubmit)
 	http.HandleFunc("/edituser", handleEditUser)
 	http.HandleFunc("/edituser_submit", handleEditUserSubmit)
+	http.HandleFunc("/replacepart", handleReplacePart)
+	http.HandleFunc("/replacepart_submit", handleReplacePartSubmit)
 
 	// rest API / API2
 	http.HandleFunc("/api/project", handleAPIProject)

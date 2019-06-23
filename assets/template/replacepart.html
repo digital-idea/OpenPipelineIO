@@ -1,0 +1,36 @@
+{{define "replacepart" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <form method="post" action="/replacepart_submit">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading">Replace part name</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>Old part name</label>
+                <input type="text" name="src" class="form-control" placeholder="기존 부서명">
+                <small class="form-text text-muted">이름을 바꿀 부서명을 입력해주세요.</small>
+            </div>
+            <div class="form-group">
+                <label>New part name</label>
+                <input type="text" name="dst" class="form-control" placeholder="바뀔 부서명">
+                <small class="form-text text-muted">앞으로 사용할 새로운 부서명을 입력해주세요.</small>
+            </div>
+            
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">UPDATE</button>
+    </div>
+    </form>
+</div>
+
+
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}

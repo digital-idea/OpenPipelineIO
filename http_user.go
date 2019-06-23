@@ -543,3 +543,76 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+// handleReplacePart 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
+func handleReplacePart(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type recipe struct {
+		User // 로그인한 사용자 정보
+	}
+	rcp := recipe{}
+	// ID는 저장된 쿠키에서 불러옵니다.
+	var id string
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "ID" {
+			id = cookie.Value
+		}
+	}
+	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	if id == "" {
+		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.User, err = getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "replacepart", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleReplacePartSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
+func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	src := r.FormValue("src")
+	dst := r.FormValue("dst")
+
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// Parts replace
+	err = ReplacePart(session, src, dst)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// users 리다리렉트한다.
+	http.Redirect(w, r, "/users", http.StatusMovedPermanently)
+}
