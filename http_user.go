@@ -361,13 +361,26 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
-	cookie := http.Cookie{
+	cookieRoot := http.Cookie{
 		Name:    "ID",
 		Value:   id,
 		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
-	http.SetCookie(w, &cookie)
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	http.SetCookie(w, &cookieRoot)
+	http.Redirect(w, r, "/signin_success", http.StatusMovedPermanently)
+}
+
+func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "signin_success", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleSignout 함수는 로그아웃 페이지이다.
@@ -377,12 +390,14 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	cookie := http.Cookie{
+
+	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
+	cookieRoot := http.Cookie{
 		Name:   "ID",
 		Value:  "",
 		MaxAge: -1,
 	}
-	http.SetCookie(w, &cookie)
+	http.SetCookie(w, &cookieRoot)
 	err = t.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
