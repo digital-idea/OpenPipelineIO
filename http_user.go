@@ -372,7 +372,7 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	ClearSessionID(w)
+	RmSessionID(w)
 	err = t.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -449,7 +449,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 기존 쿠키를 제거하고 새로 다시 로그인을 합니다.
-	ClearSessionID(w)
+	RmSessionID(w)
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 

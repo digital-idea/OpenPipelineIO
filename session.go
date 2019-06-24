@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"net/http"
 	"time"
 )
@@ -9,7 +10,7 @@ import (
 func SetSessionID(w http.ResponseWriter, id string) {
 	c := http.Cookie{
 		Name:    "session",
-		Value:   id,
+		Value:   base64.StdEncoding.EncodeToString([]byte(id)),
 		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
 	http.SetCookie(w, &c)
@@ -19,14 +20,18 @@ func SetSessionID(w http.ResponseWriter, id string) {
 func GetSessionID(r *http.Request) string {
 	for _, cookie := range r.Cookies() {
 		if cookie.Name == "session" {
-			return cookie.Value
+			decoded, err := base64.StdEncoding.DecodeString(cookie.Value)
+			if err != nil {
+				return ""
+			}
+			return string(decoded)
 		}
 	}
 	return ""
 }
 
-// ClearSessionID 는 SessionID를 제거한다.
-func ClearSessionID(w http.ResponseWriter) {
+// RmSessionID 는 SessionID를 제거한다.
+func RmSessionID(w http.ResponseWriter) {
 	c := http.Cookie{
 		Name:   "session",
 		Value:  "",
