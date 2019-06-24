@@ -92,7 +92,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	// ID는 저장된 쿠키에서 불러옵니다.
 	var id string
 	for _, cookie := range r.Cookies() {
-		if cookie.Name == "ID" {
+		if cookie.Name == "session" {
 			id = cookie.Value
 		}
 	}
@@ -297,7 +297,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 쿠키설정
 	cookie := http.Cookie{
-		Name:    "ID",
+		Name:    "session",
 		Value:   u.ID,
 		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
@@ -362,7 +362,7 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
 	cookieRoot := http.Cookie{
-		Name:    "ID",
+		Name:    "session",
 		Value:   id,
 		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
@@ -393,7 +393,7 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 
 	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
 	cookieRoot := http.Cookie{
-		Name:   "ID",
+		Name:   "session",
 		Value:  "",
 		MaxAge: -1,
 	}
@@ -456,7 +456,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	// ID는 저장된 쿠키에서 불러옵니다.
 	var id string
 	for _, cookie := range r.Cookies() {
-		if cookie.Name == "ID" {
+		if cookie.Name == "session" {
 			id = cookie.Value
 		}
 	}
@@ -480,7 +480,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 기존 쿠키를 제거하고 새로 다시 로그인을 합니다.
 	cookie := http.Cookie{
-		Name:   "ID",
+		Name:   "session",
 		Value:  "",
 		MaxAge: -1,
 	}
@@ -506,7 +506,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	// ID는 저장된 쿠키에서 불러옵니다.
 	var id string
 	for _, cookie := range r.Cookies() {
-		if cookie.Name == "ID" {
+		if cookie.Name == "session" {
 			id = cookie.Value
 		}
 	}
@@ -575,7 +575,7 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 	// ID는 저장된 쿠키에서 불러옵니다.
 	var id string
 	for _, cookie := range r.Cookies() {
-		if cookie.Name == "ID" {
+		if cookie.Name == "session" {
 			id = cookie.Value
 		}
 	}

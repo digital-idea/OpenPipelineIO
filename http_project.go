@@ -44,6 +44,7 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		Projects []Project
 		MailDNS  string
+		ID       string
 	}
 	rcp := recipe{}
 	rcp.MailDNS = *flagMailDNS
@@ -53,6 +54,13 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	var id string
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "session" {
+			id = cookie.Value
+		}
+	}
+	rcp.ID = id
 	err = t.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
 		log.Println(err)
