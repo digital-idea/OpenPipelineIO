@@ -98,7 +98,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
 	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	}
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
@@ -196,7 +196,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/user?id="+id, http.StatusMovedPermanently)
+	http.Redirect(w, r, "/user?id="+id, http.StatusSeeOther)
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
@@ -367,7 +367,7 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
 	}
 	http.SetCookie(w, &cookieRoot)
-	http.Redirect(w, r, "/signin_success", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/signin_success", http.StatusSeeOther)
 }
 
 func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
@@ -462,7 +462,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
 	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	}
 	pw := r.FormValue("OldPassword")
 	newPw := r.FormValue("NewPassword")
@@ -485,14 +485,14 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		MaxAge: -1,
 	}
 	http.SetCookie(w, &cookie)
-	http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 
 // handleUsers 함수는 유저리스트를 검색하는 페이지이다.
 func handleUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		searchword := r.FormValue("searchword")
-		http.Redirect(w, r, "/users?search="+searchword, http.StatusMovedPermanently)
+		http.Redirect(w, r, "/users?search="+searchword, http.StatusSeeOther)
 		return
 	}
 	q := r.URL.Query()
@@ -512,7 +512,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
 	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -581,7 +581,7 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 	}
 	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
 	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
@@ -626,5 +626,5 @@ func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// users 리다리렉트한다.
-	http.Redirect(w, r, "/users", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/users", http.StatusSeeOther)
 }
