@@ -50,11 +50,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			rcp.ID = cookie.Value
-		}
-	}
+	rcp.ID = GetSessionID(r)
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -980,11 +976,10 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		Searchop    SearchOption
 	}
 	rcp := recipe{}
+	rcp.ID = GetSessionID(r)
+
 	// 쿠키에 저장된 값이 있다면 rcp에 저장한다.
 	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			rcp.ID = cookie.Value
-		}
 		if cookie.Name == "Project" {
 			rcp.Searchop.Project = cookie.Value
 		}

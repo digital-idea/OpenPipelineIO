@@ -89,14 +89,8 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUserSubmit 함수는 회원정보를 수정받는 페이지이다.
 func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
-	// ID는 저장된 쿠키에서 불러옵니다.
-	var id string
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			id = cookie.Value
-		}
-	}
-	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
+	id := GetSessionID(r)
 	if id == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	}
@@ -295,14 +289,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// 쿠키설정
-	cookie := http.Cookie{
-		Name:    "session",
-		Value:   u.ID,
-		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
-	}
-	http.SetCookie(w, &cookie)
-
+	SetSessionID(w, u.ID)
 	// 가입완료 페이지로 이동
 	err = t.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {
@@ -360,13 +347,8 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
-	cookieRoot := http.Cookie{
-		Name:    "session",
-		Value:   id,
-		Expires: time.Now().Add(time.Duration(*flagCookieAge) * time.Hour),
-	}
-	http.SetCookie(w, &cookieRoot)
+	// sesssion을 셋팅하고 / 로 이동한다.
+	SetSessionID(w, id)
 	http.Redirect(w, r, "/signin_success", http.StatusSeeOther)
 }
 
@@ -390,14 +372,7 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	// 유효하면 ID 쿠키를 셋팅하고 / 로 이동한다.
-	cookieRoot := http.Cookie{
-		Name:   "session",
-		Value:  "",
-		MaxAge: -1,
-	}
-	http.SetCookie(w, &cookieRoot)
+	ClearSessionID(w)
 	err = t.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -453,16 +428,11 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// ID는 저장된 쿠키에서 불러옵니다.
-	var id string
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			id = cookie.Value
-		}
-	}
-	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
+	id := GetSessionID(r)
 	if id == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
 	}
 	pw := r.FormValue("OldPassword")
 	newPw := r.FormValue("NewPassword")
@@ -479,12 +449,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 기존 쿠키를 제거하고 새로 다시 로그인을 합니다.
-	cookie := http.Cookie{
-		Name:   "session",
-		Value:  "",
-		MaxAge: -1,
-	}
-	http.SetCookie(w, &cookie)
+	ClearSessionID(w)
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 
@@ -503,14 +468,8 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// ID는 저장된 쿠키에서 불러옵니다.
-	var id string
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			id = cookie.Value
-		}
-	}
-	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
+	id := GetSessionID(r)
 	if id == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
@@ -572,16 +531,11 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		User // 로그인한 사용자 정보
 	}
 	rcp := recipe{}
-	// ID는 저장된 쿠키에서 불러옵니다.
-	var id string
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			id = cookie.Value
-		}
-	}
-	// 쿠키에 저장된 ID가 없다면 signin을 유도합니다.
+	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
+	id := GetSessionID(r)
 	if id == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
 	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
