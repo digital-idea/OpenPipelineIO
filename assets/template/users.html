@@ -42,9 +42,13 @@
                     <a href="tel:{{.Hotline}}">{{.Hotline}}</a>{{if .Location}} / {{.Location}}{{end}}<br>
                     <a href="tel:{{.Phone}}">{{.Phone}}</a><br>
                 </p>
+                <div>
                 {{range .Parts}}
-                    <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
+                    <div class="col">
+                        <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
+                    </div>
                 {{end}}
+                </div>
             </div>
         </div>
         {{end}}
