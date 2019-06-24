@@ -29,12 +29,38 @@ func addUser(session *mgo.Session, u User) error {
 		return err
 	}
 	if num != 0 {
-		err = errors.New(u.ID + " ID를 가진 사용자가 이밎 DB에 존재합니다.")
+		err = errors.New(u.ID + " ID를 가진 사용자가 이미 DB에 존재합니다.")
 		log.Println(err)
 		return err
 	}
 	u.Createtime = time.Now().Format(time.RFC3339)
 	err = c.Insert(u)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// addToken 함수는 사용자정보로 token을 추가하는 함수이다.
+func addToken(session *mgo.Session, u User) error {
+	c := session.DB("user").C("token")
+	num, err := c.Find(bson.M{"token": u.Token}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		err = errors.New(u.Token + " 키가 이미 DB에 존재합니다.")
+		log.Println(err)
+		return err
+	}
+	t := Token{
+		Token:       u.Token,
+		AccessLevel: u.AccessLevel,
+		ID:          u.ID,
+	}
+	err = c.Insert(t)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -59,6 +85,17 @@ func rmUser(session *mgo.Session, id string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
 	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmToken 함수는 token 키를 삭제하는 함수이다.
+func rmToken(session *mgo.Session, token string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("token")
+	err := c.Remove(bson.M{"token": token})
 	if err != nil {
 		return err
 	}

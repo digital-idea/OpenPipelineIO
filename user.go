@@ -57,6 +57,13 @@ type User struct {
 	Token         string      `json:"token"`         // restAPI Token 키
 }
 
+// Token 자료구조. 사용자가 가입될 때 user.token DB에 저장된다. 모든 유저의 Token를 매번 비교하지않고, Token 키의 유효성을 바로 체크하기 위해서 사용한다.
+type Token struct {
+	Token       string      `json:"token"`       // restAPI Token 키
+	AccessLevel AccessLevel `json:"accesslevel"` // 소프트웨어의 액세스 레벨
+	ID          string      `json:"id"`          // restAPI에 대한 로그 기록을 남기기 위해서는 토큰키로 아이디를 가지고올 수 있어야 한다.
+}
+
 // NewUser 는 새로운 유저를 생성할 때 사용한다.
 func NewUser(id string) *User {
 	return &User{

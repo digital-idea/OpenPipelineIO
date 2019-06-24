@@ -291,6 +291,11 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	err = addToken(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	SetSessionID(w, u.ID)
 	// 가입완료 페이지로 이동
 	err = t.ExecuteTemplate(w, "signup_success", u)
