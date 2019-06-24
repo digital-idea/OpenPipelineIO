@@ -54,6 +54,7 @@ type User struct {
 	LastIP        string      `json:"lastip"`        // 최근 접속 IP
 	LastPort      string      `json:"lastport"`      // 최근 접속 Port
 	Thumbnail     bool        `json:"thumbnail"`     // 썸네일 유무
+	Token         string      `json:"token"`         // restAPI Token 키
 }
 
 // NewUser 는 새로운 유저를 생성할 때 사용한다.

@@ -20,3 +20,14 @@ curl http://192.168.219.104/api/users?searchword="합성팀,1팀,팀장"
 ```bash
 curl http://192.168.219.104/api/users?searchword="개발팀,1팀"
 ```
+
+#### 인증을 통한 restAPI 사용방법
+curl 명령을 사용할 때
+
+`-H "Authorization: Basic JDJhJDEwJDhpdXJiRUhqWEQ4UVppRllBU3J0YU92anNBWncwNmRMOHZCeGFHb293S2hPbnVVVUtvUUN1"`
+
+문자를 사용합니다.
+
+```bash
+curl -H "Authorization: Basic JDJhJDEwJDhpdXJiRUhqWEQ4UVppRllBU3J0YU92anNBWncwNmRMOHZCeGFHb293S2hPbnVVVUtvUUN1" http://192.168.219.104/api/user?id=khw7096
+```

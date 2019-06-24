@@ -372,6 +372,15 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
+	token, err := GetToken(r)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if *flagDebug {
+		log.Println("Token:", token)
+	}
+	log.Println("Token:", token)
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -391,6 +400,7 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	// 불필요한 정보는 초기화 시킨다.
 	user.Password = ""
+	user.Token = ""
 	rcp.Data = user
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(rcp)
@@ -425,6 +435,7 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 	// 불필요한 정보는 초기화 시킨다.
 	for _, user := range users {
 		user.Password = ""
+		user.Token = ""
 		rcp.Data = append(rcp.Data, user)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
