@@ -10,15 +10,11 @@
         <div class="input-group">
             <input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" size=50 name="searchword" autofocus="autofocus" value="{{.Searchword}}">
             <div class="input-group-append">
-            <button class="btn btn-primary" id="button">Search</button>
+            <button class="btn btn-primary" id="button">{{if eq .Usernum 0}}Search{{else}}Search ({{.Usernum}}){{end}}</button>
             </div>
         </div>
         </form>
     </div>
-</div>
-
-<div class="text-center p-3">
-    총 {{.Usernum}}명
 </div>
 
 <div class="text-center p-3">
@@ -44,9 +40,7 @@
                 </p>
                 <div>
                 {{range .Parts}}
-                    <div class="col">
-                        <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
-                    </div>
+                    <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
                 {{end}}
                 </div>
             </div>
