@@ -9,7 +9,6 @@
 속도, 간결함(검색어 Based), 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
 
 ### 다운로드
-웹서버를 안정적으로 운용하기 위해 리눅스, 맥용만 배포합니다.
 
 - [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.1/csi3_linux_x86-64.tgz)
 - [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.1/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
