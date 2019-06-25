@@ -377,16 +377,20 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-	if *flagDebug {
-		log.Println("Token:", token)
-	}
-	log.Println("Token:", token)
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	if *flagAuthmode {
+		_, err = validToken(session, token)
+		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
+	}
+	log.Println("Token:", token)
 	q := r.URL.Query()
 	id := q.Get("id")
 	user, err := getUser(session, id)

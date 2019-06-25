@@ -69,6 +69,18 @@ func addToken(session *mgo.Session, u User) error {
 	return nil
 }
 
+// validToken 함수는 Token이 유효한지 체크한다.
+func validToken(session *mgo.Session, token string) (Token, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("token")
+	t := Token{}
+	err := c.Find(bson.M{"token": token}).One(&t)
+	if err != nil {
+		return t, errors.New("authorization failed")
+	}
+	return t, nil
+}
+
 // getUser 함수는 사용자를 가지고오는 함수이다.
 func getUser(session *mgo.Session, id string) (User, error) {
 	session.SetMode(mgo.Monotonic, true)
