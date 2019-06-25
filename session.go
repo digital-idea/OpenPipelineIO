@@ -42,8 +42,8 @@ func RmSessionID(w http.ResponseWriter) {
 	http.SetCookie(w, &c)
 }
 
-// GetToken 함수는 사용자가 전달한 Token 값을 가지고 온다.
-func GetToken(r *http.Request) (string, error) {
+// GetTokenFromHeader 함수는 사용자가 전달한 Token 값을 가지고 온다.
+func GetTokenFromHeader(r *http.Request) (string, error) {
 	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
 		return "", errors.New("authorization failed")

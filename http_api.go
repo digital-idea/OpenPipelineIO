@@ -372,16 +372,6 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
-	var token string
-	if *flagAuthmode {
-		t, err := GetToken(r)
-		if err != nil {
-			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-			return
-		}
-		token = t
-	}
-
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -389,6 +379,11 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	if *flagAuthmode {
+		token, err := GetTokenFromHeader(r)
+		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
 		_, err = validToken(session, token)
 		if err != nil {
 			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
