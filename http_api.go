@@ -390,7 +390,6 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	log.Println("Token:", token)
 	q := r.URL.Query()
 	id := q.Get("id")
 	user, err := getUser(session, id)
