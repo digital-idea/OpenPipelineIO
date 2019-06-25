@@ -22,7 +22,7 @@ curl http://192.168.219.104/api/users?searchword="개발팀,1팀"
 ```
 
 #### 인증을 통한 restAPI 사용방법
-curl 명령을 사용할 때 `-H "Authorization: Basic [TOKENKEY]` 문자를 사용합니다.
+curl 명령을 사용할 때 `-H "Authorization: Basic [TOKEN KEY]"` 문자를 사용합니다.
 
 ```bash
 curl -H "Authorization: Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH" http://192.168.219.101/api/user?id=khw7096
