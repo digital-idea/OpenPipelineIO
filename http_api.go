@@ -424,6 +424,18 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	if *flagAuthmode {
+		token, err := GetTokenFromHeader(r)
+		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
+		_, err = validToken(session, token)
+		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
+	}
 	q := r.URL.Query()
 	searchword := q.Get("searchword")
 	users, err := searchUsers(session, strings.Split(searchword, ","))
