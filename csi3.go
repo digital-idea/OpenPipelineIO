@@ -123,7 +123,15 @@ func main() {
 			log.Fatal(err)
 		}
 		defer session.Close()
-		err = rmUser(session, *flagID)
+		u, err := getUser(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = rmToken(session, u)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = rmUser(session, u)
 		if err != nil {
 			log.Fatal(err)
 		}

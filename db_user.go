@@ -81,10 +81,10 @@ func getUser(session *mgo.Session, id string) (User, error) {
 }
 
 // rmUser 함수는 사용자를 삭제하는 함수이다.
-func rmUser(session *mgo.Session, id string) error {
+func rmUser(session *mgo.Session, u User) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
-	err := c.Remove(bson.M{"id": id})
+	err := c.Remove(bson.M{"id": u.ID})
 	if err != nil {
 		return err
 	}
@@ -92,10 +92,10 @@ func rmUser(session *mgo.Session, id string) error {
 }
 
 // rmToken 함수는 token 키를 삭제하는 함수이다.
-func rmToken(session *mgo.Session, token string) error {
+func rmToken(session *mgo.Session, u User) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("token")
-	err := c.Remove(bson.M{"token": token})
+	err := c.Remove(bson.M{"token": u.Token})
 	if err != nil {
 		return err
 	}
