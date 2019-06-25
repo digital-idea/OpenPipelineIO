@@ -455,6 +455,19 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 기존 토큰을 제거한다.
+	err = rmToken(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 새로운 사용자 정보를 이용해서 다시 토큰을 생성한다.
+	u, err := getUser(session, id)
+	err = addToken(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// 기존 쿠키를 제거하고 새로 다시 로그인을 합니다.
 	RmSessionID(w)
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)

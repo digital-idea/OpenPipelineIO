@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"errors"
 	"log"
 	"sort"
@@ -92,10 +93,10 @@ func rmUser(session *mgo.Session, u User) error {
 }
 
 // rmToken 함수는 token 키를 삭제하는 함수이다.
-func rmToken(session *mgo.Session, u User) error {
+func rmToken(session *mgo.Session, id string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("token")
-	err := c.Remove(bson.M{"token": u.Token})
+	err := c.Remove(bson.M{"id": id})
 	if err != nil {
 		return err
 	}
@@ -127,6 +128,7 @@ func initPassUser(session *mgo.Session, id string) error {
 	c := session.DB("user").C("users")
 	num, err := c.Find(bson.M{"id": id}).Count()
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	if num != 1 {
@@ -135,11 +137,19 @@ func initPassUser(session *mgo.Session, id string) error {
 	q := bson.M{"id": id}
 	encryptPass, err := Encrypt("Welcome2csi!")
 	if err != nil {
+		log.Println(err)
 		return err
 	}
-	change := bson.M{"$set": bson.M{"password": encryptPass, "updatetime": time.Now().Format(time.RFC3339)}}
+	change := bson.M{
+		"$set": bson.M{
+			"password":   encryptPass,
+			"updatetime": time.Now().Format(time.RFC3339),
+			"token":      base64.StdEncoding.EncodeToString([]byte(encryptPass)),
+		},
+	}
 	err = c.Update(q, change)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -167,7 +177,13 @@ func updatePasswordUser(session *mgo.Session, id, pw, newPw string) error {
 	if err != nil {
 		return err
 	}
-	change := bson.M{"$set": bson.M{"password": encryptPass, "updatetime": time.Now().Format(time.RFC3339)}}
+	change := bson.M{
+		"$set": bson.M{
+			"password":   encryptPass,
+			"updatetime": time.Now().Format(time.RFC3339),
+			"token":      base64.StdEncoding.EncodeToString([]byte(encryptPass)),
+		},
+	}
 	err = c.Update(q, change)
 	if err != nil {
 		return err

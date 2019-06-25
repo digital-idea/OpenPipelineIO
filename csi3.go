@@ -113,6 +113,18 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		u, err := getUser(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = rmToken(session, u.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = addToken(session, u)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return
 	} else if *flagRm == "user" && *flagID != "" { // 사용자 삭제
 		if user.Username != "root" {
@@ -127,7 +139,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = rmToken(session, u)
+		err = rmToken(session, u.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
