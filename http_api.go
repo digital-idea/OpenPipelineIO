@@ -379,13 +379,18 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	if *flagAuthmode {
-		token, err := GetTokenFromHeader(r)
+		key, err := GetTokenFromHeader(r)
 		if err != nil {
 			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 			return
 		}
-		_, err = validToken(session, token)
+		token, err := validToken(session, key)
 		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
+		if token.AccessLevel < 2 {
+			err := errors.New("Insufficient authority levels")
 			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 			return
 		}
@@ -425,13 +430,18 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	if *flagAuthmode {
-		token, err := GetTokenFromHeader(r)
+		key, err := GetTokenFromHeader(r)
 		if err != nil {
 			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 			return
 		}
-		_, err = validToken(session, token)
+		token, err := validToken(session, key)
 		if err != nil {
+			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+			return
+		}
+		if token.AccessLevel < 2 {
+			err := errors.New("Insufficient authority levels")
 			fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 			return
 		}
