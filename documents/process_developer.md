@@ -19,6 +19,12 @@ $ brew install mongodb
 - http://csi.lazypic.org
 - 내부 임시서버: 10.0.95.175
 
+#### https 서비스를 위한 인증서 생성
+
+```bash
+$ go run /usr/local/go/src/crypto/tls/generate_cert.go -host="csi.lazypic.org" -ca=true
+```
+
 ### TravisCI
 테스트를 위해서 [TravisCI](https://docs.travis-ci.com) 를 사용합니다.
 
