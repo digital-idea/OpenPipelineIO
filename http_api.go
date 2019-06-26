@@ -21,14 +21,17 @@ func handleAPIAddproject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	id := r.FormValue("id")
 	p := *NewProject(id)
 	err = addProject(session, p)
@@ -60,6 +63,11 @@ func handleAPIProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	id := q.Get("id")
 	project, err := getProject(session, id)
@@ -69,7 +77,8 @@ func handleAPIProject(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewEncoder(w).Encode(project)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -80,19 +89,24 @@ func handleAPIProjectTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data  []string `json:"data"`
-		Error string   `json:"error"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
+	type recipe struct {
+		Data  []string `json:"data"`
+		Error string   `json:"error"`
+	}
+	rcp := recipe{}
 	_, err = getProject(session, project)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -102,7 +116,11 @@ func handleAPIProjectTags(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 	}
-	json.NewEncoder(w).Encode(rcp)
+	err = json.NewEncoder(w).Encode(rcp)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 }
 
 // handleAPIProjects 함수는 프로젝트 리스트를 반환한다.
@@ -112,24 +130,27 @@ func handleAPIProjects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	q := r.URL.Query()
+	qStatus := q.Get("status")
 	type recipe struct {
 		Data  []string `json:"data"`
 		Error string   `json:"error"`
 	}
 	rcp := recipe{}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		rcp.Error = "DB에 접속할 수 없습니다."
-		json.NewEncoder(w).Encode(rcp)
-		return
-	}
-	defer session.Close()
-	q := r.URL.Query()
-	qStatus := q.Get("status")
 	projectList, err := getProjects(session)
 	if err != nil {
-		rcp.Error = err.Error()
-		json.NewEncoder(w).Encode(rcp)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	for _, p := range projectList {
@@ -170,7 +191,11 @@ func handleAPIProjects(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	json.NewEncoder(w).Encode(rcp)
+	err = json.NewEncoder(w).Encode(rcp)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 }
 
 // handleAPIItem 함수는 아이템 자료구조를 불러온다.
@@ -186,6 +211,11 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	slug := q.Get("slug")
@@ -196,7 +226,8 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewEncoder(w).Encode(item)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -207,16 +238,17 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []Item `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	name := q.Get("name")
@@ -225,10 +257,15 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	type recipe struct {
+		Data []Item `json:"data"`
+	}
+	rcp := recipe{}
 	rcp.Data = items
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -277,7 +314,8 @@ func handleAPIItems(w http.ResponseWriter, r *http.Request) {
 	}
 	err = json.NewEncoder(w).Encode(result)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -288,20 +326,24 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []Item `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	type recipe struct {
+		Data []Item `json:"data"`
+	}
+	rcp := recipe{}
 	q, err := URLUnescape(r.URL)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	op := SearchOption{
@@ -330,7 +372,8 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 	rcp.Data = result
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -341,19 +384,24 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data Item `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	name := q.Get("name")
+	type recipe struct {
+		Data Item `json:"data"`
+	}
+	rcp := recipe{}
 	result, err := Shot(session, project, name)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -362,7 +410,8 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 	rcp.Data = result
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -372,6 +421,7 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -398,10 +448,10 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 	user.Password = ""
 	user.Token = ""
 	rcp.Data = user
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -411,6 +461,7 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -439,10 +490,10 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 		user.Token = ""
 		rcp.Data = append(rcp.Data, user)
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -453,16 +504,17 @@ func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []string `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	if project == "" {
@@ -474,10 +526,15 @@ func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	type recipe struct {
+		Data []string `json:"data"`
+	}
+	rcp := recipe{}
 	rcp.Data = seqs
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -488,16 +545,17 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []string `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	if project == "" {
@@ -514,10 +572,15 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	type recipe struct {
+		Data []string `json:"data"`
+	}
+	rcp := recipe{}
 	rcp.Data = shots
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
-		log.Println(err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -528,6 +591,18 @@ func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
@@ -539,19 +614,22 @@ func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
 			}
 			project = v
 		case "name", "shot", "asset":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
 			}
 			name = v
 		case "task":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
 			}
 			// fursim은 회사에서 사용하고 있는 특수한 Task이다.
 			// 샷 작업은 fursim이고 에셋작업은 fur로 불린다.(작업회의중)
@@ -576,34 +654,28 @@ func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 			if !chkTask {
-				fmt.Fprintln(w, v+"값을 Task로 사용할 수 없습니다.")
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", v+"값을 Task로 사용할 수 없습니다")
 				return
 			}
 			task = v
 		case "mov": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
 			mov = strings.Join(value, ";")
 		default:
-			fmt.Fprintln(w, key+"키는 사용할 수 없습니다.(project, shot, asset, task, mov 키값만 사용가능합니다.)")
+			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, shot, asset, task, mov 키값만 사용가능합니다.)")
 			return
 		}
-
 	}
 	if mov == "" {
-		fmt.Fprintln(w, "mov 키값을 설정해주세요.")
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "mov 키값을 설정해주세요.")
 		return
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	if *flagDebug {
 		fmt.Println(project, name, task, mov)
 	}
 	err = setMov(session, project, name, task, mov)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -612,6 +684,18 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -624,39 +708,33 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "size":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			if !regexpImageSize.MatchString(v) {
-				fmt.Fprintln(w, "size 는 2048x1152 형태여야 합니다.")
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "size 는 2048x1152 형태여야 합니다.")
 				return
 			}
 			size = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetImageSize(session, project, name, "rendersize", size)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -668,6 +746,18 @@ func handleAPISetDistortionSize(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
@@ -678,39 +768,33 @@ func handleAPISetDistortionSize(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "size":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			if !regexpImageSize.MatchString(v) {
-				fmt.Fprintln(w, "size 는 2048x1152 형태여야 합니다.")
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "size 는 2048x1152 형태여야 합니다.")
 				return
 			}
 			size = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetImageSize(session, project, name, "dsize", size)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -722,6 +806,18 @@ func handleAPISetJustIn(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
@@ -732,40 +828,34 @@ func handleAPISetJustIn(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "frame":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			n, err := strconv.Atoi(v)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			frame = n
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetFrame(session, project, name, "justin", frame)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -777,6 +867,18 @@ func handleAPISetJustOut(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
@@ -787,40 +889,34 @@ func handleAPISetJustOut(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "frame":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			n, err := strconv.Atoi(v)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			frame = n
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetFrame(session, project, name, "justout", frame)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -830,6 +926,18 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -842,39 +950,33 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "size":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			if !regexpImageSize.MatchString(v) {
-				fmt.Fprintln(w, "size 는 2048x1152 형태여야 합니다.")
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "size 는 2048x1152 형태여야 합니다")
 				return
 			}
 			size = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetImageSize(session, project, name, "platesize", size)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -882,7 +984,7 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 // PostFormValueInList 는 PostForm 쿼리시 Value값이 1개라면 값을 리턴한다.
 func PostFormValueInList(key string, values []string) (string, error) {
 	if len(values) != 1 {
-		return "", errors.New(key + "값이 여러개 입니다.")
+		return "", errors.New(key + "값이 여러개 입니다")
 	}
 	if key == "startdate" && values[0] == "" { // Task 시작일은 빈 문자를 허용한다.
 		return "", nil
@@ -894,7 +996,7 @@ func PostFormValueInList(key string, values []string) (string, error) {
 		return "", nil
 	}
 	if values[0] == "" {
-		return "", errors.New(key + "값이 빈 문자입니다.")
+		return "", errors.New(key + "값이 빈 문자입니다")
 	}
 	return values[0], nil
 }
@@ -904,6 +1006,18 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -916,35 +1030,29 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "path":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			path = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetCameraPubPath(session, project, name, path)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -954,6 +1062,18 @@ func handleAPISetCameraPubTask(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -966,35 +1086,29 @@ func handleAPISetCameraPubTask(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "task":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			task = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetCameraPubTask(session, project, name, task)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1004,6 +1118,18 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -1016,21 +1142,21 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "projection":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			if strings.ToLower(v) == "true" {
@@ -1038,15 +1164,9 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetCameraProjection(session, project, name, projection)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1056,6 +1176,17 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -1069,42 +1200,36 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "path":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			path = v
 		case "type":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			typ = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetThummov(session, project, name, typ, path)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1114,6 +1239,18 @@ func handleAPISetStatus(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -1127,42 +1264,36 @@ func handleAPISetStatus(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "task":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			task = v
 		case "status":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			status = v
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetStatus(session, project, name, task, status)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1172,6 +1303,18 @@ func handleAPISetStartdate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -1185,46 +1328,40 @@ func handleAPISetStartdate(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "task":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			task = v
 		case "startdate":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			startdate, err = ditime.ToFullTime("current", v) // 작업시작시간은 현재시간으로 등록한다.
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetStartdate(session, project, name, task, startdate)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1234,6 +1371,18 @@ func handleAPISetPredate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -1247,46 +1396,40 @@ func handleAPISetPredate(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			name = v
 		case "task":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			task = v
 		case "predate":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 			predate, err = ditime.ToFullTime("end", v) // 1차 마감일은 퇴근시간으로 등록한다.
 			if err != nil {
-				fmt.Fprintln(w, err)
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
 		}
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintln(w, *flagDBIP+" DB에 접속할 수 없습니다.")
-		return
-	}
-	defer session.Close()
 	err = SetPredate(session, project, name, task, predate)
 	if err != nil {
-		fmt.Fprintln(w, err)
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
@@ -1298,19 +1441,24 @@ func handleAPISetelliteItems(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []Setellite `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	rollmedia := q.Get("rollmedia")
+	type recipe struct {
+		Data []Setellite `json:"data"`
+	}
+	rcp := recipe{}
 	rcp.Data, err = SetelliteItems(session, project, rollmedia)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -1319,6 +1467,7 @@ func handleAPISetelliteItems(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
 		fmt.Fprintf(w, "{\"err\":\"%v\"}\n", err)
+		return
 	}
 }
 
@@ -1329,19 +1478,24 @@ func handleAPISetelliteSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	type recipe struct {
-		Data []Setellite `json:"data"`
-	}
-	rcp := recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	searchword := q.Get("searchword")
+	type recipe struct {
+		Data []Setellite `json:"data"`
+	}
+	rcp := recipe{}
 	rcp.Data, err = SetelliteSearch(session, project, searchword)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
@@ -1350,5 +1504,6 @@ func handleAPISetelliteSearch(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(rcp)
 	if err != nil {
 		fmt.Fprintf(w, "{\"err\":\"%v\"}\n", err)
+		return
 	}
 }
