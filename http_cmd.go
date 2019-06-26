@@ -9,16 +9,21 @@ import (
 
 // handleCmd 함수는 /cmd URI를 통해서 입력받는 값을 이용해서 필요한 명령을 웹으로 수행하는 함수이다.
 func handleCmd(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	q := r.URL.Query()
+	funcname := q.Get("funcname")
+	project := q.Get("project")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"DB에 접속할 수 없습니다.\"}\n")
 		return
 	}
 	defer session.Close()
-	q := r.URL.Query()
-	funcname := q.Get("funcname")
-	project := q.Get("project")
 	switch funcname {
 	case "rmoverlaponsetnote":
 		err = RmOverlapOnsetnote(session, project)

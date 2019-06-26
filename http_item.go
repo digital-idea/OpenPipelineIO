@@ -18,6 +18,11 @@ import (
 
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -154,6 +159,11 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 // handleAssettags는 에셋태그 페이지이다.
 func handleAssettags(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -269,6 +279,11 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 
 // handleEdit 함수는 Item 편집페이지이다.
 func handleEdit(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -339,6 +354,11 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 
 // handleTags 함수는 태그 클릭시 출력되는 페이지이다.
 func handleTags(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -450,6 +470,11 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 
 // handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다.
 func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -846,6 +871,11 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
 func handleDdline(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -956,6 +986,11 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 
 // handleIndex 함수는 index 페이지이다.
 func handleIndex(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -999,77 +1034,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Template = "csi3"
 	err = t.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleItemDetail 함수는 Item의 디테일한 정보페이지다.
-// 이 페이지는 만들다가 만것같다.
-func handleItemDetail(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	q := r.URL.Query()
-	editType := q.Get("type")
-	project := q.Get("project")
-	slug := q.Get("slug")
-	id := q.Get("id") // 프로젝트id에 사용할 것
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	switch editType {
-	case "item":
-		type recipe struct {
-			ID      string
-			Project Project
-			Item    Item
-		}
-		rcp := recipe{}
-		defer session.Close()
-		rcp.Project, err = getProject(session, project)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Item, err = getItem(session, project, slug)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "detailItem", rcp)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		return
-	case "project":
-		rcp, err := getProject(session, id)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "detailProject", rcp)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		return
-	default:
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

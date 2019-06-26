@@ -21,6 +21,11 @@ import (
 
 // handleUser 함수는 유저정보를 출력하는 페이지이다.
 func handleUser(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -55,6 +60,11 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUser 함수는 유저정보를 수정하는 페이지이다.
 func handleEditUser(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -90,9 +100,8 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUserSubmit 함수는 회원정보를 수정받는 페이지이다.
 func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
-	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
-	id := GetSessionID(r)
-	if id == "" {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 	}
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
@@ -107,7 +116,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	u, err := getUser(session, id)
+	u, err := getUser(session, sessionID)
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
@@ -191,7 +200,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/user?id="+id, http.StatusSeeOther)
+	http.Redirect(w, r, "/user?id="+sessionID, http.StatusSeeOther)
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
@@ -360,6 +369,11 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -374,6 +388,11 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 
 // handleSignout 함수는 로그아웃 페이지이다.
 func handleSignout(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -389,6 +408,11 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 
 // handleUpdatePassword 함수는 사용자의 패스워드를 수정하는 페이지이다.
 func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -420,6 +444,11 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 
 // handleUpdatePasswordSubmit 함수는 회원가입 페이지이다.
 func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	if r.FormValue("OldPassword") == "" {
 		err := errors.New("Password 값이 빈 문자열 입니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -435,12 +464,6 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
-	id := GetSessionID(r)
-	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
 	pw := r.FormValue("OldPassword")
 	newPw := r.FormValue("NewPassword")
 	session, err := mgo.Dial(*flagDBIP)
@@ -450,19 +473,19 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = updatePasswordUser(session, id, pw, newPw)
+	err = updatePasswordUser(session, sessionID, pw, newPw)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// 기존 토큰을 제거한다.
-	err = rmToken(session, id)
+	err = rmToken(session, sessionID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// 새로운 사용자 정보를 불러와서 토큰을 생성한다.
-	u, err := getUser(session, id)
+	u, err := getUser(session, sessionID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -479,6 +502,11 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleUsers 함수는 유저리스트를 검색하는 페이지이다.
 func handleUsers(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	if r.Method == http.MethodPost {
 		searchword := r.FormValue("searchword")
 		http.Redirect(w, r, "/users?search="+searchword, http.StatusSeeOther)
@@ -490,12 +518,6 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
-	id := GetSessionID(r)
-	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -514,7 +536,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Searchword = searchword
-	rcp.User, err = getUser(session, id)
+	rcp.User, err = getUser(session, sessionID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -541,6 +563,11 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 
 // handleReplacePart 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
 func handleReplacePart(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
@@ -555,12 +582,6 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		User // 로그인한 사용자 정보
 	}
 	rcp := recipe{}
-	// sessionID를 저장된 쿠키에서 불러옵니다. 쿠키에 저장된 sessionID가 없다면 signin을 유도합니다.
-	id := GetSessionID(r)
-	if id == "" {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -569,7 +590,7 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	rcp.User, err = getUser(session, id)
+	rcp.User, err = getUser(session, sessionID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -583,6 +604,11 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 
 // handleReplacePartSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
 func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return

@@ -10,6 +10,11 @@ import (
 
 // handleAddProject 함수는 프로젝트를 추가하는 페이지이다.
 func handleAddProject(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -27,6 +32,11 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 
 // handleProjectinfo 함수는 프로젝트 자료구조 페이지이다.
 func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -71,6 +81,11 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 
 // handleEditProjectSubmit 함수는 Projectinfo의  수정정보를 처리하는 페이지이다.
 func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)

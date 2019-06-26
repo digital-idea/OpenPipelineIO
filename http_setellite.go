@@ -16,6 +16,11 @@ import (
 
 // handleSetellite 함수는 현장데이터를 출력하는 페이지이다.
 func handleSetellite(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -105,6 +110,11 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
+	sessionID := GetSessionID(r)
+	if sessionID == "" && *flagAuthmode {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)

@@ -93,7 +93,6 @@ func webserver(port string) {
 	http.HandleFunc("/projectinfo", handleProjectinfo)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
-	http.HandleFunc("/detail", handleItemDetail) // 리펙토링이 필요해보임.
 
 	// Add
 	http.HandleFunc("/addproject", handleAddProject)
