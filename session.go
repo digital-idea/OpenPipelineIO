@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/base64"
-	"errors"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -40,13 +38,4 @@ func RmSessionID(w http.ResponseWriter) {
 		MaxAge: -1,
 	}
 	http.SetCookie(w, &c)
-}
-
-// GetTokenFromHeader 함수는 사용자가 전달한 Token 값을 가지고 온다.
-func GetTokenFromHeader(r *http.Request) (string, error) {
-	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
-	if len(auth) != 2 || auth[0] != "Basic" {
-		return "", errors.New("authorization failed")
-	}
-	return auth[1], nil
 }

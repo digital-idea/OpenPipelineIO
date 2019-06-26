@@ -22,7 +22,11 @@ curl http://192.168.219.104/api/users?searchword="개발팀,1팀"
 ```
 
 #### 인증을 통한 restAPI 사용방법
-curl 명령을 사용할 때 `-H "Authorization: Basic [TOKEN KEY]"` 문자를 사용합니다.
+
+`-authmode` 모드가 활성화 되어있지 않다면 restAPI은 공개되어 있고, 아무나 사용할 수 있습니다.
+csi서비스를 실행할 때 `-authmode` 옵션을 붙히면 보안모드가 작동됩니다.
+이 때부터는 curl 명령을 사용할 때 `-H "Authorization: Basic [TOKEN KEY]"` 문자를 사용해야 데이터를 가지고 올 수 있습니다.
+이 Token 키는 사용자의 가입, 패스워드변경, 패스워드초기화시 자동으로 변경됩니다.
 
 ```bash
 curl -H "Authorization: Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH" http://192.168.219.101/api/user?id=khw7096
