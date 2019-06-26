@@ -28,7 +28,9 @@
     <div class="row">
         {{range .Users}}
         <div class="card w-10 mx-auto m-3">
-            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
+            <a href="/user?id={{.ID}}">
+                <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
+            </a>
             <div class="card-body text-center">
                 <h4 class="card-title">{{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
