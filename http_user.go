@@ -37,8 +37,10 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		User
+		SessionID string
 	}
 	rcp := recipe{}
+	rcp.SessionID = sessionID
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

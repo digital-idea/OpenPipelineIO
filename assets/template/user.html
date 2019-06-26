@@ -16,14 +16,17 @@
                     내선: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
                     핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
                 </p>
-                {{range .User.Parts}}
-                    <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
-                {{end}}
+                <div class="col parts p-1">
+                    {{range .User.Parts}}
+                        <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
+                    {{end}}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+{{if eq .User.ID .SessionID}}
 <div class="p-5">
     <div class="row">
         <div class="col-lg-4 col-sm-8 w-10 mx-auto text-center">
@@ -35,6 +38,7 @@
         </div>
     </div>
 </div>
+{{end}}
 
 {{template "footerBootstrap"}}
 </body>
