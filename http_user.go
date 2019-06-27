@@ -366,13 +366,26 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// sesssion을 셋팅하고 / 로 이동한다.
+	// 로그인에 성공하면 접속한 아이피와 포트를 DB에 기록한다.
 	u, err := getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	SetSessionID(w, u.ID, u.AccessLevel, "")
+	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u.LastIP = host
+	u.LastPort = port
+	err = setUser(session, u)
+	// session을 저장후 로그인 성공페이지로 이동한다.
+	err = SetSessionID(w, u.ID, u.AccessLevel, "")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	http.Redirect(w, r, "/signin_success", http.StatusSeeOther)
 }
 
