@@ -65,6 +65,9 @@ func GetSessionID(r *http.Request) (JwtToken, error) {
 			if err != nil {
 				return jt, err
 			}
+			if jt.ID == "" {
+				return jt, errors.New("ID가 빈 문자열입니다")
+			}
 			return jt, nil
 		}
 	}

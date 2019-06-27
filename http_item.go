@@ -23,10 +23,6 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.ID == "" && *flagAuthmode {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -169,12 +165,8 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 // handleAssettags는 에셋태그 페이지이다.
 func handleAssettags(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
+	_, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -293,12 +285,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 
 // handleEdit 함수는 Item 편집페이지이다.
 func handleEdit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
+	_, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -372,12 +360,8 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 
 // handleTags 함수는 태그 클릭시 출력되는 페이지이다.
 func handleTags(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
+	_, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -492,12 +476,8 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 
 // handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다.
 func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
+	_, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -897,12 +877,8 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
 func handleDdline(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
+	_, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -1018,10 +994,6 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 func handleIndex(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
