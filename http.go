@@ -149,10 +149,15 @@ func webserver(port string) {
 
 	// Captcha
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight))
-
-	err := http.ListenAndServe(port, nil)
-	if err != nil {
-		log.Fatal(err)
+	if port == ":443" {
+		err := http.ListenAndServeTLS(port, "cert.pem", "key.pem", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		err := http.ListenAndServe(port, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-
 }

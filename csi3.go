@@ -285,10 +285,11 @@ func main() {
 		session.Close()
 		if *flagHTTPPort == ":80" {
 			fmt.Printf("Service start: http://%s\n", ip)
+		} else if *flagHTTPPort == ":443" {
+			fmt.Printf("Service start: https://%s\n", ip)
 		} else {
 			fmt.Printf("Service start: http://%s%s\n", ip, *flagHTTPPort)
 		}
-
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.
