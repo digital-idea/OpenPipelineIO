@@ -21,8 +21,12 @@ import (
 
 // handleUser 함수는 유저정보를 출력하는 페이지이다.
 func handleUser(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -40,7 +44,7 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 	}
 	rcp := recipe{}
-	rcp.SessionID = sessionID
+	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -62,8 +66,12 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUser 함수는 유저정보를 수정하는 페이지이다.
 func handleEditUser(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -102,9 +110,14 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUserSubmit 함수는 회원정보를 수정받는 페이지이다.
 func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
 	}
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
@@ -118,7 +131,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	u, err := getUser(session, sessionID)
+	u, err := getUser(session, ssid.ID)
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
@@ -202,7 +215,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/user?id="+sessionID, http.StatusSeeOther)
+	http.Redirect(w, r, "/user?id="+ssid.ID, http.StatusSeeOther)
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
@@ -307,7 +320,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	SetSessionID(w, u.ID)
+	SetSessionID(w, u.ID, u.AccessLevel, "")
 	// 가입완료 페이지로 이동
 	err = t.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {
@@ -366,13 +379,22 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// sesssion을 셋팅하고 / 로 이동한다.
-	SetSessionID(w, id)
+	u, err := getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	SetSessionID(w, u.ID, u.AccessLevel, "")
 	http.Redirect(w, r, "/signin_success", http.StatusSeeOther)
 }
 
 func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -390,8 +412,12 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 
 // handleSignout 함수는 로그아웃 페이지이다.
 func handleSignout(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -410,8 +436,8 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 
 // handleUpdatePassword 함수는 사용자의 패스워드를 수정하는 페이지이다.
 func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -446,8 +472,12 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 
 // handleUpdatePasswordSubmit 함수는 회원가입 페이지이다.
 func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -475,18 +505,18 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = updatePasswordUser(session, sessionID, pw, newPw)
+	err = updatePasswordUser(session, ssid.ID, pw, newPw)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// 기존 토큰을 제거한다.
-	err = rmToken(session, sessionID)
+	err = rmToken(session, ssid.ID)
 	if err != nil {
 		log.Println(err)
 	}
 	// 새로운 사용자 정보를 불러와서 토큰을 생성한다.
-	u, err := getUser(session, sessionID)
+	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -503,8 +533,12 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleUsers 함수는 유저리스트를 검색하는 페이지이다.
 func handleUsers(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -537,7 +571,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Searchword = searchword
-	rcp.User, err = getUser(session, sessionID)
+	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -564,8 +598,12 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 
 // handleReplacePart 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
 func handleReplacePart(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -591,7 +629,7 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	rcp.User, err = getUser(session, sessionID)
+	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -605,8 +643,12 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 
 // handleReplacePartSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
 func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}

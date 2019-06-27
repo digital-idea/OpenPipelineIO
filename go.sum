@@ -9,6 +9,8 @@ github.com/daaku/go.zipexe v1.0.1/go.mod h1:5xWogtqlYnfBXkSB1o9xysukNP9GTvaNkqzU
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364 h1:U+BMqUt8LFgyrF0/NKgPZdr1sGZ3j6uBECpOGcISpFI=
 github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364/go.mod h1:QGrK8vMWWHQYQ3QU9bw9Y9OPNfxccGzfb41qjvVeXtY=
+github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
+github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/didev/ditime v0.0.0-20190606003054-cb41ecc8a35e/go.mod h1:YX4mk8XC9dkIre4EEBSAxs/BKOU9JJfoEJKbkFwq2lM=
 github.com/digital-idea/dilog v1.0.3 h1:WKOaWrTwiAFe3MlxilkV9MUOXjcnHhoN9TnH89Qk8/8=
 github.com/digital-idea/dilog v1.0.3/go.mod h1:x2OfytywkPh4e6V0I9Fu8DPqV/eYUjCrvUe/Vrx5dxo=

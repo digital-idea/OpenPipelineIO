@@ -9,8 +9,12 @@ import (
 
 // handleCmd 함수는 /cmd URI를 통해서 입력받는 값을 이용해서 필요한 명령을 웹으로 수행하는 함수이다.
 func handleCmd(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	sessionID, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if sessionID.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}

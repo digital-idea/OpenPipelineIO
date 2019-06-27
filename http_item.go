@@ -18,8 +18,12 @@ import (
 
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -55,7 +59,13 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
-	rcp.ID = GetSessionID(r)
+	ssid, err = GetSessionID(r)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.ID = ssid.ID
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -159,8 +169,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 // handleAssettags는 에셋태그 페이지이다.
 func handleAssettags(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -279,8 +293,12 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 
 // handleEdit 함수는 Item 편집페이지이다.
 func handleEdit(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -354,8 +372,12 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 
 // handleTags 함수는 태그 클릭시 출력되는 페이지이다.
 func handleTags(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -470,8 +492,12 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 
 // handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다.
 func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -871,8 +897,12 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
 func handleDdline(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -986,8 +1016,12 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 
 // handleIndex 함수는 index 페이지이다.
 func handleIndex(w http.ResponseWriter, r *http.Request) {
-	sessionID := GetSessionID(r)
-	if sessionID == "" && *flagAuthmode {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.ID == "" && *flagAuthmode {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
@@ -1011,7 +1045,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		Searchop    SearchOption
 	}
 	rcp := recipe{}
-	rcp.ID = GetSessionID(r)
+	rcp.ID = ssid.ID
 
 	// 쿠키에 저장된 값이 있다면 rcp에 저장한다.
 	for _, cookie := range r.Cookies() {
