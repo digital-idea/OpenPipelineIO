@@ -24,6 +24,8 @@ var (
 	DILOG = "http://127.0.0.1:8080"
 	// THUMBPATH 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	THUMBPATH = "thumbnail"
+	// DNS 값은 서비스 DNS 값입니다.
+	DNS = "csi.lazypic.org"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MAILDNS = "lazypic.org"
 	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -43,8 +45,8 @@ var (
 	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전
 	flagCookieAge      = flag.Int64("cookieage", 4, "cookie age (hour)")              // MPAA 기준 4시간이다.
 	flagAuthmode       = flag.Bool("authmode", false, "restAPI authorization active") // restAPI 이용시 authorization 활성화
-	flagCertFullchanin = flag.String("certfullchanin", "/etc/letsencrypt/live/csi.lazypic.org/fullchain.pem", "certification fullchain path")
-	flagCertPrivkey    = flag.String("certprivkey", "/etc/letsencrypt/live/csi.lazypic.org/privkey.pem", "certification privkey path")
+	flagCertFullchanin = flag.String("certfullchanin", fmt.Sprintf("/etc/letsencrypt/live/%s/fullchain.pem", DNS), "certification fullchain path")
+	flagCertPrivkey    = flag.String("certprivkey", fmt.Sprintf("/etc/letsencrypt/live/%s/privkey.pem", DNS), "certification privkey path")
 
 	// RV
 	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
