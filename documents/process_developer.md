@@ -26,17 +26,27 @@ $ go run /usr/local/go/src/crypto/tls/generate_cert.go -host="csi.lazypic.org" -
 ```
 
 #### letsencrypt
+macOS에 letsencrypt를 설치, 인증서를 생성합니다.
 
 ```bash
 $ brew install letsencrypt
 $ sudo certbot certonly --standalone -d csi.lazypic.org
 ```
 
-인증서가 생성되는 곳
+인증서가 생성되는 경로는 아래와 같습니다.
+
 ```
 /etc/letsencrypt/live/csi.lazypic.org/fullchain.pem
 /etc/letsencrypt/live/csi.lazypic.org/privkey.pem
 ```
+
+인증서 갱신
+
+```bash
+$ certbot renew
+```
+
+- reference: https://certbot.eff.org/lets-encrypt/osx-other
 
 ### TravisCI
 테스트를 위해서 [TravisCI](https://docs.travis-ci.com) 를 사용합니다.
