@@ -51,3 +51,15 @@ $ sudo csi3 -accesslevel 4 -id khw7096
 - 8: PD, 자금이슈
 - 9: 개발자
 - 10: 시스템 관리자
+
+#### JWT에 사용되는 환경변수
+CSI_JWT_TOKEN_KEY 로 세션 암호화에 사용될 문자를 환경변수로 잡아주세요.
+서버로 사용될 컴퓨터에서 아래 파일을 편집하면 됩니다.
+보안에 문제가 될 이슈가 있다면 가끔 주기적으로 바꾸어주세요. session 암호화에 사용되기 때문에
+사용자는 로그인만 다시 해주면 됩니다.
+
+macOS라면 ~/.profile, centOS 라면 ~/.bashrc 파일 입니다.
+
+```bash
+export CSI_JWT_TOKEN_KEY="암호화,복호화에 사용될 문자"
+```
