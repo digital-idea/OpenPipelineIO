@@ -483,8 +483,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	// 기존 토큰을 제거한다.
 	err = rmToken(session, sessionID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		log.Println(err)
 	}
 	// 새로운 사용자 정보를 불러와서 토큰을 생성한다.
 	u, err := getUser(session, sessionID)

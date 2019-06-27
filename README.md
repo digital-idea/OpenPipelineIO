@@ -93,10 +93,11 @@ $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프
 ```
 
 - 사용자 패스워드 초기화
-초기화 되는 패스워드는 `Welcome2csi!` 입니다.
+사용자의 패스워드를 `Welcome2csi!`로 초기화 하고 싶다면 아래 명령어를 사용합니다.
+관리자만 처리할 수 있습니다.
 
 ```bash
-$ sudo csi3 -initpass -id [userid]
+$ sudo csi3 -initpass Welcom2csi! -id [userid]
 ```
 
 - 사용자 제거

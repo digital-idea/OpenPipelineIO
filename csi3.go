@@ -62,7 +62,7 @@ var (
 	flagDate      = flag.String("date", "", "Date. ex) 2016-12-06")
 	// Commandline Args: User
 	flagID          = flag.String("id", "", "user id")
-	flagInitPass    = flag.Bool("initpass", false, "initialize user password")
+	flagInitPass    = flag.String("initpass", "", "initialize user password")
 	flagAccessLevel = flag.Int("accesslevel", -1, "edit user Access Level")
 	// scan정보 추가. plate scan tool에서 데이터를 등록할 때 활용되는 옵션
 	flagPlatesize       = flag.String("platesize", "", "스캔 플레이트 사이즈")
@@ -130,9 +130,9 @@ func main() {
 		}
 		return
 
-	} else if *flagInitPass && *flagID != "" {
+	} else if *flagInitPass != "" && *flagID != "" {
 		if user.Username != "root" {
-			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+			log.Fatal(errors.New("사용자의 비밀변호를 변경하기 위해서는 root 권한이 필요합니다"))
 		}
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
@@ -149,7 +149,7 @@ func main() {
 		}
 		err = rmToken(session, u.ID)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		err = addToken(session, u)
 		if err != nil {

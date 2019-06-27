@@ -147,7 +147,7 @@ func initPassUser(session *mgo.Session, id string) error {
 		return errors.New("해당 유저가 존재하지 않습니다")
 	}
 	q := bson.M{"id": id}
-	encryptPass, err := Encrypt("Welcome2csi!")
+	encryptPass, err := Encrypt(*flagInitPass)
 	if err != nil {
 		log.Println(err)
 		return err
