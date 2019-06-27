@@ -34,15 +34,18 @@ var (
 	MINVER = ""
 
 	// 주요서비스 인수
-	flagDBIP      = flag.String("dbip", DBIP, "mongodb ip")
-	flagMailDNS   = flag.String("maildns", MAILDNS, "mail DNS name")
-	flagThumbPath = flag.String("thumbpath", THUMBPATH, "thumbnail path")
-	flagDebug     = flag.Bool("debug", false, "디버그모드 활성화")
-	flagHTTPPort  = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
-	flagCompany   = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
-	flagVersion   = flag.Bool("version", false, "Print Version")                 // 버전
-	flagCookieAge = flag.Int64("cookieage", 4, "cookie age (hour)")              // MPAA 기준 4시간이다.
-	flagAuthmode  = flag.Bool("authmode", false, "restAPI authorization active") // restAPI 이용시 authorization 활성화
+	flagDBIP           = flag.String("dbip", DBIP, "mongodb ip")
+	flagMailDNS        = flag.String("maildns", MAILDNS, "mail DNS name")
+	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
+	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
+	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
+	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
+	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전
+	flagCookieAge      = flag.Int64("cookieage", 4, "cookie age (hour)")              // MPAA 기준 4시간이다.
+	flagAuthmode       = flag.Bool("authmode", false, "restAPI authorization active") // restAPI 이용시 authorization 활성화
+	flagCertFullchanin = flag.String("certfullchanin", "/etc/letsencrypt/live/csi.lazypic.org/fullchain.pem", "certification fullchain path")
+	flagCertPrivkey    = flag.String("certprivkey", "/etc/letsencrypt/live/csi.lazypic.org/privkey.pem", "certification privkey path")
+
 	// RV
 	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
 	flagPlay = flag.Bool("play", false, "Play RV")

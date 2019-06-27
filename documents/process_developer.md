@@ -25,6 +25,19 @@ $ brew install mongodb
 $ go run /usr/local/go/src/crypto/tls/generate_cert.go -host="csi.lazypic.org" -ca=true
 ```
 
+#### letsencrypt
+
+```bash
+$ brew install letsencrypt
+$ sudo certbot certonly --standalone -d csi.lazypic.org
+```
+
+인증서가 생성되는 곳
+```
+/etc/letsencrypt/live/csi.lazypic.org/fullchain.pem
+/etc/letsencrypt/live/csi.lazypic.org/privkey.pem
+```
+
 ### TravisCI
 테스트를 위해서 [TravisCI](https://docs.travis-ci.com) 를 사용합니다.
 
