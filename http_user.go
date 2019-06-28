@@ -268,7 +268,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	id := r.FormValue("ID")
+	id := strings.ToLower(r.FormValue("ID"))
 	u := *NewUser(id)
 	pw, err := Encrypt(r.FormValue("Password"))
 	if err != nil {
