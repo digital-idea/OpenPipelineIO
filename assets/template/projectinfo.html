@@ -1,74 +1,84 @@
 {{define "projectinfo" }}
-{{template "head"}}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+		
+<div class="row p-5">
+	<a href="/projectinfo?status=all" class="btn btn-secondary btn-sm m-1">전체</a>
+	<a href="/projectinfo?status=pre" class="btn btn-success btn-sm m-1">준비중</a>
+	<a href="/projectinfo?status=post" class="btn btn-info btn-sm m-1">진행중</a>
+	<a href="/projectinfo?status=layover" class="btn btn-warning btn-sm m-1">중단</a>
+	<a href="/projectinfo?status=backup" class="btn btn-danger btn-sm m-1">백업중</a>
+	<a href="/projectinfo?status=archive" class="btn btn-secondary btn-sm m-1">종료</a>
+	<a href="/projectinfo?status=unknown" class="btn btn-secondary btn-sm m-1">미분류</a>
+	<a href="/addproject" class="btn btn-primary btn-sm m-1">Add Project</a>
+</div>
+
 <div id="content">
-	<div class="projectinfobutton">
-	<!--색상별 프로젝트 상태 설명-->
-			<span style="background:#f2f2f2" onclick="projectDisplay('all')">전체</span>
-			<span style="background:#E3EB8D" onclick="projectDisplay('pre')">준비중</span>
-			<span style="background:#9ABF62" onclick="projectDisplay('post')">진행중</span>
-			<span style="background:#B2B084" onclick="projectDisplay('layover')">중단</span>
-			<span style="background:#7EAECB" onclick="projectDisplay('backup')">백업중</span>
-			<span style="background:#A3A3A3" onclick="projectDisplay('archive')">종료</span>
-			<span style="background:#f2f2f2" onclick="projectDisplay('unknown')" title="분류가 필요합니다.">미분류</span>
-			<div class="right"><a href="/addproject" title="프로젝트 추가하기"><default_button>프로젝트 추가</default_button></a></div>
+	{{range .Projects}}
+		{{if eq .Status 0}}<div class="projectinfo unknown" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 1}}<div class="projectinfo pre" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 2}}<div class="projectinfo post" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 3}}<div class="projectinfo layover" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 4}}<div class="projectinfo backup" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 5}}<div class="projectinfo archive" style="background:{{projectStatus2color .Status}};">{{end}}
+		{{if eq .Status 6}}<div class="projectinfo lawsuit" style="background:{{projectStatus2color .Status}};">{{end}}
+		<div class="projectinfoTitle">
+		<a href="/edit?type=project&id={{.ID}}">{{if .Name}}{{.ID}}{{else}}{{.ID}}{{end}}</a>
+		<span>{{if .Name}}({{.Name}}){{else}}{{end}}</span>
+		<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]"><img class="smallicon" src="/assets/img/mail.svg"></a>
+		<div class="projectinfoicon">
+		{{if eq .Stereo true}}<img src="/assets/img/stereoscope.svg" class="widesmallicon">{{end}}
+		{{if eq .Screenx true}}<img src="/assets/img/screenx.svg" class="smallicon">{{end}}
+		</div>
+		<hr>
+		</div>
+		<!--프로젝트 정보 출력-->
+		<div>
+		<div class="projectinfoinfo">
+		<span>진행:</span>
+		{{if .Super}}{{.Super}}Sup,{{end}}
+		{{if .CgSuper}}{{.CgSuper}}Cgsup,{{end}}
+		{{if .Pd}}{{.Pd}}PD,{{end}}
+		{{if .Pm}}{{.Pm}}PM,{{end}}
+		{{if .Pa}}{{.Pa}}PA{{end}}
+		</div>
+		<div class="projectinfoinfo">
+		<span>이슈:</span> {{.Issue}}
+		</div>
+		<div class="projectinfoinfo">
+		<span>플레이트정보:</span> {{.Camera}} / {{.PlateWidth}}x{{.PlateHeight}} / {{.PlateExt}} / {{.PlateInColorspace}} > {{.PlateOutColorspace}}
+		</div>
+		<div class="projectinfoinfo">
+		<span>컨펌용MOV:</span> {{.OutputMov.Width}}x{{.OutputMov.Height}} / {{.OutputMov.Codec}} / {{.OutputMov.Fps}}fps
+		</div>
+		<div class="projectinfoinfo">
+		<span>편집실MOV:</span> {{.EditMov.Width}}x{{.EditMov.Height}} / {{.EditMov.Codec}} / {{.EditMov.Fps}}fps
+		</div>
+		<div>
+		{{range .Milestones}}
+			{{.Name}}
+			{{.Date}}
+		{{end}}
+		</div>
+		<div class="projectinfoinfo">
+		{{if .Lut}}
+		<span class="lut"><span>LUT정보있음</span></span>
+		{{else}}
+		LUT정보없음
+		{{end}}
+		</div>
+		</div>
+		<!--프로젝트 출력 종료-->
 	</div>
-{{range .Projects}}
-	{{if eq .Status 0}}<div class="projectinfo unknown" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 1}}<div class="projectinfo pre" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 2}}<div class="projectinfo post" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 3}}<div class="projectinfo layover" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 4}}<div class="projectinfo backup" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 5}}<div class="projectinfo archive" style="background:{{projectStatus2color .Status}};">{{end}}
-	{{if eq .Status 6}}<div class="projectinfo lawsuit" style="background:{{projectStatus2color .Status}};">{{end}}
-	<div class="projectinfoTitle">
-	<a href="/edit?type=project&id={{.ID}}">{{if .Name}}{{.ID}}{{else}}{{.ID}}{{end}}</a>
-	<span>{{if .Name}}({{.Name}}){{else}}{{end}}</span>
-	<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]"><img class="smallicon" src="/assets/img/mail.svg"></a>
-	<div class="projectinfoicon">
-	{{if eq .Stereo true}}<img src="/assets/img/stereoscope.svg" class="widesmallicon">{{end}}
-	{{if eq .Screenx true}}<img src="/assets/img/screenx.svg" class="smallicon">{{end}}
-	</div>
-	<hr>
-	</div>
-	<!--프로젝트 정보 출력-->
-	<div>
-	<div class="projectinfoinfo">
-	<span>진행:</span>
-	{{if .Super}}{{.Super}}Sup,{{end}}
-	{{if .CgSuper}}{{.CgSuper}}Cgsup,{{end}}
-	{{if .Pd}}{{.Pd}}PD,{{end}}
-	{{if .Pm}}{{.Pm}}PM,{{end}}
-	{{if .Pa}}{{.Pa}}PA{{end}}
-	</div>
-	<div class="projectinfoinfo">
-	<span>이슈:</span> {{.Issue}}
-	</div>
-	<div class="projectinfoinfo">
-	<span>플레이트정보:</span> {{.Camera}} / {{.PlateWidth}}x{{.PlateHeight}} / {{.PlateExt}} / {{.PlateInColorspace}} > {{.PlateOutColorspace}}
-	</div>
-	<div class="projectinfoinfo">
-	<span>컨펌용MOV:</span> {{.OutputMov.Width}}x{{.OutputMov.Height}} / {{.OutputMov.Codec}} / {{.OutputMov.Fps}}fps
-	</div>
-	<div class="projectinfoinfo">
-	<span>편집실MOV:</span> {{.EditMov.Width}}x{{.EditMov.Height}} / {{.EditMov.Codec}} / {{.EditMov.Fps}}fps
-	</div>
-	<div>
-	{{range .Milestones}}
-		{{.Name}}
-		{{.Date}}
 	{{end}}
-	</div>
-	<div class="projectinfoinfo">
-	{{if .Lut}}
-	<span class="lut"><span>LUT정보있음</span></span>
-	{{else}}
-	LUT정보없음
-	{{end}}
-	</div>
-	</div>
-	<!--프로젝트 출력 종료-->
 </div>
-{{end}}
-</div>
-{{template "footer"}}
+
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
 {{end}}

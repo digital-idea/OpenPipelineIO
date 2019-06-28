@@ -32,7 +32,7 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 
 // handleProjectinfo 함수는 프로젝트 자료구조 페이지이다.
 func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
@@ -54,9 +54,15 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		Projects []Project
 		MailDNS  string
-		ID       string
+		User     User
 	}
 	rcp := recipe{}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
 	rcp.MailDNS = *flagMailDNS
 	rcp.Projects, err = getProjects(session)
 	if err != nil {
@@ -64,13 +70,6 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var id string
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "session" {
-			id = cookie.Value
-		}
-	}
-	rcp.ID = id
 	err = t.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
 		log.Println(err)
