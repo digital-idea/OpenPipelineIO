@@ -5,6 +5,7 @@ package main
 import (
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"log"
 	"sort"
 	"time"
@@ -219,10 +220,28 @@ func allUsers(session *mgo.Session) ([]User, error) {
 func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
-	var results []User
+	var searchwords []string
+	// 사람 이름을 가지고 검색을 자주한다.
+	for _, word := range words {
+		r := []rune(word)
+		if len(r) == 2 { // 이름이 2자리 일경우 "김웅"
+			searchwords = append(searchwords, string(r[0])) // 성을 추가한다.
+			searchwords = append(searchwords, string(r[1])) // 이름을 추가한다.
+			continue
+		} else if len(r) == 3 { // 이름일 확률이 높다.
+			searchwords = append(searchwords, string(r[0]))  // 성을 추가한다.
+			searchwords = append(searchwords, string(r[1:])) // 이름을 추가한다.
+			continue
+		} else if len(r) == 4 { // 이름이 4자리 일경우가 있다. 예)독고영재
+			searchwords = append(searchwords, string(r[2:])) // 이름이 고영재" 또는 "영재" 일 수 있다. 이름을 위주로 검색시킨다.
+			continue
+		}
+		searchwords = append(searchwords, word)
+	}
 
 	wordsQueries := []bson.M{}
-	for _, word := range words {
+	fmt.Println(searchwords)
+	for _, word := range searchwords {
 		wordQueries := []bson.M{}
 		wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
 		wordQueries = append(wordQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
@@ -241,6 +260,7 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
 	}
 	q := bson.M{"$and": wordsQueries}
+	var results []User
 	err := c.Find(q).Sort("id").All(&results)
 	if err != nil {
 		return results, err
