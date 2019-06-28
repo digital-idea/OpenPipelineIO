@@ -5,7 +5,6 @@ package main
 import (
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"log"
 	"sort"
 	"time"
@@ -240,7 +239,9 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 	}
 
 	wordsQueries := []bson.M{}
-	fmt.Println(searchwords)
+	if *flagDebug {
+		log.Println(searchwords)
+	}
 	for _, word := range searchwords {
 		wordQueries := []bson.M{}
 		wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
