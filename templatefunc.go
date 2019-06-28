@@ -388,3 +388,11 @@ func Username2Elements(str string) string {
 	}
 	return strings.Join(elements, ",")
 }
+
+// ShortPhoneNum 함수는 내선번호 길다면 마지막 4자리만 출력한다.
+func ShortPhoneNum(str string) string {
+	if len(str) < 5 {
+		return str
+	}
+	return str[len(str)-4:]
+}

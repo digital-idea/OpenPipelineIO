@@ -46,6 +46,7 @@ var funcMap = template.FuncMap{
 	"Hashtag2tag":         Hashtag2tag,
 	"Username2Elements":   Username2Elements,
 	"RemovePath":          RemovePath,
+	"ShortPhoneNum":       ShortPhoneNum,
 }
 
 // 도움말 페이지 입니다.

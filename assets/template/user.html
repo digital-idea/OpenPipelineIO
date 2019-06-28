@@ -11,10 +11,10 @@
                 <h4 class="card-title">{{.User.FirstNameKor}}{{.User.LastNameKor}}{{if .User.FirstNameChn}}({{.User.FirstNameChn}}{{.User.LastNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">{{.User.FirstNameEng}} {{.User.LastNameEng}}<br>{{.User.ID}}</h6>
                 <p class="card-text">
-                    내부: <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
-                    외부: <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
-                    내선: <a href="tel:{{.User.Hotline}}">{{.User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
-                    핸드폰: <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
+                    <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
+                    <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
+                    <a href="tel:{{.User.Hotline}}">{{ShortPhoneNum .User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
+                    <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
                 </p>
                 <div class="col parts p-1">
                     {{range .User.Parts}}
