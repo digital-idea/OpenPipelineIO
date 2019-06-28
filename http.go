@@ -9,6 +9,7 @@ import (
 
 	"github.com/dchest/captcha"
 	"github.com/shurcooL/httpfs/html/vfstemplate"
+	"gopkg.in/mgo.v2"
 )
 
 // MaxFileSize 사이즈는 웹에서 전송할 수 있는 최대 사이즈를 2기가로 제한한다.(인트라넷)
@@ -51,6 +52,21 @@ var funcMap = template.FuncMap{
 
 // 도움말 페이지 입니다.
 func handleHelp(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -58,9 +74,11 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type recipy struct {
-		Wfs string
+		Wfs  string
+		User User
 	}
 	rcp := recipy{}
+	rcp.User = u
 	rcp.Wfs = *flagWFS
 	err = t.ExecuteTemplate(w, "help", rcp)
 	if err != nil {
