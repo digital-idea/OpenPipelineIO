@@ -110,7 +110,7 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
@@ -132,8 +132,15 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Message     string
 		Errors      []string // CSV를 처리하면서 각 라인별로 에러가 있다면 에러내용을 저장한다.
+		User        User
 	}
 	rcp := recipe{}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		rcp.Message = err.Error()

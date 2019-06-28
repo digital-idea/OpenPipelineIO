@@ -1,34 +1,64 @@
 {{define "uploadSetellite" }}
-{{template "head"}}
-<div id="content">
-    <div class="uploadSetellite">
-        <div class="logoLink">
-          <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8"><img class="logo" src="/assets/img/setellite.svg"></a>
-        </div>
-        <div class="textLink">
-          <h1>Setellite 2</h1>
-          <h4><a href="https://www.setellite.nl" class="appLink">https://www.setellite.nl</a></h4>
-          <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8"><button class="downloadButton">다운로드</button></a>
-        </div>
-        <p>&#x21E3</p>
-        <hr>
-        <div class="message">{{.Message}}</div>
-        <form action="/uploadsetellite" method="POST" enctype="multipart/form-data">
-            <select name="project" class="selectproject slForm" onchange="changeProject(this);">
-            {{range .Projectlist}}<option value="{{.}}">{{.}}</option>{{end}}
-            </select>
-            <input class="importform slForm" type="file" size="45" maxlength="256" name="csv">
-            <button class="button slForm"><img class="icon" src="/assets/img/upload-icon.svg"> UPLOAD</button>
-        </form>
-        <div class="message">{{range .Errors}}{{.}}<br>{{end}}</div>
-        <hr>
-        <p>&#x21E3</p>
-        <img src="/assets/img/csi.svg">
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <form action="/uploadsetellite" method="POST" enctype="multipart/form-data">
+    <div class="pt-3 pb-5 text-center">
         <div>
-            <button onclick="location.href='/setellite'" type="button" class="button slSearch">
-            <img class="icon" src="/assets/img/search-icon.svg"> Setellite 검색하기</button>
+            <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8"><img class="logo" src="/assets/img/setellite.svg"></a>
+        </div>
+        
+        <h2 class="section-heading">Upload Setellite</h2>
+        <div>
+          {{.Message}}
+        </div>
+        <div>
+            {{range .Errors}}{{.}}<br>{{end}}
         </div>
     </div>
+    <div>
+        <div class="col-lg-4 col-sm-12 mx-auto">
+            <div class="form-group">
+                <label>Project</label>
+                <select name="project" class="form-control">
+                  {{range .Projectlist}}
+                    <option value="{{.}}">{{.}}</option>
+                  {{end}}
+                </select>
+                <small class="form-text text-muted">Setellite CSV를 업로드할 프로젝트를 선택합니다.</small>
+            </div>
+            <div class="form-group">
+                <label>Upload CSV</label>
+                <input type="file" class="form-control-file" name="csv">
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">UPLOAD</button>
+    </div>
+    </form>
 </div>
-{{template "footer"}}
+
+<div class="p-5">
+    <div class="text-center">
+      <div class="row col-lg-4 col-sm-12 mx-auto">
+        <a href="/setellite" class="btn btn-dark btn-block mt-1">Search Setellite</a>
+      </div>
+      <div class="row col-lg-4 col-sm-12 mx-auto">
+        <a href="https://itunes.apple.com/kr/app/setellite-2/id956157212?mt=8" class="btn btn-dark btn-block mt-1">Setellite2 Download</a>
+      </div>
+      <div class="row col-lg-4 col-sm-12 mx-auto">
+        <a href="https://www.setellite.nl" class="btn btn-dark btn-block mt-1">Setellite2 Homepage</a>
+      </div>
+    </div>
+</div>        
+        
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
 {{end}}
