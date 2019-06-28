@@ -4,18 +4,47 @@
 
 <body>
 		
-<div class="row p-5">
-	<a href="/projectinfo?status=all" class="btn btn-secondary btn-sm m-1">전체</a>
-	<a href="/projectinfo?status=pre" class="btn btn-success btn-sm m-1">준비중</a>
-	<a href="/projectinfo?status=post" class="btn btn-info btn-sm m-1">진행중</a>
+<div class="row p-4">
+	<a href="/projectinfo" class="btn border-secondary text-secondary btn-sm m-1 border">전체</a>
+	<a href="/projectinfo?status=pre" class="btn btn-info btn-sm m-1">준비중</a>
+	<a href="/projectinfo?status=post" class="btn btn-success btn-sm m-1">진행중</a>
 	<a href="/projectinfo?status=layover" class="btn btn-warning btn-sm m-1">중단</a>
 	<a href="/projectinfo?status=backup" class="btn btn-danger btn-sm m-1">백업중</a>
-	<a href="/projectinfo?status=archive" class="btn btn-secondary btn-sm m-1">종료</a>
-	<a href="/projectinfo?status=unknown" class="btn btn-secondary btn-sm m-1">미분류</a>
+	<a href="/projectinfo?status=archive" class="btn border-secondary text-secondary btn-sm m-1 border">종료</a>
+	<a href="/projectinfo?status=unknown" class="btn border-secondary text-secondary btn-sm m-1 border">미분류</a>
 	<a href="/addproject" class="btn btn-primary btn-sm m-1">Add Project</a>
 </div>
 
-<div id="content">
+
+<div class="row p-4">
+	<div class="card m-2">
+		<h6 class="card-header bg-success">Circle</h6>
+		<div class="card-body">
+			<h5 class="card-title">Special title treatment</h5>
+			<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+			<a href="#" class="btn btn-primary btn-sm">E-mail</a>
+		</div>
+	</div>
+	<div class="card m-2">
+		<h5 class="card-header bg-info h6">Circle</h5>
+		<div class="card-body">
+			<h5 class="card-title">Special title treatment</h5>
+			<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+			<a href="#" class="btn btn-primary btn-sm">E-mail</a>
+		</div>
+	</div>
+	<div class="card m-2">
+		<h5 class="card-header">Circle</h5>
+		<div class="card-body">
+			<h5 class="card-title">Special title treatment</h5>
+			<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+			<a href="#" class="btn btn-primary btn-sm">E-mail</a>
+		</div>
+	</div>
+</div>
+
+
+<div>
 	{{range .Projects}}
 		{{if eq .Status 0}}<div class="projectinfo unknown" style="background:{{projectStatus2color .Status}};">{{end}}
 		{{if eq .Status 1}}<div class="projectinfo pre" style="background:{{projectStatus2color .Status}};">{{end}}
@@ -24,53 +53,52 @@
 		{{if eq .Status 4}}<div class="projectinfo backup" style="background:{{projectStatus2color .Status}};">{{end}}
 		{{if eq .Status 5}}<div class="projectinfo archive" style="background:{{projectStatus2color .Status}};">{{end}}
 		{{if eq .Status 6}}<div class="projectinfo lawsuit" style="background:{{projectStatus2color .Status}};">{{end}}
-		<div class="projectinfoTitle">
-		<a href="/edit?type=project&id={{.ID}}">{{if .Name}}{{.ID}}{{else}}{{.ID}}{{end}}</a>
-		<span>{{if .Name}}({{.Name}}){{else}}{{end}}</span>
-		<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]"><img class="smallicon" src="/assets/img/mail.svg"></a>
-		<div class="projectinfoicon">
-		{{if eq .Stereo true}}<img src="/assets/img/stereoscope.svg" class="widesmallicon">{{end}}
-		{{if eq .Screenx true}}<img src="/assets/img/screenx.svg" class="smallicon">{{end}}
-		</div>
-		<hr>
-		</div>
-		<!--프로젝트 정보 출력-->
 		<div>
-		<div class="projectinfoinfo">
-		<span>진행:</span>
-		{{if .Super}}{{.Super}}Sup,{{end}}
-		{{if .CgSuper}}{{.CgSuper}}Cgsup,{{end}}
-		{{if .Pd}}{{.Pd}}PD,{{end}}
-		{{if .Pm}}{{.Pm}}PM,{{end}}
-		{{if .Pa}}{{.Pa}}PA{{end}}
+			<a href="/edit?type=project&id={{.ID}}">{{if .Name}}{{.ID}}{{else}}{{.ID}}{{end}}</a>
+			<span>{{if .Name}}({{.Name}}){{else}}{{end}}</span>
+			<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]" class="btn btn-primary btn-sm">E-mail</a>
+			<div class="projectinfoicon">
+				{{if eq .Stereo true}}<img src="/assets/img/stereoscope.svg" class="widesmallicon">{{end}}
+				{{if eq .Screenx true}}<img src="/assets/img/screenx.svg" class="smallicon">{{end}}
+			</div>
+		
 		</div>
-		<div class="projectinfoinfo">
-		<span>이슈:</span> {{.Issue}}
-		</div>
-		<div class="projectinfoinfo">
-		<span>플레이트정보:</span> {{.Camera}} / {{.PlateWidth}}x{{.PlateHeight}} / {{.PlateExt}} / {{.PlateInColorspace}} > {{.PlateOutColorspace}}
-		</div>
-		<div class="projectinfoinfo">
-		<span>컨펌용MOV:</span> {{.OutputMov.Width}}x{{.OutputMov.Height}} / {{.OutputMov.Codec}} / {{.OutputMov.Fps}}fps
-		</div>
-		<div class="projectinfoinfo">
-		<span>편집실MOV:</span> {{.EditMov.Width}}x{{.EditMov.Height}} / {{.EditMov.Codec}} / {{.EditMov.Fps}}fps
-		</div>
+			
 		<div>
-		{{range .Milestones}}
-			{{.Name}}
-			{{.Date}}
-		{{end}}
+			<div class="projectinfoinfo">
+				<span>진행:</span>
+				{{if .Super}}{{.Super}}Sup,{{end}}
+				{{if .CgSuper}}{{.CgSuper}}Cgsup,{{end}}
+				{{if .Pd}}{{.Pd}}PD,{{end}}
+				{{if .Pm}}{{.Pm}}PM,{{end}}
+				{{if .Pa}}{{.Pa}}PA{{end}}
+			</div>
+			<div class="projectinfoinfo">
+				<span>이슈:</span> {{.Issue}}
+			</div>
+			<div class="projectinfoinfo">
+				<span>플레이트정보:</span> {{.Camera}} / {{.PlateWidth}}x{{.PlateHeight}} / {{.PlateExt}} / {{.PlateInColorspace}} > {{.PlateOutColorspace}}
+			</div>
+			<div class="projectinfoinfo">
+				<span>컨펌용MOV:</span> {{.OutputMov.Width}}x{{.OutputMov.Height}} / {{.OutputMov.Codec}} / {{.OutputMov.Fps}}fps
+			</div>
+			<div class="projectinfoinfo">
+				<span>편집실MOV:</span> {{.EditMov.Width}}x{{.EditMov.Height}} / {{.EditMov.Codec}} / {{.EditMov.Fps}}fps
+			</div>
+			<div>
+				{{range .Milestones}}
+					{{.Name}}
+					{{.Date}}
+				{{end}}
+			</div>
+			<div class="projectinfoinfo">
+				{{if .Lut}}
+					<span class="lut"><span>LUT정보있음</span></span>
+				{{else}}
+					LUT정보없음
+				{{end}}
+			</div>
 		</div>
-		<div class="projectinfoinfo">
-		{{if .Lut}}
-		<span class="lut"><span>LUT정보있음</span></span>
-		{{else}}
-		LUT정보없음
-		{{end}}
-		</div>
-		</div>
-		<!--프로젝트 출력 종료-->
 	</div>
 	{{end}}
 </div>
