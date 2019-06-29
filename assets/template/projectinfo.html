@@ -27,6 +27,7 @@
 				</h6>
 				<div class="card-body">
 					<h6 class="card-title">
+						{{if .Style}}<span class="btn btn-sm border">{{.Style}}</span>{{end}}
 						{{if .Stereo}}<span class="btn btn-sm border">Stereo</span>{{end}}
 						{{if .Screenx}}<span class="btn btn-sm border">ScreenX</span>{{end}}
 						{{if .Lut}}<span class="btn btn-sm border">LUT 사용</span>{{else}}<span class="btn btn-sm border">LUT 비사용</span>{{end}}
