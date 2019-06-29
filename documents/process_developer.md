@@ -16,8 +16,8 @@ $ brew install mongodb
 디버그, 실수방지, 개발 속도를 많이 올릴 수 있으니 협업시에는 위 셋팅을 추천합니다.
 
 ### 테스트서버
-- http://csi.lazypic.org
-- 내부 임시서버: 10.0.95.175
+- https://csi.lazypic.org
+- 내부 임시 개발서버: 10.0.90.215
 
 #### https 서비스를 위한 인증서 생성
 
