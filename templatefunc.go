@@ -32,22 +32,23 @@ func itemStatus2color(num string) string {
 	}
 }
 
+// projectStatus2color 템플릿 함수는 프로젝트 상태를 받아서 Bootstrap4 컬러로 변환합니다.
 func projectStatus2color(status ProjectStatus) string {
 	switch status {
 	case PreProjectStatus:
-		return "#E3EB8D"
+		return "text-white bg-info" // 청록
 	case PostProjectStatus:
-		return "#9ABF62"
+		return "text-white bg-success" // 녹색
 	case LayoverProjectStatus:
-		return "#B2B084"
+		return "text-dark bg-warning" // 노랑
 	case BackupProjectStatus:
-		return "#7EAECB"
+		return "text-white bg-danger" // 빨강
 	case ArchiveProjectStatus:
-		return "#A3A3A3"
+		return "text-dark bg-secondary" // 회색
 	case LawsuitProjectStatus:
-		return "#CC9372"
+		return "text-dark bg-waring" // 노랑
 	default:
-		return "#EBEBEB"
+		return ""
 	}
 }
 

@@ -19,9 +19,14 @@
 스타일 : 
 <select name="Style">
 	<option value="영화" {{if eq .Style "영화"}}selected{{end}}>영화</option>
+	<option value="드라마" {{if eq .Style "드라마"}}selected{{end}}>드라마</option>
 	<option value="애니메이션" {{if eq .Style "애니메이션"}}selected{{end}}>애니메이션</option>
 	<option value="광고" {{if eq .Style "광고"}}selected{{end}}>광고</option>
+	<option value="게임" {{if eq .Style "게임"}}selected{{end}}>게임</option>
 	<option value="VR" {{if eq .Style "VR"}}selected{{end}}>VR</option>
+	<option value="AR" {{if eq .Style "AR"}}selected{{end}}>AR</option>
+	<option value="MR" {{if eq .Style "MR"}}selected{{end}}>MR</option>
+	<option value="R&D" {{if eq .Style "R&D"}}selected{{end}}>R&D</option>
 </select>
 <br>
 
