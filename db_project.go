@@ -119,6 +119,30 @@ func getProjects(session *mgo.Session) ([]Project, error) {
 	return result, nil
 }
 
+// getStatusProjects 함수는 상태를 받아서 프로젝트 정보를 가지고오는 함수입니다.
+func getStatusProjects(session *mgo.Session, status ProjectStatus) ([]Project, error) {
+	session.SetMode(mgo.Monotonic, true)
+	projects, err := session.DB("projectinfo").CollectionNames()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	var results []Project
+	for _, project := range projects {
+		if project == "system.indexes" { // 몽고DB가 자동으로 생성하는 컬렉션 입니다.
+			continue
+		}
+		c := session.DB("projectinfo").C(project)
+		p := Project{}
+		err := c.Find(bson.M{"status": status}).One(&p)
+		if err != nil {
+			continue
+		}
+		results = append(results, p)
+	}
+	return results, nil
+}
+
 func rmProject(session *mgo.Session, project string) error {
 	session.SetMode(mgo.Monotonic, true)
 	//프로젝트 정보제거

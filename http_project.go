@@ -43,6 +43,8 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	q := r.URL.Query()
+	status := q.Get("status")
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -64,17 +66,46 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.User = u
 	rcp.MailDNS = *flagMailDNS
-	rcp.Projects, err = getProjects(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if status != "" {
+		rcp.Projects, err = getStatusProjects(session, ToProjectStatus(status))
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		rcp.Projects, err = getProjects(session)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	err = t.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+}
+
+// ToProjectStatus 함수는 문자를 받아서 ProjectStatus 형으로 변환합니다.
+func ToProjectStatus(s string) ProjectStatus {
+	switch s {
+	case "pre", "ready", "준비":
+		return PreProjectStatus
+	case "post", "wip":
+		return PostProjectStatus
+	case "layover", "중단":
+		return LayoverProjectStatus
+	case "backup", "백업":
+		return BackupProjectStatus
+	case "archive", "done", "종료":
+		return ArchiveProjectStatus
+	case "lawsuit", "소송":
+		return LawsuitProjectStatus
+	default:
+		return UnknownProjectStatus
 	}
 }
 

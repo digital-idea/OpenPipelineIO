@@ -202,29 +202,3 @@ function checkScreenx(event) {
 		document.getElementById("screenxoverlay").value = 1.0;
 	}
 }
-
-// ProjectInfo 페이지 프로젝트를 상태별로 보여준다.
-// 상태 버튼을 클릭하면 해당 상태의 프로젝트들을 출력한다.
-function projectDisplay(status) {
-	// 전체 프로젝트
-	var projects = document.getElementsByClassName("projectinfo");
-	if (status == 'all') {
-		for (i = 0; i < projects.length; i++) {
-			if (projects[i].style.display == "none") {
-				projects[i].style.display = "";
-			}
-		}
-	} else { // 선택된 버튼 이외의 프로젝트는 보이지 않게 한다.
-		var statusList = ["unknown", "pre", "post", "layover", "backup", "archive", "lawsuit"]
-		for (i = 0; i < statusList.length; i++) {
-			var statusClass = document.getElementsByClassName(statusList[i]);
-			for (s = 0; s < statusClass.length; s++) {
-				if (status != statusList[i]) {
-					statusClass[s].style.display = "none";
-				} else {
-					statusClass[s].style.display = "";
-				}
-			}
-		}
-	}
-}
