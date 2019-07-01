@@ -119,6 +119,16 @@
 					<input type="text" name="NoteHighlight" class="form-control" placeholder="강조단어" value={{.Project.NoteHighlight}}>
 					<small class="form-text text-muted">노트내 강조 단어를 설정합니다.</small>
 				</div>
+				<div class="form-group">
+					<label>픽셀 Aspect Ratio</label>
+					<input type="text" name="AspectRatio" class="form-control" placeholder="Aspect Ratio" value={{.Project.AspectRatio}}>
+					<small class="form-text text-muted">픽셀비. 기본값 1.0</small>
+				</div>
+				<div class="form-group">
+					<label>Crop AspectRatio</label>
+					<input type="text" name="CropAspectRatio" class="form-control" placeholder="Crop AspectRatio" value={{.Project.CropAspectRatio}}>
+					<small class="form-text text-muted">Crop비율. 기본값 1.0</small>
+				</div>
 			</div>
 			<!--3번째열-->
 			<div class="col-sm">
@@ -131,9 +141,7 @@
 	</form>
 </div>
 
-픽셀 AspectRatio : <input type="text" size="2" name="AspectRatio" value={{.Project.AspectRatio}}><br>
 
-Crop AspectRatio : <input type="text" size="3" name="CropAspectRatio" value={{.Project.CropAspectRatio}}><br>
 
 시작프레임 : <input type="text" size="4" name="StartFrame" value={{.Project.StartFrame}}><br>
 시퀀스 자릿수 : <input type="text" size="2" name="SeqNum" value={{.Project.SeqNum}}><br>
