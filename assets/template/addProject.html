@@ -1,10 +1,33 @@
 {{define "addProject" }}
-{{template "head"}}
-<div id="content">
-<form action="/api/addproject" method="POST">
-<input type="text" name="id" placeholder="프로젝트코드명" oninput="removeWhiteSpace(this)">
-<button id="button">프로젝트생성</button>
-</form>
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+
+<div class="container p-5">
+    <form action="/addproject_submit" method="POST">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading">Add Project</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="ID" class="form-control" placeholder="ID">
+                <small class="form-text text-muted">프로젝트 이름을 입력해주세요.</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">Create Project</button>
+    </div>
+    </form>
 </div>
-{{template "footer"}}
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
 {{end}}
+

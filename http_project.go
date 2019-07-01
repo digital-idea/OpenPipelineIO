@@ -10,7 +10,7 @@ import (
 
 // handleAddProject 함수는 프로젝트를 추가하는 페이지이다.
 func handleAddProject(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
@@ -21,13 +21,51 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "addProject", nil)
+	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
+	type recipe struct {
+		User User
+	}
+	rcp := recipe{}
+	u, err := getUser(session, ssid.ID)
+	rcp.User = u
+
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "addProject", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleAddProjectSubmit 함수는 사용자로부터 프로젝트 id를 받아서 프로젝트를 생성한다.
+func handleAddProjectSubmit(w http.ResponseWriter, r *http.Request) {
+	_, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("ID")
+	p := *NewProject(id)
+	err = addProject(session, p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/projectinfo", http.StatusSeeOther)
 }
 
 // handleProjectinfo 함수는 프로젝트 자료구조 페이지이다.

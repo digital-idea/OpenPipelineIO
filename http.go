@@ -115,6 +115,8 @@ func webserver(port string) {
 
 	// Add
 	http.HandleFunc("/addproject", handleAddProject)
+	http.HandleFunc("/addproject_submit", handleAddProjectSubmit)
+
 	// User
 	http.HandleFunc("/signup", handleSignup)
 	http.HandleFunc("/signup_submit", handleSignupSubmit)
