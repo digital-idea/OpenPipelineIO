@@ -154,13 +154,6 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -301,10 +294,55 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "edited", nil)
+	http.Redirect(w, r, "/projectinfo", http.StatusSeeOther)
+}
+
+// handleEditProject 함수는 프로젝트 편집페이지이다.
+func handleEditProject(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	q := r.URL.Query()
+	id := q.Get("id") // 프로젝트id에 사용할 것
+	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
+	type recipe struct {
+		Project Project
+		User    User
+	}
+	rcp := recipe{}
+	p, err := getProject(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Project = p
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, "editProject", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	return
+
 }

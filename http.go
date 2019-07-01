@@ -101,21 +101,23 @@ func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
 	http.Handle("/thumbnail/", maxAgeHandler(3600, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
 	http.HandleFunc("/", handleIndex)
+	// Item
 	http.HandleFunc("/search", handleSearch)
 	http.HandleFunc("/tag/", handleTags)
 	http.HandleFunc("/assettags/", handleAssettags)
 	http.HandleFunc("/ddline/", handleDdline)
 	http.HandleFunc("/edit", handleEdit)
 	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)
-	http.HandleFunc("/edit_project_submit", handleEditProjectSubmit)
 	http.HandleFunc("/help", handleHelp)
-	http.HandleFunc("/projectinfo", handleProjectinfo)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
 
-	// Add
+	// Project
+	http.HandleFunc("/projectinfo", handleProjectinfo)
 	http.HandleFunc("/addproject", handleAddProject)
 	http.HandleFunc("/addproject_submit", handleAddProjectSubmit)
+	http.HandleFunc("/editproject", handleEditProject)
+	http.HandleFunc("/editproject_submit", handleEditProjectSubmit)
 
 	// User
 	http.HandleFunc("/signup", handleSignup)

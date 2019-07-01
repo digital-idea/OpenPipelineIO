@@ -298,10 +298,8 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
-	editType := q.Get("type")
 	project := q.Get("project")
 	slug := q.Get("slug")
-	id := q.Get("id") // 프로젝트id에 사용할 것
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -309,49 +307,27 @@ func handleEdit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	switch editType {
-	case "item":
-		type recipe struct {
-			ID      string
-			Project Project
-			Item    Item
-		}
-		rcp := recipe{}
-		defer session.Close()
-		rcp.Project, err = getProject(session, project)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Item, err = getItem(session, project, slug)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "editItem", rcp)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	type recipe struct {
+		ID      string
+		Project Project
+		Item    Item
+	}
+	rcp := recipe{}
+	defer session.Close()
+	rcp.Project, err = getProject(session, project)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	case "project":
-		rcp, err := getProject(session, id)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = t.ExecuteTemplate(w, "editProject", rcp)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	}
+	rcp.Item, err = getItem(session, project, slug)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	default:
+	}
+	err = t.ExecuteTemplate(w, "editItem", rcp)
+	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
