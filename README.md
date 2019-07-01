@@ -14,8 +14,9 @@
 - [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.2/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 - [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.2/csi3_darwin_x86-64.tgz)
 - [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.2/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.2/csi3_windows_x86-64.tgz)
+- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.2/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
-> 윈도우즈 경우 Server가 아니면 동시접속자수가 제한되어 있습니다. 서버로서 가치가 적어서 빌드하지 않습니다.
 
 ### Roadmap
 - [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
