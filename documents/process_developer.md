@@ -53,3 +53,7 @@ $ certbot renew
 
 ### 배포
 항상 바이너리 파일 하나를 지향합니다.
+
+디지털아이디어 아래 경로에 csi3, dilink, dilog, wfs 파일을 배포합니다.
+
+/idea/app/csi
