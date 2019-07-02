@@ -3,7 +3,7 @@
 {{template "navbar" .}}
 <body>
 
-<div class="container p-3">
+<div class="p-3">
 	<form action="/editproject_submit" method="POST" enctype="multipart/form-data">
 		<div class="pt-3 pb-5">
 			<h2 class="section-heading text-center">Edit {{.Project.ID}}</h2>
@@ -129,10 +129,99 @@
 					<input type="text" name="CropAspectRatio" class="form-control" placeholder="Crop AspectRatio" value={{.Project.CropAspectRatio}}>
 					<small class="form-text text-muted">Crop비율. 기본값 1.0</small>
 				</div>
+				<div class="form-group">
+					<label>시작프레임</label>
+					<input type="text" name="StartFrame" class="form-control" placeholder="Start Frame" value={{.Project.StartFrame}}>
+					<small class="form-text text-muted">시작프레임. 시뮬레이션을 위해서 일반적으로 1001로 시작합니다.</small>
+				</div>
+				<div class="form-group">
+					<label>시퀀스 자릿수</label>
+					<input type="text" name="SeqNum" class="form-control" placeholder="Seq number" value={{.Project.SeqNum}}>
+					<small class="form-text text-muted">보통 example.####.exr 에 해당하는 4값을 사용합니다.</small>
+				</div>
+				<div class="form-group">
+					<label>버전 자릿수</label>
+					<input type="text" name="VersionNum" class="form-control" placeholder="Version number" value={{.Project.VersionNum}}>
+					<small class="form-text text-muted">클라언트 요구 버전 자릿수. 예) 3자리 v001, 2자리 v01</small>
+				</div>
+				<div class="form-group">
+					<label>플레이트 아웃풋 사이즈</label>
+					<div class="row">
+						<div class="col-6">
+							<input type="text" name="PlateWidth" class="form-control" placeholder="Width" value={{.Project.PlateWidth}}>
+						</div>
+						<div class="col-6">
+							<input type="text" name="PlateHeight" class="form-control" placeholder="Height" value={{.Project.PlateHeight}}>
+						</div>
+					</div>
+					<small class="form-text text-muted">플레이트 아웃풋 사이즈 예) 2048x1152</small>
+				</div>
+				<div class="form-group">
+					<label>플레이트 아웃풋 리사이즈 방식</label>
+					<select name="ResizeType" class="form-control">
+						<option value="fill" {{if eq .Project.ResizeType "" "fill"}}selected{{end}}>fill</option>
+						<option value="width" {{if eq .Project.ResizeType "width"}}selected{{end}}>width</option>
+						<option value="none" {{if eq .Project.ResizeType "none"}}selected{{end}}>none</option>
+					</select>
+					<small class="form-text text-muted">플레이트 아웃풋시 최종 리사이즈 방식을 선택해주세요.</small>
+				</div>
+				<div class="form-group">
+					<label>아웃풋 확장자</label>
+					<select name="PlateExt" class="form-control">
+						<option value="exr" {{if eq .Project.PlateExt "exr"}}selected{{end}}>exr</option>
+						<option value="dpx" {{if eq .Project.PlateExt "dpx"}}selected{{end}}>dpx</option>
+						<option value="mov" {{if eq .Project.PlateExt "mov"}}selected{{end}}>mov</option>
+						<option value="tga" {{if eq .Project.PlateExt "tga"}}selected{{end}}>tga</option>
+					</select>
+					<small class="form-text text-muted">아웃풋 확장자명</small>
+				</div>
+				<div class="form-group">
+					<label>카메라</label>
+					<input type="text" name="Camera" class="form-control" placeholder="Camera" value={{.Project.Camera}}>
+					<small class="form-text text-muted">카메라 종류</small>
+				</div>
 			</div>
+			
 			<!--3번째열-->
 			<div class="col-sm">
-				3번째열
+				<div class="form-group">
+					<label>플레이트 IN 컬러스페이스</label>
+					<select name="PlateInColorspace" class="form-control">
+						<option value="linear" {{if eq .Project.PlateInColorspace "linear"}}selected{{end}}>linear</option>
+						<option value="sRGB" {{if eq .Project.PlateInColorspace "sRGB"}}selected{{end}}>sRGB</option>
+						<option value="rec709" {{if eq .Project.PlateInColorspace "rec709"}}selected{{end}}>rec709</option>
+						<option value="Cineon" {{if eq .Project.PlateInColorspace "Cineon"}}selected{{end}}>Cineon</option>
+						<option value="AlexaV3LogC" {{if eq .Project.PlateInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+						<option value="REDLog" {{if eq .Project.PlateInColorspace "REDLog"}}selected{{end}}>REDLog</option>
+						<option value="Gamma2.2" {{if eq .Project.PlateInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+						<option value="ACEScg" {{if eq .Project.PlateInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+						<option value="ACES2065-1" {{if eq .Project.PlateInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+						<option value="Output-Rec.709" {{if eq .Project.PlateInColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+						<option value="default" {{if eq .Project.PlateInColorspace "" "default"}}selected{{end}}>default</option>
+					</select>
+					<small class="form-text text-muted">플레이트 IN 컬러스페이스</small>
+				</div>
+				<div class="form-group">
+					<label>플레이트 OUT 컬러스페이스</label>
+					<select name="PlateOutColorspace" class="form-control">
+						<option value="linear" {{if eq .Project.PlateOutColorspace "linear"}}selected{{end}}>linear</option>
+						<option value="sRGB" {{if eq .Project.PlateOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
+						<option value="rec709" {{if eq .Project.PlateOutColorspace "rec709"}}selected{{end}}>rec709</option>
+						<option value="Cineon" {{if eq .Project.PlateOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
+						<option value="AlexaV3LogC" {{if eq .Project.PlateOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
+						<option value="REDLog" {{if eq .Project.PlateOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
+						<option value="Gamma2.2" {{if eq .Project.PlateOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
+						<option value="ACEScg" {{if eq .Project.PlateOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
+						<option value="ACES2065-1" {{if eq .Project.PlateOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+						<option value="Output-Rec.709" {{if eq .Project.PlateOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
+						<option value="default" {{if eq .Project.PlateOutColorspace "" "default"}}selected{{end}}>default</option>
+					</select>
+					<small class="form-text text-muted">플레이트 OUT 컬러스페이스</small>
+				</div>
+			</div>
+			<!--4번째열-->
+			<div class="col-sm">
+				4번째열
 			</div>
 		</div>
 		<div class="text-center">
@@ -140,66 +229,7 @@
 		</div>
 	</form>
 </div>
-
-
-
-시작프레임 : <input type="text" size="4" name="StartFrame" value={{.Project.StartFrame}}><br>
-시퀀스 자릿수 : <input type="text" size="2" name="SeqNum" value={{.Project.SeqNum}}><br>
-버전 자릿수 : <input type="text" size="2" name="VersionNum" value={{.Project.VersionNum}}><br>
-
-
-플레이트 아웃풋 사이즈 : <input type="text" size="4" name="PlateWidth" value={{.Project.PlateWidth}}> x <input type="text" size="4" name="PlateHeight" value={{.Project.PlateHeight}}><br>
-플레이트 아웃풋 리사이즈 타입 :
-<select name="ResizeType">
-	<option value="fill" {{if eq .Project.ResizeType "" "fill"}}selected{{end}}>fill</option>
-	<option value="width" {{if eq .Project.ResizeType "width"}}selected{{end}}>width</option>
-	<option value="none" {{if eq .Project.ResizeType "none"}}selected{{end}}>none</option>
-</select>
-<br>
-
-아웃풋 확장자 : 
-<select name="PlateExt">
-	<option value="exr" {{if eq .Project.PlateExt "exr"}}selected{{end}}>exr</option>
-	<option value="dpx" {{if eq .Project.PlateExt "dpx"}}selected{{end}}>dpx</option>
-	<option value="mov" {{if eq .Project.PlateExt "mov"}}selected{{end}}>mov</option>
-	<option value="tga" {{if eq .Project.PlateExt "tga"}}selected{{end}}>tga</option>
-</select>
-<br>
-
-카메라 : <input type="text" name="Camera" value={{.Project.Camera}}><br>
-
-플레이트 IN 컬러스페이스 : 
-<select name="PlateInColorspace">
-	<option value="linear" {{if eq .Project.PlateInColorspace "linear"}}selected{{end}}>linear</option>
-	<option value="sRGB" {{if eq .Project.PlateInColorspace "sRGB"}}selected{{end}}>sRGB</option>
-	<option value="rec709" {{if eq .Project.PlateInColorspace "rec709"}}selected{{end}}>rec709</option>
-	<option value="Cineon" {{if eq .Project.PlateInColorspace "Cineon"}}selected{{end}}>Cineon</option>
-	<option value="AlexaV3LogC" {{if eq .Project.PlateInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-	<option value="REDLog" {{if eq .Project.PlateInColorspace "REDLog"}}selected{{end}}>REDLog</option>
-	<option value="Gamma2.2" {{if eq .Project.PlateInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-	<option value="ACEScg" {{if eq .Project.PlateInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-	<option value="ACES2065-1" {{if eq .Project.PlateInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-	<option value="Output-Rec.709" {{if eq .Project.PlateInColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-	<option value="default" {{if eq .Project.PlateInColorspace "" "default"}}selected{{end}}>default</option>
-</select>
-<br>
-
-플레이트 OUT 컬러스페이스 : 
-<select name="PlateOutColorspace">
-	<option value="linear" {{if eq .Project.PlateOutColorspace "linear"}}selected{{end}}>linear</option>
-	<option value="sRGB" {{if eq .Project.PlateOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-	<option value="rec709" {{if eq .Project.PlateOutColorspace "rec709"}}selected{{end}}>rec709</option>
-	<option value="Cineon" {{if eq .Project.PlateOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-	<option value="AlexaV3LogC" {{if eq .Project.PlateOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-	<option value="REDLog" {{if eq .Project.PlateOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-	<option value="Gamma2.2" {{if eq .Project.PlateOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-	<option value="ACEScg" {{if eq .Project.PlateOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-	<option value="ACES2065-1" {{if eq .Project.PlateOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-	<option value="Output-Rec.709" {{if eq .Project.PlateOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-	<option value="default" {{if eq .Project.PlateOutColorspace "" "default"}}selected{{end}}>default</option>
-</select>
-<br>
-
+	
 프록시 OUT 컬러스페이스 :
 <select name="ProxyOutColorspace">
 	<option value="linear" {{if eq .Project.ProxyOutColorspace "linear"}}selected{{end}}>linear</option>
