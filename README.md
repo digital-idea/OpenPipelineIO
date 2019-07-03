@@ -22,7 +22,7 @@
 
 ### Roadmap
 - [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
-- [ ] 유저자료구조 추가 ![user](http://progressed.io/bar/50)
+- [x] 유저자료구조 추가 ![user](http://progressed.io/bar/100)
 - [ ] CSI2 restAPI 추가
 - [ ] multi Task 기능추가
 - [ ] 3D 파이프라인과 필요한 자료구조 및 API 생성(샷트레킹, 버전)
