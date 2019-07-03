@@ -44,6 +44,7 @@ $ brew services start mongodb
 Windows
 - https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi
 - Download: https://www.mongodb.com/download-center/community?jmp=docs
+- Setup: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows-unattended/
 
 ### CSI 실행
 
