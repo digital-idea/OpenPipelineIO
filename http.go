@@ -173,7 +173,7 @@ func webserver(port string) {
 
 	// Captcha
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight))
-	if port == ":443" || port == ":8443" {
+	if port == ":443" || port == ":8443" { // https ports
 		err := http.ListenAndServeTLS(port, *flagCertFullchanin, *flagCertPrivkey, nil)
 		if err != nil {
 			log.Fatal(err)
