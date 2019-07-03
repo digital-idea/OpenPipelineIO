@@ -25,7 +25,7 @@
 - [x] 유저자료구조 추가 ![user](http://progressed.io/bar/100)
 - [ ] CSI2 restAPI 추가 ![restAPI](http://progressed.io/bar/1)
 - [ ] multi Task 기능추가
-- [ ] 3D 파이프라인과 필요한 자료구조 및 API 생성(샷트레킹, 버전)
+- [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전)
 
 ### mongoDB 설치, 실행
 
