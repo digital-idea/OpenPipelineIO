@@ -112,7 +112,7 @@ func main() {
 		return
 	} else if *flagAccessLevel != -1 && *flagID != "" {
 		if user.Username != "root" {
-			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+			log.Fatal(errors.New("사용자의 레벨을 수정하기 위해서는 root 권한이 필요합니다"))
 		}
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
