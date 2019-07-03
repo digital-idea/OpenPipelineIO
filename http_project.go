@@ -15,6 +15,10 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -46,9 +50,13 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 
 // handleAddProjectSubmit 함수는 사용자로부터 프로젝트 id를 받아서 프로젝트를 생성한다.
 func handleAddProjectSubmit(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -73,6 +81,10 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	t, err := LoadTemplates()
@@ -149,9 +161,13 @@ func ToProjectStatus(s string) ProjectStatus {
 
 // handleEditProjectSubmit 함수는 Projectinfo의  수정정보를 처리하는 페이지이다.
 func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -302,6 +318,10 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	t, err := LoadTemplates()

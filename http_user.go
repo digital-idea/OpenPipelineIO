@@ -26,6 +26,10 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -62,9 +66,13 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 
 // handleEditUser 함수는 유저정보를 수정하는 페이지이다.
 func handleEditUser(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	t, err := LoadTemplates()
@@ -105,6 +113,10 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
@@ -225,6 +237,23 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	rcp.MailDNS = *flagMailDNS
 	rcp.CaptchaID = captcha.New()
 	err = t.ExecuteTemplate(w, "signup", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleInvalidAccess 함수는 사용자의 레벨이 부족할 때 접속하는 페이지이다.
+func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "invalidaccess", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -390,9 +419,13 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	t, err := LoadTemplates()
@@ -531,6 +564,10 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
 	if r.Method == http.MethodPost {
 		searchword := r.FormValue("searchword")
 		http.Redirect(w, r, "/users?search="+searchword, http.StatusSeeOther)
@@ -592,6 +629,10 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
@@ -628,9 +669,13 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 
 // handleReplacePartSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
 func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
-	_, err := GetSessionID(r)
+	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	if r.Method != http.MethodPost {
