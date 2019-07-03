@@ -68,9 +68,10 @@ var (
 	flagHelp      = flag.Bool("help", false, "자세한 도움말을 봅니다.")
 	flagDate      = flag.String("date", "", "Date. ex) 2016-12-06")
 	// Commandline Args: User
-	flagID          = flag.String("id", "", "user id")
-	flagInitPass    = flag.String("initpass", "", "initialize user password")
-	flagAccessLevel = flag.Int("accesslevel", -1, "edit user Access Level")
+	flagID                = flag.String("id", "", "user id")
+	flagInitPass          = flag.String("initpass", "", "initialize user password")
+	flagAccessLevel       = flag.Int("accesslevel", -1, "edit user Access Level")
+	flagSignUpAccessLevel = flag.Int("accesslevel", 3, "signup access level")
 	// scan정보 추가. plate scan tool에서 데이터를 등록할 때 활용되는 옵션
 	flagPlatesize       = flag.String("platesize", "", "스캔 플레이트 사이즈")
 	flagTask            = flag.String("task", "", "태스크 이름. 예) model,mm.layout,ani,fx,mg,fur,sim,crowd,light,comp,matte,env")

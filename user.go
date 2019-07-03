@@ -68,7 +68,7 @@ type Token struct {
 func NewUser(id string) *User {
 	return &User{
 		ID:          id,
-		AccessLevel: ArtistAccessLevel,
+		AccessLevel: AccessLevel(*flagSignUpAccessLevel),
 		Updatetime:  time.Now().Format(time.RFC3339),
 		Createtime:  time.Now().Format(time.RFC3339),
 		IsLeave:     false,
