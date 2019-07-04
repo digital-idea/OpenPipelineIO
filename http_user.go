@@ -557,7 +557,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 
-// handleUsers 함수는 유저리스트를 검색하는 페이지이다.
+// handleUsers 함수는 유저리스트를 검색하는 페이지이다. (기본 정렬은 사번순이다.)
 func handleUsers(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
