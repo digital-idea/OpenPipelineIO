@@ -1,0 +1,66 @@
+{{define "addAsset" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <form action="/addasset_submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Add Asset</h2>
+        </div>
+        <div class="form-group">
+            <label>Project</label>
+            <select name="Project" class="form-control">
+              {{range .Projectlist}}
+                <option value="{{.}}">{{.}}</option>
+              {{end}}
+            </select>
+            <small class="form-text text-muted">에셋을 생성할 프로젝트를 선택해주세요.</small>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Asset Name</label>
+                    <input type="text" name="Name" class="form-control" placeholder="예) stone01">
+                    <small class="form-text text-muted">에셋 이름을 작성해주세요. 예) stone01</small>
+                    <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러 에셋을 생성할 수 있습니다.</small>
+                    <small class="form-text text-muted">&nbsp;&nbsp;예) stone01 stone02</small>
+                    <small class="form-text text-muted">MS Excel, Google Spreadsheet, Apple Numbers, LibreOffice Spreadsheet 의 Cell 데이터를 Copy & Paste 하여 사용가능합니다.</small>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Asset Type</label>
+            <select name="Assettype" class="form-control">
+                <option value="prop">Prop (소품)</option>
+                <option value="char">Char (캐릭터, 크리쳐)</option>
+                <option value="env">Env (환경에셋)</option>
+                <option value="comp">Comp (합성 노드에셋)</option>
+                <option value="plant">Plant (식물)</option>
+                <option value="vehicle">Vehicle (탈것)</option>
+            </select>
+            <small class="form-text text-muted">에셋 타입을 선택해주세요.</small>
+        </div>
+        <div class="form-group">
+            <label>Component / Assembly</label>
+            <select name="Construction" class="form-control">
+                <option value="component">Component</option>
+                <option value="assembly">Assembly</option>
+            </select>
+            <small class="form-text text-muted">에셋의 구성 형태를 선택해주세요.</small>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary mt-5">Add Asset</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+
