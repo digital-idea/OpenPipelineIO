@@ -12,6 +12,9 @@ var regexpImageSize = regexp.MustCompile(`\d{2,5}[xX]\d{2,5}$`)
 // 샷네임값 정규식 : SS_0010 형태
 var regexpShotname = regexp.MustCompile(`^[a-zA-Z0-9]+_[a-zA-Z0-9]+$`)
 
+// 에셋 네임값 정규식 : stone01 형태
+var regexpAssetname = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+
 // 롤미디어 정규식 : 00_A03C001_180113_A001 형태
 var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 

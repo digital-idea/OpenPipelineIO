@@ -47,6 +47,66 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPIRmItem 함수는 아이템을 삭제한다.
+func handleAPIRmItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var typ string
+	info := r.PostForm
+	for key, value := range info {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "type":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			typ = v
+		default:
+			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, name, type 키값만 사용가능합니다.)")
+			return
+		}
+	}
+	err = rmItem(session, project, name, typ)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "")
+}
+
 // handleAPISearchname 함수는 입력 문자열을 포함하는 샷,에셋 정보를 검색한다.
 func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -84,7 +144,6 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
 
 // handleAPI2Items 함수는 아이템을 검색한다.
 func handleAPI2Items(w http.ResponseWriter, r *http.Request) {

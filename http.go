@@ -111,6 +111,10 @@ func webserver(port string) {
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
+	http.HandleFunc("/addshot", handleAddShot)
+	http.HandleFunc("/addshot_submit", handleAddShotSubmit)
+	http.HandleFunc("/addasset", handleAddAsset)
+	http.HandleFunc("/addasset_submit", handleAddAssetSubmit)
 
 	// Project
 	http.HandleFunc("/projectinfo", handleProjectinfo)
@@ -136,19 +140,22 @@ func webserver(port string) {
 	http.HandleFunc("/replacepart_submit", handleReplacePartSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
-	// rest API / API2
+	// restAPI Project
 	http.HandleFunc("/api/project", handleAPIProject)
 	http.HandleFunc("/api/projects", handleAPIProjects)
 	http.HandleFunc("/api/addproject", handleAPIAddproject)
 	http.HandleFunc("/api/projecttags", handleAPIProjectTags)
+	// restAPI Onset(Setellite)
+	http.HandleFunc("/api/setellite", handleAPISetelliteItems)
+	http.HandleFunc("/api/setellitesearch", handleAPISetelliteSearch)
+	// restAPI Item
 	http.HandleFunc("/api/item", handleAPIItem)
+	http.HandleFunc("/api/rmitem", handleAPIRmItem)
 	http.HandleFunc("/api2/items", handleAPI2Items)
 	http.HandleFunc("/api/searchname", handleAPISearchname)
 	http.HandleFunc("/api/seqs", handleAPISeqs)
 	http.HandleFunc("/api/shots", handleAPIShots)
 	http.HandleFunc("/api/shot", handleAPIShot)
-	http.HandleFunc("/api/setellite", handleAPISetelliteItems)
-	http.HandleFunc("/api/setellitesearch", handleAPISetelliteSearch)
 	http.HandleFunc("/api/setmov", handleAPISetmov)
 	http.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	http.HandleFunc("/api/setdistortionsize", handleAPISetDistortionSize)
@@ -162,6 +169,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setjustout", handleAPISetJustOut)
 	http.HandleFunc("/api/setstartdate", handleAPISetStartdate)
 	http.HandleFunc("/api/setpredate", handleAPISetPredate)
+	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
 	http.HandleFunc("/api/users", handleAPISearchUser)
 
