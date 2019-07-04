@@ -29,7 +29,7 @@
 							{{if .Style}}<span class="btn btn-sm border">{{.Style}}</span>{{end}}
 							{{if .Stereo}}<span class="btn btn-sm border">Stereo</span>{{end}}
 							{{if .Screenx}}<span class="btn btn-sm border">ScreenX</span>{{end}}
-							{{if .Lut}}<span class="btn btn-sm border">LUT 사용</span>{{else}}<span class="btn btn-sm border">LUT 비사용</span>{{end}}
+							{{if .Lut}}<span class="btn btn-sm btn-warning">LUT 사용</span>{{else}}<span class="btn btn-sm border">LUT 비사용</span>{{end}}
 							<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]" class="btn btn-primary btn-sm">E-mail</a>
 							<a href="/editproject?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
 						</h6>
