@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
@@ -1043,6 +1044,146 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Sortkey = "slug"
 	rcp.Searchop.Template = "csi3"
 	err = t.ExecuteTemplate(w, "index", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleAddShot 함수는 shot을 추가하는 페이지이다.
+func handleAddShot(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User        User
+		Projectlist []string
+	}
+	rcp := recipe{}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, "addShot", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleAddShotSubmit 함수는 shot을 생성한다.
+func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("Project")
+	name := r.FormValue("Name")
+	// 엑셀형태의 툴에서 인접된 셀이 복사되면 탭문자가 섞인다.
+	names := strings.Split(strings.Replace(strings.Replace(name, "\t", " ", -1), ",", " ", -1), " ")
+	type Shot struct {
+		Name  string
+		Error string
+	}
+	var success []Shot
+	var fails []Shot
+	for _, n := range names {
+		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
+			continue
+		}
+		s := Shot{}
+		s.Name = n
+		if !regexpShotname.MatchString(n) {
+			s.Error = "SS_0010 형식의 이름이 아닙니다"
+			fails = append(fails, s)
+			continue
+		}
+		i := Item{}
+		i.Name = n
+		i.Type = "org"
+		i.Project = project
+		i.Slug = i.Name + "_" + i.Type
+		i.ID = i.Name + "_" + i.Type
+		i.Status = ASSIGN
+		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
+		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, strings.Split(i.Name, "_")[0], i.Name)
+		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, strings.Split(i.Name, "_")[0], i.Name, i.Name, i.Type)
+		i.Scantime = time.Now().Format(time.RFC3339)
+		i.Updatetime = time.Now().Format(time.RFC3339)
+		err = addItem(session, project, i)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		success = append(success, s)
+	}
+
+	type recipe struct {
+		Success []Shot
+		Fails   []Shot
+		User    User
+	}
+	rcp := recipe{}
+	rcp.Success = success
+	rcp.Fails = fails
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "addShot_success", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
