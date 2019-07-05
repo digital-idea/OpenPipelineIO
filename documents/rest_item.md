@@ -295,3 +295,13 @@ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" http://10
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
 curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" http://10.0.90.251/api/setpredate
 ```
+
+#### Item 삭제
+
+```bash
+$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem
+```
+
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/rmitem | 아이템 삭제 | project, name, type | curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem |
