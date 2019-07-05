@@ -296,11 +296,7 @@ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" http://10
 curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" http://10.0.90.251/api/setpredate
 ```
 
-#### Item 삭제
-
-```bash
-$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem
-```
+### RestAPI for Item
 
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
