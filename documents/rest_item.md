@@ -10,8 +10,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/rmitem | 아이템 삭제 | project, name, type | `$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem` |
+| /api/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org"` |
 
-#### 샷,에셋정보(Item) 가지고오기
+#### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
 
 ```
@@ -19,7 +20,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 import json
 import urllib2
 
-restURL = "http://10.0.90.251/api/item?project=gunhamdo&slug=S001_0001_org" # CSI에서 군함도, S001_0001_org 샷 정보를 가지고 옵니다.
+restURL = "http://10.0.90.251/api/item?project=gunhamdo&id=S001_0001_org" # CSI에서 군함도, S001_0001_org 샷 정보를 가지고 옵니다.
 try:
 	data = json.load(urllib2.urlopen(restURL))
 except:
@@ -29,6 +30,13 @@ if "error" in data:
 	print(data["error"])
 	# 에러처리
 print(data)
+```
+
+#### 샷,에셋정보(Item) 가지고오기. Python3.6x(블랜더)
+```python
+import requests
+r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org")
+print(r.json())
 ```
 
 #### Shot 정보 가지고오기.
