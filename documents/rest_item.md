@@ -32,7 +32,7 @@ if "error" in data:
 print(data)
 ```
 
-#### 샷,에셋정보(Item) 가지고오기. Python3.6x(블랜더)
+#### 샷,에셋정보(Item) 가지고오기. Python3.7.x(블랜더)
 ```python
 import requests
 r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org")

@@ -1101,6 +1101,14 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// name2names 함수는 여러 샷,에셋이름 문자를 받아서 리스트로 변환한다.
+func name2names(name string) []string {
+	// 엑셀형태의 툴에서 인접된 셀이 복사되면 탭문자가 섞인다.
+	// 특정 .csv 파일에서 문자를 복사할 때 ; 문자가 섞인다.
+	// "," 또는 " " 문자로 구분하는 사람도 있다.
+	return strings.Split(strings.Replace(strings.Replace(strings.Replace(name, ";", " ", -1), "\t", " ", -1), ",", " ", -1), " ")
+}
+
 // handleAddShotSubmit 함수는 shot을 생성한다.
 func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -1127,8 +1135,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
-	// 엑셀형태의 툴에서 인접된 셀이 복사되면 탭문자가 섞인다.
-	names := strings.Split(strings.Replace(strings.Replace(name, "\t", " ", -1), ",", " ", -1), " ")
+	names := name2names(name)
 	type Shot struct {
 		Name  string
 		Error string
@@ -1269,8 +1276,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("Name")
 	assettype := r.FormValue("Assettype")
 	construction := r.FormValue("Construction")
-	// 엑셀형태의 툴에서 인접된 셀이 복사되면 탭문자가 섞인다.
-	names := strings.Split(strings.Replace(strings.Replace(name, "\t", " ", -1), ",", " ", -1), " ")
+	names := name2names(name)
 	type Asset struct {
 		Name  string
 		Error string
