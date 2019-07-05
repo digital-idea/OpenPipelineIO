@@ -7,10 +7,17 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 
 # RestAPI for Item
 
+## Get
+
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org"` |
+
+## Post
+
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/rmitem | 아이템 삭제 | project, name, type | `$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem` |
-| /api/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org"` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
