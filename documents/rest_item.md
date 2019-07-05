@@ -1,11 +1,15 @@
 # RestAPI Item
-restAPI의 장점은 URI를 이용하기 때문에 네트워크만 연결되어있으면 리눅스,윈도우,맥을 지원합니다.
-CSI는 DNS가 아닌 IP를 사용하면 VPN환경에서도 restAPI를 사용할 수 있습니다.
-생성된 코드도 OS의존성이 없습니다.
-python 또는 다른 언어에서 기능구현시 대부분 스텐다드 라이브러리만 사용해서 가능한 경우가 많습니다.
+restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크만 연결되어있으면 OS, 디바이스 제약없이 사용할 수 있습니다.
+또한 python같은 언어를 이용해서 api를 제작하더라도 OS별로 코드가 달라지는 일이 없습니다.
 
-이 문서는 파이썬을 이용해서 RestAPI를 프로젝트정보를 가지고 오는 방법을 다룹니다.
+이 문서는 기본 restAPI옵션, 파이썬을 이용해서 RestAPI를 사용하는 방법을 다룹니다.
 파이프라인에 사용될 확률이 높은 코드라서, 에러처리까지 코드로 다루었습니다.
+
+# RestAPI for Item
+
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/rmitem | 아이템 삭제 | project, name, type | `$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem` |
 
 #### 샷,에셋정보(Item) 가지고오기
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
@@ -296,8 +300,3 @@ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" http://10
 curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" http://10.0.90.251/api/setpredate
 ```
 
-### RestAPI for Item
-
-| uri | description | attribute name | example |
-| --- | --- | --- | --- |
-| /api/rmitem | 아이템 삭제 | project, name, type | curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem |
