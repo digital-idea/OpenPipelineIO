@@ -34,8 +34,22 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	project := q.Get("project")
-	slug := q.Get("slug")
-	item, err := getItem(session, project, slug)
+	if project == "" {
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "project가 빈 문자열입니다.")
+		return
+	}
+	// 과거 slug 방식의 api에서 id 방식의 api로 변경중이다.
+	var id string
+	if q.Get("slug") != "" {
+		id = q.Get("slug")
+	} else if q.Get("id") != "" {
+		id = q.Get("id")
+	}
+	if id == "" {
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "id 또는 slug가 빈 문자열입니다.")
+		return
+	}
+	item, err := getItem(session, project, id)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -45,6 +59,7 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	return
 }
 
 // handleAPIRmItem 함수는 아이템을 삭제한다.
