@@ -1050,7 +1050,7 @@ func handleAPISetStatus(w http.ResponseWriter, r *http.Request) {
 			status = v
 		}
 	}
-	err = SetStatus(session, project, name, task, status)
+	err = SetTaskStatus(session, project, name, task, status)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

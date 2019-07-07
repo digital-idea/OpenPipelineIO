@@ -1102,8 +1102,8 @@ func SetThummov(session *mgo.Session, project, name, typ, path string) error {
 	return nil
 }
 
-// SetStatus 함수는 item에 task의 status 값을 셋팅한다.
-func SetStatus(session *mgo.Session, project, name, task, status string) error {
+// SetTaskStatus 함수는 item에 task의 status 값을 셋팅한다.
+func SetTaskStatus(session *mgo.Session, project, name, task, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
