@@ -1128,6 +1128,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
+	stereo := r.FormValue("Stereo")
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -1151,7 +1152,11 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		i := Item{}
 		i.Name = n
-		i.Type = "org"
+		if stereo == "true" {
+			i.Type = "left"
+		} else {
+			i.Type = "org"
+		}
 		i.Project = project
 		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
