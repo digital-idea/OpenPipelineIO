@@ -26,6 +26,7 @@
 - [ ] 과거에 사용된 Python CSI2 API를 웹 restAPI로 전환(총46개함수) ![restAPI](http://progressed.io/bar/10)
 - [ ] Multi Task 기능추가. (참고: CSI의 내부구조가 완전히 달라진다.)
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전)
+- [ ] 웹용 PM 입력기
 
 ### mongoDB 설치, 실행
 
