@@ -23,7 +23,7 @@
 ### Roadmap
 - [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
 - [x] 유저자료구조 추가 ![user](http://progressed.io/bar/100)
-- [ ] 과거에 사용된 Python CSI2 API를 웹 restAPI로 전환 ![restAPI](http://progressed.io/bar/1)
+- [ ] 과거에 사용된 Python CSI2 API를 웹 restAPI로 전환(총46개함수) ![restAPI](http://progressed.io/bar/10)
 - [ ] multi Task 기능추가
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전)
 
