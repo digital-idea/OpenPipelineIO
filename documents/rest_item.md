@@ -18,7 +18,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/rmitem | 아이템 삭제 | project, name, type | `$ curl -d "project=circle&name=SS_0010&type=org" http://127.0.0.1/api/rmitem` |
-| /api/setstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" http://127.0.0.1/api/setstatus` |
+| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" http://127.0.0.1/api/setstatus` |
+| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -d "project=TEMP&name=mamma&task=light&user=김한웅" http://192.168.219.104/api/settaskuser` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기

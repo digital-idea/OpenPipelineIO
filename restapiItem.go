@@ -390,31 +390,9 @@ func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			// fursim은 회사에서 사용하고 있는 특수한 Task이다.
-			// 샷 작업은 fursim이고 에셋작업은 fur로 불린다.(작업회의중)
-			// 하지만, CSI 에서는 fur로 통일한다.
-			if strings.ToLower(v) == "fursim" {
-				v = "fur"
-			}
-			if strings.ToLower(v) == "lookdev" {
-				v = "light"
-			}
-			if strings.ToLower(v) == "look" {
-				v = "light"
-			}
-			if strings.ToLower(v) == "rig" {
-				v = "sim"
-			}
-			chkTask := false
-			for _, t := range TASKS {
-				if strings.ToLower(t) == strings.ToLower(v) {
-					chkTask = true
-					break
-				}
-			}
-			if !chkTask {
-				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", v+"값을 Task로 사용할 수 없습니다")
-				return
+			err = validTask(v)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", err.Error())
 			}
 			task = v
 		case "mov": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
@@ -994,7 +972,7 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleAPISetStatus 함수는 아이템의 task에 대한 상태를 설정한다.
-func handleAPISetStatus(w http.ResponseWriter, r *http.Request) {
+func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -1051,6 +1029,70 @@ func handleAPISetStatus(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	err = SetTaskStatus(session, project, name, task, status)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetUser 함수는 아이템의 task에 대한 유저를 설정한다.
+func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var task string
+	var user string
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "task":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			task = v
+		case "user":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			user = v
+		}
+	}
+	err = SetTaskUser(session, project, name, task, user)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

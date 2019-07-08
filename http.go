@@ -164,7 +164,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcamerapubtask", handleAPISetCameraPubTask)
 	http.HandleFunc("/api/setcameraprojection", handleAPISetCameraProjection)
 	http.HandleFunc("/api/setthummov", handleAPISetThummov)
-	http.HandleFunc("/api/setstatus", handleAPISetStatus)
+	http.HandleFunc("/api/settaskstatus", handleAPISetTaskStatus)
+	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)
 	http.HandleFunc("/api/setjustin", handleAPISetJustIn)
 	http.HandleFunc("/api/setjustout", handleAPISetJustOut)
 	http.HandleFunc("/api/setstartdate", handleAPISetStartdate)
@@ -175,6 +176,7 @@ func webserver(port string) {
 
 	// Deprecated: 사용하지 않는 API, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/api/items", handleAPIItems)
+	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.

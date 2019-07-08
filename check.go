@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"os"
 	"regexp"
 	"strings"
@@ -65,4 +66,31 @@ func validAssettype(assettype string) bool {
 		return true
 	}
 	return false
+}
+
+// Task 값이 유효한지 체크하는 함수이다.
+func validTask(inputTask string) error {
+	for _, task := range TASKS {
+		// 아래 테스크 이름을 체크하는 함수는 역사가 만들어낸 산물이며 천천히 제거되어야 한다.
+		if renameTask(task) == renameTask(inputTask) {
+			return nil
+		}
+	}
+	return errors.New("task 이름으로 사용할 수 없습니다")
+}
+
+func renameTask(task string) string {
+	// fursim은 회사에서 사용하고 있는 특수한 Task이다.
+	// 샷 작업은 fursim이고 에셋작업은 fur로 불린다.(작업회의중)
+	// 아래 테스크 이름은 역사가 만들어낸 산물이며 천천히 제거되어야 한다.
+	switch strings.ToLower(task) {
+	case "fursim":
+		return "fur"
+	case "lookdev", "look":
+		return "light"
+	case "rig":
+		return "sim"
+	default:
+		return strings.ToLower(task)
+	}
 }

@@ -1193,6 +1193,35 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 	return nil
 }
 
+// SetTaskUser 함수는 item에 task의 user 값을 셋팅한다.
+func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	slug := name + "_" + typ
+	item, err := getItem(session, project, slug)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
+	err = validTask(task)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".user": user, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
 func SetStartdate(session *mgo.Session, project, name, task, startdate string) error {
 	session.SetMode(mgo.Monotonic, true)
