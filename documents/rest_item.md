@@ -48,6 +48,13 @@ r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org")
 print(r.json())
 ```
 
+토큰키를 이용한 리퀘스트
+```python
+import requests
+r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org", headers={'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'})
+print(r.json())
+```
+
 #### Shot 정보 가지고오기.
 - 일반적으로 샷은 org타입이다.
 - 입체의 경우 샷이 left 타입이다.
