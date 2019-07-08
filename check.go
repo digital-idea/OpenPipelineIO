@@ -76,7 +76,7 @@ func validTask(inputTask string) error {
 			return nil
 		}
 	}
-	return errors.New("task 이름으로 사용할 수 없습니다")
+	return errors.New(inputTask + "이름을 task 이름으로 사용할 수 없습니다")
 }
 
 func renameTask(task string) string {
