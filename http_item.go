@@ -18,6 +18,46 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
+// handleSearchSubmit 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
+func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	Project := r.FormValue("Project")
+	Searchword := r.FormValue("Searchword")
+	Sortkey := r.FormValue("Sortkey")
+	Assign := str2bool(r.FormValue("Assign"))
+	Ready := str2bool(r.FormValue("Ready"))
+	Wip := str2bool(r.FormValue("Wip"))
+	Confirm := str2bool(r.FormValue("Confirm"))
+	Done := str2bool(r.FormValue("Done"))
+	Omit := str2bool(r.FormValue("Omit"))
+	Hold := str2bool(r.FormValue("Hold"))
+	Out := str2bool(r.FormValue("Out"))
+	None := str2bool(r.FormValue("None"))
+	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sort=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
+		Project,
+		Searchword,
+		Sortkey,
+		Assign,
+		Ready,
+		Wip,
+		Confirm,
+		Done,
+		Omit,
+		Hold,
+		Out,
+		None,
+	)
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+}
+
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -71,20 +111,20 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
 	rcp.MailDNS = *flagMailDNS
-
 	//옵션불러오기.
-	rcp.Searchop.Project = r.FormValue("Project")
-	rcp.Searchop.Searchword = r.FormValue("Searchword")
-	rcp.Searchop.Assign = str2bool(r.FormValue("Assign"))
-	rcp.Searchop.Ready = str2bool(r.FormValue("Ready"))
-	rcp.Searchop.Wip = str2bool(r.FormValue("Wip"))
-	rcp.Searchop.Confirm = str2bool(r.FormValue("Confirm"))
-	rcp.Searchop.Done = str2bool(r.FormValue("Done"))
-	rcp.Searchop.Omit = str2bool(r.FormValue("Omit"))
-	rcp.Searchop.Hold = str2bool(r.FormValue("Hold"))
-	rcp.Searchop.Out = str2bool(r.FormValue("Out"))
-	rcp.Searchop.None = str2bool(r.FormValue("None"))
-	rcp.Searchop.Sortkey = r.FormValue("Sortkey")
+	q := r.URL.Query()
+	rcp.Searchop.Project = q.Get("project")
+	rcp.Searchop.Searchword = q.Get("searchword")
+	rcp.Searchop.Sortkey = q.Get("sortkey")
+	rcp.Searchop.Assign = str2bool(q.Get("assign"))
+	rcp.Searchop.Ready = str2bool(q.Get("ready"))
+	rcp.Searchop.Wip = str2bool(q.Get("wip"))
+	rcp.Searchop.Confirm = str2bool(q.Get("confirm"))
+	rcp.Searchop.Done = str2bool(q.Get("done"))
+	rcp.Searchop.Omit = str2bool(q.Get("omit"))
+	rcp.Searchop.Hold = str2bool(q.Get("hold"))
+	rcp.Searchop.Out = str2bool(q.Get("out"))
+	rcp.Searchop.None = str2bool(q.Get("none"))
 
 	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
 	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
@@ -104,7 +144,6 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
 	rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 	if err != nil {
 		log.Println(err)

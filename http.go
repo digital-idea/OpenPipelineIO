@@ -103,6 +103,7 @@ func webserver(port string) {
 	http.HandleFunc("/", handleIndex)
 	// Item
 	http.HandleFunc("/search", handleSearch)
+	http.HandleFunc("/searchsubmit", handleSearchSubmit)
 	http.HandleFunc("/tag/", handleTags)
 	http.HandleFunc("/assettags/", handleAssettags)
 	http.HandleFunc("/ddline/", handleDdline)

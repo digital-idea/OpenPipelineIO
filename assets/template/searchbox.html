@@ -4,7 +4,7 @@
 {{$firstProject := index .Projectlist 0}}
 {{$project := or .Searchop.Project $firstProject}}
 
-<form action="/search" method="POST" class="searchbox" name="checkboxes">
+<form action="/searchsubmit" method="POST" class="searchbox" name="checkboxes">
 <select name="Project" class="selectproject" onchange="changeProject(this);">
     {{range .Projectlist}}<option value="{{.}}"{{if eq $.Searchop.Project .}} selected{{end}}>{{.}}</option>{{end}}
 </select>
