@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -1222,8 +1223,8 @@ func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
 	return nil
 }
 
-// SetStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
-func SetStartdate(session *mgo.Session, project, name, task, startdate string) error {
+// SetTaskDate 함수는 item에 task에 마감일값을 셋팅한다.
+func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1238,58 +1239,25 @@ func SetStartdate(session *mgo.Session, project, name, task, startdate string) e
 	if err != nil {
 		return err
 	}
-	hasTask := true
-	switch strings.ToLower(task) {
-	case "model":
-		item.Model.Startdate = startdate
-	case "mm":
-		item.Mm.Startdate = startdate
-	case "layout":
-		item.Layout.Startdate = startdate
-	case "ani":
-		item.Ani.Startdate = startdate
-	case "fx":
-		item.Fx.Startdate = startdate
-	case "mg":
-		item.Mg.Startdate = startdate
-	case "fur":
-		item.Fur.Startdate = startdate
-	case "sim":
-		item.Sim.Startdate = startdate
-	case "crowd":
-		item.Crowd.Startdate = startdate
-	case "light":
-		item.Light.Startdate = startdate
-	case "comp":
-		item.Comp.Startdate = startdate
-	case "matte":
-		item.Matte.Startdate = startdate
-	case "env":
-		item.Env.Startdate = startdate
-	case "concept":
-		item.Concept.Startdate = startdate
-	case "previz":
-		item.Previz.Startdate = startdate
-	case "temp1":
-		item.Temp1.Startdate = startdate
-	default:
-		hasTask = false
-	}
-	if !hasTask {
-		return errors.New("올바른 task가 아닙니다")
-	}
 	c := session.DB("project").C(project)
-	item.Updatetime = time.Now().Format(time.RFC3339)
-	err = c.Update(bson.M{"slug": item.Slug}, item)
+	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
+	err = validTask(task)
 	if err != nil {
-		log.Println(err)
+		return err
+	}
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".date": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// SetPredate 함수는 item에 task의 predate 값을 셋팅한다.
-func SetPredate(session *mgo.Session, project, name, task, predate string) error {
+// SetTaskStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
+func SetTaskStartdate(session *mgo.Session, project, name, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1304,51 +1272,51 @@ func SetPredate(session *mgo.Session, project, name, task, predate string) error
 	if err != nil {
 		return err
 	}
-	hasTask := true
-	switch strings.ToLower(task) {
-	case "model":
-		item.Model.Predate = predate
-	case "mm":
-		item.Mm.Predate = predate
-	case "layout":
-		item.Layout.Predate = predate
-	case "ani":
-		item.Ani.Predate = predate
-	case "fx":
-		item.Fx.Predate = predate
-	case "mg":
-		item.Mg.Predate = predate
-	case "fur":
-		item.Fur.Predate = predate
-	case "sim":
-		item.Sim.Predate = predate
-	case "crowd":
-		item.Crowd.Predate = predate
-	case "light":
-		item.Light.Predate = predate
-	case "comp":
-		item.Comp.Predate = predate
-	case "matte":
-		item.Matte.Predate = predate
-	case "env":
-		item.Env.Predate = predate
-	case "concept":
-		item.Concept.Predate = predate
-	case "previz":
-		item.Previz.Predate = predate
-	case "temp1":
-		item.Temp1.Predate = predate
-	default:
-		hasTask = false
+	c := session.DB("project").C(project)
+	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
+	err = validTask(task)
+	if err != nil {
+		return err
 	}
-	if !hasTask {
-		return errors.New("올바른 task가 아닙니다")
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".startdate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetTaskPredate 함수는 item에 task의 predate 값을 셋팅한다.
+func SetTaskPredate(session *mgo.Session, project, name, task, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	slug := name + "_" + typ
+	item, err := getItem(session, project, slug)
+	if err != nil {
+		return err
 	}
 	c := session.DB("project").C(project)
-	item.Updatetime = time.Now().Format(time.RFC3339)
-	err = c.Update(bson.M{"slug": item.Slug}, item)
+	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
+	err = validTask(task)
 	if err != nil {
-		log.Println(err)
+		return err
+	}
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
 		return err
 	}
 	return nil

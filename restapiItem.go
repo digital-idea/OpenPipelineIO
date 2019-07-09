@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
 
@@ -1099,8 +1098,8 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleAPISetStartdate 함수는 아이템의 task에 대한 시작일을 설정한다.
-func handleAPISetStartdate(w http.ResponseWriter, r *http.Request) {
+// handleAPISetTaskStartdate 함수는 아이템의 task에 대한 시작일을 설정한다.
+func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -1122,7 +1121,7 @@ func handleAPISetStartdate(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var task string
-	var startdate string
+	var date string
 	args := r.PostForm
 	for key, value := range args {
 		switch key {
@@ -1147,28 +1146,24 @@ func handleAPISetStartdate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			task = v
-		case "startdate":
+		case "date", "startdate":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			startdate, err = ditime.ToFullTime("current", v) // 작업시작시간은 현재시간으로 등록한다.
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
+			date = v
 		}
 	}
-	err = SetStartdate(session, project, name, task, startdate)
+	err = SetTaskStartdate(session, project, name, task, date)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
 
-// handleAPISetPredate 함수는 아이템의 task에 대한 1차마감일을 설정한다.
-func handleAPISetPredate(w http.ResponseWriter, r *http.Request) {
+// handleAPISetTaskPredate 함수는 아이템의 task에 대한 1차마감일을 설정한다.
+func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -1190,7 +1185,7 @@ func handleAPISetPredate(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var task string
-	var predate string
+	var date string
 	args := r.PostForm
 	for key, value := range args {
 		switch key {
@@ -1215,20 +1210,80 @@ func handleAPISetPredate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			task = v
-		case "predate":
+		case "date", "predate":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			predate, err = ditime.ToFullTime("end", v) // 1차 마감일은 퇴근시간으로 등록한다.
+			date = v
+		}
+	}
+	err = SetTaskPredate(session, project, name, task, date)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetTaskDate 함수는 아이템의 task에 대한 최종마감일을 설정한다.
+func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var task string
+	var date string
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "task":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			task = v
+		case "date":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			date = v
 		}
 	}
-	err = SetPredate(session, project, name, task, predate)
+	err = SetTaskDate(session, project, name, task, date)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
