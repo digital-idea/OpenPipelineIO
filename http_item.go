@@ -327,7 +327,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleEdit 함수는 Item 편집페이지이다.
-func handleEdit(w http.ResponseWriter, r *http.Request) {
+func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -895,14 +895,21 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	//로그를 추후 처리한다.
-	// logging(CurrentItem, NewItem)
-	err = t.ExecuteTemplate(w, "edited", nil)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sort=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
+		project,
+		slug,
+		"slug",
+		true,
+		true,
+		true,
+		true,
+		false,
+		false,
+		false,
+		false,
+		false,
+	)
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
