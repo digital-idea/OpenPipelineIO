@@ -5,7 +5,6 @@ type SearchOption struct {
 	Project    string // 선택한 프로젝트
 	Searchword string // 검색어
 	Sortkey    string // 정렬방식
-	Template   string // 검색결과를 출력할 템플릿명
 	// 상태
 	Assign  bool
 	Ready   bool

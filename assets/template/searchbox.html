@@ -6,11 +6,14 @@
 
 <form action="/search" method="POST" class="searchbox" name="checkboxes">
 <select name="Project" class="selectproject" onchange="changeProject(this);">
-{{range .Projectlist}}<option value="{{.}}"{{if eq $.Searchop.Project .}} selected{{end}}>{{.}}</option>{{end}}
+    {{range .Projectlist}}<option value="{{.}}"{{if eq $.Searchop.Project .}} selected{{end}}>{{.}}</option>{{end}}
 </select>
+
 <input class="searchform" type="text" size="30" maxlength="50" name="Searchword" value="{{.Searchop.Searchword}}">
 <button class="button" id="button">Search</button>
+
 <br><br>
+
 <cboxtext>
 <input class="StatusCheckBox" type="checkbox" name="Assign" value="true" {{if .Searchop.Assign}}checked{{end}}>
 <a href="/tag/{{$project}}/assign" title="작업자 배정을 기다리는 리스트" name="assign"><assign>assign</assign><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Assign}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
@@ -47,17 +50,12 @@
 &nbsp;&nbsp;
 
 <select name="Sortkey" class="sortbox">
-<option value="slug" {{if eq .Searchop.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>
-<option value="rnum" {{if eq .Searchop.Sortkey "rnum"}}selected{{end}}>정렬 : 롤넘버</option>
-<option value="ddline3d" {{if eq .Searchop.Sortkey "ddline3d"}}selected{{end}}>정렬 : 3D마감</option>
-<option value="ddline2d" {{if eq .Searchop.Sortkey "ddline2d"}}selected{{end}}>정렬 : 2D마감</option>
-<option value="scanframe" {{if eq .Searchop.Sortkey "scanframe"}}selected{{end}}>정렬 : 스캔길이</option>
-<option value="scantime" {{if eq .Searchop.Sortkey "scantime"}}selected{{end}}>정렬 : 스캔날짜</option>
+    <option value="slug" {{if eq .Searchop.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>
+    <option value="rnum" {{if eq .Searchop.Sortkey "rnum"}}selected{{end}}>정렬 : 롤넘버</option>
+    <option value="ddline3d" {{if eq .Searchop.Sortkey "ddline3d"}}selected{{end}}>정렬 : 3D마감</option>
+    <option value="ddline2d" {{if eq .Searchop.Sortkey "ddline2d"}}selected{{end}}>정렬 : 2D마감</option>
+    <option value="scanframe" {{if eq .Searchop.Sortkey "scanframe"}}selected{{end}}>정렬 : 스캔길이</option>
+    <option value="scantime" {{if eq .Searchop.Sortkey "scantime"}}selected{{end}}>정렬 : 스캔날짜</option>
 </select>
-
-<select name="Template" class="sortbox">
-    <option value="csi3" {{if eq .Searchop.Template "csi3"}}selected{{end}}>양식 : csi3</option> <!--template 이름을 그대로 사용한다.-->
-</select>
-
 </form>
 {{end}}

@@ -61,12 +61,6 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
-	ssid, err = GetSessionID(r)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.ID = ssid.ID
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
@@ -91,7 +85,6 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Out = str2bool(r.FormValue("Out"))
 	rcp.Searchop.None = str2bool(r.FormValue("None"))
 	rcp.Searchop.Sortkey = r.FormValue("Sortkey")
-	rcp.Searchop.Template = r.FormValue("Template")
 
 	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
 	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
@@ -102,6 +95,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, &cookie)
 
+	// 프로젝트 이름이 빈 문자열이 아니고, 검색어가 있다면 검색을 한다.
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
 		rcp.Items, err = Search(session, rcp.Searchop)
 		if err != nil {
@@ -110,6 +104,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
 	if err != nil {
 		log.Println(err)
@@ -152,6 +147,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 검색결과가 없다면 검색 결과가 없다는 메시지를 띄운다.
 	if len(rcp.Items) == 0 {
 		err = t.ExecuteTemplate(w, "searchno", rcp)
 		if err != nil {
@@ -161,7 +157,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -212,7 +208,6 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
 	rcp.MailDNS = *flagMailDNS
-	rcp.Searchop.Template = "csi3"
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -232,7 +227,6 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
 	rcp.Searchop.setStatusDefault()
 	rcp.Searchop.Sortkey = "slug"
-	rcp.Searchop.Template = "csi3"
 
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
 		rcp.Searchop.setStatusAll() // 에셋태그 검색시 전체상태를 검색한다.
@@ -285,7 +279,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
 	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
-	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -410,7 +404,6 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
 	rcp.Searchop.setStatusDefault()
 	rcp.Searchop.Sortkey = "slug"
-	rcp.Searchop.Template = "csi3"
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
 		rcp.Searchop.setStatusAll() //태그검색은 전체상태를 검색한다.
 		rcp.Items, err = SearchTag(session, rcp.Searchop)
@@ -460,7 +453,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	// Search 박스의 상태 옵션은 기본형이어야 한다
 	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword
 	rcp.Searchop.setStatusDefault()
-	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -937,7 +930,6 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[4] //date
 	rcp.Searchop.setStatusDefault()
 	rcp.Searchop.Sortkey = "slug"
-	rcp.Searchop.Template = "csi3"
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
 		rcp.Searchop.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
 		rcp.Items, err = SearchDdline(session, rcp.Searchop, part)
@@ -984,7 +976,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
-	err = t.ExecuteTemplate(w, rcp.Searchop.Template, rcp)
+	err = t.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1043,7 +1035,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Wip = true
 	rcp.Searchop.Confirm = true
 	rcp.Searchop.Sortkey = "slug"
-	rcp.Searchop.Template = "csi3"
 	err = t.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
 		log.Println(err)
