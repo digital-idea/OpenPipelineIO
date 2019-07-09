@@ -511,12 +511,6 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	//var logstring string
 	//기존 Item의 값을 가지고 온다.
@@ -805,13 +799,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	file, fileHandler, fileErr := r.FormFile("Thumbnail")
 	if fileErr == nil {
 		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
-			log.Println("업로드 파일이 jpeg 또는 png 파일이 아닙니다.")
-			err = t.ExecuteTemplate(w, "edited", nil)
-			if err != nil {
-				log.Println(err)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
+			http.Error(w, "업로드 파일이 jpeg 또는 png 파일이 아닙니다", http.StatusInternalServerError)
 			return
 		}
 		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
