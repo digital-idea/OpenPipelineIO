@@ -342,8 +342,8 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleAPISetmov 함수는 Task에 mov를 설정한다.
-func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
+// handleAPISetTaskMov 함수는 Task에 mov를 설정한다.
+func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -408,7 +408,7 @@ func handleAPISetmov(w http.ResponseWriter, r *http.Request) {
 	if *flagDebug {
 		fmt.Println(project, name, task, mov)
 	}
-	err = setMov(session, project, name, task, mov)
+	err = setTaskMov(session, project, name, task, mov)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

@@ -867,8 +867,8 @@ func RmOverlapOnsetnote(session *mgo.Session, project string) error {
 	return nil
 }
 
-// setMov함수는 해당 샷에 mov를 설정하는 함수이다.
-func setMov(session *mgo.Session, project, name, task, mov string) error {
+// setTaskMov함수는 해당 샷에 mov를 설정하는 함수이다.
+func setTaskMov(session *mgo.Session, project, name, task, mov string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {

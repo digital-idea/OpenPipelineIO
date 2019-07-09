@@ -156,7 +156,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/seqs", handleAPISeqs)
 	http.HandleFunc("/api/shots", handleAPIShots)
 	http.HandleFunc("/api/shot", handleAPIShot)
-	http.HandleFunc("/api/setmov", handleAPISetmov)
+	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	http.HandleFunc("/api/setdistortionsize", handleAPISetDistortionSize)
 	http.HandleFunc("/api/setrendersize", handleAPISetRenderSize)
@@ -180,6 +180,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
+	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
