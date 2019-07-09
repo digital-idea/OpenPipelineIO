@@ -156,7 +156,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/seqs", handleAPISeqs)
 	http.HandleFunc("/api/shots", handleAPIShots)
 	http.HandleFunc("/api/shot", handleAPIShot)
-	http.HandleFunc("/api/setmov", handleAPISetmov)
+	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	http.HandleFunc("/api/setdistortionsize", handleAPISetDistortionSize)
 	http.HandleFunc("/api/setrendersize", handleAPISetRenderSize)
@@ -168,8 +168,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)
 	http.HandleFunc("/api/setjustin", handleAPISetJustIn)
 	http.HandleFunc("/api/setjustout", handleAPISetJustOut)
-	http.HandleFunc("/api/setstartdate", handleAPISetStartdate)
-	http.HandleFunc("/api/setpredate", handleAPISetPredate)
+	http.HandleFunc("/api/settaskstartdate", handleAPISetTaskStartdate)
+	http.HandleFunc("/api/settaskpredate", handleAPISetTaskPredate)
+	http.HandleFunc("/api/settaskdate", handleAPISetTaskDate)
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
 	http.HandleFunc("/api/users", handleAPISearchUser)
@@ -177,6 +178,9 @@ func webserver(port string) {
 	// Deprecated: 사용하지 않는 API, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/api/items", handleAPIItems)
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
+	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
+	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
+	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
