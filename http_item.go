@@ -141,7 +141,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Project, err = getProject(session, r.FormValue("Project"))
+	rcp.Project, err = getProject(session, rcp.Searchop.Project)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
