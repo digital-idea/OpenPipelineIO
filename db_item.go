@@ -1321,3 +1321,26 @@ func SetTaskPredate(session *mgo.Session, project, name, task, date string) erro
 	}
 	return nil
 }
+
+// SetShotType 함수는 item에 shot type을 셋팅한다.
+func SetShotType(session *mgo.Session, project, name, shottype string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	if !(shottype == "2d" || shottype == "3d") {
+		return errors.New("shottype에는 2d, 3d 문자만 사용할 수 있습니다")
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": shottype, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
