@@ -60,12 +60,12 @@ func isMov(path string) bool {
 }
 
 // 에셋타입이 유효한지 체크하는 함수이다.
-func validAssettype(assettype string) bool {
+func validAssettype(assettype string) error {
 	switch assettype {
-	case "char", "comp", "env", "fx", "global", "matte", "plant", "prop", "vehicle", "concept":
-		return true
+	case "char", "comp", "env", "fx", "matte", "plant", "prop", "vehicle", "concept":
+		return nil
 	}
-	return false
+	return errors.New(assettype + "이름을 에셋타입으로 사용할 수 없습니다")
 }
 
 // Task 값이 유효한지 체크하는 함수이다.

@@ -1331,12 +1331,42 @@ func SetShotType(session *mgo.Session, project, name, shottype string) error {
 	if err != nil {
 		return err
 	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 는 asset type 입니다. 변경할 수 없습니다", name)
+	}
 	id := name + "_" + typ
 	if !(shottype == "2d" || shottype == "3d") {
 		return errors.New("shottype에는 2d, 3d 문자만 사용할 수 있습니다")
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": shottype, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetAssetType 함수는 item에 assettype을 셋팅한다.
+func SetAssetType(session *mgo.Session, project, name, assettype string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ != "asset" {
+		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	err = validAssettype(assettype)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"assettype": assettype, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

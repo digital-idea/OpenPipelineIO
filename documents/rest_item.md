@@ -26,6 +26,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" http://192.168.31.172/api/settaskmov` |
 | /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&type=3d" http://192.168.0.11/api/setshottype` |
 | /api/setthummov | 썸네일mov변경 | project, name, path | `$ curl -d "project=TEMP&name=SS_0030&path=/show/test.mov" http://192.168.0.11/api/setthummov` |
+| /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" http://192.168.0.11/api/setassettype` |
 
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
