@@ -1083,17 +1083,15 @@ func SetCameraProjection(session *mgo.Session, project, name string, has bool) e
 }
 
 // SetThummov 함수는 item에 Thummov값을 셋팅한다.
-func SetThummov(session *mgo.Session, project, name, typ, path string) error {
+func SetThummov(session *mgo.Session, project, name, path string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	if typ == "" {
-		typ, err = Type(session, project, name)
-		if err != nil {
-			return err
-		}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": time.Now().Format(time.RFC3339)}})

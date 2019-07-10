@@ -37,8 +37,8 @@
                 <h4 class="card-title">{{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
                 <p class="card-text">
-                    <a href="mailto:{{.Email}}">{{.Email}}</a><br>
-                    <a href="mailto:{{.EmailExternal}}">{{.EmailExternal}}</a><br>
+                    <a href="mailto:{{.Email}}"><small>{{.Email}}</small></a><br>
+                    <a href="mailto:{{.EmailExternal}}"><small>{{.EmailExternal}}</small></a><br>
                     <a href="tel:{{.Hotline}}">{{ShortPhoneNum .Hotline}}</a>{{if .Location}} / {{.Location}}{{end}}<br>
                     <a href="tel:{{.Phone}}">{{.Phone}}</a><br>
                 </p>

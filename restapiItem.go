@@ -929,7 +929,6 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var path string
-	var typ string
 	args := r.PostForm
 	for key, value := range args {
 		switch key {
@@ -954,23 +953,16 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			path = v
-		case "type":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			typ = v
 		}
 	}
-	err = SetThummov(session, project, name, typ, path)
+	err = SetThummov(session, project, name, path)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 }
 
-// handleAPISetStatus 함수는 아이템의 task에 대한 상태를 설정한다.
+// handleAPISetTaskStatus 함수는 아이템의 task에 대한 상태를 설정한다.
 func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
