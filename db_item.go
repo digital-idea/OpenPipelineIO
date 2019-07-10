@@ -1335,8 +1335,9 @@ func SetShotType(session *mgo.Session, project, name, shottype string) error {
 		return fmt.Errorf("%s 는 asset type 입니다. 변경할 수 없습니다", name)
 	}
 	id := name + "_" + typ
-	if !(shottype == "2d" || shottype == "3d") {
-		return errors.New("shottype에는 2d, 3d 문자만 사용할 수 있습니다")
+	err = validShottype(shottype)
+	if err != nil {
+		return err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": shottype, "updatetime": time.Now().Format(time.RFC3339)}})

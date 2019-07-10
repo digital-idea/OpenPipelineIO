@@ -68,6 +68,15 @@ func validAssettype(assettype string) error {
 	return errors.New(assettype + "이름을 에셋타입으로 사용할 수 없습니다")
 }
 
+// validShottype 함수는 샷타입이 유효한지 체크하는 함수이다.
+func validShottype(shottype string) error {
+	switch shottype {
+	case "2d", "3d":
+		return nil
+	}
+	return errors.New(shottype + "이름을 샷타입으로 사용할 수 없습니다")
+}
+
 // Task 값이 유효한지 체크하는 함수이다.
 func validTask(inputTask string) error {
 	for _, task := range TASKS {
