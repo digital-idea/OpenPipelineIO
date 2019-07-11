@@ -8,17 +8,20 @@ import (
 	"strings"
 )
 
-// 해상도값 정규식 : 2048x1080 형태
+// 해상도값 정규식: 2048x1080 형태
 var regexpImageSize = regexp.MustCompile(`\d{2,5}[xX]\d{2,5}$`)
 
-// 샷네임값 정규식 : SS_0010 형태
+// 샷네임값 정규식: SS_0010 형태
 var regexpShotname = regexp.MustCompile(`^[a-zA-Z0-9]+_[a-zA-Z0-9]+$`)
 
-// 에셋 네임값 정규식 : stone01 형태
+// 에셋 네임값 정규식: stone01 형태
 var regexpAssetname = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
 
-// 롤미디어 정규식 : 00_A03C001_180113_A001 형태
+// 롤미디어 정규식: 00_A03C001_180113_A001 형태
 var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
+
+// Timecode 정규식: 00:00:00:00 형태
+var regexpTimecode = regexp.MustCompile(`^\d{2}:\d{2}:\d{2}:\d{2}$`)
 
 // Alexa 카메라의 형태 : N_AAAACCCC_YYMMDD_RRRR
 // - N : order
