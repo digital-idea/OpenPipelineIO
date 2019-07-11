@@ -108,9 +108,10 @@ type Item struct {
 	Tag         []string `json:"tag"`         // 태그리스트
 	Assettags   []string `json:"assettags"`   // 에셋그룹 태그
 	Pmnote      []string `json:"pmnote"`      // PM 수정사항
+	Finname     string   `json:"finname"`     // 파이널 파일이름
 	Finver      string   `json:"finver"`      // 파이널된 버젼
-	Clientver   string   `json:"clientver"`   // 클라이언트에게 보낸 버전
 	Findate     string   `json:"findate"`     // 파이널 데이터가 나간 날짜
+	Clientver   string   `json:"clientver"`   // 클라이언트에게 보낸 버전
 	Outinfo     string   `json:"outinfo"`     // 삭제예정 : 외주가 나갔다면 외주회사정보.
 	Rstate      string   `json:"rstate"`      // 삭제예정 : 0,1 재스캔상태
 	Link        []string `json:"link"`        // 링크된 자료구조
@@ -120,7 +121,6 @@ type Item struct {
 	Status      string   `json:"status"`      // 샷 상태.
 	Assettype   string   `json:"assettype"`   // char, env, global, prop, comp, plant, vehicle, group 추후 Assettags로 사용된다.
 	Updatetime  string   `json:"updatetime"`  // 업데이트 시간 RFC3339
-	Finname     string   `json:"finname"`     // 파이널 파일이름
 	Focal       string   `json:"focal"`       // 렌즈 미리수
 	Stereotype  string   `json:"stereotype"`  // parallel(*), conversions
 	Stereoeye   string   `json:"stereoeye"`   // left(*), right
