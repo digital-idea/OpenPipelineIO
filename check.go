@@ -23,6 +23,9 @@ var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 // Timecode 정규식: 00:00:00:00 형태
 var regexpTimecode = regexp.MustCompile(`^\d{2}:\d{2}:\d{2}:\d{2}$`)
 
+// Rnum 정규식: A0001
+var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
+
 // Alexa 카메라의 형태 : N_AAAACCCC_YYMMDD_RRRR
 // - N : order
 // - AAAACCCC : reel name
@@ -74,7 +77,7 @@ func validAssettype(typ string) error {
 }
 
 // 롤넘버가 유효한지 체크하는 함수이다.
-func validRnum(rnum string) bool {
+func validRnumTag(rnum string) bool {
 	switch rnum {
 	case "1권", "2권", "3권", "4권", "5권", "6권", "7권", "8권":
 		return true

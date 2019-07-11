@@ -1604,8 +1604,17 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 			}
 			name = v
 		case "rnum":
-			rnum = values[0]
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			rnum = v
 		}
+	}
+	if !regexpRnum.MatchString(rnum) {
+		fmt.Fprintf(w, "{\"error\":\"%s 값은 A0001 형식이 아닙니다.\"}\n", rnum)
+		return
 	}
 	err = SetRnum(session, project, name, rnum)
 	if err != nil {

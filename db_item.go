@@ -46,19 +46,11 @@ func addItem(session *mgo.Session, project string, i Item) error {
 
 func setItem(session *mgo.Session, project string, i Item) error {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("project").C(project)
-	num, err := c.Find(bson.M{"slug": i.Slug}).Count()
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	if num != 1 {
-		return errors.New("해당 아이템이 존재하지 않습니다")
-	}
 	i.Updatetime = time.Now().Format(time.RFC3339)
-	i.updateStatus()
-	i.setRnumTag()
-	err = c.Update(bson.M{"slug": i.Slug}, i)
+	i.updateStatus() // Task상태 업데이트
+	i.setRnumTag()   // 롤넘버에 따른 테그 셋팅
+	c := session.DB("project").C(project)
+	err := c.Update(bson.M{"id": i.ID}, i)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -1420,7 +1412,7 @@ func SetOutputName(session *mgo.Session, project, name, outputname string) error
 	return nil
 }
 
-// SetRnum 함수는 샷에 롤넘버 테그를 설정한다.
+// SetRnum 함수는 샷에 롤넘버를 설정한다.
 func SetRnum(session *mgo.Session, project, name, rnum string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
@@ -1435,26 +1427,12 @@ func SetRnum(session *mgo.Session, project, name, rnum string) error {
 		return fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
-	c := session.DB("project").C(project)
 	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
-	if !(rnum == "" || validRnum(rnum)) {
-		return fmt.Errorf("%s 는 롤넘버로 사용할 수 있는 문자가 아닙니다", rnum)
-	}
-	var newTags []string
-	for _, tag := range item.Tag {
-		if validRnum(tag) {
-			continue
-		}
-		newTags = append(newTags, tag)
-	}
-	if validRnum(rnum) {
-		newTags = append(newTags, rnum)
-	}
-	sort.Strings(newTags)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
+	item.Rnum = rnum
+	err = setItem(session, project, item)
 	if err != nil {
 		return err
 	}

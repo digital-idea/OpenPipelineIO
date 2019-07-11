@@ -104,7 +104,7 @@ type Item struct {
 	Onsetnote   []string `json:"onsetnote"`   // 현장내용, 작업내용
 	Ddline3d    string   `json:"ddline3d"`    // 3D 데드라인 RFC3339
 	Ddline2d    string   `json:"ddline2d"`    // 2D 데드라인 RFC3339
-	Rnum        string   `json:"rnum"`        // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호. A는 1권을 H는 8권을 의미한다.
+	Rnum        string   `json:"rnum"`        // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호 예) A0001. A는 1권을 H는 8권을 의미한다.
 	Tag         []string `json:"tag"`         // 태그리스트
 	Assettags   []string `json:"assettags"`   // 에셋그룹 태그
 	Pmnote      []string `json:"pmnote"`      // PM 수정사항
@@ -112,14 +112,12 @@ type Item struct {
 	Finver      string   `json:"finver"`      // 파이널된 버젼
 	Findate     string   `json:"findate"`     // 파이널 데이터가 나간 날짜
 	Clientver   string   `json:"clientver"`   // 클라이언트에게 보낸 버전
-	Outinfo     string   `json:"outinfo"`     // 삭제예정 : 외주가 나갔다면 외주회사정보.
-	Rstate      string   `json:"rstate"`      // 삭제예정 : 0,1 재스캔상태
 	Link        []string `json:"link"`        // 링크된 자료구조
 	Linkslug    []string `json:"linkslug"`    // 링크된 slug리스트
 	Dsize       string   `json:"dsize"`       // 디스토션 사이즈
 	Rendersize  string   `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
 	Status      string   `json:"status"`      // 샷 상태.
-	Assettype   string   `json:"assettype"`   // char, env, global, prop, comp, plant, vehicle, group 추후 Assettags로 사용된다.
+	Assettype   string   `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
 	Updatetime  string   `json:"updatetime"`  // 업데이트 시간 RFC3339
 	Focal       string   `json:"focal"`       // 렌즈 미리수
 	Stereotype  string   `json:"stereotype"`  // parallel(*), conversions
@@ -128,51 +126,49 @@ type Item struct {
 	OCIOcc      string   `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
 
 	//시간에 관련된 데이터이다.
-	ScanFrame       int    `json:"scanframe"`       // 스캔 프레임수
-	ScanTimecodeIn  string `json:"scantimecodein"`  // 스캔플레이트 타임코드 In
-	ScanTimecodeOut string `json:"scantimecodeout"` // 스캔플레이트 타임코드 Out
-	ScanIn          int    `json:"scanin"`          // 스캔 Frame In
-	ScanOut         int    `json:"scanout"`         // 스캔 Frame Out
-	HandleIn        int    `json:"handlein"`        // 핸들 Frame In
-	HandleOut       int    `json:"handleout"`       // 핸들 Frame Out
-	JustIn          int    `json:"justin"`          // 저스트 Frame In
-	JustOut         int    `json:"justout"`         // 저스트 Frame Out
-	JustTimecodeIn  string `json:"justtimecodein"`  // 저스트 타임코드 In
-	JustTimecodeOut string `json:"justtimecodeout"` // 저스트 타임코드 Out
-	PlateIn         int    `json:"platein"`         // 플레이트 Frame In
-	PlateOut        int    `json:"plateout"`        // 플레이트 Frame Out
-
-	//아래는 자주사용하지 않지만 역사가 만들어낸 자료구조이다.
-	Soundfile string `json:"soundfile"` // 사운드파일 필요시 사운드파일 경로
+	ScanFrame       int                    `json:"scanframe"`       // 스캔 프레임수
+	ScanTimecodeIn  string                 `json:"scantimecodein"`  // 스캔플레이트 타임코드 In
+	ScanTimecodeOut string                 `json:"scantimecodeout"` // 스캔플레이트 타임코드 Out
+	ScanIn          int                    `json:"scanin"`          // 스캔 Frame In
+	ScanOut         int                    `json:"scanout"`         // 스캔 Frame Out
+	HandleIn        int                    `json:"handlein"`        // 핸들 Frame In
+	HandleOut       int                    `json:"handleout"`       // 핸들 Frame Out
+	JustIn          int                    `json:"justin"`          // 저스트 Frame In
+	JustOut         int                    `json:"justout"`         // 저스트 Frame Out
+	JustTimecodeIn  string                 `json:"justtimecodein"`  // 저스트 타임코드 In
+	JustTimecodeOut string                 `json:"justtimecodeout"` // 저스트 타임코드 Out
+	PlateIn         int                    `json:"platein"`         // 플레이트 Frame In
+	PlateOut        int                    `json:"plateout"`        // 플레이트 Frame Out
+	Soundfile       string                 `json:"soundfile"`       // 사운드파일 필요시 사운드파일 경로
+	Rollmedia       string                 `json:"rollmedia"`       // 현장데이터의 Rollmedia 문자. 수동으로 현장데이터와 연결할 때 사용한다.
+	ObjectidIn      int                    `json:"objectidin"`      // ObjectID 시작번호. Deep이미지의 DeepID를 만들기 위해서 파이프라인상 필요하다.
+	ObjectidOut     int                    `json:"objectidout"`     // ObjectID 끝번호. Deep이미지의 DeepID를 만들기 위해서 파인라인상 필요하다.
+	OnsetCam        `json:"onsetcam"`      // 현장 카메라 정보
+	ProductionCam   `json:"productioncam"` // 포스트 프로덕션 카메라 정보
 
 	//task
-	Model         Task                   `json:"model"`   // 모델링팀 정보.
-	Fur           Task                   `json:"fur"`     // 털
-	Mm            Task                   `json:"mm"`      // 매치무브
-	Ani           Task                   `json:"ani"`     // 에니메이션
-	Fx            Task                   `json:"fx"`      // FX
-	Mg            Task                   `json:"mg"`      // 모션그래픽
-	Light         Task                   `json:"light"`   // 라이팅
-	Texture       Task                   `json:"texture"` // 텍스쳐
-	Lookdev       Task                   `json:"lookdev"` // 룩뎁
-	Comp          Task                   `json:"comp"`    // 합성
-	Roto          Task                   `json:"roto"`    // 로토
-	Prep          Task                   `json:"prep"`    // 입체작업전 프렙작업
-	Stereo        Task                   `json:"stereo"`  // 입체작업
-	Matte         Task                   `json:"matte"`   // 매트
-	Env           Task                   `json:"env"`     // 환경
-	Sim           Task                   `json:"sim"`     // 시뮬레이션
-	Layout        Task                   `json:"layout"`  // 레이아웃
-	Crowd         Task                   `json:"crowd"`   // 군중
-	Temp1         Task                   `json:"temp1"`   // 기타1
-	Temp2         Task                   `json:"temp2"`   // 기타2
-	Concept       Task                   `json:"concept"` // 컨셉
-	Previz        Task                   `json:"previz"`  // 프리비즈
-	OnsetCam      `json:"onsetcam"`      // 현장 카메라 정보
-	ProductionCam `json:"productioncam"` // 포스트 프로덕션 카메라 정보
-	Rollmedia     string                 `json:"rollmedia"`   // 현장데이터의 Rollmedia 문자. 수동으로 현장데이터와 연결할 때 사용한다.
-	ObjectidIn    int                    `json:"objectidin"`  // ObjectID 시작번호. Deep이미지의 DeepID를 만들기 위해서 파이프라인상 필요하다.
-	ObjectidOut   int                    `json:"objectidout"` // ObjectID 끝번호. Deep이미지의 DeepID를 만들기 위해서 파인라인상 필요하다.
+	Model   Task `json:"model"`   // 모델링팀 정보.
+	Fur     Task `json:"fur"`     // 털
+	Mm      Task `json:"mm"`      // 매치무브
+	Ani     Task `json:"ani"`     // 에니메이션
+	Fx      Task `json:"fx"`      // FX
+	Mg      Task `json:"mg"`      // 모션그래픽
+	Light   Task `json:"light"`   // 라이팅
+	Texture Task `json:"texture"` // 텍스쳐
+	Lookdev Task `json:"lookdev"` // 룩뎁
+	Comp    Task `json:"comp"`    // 합성
+	Roto    Task `json:"roto"`    // 로토
+	Prep    Task `json:"prep"`    // 입체작업전 프렙작업
+	Stereo  Task `json:"stereo"`  // 입체작업
+	Matte   Task `json:"matte"`   // 매트
+	Env     Task `json:"env"`     // 환경
+	Sim     Task `json:"sim"`     // 시뮬레이션
+	Layout  Task `json:"layout"`  // 레이아웃
+	Crowd   Task `json:"crowd"`   // 군중
+	Temp1   Task `json:"temp1"`   // 기타1
+	Temp2   Task `json:"temp2"`   // 기타2
+	Concept Task `json:"concept"` // 컨셉
+	Previz  Task `json:"previz"`  // 프리비즈
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
