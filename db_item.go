@@ -1278,6 +1278,30 @@ func SetDeadline2D(session *mgo.Session, project, name, date string) error {
 	return nil
 }
 
+// SetDeadline3D 함수는 item에 3D마감일을 셋팅한다.
+func SetDeadline3D(session *mgo.Session, project, name, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline3d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetTaskStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
 func SetTaskStartdate(session *mgo.Session, project, name, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)

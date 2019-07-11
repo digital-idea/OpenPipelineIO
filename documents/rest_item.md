@@ -29,7 +29,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" http://192.168.0.11/api/setassettype` |
 | /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -d "project=TEMP&name=SS_0010&outputname=S101_010_010" http://192.168.31.172/api/setoutputname` |
 | /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -d "project=TEMP&name=SS_0010&rnum=1권" http://192.168.31.172/api/setrnum` |
-| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" http://192.168.31.172/api/setdeadline3d` |
+| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" http://192.168.31.172/api/setdeadline2d` |
+| /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" http://192.168.31.172/api/setdeadline3d` |
 
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
