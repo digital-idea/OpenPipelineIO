@@ -891,7 +891,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		true,
 		true,
 		true,
-		false,
+		true,
 		false,
 		false,
 		false,

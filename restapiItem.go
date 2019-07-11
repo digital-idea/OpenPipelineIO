@@ -1843,3 +1843,58 @@ func handleAPISetJustTimecodeOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleAPISetFinver 함수는 아이템에 파이널 버전값을 설정한다.
+func handleAPISetFinver(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm()
+	var project string
+	var name string
+	var version string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "version":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			version = v
+		}
+	}
+	err = SetFinver(session, project, name, version)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
