@@ -38,9 +38,9 @@ var regexpTimecode = regexp.MustCompile(`^\d{2}:\d{2}:\d{2}:\d{2}$`)
 // - HH : unique hex code that ensures another file won't have the exact same name
 // - NNN : spanned clip number
 
-// str2bool은 받아들인 문자열이 "true"나 "True"라면 참을, 그 외에는 거짓을 반환한다.
+// str2bool은 받아들인 문자열이 "true","True" ... 라면 참을, 그 외에는 거짓을 반환한다.
 func str2bool(str string) bool {
-	if str == "true" || str == "True" {
+	if strings.ToLower(str) == "true" {
 		return true
 	}
 	return false
