@@ -146,9 +146,11 @@ func webserver(port string) {
 	http.HandleFunc("/api/projects", handleAPIProjects)
 	http.HandleFunc("/api/addproject", handleAPIAddproject)
 	http.HandleFunc("/api/projecttags", handleAPIProjectTags)
+
 	// restAPI Onset(Setellite)
 	http.HandleFunc("/api/setellite", handleAPISetelliteItems)
 	http.HandleFunc("/api/setellitesearch", handleAPISetelliteSearch)
+
 	// restAPI Item
 	http.HandleFunc("/api/item", handleAPIItem)
 	http.HandleFunc("/api/rmitem", handleAPIRmItem)
@@ -178,6 +180,10 @@ func webserver(port string) {
 	http.HandleFunc("/api/setrnum", handleAPISetRnum)
 	http.HandleFunc("/api/setdeadline2d", handleAPISetDeadline2D)
 	http.HandleFunc("/api/setdeadline3d", handleAPISetDeadline3D)
+	http.HandleFunc("/api/setscantimecodein", handleAPISetScanTimecodeIn)
+	http.HandleFunc("/api/setscantimecodeout", handleAPISetScanTimecodeOut)
+	http.HandleFunc("/api/setjusttimecodein", handleAPISetJustTimecodeIn)
+	http.HandleFunc("/api/setjusttimecodeout", handleAPISetJustTimecodeOut)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

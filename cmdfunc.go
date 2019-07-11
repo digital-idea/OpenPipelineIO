@@ -86,11 +86,9 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		i.ScanFrame = scanframe
 	}
 	if scantimecodein != "" {
-		i.ScanKeycodeIn = scantimecodein // 삭제예정
 		i.ScanTimecodeIn = scantimecodein
 	}
 	if scantimecodeout != "" {
-		i.ScanKeycodeOut = scantimecodeout // 삭제예정
 		i.ScanTimecodeOut = scantimecodeout
 	}
 	if scanin != -1 {
@@ -198,11 +196,9 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		i.ScanFrame = scanframe
 	}
 	if scantimecodein != "" {
-		i.ScanKeycodeIn = scantimecodein // 삭제예정
 		i.ScanTimecodeIn = scantimecodein
 	}
 	if scantimecodeout != "" {
-		i.ScanKeycodeOut = scantimecodeout // 삭제예정
 		i.ScanTimecodeOut = scantimecodeout
 	}
 	if scanin != -1 {

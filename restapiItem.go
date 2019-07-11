@@ -1614,3 +1614,223 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
+
+// handleAPISetScanTimecodeIn 함수는 아이템에 Scan TimecodeIn 값을 설정한다.
+func handleAPISetScanTimecodeIn(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm()
+	var project string
+	var name string
+	var timecode string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "timecode":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			timecode = v
+		}
+	}
+	err = SetScanTimecodeIn(session, project, name, timecode)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetScanTimecodeOut 함수는 아이템에 Scan TimecodeOut 값을 설정한다.
+func handleAPISetScanTimecodeOut(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm()
+	var project string
+	var name string
+	var timecode string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "timecode":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			timecode = v
+		}
+	}
+	err = SetScanTimecodeOut(session, project, name, timecode)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetJustTimecodeIn 함수는 아이템에 Just TimecodeIn 값을 설정한다.
+func handleAPISetJustTimecodeIn(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm()
+	var project string
+	var name string
+	var timecode string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "timecode":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			timecode = v
+		}
+	}
+	err = SetJustTimecodeIn(session, project, name, timecode)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetJustTimecodeOut 함수는 아이템에 Just TimecodeOut 값을 설정한다.
+func handleAPISetJustTimecodeOut(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm()
+	var project string
+	var name string
+	var timecode string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "timecode":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			timecode = v
+		}
+	}
+	err = SetJustTimecodeOut(session, project, name, timecode)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}

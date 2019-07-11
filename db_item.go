@@ -1488,3 +1488,107 @@ func SetAssetType(session *mgo.Session, project, name, assettype string) error {
 	}
 	return nil
 }
+
+// SetScanTimecodeIn 함수는 item에 Scan Timecode In을 셋팅한다.
+func SetScanTimecodeIn(session *mgo.Session, project, name, timecode string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	if !regexpTimecode.MatchString(timecode) {
+		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"scantimecodein": timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetScanTimecodeOut 함수는 item에 Scan Timecode In을 셋팅한다.
+func SetScanTimecodeOut(session *mgo.Session, project, name, timecode string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	if !regexpTimecode.MatchString(timecode) {
+		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"scantimecodeout": timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetJustTimecodeIn 함수는 item에 Just Timecode In을 셋팅한다.
+func SetJustTimecodeIn(session *mgo.Session, project, name, timecode string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	if !regexpTimecode.MatchString(timecode) {
+		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"justtimecodein": timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetJustTimecodeOut 함수는 item에 Just Timecode In을 셋팅한다.
+func SetJustTimecodeOut(session *mgo.Session, project, name, timecode string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	if !regexpTimecode.MatchString(timecode) {
+		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"justtimecodeout": timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

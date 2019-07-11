@@ -128,10 +128,6 @@ type Item struct {
 	OCIOcc      string   `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
 
 	//시간에 관련된 데이터이다.
-	ScanKeycodeIn   string `json:"scankeycodein"`   // 제거예정. 스캔플레이트 키코드 In
-	ScanKeycodeOut  string `json:"scankeycodeout"`  // 제거예정. 스캔플레이트 키코드 Out
-	JustKeycodeIn   string `json:"justkeycodein"`   // 제거예정. 저스트 키코드 In
-	JustKeycodeOut  string `json:"justkeycodeout"`  // 제거에정. 저스트 키코드 Out
 	ScanFrame       int    `json:"scanframe"`       // 스캔 프레임수
 	ScanTimecodeIn  string `json:"scantimecodein"`  // 스캔플레이트 타임코드 In
 	ScanTimecodeOut string `json:"scantimecodeout"` // 스캔플레이트 타임코드 Out

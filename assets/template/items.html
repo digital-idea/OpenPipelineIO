@@ -42,11 +42,11 @@
 
 <!--썸네일 시작-->
 <td class="thumb">
-  {{if .JustKeycodeIn}}
+  {{if .JustTimecodeIn}}
   <div class="justTC">
 	  <div class="tcHeader">Just</div>
-	  <div class="tcIn" title="JustTimecode In">{{if .JustKeycodeIn}}{{.JustKeycodeIn}}{{end}}</div>
-	  <div class="tcOut" title="JustTimecode Out">{{if .JustKeycodeOut}}{{.JustKeycodeOut}}{{end}}</div>
+	  <div class="tcIn" title="JustTimecode In">{{if .JustTimecodeIn}}{{.JustTimecodeIn}}{{end}}</div>
+	  <div class="tcOut" title="JustTimecode Out">{{if .JustTimecodeOut}}{{.JustTimecodeOut}}{{end}}</div>
   </div>
   {{end}}
 	<center>
@@ -291,7 +291,7 @@
         {{if .Scanname }}<sub>스캔네임: </sub> {{.Scanname}}
         {{if .ScanFrame -}} / {{.ScanFrame}}f{{- end}}<br>{{end}}
         <!--스캔키코드 표기-->
-        <sub>스캔키코드: </sub>{{if .ScanKeycodeIn }}{{.ScanKeycodeIn}}{{end}} / {{if .ScanKeycodeOut}}{{.ScanKeycodeOut}}{{end}}<br>
+        <sub>스캔키코드: </sub>{{if .ScanTimecodeIn }}{{.ScanTimecodeIn}}{{end}} / {{if .ScanTimecodeOut}}{{.ScanTimecodeOut}}{{end}}<br>
         <sub>스캔시간: </sub>{{if .Scantime}}{{.Scantime}}{{end}}<br>
         <!--연결소스-->
         <sub>연결소스: </sub><br>{{range .Link | ReverseStringSlice -}}- {{.|note2body|RemovePath}}<a class="reflink" href="dilink://{{.|note2body|GetPath}}">{{.|note2body|GetPath}}</a><br>{{- end}}
