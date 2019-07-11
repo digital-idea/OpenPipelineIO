@@ -1347,6 +1347,32 @@ func SetShotType(session *mgo.Session, project, name, shottype string) error {
 	return nil
 }
 
+// SetOutputName 함수는 item에 Outputname 을 셋팅한다.
+func SetOutputName(session *mgo.Session, project, name, outputname string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
+	}
+	if outputname == "" {
+		return errors.New("outputname 이 빈 문자열 입니다")
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"outputname": outputname, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetAssetType 함수는 item에 assettype을 셋팅한다.
 func SetAssetType(session *mgo.Session, project, name, assettype string) error {
 	session.SetMode(mgo.Monotonic, true)

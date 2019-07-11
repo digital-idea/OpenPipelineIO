@@ -1338,6 +1338,63 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPISetOutputName 함수는 아이템의 shot의 아웃풋 이름을 설정합니다.
+func handleAPISetOutputName(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var outputname string
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "outputname":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			outputname = v
+		}
+	}
+	err = SetOutputName(session, project, name, outputname)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+}
+
 // handleAPISetAssetType 함수는 아이템의 shot type을 설정한다.
 func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()

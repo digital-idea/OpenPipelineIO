@@ -27,7 +27,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&type=3d" http://192.168.0.11/api/setshottype` |
 | /api/setthummov | 썸네일mov변경 | project, name, path | `$ curl -d "project=TEMP&name=SS_0030&path=/show/test.mov" http://192.168.0.11/api/setthummov` |
 | /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" http://192.168.0.11/api/setassettype` |
-
+| /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -d "project=TEMP&name=SS_0010&outputname=S101_010_010" http://192.168.31.172/api/setoutputname` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
@@ -50,16 +50,22 @@ print(data)
 ```
 
 #### 샷,에셋정보(Item) 가지고오기. Python3.7.x(블랜더)
+토큰키를 이용한 GET
 ```python
 import requests
-r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org")
+endpoint = "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"
+auth = {'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'}
+r = requests.get(url = endpoint, headers = auth)
 print(r.json())
 ```
 
-토큰키를 이용한 리퀘스트
+토큰키를 이용한 POST
 ```python
 import requests
-r = requests.get("http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org", headers={'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'})
+data = {'project':'TEMP', 'name':'SS_0010', 'outputname':'test'}
+endpoint = "https://csi.lazypic.org/api/setoutputname"
+auth = {'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'}
+r = requests.post(url = endpoint, data = data, headers = auth)
 print(r.json())
 ```
 
