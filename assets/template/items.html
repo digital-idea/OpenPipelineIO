@@ -104,7 +104,7 @@
 <tr><td bgcolor={{itemStatus2color .Status}} colspan=8 class=statusbar>
 {{if .Updatetime|CheckUpdate}}<new>UPDATE {{ToHumantime .Updatetime}}</new> {{end}}
 <a href="{{Review .Project .Name .Type ""}}" target="_blank" title="ily">
-{{statusnum2string .Status}}{{if eq .Status "2"}} / v{{.Finver}}{{end}}</td></tr>
+{{statusnum2string .Status}}{{if eq .Status "2"}} / v{{.Finver}}{{if .Findate}}({{ToShortTime .Findate}}){{end}}{{end}}</td></tr>
 </a>
 <tr>
 <!--concept-->

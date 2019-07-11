@@ -1589,3 +1589,27 @@ func SetFinver(session *mgo.Session, project, name, version string) error {
 	}
 	return nil
 }
+
+// SetFindate 함수는 item에 최종 데이터 아웃풋 날짜를 셋팅한다.
+func SetFindate(session *mgo.Session, project, name, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"findate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
