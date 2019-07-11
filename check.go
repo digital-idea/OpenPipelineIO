@@ -70,6 +70,16 @@ func validAssettype(typ string) error {
 	}
 }
 
+// 롤넘버가 유효한지 체크하는 함수이다.
+func validRnum(rnum string) bool {
+	switch rnum {
+	case "1권", "2권", "3권", "4권", "5권", "6권", "7권", "8권":
+		return true
+	default:
+		return false
+	}
+}
+
 // validShottype 함수는 샷타입이 유효한지 체크하는 함수이다.
 func validShottype(typ string) error {
 	switch typ {

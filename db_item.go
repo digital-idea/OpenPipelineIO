@@ -1254,6 +1254,30 @@ func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	return nil
 }
 
+// SetDeadline2D 함수는 item에 2D마감일을 셋팅한다.
+func SetDeadline2D(session *mgo.Session, project, name, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	fullTime, err := ditime.ToFullTime("end", date)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline2d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetTaskStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
 func SetTaskStartdate(session *mgo.Session, project, name, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
@@ -1367,6 +1391,47 @@ func SetOutputName(session *mgo.Session, project, name, outputname string) error
 	id := name + "_" + typ
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"outputname": outputname, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetRnum 함수는 샷에 롤넘버 테그를 설정한다.
+func SetRnum(session *mgo.Session, project, name, rnum string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	if !(rnum == "" || validRnum(rnum)) {
+		return fmt.Errorf("%s 는 롤넘버로 사용할 수 있는 문자가 아닙니다", rnum)
+	}
+	var newTags []string
+	for _, tag := range item.Tag {
+		if validRnum(tag) {
+			continue
+		}
+		newTags = append(newTags, tag)
+	}
+	if validRnum(rnum) {
+		newTags = append(newTags, rnum)
+	}
+	sort.Strings(newTags)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
