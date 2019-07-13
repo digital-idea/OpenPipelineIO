@@ -37,6 +37,10 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodeout` |
 | /api/setfinver | 파이널버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" http://192.168.31.172/api/setfinver` |
 | /api/setfindate | 파이널날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" http://192.168.31.172/api/setfindate` |
+| /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/setjustin` |
+| /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/setjustout` |
+| /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/sethandlein` |
+| /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/sethandleout` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
