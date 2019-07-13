@@ -61,19 +61,19 @@
   {{- else -}}
       {{if or .PlateIn .PlateOut}}
       <div class="plateInOut">
-	    <div class="plateHeader">Plate</div>
-          {{if .PlateIn}}<div class="plateIn" title="plate In">{{.PlateIn}} f</div>{{end}}
-          {{if .PlateOut}}<div class="plateOut" title="plate Out">{{.PlateOut}} f</div>{{end}}
-          {{if and .PlateIn .PlateOut}}<div class="plateFrames" title="Plate Frames">{{Framecal .PlateIn .PlateOut}}f</div>{{end}}
+	      <div class="plateHeader">Plate</div>
+        {{if .PlateIn}}<div class="plateIn" title="plate In">{{.PlateIn}} f</div>{{end}}
+        {{if .PlateOut}}<div class="plateOut" title="plate Out">{{.PlateOut}} f</div>{{end}}
+        {{if and .PlateIn .PlateOut}}<div class="plateFrames" title="Plate Frames">{{Framecal .PlateIn .PlateOut}}f</div>{{end}}
       </div>
       {{end}}
       <div class="justInOut">
-	    <div class="justHeader">Just</div>
-          <div class="handleIn" title="Handle in">{{.HandleIn}}</div>
-          <div class="justIn" title="Just In">{{.JustIn}} f</div>
-          <div class="justOut" title="Just Out">{{.JustOut}} f</div>
-          <div class="handleOut" title="Handle out">{{.HandleOut}}</div>
-          {{if and .JustIn .JustOut}}<div class="justFrames" title="Just Frames">{{Framecal .JustIn .JustOut}}f</div>{{end}}
+	      {{if and .JustIn .JustOut}}<div class="justHeader">Just</div>{{end}}
+        <div class="handleIn" title="Handle in">{{.HandleIn}}</div>
+        <div class="justIn" title="Just In">{{.JustIn}} f</div>
+        <div class="justOut" title="Just Out">{{.JustOut}} f</div>
+        <div class="handleOut" title="Handle out">{{.HandleOut}}</div>
+        {{if and .JustIn .JustOut}}<div class="justFrames" title="Just Frames">{{Framecal .JustIn .JustOut}}f</div>{{end}}
       </div>
   {{- end}}
   {{if eq .Type "asset" -}}
