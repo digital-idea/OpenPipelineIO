@@ -1718,6 +1718,7 @@ func AddOnset(session *mgo.Session, project, name, tool, user, text string) erro
 	if err != nil {
 		return err
 	}
+	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
 	note := fmt.Sprintf("%s;%s;%s;%s", time.Now().Format(time.RFC3339), tool, user, text)
 	i.Onsetnote = append(i.Onsetnote, note)
 	err = setItem(session, project, i)
