@@ -73,17 +73,22 @@ print(data)
 import requests
 endpoint = "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"
 auth = {'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'}
-r = requests.get(url = endpoint, headers = auth)
+r = requests.get(url=endpoint, headers=auth)
 print(r.json())
 ```
 
-토큰키를 이용한 POST
+`~/.csi/token` 토큰 파일을 읽어서 POST
 ```python
+import os
 import requests
-data = {'project':'TEMP', 'name':'SS_0010', 'outputname':'test'}
+from pathlib import Path
+home = str(Path.home())
+f = open(os.path.join(home, ".csi", "token"), "r")
+token = f.read(80)
+data = {'project':'TEMP', 'name':'SS_0010', 'text':'test'}
 endpoint = "https://csi.lazypic.org/api/setoutputname"
-auth = {'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'}
-r = requests.post(url = endpoint, data = data, headers = auth)
+auth = {'Authorization': 'Basic ' + token}
+r = requests.post(url=endpoint, data=data, headers=auth)
 print(r.json())
 ```
 
