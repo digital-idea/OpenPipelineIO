@@ -113,7 +113,6 @@ type Item struct {
 	Findate     string   `json:"findate"`     // 파이널 데이터가 나간 날짜
 	Clientver   string   `json:"clientver"`   // 클라이언트에게 보낸 버전
 	Link        []string `json:"link"`        // 링크된 자료구조
-	Linkslug    []string `json:"linkslug"`    // 링크된 slug리스트
 	Dsize       string   `json:"dsize"`       // 디스토션 사이즈
 	Rendersize  string   `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
 	Status      string   `json:"status"`      // 샷 상태.
