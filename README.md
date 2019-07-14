@@ -109,7 +109,7 @@ $ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프
 관리자만 처리할 수 있습니다.
 
 ```bash
-$ sudo csi3 -initpass Welcom2csi! -id [userid]
+$ sudo csi3 -initpass Welcome2csi! -id [userid]
 ```
 
 - 사용자 제거
