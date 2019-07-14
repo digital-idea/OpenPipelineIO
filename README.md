@@ -25,8 +25,8 @@
 - [x] 유저자료구조 추가 ![user](http://progressed.io/bar/100)
 - [ ] 과거에 사용된 Python CSI2 API를 웹 restAPI로 전환(총46개함수) ![restAPI](http://progressed.io/bar/70)
 - [ ] Multi Task 기능추가. (참고: CSI의 내부구조가 완전히 달라진다.)
-- [ ] 통계툴을 내부에서 처리하도록 변경.(기존 Statistics 페이지 통합)
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전)
+- [ ] 통계툴을 내부에서 처리하도록 변경.(기존 Statistics 페이지 통합)
 - [ ] 웹용 PM 입력기(MultiTask로 변경되면 기존 X,Y축 입력방식이 아닌 웹입력기 제작이 
 필요하다.)
 - [ ] 현 작업내용,현장정보,수정사항이 "날짜;툴;작성자;내용" 형태인것을 맵으로 바꾸기(현재는 CSIv1 구조)
