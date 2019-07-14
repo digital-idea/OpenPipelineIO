@@ -1613,3 +1613,34 @@ func SetFindate(session *mgo.Session, project, name, date string) error {
 	}
 	return nil
 }
+
+// AddTag 함수는 item에 tag를 셋팅한다.
+func AddTag(session *mgo.Session, project, name, inputTag string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	for _, tag := range i.Tag {
+		if inputTag == tag {
+			// 태그가 존재한다. 프로세스를 진행시킬 필요가 없다.
+			return nil
+		}
+	}
+	newTags := append(i.Tag, inputTag)
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

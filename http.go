@@ -188,6 +188,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setjusttimecodeout", handleAPISetJustTimecodeOut)
 	http.HandleFunc("/api/setfinver", handleAPISetFinver)
 	http.HandleFunc("/api/setfindate", handleAPISetFindate)
+	http.HandleFunc("/api/addtag", handleAPIAddTag)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
