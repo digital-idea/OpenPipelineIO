@@ -42,6 +42,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/sethandlein` |
 | /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/sethandleout` |
 | /api/addtag | tag 추가 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0010&tag=테스트" http://192.168.219.104/api/addtag` |
+| /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
