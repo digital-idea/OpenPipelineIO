@@ -2270,7 +2270,6 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
-	var tool string
 	var text string
 	args := r.PostForm
 	for key, values := range args {
@@ -2289,13 +2288,6 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
-		case "tool":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			tool = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -2305,7 +2297,7 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = AddOnset(session, project, name, tool, userID, text)
+	err = AddOnset(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2335,7 +2327,6 @@ func handleAPISetOnsets(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
-	var tool string
 	var text string
 	args := r.PostForm
 	for key, values := range args {
@@ -2354,13 +2345,6 @@ func handleAPISetOnsets(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
-		case "tool":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			tool = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -2383,7 +2367,7 @@ func handleAPISetOnsets(w http.ResponseWriter, r *http.Request) {
 		texts[i], texts[j] = texts[j], texts[i]
 	}
 
-	err = SetOnsets(session, project, name, tool, userID, texts)
+	err = SetOnsets(session, project, name, userID, texts)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

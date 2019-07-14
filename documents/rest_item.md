@@ -44,8 +44,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/addtag | tag 추가 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0010&tag=테스트" http://192.168.219.104/api/addtag` |
 | /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
 | /api/rmtag | tags 삭제 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0020&tag=태그3" http://192.168.219.114/api/rmtag` |
-| /api/addonset | 현장,작업내용 추가 | project, name, tool, text | `$ curl -d "project=TEMP&name=SS_0010&tool=pm&user=김한웅&text=바람이 휘날린다" http://192.168.219.104/api/addonset` |
-| /api/setonsets | 현장,작업내용 교체 | project, name, tool, text | `$ curl -d "project=TEMP&name=SS_0010&tool=pm&user=김한웅&text=첫번째줄. 두번째줄. 세번째줄." http://192.168.219.104/api/setonsets` |
+| /api/addonset | 현장,작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=바람이 휘날린다" http://192.168.219.104/api/addonset` |
+| /api/setonsets | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=첫번째줄. 두번째줄. 세번째줄." http://192.168.219.104/api/setonsets` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기

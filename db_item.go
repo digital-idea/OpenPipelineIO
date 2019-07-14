@@ -1703,7 +1703,7 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 }
 
 // AddOnset 함수는 item에 작업,현장내용을 추가한다.
-func AddOnset(session *mgo.Session, project, name, tool, userID, text string) error {
+func AddOnset(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1719,7 +1719,7 @@ func AddOnset(session *mgo.Session, project, name, tool, userID, text string) er
 		return err
 	}
 	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	note := fmt.Sprintf("%s;%s;%s;%s", time.Now().Format(time.RFC3339), tool, userID, text)
+	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
 	i.Onsetnote = append(i.Onsetnote, note)
 	err = setItem(session, project, i)
 	if err != nil {
@@ -1729,7 +1729,7 @@ func AddOnset(session *mgo.Session, project, name, tool, userID, text string) er
 }
 
 // SetOnsets 함수는 item에 작업,현장내용을 추가한다.
-func SetOnsets(session *mgo.Session, project, name, tool, userID string, texts []string) error {
+func SetOnsets(session *mgo.Session, project, name, userID string, texts []string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1750,7 +1750,7 @@ func SetOnsets(session *mgo.Session, project, name, tool, userID string, texts [
 		if text == "" {
 			continue
 		}
-		note := fmt.Sprintf("%s;%s;%s;%s", time.Now().Format(time.RFC3339), tool, userID, text)
+		note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
 		i.Onsetnote = append(i.Onsetnote, note)
 	}
 	err = setItem(session, project, i)
