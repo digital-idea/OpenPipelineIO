@@ -22,7 +22,7 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -62,7 +62,7 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

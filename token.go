@@ -18,20 +18,20 @@ func GetTokenFromHeader(r *http.Request) (string, error) {
 }
 
 // TokenHandler 함수는 토큰으로 restAPI를 사용할 수 있는지 체크하는 함수이다.
-func TokenHandler(r *http.Request, session *mgo.Session) error {
+func TokenHandler(r *http.Request, session *mgo.Session) (string, AccessLevel, error) {
 	if !*flagAuthmode {
-		return nil
+		return "unknown", 0, nil
 	}
 	key, err := GetTokenFromHeader(r)
 	if err != nil {
-		return err
+		return "", 0, err
 	}
 	token, err := validToken(session, key)
 	if err != nil {
-		return err
+		return "", 0, err
 	}
 	if token.AccessLevel < 2 {
-		return errors.New("Insufficient authority levels")
+		return "", 0, errors.New("Insufficient authority levels")
 	}
-	return nil
+	return token.ID, token.AccessLevel, nil
 }

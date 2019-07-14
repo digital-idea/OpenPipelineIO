@@ -21,7 +21,7 @@ func handleAPISetelliteItems(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -58,7 +58,7 @@ func handleAPISetelliteSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

@@ -26,7 +26,7 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -74,7 +74,7 @@ func handleAPIRmItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -134,7 +134,7 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -172,7 +172,7 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -230,7 +230,7 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -268,7 +268,7 @@ func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -309,7 +309,7 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -355,7 +355,7 @@ func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -429,7 +429,7 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -489,7 +489,7 @@ func handleAPISetDistortionSize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -549,7 +549,7 @@ func handleAPISetJustIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -610,7 +610,7 @@ func handleAPISetHandleIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -671,7 +671,7 @@ func handleAPISetJustOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -732,7 +732,7 @@ func handleAPISetHandleOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -793,7 +793,7 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -873,7 +873,7 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -929,7 +929,7 @@ func handleAPISetCameraPubTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -985,7 +985,7 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1042,7 +1042,7 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1098,7 +1098,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1162,7 +1162,7 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1226,7 +1226,7 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1290,7 +1290,7 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1346,7 +1346,7 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1402,7 +1402,7 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1466,7 +1466,7 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1530,7 +1530,7 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1586,7 +1586,7 @@ func handleAPISetOutputName(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1643,7 +1643,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1699,7 +1699,7 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1760,7 +1760,7 @@ func handleAPISetScanTimecodeIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1815,7 +1815,7 @@ func handleAPISetScanTimecodeOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1870,7 +1870,7 @@ func handleAPISetJustTimecodeIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1925,7 +1925,7 @@ func handleAPISetJustTimecodeOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -1980,7 +1980,7 @@ func handleAPISetFinver(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2035,7 +2035,7 @@ func handleAPISetFindate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2091,7 +2091,7 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2148,7 +2148,7 @@ func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2205,7 +2205,7 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2262,7 +2262,7 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	userID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2270,9 +2270,8 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
-	var user string
-	var text string
 	var tool string
+	var text string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -2297,13 +2296,6 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			tool = v
-		case "user":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			user = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -2313,7 +2305,7 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = AddOnset(session, project, name, tool, user, text)
+	err = AddOnset(session, project, name, tool, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

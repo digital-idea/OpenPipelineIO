@@ -21,7 +21,7 @@ func handleAPIAddproject(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -57,7 +57,7 @@ func handleAPIProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -89,7 +89,7 @@ func handleAPIProjectTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -130,7 +130,7 @@ func handleAPIProjects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = TokenHandler(r, session)
+	_, _, err = TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
