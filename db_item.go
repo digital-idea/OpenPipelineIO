@@ -1701,3 +1701,28 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	}
 	return nil
 }
+
+// AddOnset 함수는 item에 작업,현장내용을 추가한다.
+func AddOnset(session *mgo.Session, project, name, tool, user, text string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	note := fmt.Sprintf("%s;%s;%s;%s", time.Now().Format(time.RFC3339), tool, user, text)
+	i.Onsetnote = append(i.Onsetnote, note)
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}

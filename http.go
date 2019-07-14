@@ -191,6 +191,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/addtag", handleAPIAddTag)
 	http.HandleFunc("/api/rmtag", handleAPIRmTag)
 	http.HandleFunc("/api/settags", handleAPISetTags)
+	http.HandleFunc("/api/addonset", handleAPIAddOnset)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
