@@ -292,7 +292,10 @@
         <sub>스캔키코드: </sub>{{if .ScanTimecodeIn }}{{.ScanTimecodeIn}}{{end}} / {{if .ScanTimecodeOut}}{{.ScanTimecodeOut}}{{end}}<br>
         <sub>스캔시간: </sub>{{if .Scantime}}{{.Scantime}}{{end}}<br>
         <!--연결소스-->
-        <sub>연결소스: </sub><br>{{range .Link | ReverseStringSlice -}}- {{.|note2body|RemovePath}}<a class="reflink" href="dilink://{{.|note2body|GetPath}}">{{.|note2body|GetPath}}</a><br>{{- end}}
+        <sub>연결소스: </sub><br>
+        {{range .Link | ReverseStringSlice }}
+          {{.|note2body|RemovePath}}<a class="reflink" href="dilink://{{.|note2body|GetPath}}">{{.|note2body|GetPath}}</a><br>
+        {{- end}}
     </div>
 </td>
 <!--작업내용 끝-->

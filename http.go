@@ -197,6 +197,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/addpmnote", handleAPIAddPmnote)
 	http.HandleFunc("/api/rmpmnote", handleAPIRmPmnote)
 	http.HandleFunc("/api/setpmnotes", handleAPISetPmnotes)
+	http.HandleFunc("/api/addlink", handleAPIAddLink)
+	http.HandleFunc("/api/rmlink", handleAPIRmLink)
+	http.HandleFunc("/api/setlinks", handleAPISetLinks)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
