@@ -1185,6 +1185,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
+		i.Seq = strings.Split(i.Name, "_")[0]
 		i.Status = ASSIGN
 		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
 		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, strings.Split(i.Name, "_")[0], i.Name)
