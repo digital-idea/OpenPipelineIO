@@ -42,7 +42,7 @@ func handleAPIItems(w http.ResponseWriter, r *http.Request) {
 		Type3d:     str2bool(q.Get("type3d")),
 		Type2d:     str2bool(q.Get("type2d")),
 	}
-	result, err := Search(session, op)
+	result, err := Searchv1(session, op)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

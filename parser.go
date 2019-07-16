@@ -40,8 +40,12 @@ func SearchwordParser(word string) Searchword {
 			}
 		case strings.HasPrefix(w, "@"): // '@'로 시작하는지 체크
 			searchword.user = append(searchword.user, strings.TrimLeft(w, "@"))
+		case strings.HasPrefix(w, "user:"): // 'user:'로 시작하는지 체크
+			searchword.user = append(searchword.user, strings.TrimLeft(w, "user:"))
 		case strings.HasPrefix(w, "#"): // '#'으로 시작하는지 체크
 			searchword.tags = append(searchword.tags, strings.TrimLeft(w, "#"))
+		case strings.HasPrefix(w, "tag:"): // 'tag:'으로 시작하는지 체크
+			searchword.tags = append(searchword.tags, strings.TrimLeft(w, "tag:"))
 		default:
 			//중복 검색어 체크
 			hasWord := false

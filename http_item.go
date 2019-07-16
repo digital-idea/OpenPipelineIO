@@ -137,7 +137,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 
 	// 프로젝트 이름이 빈 문자열이 아니고, 검색어가 있다면 검색을 한다.
 	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
-		rcp.Items, err = Search(session, rcp.Searchop)
+		rcp.Items, err = Searchv1(session, rcp.Searchop)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)

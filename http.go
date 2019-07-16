@@ -200,6 +200,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/addlink", handleAPIAddLink)
 	http.HandleFunc("/api/rmlink", handleAPIRmLink)
 	http.HandleFunc("/api/setlinks", handleAPISetLinks)
+	http.HandleFunc("/api/search", handleAPISearch)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

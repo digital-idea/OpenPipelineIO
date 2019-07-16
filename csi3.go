@@ -335,7 +335,7 @@ func main() {
 				Out:        true,
 				Sortkey:    "slug",
 			}
-			items, err := Search(session, op)
+			items, err := Searchv1(session, op)
 			if err != nil {
 				log.Println(err)
 				os.Exit(1)

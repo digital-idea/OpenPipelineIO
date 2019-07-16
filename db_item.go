@@ -240,8 +240,8 @@ func DistinctDdline(session *mgo.Session, project string, key string) ([]string,
 	return datelist, nil
 }
 
-// Search 함수는 csi 검색함수이다.
-func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
+// Searchv1 함수는 csi 검색함수이다.
+func Searchv1(session *mgo.Session, op SearchOption) ([]Item, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(op.Project)
 	hasTeamName := false
@@ -349,10 +349,6 @@ func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
 					query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
 				}
 				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"justkeycodein": word})  // 삭제예정
-				query = append(query, bson.M{"justkeycodeout": word}) // 삭제예정
-				query = append(query, bson.M{"scankeycodein": word})  // 삭제예정
-				query = append(query, bson.M{"scankeycodeout": word}) // 삭제예정
 				query = append(query, bson.M{"justtimecodein": word})
 				query = append(query, bson.M{"justtimecodeout": word})
 				query = append(query, bson.M{"scantimecodein": word})
