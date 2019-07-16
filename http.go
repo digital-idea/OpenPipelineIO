@@ -195,6 +195,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/rmonset", handleAPIRmOnset)
 	http.HandleFunc("/api/setonsets", handleAPISetOnsets)
 	http.HandleFunc("/api/addpmnote", handleAPIAddPmnote)
+	http.HandleFunc("/api/rmpmnote", handleAPIRmPmnote)
+	http.HandleFunc("/api/setpmnotes", handleAPISetPmnotes)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

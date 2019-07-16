@@ -1821,3 +1821,72 @@ func AddPmnote(session *mgo.Session, project, name, userID, text string) error {
 	}
 	return nil
 }
+
+// RmPmnote 함수는 item에 수정사항을 삭제합니다.
+func RmPmnote(session *mgo.Session, project, name, userID, text string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	var newPmnotes []string
+	for _, note := range i.Pmnote {
+		i := strings.LastIndex(note, ";")
+		if i == -1 {
+			continue
+		}
+		if note[i+1:] == text {
+			continue
+		}
+		newPmnotes = append(newPmnotes, note)
+	}
+	i.Pmnote = newPmnotes
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetPmnotes 함수는 item에 수정내용을 교체합니다.
+func SetPmnotes(session *mgo.Session, project, name, userID string, texts []string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	var pmnotes []string
+	for _, text := range texts {
+		if text == "" {
+			continue
+		}
+		note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
+		pmnotes = append(pmnotes, note)
+	}
+	i.Pmnote = pmnotes
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}
