@@ -1748,9 +1748,10 @@ func RmOnset(session *mgo.Session, project, name, userID, text string) error {
 	var newOnsets []string
 	for _, note := range i.Onsetnote {
 		i := strings.LastIndex(note, ";")
-		fmt.Println(text)
-		fmt.Println(text)
-		if text[i:len(text)-1] == text {
+		if i == -1 {
+			continue
+		}
+		if note[i+1:] == text {
 			continue
 		}
 		newOnsets = append(newOnsets, note)
