@@ -36,7 +36,7 @@ type TaskLevel int
 
 // TaskLevel list
 const (
-	TaskLevel0 = TaskLevel(iota) // 0
+	TaskLevel0 = TaskLevel(iota) // 0 쉬운난이도
 	TaskLevel1                   // 1
 	TaskLevel2                   // 2
 	TaskLevel3                   // 3
