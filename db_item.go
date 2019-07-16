@@ -1795,3 +1795,29 @@ func SetOnsets(session *mgo.Session, project, name, userID string, texts []strin
 	}
 	return nil
 }
+
+// AddPmnote 함수는 item에 수정사항을 추가한다.
+func AddPmnote(session *mgo.Session, project, name, userID, text string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
+	i.Pmnote = append(i.Pmnote, note)
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}

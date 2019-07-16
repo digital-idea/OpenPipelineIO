@@ -35,8 +35,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setscantimecodeout | 스캔 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setscantimecodeout` |
 | /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodein` |
 | /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodeout` |
-| /api/setfinver | 파이널버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" http://192.168.31.172/api/setfinver` |
-| /api/setfindate | 파이널날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" http://192.168.31.172/api/setfindate` |
+| /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" http://192.168.31.172/api/setfinver` |
+| /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" http://192.168.31.172/api/setfindate` |
 | /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/setjustin` |
 | /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/setjustout` |
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/sethandlein` |
@@ -45,8 +45,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
 | /api/rmtag | tags 삭제 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0020&tag=태그3" http://192.168.219.114/api/rmtag` |
 | /api/addonset | 현장,작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=바람이 휘날린다" http://192.168.219.104/api/addonset` |
-| /api/setonsets | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setonsets` |
 | /api/rmonset | 현장,작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=삭제내용" http://192.168.219.104/api/rmonset` |
+| /api/setonsets | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setonsets` |
+| /api/addpmnote | 수정사항 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0010&text=1003프레임 나무제거" http://192.168.219.104/api/addpmnote` |
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
 - 군함도 S001_0001_org 샷 정보를 가지고 오기
