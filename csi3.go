@@ -42,6 +42,7 @@ var (
 	flagMailDNS        = flag.String("maildns", MAILDNS, "mail DNS name")
 	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
+	flagDev            = flag.Bool("dev", false, "devel mode")
 	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
 	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
 	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전
