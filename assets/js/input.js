@@ -1,4 +1,4 @@
-function inputTags(project, name, tags) {
+function setTags(project, name, tags) {
     $.post("/api/settags",
     {
         project: project,
