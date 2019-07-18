@@ -1208,8 +1208,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		Success []Shot
 		Fails   []Shot
 		User    User
+		Devmode bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
 	u, err := getUser(session, ssid.ID)
@@ -1360,8 +1362,10 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		Success []Asset
 		Fails   []Asset
 		User    User
+		Devmode bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
 	u, err := getUser(session, ssid.ID)
