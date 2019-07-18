@@ -83,6 +83,7 @@ type Project struct {
 	ScreenxOverlay           float64       `json:"screenxoverlay"`           // ScreenX에 사용되는 카메라 Overlay 값입니다. 기본값은 1.0입니다.
 	Netapp                   bool          `json:"netapp"`                   // Netapp을 사용하는지 체크
 	NoteHighlight            string        `json:"notehighlight"`            // onsetnote, pmnote에 입력되는 특정 단어를 강조하기 위해 사용된다.
+	ExrCompression           string        `json:"exrcompression"`           // EXR Compression 옵션
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.

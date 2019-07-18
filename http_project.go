@@ -248,6 +248,7 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	renewal.ResizeType = r.FormValue("ResizeType")
 	renewal.PlateExt = r.FormValue("PlateExt")
+	renewal.ExrCompression = r.FormValue("ExrCompression")
 	renewal.Camera = r.FormValue("Camera")
 	renewal.PlateInColorspace = r.FormValue("PlateInColorspace")
 	renewal.PlateOutColorspace = r.FormValue("PlateOutColorspace")

@@ -184,6 +184,20 @@
 								<option value="none" {{if eq .Project.ResizeType "none"}}selected{{end}}>none</option>
 							</select>
 						</div>
+						<div class="col">
+							<small class="form-text text-muted">EXR 압축</small>
+							<select name="ExrCompression" class="form-control">
+								<option value="none" {{if eq .Project.ExrCompression "none"}}selected{{end}}>none</option>
+								<option value="Zip (1 scanline)" {{if eq .Project.ExrCompression "" "Zip (1 scanline)"}}selected{{end}}>Zip (1 scanline)</option>
+								<option value="Zip (16 scanlines)" {{if eq .Project.ExrCompression "" "Zip (16 scanlines)"}}selected{{end}}>Zip (16 scanlines)</option>
+								<option value="PIZ Wavelet (32 scanlines)" {{if eq .Project.ExrCompression "" "PIZ Wavelet (32 scanlines)"}}selected{{end}}>PIZ Wavelet (32 scanlines)</option>
+								<option value="PLE" {{if eq .Project.ExrCompression "" "PLE"}}selected{{end}}>PLE</option>
+								<option value="B44" {{if eq .Project.ExrCompression "" "B44"}}selected{{end}}>B44</option>
+								<option value="B44A" {{if eq .Project.ExrCompression "" "B44A"}}selected{{end}}>B44A</option>
+								<option value="DWAA" {{if eq .Project.ExrCompression "" "DWAA"}}selected{{end}}>DWAA</option>
+								<option value="DWAB" {{if eq .Project.ExrCompression "" "DWAB"}}selected{{end}}>DWAB</option>
+							</select>
+						</div>
 					</div>
 					<div class="row">
 						<div class="col">
