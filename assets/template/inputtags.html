@@ -1,0 +1,38 @@
+{{define "inputtags" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<div class="p-3">
+	<div class="justify-content-center align-items-center p-3">
+		<form action="/" method="POST" name="checkboxs" class="editform text-center">
+			<div class="row">
+				<select name="project" class="form-control col-2">
+					{{range .Projectlist}}
+						<option value="{{.}}">{{.}}</option>
+					{{end}}
+				</select>
+				<input class="form-control col-9" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="">
+				<div class="col-1">
+					<button class="btn btn-primary" id="button">Search</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{{range .Items}}
+	<div class="form-check">
+		<label class="form-check-label">
+		  	<input type="checkbox" class="form-check-input" value="">{{.ID}}
+		</label>
+		<input class="form-control" value="{{range .Tag}}{{.}},{{end}}" type="text" id="{{.Name}}" onchange="inputTags('TEMP', this.id, this.value)">
+	</div>
+{{end}}
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+</html>
+{{end}}

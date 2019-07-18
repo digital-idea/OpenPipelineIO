@@ -143,6 +143,9 @@ func webserver(port string) {
 	http.HandleFunc("/replacepart_submit", handleReplacePartSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
+	// Input
+	http.HandleFunc("/inputtags", handleInputTags)
+
 	// restAPI Project
 	http.HandleFunc("/api/project", handleAPIProject)
 	http.HandleFunc("/api/projects", handleAPIProjects)
