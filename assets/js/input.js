@@ -1,11 +1,19 @@
-function setTags(project, name, tags) {
-    $.post("/api/settags",
-    {
-        project: project,
-        name: name,
-        tags: tags,
-    },
-    function(data, status){
-        console.log("Data: " + data + "\nStatus: " + status);
+function setTags(project, name, tags, token) {
+    $.ajax({
+        url: "/api/settags",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            tags: tags,    
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+
     });
 }
