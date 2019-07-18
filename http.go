@@ -74,10 +74,12 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type recipy struct {
-		Wfs  string
-		User User
+		Wfs     string
+		User    User
+		Devmode bool
 	}
 	rcp := recipy{}
+	rcp.Devmode = *flagDevmode
 	rcp.User = u
 	rcp.Wfs = *flagWFS
 	err = t.ExecuteTemplate(w, "help", rcp)

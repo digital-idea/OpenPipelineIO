@@ -141,8 +141,10 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		Message     string
 		Errors      []string // CSV를 처리하면서 각 라인별로 에러가 있다면 에러내용을 저장한다.
 		User        User
+		Devmode     bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

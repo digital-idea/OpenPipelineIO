@@ -33,9 +33,11 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
-		User User
+		User    User
+		Devmode bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	rcp.User = u
 
@@ -107,6 +109,7 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		Projects []Project
 		MailDNS  string
 		User     User
+		Devmode  bool
 	}
 	rcp := recipe{}
 	u, err := getUser(session, ssid.ID)
@@ -116,6 +119,7 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.User = u
 	rcp.MailDNS = *flagMailDNS
+	rcp.Devmode = *flagDevmode
 	if status != "" {
 		rcp.Projects, err = getStatusProjects(session, ToProjectStatus(status))
 		if err != nil {
@@ -343,8 +347,10 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		Project Project
 		User    User
+		Devmode bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	p, err := getProject(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

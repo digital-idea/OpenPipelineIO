@@ -27,6 +27,20 @@
               <a class="dropdown-item" href="/uploadsetellite">Setellite</a>
             </div>
         </li>
+        {{if .Devmode}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Input
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/inputtag">태그설정(샷분류)</a>
+            <a class="dropdown-item" href="/inputassign">Shot배정</a>
+            <a class="dropdown-item" href="/inputtime">시간정보 수정</a>
+            <a class="dropdown-item" href="/inputonset">작업내용 입력</a>
+            <a class="dropdown-item" href="/inputpmnote">수정내용 입력</a>
+          </div>
+        </li>
+        {{end}}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                {{.User.ID}}

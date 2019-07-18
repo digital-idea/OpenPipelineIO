@@ -36,13 +36,15 @@ var (
 	MAINVER = "v3.0"
 	// MINVER 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MINVER = ""
+	// DEVMODE 값은 컴파일 단계에서 지정한 값으로 바뀐다.
+	DEVMODE = "true"
 
 	// 주요서비스 인수
 	flagDBIP           = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
 	flagMailDNS        = flag.String("maildns", MAILDNS, "mail DNS name")
 	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
-	flagDev            = flag.Bool("dev", false, "devel mode")
+	flagDevmode        = flag.Bool("devmode", str2bool(DEVMODE), "dev mode")
 	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
 	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
 	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전

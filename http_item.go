@@ -1105,8 +1105,10 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		User        User
 		Projectlist []string
+		Devmode     bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1254,8 +1256,10 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		User        User
 		Projectlist []string
+		Devmode     bool
 	}
 	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
