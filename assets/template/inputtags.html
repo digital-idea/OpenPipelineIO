@@ -1,24 +1,36 @@
 {{define "inputtags" }}
 {{template "headBootstrap"}}
 {{template "navbar" .}}
-
-<div class="p-3">
-	<div class="justify-content-center align-items-center p-3">
-		<form action="/" method="POST" name="checkboxs" class="editform text-center">
-			<div class="row">
-				<select name="project" class="form-control col-2">
-					{{range .Projectlist}}
-						<option value="{{.}}">{{.}}</option>
-					{{end}}
-				</select>
-				<input class="form-control col-9" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="">
-				<div class="col-1">
+<form action="/" method="POST">
+	<div class="row justify-content-center align-items-center p-3">
+		<div class="col-lg-6">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<select name="project" class="custom-select">
+						{{range .Projectlist}}
+							<option value="{{.}}">{{.}}</option>
+						{{end}}
+					</select>
+				</div>
+				<input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="">
+				<div class="input-group-append">
+					<select name="Sortkey" class="custom-select">
+						<option value="slug" >정렬 : 샷네임</option>
+						<option value="rnum" >정렬 : 롤넘버</option>
+						<option value="ddline3d" >정렬 : 3D마감</option>
+						<option value="ddline2d" >정렬 : 2D마감</option>
+						<option value="scanframe" >정렬 : 스캔길이</option>
+						<option value="scantime" >정렬 : 스캔날짜</option>
+					</select>
+				</div>
+				<div class="input-group-append">
 					<button class="btn btn-primary" id="button">Search</button>
 				</div>
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
+	
+</form>
 
 {{range .Items}}
 	<div class="form-check">
