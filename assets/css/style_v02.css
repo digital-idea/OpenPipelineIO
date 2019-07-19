@@ -1,0 +1,39 @@
+.bg-assign, .bg-assign:hover {
+    background-color: #FFF76B;
+}
+
+.bg-ready, .bg-ready:hover {
+    background-color: #BEEF37;
+}
+
+.bg-wip, .bg-wip:hover {
+    background-color: #77BB40;
+}
+
+.bg-confirm, .bg-confirm:hover {
+    background-color: #54D6FD;
+}
+
+.bg-none, .bg-none:hover {
+    background-color: #F0F1F0;
+}
+
+.bg-omit, .bg-omit:hover {
+    background-color: #FC9F55;
+}
+
+.bg-hold, .bg-hold:hover {
+    background-color: #989898;
+}
+
+.bg-out, .bg-out:hover {
+    background-color: #EEA4F1;
+}
+
+.bg-done, .bg-done:hover {
+    background-color: #CCCDCC;
+}
+
+.bg-retake, .bg-retake:hover {
+    background-color: #FC8F55;
+}
