@@ -88,7 +88,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
-		Infobarnum  Infobarnum
+		Totalnum    Infobarnum
 		Searchnum   Infobarnum
 		Items       []Item
 		Ddline3d    []string
@@ -168,7 +168,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
+	rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -232,7 +232,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
-		Infobarnum  Infobarnum
+		Totalnum    Infobarnum
 		Searchnum   Infobarnum
 		Items       []Item
 		Ddline3d    []string
@@ -304,7 +304,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -412,7 +412,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
-		Infobarnum  Infobarnum
+		Totalnum    Infobarnum
 		Searchnum   Infobarnum
 		Items       []Item
 		Ddline3d    []string
@@ -477,7 +477,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -933,7 +933,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Project     Project
 		Searchop    SearchOption
-		Infobarnum  Infobarnum
+		Totalnum    Infobarnum
 		Searchnum   Infobarnum
 		Items       []Item
 		Ddline3d    []string
@@ -998,7 +998,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)

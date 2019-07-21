@@ -2,8 +2,8 @@
 <div class="ddline">
     <div class="projectSearch">
         <b>[<span id="projectId">{{.Project.ID}}</span>]</b>
-        {{$total := Minus .Infobarnum.Total .Infobarnum.None }}
-        ({{Add .Infobarnum.Done .Infobarnum.Hold}} / {{Minus $total .Infobarnum.Omit}}) /
+        {{$total := Minus .Totalnum.Total .Totalnum.None }}
+        ({{Add .Totalnum.Done .Totalnum.Hold}} / {{Minus $total .Totalnum.Omit}}) /
         <b>검색 {{.Searchnum.Search}}건</b> /
         2D({{.Searchnum.Shot2d}}),
         3D({{.Searchnum.Shot3d}}),
