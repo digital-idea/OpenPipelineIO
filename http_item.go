@@ -58,6 +58,49 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
+// handleSearchSubmitv2 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
+func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	Project := r.FormValue("Project")
+	Searchword := r.FormValue("Searchword")
+	Sortkey := r.FormValue("Sortkey")
+	Assign := str2bool(r.FormValue("Assign"))
+	Ready := str2bool(r.FormValue("Ready"))
+	Wip := str2bool(r.FormValue("Wip"))
+	Confirm := str2bool(r.FormValue("Confirm"))
+	Done := str2bool(r.FormValue("Done"))
+	Omit := str2bool(r.FormValue("Omit"))
+	Hold := str2bool(r.FormValue("Hold"))
+	Out := str2bool(r.FormValue("Out"))
+	None := str2bool(r.FormValue("None"))
+	Template := "inputtags" //r.FormValue("Template")
+	redirectURL := fmt.Sprintf(`/%s?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s`,
+		Template,
+		Project,
+		Searchword,
+		Sortkey,
+		Assign,
+		Ready,
+		Wip,
+		Confirm,
+		Done,
+		Omit,
+		Hold,
+		Out,
+		None,
+		Template,
+	)
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+}
+
 // handleSearch 함수는 검색결과를 반환하는 페이지다.
 func handleSearch(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)

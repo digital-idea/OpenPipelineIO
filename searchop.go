@@ -6,10 +6,10 @@ import (
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
-	Project      string // 선택한 프로젝트
-	Searchword   string // 검색어
-	Sortkey      string // 정렬방식
-	PostEndpoint string // Post 전송 URL
+	Project    string // 선택한 프로젝트
+	Searchword string // 검색어
+	Sortkey    string // 정렬방식
+	Template   string // 템플릿 이름
 	// 상태
 	Assign  bool
 	Ready   bool
@@ -25,8 +25,6 @@ type SearchOption struct {
 	Assets bool
 	Type3d bool
 	Type2d bool
-	// Template
-	Template string
 }
 
 // SearchOption과 관련된 메소드
@@ -70,20 +68,19 @@ func (op *SearchOption) setStatusNone() {
 func handleRequestToSearchOption(r *http.Request) SearchOption {
 	q := r.URL.Query()
 	op := SearchOption{
-		Project:      q.Get("project"),
-		Searchword:   q.Get("searchword"),
-		Sortkey:      q.Get("sortkey"),
-		Template:     q.Get("template"),
-		PostEndpoint: "/" + q.Get("endpoint"),
-		Assign:       str2bool(q.Get("assign")),
-		Ready:        str2bool(q.Get("ready")),
-		Wip:          str2bool(q.Get("wip")),
-		Confirm:      str2bool(q.Get("confirm")),
-		Done:         str2bool(q.Get("done")),
-		Omit:         str2bool(q.Get("omit")),
-		Hold:         str2bool(q.Get("hold")),
-		Out:          str2bool(q.Get("out")),
-		None:         str2bool(q.Get("none")),
+		Project:    q.Get("project"),
+		Searchword: q.Get("searchword"),
+		Sortkey:    q.Get("sortkey"),
+		Template:   q.Get("template"),
+		Assign:     str2bool(q.Get("assign")),
+		Ready:      str2bool(q.Get("ready")),
+		Wip:        str2bool(q.Get("wip")),
+		Confirm:    str2bool(q.Get("confirm")),
+		Done:       str2bool(q.Get("done")),
+		Omit:       str2bool(q.Get("omit")),
+		Hold:       str2bool(q.Get("hold")),
+		Out:        str2bool(q.Get("out")),
+		None:       str2bool(q.Get("none")),
 	}
 	return op
 }

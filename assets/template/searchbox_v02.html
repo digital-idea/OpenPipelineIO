@@ -1,16 +1,16 @@
 {{define "searchbox_v02"}}
-<form action="{{.SearchOption.PostEndpoint}}" method="POST">
+<form action="/searchsubmitv2" method="POST">
 	<div class="row justify-content-center align-items-center p-3">
 		<div class="col-lg-6">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<select name="project" class="custom-select">
+					<select name="Project" class="custom-select">
 						{{range .Projectlist}}
 							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}
 					</select>
 				</div>
-				<input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="{{.SearchOption.Searchword}}">
+				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
 					<select name="Sortkey" class="custom-select">
 						<option value="slug" {{if eq $.SearchOption.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>

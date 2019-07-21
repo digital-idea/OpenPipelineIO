@@ -53,6 +53,7 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
+	rcp.SearchOption.Template = "inputtags"
 	rcp.Items, err = Searchv1(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -104,8 +104,7 @@ func webserver(port string) {
 	http.Handle("/thumbnail/", maxAgeHandler(3600, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
 	http.HandleFunc("/", handleIndex)
 	// Item
-	http.HandleFunc("/search", handleSearch)
-	http.HandleFunc("/searchsubmit", handleSearchSubmit)
+	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
 	http.HandleFunc("/tag/", handleTags)
 	http.HandleFunc("/assettags/", handleAssettags)
 	http.HandleFunc("/ddline/", handleDdline)
@@ -213,7 +212,10 @@ func webserver(port string) {
 	http.HandleFunc("/api/user", handleAPIUser)
 	http.HandleFunc("/api/users", handleAPISearchUser)
 
-	// Deprecated: 사용하지 않는 API, 과거호환성을 위해서 남겨둠
+	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
+	http.HandleFunc("/search", handleSearch)
+	http.HandleFunc("/searchsubmit", handleSearchSubmit)
+
 	http.HandleFunc("/api/items", handleAPIItems)
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
