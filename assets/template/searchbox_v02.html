@@ -6,19 +6,19 @@
 				<div class="input-group-prepend">
 					<select name="project" class="custom-select">
 						{{range .Projectlist}}
-							<option value="{{.}}">{{.}}</option>
+							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}
 					</select>
 				</div>
-				<input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="">
+				<input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" name="searchword" autofocus="autofocus" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
 					<select name="Sortkey" class="custom-select">
-						<option value="slug">정렬 : 샷네임</option>
-						<option value="rnum">정렬 : 롤넘버</option>
-						<option value="ddline3d">정렬 : 3D마감</option>
-						<option value="ddline2d">정렬 : 2D마감</option>
-						<option value="scanframe">정렬 : 스캔길이</option>
-						<option value="scantime">정렬 : 스캔날짜</option>
+						<option value="slug" {{if eq $.SearchOption.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>
+						<option value="rnum" {{if eq $.SearchOption.Sortkey "rnum"}}selected{{end}}>정렬 : 롤넘버</option>
+						<option value="ddline3d" {{if eq $.SearchOption.Sortkey "ddline3d"}}selected{{end}}>정렬 : 3D마감</option>
+						<option value="ddline2d" {{if eq $.SearchOption.Sortkey "ddline2d"}}selected{{end}}>정렬 : 2D마감</option>
+						<option value="scanframe" {{if eq $.SearchOption.Sortkey "scanframe"}}selected{{end}}>정렬 : 스캔길이</option>
+						<option value="scantime" {{if eq $.SearchOption.Sortkey "scantime"}}selected{{end}}>정렬 : 스캔날짜</option>
 					</select>
 				</div>
 				<div class="input-group-append">
@@ -30,22 +30,38 @@
     <div class="row justify-content-center align-items-center pl-3 pr-3">
         <div class="row pl-3 pr-3">
             <div class="col">
-                <a class="btn btn-sm mb-2 bg-assign text-dark" href="/"><input type="checkbox" class="mr-2">assign(0)</a>
-                <a class="btn btn-sm mb-2 bg-ready"><input type="checkbox" class="mr-2">ready(0)</a>
-                <a class="btn btn-sm mb-2 bg-wip"><input type="checkbox" class="mr-2">wip(0)</a>
-                <a class="btn btn-sm mb-2 bg-confirm"><input type="checkbox" class="mr-2">confirm(0)</a>
-                <a class="btn btn-sm mb-2 bg-done"><input type="checkbox" class="mr-2">done(0)</a>
-                <a class="btn btn-sm mb-2 bg-omit"><input type="checkbox" class="mr-2">omit(0)</a>
-                <a class="btn btn-sm mb-2 bg-out"><input type="checkbox" class="mr-2">out(0)</a>
-                <a class="btn btn-sm mb-2 bg-none"><input type="checkbox" class="mr-2">none(0)</a>
+				<a class="btn btn-sm mb-2 bg-assign text-dark" href="/tag/{{.SearchOption.Project}}/assign">
+					<input type="checkbox" class="mr-2" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>assign(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-ready text-dark" href="/tag/{{.SearchOption.Project}}/ready">
+					<input type="checkbox" class="mr-2" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>ready(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-wip text-dark" href="/tag/{{.SearchOption.Project}}/wip">
+					<input type="checkbox" class="mr-2" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>wip(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-confirm text-dark" href="/tag/{{.SearchOption.Project}}/confirm">
+					<input type="checkbox" class="mr-2" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>confirm(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-done text-dark" href="/tag/{{.SearchOption.Project}}/done">
+					<input type="checkbox" class="mr-2" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>done(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-omit text-dark" href="/tag/{{.SearchOption.Project}}/omit">
+					<input type="checkbox" class="mr-2" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>omit(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-out text-dark" href="/tag/{{.SearchOption.Project}}/out">
+					<input type="checkbox" class="mr-2" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>out(0)
+				</a>
+				<a class="btn btn-sm mb-2 bg-none text-dark" href="/tag/{{.SearchOption.Project}}/none">
+					<input type="checkbox" class="mr-2" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>none(0)
+				</a>
             </div>
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
-                <a class="btn btn-sm btn-outline-secondary mb-2">선택모드</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2">2D</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2">3D</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2">Asset</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark">선택모드</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset</a>
             </div>
         </div>
     </div>

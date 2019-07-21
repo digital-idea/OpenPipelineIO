@@ -20,6 +20,8 @@ type SearchOption struct {
 	Assets bool
 	Type3d bool
 	Type2d bool
+	// Template
+	Template string
 }
 
 // SearchOption과 관련된 메소드

@@ -31,6 +31,8 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		Projectlist []string
 		Items       []Item
+		Project     string
+		SearchOption
 	}
 	rcp := recipe{}
 	rcp.Devmode = *flagDevmode
@@ -50,20 +52,29 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	q := r.URL.Query()
 	op := SearchOption{
-		Project:    "TEMP",
-		Searchword: "SS",
-		Assign:     true,
-		Ready:      true,
-		Wip:        true,
-		Confirm:    true,
+		Project:    q.Get("project"),
+		Searchword: q.Get("searchword"),
+		Sortkey:    q.Get("sortkey"),
+		Assign:     str2bool(q.Get("assign")),
+		Ready:      str2bool(q.Get("ready")),
+		Wip:        str2bool(q.Get("wip")),
+		Confirm:    str2bool(q.Get("confirm")),
+		Done:       str2bool(q.Get("done")),
+		Omit:       str2bool(q.Get("omit")),
+		Hold:       str2bool(q.Get("hold")),
+		Out:        str2bool(q.Get("out")),
+		None:       str2bool(q.Get("none")),
+		Template:   q.Get("template"),
 	}
+	rcp.SearchOption = op
 	rcp.Items, err = Searchv1(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "inputtags", rcp)
+	err = t.ExecuteTemplate(w, op.Template, rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
