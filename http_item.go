@@ -168,7 +168,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+	rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -304,7 +304,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -477,7 +477,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -998,7 +998,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Infobarnum, err = Resultnum(session, rcp.Searchop.Project)
+		rcp.Infobarnum, err = Totalnum(session, rcp.Searchop.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -637,7 +637,7 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 	return results, nil
 }
 
-// Searchnum 함수는 검색된 결과(search, ddline, tag)의 상태별 갯수를 검색한다.
+// Searchnum 함수는 검색된 결과에 대한 상태별 갯수를 검색한다.
 func Searchnum(project string, items []Item) (Infobarnum, error) {
 	var results Infobarnum
 	results.Search = len(items)
@@ -678,8 +678,8 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 	return results, nil
 }
 
-// Resultnum 함수는 프로젝트의 전체 샷에 대한 상태별 갯수를 검색한다.
-func Resultnum(session *mgo.Session, project string) (Infobarnum, error) {
+// Totalnum 함수는 프로젝트의 전체샷에 대한 상태 갯수를 검색한다.
+func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	if project == "" {
 		return Infobarnum{}, nil
 	}
