@@ -1,5 +1,9 @@
 package main
 
+import (
+	"net/http"
+)
+
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
 	Project      string // 선택한 프로젝트
@@ -61,4 +65,25 @@ func (op *SearchOption) setStatusNone() {
 	op.Hold = false
 	op.Out = false
 	op.None = false
+}
+
+func handleRequestToSearchOption(r *http.Request) SearchOption {
+	q := r.URL.Query()
+	op := SearchOption{
+		Project:      q.Get("project"),
+		Searchword:   q.Get("searchword"),
+		Sortkey:      q.Get("sortkey"),
+		Template:     q.Get("template"),
+		PostEndpoint: "/" + q.Get("endpoint"),
+		Assign:       str2bool(q.Get("assign")),
+		Ready:        str2bool(q.Get("ready")),
+		Wip:          str2bool(q.Get("wip")),
+		Confirm:      str2bool(q.Get("confirm")),
+		Done:         str2bool(q.Get("done")),
+		Omit:         str2bool(q.Get("omit")),
+		Hold:         str2bool(q.Get("hold")),
+		Out:          str2bool(q.Get("out")),
+		None:         str2bool(q.Get("none")),
+	}
+	return op
 }
