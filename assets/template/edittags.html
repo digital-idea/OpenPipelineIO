@@ -1,0 +1,12 @@
+{{define "edittags" }}
+
+{{range .Items}}
+	<div class="form-check">
+		<label class="form-check-label">
+		  	<input type="checkbox" class="form-check-input" value="">{{.ID}}
+		</label>
+		<input class="form-control" value="{{range .Tag}}{{.}},{{end}}" type="text" onchange="setTags('TEMP', '{{.Name}}', this.value, '{{$.User.Token}}')">
+	</div>
+{{end}}
+
+{{end}}

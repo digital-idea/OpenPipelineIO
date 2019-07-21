@@ -2,16 +2,7 @@
 {{template "headBootstrap"}}
 {{template "navbar" .}}
 {{template "searchbox_v02" .}}
-
-{{range .Items}}
-	<div class="form-check">
-		<label class="form-check-label">
-		  	<input type="checkbox" class="form-check-input" value="">{{.ID}}
-		</label>
-		<input class="form-control" value="{{range .Tag}}{{.}},{{end}}" type="text" onchange="setTags('TEMP', '{{.Name}}', this.value, '{{$.User.Token}}')">
-	</div>
-{{end}}
-
+{{template "edittags" .}}
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>

@@ -2,9 +2,10 @@ package main
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
-	Project    string // 선택한 프로젝트
-	Searchword string // 검색어
-	Sortkey    string // 정렬방식
+	Project      string // 선택한 프로젝트
+	Searchword   string // 검색어
+	Sortkey      string // 정렬방식
+	PostEndpoint string // Post 전송 URL
 	// 상태
 	Assign  bool
 	Ready   bool

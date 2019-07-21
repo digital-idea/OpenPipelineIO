@@ -54,19 +54,20 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	op := SearchOption{
-		Project:    q.Get("project"),
-		Searchword: q.Get("searchword"),
-		Sortkey:    q.Get("sortkey"),
-		Assign:     str2bool(q.Get("assign")),
-		Ready:      str2bool(q.Get("ready")),
-		Wip:        str2bool(q.Get("wip")),
-		Confirm:    str2bool(q.Get("confirm")),
-		Done:       str2bool(q.Get("done")),
-		Omit:       str2bool(q.Get("omit")),
-		Hold:       str2bool(q.Get("hold")),
-		Out:        str2bool(q.Get("out")),
-		None:       str2bool(q.Get("none")),
-		Template:   q.Get("template"),
+		Project:      q.Get("project"),
+		Searchword:   q.Get("searchword"),
+		Sortkey:      q.Get("sortkey"),
+		Assign:       str2bool(q.Get("assign")),
+		Ready:        str2bool(q.Get("ready")),
+		Wip:          str2bool(q.Get("wip")),
+		Confirm:      str2bool(q.Get("confirm")),
+		Done:         str2bool(q.Get("done")),
+		Omit:         str2bool(q.Get("omit")),
+		Hold:         str2bool(q.Get("hold")),
+		Out:          str2bool(q.Get("out")),
+		None:         str2bool(q.Get("none")),
+		Template:     q.Get("template"),
+		PostEndpoint: "/searchv2",
 	}
 	rcp.SearchOption = op
 	rcp.Items, err = Searchv1(session, op)
