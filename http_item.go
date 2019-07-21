@@ -247,6 +247,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
 	rcp.MailDNS = *flagMailDNS
+	rcp.ID = ssid.ID
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -426,6 +427,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
 	rcp.MailDNS = *flagMailDNS
+	rcp.ID = ssid.ID
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
