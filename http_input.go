@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"gopkg.in/mgo.v2"
 )
@@ -53,7 +54,7 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
-	rcp.SearchOption.Template = "inputtags"
+	rcp.SearchOption.Template = strings.Trim(r.URL.Path, "/")
 	rcp.Items, err = Searchv1(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
