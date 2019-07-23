@@ -146,6 +146,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
 	u.Parts = Str2Tags(r.FormValue("Parts"))
+	u.Parts = append(u.Parts, Str2Tags(r.FormValue("AdditionalParts"))...)
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
@@ -319,6 +320,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
 	u.Parts = Str2Tags(r.FormValue("Parts"))
+	u.Parts = append(u.Parts, Str2Tags(r.FormValue("AdditionalParts"))...)
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
