@@ -142,6 +142,9 @@ func webserver(port string) {
 	http.HandleFunc("/replacepart_submit", handleReplacePartSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
+	// Part
+	http.HandleFunc("/addpart", handleAddPart)
+
 	// Input
 	http.HandleFunc("/inputtags", handleInputTags)
 

@@ -1,0 +1,49 @@
+{{define "addpart" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+
+<div class="container p-5">
+    <form action="/addpart_submit" method="POST">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading">Add Part</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>Code</label>
+                <input type="text" name="ID" class="form-control" placeholder="ID">
+                <small class="form-text text-muted">Part Code를 입력해주세요.</small>
+                <small class="form-text text-muted">이 코드는 Part ID 및 메일알리아스로 사용됩니다.</small>
+            </div>
+            <div class="form-group">
+                <label>한글명</label>
+                <input type="text" name="PartKor" class="form-control" placeholder="한글명">
+                <small class="form-text text-muted">Part 한글명</small>
+            </div>
+            <div class="form-group">
+                <label>영문명</label>
+                <input type="text" name="PartEng" class="form-control" placeholder="한글명">
+                <small class="form-text text-muted">Part 영문명</small>
+            </div>
+            <div class="form-group">
+                <label>카테고리</label>
+                <input type="text" name="Category" class="form-control" placeholder="Category">
+                <small class="form-text text-muted">Part 상위부서 및 정보</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">Create Part</button>
+    </div>
+    </form>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+
