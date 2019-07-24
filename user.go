@@ -55,7 +55,7 @@ type User struct {
 	LastPort      string      `json:"lastport"`      // 최근 접속 Port
 	Thumbnail     bool        `json:"thumbnail"`     // 썸네일 유무
 	Token         string      `json:"token"`         // restAPI Token 키
-	Partscode     string      `json:"partscode"`     // parts code 문자열
+	PartID        string      `json:"partID"`        // partID 문자열
 }
 
 // Token 자료구조. 사용자가 가입될 때 user.token DB에 저장된다. 모든 유저의 Token를 매번 비교하지않고, Token 키의 유효성을 바로 체크하기 위해서 사용한다.
