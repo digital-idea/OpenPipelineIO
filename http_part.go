@@ -89,3 +89,56 @@ func handleAddPartSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/parts", http.StatusSeeOther)
 }
+
+// handleParts 함수는 parts를 볼 수 있는 페이지이다.
+func handleParts(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Parts   []Part
+		Devmode bool
+		User
+		MailDNS string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
+	rcp.Parts, err = allParts(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}

@@ -143,6 +143,7 @@ func webserver(port string) {
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
 	// Part
+	http.HandleFunc("/parts", handleParts)
 	http.HandleFunc("/addpart", handleAddPart)
 	http.HandleFunc("/addpartsubmit", handleAddPartSubmit)
 

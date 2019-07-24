@@ -35,3 +35,15 @@ func addPart(session *mgo.Session, p Part) error {
 	}
 	return nil
 }
+
+// allParts 함수는 모든 Part를 반환한다.
+func allParts(session *mgo.Session) ([]Part, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("part").C("parts")
+	var result []Part
+	err := c.Find(bson.M{}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
