@@ -8,10 +8,66 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// addTeam 함수는 Part를 추가하는 함수이다.
+// addDivision 함수는 Division을 추가하는 함수이다.
+func addDivision(session *mgo.Session, d Division) error {
+	if d.ID == "" {
+		err := errors.New("ID가 빈 문자열입니다. Division 을 생성할 수 없습니다")
+		log.Println(err)
+		return err
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+
+	num, err := c.Find(bson.M{"id": d.ID}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		err = errors.New(d.ID + " ID를 가진 Division이 이미 DB에 존재합니다.")
+		log.Println(err)
+		return err
+	}
+	err = c.Insert(d)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// addDepartment 함수는 Department 를 추가하는 함수이다.
+func addDepartment(session *mgo.Session, d Department) error {
+	if d.ID == "" {
+		err := errors.New("ID가 빈 문자열입니다. Department 를 생성할 수 없습니다")
+		log.Println(err)
+		return err
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("departments")
+
+	num, err := c.Find(bson.M{"id": d.ID}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		err = errors.New(d.ID + " ID를 가진 Department 가 이미 DB에 존재합니다.")
+		log.Println(err)
+		return err
+	}
+	err = c.Insert(d)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// addTeam 함수는 Team을 추가하는 함수이다.
 func addTeam(session *mgo.Session, t Team) error {
 	if t.ID == "" {
-		err := errors.New("ID가 빈 문자열입니다. 유저를 생성할 수 없습니다")
+		err := errors.New("ID가 빈 문자열입니다. Team을 생성할 수 없습니다")
 		log.Println(err)
 		return err
 	}
@@ -29,6 +85,62 @@ func addTeam(session *mgo.Session, t Team) error {
 		return err
 	}
 	err = c.Insert(t)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// addRole 함수는 Role을 추가하는 함수이다.
+func addRole(session *mgo.Session, r Role) error {
+	if r.ID == "" {
+		err := errors.New("ID가 빈 문자열입니다. Role 을 생성할 수 없습니다")
+		log.Println(err)
+		return err
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("roles")
+
+	num, err := c.Find(bson.M{"id": r.ID}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		err = errors.New(r.ID + " ID를 가진 Role이 이미 DB에 존재합니다.")
+		log.Println(err)
+		return err
+	}
+	err = c.Insert(r)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// addPosition 함수는 Position을 추가하는 함수이다.
+func addPosition(session *mgo.Session, p Position) error {
+	if p.ID == "" {
+		err := errors.New("ID가 빈 문자열입니다. Position 을 생성할 수 없습니다")
+		log.Println(err)
+		return err
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("positions")
+
+	num, err := c.Find(bson.M{"id": p.ID}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		err = errors.New(p.ID + " ID를 가진 Position이 이미 DB에 존재합니다.")
+		log.Println(err)
+		return err
+	}
+	err = c.Insert(p)
 	if err != nil {
 		log.Println(err)
 		return err

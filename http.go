@@ -148,8 +148,16 @@ func webserver(port string) {
 	http.HandleFunc("/teams", handleTeams)
 	http.HandleFunc("/roles", handleRoles)
 	http.HandleFunc("/positions", handlePositions)
-	http.HandleFunc("/addteam", handleAddTeam)
+	http.HandleFunc("/adddivision", handleAddOrganization)
+	http.HandleFunc("/adddepartment", handleAddOrganization)
+	http.HandleFunc("/addteam", handleAddOrganization)
+	http.HandleFunc("/addrole", handleAddOrganization)
+	http.HandleFunc("/addposition", handleAddOrganization)
+	http.HandleFunc("/adddivisionsubmit", handleAddDivisionSubmit)
+	http.HandleFunc("/adddepartmentsubmit", handleAddDepartmentSubmit)
 	http.HandleFunc("/addteamsubmit", handleAddTeamSubmit)
+	http.HandleFunc("/addrolesubmit", handleAddRoleSubmit)
+	http.HandleFunc("/addpositionsubmit", handleAddPositionSubmit)
 
 	// Input
 	http.HandleFunc("/inputtags", handleInputTags)

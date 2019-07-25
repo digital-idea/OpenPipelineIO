@@ -8,8 +8,8 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleAddTeam 함수는 team를 추가하는 페이지이다.
-func handleAddTeam(w http.ResponseWriter, r *http.Request) {
+// handleAddOrganization 함수는 team를 추가하는 페이지이다.
+func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -106,6 +106,74 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAddDivisionSubmit 함수는 Division을 추가합니다.
+func handleAddDivisionSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("ID")
+	nameKor := r.FormValue("NameKor")
+	nameEng := r.FormValue("NameEng")
+	d := Division{
+		ID:      id,
+		NameKor: nameKor,
+		NameEng: nameEng,
+	}
+	err = addDivision(session, d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/divisions", http.StatusSeeOther)
+}
+
+// handleAddDepartmentSubmit 함수는 Department를 추가합니다.
+func handleAddDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("ID")
+	nameKor := r.FormValue("NameKor")
+	nameEng := r.FormValue("NameEng")
+	d := Department{
+		ID:      id,
+		NameKor: nameKor,
+		NameEng: nameEng,
+	}
+	err = addDepartment(session, d)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/departments", http.StatusSeeOther)
+}
+
 // handleAddTeamSubmit 함수는 team을 추가합니다.
 func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -139,6 +207,74 @@ func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/teams", http.StatusSeeOther)
+}
+
+// handleAddRoleSubmit 함수는 Role 을 추가합니다.
+func handleAddRoleSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("ID")
+	nameKor := r.FormValue("NameKor")
+	nameEng := r.FormValue("NameEng")
+	role := Role{
+		ID:      id,
+		NameKor: nameKor,
+		NameEng: nameEng,
+	}
+	err = addRole(session, role)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/roles", http.StatusSeeOther)
+}
+
+// handleAddPositionSubmit 함수는 Position 을 추가합니다.
+func handleAddPositionSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("ID")
+	nameKor := r.FormValue("NameKor")
+	nameEng := r.FormValue("NameEng")
+	p := Position{
+		ID:      id,
+		NameKor: nameKor,
+		NameEng: nameEng,
+	}
+	err = addPosition(session, p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/positions", http.StatusSeeOther)
 }
 
 // handleDivisions 함수는 divisions를 볼 수 있는 페이지이다.
