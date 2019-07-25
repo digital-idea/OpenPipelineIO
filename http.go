@@ -138,14 +138,14 @@ func webserver(port string) {
 	http.HandleFunc("/updatepassword_submit", handleUpdatePasswordSubmit)
 	http.HandleFunc("/edituser", handleEditUser)
 	http.HandleFunc("/edituser_submit", handleEditUserSubmit)
-	http.HandleFunc("/replacepart", handleReplacePart)
-	http.HandleFunc("/replacepart_submit", handleReplacePartSubmit)
+	http.HandleFunc("/replacetag", handleReplaceTag)
+	http.HandleFunc("/replacetag_submit", handleReplaceTagSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
-	// Part
-	http.HandleFunc("/parts", handleParts)
-	http.HandleFunc("/addpart", handleAddPart)
-	http.HandleFunc("/addpartsubmit", handleAddPartSubmit)
+	// Organization
+	http.HandleFunc("/teams", handleTeams)
+	http.HandleFunc("/addteam", handleAddTeam)
+	http.HandleFunc("/addteamsubmit", handleAddTeamSubmit)
 
 	// Input
 	http.HandleFunc("/inputtags", handleInputTags)

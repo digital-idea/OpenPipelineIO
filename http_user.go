@@ -145,8 +145,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Phone = r.FormValue("Phone")
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
-	u.Parts = Str2Tags(r.FormValue("Parts"))
-	u.Parts = append(u.Parts, Str2Tags(r.FormValue("AdditionalParts"))...)
+	u.Tags = Str2Tags(r.FormValue("Tags"))
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
@@ -319,8 +318,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Phone = r.FormValue("Phone")
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
-	u.Parts = Str2Tags(r.FormValue("Parts"))
-	u.Parts = append(u.Parts, Str2Tags(r.FormValue("AdditionalParts"))...)
+	u.Tags = Str2Tags(r.FormValue("Tags"))
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
@@ -630,8 +628,8 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// handleReplacePart 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
-func handleReplacePart(w http.ResponseWriter, r *http.Request) {
+// handleReplaceTag 함수는 유저에 설정된 태그를 변경하는 페이지이다.
+func handleReplaceTag(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -668,15 +666,15 @@ func handleReplacePart(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "replacepart", rcp)
+	err = t.ExecuteTemplate(w, "replacetag", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
-// handleReplacePartSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
-func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
+// handleReplaceTagSubmit 함수는 유저에 설정된 부서 태그를 변경하는 페이지이다.
+func handleReplaceTagSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -699,8 +697,8 @@ func handleReplacePartSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// Parts replace
-	err = ReplacePart(session, src, dst)
+	// Tags replace
+	err = ReplaceTags(session, src, dst)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
