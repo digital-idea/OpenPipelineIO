@@ -16,7 +16,7 @@ func addPart(session *mgo.Session, p Part) error {
 		return err
 	}
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("part").C("parts")
+	c := session.DB("organization").C("parts")
 
 	num, err := c.Find(bson.M{"id": p.ID}).Count()
 	if err != nil {
@@ -39,7 +39,7 @@ func addPart(session *mgo.Session, p Part) error {
 // allParts 함수는 모든 Part를 반환한다.
 func allParts(session *mgo.Session) ([]Part, error) {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("part").C("parts")
+	c := session.DB("organization").C("parts")
 	var result []Part
 	err := c.Find(bson.M{}).All(&result)
 	if err != nil {
