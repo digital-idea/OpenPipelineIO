@@ -36,11 +36,59 @@ func addTeam(session *mgo.Session, t Team) error {
 	return nil
 }
 
+// allDivisions 함수는 모든 Division을 반환한다.
+func allDivisions(session *mgo.Session) ([]Division, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	var result []Division
+	err := c.Find(bson.M{}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
+// allDepartments 함수는 모든 Department를 반환한다.
+func allDepartments(session *mgo.Session) ([]Department, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("departments")
+	var result []Department
+	err := c.Find(bson.M{}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 // allTeams 함수는 모든 Team을 반환한다.
 func allTeams(session *mgo.Session) ([]Team, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("organization").C("teams")
 	var result []Team
+	err := c.Find(bson.M{}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
+// allRoles 함수는 모든 Role을 반환한다.
+func allRoles(session *mgo.Session) ([]Role, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("roles")
+	var result []Role
+	err := c.Find(bson.M{}).All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
+// allPositions 함수는 모든 Position 을 반환한다.
+func allPositions(session *mgo.Session) ([]Position, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("positions")
+	var result []Position
 	err := c.Find(bson.M{}).All(&result)
 	if err != nil {
 		return result, err

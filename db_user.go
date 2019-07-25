@@ -256,7 +256,7 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 		wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
 		wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
 		wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"parts": &bson.RegEx{Pattern: word}})
+		wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word}})
 		wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
 		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
 	}
@@ -293,20 +293,20 @@ func vaildUser(session *mgo.Session, id, pw string) error {
 	return nil
 }
 
-// UserTags 함수는 전체 사용자에 등록된 Parts(부서,소속) 분석하여 하나의 Parts(부서,소속) 태그리스트를 반환합니다.
+// UserTags 함수는 전체 사용자에 등록된 Tags를 분석하여 태그리스트를 반환합니다.
 func UserTags(session *mgo.Session) ([]string, error) {
-	var parts []string
+	var tags []string
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
-	err := c.Find(bson.M{}).Distinct("parts", &parts)
+	err := c.Find(bson.M{}).Distinct("tags", &tags)
 	if err != nil {
 		return nil, err
 	}
-	sort.Strings(parts)
-	return parts, nil
+	sort.Strings(tags)
+	return tags, nil
 }
 
-// ReplaceTags 함수는 전체 사용자에 등록된 Parts(부서,소속) 의 이름을 변경한다.
+// ReplaceTags 함수는 전체 사용자에 등록된 태그의 이름을 변경한다.
 func ReplaceTags(session *mgo.Session, old, new string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")

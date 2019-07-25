@@ -17,7 +17,7 @@
                     <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
                 </p>
                 <div class="col parts p-1">
-                    {{range .User.Parts}}
+                    {{range .User.Tags}}
                         <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
                     {{end}}
                 </div>

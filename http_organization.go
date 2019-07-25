@@ -141,6 +141,112 @@ func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/teams", http.StatusSeeOther)
 }
 
+// handleDivisions 함수는 divisions를 볼 수 있는 페이지이다.
+func handleDivisions(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Divisions []Division
+		Devmode   bool
+		User
+		MailDNS string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
+	rcp.Divisions, err = allDivisions(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleDepartments 함수는 departments를 볼 수 있는 페이지이다.
+func handleDepartments(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Departments []Department
+		Devmode     bool
+		User
+		MailDNS string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
+	rcp.Departments, err = allDepartments(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // handleTeams 함수는 teams를 볼 수 있는 페이지이다.
 func handleTeams(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -176,6 +282,112 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Teams, err = allTeams(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleRoles 함수는 roles를 볼 수 있는 페이지이다.
+func handleRoles(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Roles   []Role
+		Devmode bool
+		User
+		MailDNS string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
+	rcp.Roles, err = allRoles(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handlePositions 함수는 positions를 볼 수 있는 페이지이다.
+func handlePositions(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		Positions []Position
+		Devmode   bool
+		User
+		MailDNS string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
+	rcp.Positions, err = allPositions(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

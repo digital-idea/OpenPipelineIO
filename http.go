@@ -143,7 +143,11 @@ func webserver(port string) {
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 
 	// Organization
+	http.HandleFunc("/divisions", handleDivisions)
+	http.HandleFunc("/departments", handleDepartments)
 	http.HandleFunc("/teams", handleTeams)
+	http.HandleFunc("/roles", handleRoles)
+	http.HandleFunc("/positions", handlePositions)
 	http.HandleFunc("/addteam", handleAddTeam)
 	http.HandleFunc("/addteamsubmit", handleAddTeamSubmit)
 
