@@ -561,7 +561,7 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
-	id := q.Get("id") // 본부id에 사용할 것
+	id := q.Get("id")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -587,7 +587,7 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "editdivision", rcp)
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
