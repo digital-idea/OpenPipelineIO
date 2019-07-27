@@ -149,6 +149,7 @@ func webserver(port string) {
 	http.HandleFunc("/roles", handleRoles)
 	http.HandleFunc("/positions", handlePositions)
 	http.HandleFunc("/adddivision", handleAddOrganization)
+	http.HandleFunc("/editdivision", handleEditDivision)
 	http.HandleFunc("/adddepartment", handleAddOrganization)
 	http.HandleFunc("/addteam", handleAddOrganization)
 	http.HandleFunc("/addrole", handleAddOrganization)

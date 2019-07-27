@@ -219,3 +219,15 @@ func getTeam(session *mgo.Session, id string) (Team, error) {
 	}
 	return t, nil
 }
+
+// getDivision 함수는 본부를 가지고오는 함수이다.
+func getDivision(session *mgo.Session, id string) (Division, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	d := Division{}
+	err := c.Find(bson.M{"id": id}).One(&d)
+	if err != nil {
+		return d, err
+	}
+	return d, nil
+}
