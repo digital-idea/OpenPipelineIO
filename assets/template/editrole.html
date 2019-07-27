@@ -1,0 +1,41 @@
+{{define "editrole" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+
+<div class="container p-5">
+    <form action="/editrolesubmit" method="POST">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading">Edit Role</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label>ID: {{.Role.ID}}</label>
+            </div>
+            <div class="form-group">
+                <label>한글명</label>
+                <input type="text" name="NameKor" class="form-control" placeholder="한글명" value="{{.Role.NameKor}}">
+                <small class="form-text text-muted">직책 한글명</small>
+            </div>
+            <div class="form-group">
+                <label>영문명</label>
+                <input type="text" name="NameEng" class="form-control" placeholder="English name" value="{{.Role.NameEng}}">
+                <small class="form-text text-muted">직책 영문명</small>
+            </div>
+        </div>
+    </div>     
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary mt-5">Update Role</button>
+    </div>
+    </form>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

@@ -208,6 +208,30 @@ func allPositions(session *mgo.Session) ([]Position, error) {
 	return result, nil
 }
 
+// getDivision 함수는 본부를 가지고오는 함수이다.
+func getDivision(session *mgo.Session, id string) (Division, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	d := Division{}
+	err := c.Find(bson.M{"id": id}).One(&d)
+	if err != nil {
+		return d, err
+	}
+	return d, nil
+}
+
+// getDepartment 함수는 Department 아이디를 받아서 Department 자료구조를 반환하는 함수이다.
+func getDepartment(session *mgo.Session, id string) (Department, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("departments")
+	d := Department{}
+	err := c.Find(bson.M{"id": id}).One(&d)
+	if err != nil {
+		return d, err
+	}
+	return d, nil
+}
+
 // getTeam 함수는 Team 아이디를 받아서 Team 자료구조를 반환하는 함수이다.
 func getTeam(session *mgo.Session, id string) (Team, error) {
 	session.SetMode(mgo.Monotonic, true)
@@ -220,14 +244,26 @@ func getTeam(session *mgo.Session, id string) (Team, error) {
 	return t, nil
 }
 
-// getDivision 함수는 본부를 가지고오는 함수이다.
-func getDivision(session *mgo.Session, id string) (Division, error) {
+// getRole 함수는 Role 아이디를 받아서 Role 자료구조를 반환하는 함수이다.
+func getRole(session *mgo.Session, id string) (Role, error) {
 	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("organization").C("divisions")
-	d := Division{}
-	err := c.Find(bson.M{"id": id}).One(&d)
+	c := session.DB("organization").C("roles")
+	r := Role{}
+	err := c.Find(bson.M{"id": id}).One(&r)
 	if err != nil {
-		return d, err
+		return r, err
 	}
-	return d, nil
+	return r, nil
+}
+
+// getPosition 함수는 Position 아이디를 받아서 Position 자료구조를 반환하는 함수이다.
+func getPosition(session *mgo.Session, id string) (Position, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("positions")
+	p := Position{}
+	err := c.Find(bson.M{"id": id}).One(&p)
+	if err != nil {
+		return p, err
+	}
+	return p, nil
 }
