@@ -230,15 +230,50 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
-		Company   string
-		CaptchaID string
-		MailDNS   string
+		Company     string
+		CaptchaID   string
+		MailDNS     string
+		Divisions   []Division
+		Departments []Department
+		Teams       []Team
+		Roles       []Role
+		Positions   []Position
 	}
 	rcp := recipe{}
 	rcp.Company = strings.Title(*flagCompany)
 	rcp.MailDNS = *flagMailDNS
 	rcp.CaptchaID = captcha.New()
-	err = t.ExecuteTemplate(w, "signup", rcp)
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Divisions, err = allDivisions(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Departments, err = allDepartments(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Teams, err = allTeams(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Roles, err = allRoles(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Positions, err = allPositions(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

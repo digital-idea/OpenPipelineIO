@@ -90,23 +90,19 @@
                     <small class="form-text text-muted">Division / 본부</small>    
                     <select class="form-control" name="Division">
                         <option value="">해당없음</option>
-                        <option value="기획마케팅,사업본부,일산,">사업본부</option>
-                        <option value="기획마케팅,사업본부,일산,">제작본부</option>
-                        <option value="기획마케팅,사업본부,일산,">경영지원본부</option>
+                        {{range .Divisions}}
+                            <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
+                        {{end}}
                     </select>
                 </div>
 
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Department / 부서</small>    
-                    <select class="form-control" name="Division">
+                    <select class="form-control" name="Department">
                         <option value="">해당없음</option>
-                        <option value="기획마케팅,사업본부,일산,">매니지먼트</option>
-                        <option value="기획마케팅,사업본부,일산,">ProjectTF</option>
-                        <option value="기획마케팅,사업본부,일산,">Pre/Postviz</option>
-                        <option value="기획마케팅,사업본부,일산,">데이터관리</option>
-                        <option value="기획마케팅,사업본부,일산,">R&D센터</option>
-                        <option value="기획마케팅,사업본부,일산,">2D</option>
-                        <option value="기획마케팅,사업본부,일산,">3D</option>
+                        {{range .Departments}}
+                            <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
+                        {{end}}
                     </select>
                 </div>
 
@@ -114,40 +110,9 @@
                     <small class="form-text text-muted">Team / 팀</small>
                     <select class="form-control" name="Team">
                         <option value="">해당없음</option>
-                        <option value="기획마케팅,사업본부,일산,">기획마케팅</option>
-                        <option value="제작관리,제작본부,일산,">제작관리</option>
-                        <option value="TF관리,제작본부,일산,">TF관리</option>
-                        <option value="드라마관리,제작본부,일산,">드라마관리</option>
-                        <option value="드라마제작,제작본부,일산,">드라마제작</option>
-                        <option value="SCX TF,제작본부,일산,">SCX TF</option>
-                        <option value="Pre/Post Viz,제작본부,일산,">Pre/Post Viz</option>
-                        <option value="Onset Supervisor,제작본부,일산,">Onset Supervisor</option>
-                        <option value="Project Support,제작본부,일산,">Project Support</option>
-                        <option value="데이터관리팀,제작본부,일산,">데이터관리팀</option>
-                        <option value="CG슈퍼바이저,제작본부,일산,">CG슈퍼바이저</option>
-                        <option value="파이프라인,R&D,지원 본부,일산,">파이프라인</option>
-                        <option value="파이프라인 TF,R&D,지원 본부,일산,">파이프라인 TF</option>
-                        <option value="모델링,제작본부,일산,">모델링</option>
-                        <option value="매치무브,제작본부,일산,">매치무브</option>
-                        <option value="애니메이션,제작본부,일산,">애니메이션</option>
-                        <option value="Crowd,제작본부,일산,">Crowd</option>
-                        <option value="Rigging,제작본부,일산,">Rigging</option>
-                        <option value="Lighting,제작본부,일산,">Lighting</option>
-                        <option value="Texture,제작본부,일산,">Texture</option>
-                        <option value="FX,제작본부,일산,">FX</option>
-                        <option value="Environment,제작본부,일산,">Environment</option>
-                        <option value="Matte Painting,제작본부,일산,">Matte Painting</option>
-                        <option value="Comp1,제작본부,일산,">Comp1</option>
-                        <option value="Comp2,제작본부,일산,">Comp2</option>
-                        <option value="Comp3,제작본부,일산,">Comp3</option>
-                        <option value="Motion,제작본부,일산,">Motion</option>
-                        <option value="R&D Center,R&D,지원 본부,일산,">R&D Center</option>
-                        <option value="지원 TF,R&D,지원 본부,일산,">지원 TF</option>
-                        <option value="Visual media,">Visual media</option>
-                        <option value="인사총무,경영지원본부,일산,">인사총무</option>
-                        <option value="자금,경영지원본부,일산,">자금</option>
-                        <option value="회계,경영지원본부,일산,">회계</option>
-                        <option value="IT/Infra,경영지원본부,일산,">IT/Infra</option>
+                        {{range .Teams}}
+                            <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
+                        {{end}}
                     </select>
                 </div>
             </div>
@@ -157,12 +122,9 @@
                     <small class="form-text text-muted">Role / 직책</small>
                     <select class="form-control" name="Role">
                         <option value="">해당없음</option>
-                        <option value="기획마케팅,사업본부,일산,">Comp</option>
-                        <option value="기획마케팅,사업본부,일산,">PD</option>
-                        <option value="기획마케팅,사업본부,일산,">PM</option>
-                        <option value="기획마케팅,사업본부,일산,">PA</option>
-                        <option value="제작관리,제작본부,일산,">TD</option>
-                        <option value="제작관리,제작본부,일산,">TA</option>
+                        {{range .Roles}}
+                            <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
+                        {{end}}
                     </select>
                 </div>
     
@@ -170,12 +132,9 @@
                     <small class="form-text text-muted">Position / 직급</small>
                     <select class="form-control" name="Position">
                         <option value="">해당없음</option>
-                        <option value="제작관리,제작본부,일산,">인턴</option>
-                        <option value="제작관리,제작본부,일산,">사원</option>
-                        <option value="기획마케팅,사업본부,일산,">선임</option>
-                        <option value="기획마케팅,사업본부,일산,">팀장</option>
-                        <option value="기획마케팅,사업본부,일산,">부사장</option>
-                        <option value="기획마케팅,사업본부,일산,">사장</option>
+                        {{range .Positions}}
+                            <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
+                        {{end}}
                     </select>
                 </div>
             </div>
