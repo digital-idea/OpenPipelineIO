@@ -267,3 +267,90 @@ func getPosition(session *mgo.Session, id string) (Position, error) {
 	}
 	return p, nil
 }
+
+// setDivision 함수는 Division 정보를 수정하는 함수입니다.
+func setDivision(session *mgo.Session, d Division) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	num, err := c.Find(bson.M{"id": d.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": d.ID}, d)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// setDepartment 함수는 Department 정보를 수정하는 함수입니다.
+func setDepartment(session *mgo.Session, d Department) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("departments")
+	num, err := c.Find(bson.M{"id": d.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": d.ID}, d)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setTeam(session *mgo.Session, t Team) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("teams")
+	num, err := c.Find(bson.M{"id": t.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": t.ID}, t)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setRole(session *mgo.Session, r Role) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("roles")
+	num, err := c.Find(bson.M{"id": r.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": r.ID}, r)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setPosition(session *mgo.Session, p Position) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("positions")
+	num, err := c.Find(bson.M{"id": p.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 아이템이 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": p.ID}, p)
+	if err != nil {
+		return err
+	}
+	return nil
+}

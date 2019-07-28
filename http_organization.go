@@ -750,3 +750,42 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 	}
 	return
 }
+
+// handleEditDivisionSubmit 함수는 Division의 수정정보를 처리하는 페이지이다.
+func handleEditDivisionSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	current, err := getDivision(session, r.FormValue("ID"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	renewal := current
+	if current.NameKor != r.FormValue("NameKor") {
+		renewal.NameKor = r.FormValue("NameKor")
+	}
+	if current.NameEng != r.FormValue("NameEng") {
+		renewal.NameEng = r.FormValue("NameEng")
+	}
+	err = setDivision(session, renewal)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/divisions", http.StatusSeeOther)
+}

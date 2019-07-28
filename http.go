@@ -150,6 +150,7 @@ func webserver(port string) {
 	http.HandleFunc("/positions", handlePositions)
 	http.HandleFunc("/adddivision", handleAddOrganization)
 	http.HandleFunc("/editdivision", handleEditDivision)
+	http.HandleFunc("/editdivisionsubmit", handleEditDivisionSubmit)
 	http.HandleFunc("/adddepartment", handleAddOrganization)
 	http.HandleFunc("/editdepartment", handleEditDepartment)
 	http.HandleFunc("/addteam", handleAddOrganization)
