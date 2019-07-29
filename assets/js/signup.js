@@ -14,6 +14,14 @@ function setInputFilter(textbox, inputFilter) {
     });
 }
 
+document.getElementById("addOrganization").onclick = function() {
+	addOrganization()
+};
+
+function addOrganization() {
+	console.log("print");
+}
+
 setInputFilter(document.getElementById("Hotline"), function(value) {
 	return /^\d*$/.test(value);
 });
