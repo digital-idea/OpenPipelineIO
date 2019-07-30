@@ -90,3 +90,30 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleAPIAddUser 함수는 사용자를 추가한다.
+// 버튼을 눌렀을 때 ajax로 Post 한다.
+// 사용자 가입이 되도록 한다.
+func handleAPIAddUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+
+	r.ParseForm() // 파싱이 되면 맵이 됩니다.
+	info := r.PostForm
+	fmt.Println(info)
+	//fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "")
+}

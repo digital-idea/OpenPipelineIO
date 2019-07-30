@@ -300,13 +300,6 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 
 // handleSignupSubmit 함수는 회원가입 페이지이다.
 func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
-	host, port, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	t, err := LoadTemplates()
 	if err != nil {
 		log.Println("loadTemplates:", err)
@@ -314,8 +307,8 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	if !captcha.VerifyString(r.FormValue("CaptchaNum"), r.FormValue("CaptchaID")) {
-		err := errors.New("CaptchaNum 값과 CaptchaID 값이 다릅니다")
+	if !captcha.VerifyString(r.FormValue("CaptchaID"), r.FormValue("CaptchaNum")) {
+		err := errors.New("CaptchaID 값과 CaptchaNum 값이 다릅니다")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -355,6 +348,12 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Location = r.FormValue("Location")
 	u.Tags = Str2Tags(r.FormValue("Tags"))
 	u.Timezone = r.FormValue("Timezone")
+	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	u.LastIP = host
 	u.LastPort = port
 	u.Token = base64.StdEncoding.EncodeToString([]byte(pw))

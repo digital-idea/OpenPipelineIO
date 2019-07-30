@@ -3,7 +3,6 @@
 <body>
 
 <div class="container p-5">
-    <form method="post" action="/signup_submit">
     <div class="pt-3 pb-5">
         <h2 class="section-heading text-center">{{.Company}} Sign Up</h2>
     </div>
@@ -11,57 +10,57 @@
         <div class="col-sm">
             <div class="form-group">
                 <label>ID <span class="text-danger">*</span></label>
-                <input type="text" name="ID" class="form-control" placeholder="ID">
+                <input type="text" name="ID" id="ID" class="form-control" placeholder="ID">
                 <small class="form-text text-muted">사번이 있다면 사번을 입력해주세요. 대문자를 입력하더라도 소문자로 변경됩니다.</small>
             </div>
             <div class="form-group">
                 <label>Password <span class="text-danger">*</span></label>
-                <input type="password" name="Password" class="form-control" placeholder="Password">
+                <input type="password" name="Password" id="Password" class="form-control" placeholder="Password">
                 <small class="form-text text-muted">대소문자,숫자,특수문자 포함,8자리 이상을 권장합니다.</small>
             </div>
             <div class="form-group">
                 <label>Confirm Password <span class="text-danger">*</span></label>
-                <input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="form-control" placeholder="Confirm Password">
                 <small class="form-text text-muted">다시한번 패스워드를 입력해주세요.</small>
             </div>
             <label>Name / 이름</label>
             <div class="form-row">
                 <div class="col-4">
-                    <input type="text" name="FirstNameKor" class="form-control" placeholder="성">
+                    <input type="text" name="FirstNameKor" id="FirstNameKor" class="form-control" placeholder="성">
                 </div>
                 <div class="col-8">
-                    <input type="text" name="LastNameKor" class="form-control" placeholder="이름">
+                    <input type="text" name="LastNameKor" id="LastNameKor" class="form-control" placeholder="이름">
                 </div>
             </div>
             <small class="form-text text-muted pb-3">한글이름</small>
             <div class="form-row">
                 <div class="col-8">
-                    <input type="text" name="FirstNameEng" class="form-control" placeholder="First">
+                    <input type="text" name="FirstNameEng" id="FirstNameEng" class="form-control" placeholder="First">
                 </div>
                 <div class="col-4">
-                    <input type="text" name="LastNameEng" class="form-control" placeholder="Last">
+                    <input type="text" name="LastNameEng" id="LastNameEng" class="form-control" placeholder="Last">
                 </div>
             </div>
             <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
             <div class="form-row">
                 <div class="col-4">
-                    <input type="text" name="FirstNameChn" class="form-control" placeholder="성(한자)">
+                    <input type="text" name="FirstNameChn" id="FirstNameChn" class="form-control" placeholder="성(한자)">
                 </div>
                 <div class="col-8">
-                    <input type="text" name="LastNameChn" class="form-control" placeholder="이름(한자)">
+                    <input type="text" name="LastNameChn" id="LastNameChn" class="form-control" placeholder="이름(한자)">
                 </div>
             </div>
             <small class="form-text text-muted pb-3">중국영화 크레딧 제작시 한자이름을 요구하는 경우가 있습니다.</small>
 
             <div class="form-group">
                 <label>E-mail / 사내 이메일</label>
-                <input type="email" name="Email" class="form-control" placeholder="사번@{{.MailDNS}}">
+                <input type="email" name="Email" id="Email" class="form-control" placeholder="사번@{{.MailDNS}}">
                 <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>
             </div>
 
             <div class="form-group">
                 <label >E-mail / 외부 이메일</label>
-                <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail">
+                <input type="email" name="EmailExternal" id="EmailExternal" class="form-control" placeholder="E-mail">
                 <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
             </div>
 
@@ -88,7 +87,7 @@
             <div class="row">
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Division / 본부</small>    
-                    <select class="form-control" name="Division">
+                    <select class="form-control" name="Division" id="Division">
                         <option value="">해당없음</option>
                         {{range .Divisions}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
@@ -98,7 +97,7 @@
 
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Department / 부서</small>    
-                    <select class="form-control" name="Department">
+                    <select class="form-control" name="Department" id="Department">
                         <option value="">해당없음</option>
                         {{range .Departments}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
@@ -108,7 +107,7 @@
 
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Team / 팀</small>
-                    <select class="form-control" name="Team">
+                    <select class="form-control" name="Team" id="Team">
                         <option value="">해당없음</option>
                         {{range .Teams}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
@@ -120,7 +119,7 @@
             <div class="row">
                 <div class="col-6 form-group">
                     <small class="form-text text-muted">Role / 직책</small>
-                    <select class="form-control" name="Role">
+                    <select class="form-control" name="Role" id="Role">
                         <option value="">해당없음</option>
                         {{range .Roles}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
@@ -130,7 +129,7 @@
     
                 <div class="col-6 form-group">
                     <small class="form-text text-muted">Position / 직급</small>
-                    <select class="form-control" name="Position">
+                    <select class="form-control" name="Position" id="Position">
                         <option value="">해당없음</option>
                         {{range .Positions}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
@@ -145,27 +144,27 @@
                 </div>
             </div>
             
-            <div class="form-group">
+            <div class="form-group pt-3">
                 <small class="form-text text-muted">조직정보가 추가되면 아래 항목에 표기됩니다.</small>
-                <textarea class="form-text w-100" rows="3" disabled>사업본부,2D,기획마케팅,Comp,사원&#13;&#10;제작본부,3D,제작관리,PD,팀장</textarea>
+                <div id="Organizations"></div>
             </div>
 
             <div class="form-group pt-3">
                 <label>Additional Tags / 추가태그</label>
-                <input type="text" name="AdditionalTags" class="form-control" placeholder="추가 Tags">
+                <input type="text" name="AdditionalTags" id="AdditionalTags" class="form-control" placeholder="추가 Tags">
                 <small class="form-text text-muted">위에서 선택할 수 없는 정보를 추가적으로 작성합니다.</small>
                 <small class="form-text text-muted">조직은 자주 변화되기 때문에 필요시 Tag를 추가해주세요.</small>
             </div>
 
             <div class="form-group">
                 <label>Location / 사내 위치정보</label>
-                <input type="text" name="Location" class="form-control" placeholder="8층">
+                <input type="text" name="Location" id="Location" class="form-control" placeholder="8층">
                 <small class="form-text text-muted">층수를 입력해주세요.</small>
             </div>
 
             <div class="form-group">
                 <label>Timezone / 시간대</label>
-                <select name="Timezone" class="form-control">
+                <select name="Timezone" id="Timezone" class="form-control">
                     <option value="Asia/Seoul" selected>한국 Asia/Seoul</option>
                     <option value="Asia/Beijing">중국 Asia/Beijing</option>
                 </select>
@@ -177,22 +176,23 @@
                 <p>
                     <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
                 </p>
-                <input type=hidden name="CaptchaNum" value="{{.CaptchaID}}">
-                <input type="text" name="CaptchaID" id="CaptchaID" class="form-control" placeholder="">
+                <input type=hidden name="CaptchaID" id="CaptchaID" value="{{.CaptchaID}}">
+                <input type="text" name="CaptchaNum" id="CaptchaNum" class="form-control" placeholder="">
                 <small class="form-text text-muted">위 이미지에 보이는 숫자를 입력해주세요.</small>
             </div>
         </div>
     </div>     
     <div class="text-center">
-        <button type="submit" class="btn btn-primary mt-5">SIGN UP / 가입하기</button>
+        <button type="submit" class="btn btn-primary mt-5" id="SignUp">SIGN UP / 가입하기</button>
     </div>
-    </form>
 </div>
 
 
 
 {{template "footerBootstrap"}}
 </body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 <script src="/assets/js/signup.js"></script>
 </html>
 {{end}}
