@@ -97,6 +97,14 @@ function renderOrganizations() {
 		div.innerHTML += `<a href="#" class="alert-link">&bigotimes;</a>`;
 		div.onclick = removeItem;
 		document.getElementById("Organizations").appendChild(div);
+		// OrganizationsForm 추가하기. di,de,te,ro,po;
+		let org = "";
+		org += userData.Organizations[i].Division;
+		org += userData.Organizations[i].Department;
+		org += userData.Organizations[i].Team;
+		org += userData.Organizations[i].Role;
+		org += userData.Organizations[i].Position;
+		document.getElementById('OrganizationsForm').value = org;
 	}
 }
 
@@ -122,9 +130,9 @@ setInputFilter(document.getElementById("CaptchaID"), function(value) {
 });
 
 // SignUp 버튼을 누르면 가입이 된다.
-document.getElementById("SignUp").onclick = function() {
-	addUser()
-};
+//document.getElementById("SignUp").onclick = function() {
+//	addUser()
+//};
 
 function addUser() {
 	// check Error
@@ -175,10 +183,15 @@ function addUser() {
         url: "/api/adduser",
 		type: "post",
 		data: userData,
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        }
+		dataType: "json",
+        success: function(response) {
+			if (response.status === "success") {
+				console.log(response);
+				window.location.replace("/signup_success");
+			} else if (response.status === "error") {
+				console.log(response);
+			}
+        },
 	});
-	location.replace("/invalidaccess")
+	
 }

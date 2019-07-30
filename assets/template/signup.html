@@ -3,10 +3,11 @@
 <body>
 
 <div class="container p-5">
+    <form action="/signup_submit" method="POST">
     <div class="pt-3 pb-5">
         <h2 class="section-heading text-center">{{.Company}} Sign Up</h2>
     </div>
-    <div class="row">   
+    <div class="row">
         <div class="col-sm">
             <div class="form-group">
                 <label>ID <span class="text-danger">*</span></label>
@@ -151,6 +152,7 @@
 
             <div class="form-group pt-3">
                 <label>Additional Tags / 추가태그</label>
+                <input type="text" name="OrganizationsForm" id="OrganizationsForm" class="form-control"> <!--나중에 숨겨진다.-->
                 <input type="text" name="AdditionalTags" id="AdditionalTags" class="form-control" placeholder="추가 Tags">
                 <small class="form-text text-muted">위에서 선택할 수 없는 정보를 추가적으로 작성합니다.</small>
                 <small class="form-text text-muted">조직은 자주 변화되기 때문에 필요시 Tag를 추가해주세요.</small>
@@ -185,6 +187,7 @@
     <div class="text-center">
         <button type="submit" class="btn btn-primary mt-5" id="SignUp">SIGN UP / 가입하기</button>
     </div>
+    </form>
 </div>
 
 
