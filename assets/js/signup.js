@@ -1,23 +1,5 @@
 let userData = {
-	"ID":"",
-	"Password":"",
-	"ConfirmPassword":"",
-	"FirstNameKor":"",
-	"LastNameKor":"",
-	"FirstNameEng":"",
-	"LastNameEng":"",
-	"FirstNameChn":"",
-	"LastNameChn":"",
-	"Email":"",
-	"EmailExternal":"",
-	"Phone":"",
-	"Hotline":"",
 	"Organizations": [],
-	"AdditionalTags": "",
-	"Location": "",
-	"Timezone": "",
-	"CaptchaID": "",
-	"CaptchaNum": "",
 }
 
 let organization = {
@@ -84,6 +66,7 @@ function addOrganization() {
 
 function renderOrganizations() {
 	document.getElementById("Organizations").innerHTML = "";
+	let orgstags = [];
 	for (let i = 0; i < userData.Organizations.length; i++) {
 		let div = document.createElement("div");
 		div.setAttribute("id", userData.Organizations[i].ID);
@@ -97,15 +80,15 @@ function renderOrganizations() {
 		div.innerHTML += `<a href="#" class="alert-link">&bigotimes;</a>`;
 		div.onclick = removeItem;
 		document.getElementById("Organizations").appendChild(div);
-		// OrganizationsForm 추가하기. di,de,te,ro,po;
-		let org = "";
-		org += userData.Organizations[i].Division;
-		org += userData.Organizations[i].Department;
-		org += userData.Organizations[i].Team;
-		org += userData.Organizations[i].Role;
-		org += userData.Organizations[i].Position;
-		document.getElementById('OrganizationsForm').value = org;
+		let orgtags = [];
+		orgtags.push(userData.Organizations[i].Division);
+		orgtags.push(userData.Organizations[i].Department);
+		orgtags.push(userData.Organizations[i].Team);
+		orgtags.push(userData.Organizations[i].Role);
+		orgtags.push(userData.Organizations[i].Position);
+		orgstags.push(orgtags.join(","))
 	}
+	document.getElementById('OrganizationsForm').value = orgstags.join(":");
 }
 
 function removeItem(e) {

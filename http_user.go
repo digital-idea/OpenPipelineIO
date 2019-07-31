@@ -334,6 +334,11 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
+	// 태그를 자동으로 생성한다.
+	// 사용자에 넣는다.
+	fmt.Println(r.FormValue("OrganizationsForm"))
+
 	u.Password = pw
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")

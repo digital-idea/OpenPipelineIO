@@ -89,7 +89,7 @@
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Division / 본부</small>    
                     <select class="form-control" name="Division" id="Division">
-                        <option value="">해당없음</option>
+                        <option value="unknown">해당없음</option>
                         {{range .Divisions}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
                         {{end}}
@@ -99,7 +99,7 @@
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Department / 부서</small>    
                     <select class="form-control" name="Department" id="Department">
-                        <option value="">해당없음</option>
+                        <option value="unknown">해당없음</option>
                         {{range .Departments}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
                         {{end}}
@@ -109,7 +109,7 @@
                 <div class="col-4 form-group">
                     <small class="form-text text-muted">Team / 팀</small>
                     <select class="form-control" name="Team" id="Team">
-                        <option value="">해당없음</option>
+                        <option value="unknown">해당없음</option>
                         {{range .Teams}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
                         {{end}}
@@ -121,7 +121,7 @@
                 <div class="col-6 form-group">
                     <small class="form-text text-muted">Role / 직책</small>
                     <select class="form-control" name="Role" id="Role">
-                        <option value="">해당없음</option>
+                        <option value="unknown">해당없음</option>
                         {{range .Roles}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
                         {{end}}
@@ -131,7 +131,7 @@
                 <div class="col-6 form-group">
                     <small class="form-text text-muted">Position / 직급</small>
                     <select class="form-control" name="Position" id="Position">
-                        <option value="">해당없음</option>
+                        <option value="unknown">해당없음</option>
                         {{range .Positions}}
                             <option value="{{.ID}}">{{.NameKor}}({{.NameEng}})</option>
                         {{end}}
@@ -152,7 +152,7 @@
 
             <div class="form-group pt-3">
                 <label>Additional Tags / 추가태그</label>
-                <input type="text" name="OrganizationsForm" id="OrganizationsForm" class="form-control"> <!--나중에 숨겨진다.-->
+                <input type="hidden" name="OrganizationsForm" id="OrganizationsForm" class="form-control">
                 <input type="text" name="AdditionalTags" id="AdditionalTags" class="form-control" placeholder="추가 Tags">
                 <small class="form-text text-muted">위에서 선택할 수 없는 정보를 추가적으로 작성합니다.</small>
                 <small class="form-text text-muted">조직은 자주 변화되기 때문에 필요시 Tag를 추가해주세요.</small>
