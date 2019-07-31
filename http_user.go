@@ -298,6 +298,46 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// OrganizationsFormToOrganizations 함수는 form 문자를 받아서 []Organization 을 생성한다.
+func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organization, error) {
+	var results []Organization
+	orgs := strings.Split(s, ":")
+	for _, org := range orgs {
+		parts := strings.Split(org, ",")
+		if len(parts) != 5 {
+			return results, errors.New("조직 정보가 5개가 아닙니다")
+		}
+		org := Organization{}
+		division, err := getDivision(session, parts[0])
+		if err != nil {
+			return results, err
+		}
+		org.Division = division
+		department, err := getDepartment(session, parts[1])
+		if err != nil {
+			return results, err
+		}
+		org.Department = department
+		team, err := getTeam(session, parts[2])
+		if err != nil {
+			return results, err
+		}
+		org.Team = team
+		role, err := getRole(session, parts[3])
+		if err != nil {
+			return results, err
+		}
+		org.Role = role
+		position, err := getPosition(session, parts[4])
+		if err != nil {
+			return results, err
+		}
+		org.Position = position
+		results = append(results, org)
+	}
+	return results, nil
+}
+
 // handleSignupSubmit 함수는 회원가입 페이지이다.
 func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	t, err := LoadTemplates()
@@ -334,11 +374,6 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
-	// 태그를 자동으로 생성한다.
-	// 사용자에 넣는다.
-	fmt.Println(r.FormValue("OrganizationsForm"))
-
 	u.Password = pw
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
@@ -368,6 +403,14 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
+	u.Organizations, err = OrganizationsFormToOrganizations(session, r.FormValue("OrganizationsForm"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 조직 정보로 태그를 자동으로 생성한다.
+	// u.genTags()
 	err = addUser(session, u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
