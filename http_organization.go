@@ -280,12 +280,10 @@ func handleAddDivisionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
-	nameKor := r.FormValue("NameKor")
-	nameEng := r.FormValue("NameEng")
+	name := r.FormValue("Name")
 	d := Division{
-		ID:      id,
-		NameKor: nameKor,
-		NameEng: nameEng,
+		ID:   id,
+		Name: name,
 	}
 	err = addDivision(session, d)
 	if err != nil {
@@ -314,12 +312,10 @@ func handleAddDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
-	nameKor := r.FormValue("NameKor")
-	nameEng := r.FormValue("NameEng")
+	name := r.FormValue("Name")
 	d := Department{
-		ID:      id,
-		NameKor: nameKor,
-		NameEng: nameEng,
+		ID:   id,
+		Name: name,
 	}
 	err = addDepartment(session, d)
 	if err != nil {
@@ -349,12 +345,10 @@ func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	// add team
 	id := r.FormValue("ID")
-	nameKor := r.FormValue("NameKor")
-	nameEng := r.FormValue("NameEng")
+	name := r.FormValue("Name")
 	t := Team{
-		ID:      id,
-		NameKor: nameKor,
-		NameEng: nameEng,
+		ID:   id,
+		Name: name,
 	}
 	err = addTeam(session, t)
 	if err != nil {
@@ -383,12 +377,10 @@ func handleAddRoleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
-	nameKor := r.FormValue("NameKor")
-	nameEng := r.FormValue("NameEng")
+	name := r.FormValue("Name")
 	role := Role{
-		ID:      id,
-		NameKor: nameKor,
-		NameEng: nameEng,
+		ID:   id,
+		Name: name,
 	}
 	err = addRole(session, role)
 	if err != nil {
@@ -417,12 +409,10 @@ func handleAddPositionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
-	nameKor := r.FormValue("NameKor")
-	nameEng := r.FormValue("NameEng")
+	name := r.FormValue("Name")
 	p := Position{
-		ID:      id,
-		NameKor: nameKor,
-		NameEng: nameEng,
+		ID:   id,
+		Name: name,
 	}
 	err = addPosition(session, p)
 	if err != nil {
@@ -776,11 +766,8 @@ func handleEditDivisionSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	renewal := current
-	if current.NameKor != r.FormValue("NameKor") {
-		renewal.NameKor = r.FormValue("NameKor")
-	}
-	if current.NameEng != r.FormValue("NameEng") {
-		renewal.NameEng = r.FormValue("NameEng")
+	if current.Name != r.FormValue("Name") {
+		renewal.Name = r.FormValue("Name")
 	}
 	err = setDivision(session, renewal)
 	if err != nil {
@@ -814,11 +801,8 @@ func handleEditDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	renewal := current
-	if current.NameKor != r.FormValue("NameKor") {
-		renewal.NameKor = r.FormValue("NameKor")
-	}
-	if current.NameEng != r.FormValue("NameEng") {
-		renewal.NameEng = r.FormValue("NameEng")
+	if current.Name != r.FormValue("Name") {
+		renewal.Name = r.FormValue("Name")
 	}
 	err = setDepartment(session, renewal)
 	if err != nil {
@@ -852,11 +836,8 @@ func handleEditTeamSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	renewal := current
-	if current.NameKor != r.FormValue("NameKor") {
-		renewal.NameKor = r.FormValue("NameKor")
-	}
-	if current.NameEng != r.FormValue("NameEng") {
-		renewal.NameEng = r.FormValue("NameEng")
+	if current.Name != r.FormValue("Name") {
+		renewal.Name = r.FormValue("Name")
 	}
 	err = setTeam(session, renewal)
 	if err != nil {
@@ -890,11 +871,8 @@ func handleEditRoleSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	renewal := current
-	if current.NameKor != r.FormValue("NameKor") {
-		renewal.NameKor = r.FormValue("NameKor")
-	}
-	if current.NameEng != r.FormValue("NameEng") {
-		renewal.NameEng = r.FormValue("NameEng")
+	if current.Name != r.FormValue("Name") {
+		renewal.Name = r.FormValue("Name")
 	}
 	err = setRole(session, renewal)
 	if err != nil {
@@ -928,11 +906,8 @@ func handleEditPositionSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	renewal := current
-	if current.NameKor != r.FormValue("NameKor") {
-		renewal.NameKor = r.FormValue("NameKor")
-	}
-	if current.NameEng != r.FormValue("NameEng") {
-		renewal.NameEng = r.FormValue("NameEng")
+	if current.Name != r.FormValue("Name") {
+		renewal.Name = r.FormValue("Name")
 	}
 	err = setPosition(session, renewal)
 	if err != nil {
