@@ -89,10 +89,40 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		MailDNS string
 		User
+		Divisions   []Division
+		Departments []Department
+		Teams       []Team
+		Roles       []Role
+		Positions   []Position
 	}
 	rcp := recipe{}
 	rcp.MailDNS = *flagMailDNS
 	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Divisions, err = allDivisions(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Departments, err = allDepartments(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Teams, err = allTeams(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Roles, err = allRoles(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Positions, err = allPositions(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -146,9 +176,20 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
 	u.Tags = Str2Tags(r.FormValue("Tags"))
+
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
 	u.LastPort = port
+
+	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
+	u.OrganizationsForm = r.FormValue("OrganizationsForm")
+	u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 조직 정보로 태그를 자동으로 생성한다.
+	u.SetTags()
 	file, fileHandler, fileErr := r.FormFile("Photo")
 	if fileErr == nil {
 		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
@@ -414,7 +455,8 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
-	u.Organizations, err = OrganizationsFormToOrganizations(session, r.FormValue("OrganizationsForm"))
+	u.OrganizationsForm = r.FormValue("OrganizationsForm")
+	u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

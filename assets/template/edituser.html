@@ -53,9 +53,7 @@
                 <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail" value="{{.User.EmailExternal}}">
                 <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
             </div>
-        </div>
-        <div class="col-sm-1"></div>
-        <div class="col-sm">
+
             <div class="form-group">
                 <label>Phone / 휴대폰 번호</label>
                 <input type="tel" name="Phone" id="Phone" class="form-control" placeholder="Phone number" value="{{.User.Phone}}">
@@ -67,12 +65,84 @@
                 <input type="tel" name="Hotline" id="Hotline" class="form-control" placeholder="Hotline number" value="{{.User.Hotline}}">
                 <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
             </div>
+        </div>
+        <div class="col-sm-1"></div>
 
+        <div class="col-sm">
             <div class="form-group">
-                <label>Tags / 태그정보</label>
-                <input type="text" name="Tags" class="form-control" placeholder="추가태그" value="{{Tags2str .User.Tags}}">
-                <small class="form-text text-muted">부서, 본부, 팀, 세부팀, 직함을 입력해주세요.</small>
-                <small class="form-text text-muted">조직은 변화되기 때문에 Tag로 관리됩니다.</small>
+                <labe class="mb-0">조직정보</label>
+            </div>
+            
+            <div class="row">
+                <div class="col-4 form-group">
+                    <small class="form-text text-muted">Division / 본부</small>    
+                    <select class="form-control" name="Division" id="Division">
+                        <option value="unknown">해당없음</option>
+                        {{range .Divisions}}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="col-4 form-group">
+                    <small class="form-text text-muted">Department / 부서</small>    
+                    <select class="form-control" name="Department" id="Department">
+                        <option value="unknown">해당없음</option>
+                        {{range .Departments}}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="col-4 form-group">
+                    <small class="form-text text-muted">Team / 팀</small>
+                    <select class="form-control" name="Team" id="Team">
+                        <option value="unknown">해당없음</option>
+                        {{range .Teams}}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-6 form-group">
+                    <small class="form-text text-muted">Role / 직책</small>
+                    <select class="form-control" name="Role" id="Role">
+                        <option value="unknown">해당없음</option>
+                        {{range .Roles}}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+    
+                <div class="col-6 form-group">
+                    <small class="form-text text-muted">Position / 직급</small>
+                    <select class="form-control" name="Position" id="Position">
+                        <option value="unknown">해당없음</option>
+                        {{range .Positions}}
+                            <option value="{{.ID}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <span class="btn btn-warning w-100" id="addOrganization">조직정보 수정하기</span>
+                </div>
+            </div>
+            
+            <div class="form-group pt-3">
+                <small class="form-text text-muted">조직정보가 수정되면 아래 항목에 표기됩니다.</small>
+                <div id="Organizations"></div>
+            </div>
+
+            <div class="form-group pt-3">
+                <label>Tags / 태그</label>
+                <input type="hidden" name="OrganizationsForm" id="OrganizationsForm" value="{{.User.OrganizationsForm}}" class="form-control">
+                <input type="text" name="Tags" id="Tags" class="form-control" placeholder="추가태그" value="{{Tags2str .User.Tags}}">
+                <small class="form-text text-muted">사용자가 현재 사용중인 Tag 입니다.</small>
             </div>
 
             <div class="form-group">
