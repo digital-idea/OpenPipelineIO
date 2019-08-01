@@ -308,31 +308,41 @@ func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organiz
 			return results, errors.New("조직 정보가 5개가 아닙니다")
 		}
 		org := Organization{}
-		division, err := getDivision(session, parts[0])
-		if err != nil {
-			return results, err
+		if parts[0] != "unknown" {
+			division, err := getDivision(session, parts[0])
+			if err != nil {
+				return results, err
+			}
+			org.Division = division
 		}
-		org.Division = division
-		department, err := getDepartment(session, parts[1])
-		if err != nil {
-			return results, err
+		if parts[1] != "unknown" {
+			department, err := getDepartment(session, parts[1])
+			if err != nil {
+				return results, err
+			}
+			org.Department = department
 		}
-		org.Department = department
-		team, err := getTeam(session, parts[2])
-		if err != nil {
-			return results, err
+		if parts[2] != "unknown" {
+			team, err := getTeam(session, parts[2])
+			if err != nil {
+				return results, err
+			}
+			org.Team = team
 		}
-		org.Team = team
-		role, err := getRole(session, parts[3])
-		if err != nil {
-			return results, err
+		if parts[3] != "unknown" {
+			role, err := getRole(session, parts[3])
+			if err != nil {
+				return results, err
+			}
+			org.Role = role
 		}
-		org.Role = role
-		position, err := getPosition(session, parts[4])
-		if err != nil {
-			return results, err
+		if parts[4] != "unknown" {
+			position, err := getPosition(session, parts[4])
+			if err != nil {
+				return results, err
+			}
+			org.Position = position
 		}
-		org.Position = position
 		results = append(results, org)
 	}
 	return results, nil

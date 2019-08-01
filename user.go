@@ -82,12 +82,22 @@ func NewUser(id string) *User {
 func (u *User) SetTags() {
 	var tags []string
 	for _, org := range u.Organizations {
-		tags = append(tags, org.Division.Name)
-		tags = append(tags, org.Department.Name)
-		tags = append(tags, org.Team.Name)
-		tags = append(tags, org.Role.Name)
-		tags = append(tags, org.Position.Name)
+		if org.Division.Name != "" {
+			tags = append(tags, org.Division.Name)
+		}
+		if org.Department.Name != "" {
+			tags = append(tags, org.Department.Name)
+		}
+		if org.Team.Name != "" {
+			tags = append(tags, org.Team.Name)
+		}
+		if org.Role.Name != "" {
+			tags = append(tags, org.Role.Name)
+		}
+		if org.Position.Name != "" {
+			tags = append(tags, org.Position.Name)
+		}
 	}
 	tags = append(tags, u.Tags...)
-	u.Tags = tags
+	u.Tags = UniqueSlice(tags)
 }
