@@ -15,7 +15,9 @@
 					<div class="card-body">
 						<h6 class="card-title">
 							<a href="mailto:{{.ID}}@{{$.MailDNS}}" class="btn btn-primary btn-sm">E-mail</a>
+							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
 							<a href="/editteam?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
+							{{end}}
 						</h6>
 						<p class="card-text">
 							이름: {{.Name}}
