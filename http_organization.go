@@ -280,6 +280,10 @@ func handleAddDivisionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
+	if !regexpID.MatchString(id) {
+		http.Error(w, "id는 소문자와 숫자로만 이루어져야 합니다", http.StatusInternalServerError)
+		return
+	}
 	name := r.FormValue("Name")
 	d := Division{
 		ID:   id,
@@ -312,6 +316,10 @@ func handleAddDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
+	if !regexpID.MatchString(id) {
+		http.Error(w, "id는 소문자와 숫자로만 이루어져야 합니다", http.StatusInternalServerError)
+		return
+	}
 	name := r.FormValue("Name")
 	d := Department{
 		ID:   id,
@@ -345,6 +353,10 @@ func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	// add team
 	id := r.FormValue("ID")
+	if !regexpID.MatchString(id) {
+		http.Error(w, "id는 소문자와 숫자로만 이루어져야 합니다", http.StatusInternalServerError)
+		return
+	}
 	name := r.FormValue("Name")
 	t := Team{
 		ID:   id,
@@ -377,6 +389,10 @@ func handleAddRoleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
+	if !regexpID.MatchString(id) {
+		http.Error(w, "id는 소문자와 숫자로만 이루어져야 합니다", http.StatusInternalServerError)
+		return
+	}
 	name := r.FormValue("Name")
 	role := Role{
 		ID:   id,
@@ -409,6 +425,10 @@ func handleAddPositionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("ID")
+	if !regexpID.MatchString(id) {
+		http.Error(w, "id는 소문자와 숫자로만 이루어져야 합니다", http.StatusInternalServerError)
+		return
+	}
 	name := r.FormValue("Name")
 	p := Position{
 		ID:   id,
