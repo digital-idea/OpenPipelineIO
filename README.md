@@ -130,6 +130,9 @@ $ sudo csi3 -rm user -id [userid]
 - 썸네일주소 : `/thumbnail/{projectname}/{slug}.jpg`
 - 사용자이미지 : `/thumbnail/user/{id}.jpg`
 
+### CommandLine
+- [Organization](documents/organization.md)
+
 ### RestAPI
 - [Project](documents/rest_project.md)
 - [Item](documents/rest_item.md)
