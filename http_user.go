@@ -410,7 +410,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 조직 정보로 태그를 자동으로 생성한다.
-	// u.genTags()
+	u.SetTags()
 	err = addUser(session, u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

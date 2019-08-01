@@ -1,6 +1,8 @@
 package main
 
-import "time"
+import (
+	"time"
+)
 
 // AccessLevel 사용자의 엑세스 레벨이다.
 type AccessLevel int
@@ -74,4 +76,18 @@ func NewUser(id string) *User {
 		Createtime:  time.Now().Format(time.RFC3339),
 		IsLeave:     false,
 	}
+}
+
+// SetTags 메소드는 조직정보를 분석하여 사용자에게 적용해야할 태그를 설정한다.
+func (u *User) SetTags() {
+	var tags []string
+	for _, org := range u.Organizations {
+		tags = append(tags, org.Division.Name)
+		tags = append(tags, org.Department.Name)
+		tags = append(tags, org.Team.Name)
+		tags = append(tags, org.Role.Name)
+		tags = append(tags, org.Position.Name)
+	}
+	tags = append(tags, u.Tags...)
+	u.Tags = tags
 }
