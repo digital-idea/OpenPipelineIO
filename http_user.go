@@ -183,10 +183,12 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
 	u.OrganizationsForm = r.FormValue("OrganizationsForm")
-	u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if u.OrganizationsForm != "" {
+		u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	// 조직 정보로 태그를 자동으로 생성한다.
 	u.SetTags()
@@ -456,10 +458,12 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
 	u.OrganizationsForm = r.FormValue("OrganizationsForm")
-	u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if u.OrganizationsForm != "" {
+		u.Organizations, err = OrganizationsFormToOrganizations(session, u.OrganizationsForm)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	// 조직 정보로 태그를 자동으로 생성한다.
 	u.SetTags()
