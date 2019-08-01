@@ -148,12 +148,24 @@ func addPosition(session *mgo.Session, p Position) error {
 	return nil
 }
 
+// allDivisions 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
+func allDivisions(session *mgo.Session) ([]Division, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	var result []Division
+	err := c.Find(bson.M{}).Sort("id").All(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 // allDepartments 함수는 모든 Department를 반환한다.
 func allDepartments(session *mgo.Session) ([]Department, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("organization").C("departments")
 	var result []Department
-	err := c.Find(bson.M{}).All(&result)
+	err := c.Find(bson.M{}).Sort("id").All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -165,7 +177,7 @@ func allTeams(session *mgo.Session) ([]Team, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("organization").C("teams")
 	var result []Team
-	err := c.Find(bson.M{}).All(&result)
+	err := c.Find(bson.M{}).Sort("id").All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -177,7 +189,7 @@ func allRoles(session *mgo.Session) ([]Role, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("organization").C("roles")
 	var result []Role
-	err := c.Find(bson.M{}).All(&result)
+	err := c.Find(bson.M{}).Sort("id").All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -189,7 +201,7 @@ func allPositions(session *mgo.Session) ([]Position, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("organization").C("positions")
 	var result []Position
-	err := c.Find(bson.M{}).All(&result)
+	err := c.Find(bson.M{}).Sort("id").All(&result)
 	if err != nil {
 		return result, err
 	}
@@ -206,18 +218,6 @@ func getDivision(session *mgo.Session, id string) (Division, error) {
 		return d, err
 	}
 	return d, nil
-}
-
-// allDivisions 함수는 DB에서 전체 사용자 정보를 가지고오는 함수입니다.
-func allDivisions(session *mgo.Session) ([]Division, error) {
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("organization").C("divisions")
-	var result []Division
-	err := c.Find(bson.M{}).All(&result)
-	if err != nil {
-		return result, err
-	}
-	return result, nil
 }
 
 // getDepartment 함수는 Department 아이디를 받아서 Department 자료구조를 반환하는 함수이다.
