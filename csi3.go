@@ -167,6 +167,76 @@ func main() {
 			log.Fatal(err)
 		}
 		return
+	} else if *flagRm == "division" && *flagID != "" { // division 삭제
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmDivision(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	} else if *flagRm == "department" && *flagID != "" { // department 삭제
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmDepartment(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	} else if *flagRm == "team" && *flagID != "" { // team 삭제
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmTeam(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	} else if *flagRm == "role" && *flagID != "" { // role 삭제
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmRole(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	} else if *flagRm == "position" && *flagID != "" { // position 삭제
+		if user.Username != "root" {
+			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer session.Close()
+		err = rmPosition(session, *flagID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
 	} else if *flagRm == "user" && *flagID != "" { // 사용자 삭제
 		if user.Username != "root" {
 			log.Fatal(errors.New("사용자를 삭제하기 위해서는 root 권한이 필요합니다"))

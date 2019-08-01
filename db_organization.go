@@ -354,3 +354,58 @@ func setPosition(session *mgo.Session, p Position) error {
 	}
 	return nil
 }
+
+// rmDivision 함수는 Division을 삭제하는 함수이다.
+func rmDivision(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("divisions")
+	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmDepartment 함수는 Department를 삭제하는 함수이다.
+func rmDepartment(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("departments")
+	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmTeam 함수는 Team을 삭제하는 함수이다.
+func rmTeam(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("teams")
+	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmRole 함수는 Role을 삭제하는 함수이다.
+func rmRole(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("roles")
+	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmPosition 함수는 Position을 삭제하는 함수이다.
+func rmPosition(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("organization").C("positions")
+	err := c.Remove(bson.M{"id": id})
+	if err != nil {
+		return err
+	}
+	return nil
+}
