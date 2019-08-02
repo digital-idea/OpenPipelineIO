@@ -12,12 +12,12 @@
 
 ### 다운로드
 
-- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_linux_x86-64.tgz)
-- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_darwin_x86-64.tgz)
-- [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_windows_x86-64.tgz)
-- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.3/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_linux_x86-64.tgz)
+- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_darwin_x86-64.tgz)
+- [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_windows_x86-64.tgz)
+- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.4/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 
 ### Roadmap
