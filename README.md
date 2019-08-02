@@ -24,8 +24,9 @@
 - [x] 빌드환경 구축 ![build](http://progressed.io/bar/100)
 - [x] 유저자료구조 추가 ![user](http://progressed.io/bar/100)
 - [x] 과거에 사용된 Python CSI2 API를 웹 restAPI로 전환(총46개함수) ![restAPI](http://progressed.io/bar/100)
-- [ ] 본부, 부서, 팀, 직책, 직급 자료구조 정의 ![organization](http://progressed.io/bar/10)
+- [x] 본부, 부서, 팀, 직책, 직급 자료구조 정의 ![organization](http://progressed.io/bar/100)
 - [ ] 리서치: 웹용 PM 입력기(MultiTask로 변경되면 기존 X,Y축 입력방식이 아닌 웹입력기 제작이 필요 ![input](http://progressed.io/bar/5)
+    - user자료구조가 정착화 되기 전까지 진행된다.
     - [x] 태그입력 기술테스트 완료.
     - [ ] 작업배정 기술테스트
     - [ ] 시간정보 수정
