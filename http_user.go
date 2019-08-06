@@ -516,10 +516,12 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		Company string
 		Message string
+		ID      string
 	}
 	rcp := recipe{}
 	q := r.URL.Query()
 	errorCode := q.Get("status")
+	id := q.Get("id")
 	passwordAttempt := q.Get("passwordattempt")
 	switch errorCode {
 	case "wrongpw":
@@ -529,6 +531,7 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 			rcp.Message = "패스워드를 틀렸습니다. 다시 로그인 해주세요."
 		}
 	}
+	rcp.ID = id
 	rcp.Company = strings.Title(*flagCompany)
 	err = t.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
@@ -580,7 +583,7 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// 다시 로그인 페이지로 리다이렉트한다.
-		http.Redirect(w, r, fmt.Sprintf("/signin?status=wrongpw&passwordattempt=%d", u.PasswordAttempt), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/signin?status=wrongpw&passwordattempt=%d&id=%s", u.PasswordAttempt, id), http.StatusSeeOther)
 		return
 	}
 
