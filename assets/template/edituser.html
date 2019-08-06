@@ -129,20 +129,26 @@
 
             <div class="row">
                 <div class="col-12">
-                    <span class="btn btn-warning w-100" id="addOrganization">조직정보 수정하기</span>
+                    <span type="hidden" class="btn btn-danger w-100" id="addOrganization">조직정보 갱신하기</span>
                 </div>
             </div>
             
             <div class="form-group pt-3">
-                <small class="form-text text-muted">조직정보가 수정되면 아래 항목에 표기됩니다.</small>
-                <div id="Organizations"></div>
+                <small class="form-text text-muted">기존 등록된 조직정보는 아래 항목에 표기됩니다.</small>
+                <div id="Organizations">
+                    {{range .Organizations}}
+                        <div class="alert alert-warning small" role="alert">
+                            {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                        </div>
+                    {{end}}
+                </div>
             </div>
 
             <div class="form-group pt-3">
                 <label>Tags / 태그</label>
                 <input type="hidden" name="OrganizationsForm" id="OrganizationsForm" value="{{.User.OrganizationsForm}}" class="form-control">
                 <input type="text" name="Tags" id="Tags" class="form-control" placeholder="추가태그" value="{{Tags2str .User.Tags}}">
-                <small class="form-text text-muted">사용자가 현재 사용중인 Tag 입니다.</small>
+                <small class="form-text text-muted">사용자에게 설정된 Tag목록 입니다.</small>
             </div>
 
             <div class="form-group">

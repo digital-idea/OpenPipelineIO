@@ -38,6 +38,10 @@ document.getElementById("addOrganization").onclick = function() {
 	addOrganization();
 	// add Tags in Organizations
 	renderOrganizations();
+	// 만약 사용자 edit페이지라면 tag 항목제거함.
+	if (document.location.href.includes("edit")) {
+		document.getElementById("Tags").value = "";
+	};
 };
 
 function addOrganization() {
@@ -77,7 +81,7 @@ function renderOrganizations() {
 		div.innerHTML += `${userData.Organizations[i].TeamName}, `;
 		div.innerHTML += `${userData.Organizations[i].RoleName}, `;
 		div.innerHTML += `${userData.Organizations[i].PositionName} `;
-		div.innerHTML += `<a href="#" class="alert-link">&bigotimes;</a>`;
+		div.innerHTML += `<span class="alert-link">&bigotimes;</span>`;
 		div.onclick = removeItem;
 		document.getElementById("Organizations").appendChild(div);
 		let orgtags = [];
