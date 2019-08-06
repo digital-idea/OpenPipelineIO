@@ -74,70 +74,21 @@ $ dilog -http :8080
 $ wfs -http :8081
 ```
 
-### 명령어 사용법
-- 프로젝트 생성
-```bash
-$ csi3 -add project -name [projectname]
-```
-
-- 프로젝트 삭제: Root 계정에서만 작동됩니다.
-```
-# csi3 -rm project -name [projectname]
-```
-
-- 샷등록
-DB값만 생성되며, 샷 폴더가 생성되지는 않습니다.
-
-```bash
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org]
-```
-
-- 샷,에셋 삭제
-```bash
-$ csi3 -rm item -project [projectname] -name [SS_0010] -type [org]
-```
-
-- 에셋등록 예: 에셋이 prop 타입이고 component 형태일 때
-```
-$ csi3 -add item -type asset -project [projectname] -name [Assetname] -assettype prop -assettags prop,component
-```
-
-- 2016-12-05 에 아티스트가 업로드한 mov를 rvplayer로 한번에 모아보기.
-```bash
-$ csi3 -date 2016-12-05 -play &
-```
-
-- 특정 프로젝트의 데일리 mov rvplayer로 모아보기.
-```bash
-$ csi3 -date 2016-12-05 -play -project [projectname] &
-$ csi3 -date 2016-12-05 -play -project [projectname] -task model & // 해당 프로젝트의 model 테스크만 보기
-```
-
-- 사용자 패스워드 초기화
-사용자의 패스워드를 `Welcome2csi!`로 초기화 하고 싶다면 아래 명령어를 사용합니다.
-관리자만 처리할 수 있습니다.
-
-```bash
-$ sudo csi3 -initpass Welcome2csi! -id [userid]
-```
-
-- 사용자 제거
-
-```bash
-$ sudo csi3 -rm user -id [userid]
-```
-
-### 썸네일 경로
-- 썸네일주소 : `/thumbnail/{projectname}/{slug}.jpg`
-- 사용자이미지 : `/thumbnail/user/{id}.jpg`
-
-### CommandLine
+### CommandLine / 터미널 명령어
+- [Project](documents/project.md)
+- [Item](documents/item.md): 샷, 에셋등록, 삭제
+- [User](documents/user.md)
+- [Daily](documents/daily.md)
 - [Organization](documents/organization.md)
 
 ### RestAPI
 - [Project](documents/rest_project.md)
 - [Item](documents/rest_item.md)
 - [User](documents/rest_user.md)
+
+### 썸네일 경로
+- 썸네일주소 : `/thumbnail/{projectname}/{slug}.jpg`
+- 사용자이미지 : `/thumbnail/user/{id}.jpg`
 
 ### Process
 - [디자인 프로세스](documents/process_designer.md)
