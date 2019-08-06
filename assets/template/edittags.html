@@ -2,11 +2,13 @@
 
 <div class="row pt-5">
 	{{range .Items}}
-	<div class="card mx-auto" style="width: 18rem;">
-		<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg">
-		<div class="card-body">
-			<h6 class="card-title">{{.Name}}({{.Type}})</h6>
-			<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+	<div class="mx-auto">
+		<div class="card m-2" style="width: 18rem;">
+			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg">
+			<div class="card-body">
+				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+				<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+			</div>
 		</div>
 	</div>
 	{{end}}	
