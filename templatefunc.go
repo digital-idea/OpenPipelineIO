@@ -201,6 +201,9 @@ func Tags2str(tags []string) string {
 
 // Str2Tags 템플릿함수는 태그 문자열을 리스트로 만든다.
 func Str2Tags(tags string) []string {
+	if tags == "" {
+		return []string{}
+	}
 	var newtags []string
 	cleanup := strings.Replace(tags, " ", "", -1)
 	for _, tag := range strings.Split(cleanup, ",") {

@@ -1,12 +1,15 @@
 {{define "edittags" }}
 
-{{range .Items}}
-	<div class="form-check">
-		<label class="form-check-label">
-		  	<input type="checkbox" class="form-check-input" value="">{{.ID}}
-		</label>
-		<input class="form-control" value="{{range .Tag}}{{.}},{{end}}" type="text" onchange="setTags('TEMP', '{{.Name}}', this.value, '{{$.User.Token}}')">
+<div class="row pt-5">
+	{{range .Items}}
+	<div class="card mx-auto" style="width: 18rem;">
+		<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg">
+		<div class="card-body">
+			<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+			<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+		</div>
 	</div>
-{{end}}
+	{{end}}	
+</div>
 
 {{end}}

@@ -2175,12 +2175,11 @@ func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
 			}
 			name = v
 		case "tag", "tags":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+			if len(values) == 0 {
+				tags = ""
+			} else {
+				tags = values[0]
 			}
-			tags = v
 		}
 	}
 	err = SetTags(session, project, name, Str2Tags(tags))
