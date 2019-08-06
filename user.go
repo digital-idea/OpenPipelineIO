@@ -36,6 +36,7 @@ const (
 type User struct {
 	ID                string         `json:"id"`                // 사용자 ID(사번). 손님 및 클라이언트는 사번이 없다.(예외)
 	Password          string         `json:"password"`          // 사용자 비밀번호
+	PasswordAttempt   int            `json:"passwordattempt"`   // 잘못된 패스워드 시도횟수
 	FirstNameKor      string         `json:"firstnamekor"`      // 한글이름: 이름
 	LastNameKor       string         `json:"lastnamekor"`       // 한글이름: 성
 	FirstNameEng      string         `json:"firstnameeng"`      // 영문이름, Firstname, 외국인은 이름이 길기때문에 이 이름을 닉네임으로 사용한다.

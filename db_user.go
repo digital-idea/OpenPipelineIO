@@ -154,9 +154,10 @@ func initPassUser(session *mgo.Session, id string) error {
 	}
 	change := bson.M{
 		"$set": bson.M{
-			"password":   encryptPass,
-			"updatetime": time.Now().Format(time.RFC3339),
-			"token":      base64.StdEncoding.EncodeToString([]byte(encryptPass)),
+			"password":        encryptPass,
+			"passwordattempt": 0,
+			"updatetime":      time.Now().Format(time.RFC3339),
+			"token":           base64.StdEncoding.EncodeToString([]byte(encryptPass)),
 		},
 	}
 	err = c.Update(q, change)
@@ -287,6 +288,42 @@ func vaildUser(session *mgo.Session, id, pw string) error {
 		return err
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pw))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// addPasswordAttempt 함수는 사용자의 id를 받아서 패스워드 시도횟수를 추가한다.
+func addPasswordAttempt(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$inc": bson.M{"passwordattempt": 1}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// resetPasswordAttempt 함수는 사용자의 id를 받아서 패스워드 시도횟수를 초기화 한다.
+func resetPasswordAttempt(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"passwordattempt": 0}})
 	if err != nil {
 		return err
 	}

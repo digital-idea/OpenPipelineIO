@@ -341,6 +341,23 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleInvalidPass 함수는 사용자의 패스워드가 많이 틀려서 접속되는 페이지이다.
+func handleInvalidPass(w http.ResponseWriter, r *http.Request) {
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "invalidpass", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // OrganizationsFormToOrganizations 함수는 form 문자를 받아서 []Organization 을 생성한다.
 func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organization, error) {
 	var results []Organization
@@ -498,8 +515,20 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		Company string
+		Message string
 	}
 	rcp := recipe{}
+	q := r.URL.Query()
+	errorCode := q.Get("status")
+	passwordAttempt := q.Get("passwordattempt")
+	switch errorCode {
+	case "wrongpw":
+		if passwordAttempt != "" {
+			rcp.Message = passwordAttempt + "회 패스워드를 틀렸습니다. 다시 로그인 해주세요."
+		} else {
+			rcp.Message = "패스워드를 틀렸습니다. 다시 로그인 해주세요."
+		}
+	}
 	rcp.Company = strings.Title(*flagCompany)
 	err = t.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
@@ -530,17 +559,32 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = vaildUser(session, id, pw)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// 로그인에 성공하면 접속한 아이피와 포트를 DB에 기록한다.
+	// 사용자가 과거에 패스워드를 5회이상 틀렸다면 로그인을 허용하지 않는다.
 	u, err := getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	if u.PasswordAttempt > 4 {
+		http.Redirect(w, r, "/invalidpass", http.StatusSeeOther)
+		return
+	}
+	err = vaildUser(session, id, pw)
+	if err != nil {
+		// 패스워드 시도횟수를 추가한다.
+		addPasswordAttempt(session, id)
+		// 패스워드 시도횟수를 가지고 오기 위해서 사용자 정보를 가지고 온다.
+		u, err := getUser(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 다시 로그인 페이지로 리다이렉트한다.
+		http.Redirect(w, r, fmt.Sprintf("/signin?status=wrongpw&passwordattempt=%d", u.PasswordAttempt), http.StatusSeeOther)
+		return
+	}
+
+	// 로그인에 성공하면 접속한 아이피와 포트를 DB에 기록한다.
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -548,6 +592,7 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	u.LastIP = host
 	u.LastPort = port
+	u.PasswordAttempt = 0 // 로그인에 성공하면 기존 시도한 패스워드 횟수를 초기화 한다.
 	err = setUser(session, u)
 	// session을 저장후 로그인 성공페이지로 이동한다.
 	err = SetSessionID(w, u.ID, u.AccessLevel, "")
