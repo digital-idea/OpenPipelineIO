@@ -93,7 +93,7 @@ $ wfs -http :8081
 
 ### Developer
 - Maintainer: HanwoongKim(hello@lazypic.org)
-- Committer: 
+- Committer: Bailey(bailey@lazypic.org)
 - Contributors: 
 
 ### Infomation
