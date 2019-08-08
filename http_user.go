@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -189,6 +190,27 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
 	u.Tags = Str2Tags(r.FormValue("Tags"))
+	if r.FormValue("AccessLevel") != "" {
+		level, err := strconv.Atoi(r.FormValue("AccessLevel"))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 사용자 레벨을 업데이트한다.
+		u.AccessLevel = AccessLevel(level)
+		// 사용자 토큰을 업데이트한다.
+		t, err := getToken(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		t.AccessLevel = AccessLevel(level)
+		err = setToken(session, t)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 
 	u.Timezone = r.FormValue("Timezone")
 	u.LastIP = host
