@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 // 해상도값 정규식: 2048x1080 형태
@@ -137,4 +138,14 @@ func UniqueSlice(stringSlice []string) []string {
 		}
 	}
 	return list
+}
+
+// isASCII 함수는 문자가 아스키로 구성되어있는지 체크한다.
+func isASCII(s string) bool {
+	for _, c := range s {
+		if c > unicode.MaxASCII {
+			return false
+		}
+	}
+	return true
 }

@@ -57,7 +57,7 @@ func rmProjectCmd(name string) {
 	}
 }
 
-func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, scantimecodeout string, scanframe, scanin, scanout, platein, plateout int) {
+func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, scantimecodeout, justtimecodein, justtimecodeout string, scanframe, scanin, scanout, platein, plateout, justin, justout int) {
 	if !regexpShotname.MatchString(name) {
 		log.Fatal("샷 이름 규칙이 아닙니다.")
 	}
@@ -91,19 +91,31 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if scantimecodeout != "" {
 		i.ScanTimecodeOut = scantimecodeout
 	}
+	if justtimecodein != "" {
+		i.JustTimecodeIn = justtimecodein
+	}
+	if justtimecodeout != "" {
+		i.JustTimecodeOut = justtimecodeout
+	}
 	if scanin != -1 {
 		i.ScanIn = scanin
 	}
 	if scanout != -1 {
 		i.ScanOut = scanout
 	}
-	if platein != -1 {
+	if platein != -1 && justin == -1 {
 		i.PlateIn = platein
 		i.JustIn = platein
 	}
-	if plateout != -1 {
+	if plateout != -1 && justout == -1 {
 		i.PlateOut = plateout
 		i.JustOut = plateout
+	}
+	if justin != -1 {
+		i.JustIn = justin
+	}
+	if justout != -1 {
+		i.JustOut = justout
 	}
 	i.Project = project
 	session, err := mgo.Dial(*flagDBIP)
@@ -165,7 +177,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 }
 
 // addOtherItemCmd함수는 Shot, Asset 이 아닌 나머지 아이템을 추가하는 함수이다.
-func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, scantimecodeout string, scanframe, scanin, scanout, platein, plateout int) {
+func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, scantimecodeout, justtimecodein, justtimecodeout string, scanframe, scanin, scanout, platein, plateout, justin, justout int) {
 	if !regexpShotname.MatchString(name) {
 		log.Fatal("소스, 재스캔 이름 규칙이 아닙니다.")
 	}
@@ -201,19 +213,31 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	if scantimecodeout != "" {
 		i.ScanTimecodeOut = scantimecodeout
 	}
+	if justtimecodein != "" {
+		i.JustTimecodeIn = justtimecodein
+	}
+	if justtimecodeout != "" {
+		i.JustTimecodeOut = justtimecodeout
+	}
 	if scanin != -1 {
 		i.ScanIn = scanin
 	}
 	if scanout != -1 {
 		i.ScanOut = scanout
 	}
-	if platein != -1 {
+	if platein != -1 && justin == -1 {
 		i.PlateIn = platein
 		i.JustIn = platein
 	}
-	if plateout != -1 {
+	if plateout != -1 && justout == -1 {
 		i.PlateOut = plateout
 		i.JustOut = plateout
+	}
+	if justin != -1 {
+		i.JustIn = justin
+	}
+	if justout != -1 {
+		i.JustOut = justout
 	}
 
 	// 현장데이터가 존재하는지 체크한다.

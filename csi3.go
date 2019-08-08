@@ -80,10 +80,14 @@ var (
 	flagTask            = flag.String("task", "", "태스크 이름. 예) model,mm.layout,ani,fx,mg,fur,sim,crowd,light,comp,matte,env")
 	flagScantimecodein  = flag.String("scantimecodein", "", "스캔 Timecode In")
 	flagScantimecodeout = flag.String("scantimecodeout", "", "스캔 Timecode Out")
+	flagJusttimecodein  = flag.String("justtimecodein", "", "Just구간 Timecode In")
+	flagJusttimecodeout = flag.String("justtimecodeout", "", "Just구간 Timecode Out")
 	flagScanframe       = flag.Int("scanframe", 0, "스캔 총 프레임수")
 	flagScanname        = flag.String("scanname", "", "스캔 폴더명")
 	flagScanin          = flag.Int("scanin", -1, "스캔 In Frame")
 	flagScanout         = flag.Int("scanout", -1, "스캔 Out Frame")
+	flagJustin          = flag.Int("justin", -1, "Just In Frame")
+	flagJustout         = flag.Int("justout", -1, "Just Out Frame")
 	flagPlatein         = flag.Int("platein", -1, "플레이트 In Frame")
 	flagPlateout        = flag.Int("plateout", -1, "플레이트 Out Frame")
 	flagUpdateParent    = flag.Bool("updateparent", false, "org1,org2 형태의 재스캔 항목이라면 원본 org 정보를 업데이트 한다.")
@@ -262,7 +266,7 @@ func main() {
 	} else if *flagAdd == "item" && *flagName != "" && *flagProject != "" && *flagType != "" { //아이템 추가
 		switch *flagType {
 		case "org", "left": // 일반영상은 org가 샷 타입이다. 입체프로젝트는 left가 샷타입이다.
-			addShotItemCmd(*flagProject, *flagName, *flagType, *flagPlatesize, *flagScanname, *flagScantimecodein, *flagScantimecodeout, *flagScanframe, *flagScanin, *flagScanout, *flagPlatein, *flagPlateout)
+			addShotItemCmd(*flagProject, *flagName, *flagType, *flagPlatesize, *flagScanname, *flagScantimecodein, *flagScantimecodeout, *flagJusttimecodein, *flagJusttimecodeout, *flagScanframe, *flagScanin, *flagScanout, *flagPlatein, *flagPlateout, *flagJustin, *flagJustout)
 			dilog.Add(*flagDBIP, ip, "샷 생성되었습니다.", *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
 			dilog.Add(*flagDBIP, ip, "스캔이름 : "+*flagScanname, *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
 			dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
@@ -275,7 +279,7 @@ func main() {
 			dilog.Add(*flagDBIP, ip, fmt.Sprintf("에셋타입 : %s, 에셋태그 : %s", *flagAssettype, *flagAssettags), *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
 			return
 		default: //소스, 재스캔 추가
-			addOtherItemCmd(*flagProject, *flagName, *flagType, *flagPlatesize, *flagScanname, *flagScantimecodein, *flagScantimecodeout, *flagScanframe, *flagScanin, *flagScanout, *flagPlatein, *flagPlateout)
+			addOtherItemCmd(*flagProject, *flagName, *flagType, *flagPlatesize, *flagScanname, *flagScantimecodein, *flagScantimecodeout, *flagJusttimecodein, *flagJusttimecodeout, *flagScanframe, *flagScanin, *flagScanout, *flagPlatein, *flagPlateout, *flagJustin, *flagJustout)
 			dilog.Add(*flagDBIP, ip, "아이템이 생성되었습니다.", *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
 			dilog.Add(*flagDBIP, ip, "스캔이름 : "+*flagScanname, *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
 			dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
@@ -302,6 +306,18 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
+					if *flagJusttimecodein != "" {
+						err = SetTimecode(session, *flagProject, *flagName, "justtimecodein", *flagJusttimecodein)
+						if err != nil {
+							log.Fatal(err)
+						}
+					}
+					if *flagJusttimecodeout != "" {
+						err = SetTimecode(session, *flagProject, *flagName, "justtimecodeout", *flagJusttimecodeout)
+						if err != nil {
+							log.Fatal(err)
+						}
+					}
 					err = SetFrame(session, *flagProject, *flagName, "scanin", *flagScanin)
 					if err != nil {
 						log.Fatal(err)
@@ -321,6 +337,19 @@ func main() {
 					err = SetFrame(session, *flagProject, *flagName, "plateout", *flagPlateout)
 					if err != nil {
 						log.Fatal(err)
+					}
+					// Just In/Out 등록
+					if *flagJustin > 0 {
+						err = SetFrame(session, *flagProject, *flagName, "justin", *flagJustin)
+						if err != nil {
+							log.Fatal(err)
+						}
+					}
+					if *flagJustout > 0 {
+						err = SetFrame(session, *flagProject, *flagName, "justout", *flagJustout)
+						if err != nil {
+							log.Fatal(err)
+						}
 					}
 					err = SetUseType(session, *flagProject, *flagName, *flagType)
 					if err != nil {

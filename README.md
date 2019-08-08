@@ -92,12 +92,12 @@ $ wfs -http :8081
 - [DB관리](documents/dbbackup.md)
 
 ### Developer
-- Maintainer: HanwoongKim(hello@lazypic.org)
+- 회사 전용 빌드문의: hello@lazypic.org
+- Maintainer: Jason(jason@lazypic.org)
 - Committer: Bailey(bailey@lazypic.org)
-- Contributors: 
+- Contributors:
 
 ### Infomation
 - [History](documents/history.md): csi의 역사
 - License: BSD 3-Clause License
-- 회사 전용 빌드문의: hello@lazypic.org
 - 참고: [CentOS7에서 mongoDB 설치](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)

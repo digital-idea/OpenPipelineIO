@@ -981,6 +981,9 @@ func SetUseType(session *mgo.Session, project, name, usetype string) error {
 // SetFrame 함수는 item에 프레임을 설정한다.
 // ScanIn,ScanOut,ScanFrame,PlateIn,PlateOut,JustIn,JustOut,HandleIn,HandleOut 문자를 key로 사용할 수 있다.
 func SetFrame(session *mgo.Session, project, name, key string, frame int) error {
+	if frame == -1 {
+		return nil
+	}
 	if !(key == "scanin" ||
 		key == "scanout" ||
 		key == "scanframe" ||

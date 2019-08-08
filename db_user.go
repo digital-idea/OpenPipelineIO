@@ -223,6 +223,10 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 	var searchwords []string
 	// 사람 이름을 가지고 검색을 자주한다.
 	for _, word := range words {
+		if isASCII(word) {
+			searchwords = append(searchwords, word)
+			continue
+		}
 		r := []rune(word)
 		if len(r) == 2 { // 이름이 2자리 일경우 "김웅"
 			searchwords = append(searchwords, string(r[0])) // 성을 추가한다.
