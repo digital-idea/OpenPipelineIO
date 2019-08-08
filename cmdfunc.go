@@ -103,11 +103,11 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if scanout != -1 {
 		i.ScanOut = scanout
 	}
-	if platein != -1 && justin == -1 {
+	if platein != -1 {
 		i.PlateIn = platein
 		i.JustIn = platein
 	}
-	if plateout != -1 && justout == -1 {
+	if plateout != -1 {
 		i.PlateOut = plateout
 		i.JustOut = plateout
 	}
@@ -225,11 +225,11 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	if scanout != -1 {
 		i.ScanOut = scanout
 	}
-	if platein != -1 && justin == -1 {
+	if platein != -1 {
 		i.PlateIn = platein
 		i.JustIn = platein
 	}
-	if plateout != -1 && justout == -1 {
+	if plateout != -1 {
 		i.PlateOut = plateout
 		i.JustOut = plateout
 	}
