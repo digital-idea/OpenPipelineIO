@@ -166,6 +166,25 @@
                 </select>
                 <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
             </div>
+            {{if eq .SessionUser.AccessLevel 10}}
+            <div class="form-group">
+                <label>AccessLevel</label>
+                <select name="AccessLevel" class="form-control">
+                    <option value="0" {{if eq .User.AccessLevel 0}}selected{{end}}>0: Unknown</option>
+                    <option value="1" {{if eq .User.AccessLevel 1}}selected{{end}}>1: Guest</option>
+                    <option value="2" {{if eq .User.AccessLevel 2}}selected{{end}}>2: Client</option>
+                    <option value="3" {{if eq .User.AccessLevel 3}}selected{{end}}>3: Artist</option>
+                    <option value="4" {{if eq .User.AccessLevel 4}}selected{{end}}>4: Lead</option>
+                    <option value="5" {{if eq .User.AccessLevel 5}}selected{{end}}>5: Pm</option>
+                    <option value="6" {{if eq .User.AccessLevel 6}}selected{{end}}>6: Supervisor</option>
+                    <option value="7" {{if eq .User.AccessLevel 7}}selected{{end}}>7: IO</option>
+                    <option value="8" {{if eq .User.AccessLevel 8}}selected{{end}}>8: PD</option>
+                    <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: Developer</option>
+                    <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Admin</option>
+                </select>
+                <small class="form-text text-danger">사용자 Accesslevel을 선택합니다.</small>
+            </div>
+            {{end}}
         </div>
     </div>     
     <div class="text-center">

@@ -89,6 +89,7 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		MailDNS string
 		User
+		SessionUser User
 		Divisions   []Division
 		Departments []Department
 		Teams       []Team
@@ -128,6 +129,11 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User, err = getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.SessionUser, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
