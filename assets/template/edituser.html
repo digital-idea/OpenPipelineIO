@@ -6,6 +6,7 @@
     <form action="/edituser_submit"  method="POST" enctype="multipart/form-data">
     <div class="pt-3 pb-5">
         <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
+        <input type="hidden" name="ID" id="ID" value="{{.User.ID}}">
     </div>
     <div class="row">
         <div class="col-sm">

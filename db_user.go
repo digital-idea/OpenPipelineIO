@@ -7,6 +7,7 @@ import (
 	"errors"
 	"log"
 	"sort"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -227,6 +228,10 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 			searchwords = append(searchwords, word)
 			continue
 		}
+		if strings.HasPrefix(word, "tag:") {
+			searchwords = append(searchwords, word)
+			continue
+		}
 		r := []rune(word)
 		if len(r) == 2 { // 이름이 2자리 일경우 "김웅"
 			searchwords = append(searchwords, string(r[0])) // 성을 추가한다.
@@ -249,20 +254,24 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 	}
 	for _, word := range searchwords {
 		wordQueries := []bson.M{}
-		wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"lastnameeng": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"firstnamechn": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"lastnamechn": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"email": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"emailexternal": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word}})
-		wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
+		if strings.HasPrefix(word, "tag:") {
+			wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: strings.Trim(word, "tag:")}})
+		} else {
+			wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"lastnameeng": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"firstnamechn": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"lastnamechn": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"email": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"emailexternal": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
+		}
 		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
 	}
 	q := bson.M{"$and": wordsQueries}

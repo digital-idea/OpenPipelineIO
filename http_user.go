@@ -163,7 +163,14 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	u, err := getUser(session, ssid.ID)
+	id := r.FormValue("ID")
+	if id != ssid.ID {
+		if ssid.AccessLevel != 10 {
+			http.Error(w, "사용자를 수정하기 위해서는 Accesslevel 10이 필요합니다", http.StatusInternalServerError)
+			return
+		}
+	}
+	u, err := getUser(session, id)
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
@@ -260,7 +267,13 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/user?id="+ssid.ID, http.StatusSeeOther)
+	if id != ssid.ID {
+		// 관리자가 일반유저를 수정하는 경우 리다이렉션 URL
+		http.Redirect(w, r, "/users?search="+id, http.StatusSeeOther)
+	} else {
+		// 자기 자신이 수정하는 경우 리다이렉션 URL
+		http.Redirect(w, r, "/user?id="+ssid.ID, http.StatusSeeOther)
+	}
 }
 
 // handleSignup 함수는 회원가입 페이지이다.
