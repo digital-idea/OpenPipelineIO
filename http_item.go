@@ -429,6 +429,32 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleEditedItem 함수는 Item 이 수정된 이후 이동하는 페이지이다.
+func handleEditedItem(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	t, err := LoadTemplates()
+	if err != nil {
+		log.Println("loadTemplates:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = t.ExecuteTemplate(w, "editeditem", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // handleTags 함수는 태그 클릭시 출력되는 페이지이다.
 func handleTags(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -932,21 +958,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sort=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
-		project,
-		slug,
-		"slug",
-		true,
-		true,
-		true,
-		true,
-		true,
-		false,
-		false,
-		false,
-		false,
-	)
-	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+	http.Redirect(w, r, "/editeditem", http.StatusSeeOther)
 }
 
 // handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.

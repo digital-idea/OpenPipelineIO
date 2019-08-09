@@ -1,0 +1,24 @@
+{{define "editeditem" }}
+{{template "headBootstrap"}}
+<script>
+    function goBack() {
+      window.history.go(-2);
+    }
+</script>
+<body onload="goBack()">
+
+<div class="container p-5">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading text-center">Edited Item</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm text-center">
+            Item이 수정되었습니다. 이전 페이지로 자동이동합니다.<br>
+        </div>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}

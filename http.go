@@ -109,6 +109,7 @@ func webserver(port string) {
 	http.HandleFunc("/assettags/", handleAssettags)
 	http.HandleFunc("/ddline/", handleDdline)
 	http.HandleFunc("/edit", handleEditItem)
+	http.HandleFunc("/editeditem", handleEditedItem)
 	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/setellite", handleSetellite)
