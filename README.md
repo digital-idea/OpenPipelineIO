@@ -55,8 +55,11 @@ Windows
 - Setup: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows-unattended/
 
 ### CSI 실행
+명령어 실행전 thumbnail 경로가 필요합니다.
+이 경로는 CSI를 운용하면서 생성되는 썸네일 이미지, 사용자 프로필 사진이 저장되는 경로로 활용됩니다.
 
 ```bash
+$ mkdir thumbnail // thumbnail 경로가 없다면 생성해주세요.
 $ sudo csi3 -http :80
 ```
 
