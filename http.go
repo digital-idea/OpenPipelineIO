@@ -172,7 +172,7 @@ func webserver(port string) {
 	http.HandleFunc("/addpositionsubmit", handleAddPositionSubmit)
 
 	// Input
-	http.HandleFunc("/inputtags", handleInputTags)
+	http.HandleFunc("/inputmode", handleInputMode)
 
 	// restAPI Project
 	http.HandleFunc("/api/project", handleAPIProject)

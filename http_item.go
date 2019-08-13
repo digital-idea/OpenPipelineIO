@@ -85,9 +85,8 @@ func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
 	Hold := str2bool(r.FormValue("Hold"))
 	Out := str2bool(r.FormValue("Out"))
 	None := str2bool(r.FormValue("None"))
-	Template := "inputtags" //r.FormValue("Template")
-	redirectURL := fmt.Sprintf(`/%s?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s`,
-		Template,
+	Template := r.FormValue("Template")
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s`,
 		Project,
 		Searchword,
 		Sortkey,

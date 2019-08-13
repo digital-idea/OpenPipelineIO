@@ -3,13 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
-	"strings"
 
 	"gopkg.in/mgo.v2"
 )
 
-// handleInputTags 함수는 태그를 편하게 입력하는 페이지 이다.
-func handleInputTags(w http.ResponseWriter, r *http.Request) {
+// handleInputMode 함수는 태그를 편하게 입력하는 페이지 이다.
+func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -35,6 +34,7 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		Project     string
 		SearchOption
 	}
+
 	rcp := recipe{}
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
@@ -54,7 +54,9 @@ func handleInputTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
-	rcp.SearchOption.Template = strings.Trim(r.URL.Path, "/")
+	q := r.URL.Query()
+	template := q.Get("template")
+	rcp.SearchOption.Template = template
 	rcp.Items, err = Searchv1(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
