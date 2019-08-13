@@ -19,8 +19,6 @@ function setTags(project, name, tags, token) {
 }
 
 function setAssignTask(project, name, task, status, token) {
-    console.log(project, name, task, status, token)
-    /*
     $.ajax({
         url: "/api/setassigntask",
         type: "post",
@@ -39,5 +37,4 @@ function setAssignTask(project, name, task, status, token) {
         }
 
     });
-    */
 }
