@@ -9,7 +9,7 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					<div class="form-check ml-3">
-						<input type="checkbox" class="form-check-input" id="concept">
+						<input type="checkbox" class="form-check-input" id="concept" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'concept', this.checked, '{{$.User.Token}}')">
 						<label class="form-check-label">Concept</label>
 					</div>
 					<div class="form-check ml-3">

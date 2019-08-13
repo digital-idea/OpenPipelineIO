@@ -18,9 +18,11 @@ function setTags(project, name, tags, token) {
     });
 }
 
-function setTaskStatus(project, name, task, status, token) {
+function setAssignTask(project, name, task, status, token) {
+    console.log(project, name, task, status, token)
+    /*
     $.ajax({
-        url: "/api/status",
+        url: "/api/setassigntask",
         type: "post",
         data: {
             project: project,
@@ -37,4 +39,5 @@ function setTaskStatus(project, name, task, status, token) {
         }
 
     });
+    */
 }
