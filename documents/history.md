@@ -1,5 +1,7 @@
 # History
-
+- '19. 7~8: 로그인, 사용자 자료구조 추가 ![login_and_user](http://progressed.io/bar/100)
+- '19. 7: CSI2 RestAPI 48개 함수 추가 ![csi2_restapi](http://progressed.io/bar/100)
+- '19. 6~7: 빌드환경구축. 바이너리 파일하나로 배포하는 모델 구축 ![build](http://progressed.io/bar/100)
 - '19. 6. 5 : Opensource 전환
 - '18. 3. 25 : 현장툴 Setellite 연결
 - ’17. 5.29 ~ : 웹을 이용한 restAPI 개발시작
