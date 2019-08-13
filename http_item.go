@@ -651,6 +651,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.ProductionCam.Projection = str2bool(r.FormValue("ProductionCamProjection"))
 	//concept
 	NewItem.Concept.Status = r.FormValue("ConceptStatus")
+	if NewItem.Concept.Status != CurrentItem.Concept.Status {
+		NewItem.Concept.BeforeStatus = CurrentItem.Concept.Status
+	}
 	NewItem.Concept.User = r.FormValue("ConceptUser")
 	NewItem.Concept.UserNote = r.FormValue("ConceptUserNote")
 	NewItem.Concept.Startdate = ToFullTime(r.FormValue("ConceptStartdate"))
@@ -669,6 +672,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 
 	//model
 	NewItem.Model.Status = r.FormValue("ModelStatus")
+	if NewItem.Model.Status != CurrentItem.Model.Status {
+		NewItem.Model.BeforeStatus = CurrentItem.Model.Status
+	}
 	NewItem.Model.User = r.FormValue("ModelUser")
 	NewItem.Model.UserNote = r.FormValue("ModelUserNote")
 	NewItem.Model.Startdate = ToFullTime(r.FormValue("ModelStartdate"))
@@ -686,6 +692,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	//mm
 	NewItem.Mm.Status = r.FormValue("MmStatus")
+	if NewItem.Mm.Status != CurrentItem.Mm.Status {
+		NewItem.Mm.BeforeStatus = CurrentItem.Mm.Status
+	}
 	NewItem.Mm.User = r.FormValue("MmUser")
 	NewItem.Mm.UserNote = r.FormValue("MmUserNote")
 	NewItem.Mm.Startdate = ToFullTime(r.FormValue("MmStartdate"))
@@ -698,6 +707,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Mm.Mov = r.FormValue("MmMov")
 	//layout
 	NewItem.Layout.Status = r.FormValue("LayoutStatus")
+	if NewItem.Layout.Status != CurrentItem.Layout.Status {
+		NewItem.Layout.BeforeStatus = CurrentItem.Layout.Status
+	}
 	NewItem.Layout.User = r.FormValue("LayoutUser")
 	NewItem.Layout.UserNote = r.FormValue("LayoutUserNote")
 	NewItem.Layout.Startdate = ToFullTime(r.FormValue("LayoutStartdate"))
@@ -710,6 +722,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Layout.Mov = r.FormValue("LayoutMov")
 	//ani
 	NewItem.Ani.Status = r.FormValue("AniStatus")
+	if NewItem.Ani.Status != CurrentItem.Ani.Status {
+		NewItem.Ani.BeforeStatus = CurrentItem.Ani.Status
+	}
 	NewItem.Ani.User = r.FormValue("AniUser")
 	NewItem.Ani.UserNote = r.FormValue("AniUserNote")
 	NewItem.Ani.Startdate = ToFullTime(r.FormValue("AniStartdate"))
@@ -722,6 +737,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Ani.Mov = r.FormValue("AniMov")
 	//fx
 	NewItem.Fx.Status = r.FormValue("FxStatus")
+	if NewItem.Fx.Status != CurrentItem.Fx.Status {
+		NewItem.Fx.BeforeStatus = CurrentItem.Fx.Status
+	}
 	NewItem.Fx.User = r.FormValue("FxUser")
 	NewItem.Fx.UserNote = r.FormValue("FxUserNote")
 	NewItem.Fx.Startdate = ToFullTime(r.FormValue("FxStartdate"))
@@ -734,6 +752,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Fx.Mov = r.FormValue("FxMov")
 	//mg
 	NewItem.Mg.Status = r.FormValue("MgStatus")
+	if NewItem.Mg.Status != CurrentItem.Mg.Status {
+		NewItem.Mg.BeforeStatus = CurrentItem.Mg.Status
+	}
 	NewItem.Mg.User = r.FormValue("MgUser")
 	NewItem.Mg.UserNote = r.FormValue("MgUserNote")
 	NewItem.Mg.Startdate = ToFullTime(r.FormValue("MgStartdate"))
@@ -753,6 +774,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	//temp1
 	NewItem.Temp1.Title = r.FormValue("Temp1Title")
 	NewItem.Temp1.Status = r.FormValue("Temp1Status")
+	if NewItem.Temp1.Status != CurrentItem.Temp1.Status {
+		NewItem.Temp1.BeforeStatus = CurrentItem.Temp1.Status
+	}
 	NewItem.Temp1.User = r.FormValue("Temp1User")
 	NewItem.Temp1.UserNote = r.FormValue("Temp1UserNote")
 	NewItem.Temp1.Startdate = ToFullTime(r.FormValue("Temp1Startdate"))
@@ -765,6 +789,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Temp1.Mov = r.FormValue("Temp1Mov")
 	//previz
 	NewItem.Previz.Status = r.FormValue("PrevizStatus")
+	if NewItem.Previz.Status != CurrentItem.Previz.Status {
+		NewItem.Previz.BeforeStatus = CurrentItem.Previz.Status
+	}
 	NewItem.Previz.User = r.FormValue("PrevizUser")
 	NewItem.Previz.UserNote = r.FormValue("PrevizUserNote")
 	NewItem.Previz.Startdate = ToFullTime(r.FormValue("PrevizStartdate"))
@@ -777,6 +804,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Previz.Mov = r.FormValue("PrevizMov")
 	//fur
 	NewItem.Fur.Status = r.FormValue("FurStatus")
+	if NewItem.Fur.Status != CurrentItem.Fur.Status {
+		NewItem.Fur.BeforeStatus = CurrentItem.Fur.Status
+	}
 	NewItem.Fur.User = r.FormValue("FurUser")
 	NewItem.Fur.UserNote = r.FormValue("FurUserNote")
 	NewItem.Fur.Startdate = ToFullTime(r.FormValue("FurStartdate"))
@@ -789,6 +819,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Fur.Mov = r.FormValue("FurMov")
 	//sim
 	NewItem.Sim.Status = r.FormValue("SimStatus")
+	if NewItem.Sim.Status != CurrentItem.Sim.Status {
+		NewItem.Sim.BeforeStatus = CurrentItem.Sim.Status
+	}
 	NewItem.Sim.User = r.FormValue("SimUser")
 	NewItem.Sim.UserNote = r.FormValue("SimUserNote")
 	NewItem.Sim.Startdate = ToFullTime(r.FormValue("SimStartdate"))
@@ -801,6 +834,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Sim.Mov = r.FormValue("SimMov")
 	//crowd
 	NewItem.Crowd.Status = r.FormValue("CrowdStatus")
+	if NewItem.Crowd.Status != CurrentItem.Crowd.Status {
+		NewItem.Crowd.BeforeStatus = CurrentItem.Crowd.Status
+	}
 	NewItem.Crowd.User = r.FormValue("CrowdUser")
 	NewItem.Crowd.UserNote = r.FormValue("CrowdUserNote")
 	NewItem.Crowd.Startdate = ToFullTime(r.FormValue("CrowdStartdate"))
@@ -813,6 +849,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Crowd.Mov = r.FormValue("CrowdMov")
 	//light
 	NewItem.Light.Status = r.FormValue("LightStatus")
+	if NewItem.Light.Status != CurrentItem.Light.Status {
+		NewItem.Light.BeforeStatus = CurrentItem.Light.Status
+	}
 	NewItem.Light.User = r.FormValue("LightUser")
 	NewItem.Light.UserNote = r.FormValue("LightUserNote")
 	NewItem.Light.Startdate = ToFullTime(r.FormValue("LightStartdate"))
@@ -825,6 +864,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Light.Mov = r.FormValue("LightMov")
 	//comp
 	NewItem.Comp.Status = r.FormValue("CompStatus")
+	if NewItem.Comp.Status != CurrentItem.Comp.Status {
+		NewItem.Comp.BeforeStatus = CurrentItem.Comp.Status
+	}
 	NewItem.Comp.User = r.FormValue("CompUser")
 	NewItem.Comp.UserNote = r.FormValue("CompUserNote")
 	NewItem.Comp.Startdate = ToFullTime(r.FormValue("CompStartdate"))
@@ -837,6 +879,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	NewItem.Comp.Mov = r.FormValue("CompMov")
 	//matte
 	NewItem.Matte.Status = r.FormValue("MatteStatus")
+	if NewItem.Matte.Status != CurrentItem.Matte.Status {
+		NewItem.Matte.BeforeStatus = CurrentItem.Matte.Status
+	}
 	NewItem.Matte.User = r.FormValue("MatteUser")
 	NewItem.Matte.UserNote = r.FormValue("MatteUserNote")
 	NewItem.Matte.Startdate = ToFullTime(r.FormValue("MatteStartdate"))
@@ -854,6 +899,9 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	//env
 	NewItem.Env.Status = r.FormValue("EnvStatus")
+	if NewItem.Env.Status != CurrentItem.Env.Status {
+		NewItem.Env.BeforeStatus = CurrentItem.Env.Status
+	}
 	NewItem.Env.User = r.FormValue("EnvUser")
 	NewItem.Env.UserNote = r.FormValue("EnvUserNote")
 	NewItem.Env.Startdate = ToFullTime(r.FormValue("EnvStartdate"))

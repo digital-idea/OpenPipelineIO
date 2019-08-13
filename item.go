@@ -185,21 +185,22 @@ type Item struct {
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
 type Task struct {
-	User       string             `json:"user"`       // 아티스트명
-	Status     string             `json:"status"`     // 상태
-	Startdate  string             `json:"startdate"`  // 작업시작일 RFC3339
-	Predate    string             `json:"predate"`    // 1차 마감일 RFC3339
-	Date       string             `json:"date"`       // 마감일 RFC3339
-	Mov        string             `json:"mov"`        // mov 경로
-	Mdate      string             `json:"mdate"`      // mov 업데이트된 날짜 RFC3339
-	Note       []string           `json:"note"`       // 작업노트
-	Movhistory []string           `json:"movhistory"` // mov 히스토리
-	Pubfile    string             `json:"pubfile"`    // Pubfile
-	Due        int                `json:"due"`        // 예측 멘데이
-	Promday    int                `json:"promday"`    // 실제멘데이
-	Title      string             `json:"title"`      // 테스크 네임. Temp1, Temp2의 표기 네임을 바꾸기 위해서 사용함.
-	UserNote   string             `json:"usernote"`   // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
-	TaskLevel  `json:"tasklevel"` // 샷 레벨
+	User         string             `json:"user"`         // 아티스트명
+	Status       string             `json:"status"`       // 상태
+	BeforeStatus string             `json:"beforestatus"` // 이전상태
+	Startdate    string             `json:"startdate"`    // 작업시작일 RFC3339
+	Predate      string             `json:"predate"`      // 1차 마감일 RFC3339
+	Date         string             `json:"date"`         // 마감일 RFC3339
+	Mov          string             `json:"mov"`          // mov 경로
+	Mdate        string             `json:"mdate"`        // mov 업데이트된 날짜 RFC3339
+	Note         []string           `json:"note"`         // 작업노트
+	Movhistory   []string           `json:"movhistory"`   // mov 히스토리
+	Pubfile      string             `json:"pubfile"`      // Pubfile
+	Due          int                `json:"due"`          // 예측 멘데이
+	Promday      int                `json:"promday"`      // 실제멘데이
+	Title        string             `json:"title"`        // 테스크 네임. Temp1, Temp2의 표기 네임을 바꾸기 위해서 사용함.
+	UserNote     string             `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
+	TaskLevel    `json:"tasklevel"` // 샷 레벨
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다.

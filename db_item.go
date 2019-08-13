@@ -1135,36 +1135,52 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 	hasTask := true
 	switch strings.ToLower(task) {
 	case "model":
+		item.Model.BeforeStatus = item.Model.Status
 		item.Model.Status = hasStatus
 	case "mm":
+		item.Mm.BeforeStatus = item.Mm.Status
 		item.Mm.Status = hasStatus
 	case "layout":
+		item.Layout.BeforeStatus = item.Layout.Status
 		item.Layout.Status = hasStatus
 	case "ani":
+		item.Ani.BeforeStatus = item.Ani.Status
 		item.Ani.Status = hasStatus
 	case "fx":
+		item.Fx.BeforeStatus = item.Fx.Status
 		item.Fx.Status = hasStatus
 	case "mg":
+		item.Mg.BeforeStatus = item.Mg.Status
 		item.Mg.Status = hasStatus
 	case "fur":
+		item.Fur.BeforeStatus = item.Fur.Status
 		item.Fur.Status = hasStatus
 	case "sim":
+		item.Sim.BeforeStatus = item.Sim.Status
 		item.Sim.Status = hasStatus
 	case "crowd":
+		item.Crowd.BeforeStatus = item.Crowd.Status
 		item.Crowd.Status = hasStatus
 	case "light":
+		item.Light.BeforeStatus = item.Light.Status
 		item.Light.Status = hasStatus
 	case "comp":
+		item.Comp.BeforeStatus = item.Comp.Status
 		item.Comp.Status = hasStatus
 	case "matte":
+		item.Matte.BeforeStatus = item.Matte.Status
 		item.Matte.Status = hasStatus
 	case "env":
+		item.Env.BeforeStatus = item.Env.Status
 		item.Env.Status = hasStatus
 	case "concept":
+		item.Concept.BeforeStatus = item.Concept.Status
 		item.Concept.Status = hasStatus
 	case "previz":
+		item.Previz.BeforeStatus = item.Previz.Status
 		item.Previz.Status = hasStatus
 	case "temp1":
+		item.Temp1.BeforeStatus = item.Temp1.Status
 		item.Temp1.Status = hasStatus
 	default:
 		hasTask = false
