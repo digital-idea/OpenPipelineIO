@@ -34,7 +34,7 @@
                 <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
             </a>
             <div class="card-body text-center">
-                <h4 class="card-title">{{.FirstNameKor}}{{.LastNameKor}}{{if .FirstNameChn}}({{.FirstNameChn}}{{.LastNameChn}}){{end}}</h4>
+                <h4 class="card-title">{{.LastNameKor}}{{.FirstNameKor}}{{if .FirstNameChn}}({{.LastNameChn}}{{.FirstNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
                 <p class="card-text">
                     <a href="mailto:{{.Email}}"><small>{{.Email}}</small></a><br>

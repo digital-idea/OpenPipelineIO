@@ -7,7 +7,20 @@
 			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
 			<div class="card-body">
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
-				<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+				<div class="row">
+					<div class="form-check ml-3">
+						<input type="checkbox" class="form-check-input" id="concept">
+						<label class="form-check-label">Concept</label>
+					</div>
+					<div class="form-check ml-3">
+						<input type="checkbox" class="form-check-input" id="previz">
+						<label class="form-check-label">Previz</label>
+					</div>
+					<div class="form-check ml-3">
+						<input type="checkbox" class="form-check-input" id="matte">
+						<label class="form-check-label">Matte</label>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
