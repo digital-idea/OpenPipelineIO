@@ -374,7 +374,11 @@ func main() {
 		return
 	} else if *flagHTTPPort != "" {
 		if _, err := os.Stat(*flagThumbPath); err != nil {
-			log.Fatal("CSI에 사용되는 썸네일 경로가 존재하지 않습니다.")
+			os.Stderr.WriteString("CSI에 사용되는 썸네일 경로가 존재하지 않습니다.\n")
+			os.Stderr.WriteString("csi에서 생성되는 이미지, 사용자 프로필사진을 저장할 thumbnail 경로가 필요합니다.\n")
+			os.Stderr.WriteString("명령어를 실행하는 곳에 thumbnail 폴더를 생성하거나,\n")
+			os.Stderr.WriteString("-thumbpath 옵션을 이용하여 thumbnail로 사용될 경로를 지정하여 csi를 실행해주세요.\n")
+			os.Exit(1)
 		}
 		// 만약 프로젝트가 하나도 없다면 "TEMP" 프로젝트를 생성한다. 프로젝트가 있어야 템플릿이 작동하기 때문이다.
 		session, err := mgo.DialWithTimeout(*flagDBIP, 2*time.Second)
