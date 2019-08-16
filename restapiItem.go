@@ -596,6 +596,128 @@ func handleAPISetJustIn(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPISetPlateIn 함수는 아이템에 PlateIn 값을 설정한다.
+func handleAPISetPlateIn(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var frame int
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "frame":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			n, err := strconv.Atoi(v)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			frame = n
+		}
+	}
+	err = SetFrame(session, project, name, "platein", frame)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
+// handleAPISetPlateOut 함수는 아이템에 PlateOut 값을 설정한다.
+func handleAPISetPlateOut(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var frame int
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "frame":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			n, err := strconv.Atoi(v)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			frame = n
+		}
+	}
+	err = SetFrame(session, project, name, "plateout", frame)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
+
 // handleAPISetScanIn 함수는 아이템에 ScanIn 값을 설정한다.
 func handleAPISetScanIn(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
