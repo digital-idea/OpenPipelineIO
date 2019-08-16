@@ -9,7 +9,7 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					<div class="col p-1">
-					  	<input type="text" class="form-control form-control-sm" placeholder="ScanIn" value="{{.ScanIn}}" title="ScanIn">
+					  	<input type="text" class="form-control form-control-sm" placeholder="ScanIn" value="{{.ScanIn}}" title="ScanIn"  onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
 					</div>
 					<div class="col p-1">
 						<input type="text" class="form-control form-control-sm" placeholder="ScanOut" value="{{.ScanOut}}" title="ScanOut">
@@ -50,10 +50,10 @@
 				</div>
 				<div class="row">
 					<div class="col p-1">
-					  	<input type="text" class="form-control form-control-sm" placeholder="JustTimeIn">
+					  	<input type="text" class="form-control form-control-sm" placeholder="JustTimeIn" value="{{.JustTimecodeIn}}" title="JustTimecodeIn">
 					</div>
 					<div class="col p-1">
-						<input type="text" class="form-control form-control-sm" placeholder="JustTimeOut">
+						<input type="text" class="form-control form-control-sm" placeholder="JustTimeOut" value="{{.JustTimecodeOut}}" title="JustTimecodeOut">
 					</div>
 				</div>
 			</div>
