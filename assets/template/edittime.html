@@ -1,0 +1,65 @@
+{{define "edittime" }}
+
+<div class="row pt-5">
+	{{range .Items}}
+	<div class="mx-auto">
+		<div class="card m-2" style="width: 18rem;">
+			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+			<div class="card-body">
+				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+				<div class="row">
+					<div class="col p-1">
+					  	<input type="text" class="form-control form-control-sm" placeholder="ScanIn" value="{{.ScanIn}}" title="ScanIn">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="ScanOut" value="{{.ScanOut}}" title="ScanOut">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="ScanFrame" value="{{.ScanFrame}}" title="ScanFrame">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col p-1">
+					  	<input type="text" class="form-control form-control-sm" placeholder="ScanTimeIn" value="{{.ScanTimecodeIn}}" title="ScanTimecodeIn">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="ScanTimeOut" value="{{.ScanTimecodeOut}}" title="ScanTimecodeOut">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col p-1">
+					  	<input type="text" class="form-control form-control-sm" placeholder="PlateIn" value="{{.PlateIn}}" title="PlateIn">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="HandleIn" value="{{.HandleIn}}" title="HandleIn">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="JustIn" value="{{.JustIn}}" title="JustIn">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col p-1">
+					  	<input type="text" class="form-control form-control-sm" placeholder="PlateOut" value="{{.PlateOut}}" title="PlateOut">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="HandleOut" value="{{.HandleOut}}" title="HandleOut">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="JustOut" value="{{.JustOut}}" title="JustOut">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col p-1">
+					  	<input type="text" class="form-control form-control-sm" placeholder="JustTimeIn">
+					</div>
+					<div class="col p-1">
+						<input type="text" class="form-control form-control-sm" placeholder="JustTimeOut">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{end}}	
+</div>
+
+{{end}}
