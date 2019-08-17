@@ -97,8 +97,8 @@ $ wfs -http :8081
 ### Developer
 - AWS 운용서버: https://csi.lazypic.org
 - 회사 전용 빌드문의: hello@lazypic.org
-- Maintainer: Jason(jason@lazypic.org)
-- Committer: Bailey(bailey@lazypic.org)
+- Maintainer: Jason / jason@lazypic.org
+- Committer: Bailey / bailey@lazypic.org
 - Contributors:
 
 ### Infomation
