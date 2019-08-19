@@ -286,7 +286,7 @@ func Searchv1(session *mgo.Session, op SearchOption) ([]Item, error) {
 			}
 		} else {
 			switch word {
-			case "all", "ALL", "올", "미ㅣ", "dhf", "전체":
+			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":
 				query = append(query, bson.M{})
 			case "shot", "SHOT", "샷", "전샷", "전체샷":
 				query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
