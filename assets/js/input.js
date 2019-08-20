@@ -134,3 +134,22 @@ function setJustTimecodeOut(project, name, timecode, token) {
         }
     });
 }
+
+function addNote(project, name, text, token) {
+    $.ajax({
+        url: "/api/addnote",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            text: text,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
