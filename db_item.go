@@ -2029,8 +2029,8 @@ func SetNotes(session *mgo.Session, project, name, userID string, texts []string
 	return nil
 }
 
-// AddPmnote 함수는 item에 수정사항을 추가한다.
-func AddPmnote(session *mgo.Session, project, name, userID, text string) error {
+// AddComment 함수는 item에 수정사항을 추가한다.
+func AddComment(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2055,8 +2055,8 @@ func AddPmnote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// RmPmnote 함수는 item에 수정사항을 삭제합니다.
-func RmPmnote(session *mgo.Session, project, name, userID, text string) error {
+// RmComment 함수는 item에 수정사항을 삭제합니다.
+func RmComment(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2091,8 +2091,8 @@ func RmPmnote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// SetPmnotes 함수는 item에 수정내용을 교체합니다.
-func SetPmnotes(session *mgo.Session, project, name, userID string, texts []string) error {
+// SetComments 함수는 item에 수정내용을 교체합니다.
+func SetComments(session *mgo.Session, project, name, userID string, texts []string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {

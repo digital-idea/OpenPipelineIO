@@ -2800,8 +2800,8 @@ func handleAPISetNotes(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIAddPmnote 함수는 아이템에 수정사항을 추가합니다.
-func handleAPIAddPmnote(w http.ResponseWriter, r *http.Request) {
+// handleAPIAddComment 함수는 아이템에 수정사항을 추가합니다.
+func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2849,7 +2849,7 @@ func handleAPIAddPmnote(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = AddPmnote(session, project, name, userID, text)
+	err = AddComment(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2857,8 +2857,8 @@ func handleAPIAddPmnote(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIRmPmnote 함수는 아이템에서 수정사항을 삭제합니다.
-func handleAPIRmPmnote(w http.ResponseWriter, r *http.Request) {
+// handleAPIRmComment 함수는 아이템에서 수정사항을 삭제합니다.
+func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2906,7 +2906,7 @@ func handleAPIRmPmnote(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = RmPmnote(session, project, name, userID, text)
+	err = RmComment(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2915,7 +2915,7 @@ func handleAPIRmPmnote(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleAPISetPmnotes 함수는 아이템에 수정사항 리스트를 교체합니다.
-func handleAPISetPmnotes(w http.ResponseWriter, r *http.Request) {
+func handleAPISetComments(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2976,7 +2976,7 @@ func handleAPISetPmnotes(w http.ResponseWriter, r *http.Request) {
 		texts[i], texts[j] = texts[j], texts[i]
 	}
 
-	err = SetPmnotes(session, project, name, userID, texts)
+	err = SetComments(session, project, name, userID, texts)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

@@ -153,3 +153,22 @@ function addNote(project, name, text, token) {
         }
     });
 }
+
+function addComment(project, name, text, token) {
+    $.ajax({
+        url: "/api/addcomment",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            text: text,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
