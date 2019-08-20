@@ -1,0 +1,21 @@
+{{define "editnote" }}
+
+<div class="row pt-5">
+	{{range .Items}}
+	<div class="mx-auto">
+		<div class="card m-2" style="width: 18rem;">
+			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+			<div class="card-body">
+				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+				<div class="row">
+					<div class="col pl-1 pr-1 pt-0 pb-0">
+						<button type="button" class="btn btn-primary btn-sm">작업내용추가</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{end}}	
+</div>
+
+{{end}}
