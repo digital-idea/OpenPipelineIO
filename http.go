@@ -232,7 +232,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/settags", handleAPISetTags)
 	http.HandleFunc("/api/addnote", handleAPIAddNote)
 	http.HandleFunc("/api/rmnote", handleAPIRmNote)
-	http.HandleFunc("/api/setonsets", handleAPISetOnsets)
+	http.HandleFunc("/api/setnotes", handleAPISetNotes)
 	http.HandleFunc("/api/addpmnote", handleAPIAddPmnote)
 	http.HandleFunc("/api/rmpmnote", handleAPIRmPmnote)
 	http.HandleFunc("/api/setpmnotes", handleAPISetPmnotes)

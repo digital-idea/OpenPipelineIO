@@ -1997,8 +1997,8 @@ func RmNote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// SetOnsets 함수는 item에 작업,현장내용을 추가한다.
-func SetOnsets(session *mgo.Session, project, name, userID string, texts []string) error {
+// SetNotes 함수는 item에 작업,현장내용을 추가한다.
+func SetNotes(session *mgo.Session, project, name, userID string, texts []string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {

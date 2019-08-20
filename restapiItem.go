@@ -2730,8 +2730,8 @@ func handleAPIRmNote(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPISetOnsets 함수는 아이템에 온셋노드 리스트를 교체합니다.
-func handleAPISetOnsets(w http.ResponseWriter, r *http.Request) {
+// handleAPISetNotes 함수는 아이템에 작업내용을 교체합니다.
+func handleAPISetNotes(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2792,7 +2792,7 @@ func handleAPISetOnsets(w http.ResponseWriter, r *http.Request) {
 		texts[i], texts[j] = texts[j], texts[i]
 	}
 
-	err = SetOnsets(session, project, name, userID, texts)
+	err = SetNotes(session, project, name, userID, texts)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
