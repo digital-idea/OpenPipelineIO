@@ -41,7 +41,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	Hold := str2bool(r.FormValue("Hold"))
 	Out := str2bool(r.FormValue("Out"))
 	None := str2bool(r.FormValue("None"))
-	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sort=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
+	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
 		Project,
 		Searchword,
 		Sortkey,
