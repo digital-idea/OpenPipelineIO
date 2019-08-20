@@ -292,7 +292,7 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 			wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
 			wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
 			wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word}})
+			wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word, Options: "i"}})
 			wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
 		}
 		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
