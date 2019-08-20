@@ -2616,8 +2616,8 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIAddOnset 함수는 아이템에 온셋노트를 추가합니다.
-func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
+// handleAPIAddNote 함수는 아이템에 작업내용을 추가합니다.
+func handleAPIAddNote(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2665,7 +2665,7 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = AddOnset(session, project, name, userID, text)
+	err = AddNote(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2673,8 +2673,8 @@ func handleAPIAddOnset(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIRmOnset 함수는 아이템에서 온셋노트를 삭제합니다.
-func handleAPIRmOnset(w http.ResponseWriter, r *http.Request) {
+// handleAPIRmNote 함수는 아이템에서 작업내용을 삭제합니다.
+func handleAPIRmNote(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -2722,7 +2722,7 @@ func handleAPIRmOnset(w http.ResponseWriter, r *http.Request) {
 			text = v
 		}
 	}
-	err = RmOnset(session, project, name, userID, text)
+	err = RmNote(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

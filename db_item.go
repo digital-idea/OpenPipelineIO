@@ -1935,8 +1935,8 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	return nil
 }
 
-// AddOnset 함수는 item에 작업,현장내용을 추가한다.
-func AddOnset(session *mgo.Session, project, name, userID, text string) error {
+// AddNote 함수는 item에 작업,현장내용을 추가한다.
+func AddNote(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1961,8 +1961,8 @@ func AddOnset(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// RmOnset 함수는 item에 작업,현장내용을 삭제한다.
-func RmOnset(session *mgo.Session, project, name, userID, text string) error {
+// RmNote 함수는 item에 작업내용을 삭제한다.
+func RmNote(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1978,7 +1978,7 @@ func RmOnset(session *mgo.Session, project, name, userID, text string) error {
 		return err
 	}
 	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	var newOnsets []string
+	var notes []string
 	for _, note := range i.Onsetnote {
 		i := strings.LastIndex(note, ";")
 		if i == -1 {
@@ -1987,9 +1987,9 @@ func RmOnset(session *mgo.Session, project, name, userID, text string) error {
 		if note[i+1:] == text {
 			continue
 		}
-		newOnsets = append(newOnsets, note)
+		notes = append(notes, note)
 	}
-	i.Onsetnote = newOnsets
+	i.Onsetnote = notes
 	err = setItem(session, project, i)
 	if err != nil {
 		return err
