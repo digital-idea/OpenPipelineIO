@@ -74,8 +74,8 @@ $ wfs -http :8081
 ```
 
 ### 터미널 명령어 / CommandLine
-CSI는 터미널에서 간단하게 관리를 진행할 수 있습니다.
-관리를 위해서 알아야할 메뉴얼입니다.
+CSI는 터미널에서 간단하게 관리를 할 수 있습니다.
+관리를 위해 필요한 명령어 메뉴얼입니다.
 
 - [Project](documents/project.md)
 - [Item](documents/item.md): 샷, 에셋등록, 삭제
@@ -84,7 +84,7 @@ CSI는 터미널에서 간단하게 관리를 진행할 수 있습니다.
 - [Organization](documents/organization.md)
 
 ### RestAPI
-CSI는 RestAPI가 설정되어있습니다.
+CSI는 RestAPI가 설계되어 있습니다.
 Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI의 상태를 변경할 수 있습니다.
 
 - [Project](documents/rest_project.md)
