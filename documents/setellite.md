@@ -90,7 +90,7 @@ CSV 파일은 아무리 커도 3메가를 넘기 힘듭니다. 해외 느린 인
 
 #### 리눅스 터미널에서 CSV 추가하는 방법
 
-Setellite CSV파일은 CSI의 ![UploadSetellite](http://127.0.0.1/uploadsetellite) 메뉴를 통해서 업로드 할 수 있습니다.
+Setellite CSV파일은 CSI상단 Add > Setellite 메뉴를 통해서 업로드 할 수 있습니다.
 
 #### 소프트웨어 유지비
 - 2018년 기준. 슈퍼바이저 20명 기준 년 약 400만원 선
