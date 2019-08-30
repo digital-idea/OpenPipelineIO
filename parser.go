@@ -10,7 +10,7 @@ import (
 type Searchword struct {
 	words  []string // 아래 항목에 들어가지 않는 나머지 단어의 집합
 	tasks  []string // task:ani,comp
-	user   []string // user:김한웅 형태로 시작하는 문자
+	users  []string // user:김한웅 형태로 시작하는 문자
 	tags   []string // tag:태그명 형태로 시작하는 문자
 	status []string // status: 형태로 시작하는 문자
 }
@@ -40,7 +40,7 @@ func SearchwordParser(word string) Searchword {
 				}
 			}
 		case strings.HasPrefix(w, "user:"): // 'user:'로 시작하는지 체크
-			searchword.user = append(searchword.user, strings.TrimLeft(w, "user:"))
+			searchword.users = append(searchword.users, strings.TrimLeft(w, "user:"))
 		case strings.HasPrefix(w, "tag:"): // 'tag:'로 시작하는지 체크
 			searchword.tags = append(searchword.tags, strings.TrimLeft(w, "tag:"))
 		case strings.HasPrefix(w, "status:"): // 'status:'로 시작하는지 체크
