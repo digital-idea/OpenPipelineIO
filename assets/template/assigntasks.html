@@ -1,78 +1,80 @@
 {{define "assigntasks" }}
-
-<div class="row pt-5">
-	{{range .Items}}
-	<div class="mx-auto">
-		<div class="card m-2" style="width: 18rem;">
-			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
-			<div class="card-body">
-				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
-				<div class="row">
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="concept" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'concept', this.checked, '{{$.User.Token}}')" {{if eq .Concept.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Concept</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="previz" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'previz', this.checked, '{{$.User.Token}}')" {{if eq .Previz.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Previz</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="matte" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'matte', this.checked, '{{$.User.Token}}')" {{if eq .Matte.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Matte</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="mm" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'mm', this.checked, '{{$.User.Token}}')" {{if eq .Mm.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Mm</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="layout" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'layout', this.checked, '{{$.User.Token}}')" {{if eq .Layout.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Layout</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="model" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'model', this.checked, '{{$.User.Token}}')" {{if eq .Model.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Model</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="fur" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'fur', this.checked, '{{$.User.Token}}')" {{if eq .Fur.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Fur</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="sim" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'sim', this.checked, '{{$.User.Token}}')" {{if eq .Sim.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Sim</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="ani" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'ani', this.checked, '{{$.User.Token}}')" {{if eq .Ani.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Ani</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="crowd" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'crowd', this.checked, '{{$.User.Token}}')" {{if eq .Crowd.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Crowd</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="light" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'light', this.checked, '{{$.User.Token}}')" {{if eq .Light.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Light</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="fx" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'fx', this.checked, '{{$.User.Token}}')" {{if eq .Fx.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Fx</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="env" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'env', this.checked, '{{$.User.Token}}')" {{if eq .Env.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Env</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="comp" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'comp', this.checked, '{{$.User.Token}}')" {{if eq .Comp.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Comp</label>
-					</div>
-					<div class="form-check ml-2">
-						<input type="checkbox" class="form-check-input" id="mg" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'mg', this.checked, '{{$.User.Token}}')" {{if eq .Mg.Status "" "0" }}{{else}}checked{{end}}>
-						<label class="form-check-label">Mg</label>
+<div class="mt-5">
+	<div class="row mx-auto">
+		{{range .Items}}
+		<div class="mx-auto">
+			<div class="card m-2" style="width: 18rem;">
+				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+				<div class="card-body">
+					<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+					<div class="row">
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="concept" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'concept', this.checked, '{{$.User.Token}}')" {{if eq .Concept.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Concept</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="previz" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'previz', this.checked, '{{$.User.Token}}')" {{if eq .Previz.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Previz</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="matte" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'matte', this.checked, '{{$.User.Token}}')" {{if eq .Matte.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Matte</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="mm" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'mm', this.checked, '{{$.User.Token}}')" {{if eq .Mm.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Mm</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="layout" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'layout', this.checked, '{{$.User.Token}}')" {{if eq .Layout.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Layout</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="model" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'model', this.checked, '{{$.User.Token}}')" {{if eq .Model.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Model</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="fur" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'fur', this.checked, '{{$.User.Token}}')" {{if eq .Fur.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Fur</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="sim" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'sim', this.checked, '{{$.User.Token}}')" {{if eq .Sim.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Sim</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="ani" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'ani', this.checked, '{{$.User.Token}}')" {{if eq .Ani.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Ani</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="crowd" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'crowd', this.checked, '{{$.User.Token}}')" {{if eq .Crowd.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Crowd</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="light" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'light', this.checked, '{{$.User.Token}}')" {{if eq .Light.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Light</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="fx" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'fx', this.checked, '{{$.User.Token}}')" {{if eq .Fx.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Fx</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="env" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'env', this.checked, '{{$.User.Token}}')" {{if eq .Env.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Env</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="comp" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'comp', this.checked, '{{$.User.Token}}')" {{if eq .Comp.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Comp</label>
+						</div>
+						<div class="form-check ml-2">
+							<input type="checkbox" class="form-check-input" id="mg" onchange="setAssignTask('{{.Project}}', '{{.Name}}', 'mg', this.checked, '{{$.User.Token}}')" {{if eq .Mg.Status "" "0" }}{{else}}checked{{end}}>
+							<label class="form-check-label">Mg</label>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		{{end}}	
 	</div>
-	{{end}}	
 </div>
+
 
 {{end}}

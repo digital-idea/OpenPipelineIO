@@ -1,104 +1,105 @@
 {{define "edittime" }}
-
-<div class="row pt-5">
-	{{range .Items}}
-	<div class="mx-auto">
-		<div class="card m-2" style="width: 18rem;">
-			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
-			<div class="card-body">
-				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
-				<div class="row">
-					<div class="col pl-1 pr-1 pt-0 pb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">ScanIn</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="ScanIn" value="{{.ScanIn}}" title="ScanIn" onchange="setFrame('setscanin', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">			
+<div class="pt-5">
+	<div class="row mx-auto">
+		{{range .Items}}
+		<div class="mx-auto">
+			<div class="card m-2" style="width: 18rem;">
+				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+				<div class="card-body">
+					<h6 class="card-title">{{.Name}}({{.Type}})</h6>
+					<div class="row">
+						<div class="col pl-1 pr-1 pt-0 pb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">ScanIn</small>
+								<input type="text" class="form-control form-control-sm border-info" placeholder="ScanIn" value="{{.ScanIn}}" title="ScanIn" onchange="setFrame('setscanin', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">			
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pt-0 pb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">ScanOut</small>
+								<input type="text" class="form-control form-control-sm border-info" placeholder="ScanOut" value="{{.ScanOut}}" title="ScanOut" onchange="setFrame('setscanout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pt-0 pb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">ScanFrame</small>
+								<input type="text" class="form-control form-control-sm border-info" placeholder="ScanFrame" value="{{.ScanFrame}}" title="ScanFrame" onchange="setFrame('setscanframe', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
 						</div>
 					</div>
-					<div class="col pl-1 pr-1 pt-0 pb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">ScanOut</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="ScanOut" value="{{.ScanOut}}" title="ScanOut" onchange="setFrame('setscanout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<div class="row">
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">ScanTimecodeIn</small>
+								<input type="text" class="form-control form-control-sm border-info" placeholder="ScanTimeIn" value="{{.ScanTimecodeIn}}" title="ScanTimecodeIn" onchange="setScanTimecodeIn('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">ScanTimecodeOut</small>
+								<input type="text" class="form-control form-control-sm border-info" placeholder="ScanTimeOut" value="{{.ScanTimecodeOut}}" title="ScanTimecodeOut" onchange="setScanTimecodeOut('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
 						</div>
 					</div>
-					<div class="col pl-1 pr-1 pt-0 pb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">ScanFrame</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="ScanFrame" value="{{.ScanFrame}}" title="ScanFrame" onchange="setFrame('setscanframe', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<div class="row">
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">PlateIn</small>
+								<input type="text" class="form-control form-control-sm border-primary" placeholder="PlateIn" value="{{.PlateIn}}" title="PlateIn" onchange="setFrame('setplatein', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">HandleIn</small>
+								<input type="text" class="form-control form-control-sm border-success" placeholder="HandleIn" value="{{.HandleIn}}" title="HandleIn" onchange="setFrame('sethandlein', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">JustIn</small>
+								<input type="text" class="form-control form-control-sm border-danger" placeholder="JustIn" value="{{.JustIn}}" title="JustIn" onchange="setFrame('setjustin', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">ScanTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="ScanTimeIn" value="{{.ScanTimecodeIn}}" title="ScanTimecodeIn" onchange="setScanTimecodeIn('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<div class="row">
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">PlateOut</small>
+								<input type="text" class="form-control form-control-sm border-primary" placeholder="PlateOut" value="{{.PlateOut}}" title="PlateOut" onchange="setFrame('setplateout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">HandleOut</small>
+								<input type="text" class="form-control form-control-sm border-success" placeholder="HandleOut" value="{{.HandleOut}}" title="HandleOut" onchange="setFrame('sethandleout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
+						</div>
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">JustOut</small>
+								<input type="text" class="form-control form-control-sm border-danger" placeholder="JustOut" value="{{.JustOut}}" title="JustOut" onchange="setFrame('setjustout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
 						</div>
 					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">ScanTimecodeOut</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="ScanTimeOut" value="{{.ScanTimecodeOut}}" title="ScanTimecodeOut" onchange="setScanTimecodeOut('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<div class="row">
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">JustTimecodeIn</small>
+								<input type="text" class="form-control form-control-sm border-danger" placeholder="JustTimeIn" value="{{.JustTimecodeIn}}" title="JustTimecodeIn" onchange="setJustTimecodeIn('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">PlateIn</small>
-							<input type="text" class="form-control form-control-sm border-primary" placeholder="PlateIn" value="{{.PlateIn}}" title="PlateIn" onchange="setFrame('setplatein', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+						<div class="col pl-1 pr-1 pb-0 mb-0">
+							<div class="form-group p-0 m-0">
+								<small class="form-text text-muted">JustTimecodeIn</small>
+								<input type="text" class="form-control form-control-sm border-danger" placeholder="JustTimeOut" value="{{.JustTimecodeOut}}" title="JustTimecodeOut" onchange="setJustTimecodeOut('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+							</div>			
 						</div>
-					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">HandleIn</small>
-							<input type="text" class="form-control form-control-sm border-success" placeholder="HandleIn" value="{{.HandleIn}}" title="HandleIn" onchange="setFrame('sethandlein', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">JustIn</small>
-							<input type="text" class="form-control form-control-sm border-danger" placeholder="JustIn" value="{{.JustIn}}" title="JustIn" onchange="setFrame('setjustin', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">PlateOut</small>
-							<input type="text" class="form-control form-control-sm border-primary" placeholder="PlateOut" value="{{.PlateOut}}" title="PlateOut" onchange="setFrame('setplateout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">HandleOut</small>
-							<input type="text" class="form-control form-control-sm border-success" placeholder="HandleOut" value="{{.HandleOut}}" title="HandleOut" onchange="setFrame('sethandleout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">JustOut</small>
-							<input type="text" class="form-control form-control-sm border-danger" placeholder="JustOut" value="{{.JustOut}}" title="JustOut" onchange="setFrame('setjustout', '{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">JustTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-danger" placeholder="JustTimeIn" value="{{.JustTimecodeIn}}" title="JustTimecodeIn" onchange="setJustTimecodeIn('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>
-					</div>
-					<div class="col pl-1 pr-1 pb-0 mb-0">
-						<div class="form-group p-0 m-0">
-							<small class="form-text text-muted">JustTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-danger" placeholder="JustTimeOut" value="{{.JustTimecodeOut}}" title="JustTimecodeOut" onchange="setJustTimecodeOut('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
-						</div>			
 					</div>
 				</div>
 			</div>
 		</div>
+		{{end}}	
 	</div>
-	{{end}}	
 </div>
 
 {{end}}
