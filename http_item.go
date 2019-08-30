@@ -352,8 +352,8 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
-	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
+	rcp.Searchop.Searchword = "tag:" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
+	rcp.Searchop.setStatusDefault()                            // 검색이후 상태를 기본형으로 바꾸어 놓는다.
 	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
