@@ -3,13 +3,13 @@
 <div class="row pt-5">
 	{{range .Items}}
 	<div class="mx-auto">
-		<div class="card m-2" style="width: 18rem;">
-			<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+		<div class="card m-2" style="width: 18rem;" for="{{.ID}}-checkbox">
+			<label for="{{.ID}}-checkbox" class="p-0 m-0">
+				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+			</label>
+			<input type="checkbox" class="form-check-input" id="{{.ID}}-checkbox" style="opacity:0; position:absolute;">
 			<div class="card-body">
-				<div class="form-check">
-					<input type="checkbox" class="form-check-input" id="{{.ID}}-checkbox">
-					<label class="form-check-label" for="{{.ID}}-checkbox">{{.Name}}({{.Type}})</label>
-				</div>
+				<label class="form-check-label" for="{{.ID}}-checkbox">{{.Name}}({{.Type}})</label>
 				<div class="row">
 					<div class="col pl-1 pr-1 pt-0 pb-0">
 						<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{.ID}}">수정내용추가</button>
