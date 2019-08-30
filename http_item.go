@@ -115,12 +115,6 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -234,7 +228,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	}
 	// 검색결과가 없다면 검색 결과가 없다는 메시지를 띄운다.
 	if len(rcp.Items) == 0 {
-		err = t.ExecuteTemplate(w, "searchno", rcp)
+		err = TEMPLATES.ExecuteTemplate(w, "searchno", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -242,7 +236,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	err = t.ExecuteTemplate(w, "csi3", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -259,11 +253,6 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -365,7 +354,7 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
 	rcp.Searchop.setStatusDefault()                         // 검색이후 상태를 기본형으로 바꾸어 놓는다.
-	err = t.ExecuteTemplate(w, "csi3", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -382,12 +371,6 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -420,7 +403,7 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "editItem", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "editItem", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -439,14 +422,8 @@ func handleEditedItem(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "editeditem", nil)
+	err = TEMPLATES.ExecuteTemplate(w, "editeditem", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -463,12 +440,6 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -566,7 +537,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	// Search 박스의 상태 옵션은 기본형이어야 한다
 	rcp.Searchop.Searchword = "tag:" + rcp.Searchop.Searchword
 	rcp.Searchop.setStatusDefault()
-	err = t.ExecuteTemplate(w, "csi3", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1019,12 +990,6 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -1118,7 +1083,7 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
-	err = t.ExecuteTemplate(w, "csi3", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1135,12 +1100,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -1177,7 +1136,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp.Searchop.Wip = true
 	rcp.Searchop.Confirm = true
 	rcp.Searchop.Sortkey = "slug"
-	err = t.ExecuteTemplate(w, "index", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1194,12 +1153,6 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -1229,7 +1182,7 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "addShot", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "addShot", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1246,12 +1199,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -1330,7 +1277,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "addShot_success", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "addShot_success", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1347,12 +1294,6 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -1382,7 +1323,7 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "addAsset", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "addAsset", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1399,12 +1340,6 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -1484,7 +1419,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "addAsset_success", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "addAsset_success", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

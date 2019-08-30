@@ -19,12 +19,6 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -45,7 +39,7 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -62,12 +56,6 @@ func handleEditDepartment(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -97,7 +85,7 @@ func handleEditDepartment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -114,12 +102,6 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -149,7 +131,7 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -166,12 +148,6 @@ func handleEditRole(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -201,7 +177,7 @@ func handleEditRole(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -218,12 +194,6 @@ func handleEditPosition(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -253,7 +223,7 @@ func handleEditPosition(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -453,12 +423,6 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -487,7 +451,7 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -504,12 +468,6 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -540,7 +498,7 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -557,12 +515,6 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -593,7 +545,7 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -610,12 +562,6 @@ func handleRoles(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -646,7 +592,7 @@ func handleRoles(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -663,12 +609,6 @@ func handlePositions(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -699,7 +639,7 @@ func handlePositions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -716,12 +656,6 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
@@ -752,7 +686,7 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

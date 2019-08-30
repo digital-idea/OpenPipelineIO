@@ -25,12 +25,6 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -65,7 +59,7 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			if len(value) != 1 {
 				rcp.Error = "프로젝트값을 1개만 설정해주세요."
-				err := t.ExecuteTemplate(w, "setellite", rcp)
+				err := TEMPLATES.ExecuteTemplate(w, "setellite", rcp)
 				if err != nil {
 					log.Println(err)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -77,7 +71,7 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 		case "searchword":
 			if len(value) != 1 {
 				rcp.Error = "Searchword 값을 1개만 설정해주세요."
-				err := t.ExecuteTemplate(w, "setellite", rcp)
+				err := TEMPLATES.ExecuteTemplate(w, "setellite", rcp)
 				if err != nil {
 					log.Println(err)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -90,7 +84,7 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 	}
 	if rcp.Searchword == "" {
 		rcp.Error = "검색어를 입력해주세요."
-		err := t.ExecuteTemplate(w, "setellite", rcp)
+		err := TEMPLATES.ExecuteTemplate(w, "setellite", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -105,7 +99,7 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 	if len(rcp.Items) == 0 {
 		rcp.Error = "검색결과 0 건"
 	}
-	err = t.ExecuteTemplate(w, "setellite", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "setellite", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -121,12 +115,6 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -154,7 +142,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		rcp.Message = err.Error()
-		err = t.ExecuteTemplate(w, "uploadSetellite", rcp)
+		err = TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -165,7 +153,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rcp.Message = "Setellite CSV파일을 업로드해주세요."
 		w.Header().Set("Content-Type", "text/html")
-		err = t.ExecuteTemplate(w, "uploadSetellite", rcp)
+		err = TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -177,7 +165,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		file, fileHandle, err := r.FormFile("csv")
 		if err != nil {
 			rcp.Message = err.Error()
-			err := t.ExecuteTemplate(w, "uploadSetellite", rcp)
+			err := TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -188,7 +176,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		mediatype, fileParams, err := mime.ParseMediaType(fileHandle.Header.Get("Content-Disposition"))
 		if err != nil {
 			rcp.Message = err.Error()
-			err := t.ExecuteTemplate(w, "uploadSetellite", rcp)
+			err := TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -198,7 +186,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		}
 		if mediatype != "form-data" {
 			rcp.Message = "지원하지 않는 미디어 입니다."
-			err := t.ExecuteTemplate(w, "uploadSetellite", rcp)
+			err := TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -209,7 +197,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		// csv 확장자 체크
 		if ".csv" != strings.ToLower(filepath.Ext(fileParams["filename"])) {
 			rcp.Message = "CSV 파일이 아닙니다."
-			err := t.ExecuteTemplate(w, "uploadSetellite", rcp)
+			err := TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -220,7 +208,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		f, err := ioutil.TempFile(os.TempDir(), "")
 		if err != nil {
 			rcp.Message = err.Error()
-			err := t.ExecuteTemplate(w, "uploadSetellite", rcp)
+			err := TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 			if err != nil {
 				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -239,7 +227,7 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		rcp.Message = "파일이 업로드 되었습니다. 업로드할 다른 CSV가 있다면 업로드해주세요."
-		err = t.ExecuteTemplate(w, "uploadSetellite", rcp)
+		err = TEMPLATES.ExecuteTemplate(w, "uploadSetellite", rcp)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)

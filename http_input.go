@@ -18,12 +18,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		User
@@ -62,7 +56,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, rcp.SearchOption.Template, rcp)
+	err = TEMPLATES.ExecuteTemplate(w, rcp.SearchOption.Template, rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

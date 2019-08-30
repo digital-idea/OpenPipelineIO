@@ -371,11 +371,11 @@ func Scanname2RollMedia(scanname string) string {
 	return strings.Split(scanname, "_")[1]
 }
 
-// Hashtag2tag 템플릿함수는 태그명을 `#태그명`으로 변경한다.
+// Hashtag2tag 템플릿함수는 태그명을 `tag:태그명`으로 변경한다.
 func Hashtag2tag(tag string) string {
 	var hastag string
 	if tag != "" {
-		hastag = `#` + tag
+		hastag = `tag:` + tag
 	}
 	return hastag
 }

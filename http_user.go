@@ -31,12 +31,6 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	q := r.URL.Query()
 	id := q.Get("id")
 	w.Header().Set("Content-Type", "text/html")
@@ -58,7 +52,7 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "user", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "user", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -76,12 +70,6 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 	}
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	q := r.URL.Query()
@@ -139,7 +127,7 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "edituser", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "edituser", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -306,12 +294,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignup 함수는 회원가입 페이지이다.
 func handleSignup(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		Company     string
@@ -357,7 +339,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
+	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -367,14 +349,8 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 
 // handleInvalidAccess 함수는 사용자의 레벨이 부족할 때 접속하는 페이지이다.
 func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "invalidaccess", nil)
+	err := TEMPLATES.ExecuteTemplate(w, "invalidaccess", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -384,14 +360,8 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 
 // handleInvalidPass 함수는 사용자의 패스워드가 많이 틀려서 접속되는 페이지이다.
 func handleInvalidPass(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "invalidpass", nil)
+	err := TEMPLATES.ExecuteTemplate(w, "invalidpass", nil)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -451,12 +421,6 @@ func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organiz
 
 // handleSignupSubmit 함수는 회원가입 페이지이다.
 func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	if !captcha.VerifyString(r.FormValue("CaptchaID"), r.FormValue("CaptchaNum")) {
 		err := errors.New("CaptchaID 값과 CaptchaNum 값이 다릅니다")
@@ -537,7 +501,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	SetSessionID(w, u.ID, u.AccessLevel, "")
 	// 가입완료 페이지로 이동
-	err = t.ExecuteTemplate(w, "signup_success", u)
+	err = TEMPLATES.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -547,12 +511,6 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignin 함수는 로그인 페이지이다.
 func handleSignin(w http.ResponseWriter, r *http.Request) {
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		Company string
@@ -574,7 +532,7 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.ID = id
 	rcp.Company = strings.Title(*flagCompany)
-	err = t.ExecuteTemplate(w, "signin", rcp)
+	err := TEMPLATES.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -657,12 +615,7 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = t.ExecuteTemplate(w, "signin_success", nil)
+	err = TEMPLATES.ExecuteTemplate(w, "signin_success", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -676,13 +629,8 @@ func handleSignout(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	RmSessionID(w)
-	err = t.ExecuteTemplate(w, "signout", nil)
+	err = TEMPLATES.ExecuteTemplate(w, "signout", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -694,11 +642,6 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	_, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	t, err := LoadTemplates()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	q := r.URL.Query()
@@ -720,7 +663,7 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "updatepassword", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "updatepassword", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -807,11 +750,6 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	var searchword string
 	searchword = q.Get("search")
-	t, err := LoadTemplates()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -847,7 +785,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "users", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "users", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -870,12 +808,6 @@ func handleReplaceTag(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	type recipe struct {
 		User // 로그인한 사용자 정보
 	}
@@ -893,7 +825,7 @@ func handleReplaceTag(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, "replacetag", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "replacetag", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

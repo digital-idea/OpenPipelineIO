@@ -4,6 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"os/exec"
@@ -38,6 +39,8 @@ var (
 	MINVER = ""
 	// DEVMODE 값은 컴파일 단계에서 지정한 값으로 바뀐다.
 	DEVMODE = "true"
+	// TEMPLATES 값은 웹서버 실행전 사용할 템플릿이다.
+	TEMPLATES = template.New("")
 
 	// 주요서비스 인수
 	flagDBIP           = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
@@ -404,6 +407,11 @@ func main() {
 		} else {
 			fmt.Printf("Service start: http://%s%s\n", ip, *flagHTTPPort)
 		}
+		vfsTempates, err := LoadTemplates()
+		if err != nil {
+			log.Fatal(err)
+		}
+		TEMPLATES = vfsTempates
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.

@@ -19,12 +19,6 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -42,7 +36,7 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 
 	w.Header().Set("Content-Type", "text/html")
-	err = t.ExecuteTemplate(w, "addProject", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "addProject", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -89,12 +83,6 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	q := r.URL.Query()
 	status := q.Get("status")
 	w.Header().Set("Content-Type", "text/html")
@@ -135,7 +123,7 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	err = t.ExecuteTemplate(w, "projectinfo", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -329,12 +317,6 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	t, err := LoadTemplates()
-	if err != nil {
-		log.Println("loadTemplates:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "text/html")
 	q := r.URL.Query()
 	id := q.Get("id") // 프로젝트id에 사용할 것
@@ -364,7 +346,7 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-	err = t.ExecuteTemplate(w, "editProject", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "editProject", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
