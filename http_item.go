@@ -564,7 +564,7 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 	}
 	// 태그는 전체 검색을 하고 #으로 시작한다.
 	// Search 박스의 상태 옵션은 기본형이어야 한다
-	rcp.Searchop.Searchword = "#" + rcp.Searchop.Searchword
+	rcp.Searchop.Searchword = "tag:" + rcp.Searchop.Searchword
 	rcp.Searchop.setStatusDefault()
 	err = t.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {

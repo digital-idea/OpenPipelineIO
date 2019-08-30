@@ -1014,6 +1014,9 @@ func SetFrame(session *mgo.Session, project, name, key string, frame int) error 
 
 // SetCameraPubPath 함수는 해당 카메라 퍼블리쉬 경로를 설정한다.
 func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
+	if path == "" {
+		return errors.New("path가 빈 문자열입니다")
+	}
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1024,7 +1027,7 @@ func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1046,7 +1049,7 @@ func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1054,7 +1057,7 @@ func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
 }
 
 // SetCameraProjection 함수는 샷에 Projection 카메라 사용여부를 체크한다.
-func SetCameraProjection(session *mgo.Session, project, name string, has bool) error {
+func SetCameraProjection(session *mgo.Session, project, name string, isProjection bool) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1065,7 +1068,7 @@ func SetCameraProjection(session *mgo.Session, project, name string, has bool) e
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": has, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": isProjection, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
