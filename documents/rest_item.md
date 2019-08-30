@@ -64,7 +64,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setlinks | 링크소스 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1,/show/src2" http://192.168.31.172/api/setlinks` |
 | /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
 | /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
-| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath|
+| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath`|
 
 
 #### 샷,에셋정보(Item) 가지고오기. Python2.7x
@@ -193,7 +193,7 @@ restURL = "http://10.0.90.251/api2/items?project=TEMP&searchword=comp+박지섭&
 ```
 values = {}
 values["project"] = "TEMP"
-values["searchword"] = "comp+박지섭"
+values["searchword"] = "comp+김한웅"
 values["wip"] = "true"
 
 url = "http://10.0.90.251/api2/items"
@@ -334,21 +334,6 @@ $ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/
 $ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/api/setdistortionsize
 ```
 
-- 샷 프로젝션 사용여부 셋팅
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&projection=true" http://10.0.90.251/api/setcameraprojection
-```
-
-- 카메라 퍼블리쉬 테스크 : 사용가능한 테스크명은 "", "mm", "layout", "ani" 이다.
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&task=mm" http://10.0.90.251/api/setcamerapubtask
-```
-
-- 카메라 Publish 경로셋팅
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath
-```
-
 - 썸네일 mov 등록
 ```
 $ curl -X POST -d "project=TEMP&name=SS_0010&path=/show/thumb/nail.mov" http://10.0.90.251/api/setthummov
@@ -357,12 +342,6 @@ $ curl -X POST -d "project=TEMP&name=SS_0010&path=/show/thumb/nail.mov" http://1
 - Task 상태 변경
 ```
 curl -X POST -d "project=TEMP&name=SS_0011&task=mm&status=omit" http://10.0.90.251/api/setstatus
-```
-
-- Just In/Out 값 설정
-```
-curl -X POST -d "project=TEMP&name=SS_0011&frame=1001" http://10.0.90.251/api/setjustin
-curl -X POST -d "project=TEMP&name=SS_0011&frame=1030" http://10.0.90.251/api/setjustout
 ```
 
 - Task에 대한 시작일 설정
