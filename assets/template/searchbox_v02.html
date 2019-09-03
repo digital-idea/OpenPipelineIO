@@ -10,6 +10,27 @@
 						{{end}}
 					</select>
 				</div>
+				{{if $.SearchOption.Task}}
+				<div class="input-group-append">
+					<select name="Task" class="custom-select">
+						<option value="concept" {{if eq $.SearchOption.Task "concept"}}selected{{end}}>concept</option>
+						<option value="model" {{if eq $.SearchOption.Task "model"}}selected{{end}}>model</option>
+						<option value="mm" {{if eq $.SearchOption.Task "mm"}}selected{{end}}>mm</option>
+						<option value="layout" {{if eq $.SearchOption.Task "layout"}}selected{{end}}>layout</option>
+						<option value="ani" {{if eq $.SearchOption.Task "ani"}}selected{{end}}>ani</option>
+						<option value="fx" {{if eq $.SearchOption.Task "fx"}}selected{{end}}>fx</option>
+						<option value="mg" {{if eq $.SearchOption.Task "mg"}}selected{{end}}>mg</option>
+						<option value="previz" {{if eq $.SearchOption.Task "previz"}}selected{{end}}>previz</option>
+						<option value="fur" {{if eq $.SearchOption.Task "fur"}}selected{{end}}>fur</option>
+						<option value="rig" {{if eq $.SearchOption.Task "rig"}}selected{{end}}>rig</option>
+						<option value="crowd" {{if eq $.SearchOption.Task "crowd"}}selected{{end}}>crowd</option>
+						<option value="light" {{if eq $.SearchOption.Task "light"}}selected{{end}}>light</option>
+						<option value="comp" {{if eq $.SearchOption.Task "comp"}}selected{{end}}>comp</option>
+						<option value="matte" {{if eq $.SearchOption.Task "matte"}}selected{{end}}>matte</option>
+						<option value="env" {{if eq $.SearchOption.Task "env"}}selected{{end}}>env</option>
+					</select>
+				</div>
+				{{end}}
 				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
 					<select name="Sortkey" class="custom-select">

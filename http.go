@@ -102,6 +102,7 @@ func maxAgeHandler(seconds int, h http.Handler) http.Handler {
 func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
 	http.Handle("/thumbnail/", maxAgeHandler(3600, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
+	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	http.HandleFunc("/", handleIndex)
 	// Item
 	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
@@ -242,6 +243,11 @@ func webserver(port string) {
 	http.HandleFunc("/api/search", handleAPISearch)
 	http.HandleFunc("/api/deadline2d", handleAPIDeadline2D)
 	http.HandleFunc("/api/deadline3d", handleAPIDeadline3D)
+	http.HandleFunc("/api/items", handleAPIItems)
+	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
+	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
+	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
+	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
@@ -251,17 +257,9 @@ func webserver(port string) {
 	http.HandleFunc("/search", handleSearch)
 	http.HandleFunc("/searchsubmit", handleSearchSubmit)
 
-	http.HandleFunc("/api/items", handleAPIItems)
-	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
-	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
-	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
-	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
-
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
 
-	// Captcha
-	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight))
 	if port == ":443" || port == ":8443" { // https ports
 		err := http.ListenAndServeTLS(port, *flagCertFullchanin, *flagCertPrivkey, nil)
 		if err != nil {

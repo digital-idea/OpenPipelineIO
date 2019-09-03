@@ -10,6 +10,7 @@ type SearchOption struct {
 	Searchword string // 검색어
 	Sortkey    string // 정렬방식
 	Template   string // 템플릿 이름
+	Task       string // Task명
 	// 상태
 	Assign  bool
 	Ready   bool
@@ -72,6 +73,7 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 		Searchword: q.Get("searchword"),
 		Sortkey:    q.Get("sortkey"),
 		Template:   q.Get("template"),
+		Task:       q.Get("task"),
 		Assign:     str2bool(q.Get("assign")),
 		Ready:      str2bool(q.Get("ready")),
 		Wip:        str2bool(q.Get("wip")),
