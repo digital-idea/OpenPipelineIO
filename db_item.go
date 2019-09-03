@@ -436,6 +436,10 @@ func Searchv1(session *mgo.Session, op SearchOption) ([]Item, error) {
 // Searchv2 함수는 다음 검색함수이다.
 func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	results := []Item{}
+	// 검색어가 없다면 바로 빈 값을 리턴한다.
+	if op.Task == "" && op.Searchword == "" {
+		return results, nil
+	}
 	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
 	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
 		return results, nil
@@ -445,44 +449,11 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	c := session.DB("project").C(op.Project)
 	wordQueries := []bson.M{}
 
-	// 'task:' 로 시작하는 검색어는 검색어 뒤에 붙은 task만 검색한다.
-	// '#태그명' 형태로 들어왔을때 해당 태그명에 대한 검색이다.
-	searchword := SearchwordParser(op.Searchword)
-	if len(searchword.tags) > 0 && len(searchword.words) == 1 && searchword.words[0] == "''" {
-		op.setStatusAll() // 모든 상태를 검색한다.
-		searchword.words[0] = searchword.tags[0]
-	}
-	for _, word := range searchword.words {
-		query := []bson.M{}
-		if op.Task != "" {
-			if op.Assign {
-				query = append(query, bson.M{word + ".status": ASSIGN})
-			}
-			if op.Ready {
-				query = append(query, bson.M{word + ".status": READY})
-			}
-			if op.Wip {
-				query = append(query, bson.M{word + ".status": WIP})
-			}
-			if op.Confirm {
-				query = append(query, bson.M{word + ".status": CONFIRM})
-			}
-			if op.Done {
-				query = append(query, bson.M{word + ".status": DONE})
-			}
-			if op.Omit {
-				query = append(query, bson.M{word + ".status": OMIT})
-			}
-			if op.Hold {
-				query = append(query, bson.M{word + ".status": HOLD})
-			}
-			if op.Out {
-				query = append(query, bson.M{word + ".status": OUT})
-			}
-			if op.None {
-				query = append(query, bson.M{word + ".status": NONE})
-			}
+	for _, word := range strings.Split(op.Searchword, " ") {
+		if word == "" {
+			continue
 		}
+		query := []bson.M{}
 		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
 			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
 			if op.Task == "" {
@@ -512,10 +483,53 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"justtimecodeout": word})
 			query = append(query, bson.M{"scantimecodein": word})
 			query = append(query, bson.M{"scantimecodeout": word})
+		} else if strings.HasPrefix(word, "tag:") {
+			query = append(query, bson.M{"tag": strings.TrimLeft(word, "tag:")})
+			query = append(query, bson.M{"assettags": strings.TrimLeft(word, "tag:")})
+		} else if strings.HasPrefix(word, "user:") {
+			if op.Task == "" {
+				for _, task := range TASKS {
+					query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimLeft(word, "user:")}})
+				}
+			} else {
+				query = append(query, bson.M{op.Task + ".user": &bson.RegEx{Pattern: strings.TrimLeft(word, "user:")}})
+			}
+		} else if regexpRnum.MatchString(word) {
+			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
 		} else {
 			switch word {
 			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":
-				query = append(query, bson.M{})
+				if op.Task != "" {
+					if op.Assign {
+						query = append(query, bson.M{op.Task + ".status": ASSIGN})
+					}
+					if op.Ready {
+						query = append(query, bson.M{op.Task + ".status": READY})
+					}
+					if op.Wip {
+						query = append(query, bson.M{op.Task + ".status": WIP})
+					}
+					if op.Confirm {
+						query = append(query, bson.M{op.Task + ".status": CONFIRM})
+					}
+					if op.Done {
+						query = append(query, bson.M{op.Task + ".status": DONE})
+					}
+					if op.Omit {
+						query = append(query, bson.M{op.Task + ".status": OMIT})
+					}
+					if op.Hold {
+						query = append(query, bson.M{op.Task + ".status": HOLD})
+					}
+					if op.Out {
+						query = append(query, bson.M{op.Task + ".status": OUT})
+					}
+					if op.None {
+						query = append(query, bson.M{op.Task + ".status": NONE})
+					}
+				} else {
+					query = append(query, bson.M{})
+				}
 			case "shot", "Shot", "SHOT", "샷", "전샷", "전체샷":
 				query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
 			case "asset", "Asset", "ASSET", "assets", "ASSETS", "에셋", "texture", "텍스쳐":
@@ -536,19 +550,12 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			default:
 				query = append(query, bson.M{"id": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
-				// #태그명으로 검색시 검색어를 패턴 검색하지 않는다.
-				if len(searchword.tags) > 0 {
-					query = append(query, bson.M{"tag": word})
-					query = append(query, bson.M{"assettags": word})
-				} else {
-					query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
-					query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
-				}
 				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
+				// 느슨한 유저체크
 				if op.Task == "" {
 					for _, task := range TASKS {
 						query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
