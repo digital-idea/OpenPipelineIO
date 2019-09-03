@@ -51,7 +51,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	template := q.Get("template")
 	rcp.SearchOption.Template = template
-	rcp.Items, err = Searchv1(session, rcp.SearchOption)
+	rcp.Items, err = Searchv2(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

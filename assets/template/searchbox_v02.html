@@ -10,9 +10,9 @@
 						{{end}}
 					</select>
 				</div>
-				{{if $.SearchOption.Task}}
 				<div class="input-group-append">
 					<select name="Task" class="custom-select">
+						<option value="" {{if eq $.SearchOption.Task ""}}selected{{end}}>All</option>
 						<option value="concept" {{if eq $.SearchOption.Task "concept"}}selected{{end}}>concept</option>
 						<option value="model" {{if eq $.SearchOption.Task "model"}}selected{{end}}>model</option>
 						<option value="mm" {{if eq $.SearchOption.Task "mm"}}selected{{end}}>mm</option>
@@ -30,7 +30,6 @@
 						<option value="env" {{if eq $.SearchOption.Task "env"}}selected{{end}}>env</option>
 					</select>
 				</div>
-				{{end}}
 				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
 					<select name="Sortkey" class="custom-select">
