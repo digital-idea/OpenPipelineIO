@@ -222,3 +222,97 @@ function addComments(project, text, token) {
         });
     }
 }
+
+function setTaskUser(project, name, task, user, token) {
+    $.ajax({
+        url: "/api/settaskuser",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            user: user,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setTaskUsers(project, task, user, token) {
+    console.log(project,task,user,token)
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/settaskuser",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                task: task,
+                user, user,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+
+function setTaskStatus(project, name, task, status, token) {
+    $.ajax({
+        url: "/api/settaskstatus",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            status: status,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setTaskStatuses(project, task, status, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/settaskstatus",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                task: task,
+                status, status,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}

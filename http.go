@@ -48,6 +48,8 @@ var funcMap = template.FuncMap{
 	"Username2Elements":   Username2Elements,
 	"RemovePath":          RemovePath,
 	"ShortPhoneNum":       ShortPhoneNum,
+	"TaskStatus":          TaskStatus,
+	"TaskUser":            TaskUser,
 }
 
 // 도움말 페이지 입니다.

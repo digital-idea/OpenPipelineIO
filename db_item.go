@@ -437,7 +437,7 @@ func Searchv1(session *mgo.Session, op SearchOption) ([]Item, error) {
 func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	results := []Item{}
 	// 검색어가 없다면 바로 빈 값을 리턴한다.
-	if op.Task == "" && op.Searchword == "" {
+	if op.Searchword == "" {
 		return results, nil
 	}
 	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.

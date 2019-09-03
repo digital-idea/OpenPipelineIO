@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 	"time"
@@ -399,4 +400,14 @@ func ShortPhoneNum(str string) string {
 		return str
 	}
 	return str[len(str)-4:]
+}
+
+// TaskStatus 템플릿 함수는 아이템과 Task 문자를 받아서 상태를 반환한다.
+func TaskStatus(i Item, task string) string {
+	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("Status").String()
+}
+
+// TaskUser 템플릿 함수는 아이템과 Task 문자를 받아서 User를 반환한다.
+func TaskUser(i Item, task string) string {
+	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("User").String()
 }
