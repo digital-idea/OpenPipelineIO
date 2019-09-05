@@ -316,3 +316,29 @@ function setTaskStatuses(project, task, status, token) {
         });
     }
 }
+
+function selectCheckboxAll() {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        cboxes[i].checked = true;
+    }
+}
+
+function selectCheckboxNone() {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        cboxes[i].checked = false;
+    }
+}
+
+function selectCheckboxInvert() {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            cboxes[i].checked = true;
+        } else {
+            cboxes[i].checked = false;
+        }
+    }
+}
+

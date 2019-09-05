@@ -1,6 +1,11 @@
 {{define "assignuser" }}
 <!-- 멀티입력 -->
 <div class="">
+	<div class="text-right m-3">
+		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxAll()">전체선택</button>
+		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxNone()">전체해제</button>
+		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxInvert()">선택반전</button>
+	</div>
 	<div class="text-right mr-3">
 		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#multi-input">멀티유저 등록</button>
 	</div>
