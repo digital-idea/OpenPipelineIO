@@ -94,9 +94,7 @@ type Item struct {
 	// 현장에서 사용하는 카메라 데이터 이름. 슈퍼바이저 툴과 연동하기 위해서 Key로 사용된다.
 	// 일반적으로 스캔이름과 같지만 항상 동일하지 않다.
 	// 카메라 데이터 A037C012_160708_R717.[11694428-1172226].ari 형태에서 A037C012_160708_R717 부분이 데이터 이름이다.
-	Dataname   string `json:"dataname"`   // 영화카메라(Red,Alexa등)이 자동 생성시키는 이미지 파일명이다.
-	OnsetScene string `json:"onsetscene"` // 현장툴 TakeD와 맞출 Scene 문자열
-	OnsetCut   string `json:"onsetcut"`   // 현장툴 TakeD와 맞출 Cut 문자열
+	Dataname string `json:"dataname"` // 영화카메라(Red,Alexa등)이 자동 생성시키는 이미지 파일명이다.
 
 	// 작업이 필요한 정보
 	Scanname    string   `json:"scanname"`    // 스캔이름
