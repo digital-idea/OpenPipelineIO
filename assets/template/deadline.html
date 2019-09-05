@@ -23,11 +23,11 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="multi-input-deadline3d" class="col-form-label">Deadline 3D:</label>
-					<input type=date class="form-control" id="multi-input-deadline3d" onchange="setDeadline3Ds('{{.SearchOption.Project}}', document.getElementById('multi-input-deadline3d').value, '{{$.User.Token}}')">
+					<input type=date class="form-control" id="multi-input-deadline3d" onchange="setDeadline3Ds('{{.SearchOption.Project}}', document.getElementById('multi-input-deadline3d').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 				</div>
 				<div class="form-group">
 					<label for="multi-input-deadline2d" class="col-form-label">Deadline 2D:</label>
-					<input type=date class="form-control" id="multi-input-deadline2d" onchange="setDeadline2Ds('{{.SearchOption.Project}}', document.getElementById('multi-input-deadline2d').value, '{{$.User.Token}}')">
+					<input type=date class="form-control" id="multi-input-deadline2d" onchange="setDeadline2Ds('{{.SearchOption.Project}}', document.getElementById('multi-input-deadline2d').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -50,9 +50,9 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					<label for="{{.ID}}-deadline3d" class="col-form-label">Deadline 3D:</label>
-					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline3d}}" onchange="setDeadline3D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline3d}}" onchange="setDeadline3D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 					<label for="{{.ID}}-deadline2d" class="col-form-label">Deadline 2D:</label>
-					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline2d}}" onchange="setDeadline2D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline2d}}" onchange="setDeadline2D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 				</div>
 			</div>
 		</div>

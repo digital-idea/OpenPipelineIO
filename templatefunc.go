@@ -100,23 +100,36 @@ func pmnote2body(note string) string {
 	return ToShortTime(date) + "-" + note[num+1:]
 }
 
-// GetPath 함수는 "컨셉 : /show/test.jpg" 문자열을 "/show/test.jpg" 형태로 바꾸어주는 함수.
+// GetPath 함수는 "컨셉: /show/test.jpg" 문자열을 "/show/test.jpg" 형태로 바꾸어준다. /clib 도 마찬가지로 지원한다.
 func GetPath(s string) string {
 	for _, i := range strings.Split(s, " ") {
 		if strings.HasPrefix(i, "/show") {
+			return i
+		}
+		if strings.HasPrefix(i, "/clib") {
 			return i
 		}
 	}
 	return s
 }
 
-// RemovePath 함수는 "컨셉:/show/test.jpg"문자열을"컨셉:"형태로 바꾸어 준다.
+// RemovePath 함수는 "컨셉:/show/test.jpg" 문자열을 "컨셉:" 형태로 바꾸어 준다. /clib 형태의 클립라이브러리도 바꾸어준다.
 func RemovePath(s string) string {
-	num := strings.Index(s, "/show")
-	if num == -1 {
-		return s
+	if strings.Contains(s, "/show") {
+		num := strings.Index(s, "/show")
+		if num == -1 {
+			return s
+		}
+		return s[0:num]
 	}
-	return s[0:num]
+	if strings.Contains(s, "/clib") {
+		num := strings.Index(s, "/clib")
+		if num == -1 {
+			return s
+		}
+		return s[0:num]
+	}
+	return s
 }
 
 // ReverseStringSlice 함수는 받아들인 string 슬라이스의 아이템 순서를 역순으로 변경한다.
