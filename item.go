@@ -102,6 +102,7 @@ type Item struct {
 	Name        string   `json:"name"`        // 샷이름 SS_0010
 	Seq         string   `json:"seq"`         // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
 	Type        string   `json:"type"`        // org, org1, src, asset..
+	Assettype   string   `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
 	UseType     string   `json:"usetype"`     // 재스캔상황시 실제로 사용해야하는 타입표기
 	Scantime    string   `json:"scantime"`    // 스캔 등록시간 RFC3339
 	Thumpath    string   `json:"thumpath"`    // 썸네일경로
@@ -111,7 +112,7 @@ type Item struct {
 	Retimeplate string   `json:"retimeplate"` // 리타임 플레이트 경로
 	Platepath   string   `json:"platepath"`   // 플레이트 경로
 	Slug        string   `json:"slug"`        // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
-	Shottype    string   `json:"shottype"`    // 2d, 3d
+	Shottype    string   `json:"shottype"`    // "", "2d", "3d"
 	Onsetnote   []string `json:"onsetnote"`   // 현장내용, 작업내용
 	Ddline3d    string   `json:"ddline3d"`    // 3D 데드라인 RFC3339
 	Ddline2d    string   `json:"ddline2d"`    // 2D 데드라인 RFC3339
@@ -127,11 +128,10 @@ type Item struct {
 	Dsize       string   `json:"dsize"`       // 디스토션 사이즈
 	Rendersize  string   `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
 	Status      string   `json:"status"`      // 샷 상태.
-	Assettype   string   `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
 	Updatetime  string   `json:"updatetime"`  // 업데이트 시간 RFC3339
 	Focal       string   `json:"focal"`       // 렌즈 미리수
-	Stereotype  string   `json:"stereotype"`  // parallel(*), conversions
-	Stereoeye   string   `json:"stereoeye"`   // left(*), right
+	Stereotype  string   `json:"stereotype"`  // parallel(default), conversions
+	Stereoeye   string   `json:"stereoeye"`   // left(default), right
 	Outputname  string   `json:"outputname"`  // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
 	OCIOcc      string   `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
 
