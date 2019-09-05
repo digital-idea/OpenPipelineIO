@@ -93,7 +93,7 @@ func validRnumTag(rnum string) bool {
 // validShottype 함수는 샷타입이 유효한지 체크하는 함수이다.
 func validShottype(typ string) error {
 	switch typ {
-	case "2d", "3d":
+	case "2d", "3d", "":
 		return nil
 	default:
 		return fmt.Errorf("%s 이름을 샷타입으로 사용할 수 없습니다", typ)

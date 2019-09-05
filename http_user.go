@@ -450,14 +450,14 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	u.Password = pw
-	u.FirstNameKor = r.FormValue("FirstNameKor")
-	u.LastNameKor = r.FormValue("LastNameKor")
-	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
-	u.LastNameEng = strings.Title(strings.ToLower(r.FormValue("LastNameEng")))
-	u.FirstNameChn = r.FormValue("FirstNameChn")
-	u.LastNameChn = r.FormValue("LastNameChn")
-	u.Email = r.FormValue("Email")
-	u.EmailExternal = r.FormValue("EmailExternal")
+	u.FirstNameKor = strings.TrimSpace(r.FormValue("FirstNameKor"))
+	u.LastNameKor = strings.TrimSpace(r.FormValue("LastNameKor"))
+	u.FirstNameEng = strings.Title(strings.TrimSpace(strings.ToLower(r.FormValue("FirstNameEng"))))
+	u.LastNameEng = strings.Title(strings.TrimSpace(strings.ToLower(r.FormValue("LastNameEng"))))
+	u.FirstNameChn = strings.TrimSpace(r.FormValue("FirstNameChn"))
+	u.LastNameChn = strings.TrimSpace(r.FormValue("LastNameChn"))
+	u.Email = strings.TrimSpace(r.FormValue("Email"))
+	u.EmailExternal = strings.TrimSpace(r.FormValue("EmailExternal"))
 	u.Phone = r.FormValue("Phone")
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")

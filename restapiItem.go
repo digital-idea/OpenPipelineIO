@@ -1158,6 +1158,9 @@ func PostFormValueInList(key string, values []string) (string, error) {
 	if key == "date" && values[0] == "" { // 2차마감일은 빈 문자를 허용한다.
 		return "", nil
 	}
+	if key == "shottype" && values[0] == "" { // 샷타입은 빈 문자를 허용한다.
+		return "", nil
+	}
 	if values[0] == "" {
 		return "", errors.New(key + "값이 빈 문자입니다")
 	}
@@ -1925,7 +1928,7 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
-		case "type", "shottype":
+		case "shottype":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)

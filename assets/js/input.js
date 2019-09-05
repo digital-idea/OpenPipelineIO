@@ -407,6 +407,50 @@ function setDeadline3Ds(project, date, token) {
     }
 }
 
+function setShottype(project, name, shottype, token) {
+    $.ajax({
+        url: "/api/setshottype",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            shottype: shottype,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setShottypes(project, shottype, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/setshottype",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                shottype: shottype,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
 function selectCheckboxAll() {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {

@@ -113,7 +113,7 @@ type Item struct {
 	Retimeplate string   `json:"retimeplate"` // 리타임 플레이트 경로
 	Platepath   string   `json:"platepath"`   // 플레이트 경로
 	Slug        string   `json:"slug"`        // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
-	Shottype    string   `json:"shottype"`    // 2D, 3D
+	Shottype    string   `json:"shottype"`    // 2d, 3d
 	Onsetnote   []string `json:"onsetnote"`   // 현장내용, 작업내용
 	Ddline3d    string   `json:"ddline3d"`    // 3D 데드라인 RFC3339
 	Ddline2d    string   `json:"ddline2d"`    // 2D 데드라인 RFC3339
