@@ -34,6 +34,7 @@ var funcMap = template.FuncMap{
 	"GetPath":             GetPath,
 	"ReverseStringSlice":  ReverseStringSlice,
 	"ToShortTime":         ToShortTime,
+	"ToNormalTime":        ToNormalTime,
 	"Tags2str":            Tags2str,
 	"CheckDate":           CheckDate,
 	"CheckUpdate":         CheckUpdate,

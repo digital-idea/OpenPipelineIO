@@ -317,6 +317,96 @@ function setTaskStatuses(project, task, status, token) {
     }
 }
 
+function setDeadline2D(project, name, date, token) {
+    $.ajax({
+        url: "/api/setdeadline2d",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            date: date,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setDeadline2Ds(project, date, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        console.log(project, cboxes[i].getAttribute("id"), date)
+        $.ajax({
+            url: "/api/setdeadline2d",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                date: date,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+function setDeadline3D(project, name, date, token) {
+    $.ajax({
+        url: "/api/setdeadline3d",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            date: date,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setDeadline3Ds(project, date, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        console.log(project, cboxes[i].getAttribute("id"), date)
+        $.ajax({
+            url: "/api/setdeadline3d",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                date: date,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
 function selectCheckboxAll() {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
@@ -341,4 +431,3 @@ function selectCheckboxInvert() {
         }
     }
 }
-
