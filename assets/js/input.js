@@ -451,6 +451,50 @@ function setShottypes(project, shottype, token) {
     }
 }
 
+function setAssettype(project, name, assettype, token) {
+    $.ajax({
+        url: "/api/setassettype",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            assettype: assettype,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setAssettypes(project, assettype, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/setassettype",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                assettype: assettype,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
 function selectCheckboxAll() {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
