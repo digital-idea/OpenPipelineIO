@@ -495,6 +495,25 @@ function setAssettypes(project, assettype, token) {
     }
 }
 
+function setRnum(project, name, rnum, token) {
+    $.ajax({
+        url: "/api/setrnum",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            rnum: rnum,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
 function selectCheckboxAll() {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
