@@ -27,7 +27,7 @@ curl http://192.168.219.104/api/users?searchword=개발팀,1팀
 | --- | --- | --- | --- |
 | /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
 
-#### 인증을 통한 restAPI 사용방법
+## 인증을 통한 restAPI 사용방법
 
 `-authmode` 모드가 활성화 되어있지 않다면 restAPI은 공개되어 있고, 아무나 사용할 수 있습니다.
 csi서비스를 실행할 때 `-authmode` 옵션을 붙히면 보안모드가 작동됩니다.
@@ -38,10 +38,10 @@ csi서비스를 실행할 때 `-authmode` 옵션을 붙히면 보안모드가 �
 curl -H "Authorization: Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH" http://192.168.219.101/api/user?id=khw7096
 ```
 
-#### Access Level 변경
-웹을 통해서 가입되는 모든 유저의 AccessLevel 값은 아티스트를 상징하는 3 값이다.
+## Access Level 변경
+웹을 통해서 가입되는 모든 유저의 AccessLevel 값은 기본적으로 3 입니다.(아티스트)
 
-아래 명령어를 통해서 AccessLevel 을 변경할 수 있다.
+아래 명령어를 통해서 AccessLevel 을 변경할 수 있습니다.
 ```bash
 $ sudo csi3 -accesslevel 4 -id khw7096
 ```
@@ -57,6 +57,8 @@ $ sudo csi3 -accesslevel 4 -id khw7096
 - 8: PD, 자금이슈
 - 9: 개발자
 - 10: 시스템 관리자
+
+Accesslevel이 10인 유저라면 웹 GUI에서도 각 사용자별 Accesslevel을 수정할 수 있습니다.
 
 #### JWT에 사용되는 환경변수
 CSI_JWT_TOKEN_KEY 로 세션 암호화에 사용될 문자를 환경변수로 잡아주세요.
