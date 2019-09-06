@@ -1120,7 +1120,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	rcp.ID = ssid.ID
 
-	// 쿠키에 저장된 값이 있다면 rcp에 저장한다.
+	// 쿠키에 저장된 Project 값이 있다면 rcp에 저장한다.
 	for _, cookie := range r.Cookies() {
 		if cookie.Name == "Project" {
 			rcp.Searchop.Project = cookie.Value

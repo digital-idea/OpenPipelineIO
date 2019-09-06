@@ -52,16 +52,16 @@
             Input
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputtags&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">태그설정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputshottype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">샷 타입 설정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputassettype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">에셋 타입 설정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputassigntasks&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">Assign Tasks</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputdeadline&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">마감일 설정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputassignuser&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">Assign User</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputrnum&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">롤넘버 수정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputedittime&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">시간정보 수정</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputaddnote&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">작업내용 입력</a>
-            <a class="dropdown-item" href="/inputmode?project=TEMP&sortkey=slug&template=inputaddcomment&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true">수정내용 입력</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputtags&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">태그설정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputshottype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">샷 타입 설정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassettype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">에셋 타입 설정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassigntasks&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">Assign Tasks</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputdeadline&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">마감일 설정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassignuser&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">Assign User</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputrnum&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">롤넘버 수정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputedittime&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">시간정보 수정</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddnote&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">작업내용 입력</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddcomment&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">수정내용 입력</a>
           </div>
         </li>
         {{end}}
