@@ -253,6 +253,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
 	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
+	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

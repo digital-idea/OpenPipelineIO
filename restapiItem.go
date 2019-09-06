@@ -2001,6 +2001,63 @@ func handleAPISetOutputName(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
+// handleAPISetRetimePlate 함수는 아이템의 retimeplate 값을 설정합니다.
+func handleAPISetRetimePlate(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var retimePlate string
+	args := r.PostForm
+	for key, value := range args {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "retimeplate", "path", "plate":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			retimePlate = v
+		}
+	}
+	err = SetRetimePlate(session, project, name, retimePlate)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+}
+
 // handleAPISetAssetType 함수는 아이템의 shot type을 설정한다.
 func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
