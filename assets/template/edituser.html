@@ -163,6 +163,7 @@
                 <select name="Timezone" class="form-control">
                     <option value="Asia/Seoul" {{if eq .User.Timezone "Asia/Seoul"}}selected{{end}}>한국 Asia/Seoul</option>
                     <option value="Asia/Beijing" {{if eq .User.Timezone "Asia/Beijing"}}selected{{end}}>중국 Asia/Beijing</option>
+                    <option value="US/Eastern" {{if eq .User.Timezone "US/Eastern"}}selected{{end}}>미국 US/Eastern</option>
                 </select>
                 <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
             </div>
