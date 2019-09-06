@@ -1412,8 +1412,10 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		Fails   []Asset
 		User    User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
