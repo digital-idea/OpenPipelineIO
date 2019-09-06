@@ -1169,8 +1169,10 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 		User        User
 		Projectlist []string
 		Devmode     bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -1310,8 +1312,10 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 		User        User
 		Projectlist []string
 		Devmode     bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {

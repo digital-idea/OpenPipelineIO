@@ -13,7 +13,7 @@
             <label>Project</label>
             <select name="Project" class="form-control">
               {{range .Projectlist}}
-                <option value="{{.}}">{{.}}</option>
+                <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
               {{end}}
             </select>
             <small class="form-text text-muted">에셋을 생성할 프로젝트를 선택해주세요.</small>

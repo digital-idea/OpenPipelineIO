@@ -80,8 +80,10 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		Wfs     string
 		User    User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipy{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.User = u
 	rcp.Wfs = *flagWFS

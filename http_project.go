@@ -29,8 +29,10 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		User    User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	rcp.User = u
@@ -98,8 +100,10 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		MailDNS  string
 		User     User
 		Devmode  bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -331,8 +335,10 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		Project Project
 		User    User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	p, err := getProject(session, id)
 	if err != nil {

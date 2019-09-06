@@ -24,7 +24,7 @@
                 <label>Project</label>
                 <select name="project" class="form-control">
                   {{range .Projectlist}}
-                    <option value="{{.}}">{{.}}</option>
+                    <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
                   {{end}}
                 </select>
                 <small class="form-text text-muted">Setellite CSV를 업로드할 프로젝트를 선택합니다.</small>

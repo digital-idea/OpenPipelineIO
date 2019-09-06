@@ -38,8 +38,10 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		User
 		SessionID string
 		Devmode   bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -650,8 +652,10 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -764,8 +768,10 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		Searchword string   // searchform에 들어가는 문자
 		Usernum    int      // 검색된 인원수
 		Devmode    bool     // 개발모드
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.Searchword = searchword
 	rcp.User, err = getUser(session, ssid.ID)

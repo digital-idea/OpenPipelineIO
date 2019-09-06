@@ -30,8 +30,10 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		User    User
 		Devmode bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -436,8 +438,10 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		User
 		MailDNS string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Divisions, err = allDivisions(session)
@@ -483,8 +487,10 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		User
 		MailDNS string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Departments, err = allDepartments(session)
@@ -530,8 +536,10 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		User
 		MailDNS string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Teams, err = allTeams(session)
@@ -577,8 +585,10 @@ func handleRoles(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		User
 		MailDNS string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Roles, err = allRoles(session)
@@ -624,8 +634,10 @@ func handlePositions(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		User
 		MailDNS string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Positions, err = allPositions(session)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"log"
 	"net/http"
 
@@ -33,21 +34,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	// 쿠키에 저장된 Project 값이 있다면 rcp에 저장한다.
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "Project" {
-			rcp.SearchOption.Project = cookie.Value
-		}
-		if cookie.Name == "Task" {
-			rcp.SearchOption.Task = cookie.Value
-		}
-		if cookie.Name == "Searchword" {
-			rcp.SearchOption.Searchword = cookie.Value
-		}
-	}
-	if rcp.SearchOption.Project == "" {
-		rcp.SearchOption.Project = "TEMP"
-	}
+	rcp.SearchOption.LoadCookie(r)
 
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
@@ -115,7 +102,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	cookie = http.Cookie{
 		Name:   "Searchword",
-		Value:  rcp.SearchOption.Searchword,
+		Value:  base64.StdEncoding.EncodeToString([]byte(rcp.SearchOption.Searchword)), //  쿠키는 UTF-8을 저장할 때 에러가 발생한다.
 		MaxAge: 0,
 	}
 	http.SetCookie(w, &cookie)

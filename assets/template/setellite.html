@@ -4,7 +4,9 @@
 <div class="setelliteSearch">
     <form action="/setellite" method="POST"  class="searchbox">
         <select name="project" class="selectproject">
-            {{range .Projectlist}}<option value="{{.}}" {{if eq $.Project .}}selected{{end}}>{{.}}</option>{{end}}
+            {{range .Projectlist}}
+                <option value="{{.}}" {{if eq $.SearchOption.Project . }}selected{{end}}>{{.}}</option>
+            {{end}}
         </select>
         <input class="searchform" type="text" size="45" maxlength="256" name="searchWord" value="{{$.Searchword}}">
         <button class="button" id="button">SEARCH</button>

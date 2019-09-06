@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/base64"
+	"log"
 	"net/http"
 )
 
@@ -85,4 +87,27 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 		None:       str2bool(q.Get("none")),
 	}
 	return op
+}
+
+// LoadCookie 메소드는 request에 이미 설정된 쿠키값을을 SearchOption 자료구조에 추가한다.
+func (op *SearchOption) LoadCookie(r *http.Request) {
+	for _, cookie := range r.Cookies() {
+		if cookie.Name == "Project" {
+			op.Project = cookie.Value
+		}
+		if cookie.Name == "Task" {
+			op.Task = cookie.Value
+		}
+		if cookie.Name == "Searchword" {
+			cookieByte, err := base64.StdEncoding.DecodeString(cookie.Value)
+			if err != nil {
+				log.Println(err)
+			}
+			op.Searchword = string(cookieByte)
+		}
+	}
+	if op.Project == "" {
+		op.Project = "TEMP"
+	}
+
 }

@@ -45,8 +45,10 @@ func handleSetellite(w http.ResponseWriter, r *http.Request) {
 		Searchword  string
 		Items       []Setellite
 		Error       string
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -130,8 +132,10 @@ func handleUploadSetellite(w http.ResponseWriter, r *http.Request) {
 		Errors      []string // CSV를 처리하면서 각 라인별로 에러가 있다면 에러내용을 저장한다.
 		User        User
 		Devmode     bool
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
