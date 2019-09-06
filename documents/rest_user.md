@@ -21,6 +21,12 @@ curl http://192.168.219.104/api/users?searchword=합성팀,1팀,팀장
 curl http://192.168.219.104/api/users?searchword=개발팀,1팀
 ```
 
+## Post
+
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
+
 #### 인증을 통한 restAPI 사용방법
 
 `-authmode` 모드가 활성화 되어있지 않다면 restAPI은 공개되어 있고, 아무나 사용할 수 있습니다.
