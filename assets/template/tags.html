@@ -2,7 +2,7 @@
 <div class="taggroup textbold">{{range .Tags }}
 	{{if eq . "" -}}
 	{{- else -}}
-		{{$tag := Hashtag2tag .}}
+		{{$tag := AddTagColon .}}
 		{{if eq $tag $.Searchop.Searchword -}}
 			<tagselected><a href="/tag/{{$.Searchop.Project}}/{{.}}"><b>{{.}}</b></a></tagselected>
 		{{- else -}}

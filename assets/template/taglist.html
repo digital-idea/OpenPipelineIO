@@ -1,0 +1,24 @@
+{{define "taglist" }}
+
+
+<div class="text-right m-3">
+	{{range .Tags}}
+		{{if eq . "" }}
+		{{else}}
+			{{$tag := AddTagColon .}}
+			{{if eq $tag $.SearchOption.Searchword}}
+				<a href="/tag/{{$.SearchOption.Project}}/{{.}}" class="btn btn-success btn-sm">{{.}}</a>
+			{{else}}
+				<a href="/tag/{{$.SearchOption.Project}}/{{.}}" class="btn btn-outline-secondary btn-sm">{{.}}</a>
+			{{end}}
+		{{end}}
+	{{end}}
+</div>
+
+<div class="text-right m-3">
+	{{range .Assettags}}
+		<a href="/assettags/{{$.SearchOption.Project}}/{{.}}" class="btn btn-outline-secondary btn-sm">{{.}}</a>
+	{{end}}
+</div>
+
+{{end}}

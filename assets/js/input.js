@@ -514,6 +514,85 @@ function setRnum(project, name, rnum, token) {
     });
 }
 
+function addTags(project, tag, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/addtag",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                tag: tag,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+function setTags(project, tags, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/settags",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                tags: tags,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+function rmTags(project, tag, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        console.log(project, cboxes[i].getAttribute("id"), tag, token);
+        $.ajax({
+            url: "/api/rmtag",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                tag: tag,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
 function selectCheckboxAll() {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {

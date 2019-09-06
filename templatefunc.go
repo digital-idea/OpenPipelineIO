@@ -385,13 +385,9 @@ func Scanname2RollMedia(scanname string) string {
 	return strings.Split(scanname, "_")[1]
 }
 
-// Hashtag2tag 템플릿함수는 태그명을 `tag:태그명`으로 변경한다.
-func Hashtag2tag(tag string) string {
-	var hastag string
-	if tag != "" {
-		hastag = `tag:` + tag
-	}
-	return hastag
+// AddTagColon 템플릿함수는 태그문자에 "tag:태그"를 붙혀 반환한다.
+func AddTagColon(tag string) string {
+	return "tag:" + tag
 }
 
 // Username2Elements 함수는 element 이름들을 반환한다.

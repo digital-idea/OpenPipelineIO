@@ -69,7 +69,7 @@ CSI는 터미널에서 간단하게 관리를 할 수 있습니다.
 관리를 위해 필요한 명령어 메뉴얼입니다.
 
 - [Project](documents/project.md)
-- [Item](documents/item.md): 샷, 에셋등록, 삭제
+- [Item](documents/item.md): Asset, Shot
 - [User](documents/user.md)
 - [Daily](documents/daily.md)
 - [Organization](documents/organization.md)
@@ -79,7 +79,7 @@ CSI는 RestAPI가 설계되어 있습니다.
 Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI의 상태를 변경할 수 있습니다.
 
 - [Project](documents/rest_project.md)
-- [Item](documents/rest_item.md)
+- [Item](documents/rest_item.md): Asset, Shot
 - [User](documents/rest_user.md)
 
 ### 썸네일 경로

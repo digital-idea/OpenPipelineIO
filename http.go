@@ -45,7 +45,7 @@ var funcMap = template.FuncMap{
 	"Minus":               Minus,
 	"Review":              Review,
 	"Scanname2RollMedia":  Scanname2RollMedia,
-	"Hashtag2tag":         Hashtag2tag,
+	"AddTagColon":         AddTagColon, //Hashtag2tag,
 	"Username2Elements":   Username2Elements,
 	"RemovePath":          RemovePath,
 	"ShortPhoneNum":       ShortPhoneNum,
