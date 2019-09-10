@@ -1,31 +1,21 @@
 # RestAPI User
 
-id가 `woong`인 유저의 정보를 가지고 오기
 
-```bash
-$ curl http://csi.lazypic.org/api/user?id=woong
-```
+## Get
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/user | 유저정보를 가지고 오기 | id | `$ curl http://csi.lazypic.org/api/user?id=woong` |
+| /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=팀장` |
+| /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=합성팀,1팀,팀장` |
+| /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=개발팀,1팀` |
 
-회사에서 팀장 사용자 데이터를 가지고 오는 방법
-```bash
-curl http://192.168.219.104/api/users?searchword=팀장
-```
-
-합성팀, 1팀, 팀장 사용자 데이터를 가지고 오는 방법
-```bash
-curl http://192.168.219.104/api/users?searchword=합성팀,1팀,팀장
-```
-
-개발팀,1팀 사용자 데이터를 가지고 오는 방법
-```bash
-curl http://192.168.219.104/api/users?searchword=개발팀,1팀
-```
 
 ## Post
 
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
+| /api/setleave | 유저가 퇴사했는지 체크 | id, leave | `$ curl -d "id=id&leave=true" http://127.0.0.1/api/setleave` |
 
 ## 인증을 통한 restAPI 사용방법
 

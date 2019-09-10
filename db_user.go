@@ -366,6 +366,32 @@ func resetPasswordAttempt(session *mgo.Session, id string) error {
 	return nil
 }
 
+// setLeaveUser 함수는 사용자의 id와 bool 값을 받아서 사용자 퇴사여부를 체크한다.
+func setLeaveUser(session *mgo.Session, id string, leave bool) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("user").C("users")
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return err
+	}
+	if num != 1 {
+		return errors.New("해당 유저가 존재하지 않습니다")
+	}
+	if leave {
+		// 사용자가 한번 떠나면 사용자의 엑세스 레벨은 최소값으로 바뀐다.
+		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"isleave": leave, "accesslevel": UnknownAccessLevel}})
+		if err != nil {
+			return err
+		}
+	} else {
+		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"isleave": leave}})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // UserTags 함수는 전체 사용자에 등록된 Tags를 분석하여 태그리스트를 반환합니다.
 func UserTags(session *mgo.Session) ([]string, error) {
 	var tags []string

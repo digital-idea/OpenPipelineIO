@@ -29,6 +29,8 @@
 <div class="p-3">
     <div class="row">
         {{range .Users}}
+        {{if .IsLeave}}
+        {{else}}
         <div class="card w-10 mx-auto m-3{{if eq .AccessLevel 0}} bg-warning{{end}}">
             <a href="/user?id={{.ID}}">
                 <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
@@ -52,6 +54,7 @@
                 </div>
             </div>
         </div>
+        {{end}}
         {{end}}
     </div>
 </div>
