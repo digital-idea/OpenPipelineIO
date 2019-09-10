@@ -26,8 +26,8 @@ func SearchwordParser(word string) Searchword {
 
 		switch {
 		case strings.HasPrefix(w, "task:"): //'task:'로 시작하는지 체크
-			// taskValue := strings.TrimLeft(w, "task:")
-			// string.TrimLeft를 쓰는 경우 task:ani 등의 :a로 시작하면 a문자열이 잘린다. 유니코드문제
+			// taskValue := strings.TrimPrefix(w, "task:")
+			// string.TrimPrefix를 쓰는 경우 task:ani 등의 :a로 시작하면 a문자열이 잘린다. 유니코드문제
 			taskValue := strings.TrimSpace(strings.Split(w, ":")[1])
 			taskList := strings.Split(taskValue, ",")
 			for _, list := range taskList {
@@ -40,11 +40,11 @@ func SearchwordParser(word string) Searchword {
 				}
 			}
 		case strings.HasPrefix(w, "user:"): // 'user:'로 시작하는지 체크
-			searchword.users = append(searchword.users, strings.TrimLeft(w, "user:"))
+			searchword.users = append(searchword.users, strings.TrimPrefix(w, "user:"))
 		case strings.HasPrefix(w, "tag:"): // 'tag:'로 시작하는지 체크
-			searchword.tags = append(searchword.tags, strings.TrimLeft(w, "tag:"))
+			searchword.tags = append(searchword.tags, strings.TrimPrefix(w, "tag:"))
 		case strings.HasPrefix(w, "status:"): // 'status:'로 시작하는지 체크
-			searchword.status = append(searchword.status, strings.TrimLeft(w, "status:"))
+			searchword.status = append(searchword.status, strings.TrimPrefix(w, "status:"))
 		default:
 			//중복 검색어 체크
 			hasWord := false

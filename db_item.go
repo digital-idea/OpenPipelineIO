@@ -484,15 +484,16 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"scantimecodein": word})
 			query = append(query, bson.M{"scantimecodeout": word})
 		} else if strings.HasPrefix(word, "tag:") {
-			query = append(query, bson.M{"tag": strings.TrimLeft(word, "tag:")})
-			query = append(query, bson.M{"assettags": strings.TrimLeft(word, "tag:")})
+			query = append(query, bson.M{"tag": strings.TrimPrefix(word, "tag:")})
+		} else if strings.HasPrefix(word, "assettags:") {
+			query = append(query, bson.M{"assettags": strings.TrimPrefix(word, "assettags:")})
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
 				for _, task := range TASKS {
-					query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimLeft(word, "user:")}})
+					query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
 				}
 			} else {
-				query = append(query, bson.M{op.Task + ".user": &bson.RegEx{Pattern: strings.TrimLeft(word, "user:")}})
+				query = append(query, bson.M{op.Task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
 			}
 		} else if regexpRnum.MatchString(word) {
 			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})

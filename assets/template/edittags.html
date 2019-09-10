@@ -3,10 +3,10 @@
 <!-- 멀티입력 -->
 <div class="">
 	<div class="text-right m-3">
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxAll()">전체선택</button>
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxNone()">전체해제</button>
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxInvert()">선택반전</button>
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#multi-input-modal-addtag">태그추가</button>
+		<button type="button" class="btn btn-secondary btn-sm m-1" onclick="selectCheckboxAll()">전체선택</button>
+		<button type="button" class="btn btn-secondary btn-sm m-1" onclick="selectCheckboxNone()">전체해제</button>
+		<button type="button" class="btn btn-secondary btn-sm m-1" onclick="selectCheckboxInvert()">선택반전</button>
+		<button type="button" class="btn btn-primary btn-sm m-1" data-toggle="modal" data-target="#multi-input-modal-addtag">태그추가</button>
 		<!-- Modal: multi-input-modal-tag -->
 		<div class="modal fade" id="multi-input-modal-addtag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -30,7 +30,7 @@
 			</div>
 			</div>
 		</div>
-		<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#multi-replace-modal-tag">태그 일괄변경</button>
+		<button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#multi-replace-modal-tag">태그 일괄변경</button>
 		<!-- Modal: multi-replace-modal-tag -->
 		<div class="modal fade" id="multi-replace-modal-tag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -54,7 +54,7 @@
 			</div>
 			</div>
 		</div>
-		<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#multi-remove-modal-tag">태그삭제</button>
+		<button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#multi-remove-modal-tag">태그삭제</button>
 		<!-- Modal: multi-replace-modal-tag -->
 		<div class="modal fade" id="multi-remove-modal-tag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
@@ -95,7 +95,7 @@
 				<h6 class="card-title">
 					{{if .Rnum}}<small class="form-text text-muted">{{.Rnum}}</small>{{end}}{{.Name}}({{.Type}})
 				</h6>
-				<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTags('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+				<input class="form-control" value="{{Tags2str .Tag}}" type="text" onchange="setTag('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
 			</div>
 		</div>
 	</div>

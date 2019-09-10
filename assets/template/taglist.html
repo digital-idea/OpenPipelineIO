@@ -1,15 +1,41 @@
 {{define "taglist" }}
 
 
-<div class="text-right m-3">
+<div class="text-right m-1">
 	{{range .Tags}}
 		{{if eq . "" }}
 		{{else}}
 			{{$tag := AddTagColon .}}
 			{{if eq $tag $.SearchOption.Searchword}}
-				<a href="/tag/{{$.SearchOption.Project}}/{{.}}" class="btn btn-success btn-sm">{{.}}</a>
+				<a href="/inputmode?project={{$.SearchOption.Project}}&
+						searchword=tag:{{.}}&
+						sortkey={{$.SearchOption.Sortkey}}&
+						assign=true&
+						ready=true&
+						wip=true&
+						confirm=true&
+						done=true&
+						omit=true&
+						hold=true&
+						out=true&
+						none=true&
+						template=inputtags&
+						task=" class="btn btn-success btn-sm m-1">{{.}}</a>
 			{{else}}
-				<a href="/tag/{{$.SearchOption.Project}}/{{.}}" class="btn btn-outline-secondary btn-sm">{{.}}</a>
+				<a href="/inputmode?project={{$.SearchOption.Project}}&
+						searchword=tag:{{.}}&
+						sortkey={{$.SearchOption.Sortkey}}&
+						assign=true&
+						ready=true&
+						wip=true&
+						confirm=true&
+						done=true&
+						omit=true&
+						hold=true&
+						out=true&
+						none=true&
+						template=inputtags&
+						task=" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 			{{end}}
 		{{end}}
 	{{end}}
@@ -17,7 +43,20 @@
 
 <div class="text-right m-3">
 	{{range .Assettags}}
-		<a href="/assettags/{{$.SearchOption.Project}}/{{.}}" class="btn btn-outline-secondary btn-sm">{{.}}</a>
+		<a href="/inputmode?project={{$.SearchOption.Project}}&
+							searchword=tag:{{.}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							assign=true&
+							ready=true&
+							wip=true&
+							confirm=true&
+							done=true&
+							omit=true&
+							hold=true&
+							out=true&
+							none=true&
+							template=inputtags&
+							task=" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 	{{end}}
 </div>
 

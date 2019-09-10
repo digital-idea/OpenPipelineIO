@@ -566,6 +566,27 @@ function setTags(project, tags, token) {
     }
 }
 
+function setTag(project, name, tags, token) {
+    $.ajax({
+        url: "/api/settags",
+        type: "post",
+        
+        data: {
+            project: project,
+            name: name,
+            tags: tags,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+
 function rmTags(project, tag, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
