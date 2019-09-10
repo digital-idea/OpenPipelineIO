@@ -259,7 +259,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/user", handleAPIUser)
 	http.HandleFunc("/api/users", handleAPISearchUser)
 	http.HandleFunc("/api/validuser", handleAPIValidUser)
-	http.HandleFunc("/api/setleave", handleAPISetLeave)
+	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/search", handleSearch)

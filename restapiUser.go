@@ -141,7 +141,7 @@ func handleAPIValidUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleAPIValidUser 함수는 사용자가 유효한지 체크하는 핸들러 입니다.
-func handleAPISetLeave(w http.ResponseWriter, r *http.Request) {
+func handleAPISetLeaveUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)

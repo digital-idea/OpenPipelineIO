@@ -15,7 +15,7 @@
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
-| /api/setleave | 유저가 퇴사했는지 체크 | id, leave | `$ curl -d "id=id&leave=true" http://127.0.0.1/api/setleave` |
+| /api/setleaveuser | 유저가 퇴사했는지 체크 | id, leave | `$ curl -d "id=id&leave=true" http://127.0.0.1/api/setleaveuser` |
 
 ## 인증을 통한 restAPI 사용방법
 
