@@ -48,7 +48,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Projectlist, err = Projectlist(session)
+	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

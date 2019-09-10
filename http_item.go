@@ -144,7 +144,7 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
 	rcp.ID = ssid.ID
-	rcp.Projectlist, err = Projectlist(session)
+	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1126,7 +1126,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 			rcp.Searchop.Project = cookie.Value
 		}
 	}
-	rcp.Projectlist, err = Projectlist(session)
+	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
