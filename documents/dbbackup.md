@@ -4,8 +4,13 @@
 - DB백업은 mongodump 명령을 사용한다. mongoDB를 설치하면 해당 명령어가 있습니다.
 - 원칙상 백업은 서비스를 끄고 백업을 하는 것이 관례입니다. 현재 입력되는 값의 백업을 포기한다면, DB가 돌고 있을때도 mongodump는 사용가능합니다.
 - 만약 /backuppath/20190613 경로에 CSI에서 사용하는 project DB를 백업한다면 명령어는 아래와 같습니다.
-```
-mongodump -d project -o /backuppath/20190613
+
+```bash
+$ mongodump -d project -o /backuppath/20190906
+$ mongodump -d user -o /backuppath/20190906
+$ mongodump -d setellite -o /backuppath/20190906
+$ mongodump -d projectinfo -o /backuppath/20190906
+$ mongodump -d organization -o /backuppath/20190906
 ```
 
 ### DB복원
