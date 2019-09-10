@@ -1,6 +1,5 @@
 {{define "taglist" }}
 
-
 <div class="text-right m-1">
 	{{range .Tags}}
 		{{if eq . "" }}
@@ -10,32 +9,32 @@
 				<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
 						sortkey={{$.SearchOption.Sortkey}}&
-						assign=true&
-						ready=true&
-						wip=true&
-						confirm=true&
-						done=true&
-						omit=true&
-						hold=true&
-						out=true&
-						none=true&
+						assign={{$.SearchOption.Assign}}&
+						ready={{$.SearchOption.Ready}}&
+						wip={{$.SearchOption.Wip}}&
+						confirm={{$.SearchOption.Confirm}}&
+						done={{$.SearchOption.Done}}&
+						omit={{$.SearchOption.Omit}}&
+						hold={{$.SearchOption.Hold}}&
+						out={{$.SearchOption.Out}}&
+						none={{$.SearchOption.None}}&
 						template=inputtags&
-						task=" class="btn btn-success btn-sm m-1">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="btn btn-success btn-sm m-1">{{.}}</a>
 			{{else}}
 				<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
 						sortkey={{$.SearchOption.Sortkey}}&
-						assign=true&
-						ready=true&
-						wip=true&
-						confirm=true&
-						done=true&
-						omit=true&
-						hold=true&
-						out=true&
-						none=true&
+						assign={{$.SearchOption.Assign}}&
+						ready={{$.SearchOption.Ready}}&
+						wip={{$.SearchOption.Wip}}&
+						confirm={{$.SearchOption.Confirm}}&
+						done={{$.SearchOption.Done}}&
+						omit={{$.SearchOption.Omit}}&
+						hold={{$.SearchOption.Hold}}&
+						out={{$.SearchOption.Out}}&
+						none={{$.SearchOption.None}}&
 						template=inputtags&
-						task=" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 			{{end}}
 		{{end}}
 	{{end}}
@@ -44,19 +43,20 @@
 <div class="text-right m-3">
 	{{range .Assettags}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
-							searchword=tag:{{.}}&
-							sortkey={{$.SearchOption.Sortkey}}&
-							assign=true&
-							ready=true&
-							wip=true&
-							confirm=true&
-							done=true&
-							omit=true&
-							hold=true&
-							out=true&
-							none=true&
-							template=inputtags&
-							task=" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
+				searchword=assettags:{{.}}&
+				sortkey={{$.SearchOption.Sortkey}}&
+				sortkey={{$.SearchOption.Sortkey}}&
+				assign={{$.SearchOption.Assign}}&
+				ready={{$.SearchOption.Ready}}&
+				wip={{$.SearchOption.Wip}}&
+				confirm={{$.SearchOption.Confirm}}&
+				done={{$.SearchOption.Done}}&
+				omit={{$.SearchOption.Omit}}&
+				hold={{$.SearchOption.Hold}}&
+				out={{$.SearchOption.Out}}&
+				none={{$.SearchOption.None}}&
+				template=inputtags&
+				task={{$.SearchOption.Task}}" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 	{{end}}
 </div>
 
