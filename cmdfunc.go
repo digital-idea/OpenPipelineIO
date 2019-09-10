@@ -265,7 +265,7 @@ func rmItemCmd(project, name, typ string) {
 		log.Fatal(err)
 	}
 	defer session.Close()
-	err = rmItem(session, project, name, typ)
+	err = rmItem(session, project, name)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1436,3 +1436,129 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleRmShot 함수는 shot을 삭제하는 페이지이다.
+func handleRmShot(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 5 { // 메니저 이상
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User        User
+		Projectlist []string
+		Devmode     bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "rmshot", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleRmShotSubmit 함수는 shot을 삭제한다.
+func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 5 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("Project")
+	name := r.FormValue("Name")
+	f := func(c rune) bool {
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
+	}
+	names := strings.FieldsFunc(name, f)
+	type Shot struct {
+		Name  string
+		Error string
+	}
+	var success []Shot
+	var fails []Shot
+	for _, n := range names {
+		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
+			continue
+		}
+		s := Shot{}
+		s.Name = n
+		if !regexpShotname.MatchString(n) {
+			s.Error = "SS_0010 형식의 이름이 아닙니다"
+			fails = append(fails, s)
+			continue
+		}
+		err = rmItem(session, project, n)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		success = append(success, s)
+	}
+
+	type recipe struct {
+		Success []Shot
+		Fails   []Shot
+		User    User
+		Devmode bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	rcp.Success = success
+	rcp.Fails = fails
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+
+	w.Header().Set("Content-Type", "text/html")
+	err = TEMPLATES.ExecuteTemplate(w, "rmshot_success", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}

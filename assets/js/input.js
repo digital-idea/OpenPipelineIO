@@ -205,6 +205,50 @@ function addComments(project, text, token) {
     }
 }
 
+function addLink(project, name, text, token) {
+    $.ajax({
+        url: "/api/addlink",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            text: text,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function addLinks(project, text, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/addlink",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                text: text,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
 function setTaskUser(project, name, task, user, token) {
     $.ajax({
         url: "/api/settaskuser",

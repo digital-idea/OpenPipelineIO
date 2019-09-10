@@ -46,6 +46,16 @@
               {{end}}
             </div>
         </li>
+        {{if eq .User.AccessLevel 5 8 10}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Rm
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item text-danger" href="/rmshot">Shot 삭제</a>
+          </div>
+        </li>
+        {{end}}
         {{if .Devmode}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,6 +72,7 @@
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputedittime&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">시간정보 수정</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddnote&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">작업내용 입력</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddcomment&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">수정내용 입력</a>
+            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddlink&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">연결소스 입력</a>
           </div>
         </li>
         {{end}}

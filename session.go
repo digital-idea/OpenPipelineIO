@@ -11,9 +11,9 @@ import (
 
 // JwtToken 은 CSI에서 사용하는 토큰 구조입니다.
 type JwtToken struct {
-	ID          string      `json:"id"`
-	LastProject string      `json:"project"`
-	AccessLevel AccessLevel `json:"accesslevel"`
+	ID          string `json:"id"`
+	LastProject string `json:"project"`
+	AccessLevel `json:"accesslevel"`
 	jwt.StandardClaims
 }
 

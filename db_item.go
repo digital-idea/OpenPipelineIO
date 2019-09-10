@@ -161,8 +161,12 @@ func Shots(session *mgo.Session, project string, seq string) ([]string, error) {
 	return shots, nil
 }
 
-func rmItem(session *mgo.Session, project string, name string, typ string) error {
+func rmItem(session *mgo.Session, project string, name string) error {
 	session.SetMode(mgo.Monotonic, true)
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
 	c := session.DB("project").C(project)
 	num, err := c.Find(bson.M{"name": name, "type": typ}).Count()
 	if err != nil {
@@ -175,7 +179,6 @@ func rmItem(session *mgo.Session, project string, name string, typ string) error
 	}
 	err = c.Remove(bson.M{"name": name, "type": typ})
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil
