@@ -96,7 +96,9 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - [DB관리](documents/dbbackup.md)
 
 ### Developer
-- AWS 운용서버: https://csi.lazypic.org
+- CSI서버: https://csi.lazypic.org
+- Log서버: http://csi.lazypic.org:8080
+- WFS서버: http://csi.lazypic.org:8081
 - 회사 전용 빌드문의: hello@lazypic.org
 - Maintainer: Jason / jason@lazypic.org
 - Committer: Bailey / bailey@lazypic.org
