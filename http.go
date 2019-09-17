@@ -159,6 +159,8 @@ func webserver(port string) {
 
 	// Admin Setting
 	http.HandleFunc("/adminsetting", handleAdminSetting)
+	http.HandleFunc("/adminsetting_submit", handleAdminSettingSubmit)
+	http.HandleFunc("/setadminsetting", handleSetAdminSetting)
 
 	// Organization
 	http.HandleFunc("/divisions", handleDivisions)

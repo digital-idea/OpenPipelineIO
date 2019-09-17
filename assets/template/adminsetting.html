@@ -10,8 +10,8 @@
         </div>
         <form action="/adminsetting_submit" method="POST">
         <div class="form-group">
-            <label for="runScriptAfterSignup">Run script after sign-up</label>
-            <textarea class="form-control" id="runScriptAfterSignup" rows="3"></textarea>
+            <label for="RunScriptAfterSignup">Run script after sign-up</label>
+            <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="3">{{.Setting.RunScriptAfterSignup}}</textarea>
         </div>
         
         <div class="text-center">
