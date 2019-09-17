@@ -1,0 +1,30 @@
+{{define "adminsetting" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Admin Setting</h2>
+        </div>
+        <form action="/adminsetting_submit" method="POST">
+        <div class="form-group">
+            <label for="runScriptAfterSignup">Run script after sign-up</label>
+            <textarea class="form-control" id="runScriptAfterSignup" rows="3"></textarea>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger mt-5">Update</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

@@ -91,6 +91,10 @@
               <a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a>
               <a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a>
               <a class="dropdown-item text-danger" href="/updatepassword?id={{.User.ID}}">Update Password</a>
+              {{if eq .User.AccessLevel 10}}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/adminsetting">Admin Setting</a>
+              {{end}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/signout">SignOut</a>
             </div>

@@ -157,6 +157,9 @@ func webserver(port string) {
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 	http.HandleFunc("/invalidpass", handleInvalidPass)
 
+	// Admin Setting
+	http.HandleFunc("/adminsetting", handleAdminSetting)
+
 	// Organization
 	http.HandleFunc("/divisions", handleDivisions)
 	http.HandleFunc("/departments", handleDepartments)
