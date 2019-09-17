@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -502,6 +503,28 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	SetSessionID(w, u.ID, u.AccessLevel, "")
+	// 가입이후 처리할 스크립트가 admin setting에 선언되어 있다면, 실행합니다.
+	setting, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if setting.RunScriptAfterSignup != "" {
+		for _, line := range strings.Split(setting.RunScriptAfterSignup, "\r\n") {
+			cmds := strings.Split(line, " ")
+			if len(cmds) < 2 {
+				err := exec.Command(line).Run()
+				if err != nil {
+					log.Println(err)
+				}
+			} else {
+				err := exec.Command(cmds[0], cmds[1:]...).Run()
+				if err != nil {
+					log.Println(err)
+				}
+			}
+		}
+	}
+
 	// 가입완료 페이지로 이동
 	err = TEMPLATES.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {

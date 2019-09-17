@@ -11,7 +11,8 @@
         <form action="/adminsetting_submit" method="POST">
         <div class="form-group">
             <label for="RunScriptAfterSignup">Run script after sign-up</label>
-            <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="3">{{.Setting.RunScriptAfterSignup}}</textarea>
+            <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterSignup}}</textarea>
+            <small class="form-text text-muted">사용자가 가입되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
         </div>
         
         <div class="text-center">
