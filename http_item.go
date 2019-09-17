@@ -1610,3 +1610,76 @@ func handleRmAsset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleRmAssetSubmit 함수는 asset을 삭제한다.
+func handleRmAssetSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 5 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("Project")
+	name := r.FormValue("Name")
+	f := func(c rune) bool {
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
+	}
+	names := strings.FieldsFunc(name, f)
+	type Asset struct {
+		Name  string
+		Error string
+	}
+	var success []Asset
+	var fails []Asset
+	for _, n := range names {
+		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
+			continue
+		}
+		s := Asset{}
+		s.Name = n
+		err = rmItem(session, project, n)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		success = append(success, s)
+	}
+
+	type recipe struct {
+		Success []Asset
+		Fails   []Asset
+		User    User
+		Devmode bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	rcp.Success = success
+	rcp.Fails = fails
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+
+	w.Header().Set("Content-Type", "text/html")
+	err = TEMPLATES.ExecuteTemplate(w, "rmasset_success", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
