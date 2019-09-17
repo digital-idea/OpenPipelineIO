@@ -1,13 +1,13 @@
-{{define "rmshot" }}
+{{define "rmasset" }}
 {{template "headBootstrap"}}
 {{template "navbar" .}}
 <body>
 
 <div class="container p-5">
     <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-        <form action="/rmshot_submit" method="POST">
+        <form action="/rmasset_submit" method="POST">
         <div class="pt-3 pb-5">
-            <h2 class="section-heading">Rm Shot</h2>
+            <h2 class="section-heading">Rm Asset</h2>
         </div>
         <div class="form-group">
             <label>Project</label>
@@ -16,22 +16,22 @@
                 <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
               {{end}}
             </select>
-            <small class="form-text text-danger">샷을 제거할 프로젝트를 선택해주세요.</small>
+            <small class="form-text text-danger">에셋을 제거할 프로젝트를 선택해주세요.</small>
         </div>
         <div class="row">
             <div class="col-sm">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" name="Name" class="form-control" placeholder="예) SS_0010">
-                    <small class="form-text text-muted">샷 이름을 작성해주세요. 예) SS_0010</small>
-                    <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러샷을 제거할 수 있습니다.</small>
-                    <small class="form-text text-muted">&nbsp;&nbsp;예) SS_0010 SS_0020</small>
+                    <input type="text" name="Name" class="form-control" placeholder="예) box01">
+                    <small class="form-text text-muted">에셋 이름을 작성해주세요. 예) box01</small>
+                    <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러에셋을 제거할 수 있습니다.</small>
+                    <small class="form-text text-muted">&nbsp;&nbsp;예) box01 box02</small>
                     <small class="form-text text-muted">MS Excel, Google Spreadsheet, Apple Numbers, LibreOffice Spreadsheet 의 Cell 데이터를 Copy & Paste 하여 사용가능합니다.</small>
                 </div>
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-danger mt-5">Remove Shot</button>
+            <button type="submit" class="btn btn-danger mt-5">Remove Asset</button>
         </div>
         </form>
     </div>

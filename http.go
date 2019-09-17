@@ -126,6 +126,7 @@ func webserver(port string) {
 	http.HandleFunc("/addasset_submit", handleAddAssetSubmit)
 	http.HandleFunc("/rmshot", handleRmShot)
 	http.HandleFunc("/rmshot_submit", handleRmShotSubmit)
+	http.HandleFunc("/rmasset", handleRmAsset)
 
 	// Project
 	http.HandleFunc("/projectinfo", handleProjectinfo)
