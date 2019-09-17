@@ -1,0 +1,30 @@
+{{define "noonproject" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <form action="/rmproject_submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Error</h2>
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            준비중, 진행중, 백업중인 프로젝트가 없습니다.
+            <small class="form-text text-danger">프로젝트 정보창에서 프로젝트 상태를 설정해주세요.</small>
+        </div>
+        <div class="text-center">
+            <a href="/projectinfo" class="btn btn-primary mt-5">Go Projectinfo</a>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

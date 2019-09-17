@@ -49,11 +49,14 @@
         {{if eq .User.AccessLevel 5 8 10}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Rm
+            Remove
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item text-danger" href="/rmshot">Shot 삭제</a>
-            <a class="dropdown-item text-danger" href="/rmasset">Asset 삭제</a>
+            {{if eq .User.AccessLevel 10}}
+              <a class="dropdown-item text-danger" href="/rmproject">Project</a>
+            {{end}}
+            <a class="dropdown-item text-danger" href="/rmshot">Shot</a>
+            <a class="dropdown-item text-danger" href="/rmasset">Asset</a>
           </div>
         </li>
         {{end}}

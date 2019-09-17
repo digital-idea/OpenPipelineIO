@@ -150,6 +150,10 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	if len(rcp.Projectlist) == 0 {
+		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
+		return
+	}
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
 	rcp.MailDNS = *flagMailDNS
@@ -1130,6 +1134,10 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(rcp.Projectlist) == 0 {
+		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
 		return
 	}
 	//검색바 초기셋팅

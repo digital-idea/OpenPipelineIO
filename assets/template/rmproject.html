@@ -1,0 +1,34 @@
+{{define "rmproject" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <form action="/rmproject_submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Remove Project</h2>
+        </div>
+        <div class="form-group">
+            <label>Project</label>
+            <select name="Project" class="form-control">
+              {{range .Projectlist}}
+                <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
+              {{end}}
+            </select>
+            <small class="form-text text-danger">제거할 프로젝트를 선택해주세요.</small>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-danger mt-5">Remove Project</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

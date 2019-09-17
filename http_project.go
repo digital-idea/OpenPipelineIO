@@ -361,3 +361,139 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 	return
 
 }
+
+// handleRmProject 함수는 project을 삭제하는 페이지이다.
+func handleRmProject(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel != 10 { // Admin
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User        User
+		Projectlist []string
+		Devmode     bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "rmproject", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleRmProjectSubmit 함수는 shot을 삭제한다.
+func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel != 10 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("Project")
+
+	type recipe struct {
+		User    User
+		Devmode bool
+		SearchOption
+		Error   string
+		Project string
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	rcp.Project = project
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = rmProject(session, rcp.Project)
+	if err != nil {
+		rcp.Error = err.Error()
+	}
+	w.Header().Set("Content-Type", "text/html")
+	err = TEMPLATES.ExecuteTemplate(w, "rmproject_success", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleNoOnProject 함수는 OnProject가 없을 때 접근하는 페이지이다.
+func handleNoOnProject(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User    User
+		Devmode bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	rcp.User = u
+
+	w.Header().Set("Content-Type", "text/html")
+	err = TEMPLATES.ExecuteTemplate(w, "noonproject", rcp)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
