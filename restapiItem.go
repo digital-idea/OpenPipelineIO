@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
 )
 
@@ -2512,7 +2514,7 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	tokenID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2552,6 +2554,13 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	// 로그처리
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dilog.Add(*flagDBIP, host, fmt.Sprintf("Add tag: %s", tag), project, name, "csi3", tokenID, 180)
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
@@ -2569,7 +2578,7 @@ func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	tokenID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2608,6 +2617,13 @@ func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	// 로그처리
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dilog.Add(*flagDBIP, host, fmt.Sprintf("Edit tag: %s", tags), project, name, "csi3", tokenID, 180)
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
@@ -2625,7 +2641,7 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	tokenID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2665,6 +2681,13 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	// 로그처리
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm tag: %s", tag), project, name, "csi3", tokenID, 180)
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 

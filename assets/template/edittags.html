@@ -85,20 +85,22 @@
 
 <div class="row m-1">
 	{{range .Items}}
-	<div class="mx-auto">
-		<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
-		<div class="card m-2" style="width: 18rem;">
-			<label for="{{.Name}}" class="p-0 m-0">
-				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
-			</label>
-			<div class="card-body">
-				<h6 class="card-title">
-					{{if .Rnum}}<small class="form-text text-muted">{{.Rnum}}</small>{{end}}{{.Name}}({{.Type}})
-				</h6>
-				<input class="form-control" id="input-tag-{{.Name}}" value="{{Tags2str .Tag}}" type="text" onchange="setTag('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+		{{if eq .Type "org" "left" "asset" }}
+			<div class="mx-auto">
+				<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
+				<div class="card m-2" style="width: 18rem;">
+					<label for="{{.Name}}" class="p-0 m-0">
+						<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
+					</label>
+					<div class="card-body">
+						<h6 class="card-title">
+							{{if .Rnum}}<small class="form-text text-muted">{{.Rnum}}</small>{{end}}{{.Name}}({{.Type}})
+						</h6>
+						<input class="form-control" id="input-tag-{{.Name}}" value="{{Tags2str .Tag}}" type="text" onchange="setTag('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
+		{{end}}
 	{{end}}
 </div>
 

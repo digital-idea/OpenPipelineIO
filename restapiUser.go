@@ -140,7 +140,7 @@ func handleAPIValidUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIValidUser 함수는 사용자가 유효한지 체크하는 핸들러 입니다.
+// handleAPISetLeaveUser 함수는 사용자의 퇴사여부를 셋팅하는 핸들러 입니다.
 func handleAPISetLeaveUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
