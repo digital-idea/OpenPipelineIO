@@ -135,7 +135,7 @@
             </div>
             
             <div class="form-group pt-3">
-                <small class="form-text text-muted">기존 등록된 조직정보는 아래 항목에 표기됩니다.</small>
+                <small id="Warning" class="form-text text-danger">기존에 등록된 조직정보가 아래 출력됩니다.</small>
                 <div id="Organizations">
                     {{range .Organizations}}
                         <div class="alert alert-warning small" role="alert">

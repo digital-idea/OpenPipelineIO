@@ -93,6 +93,11 @@ function renderOrganizations() {
 		orgstags.push(orgtags.join(","))
 	}
 	document.getElementById('OrganizationsForm').value = orgstags.join(":");
+	if (userData.Organizations.length > 0) {
+		document.getElementById("Warning").innerHTML = "동시에 여러 역할을 하고 있다면, 조직 정보를 계속 추가할 수 있습니다.";
+	} else {
+		document.getElementById("Warning").innerHTML = "조직정보를 설정해주세요.";
+	}
 }
 
 function removeItem(e) {
