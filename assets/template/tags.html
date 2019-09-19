@@ -3,10 +3,10 @@
 	{{if eq . "" -}}
 	{{- else -}}
 		{{$tag := AddTagColon .}}
-		{{if eq $tag $.Searchop.Searchword -}}
-			<tagselected><a href="/tag/{{$.Searchop.Project}}/{{.}}"><b>{{.}}</b></a></tagselected>
+		{{if eq $tag $.SearchOption.Searchword -}}
+			<tagselected><a href="/tag/{{$.SearchOption.Project}}/{{.}}"><b>{{.}}</b></a></tagselected>
 		{{- else -}}
-			<a href="/tag/{{$.Searchop.Project}}/{{.}}"><tag>{{.}}</tag></a>
+			<a href="/tag/{{$.SearchOption.Project}}/{{.}}"><tag>{{.}}</tag></a>
 		{{- end}}
 	{{- end}}
 {{end}}</div>{{end}}

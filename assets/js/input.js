@@ -549,7 +549,11 @@ function addTags(project, tag, token) {
         name = cboxes[i].getAttribute("id");
         // 기존 폼에 있는 값에도 태그를 추가한다.
         before = document.getElementById("input-tag-" + name).value;
-        document.getElementById("input-tag-" + name).value = before + "," + tag;
+        let splitString = ","
+        if (before === "") {
+            splitString = ""
+        }
+        document.getElementById("input-tag-" + name).value = before + splitString + tag;
         $.ajax({
             url: "/api/addtag",
             type: "post",

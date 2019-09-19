@@ -5,13 +5,13 @@
 	{{if eq . "" -}}
 	{{- else -}}
 		{{if eq . "char" "env" "global" "prop" "comp" "plant" "vehicle" "assembly" "component" -}}
-			<a href="/assettags/{{$.Searchop.Project}}/{{.}}">
-			<assettag>{{if eq . $.Searchop.Searchword}}<b>{{end}}{{.}}{{if eq . $.Searchop.Searchword}}</b>{{end}}</assettag></a>
+			<a href="/assettags/{{$.SearchOption.Project}}/{{.}}">
+			<assettag>{{if eq . $.SearchOption.Searchword}}<b>{{end}}{{.}}{{if eq . $.SearchOption.Searchword}}</b>{{end}}</assettag></a>
 		{{- else -}}
-			<a href="/assettree/{{$.Searchop.Project}}/{{.}}">
+			<a href="/assettree/{{$.SearchOption.Project}}/{{.}}">
 			<assettreeHead><img src="/assets/img/linkicon.svg" class="tagicon"></assettreeHead></a>
-			<a href="/assettags/{{$.Searchop.Project}}/{{.}}">
-			<assettreeTail>{{if eq . $.Searchop.Searchword}}<b>{{end}}{{.}}{{if eq . $.Searchop.Searchword}}</b>{{end}}</assettreeTail></a>
+			<a href="/assettags/{{$.SearchOption.Project}}/{{.}}">
+			<assettreeTail>{{if eq . $.SearchOption.Searchword}}<b>{{end}}{{.}}{{if eq . $.SearchOption.Searchword}}</b>{{end}}</assettreeTail></a>
 		{{- end}}
         {{- end}}
     {{end}}

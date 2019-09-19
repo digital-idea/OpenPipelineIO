@@ -29,13 +29,13 @@
     <p class="basicinfoIcons">
         <input class="tbbox" type="checkbox" id="{{.Slug}}" name="select_slug">
         {{if eq .Type "asset" -}}
-        <a href="/edit?type=item&project={{$.Searchop.Project}}&slug={{.Slug}}"><img src="/assets/img/edit.png"></a>&nbsp;
-        <a href="dilink:///show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}"><img src="/assets/img/folder.png"></a>
+        <a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}"><img src="/assets/img/edit.png"></a>&nbsp;
+        <a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}"><img src="/assets/img/folder.png"></a>
         {{- else -}}
-        <a href="/edit?type=item&project={{$.Searchop.Project}}&slug={{.Slug}}"><img src="/assets/img/edit.png"></a>&nbsp;
-        <a href="dilink:///show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}"><img src="/assets/img/folder.png"></a>
+        <a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}"><img src="/assets/img/edit.png"></a>&nbsp;
+        <a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}"><img src="/assets/img/folder.png"></a>
         {{- end}}
-        <a href="{{$.Dilog}}/search?tool=csi&project={{$.Searchop.Project}}&slug={{.Slug}}"><img src="/assets/img/log.png"></a>
+        <a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}"><img src="/assets/img/log.png"></a>
     </p>
 </td>
 <!--기본정보 끝-->
@@ -51,11 +51,11 @@
   {{end}}
 	<center>
 	{{if eq .Thummov "" -}}
-	<a href="dilink:///show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.Slug}}.mov">
+	<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.Slug}}.mov">
 	{{- else -}}
 	<a href="dilink://{{.Thummov}}">
 	{{- end}}
-	<img class="thumbimg{{if.OCIOcc}}OCIOcc{{end}}" src="/thumbnail/{{$.Searchop.Project}}/{{.Slug}}.jpg" onerror="this.src='/assets/img/none.jpg'" align="middle"></a>
+	<img class="thumbimg{{if.OCIOcc}}OCIOcc{{end}}" src="/thumbnail/{{$.SearchOption.Project}}/{{.Slug}}.jpg" onerror="this.src='/assets/img/none.jpg'" align="middle"></a>
 	</center>
   {{if eq .Type "asset" -}}
   {{- else -}}
@@ -107,145 +107,145 @@
 <tr>
 <!--concept-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Concept.Status}} class="statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Concept.Status}} class="statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">
 {{if eq .Concept.Mov "" -}}concept<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">concept ▶</a><br>{{- end}}
-{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
+{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
 {{if .Concept.Predate}}{{ToShortTime .Concept.Predate}}<br>{{end}}{{ToShortTime .Concept.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Concept.Status}} class="statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Concept.Status}} class="statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">
 {{if eq .Concept.Mov "" -}}concept<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">concept ▶</a><br>{{- end}}
-{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
+{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
 {{if .Concept.Predate}}{{ToShortTime .Concept.Predate}}<br>{{end}}{{ToShortTime .Concept.Date}}</td>
 {{- end}}
 <!--model-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Model.Status}} class="statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Model.Status}} class="statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">
 {{if eq .Model.Mov "" -}}model<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">model ▶</a><br>{{- end}}
-{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
+{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
 {{if .Model.Predate}}{{ToShortTime .Model.Predate}}<br>{{end}}{{ToShortTime .Model.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Model.Status}} class="statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Model.Status}} class="statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">
 {{if eq .Model.Mov "" -}}model<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">model ▶</a><br>{{- end}}
-{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
+{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
 {{if .Model.Predate}}{{ToShortTime .Model.Predate}}<br>{{end}}{{ToShortTime .Model.Date}}</td>
 {{- end}}
 <!--mm-->
-<td bgcolor={{itemStatus2color .Mm.Status}} class="statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Mm.Status}} class="statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}">
 {{if eq .Mm.Mov "" -}}mm<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">mm ▶</a><br>{{- end}}
-{{if eq .Mm.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Mm.User}}</a><br>{{- end}}
+{{if eq .Mm.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Mm.User}}</a><br>{{- end}}
 {{if .Mm.Predate}}{{ToShortTime .Mm.Predate}}<br>{{end}}{{ToShortTime .Mm.Date}}</td>
 <!--layout-->
-<td bgcolor={{itemStatus2color .Layout.Status}} class="statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Layout.Status}} class="statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}">
 {{if eq .Layout.Mov "" -}}layout<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">layout ▶</a><br>{{- end}}
-{{if eq .Layout.User ""}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Layout.User}}</a><br>{{- end}}
+{{if eq .Layout.User ""}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Layout.User}}</a><br>{{- end}}
 {{if .Layout.Predate}}{{ToShortTime .Layout.Predate}}<br>{{end}}{{ToShortTime .Layout.Date}}</td>
 <!--ani-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Ani.Status}} class="statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Ani.Status}} class="statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}">
 {{if eq .Ani.Mov "" -}}ani<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">ani ▶</a><br>{{- end}}
-{{if eq .Ani.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Ani.User}}</a><br>{{- end}}
+{{if eq .Ani.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Ani.User}}</a><br>{{- end}}
 {{if .Ani.Predate}}{{ToShortTime .Ani.Predate}}<br>{{end}}{{ToShortTime .Ani.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Ani.Status}} class="statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Ani.Status}} class="statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}">
 {{if eq .Ani.Mov "" -}}ani<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">ani ▶</a><br>{{- end}}
-{{if eq .Ani.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Ani.User}}</a><br>{{- end}}
+{{if eq .Ani.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Ani.User}}</a><br>{{- end}}
 {{if .Ani.Predate}}{{ToShortTime .Ani.Predate}}<br>{{end}}{{ToShortTime .Ani.Date}}</td>
 {{- end}}
 <!--fx-->
-<td bgcolor={{itemStatus2color .Fx.Status}} class="statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Fx.Status}} class="statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}">
 {{if eq .Fx.Mov "" -}}fx<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">fx ▶</a><br>{{- end}}
 {{if eq .Fx.User "" -}}
 	.<br>
 {{- else -}}
-	<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fx.User}}</a><br>
+	<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fx.User}}</a><br>
 {{- end}}
 {{if .Fx.Predate}}{{ToShortTime .Fx.Predate}}<br>{{end}}{{ToShortTime .Fx.Date}}</td>
 <!--motion-->
-<td bgcolor={{itemStatus2color .Mg.Status}} class="statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Mg.Status}} class="statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}">
 {{if eq .Mg.Mov "" -}}mg<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">mg ▶</a><br>{{- end}}
-{{if eq .Mg.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Mg.User}}</a><br>{{- end}}
+{{if eq .Mg.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Mg.User}}</a><br>{{- end}}
 {{if .Mg.Predate}}{{ToShortTime .Mg.Predate}}<br>{{end}}{{ToShortTime .Mg.Date}}</td>
 <!--temp1-->
-<td bgcolor={{itemStatus2color .Temp1.Status}} class="statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Temp1.Status}} class="statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}">
 {{if eq .Temp1.Mov "" -}}{{if .Temp1.Title}}{{.Temp1.Title}}{{end}}<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">{{.Temp1.Title}} ▶</a><br>{{- end}}
-{{if eq .Temp1.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Temp1.User}}</a><br>{{- end}}
+{{if eq .Temp1.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Temp1.User}}</a><br>{{- end}}
 {{if .Temp1.Predate}}{{ToShortTime .Temp1.Predate}}<br>{{end}}{{ToShortTime .Temp1.Date}}</td>
 </tr>
 <tr>
 <!--previz-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Previz.Status}} class="statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Previz.Status}} class="statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}">
 {{if eq .Previz.Mov "" -}}previz<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">previz ▶</a><br>{{- end}}
-{{if eq .Previz.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Previz.User}}</a><br>{{- end}}
+{{if eq .Previz.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Previz.User}}</a><br>{{- end}}
 {{if .Previz.Predate}}{{ToShortTime .Previz.Predate}}<br>{{end}}{{ToShortTime .Previz.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Previz.Status}} class="statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Previz.Status}} class="statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}">
 {{if eq .Previz.Mov "" -}}previz<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">previz ▶</a><br>{{- end}}
-{{if eq .Previz.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Previz.User}}</a><br>{{- end}}
+{{if eq .Previz.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Previz.User}}</a><br>{{- end}}
 {{if .Previz.Predate}}{{ToShortTime .Previz.Predate}}<br>{{end}}{{ToShortTime .Previz.Date}}</td>
 {{- end}}
 <!--fur-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Fur.Status}} class="statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Fur.Status}} class="statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}">
 {{if eq .Fur.Mov "" -}}fur<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">fur ▶</a><br>{{- end}}
-{{if eq .Fur.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fur.User}}</a><br>{{- end}}
+{{if eq .Fur.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fur.User}}</a><br>{{- end}}
 {{if .Fur.Predate}}{{ToShortTime .Fur.Predate}}<br>{{end}}{{ToShortTime .Fur.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Fur.Status}} class="statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Fur.Status}} class="statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}">
 {{if eq .Fur.Mov "" -}}fursim<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">fursim ▶</a><br>{{- end}}
-{{if eq .Fur.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fur.User}}</a><br>{{- end}}
+{{if eq .Fur.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Fur.User}}</a><br>{{- end}}
 {{if .Fur.Predate}}{{ToShortTime .Fur.Predate}}<br>{{end}}{{ToShortTime .Fur.Date}}</td>
 {{- end}}
 <!--sim-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Sim.Status}} class="statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Sim.Status}} class="statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}">
 {{if eq .Sim.Mov "" -}}rig<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">rig ▶</a><br>{{- end}}
-{{if eq .Sim.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Sim.User}}</a><br>{{- end}}
+{{if eq .Sim.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Sim.User}}</a><br>{{- end}}
 {{if .Sim.Predate}}{{ToShortTime .Sim.Predate}}<br>{{end}}{{ToShortTime .Sim.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Sim.Status}} class="statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Sim.Status}} class="statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}">
 {{if eq .Sim.Mov "" -}}sim<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">sim ▶</a><br>{{- end}}
-{{if eq .Sim.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Sim.User}}</a><br>{{- end}}
+{{if eq .Sim.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Sim.User}}</a><br>{{- end}}
 {{if .Sim.Predate}}{{ToShortTime .Sim.Predate}}<br>{{end}}{{ToShortTime .Sim.Date}}</td>
 {{- end}}
 <!--crowd-->
-<td bgcolor={{itemStatus2color .Crowd.Status}} class="statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Crowd.Status}} class="statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}">
 {{if eq .Crowd.Mov "" -}}crowd<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">crowd ▶</a><br>{{- end}}
-{{if eq .Crowd.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Crowd.User}}</a><br>{{- end}}
+{{if eq .Crowd.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Crowd.User}}</a><br>{{- end}}
 {{if .Crowd.Predate}}{{ToShortTime .Crowd.Predate}}<br>{{end}}{{ToShortTime .Crowd.Date}}</td>
 <!--light-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Light.Status}} class="statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Light.Status}} class="statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}">
 {{if eq .Light.Mov "" -}}look<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">look ▶</a><br>{{- end}}
-{{if eq .Light.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Light.User}}</a><br>{{- end}}
+{{if eq .Light.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Light.User}}</a><br>{{- end}}
 {{if .Light.Predate}}{{ToShortTime .Light.Predate}}<br>{{end}}{{ToShortTime .Light.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Light.Status}} class="statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Light.Status}} class="statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}">
 {{if eq .Light.Mov "" -}}light<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">light ▶</a><br>{{- end}}
-{{if eq .Light.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Light.User}}</a><br>{{- end}}
+{{if eq .Light.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Light.User}}</a><br>{{- end}}
 {{if .Light.Predate}}{{ToShortTime .Light.Predate}}<br>{{end}}{{ToShortTime .Light.Date}}</td>
 {{- end}}
 <!--comp-->
 {{if eq .Type "asset" -}}
-<td bgcolor={{itemStatus2color .Comp.Status}} class="statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Comp.Status}} class="statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}">
 {{if eq .Comp.Mov "" -}}comp<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">comp ▶</a><br>{{- end}}
-{{if eq .Comp.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Comp.User}}</a><br>{{- end}}
+{{if eq .Comp.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Comp.User}}</a><br>{{- end}}
 {{if .Comp.Predate}}{{ToShortTime .Comp.Predate}}<br>{{end}}{{ToShortTime .Comp.Date}}</td>
 {{- else -}}
-<td bgcolor={{itemStatus2color .Comp.Status}} class="statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Comp.Status}} class="statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}">
 {{if eq .Comp.Mov "" -}}comp<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">comp ▶</a><br>{{- end}}
-{{if eq .Comp.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Comp.User}}</a><br>{{- end}}
+{{if eq .Comp.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Comp.User}}</a><br>{{- end}}
 {{if .Comp.Predate}}{{ToShortTime .Comp.Predate}}<br>{{end}}{{ToShortTime .Comp.Date}}</td>
 {{- end}}
 <!--matte-->
-<td bgcolor={{itemStatus2color .Matte.Status}} class="statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Matte.Status}} class="statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}">
 {{if eq .Matte.Mov "" -}}matte<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">matte ▶</a><br>{{- end}}
-{{if eq .Matte.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Matte.User}}</a><br>{{- end}}
+{{if eq .Matte.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Matte.User}}</a><br>{{- end}}
 {{if .Matte.Predate}}{{ToShortTime .Matte.Predate}}<br>{{end}}{{ToShortTime .Matte.Date}}</td>
 <!--env-->
-<td bgcolor={{itemStatus2color .Env.Status}} class="statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.Searchop.Searchword}}">
+<td bgcolor={{itemStatus2color .Env.Status}} class="statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}">
 {{if eq .Env.Mov "" -}}env<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">env ▶</a><br>{{- end}}
-{{if eq .Env.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.Searchop.Project}}/seq/{{name2seq .Name}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Env.User}}</a><br>{{- end}}
+{{if eq .Env.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Env.User}}</a><br>{{- end}}
 {{if .Env.Predate}}{{ToShortTime .Env.Predate}}<br>{{end}}{{ToShortTime .Env.Date}}</td>
 </tr></table></td>
 <!--상태 끝-->
@@ -312,11 +312,11 @@
 <td class=tag><div>
 {{if eq .Type "asset" -}}
 	{{range .Assettags}}
-		<a href="/assettags/{{$.Searchop.Project}}/{{.}}">{{.}}</a><br>
+		<a href="/assettags/{{$.SearchOption.Project}}/{{.}}">{{.}}</a><br>
 	{{- end}}
 {{- end}}
 {{range .Tag -}}
-	<a href="/tag/{{$.Searchop.Project}}/{{.}}">{{.}}</a><br>
+	<a href="/tag/{{$.SearchOption.Project}}/{{.}}">{{.}}</a><br>
 {{- end}}
 </div></td>
 <!--태그 끝-->

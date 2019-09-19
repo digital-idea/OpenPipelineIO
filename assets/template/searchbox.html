@@ -2,44 +2,46 @@
 
 {{/*만약 프로젝트명이 쿠키로 저장되어있지 않고, 최초 index페이지로 접근하면 첫번째 프로젝트를 선택한다.*/}}
 {{$firstProject := index .Projectlist 0}}
-{{$project := or .Searchop.Project $firstProject}}
+{{$project := or $.SearchOption.Project $firstProject}}
 
 <form action="/searchsubmit" method="POST" class="searchbox" name="checkboxes">
 <select name="Project" class="selectproject" onchange="changeProject(this);">
-    {{range .Projectlist}}<option value="{{.}}"{{if eq $.Searchop.Project .}} selected{{end}}>{{.}}</option>{{end}}
+    {{range .Projectlist}}
+        <option value="{{.}}"{{if eq $.SearchOption.Project .}} selected{{end}}>{{.}}</option>
+    {{end}}
 </select>
 
-<input class="searchform" type="text" size="30" maxlength="50" name="Searchword" value="{{.Searchop.Searchword}}">
+<input class="searchform" type="text" size="30" maxlength="50" name="Searchword" value="{{.SearchOption.Searchword}}">
 <button class="button" id="button">Search</button>
 
 <br><br>
 
 <cboxtext>
-<input class="StatusCheckBox" type="checkbox" name="Assign" value="true" {{if .Searchop.Assign}}checked{{end}}>
-<a href="/tag/{{$project}}/assign" title="작업자 배정을 기다리는 리스트" name="assign"><assign>assign</assign><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Assign}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Assign" value="true" {{if .SearchOption.Assign}}checked{{end}}>
+<a href="/tag/{{$project}}/assign" title="작업자 배정을 기다리는 리스트" name="assign"><assign>assign</assign><searchnum>{{.Searchnum.Assign}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Ready" value="true" {{if .Searchop.Ready}}checked{{end}}>
-<a href="/tag/{{$project}}/ready" title="작업자가 배정만 된 리스트(팀장)" name="ready"><ready>ready</ready><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Ready}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Ready" value="true" {{if .SearchOption.Ready}}checked{{end}}>
+<a href="/tag/{{$project}}/ready" title="작업자가 배정만 된 리스트(팀장)" name="ready"><ready>ready</ready><searchnum>{{.Searchnum.Ready}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Wip" value="true" {{if .Searchop.Wip}}checked{{end}}>
-<a href="/tag/{{$project}}/wip" title="작업중인 리스트(작업자)" name="wip"><wip>wip</wip><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Wip}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Wip" value="true" {{if .SearchOption.Wip}}checked{{end}}>
+<a href="/tag/{{$project}}/wip" title="작업중인 리스트(작업자)" name="wip"><wip>wip</wip><searchnum>{{.Searchnum.Wip}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Confirm" value="true" {{if .Searchop.Confirm}}checked{{end}}>
-<a href="/tag/{{$project}}/confirm" title="컨펌대기중인 리스트(작업자)" name="confirm"><confirm>confirm</confirm><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Confirm}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Confirm" value="true" {{if .SearchOption.Confirm}}checked{{end}}>
+<a href="/tag/{{$project}}/confirm" title="컨펌대기중인 리스트(작업자)" name="confirm"><confirm>confirm</confirm><searchnum>{{.Searchnum.Confirm}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Done" value="true" {{if .Searchop.Done}}checked{{end}}>
-<a href="/tag/{{$project}}/done" title="작업이 완료된 리스트" name="done"><done>done</done><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Done}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Done" value="true" {{if .SearchOption.Done}}checked{{end}}>
+<a href="/tag/{{$project}}/done" title="작업이 완료된 리스트" name="done"><done>done</done><searchnum>{{.Searchnum.Done}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Omit" value="true" {{if .Searchop.Omit}}checked{{end}}>
-<a href="/tag/{{$project}}/omit" title="작업이 취소된 리스트" name="omit"><omit>omit</omit><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Omit}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Omit" value="true" {{if .SearchOption.Omit}}checked{{end}}>
+<a href="/tag/{{$project}}/omit" title="작업이 취소된 리스트" name="omit"><omit>omit</omit><searchnum>{{.Searchnum.Omit}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Hold" value="true" {{if .Searchop.Hold}}checked{{end}}>
-<a href="/tag/{{$project}}/hold" title="작업이 정지된 리스트" name="hold"><hold>hold</hold><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Hold}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Hold" value="true" {{if .SearchOption.Hold}}checked{{end}}>
+<a href="/tag/{{$project}}/hold" title="작업이 정지된 리스트" name="hold"><hold>hold</hold><searchnum>{{.Searchnum.Hold}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="Out" value="true" {{if .Searchop.Out}}checked{{end}}>
-<a href="/tag/{{$project}}/out" title="외주로 나간 리스트" name="out"><out>out</out><searchnum>{{if $.Searchop.Searchword}}{{.Searchnum.Out}}{{else}}0{{end}}</searchnum></a>&nbsp;&nbsp;
+<input class="StatusCheckBox" type="checkbox" name="Out" value="true" {{if .SearchOption.Out}}checked{{end}}>
+<a href="/tag/{{$project}}/out" title="외주로 나간 리스트" name="out"><out>out</out><searchnum>{{.Searchnum.Out}}</searchnum></a>&nbsp;&nbsp;
 
-<input class="StatusCheckBox" type="checkbox" name="None" value="true" {{if .Searchop.None}}checked{{end}}>
+<input class="StatusCheckBox" type="checkbox" name="None" value="true" {{if .SearchOption.None}}checked{{end}}>
 <a href="/tag/{{$project}}/none" title="기타 리스트(소스, 레퍼런스)" name="none"><none>none</none></a>&nbsp;
 
 <button class="selectmode" type=button onclick="selectmode()">선택모드</button> &nbsp;&nbsp;/&nbsp;
@@ -50,12 +52,12 @@
 &nbsp;&nbsp;
 
 <select name="Sortkey" class="sortbox">
-    <option value="slug" {{if eq .Searchop.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>
-    <option value="rnum" {{if eq .Searchop.Sortkey "rnum"}}selected{{end}}>정렬 : 롤넘버</option>
-    <option value="ddline3d" {{if eq .Searchop.Sortkey "ddline3d"}}selected{{end}}>정렬 : 3D마감</option>
-    <option value="ddline2d" {{if eq .Searchop.Sortkey "ddline2d"}}selected{{end}}>정렬 : 2D마감</option>
-    <option value="scanframe" {{if eq .Searchop.Sortkey "scanframe"}}selected{{end}}>정렬 : 스캔길이</option>
-    <option value="scantime" {{if eq .Searchop.Sortkey "scantime"}}selected{{end}}>정렬 : 스캔날짜</option>
+    <option value="slug" {{if eq .SearchOption.Sortkey "slug"}}selected{{end}}>정렬 : 샷네임</option>
+    <option value="rnum" {{if eq .SearchOption.Sortkey "rnum"}}selected{{end}}>정렬 : 롤넘버</option>
+    <option value="ddline3d" {{if eq .SearchOption.Sortkey "ddline3d"}}selected{{end}}>정렬 : 3D마감</option>
+    <option value="ddline2d" {{if eq .SearchOption.Sortkey "ddline2d"}}selected{{end}}>정렬 : 2D마감</option>
+    <option value="scanframe" {{if eq .SearchOption.Sortkey "scanframe"}}selected{{end}}>정렬 : 스캔길이</option>
+    <option value="scantime" {{if eq .SearchOption.Sortkey "scantime"}}selected{{end}}>정렬 : 스캔날짜</option>
 </select>
 </form>
 {{end}}

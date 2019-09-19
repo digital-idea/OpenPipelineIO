@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
@@ -129,21 +130,22 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 		ID          string
 		Projectlist []string
 		Project     Project
-		Searchop    SearchOption
-		Totalnum    Infobarnum
-		Searchnum   Infobarnum
-		Items       []Item
-		Ddline3d    []string
-		Ddline2d    []string
-		Tags        []string
-		Assettags   []string
-		Dilog       string
-		Wfs         string
-		MailDNS     string
+		SearchOption
+		Totalnum  Infobarnum
+		Searchnum Infobarnum
+		Items     []Item
+		Ddline3d  []string
+		Ddline2d  []string
+		Tags      []string
+		Assettags []string
+		Dilog     string
+		Wfs       string
+		MailDNS   string
 	}
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
 	rcp.ID = ssid.ID
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -159,74 +161,86 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp.MailDNS = *flagMailDNS
 	//옵션불러오기.
 	q := r.URL.Query()
-	rcp.Searchop.Project = q.Get("project")
-	rcp.Searchop.Searchword = q.Get("searchword")
-	rcp.Searchop.Sortkey = q.Get("sortkey")
-	rcp.Searchop.Assign = str2bool(q.Get("assign"))
-	rcp.Searchop.Ready = str2bool(q.Get("ready"))
-	rcp.Searchop.Wip = str2bool(q.Get("wip"))
-	rcp.Searchop.Confirm = str2bool(q.Get("confirm"))
-	rcp.Searchop.Done = str2bool(q.Get("done"))
-	rcp.Searchop.Omit = str2bool(q.Get("omit"))
-	rcp.Searchop.Hold = str2bool(q.Get("hold"))
-	rcp.Searchop.Out = str2bool(q.Get("out"))
-	rcp.Searchop.None = str2bool(q.Get("none"))
+	rcp.SearchOption.Project = q.Get("project")
+	rcp.SearchOption.Searchword = q.Get("searchword")
+	rcp.SearchOption.Sortkey = q.Get("sortkey")
+	rcp.SearchOption.Assign = str2bool(q.Get("assign"))
+	rcp.SearchOption.Ready = str2bool(q.Get("ready"))
+	rcp.SearchOption.Wip = str2bool(q.Get("wip"))
+	rcp.SearchOption.Confirm = str2bool(q.Get("confirm"))
+	rcp.SearchOption.Done = str2bool(q.Get("done"))
+	rcp.SearchOption.Omit = str2bool(q.Get("omit"))
+	rcp.SearchOption.Hold = str2bool(q.Get("hold"))
+	rcp.SearchOption.Out = str2bool(q.Get("out"))
+	rcp.SearchOption.None = str2bool(q.Get("none"))
 
 	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
 	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
 	cookie := http.Cookie{
 		Name:   "Project",
-		Value:  rcp.Searchop.Project,
+		Value:  rcp.SearchOption.Project,
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Task",
+		Value:  rcp.SearchOption.Task,
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Searchword",
+		Value:  base64.StdEncoding.EncodeToString([]byte(rcp.SearchOption.Searchword)), //  쿠키는 UTF-8을 저장할 때 에러가 발생한다.
 		MaxAge: 0,
 	}
 	http.SetCookie(w, &cookie)
 
 	// 프로젝트 이름이 빈 문자열이 아니고, 검색어가 있다면 검색을 한다.
-	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
-		rcp.Items, err = Searchv1(session, rcp.Searchop)
+	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
+		rcp.Items, err = Searchv1(session, rcp.SearchOption)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
-	rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+	rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+	rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+	rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+	rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
+	rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+	rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Project, err = getProject(session, rcp.Searchop.Project)
+	rcp.Project, err = getProject(session, rcp.SearchOption.Project)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -272,17 +286,17 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 		ID          string
 		Projectlist []string
 		Project     Project
-		Searchop    SearchOption
-		Totalnum    Infobarnum
-		Searchnum   Infobarnum
-		Items       []Item
-		Ddline3d    []string
-		Ddline2d    []string
-		Tags        []string
-		Assettags   []string
-		Dilog       string
-		Wfs         string
-		MailDNS     string
+		SearchOption
+		Totalnum  Infobarnum
+		Searchnum Infobarnum
+		Items     []Item
+		Ddline3d  []string
+		Ddline2d  []string
+		Tags      []string
+		Assettags []string
+		Dilog     string
+		Wfs       string
+		MailDNS   string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
@@ -304,62 +318,62 @@ func handleAssettags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[2]
-	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
-	rcp.Searchop.setStatusDefault()
-	rcp.Searchop.Sortkey = "slug"
+	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[2]
+	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[3]
+	rcp.SearchOption.setStatusDefault()
+	rcp.SearchOption.Sortkey = "slug"
 
-	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
-		rcp.Searchop.setStatusAll() // 에셋태그 검색시 전체상태를 검색한다.
+	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
+		rcp.SearchOption.setStatusAll() // 에셋태그 검색시 전체상태를 검색한다.
 		if mode == "assettree" {
-			rcp.Items, err = SearchAssetTree(session, rcp.Searchop)
+			rcp.Items, err = SearchAssetTree(session, rcp.SearchOption)
 		} else {
-			rcp.Items, err = SearchAssettags(session, rcp.Searchop)
+			rcp.Items, err = SearchAssettags(session, rcp.SearchOption)
 		}
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
-	rcp.Searchop.Searchword = "tag:" + rcp.Searchop.Searchword // 태그검색은 #으로 시작한다.
-	rcp.Searchop.setStatusDefault()                            // 검색이후 상태를 기본형으로 바꾸어 놓는다.
+	rcp.SearchOption.Searchword = "tag:" + rcp.SearchOption.Searchword // 태그검색은 "tag:"로 시작한다.
+	rcp.SearchOption.setStatusDefault()                                // 검색이후 상태를 기본형으로 바꾸어 놓는다.
 	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
@@ -460,17 +474,17 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 		ID          string
 		Projectlist []string
 		Project     Project
-		Searchop    SearchOption
-		Totalnum    Infobarnum
-		Searchnum   Infobarnum
-		Items       []Item
-		Ddline3d    []string
-		Ddline2d    []string
-		Tags        []string
-		Assettags   []string
-		Dilog       string
-		Wfs         string
-		MailDNS     string
+		SearchOption
+		Totalnum  Infobarnum
+		Searchnum Infobarnum
+		Items     []Item
+		Ddline3d  []string
+		Ddline2d  []string
+		Tags      []string
+		Assettags []string
+		Dilog     string
+		Wfs       string
+		MailDNS   string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
@@ -490,59 +504,59 @@ func handleTags(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[2]
-	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[3]
-	rcp.Searchop.setStatusDefault()
-	rcp.Searchop.Sortkey = "slug"
-	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
-		rcp.Searchop.setStatusAll() //태그검색은 전체상태를 검색한다.
-		rcp.Items, err = SearchTag(session, rcp.Searchop)
+	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[2]
+	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[3]
+	rcp.SearchOption.setStatusDefault()
+	rcp.SearchOption.Sortkey = "slug"
+	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
+		rcp.SearchOption.setStatusAll() //태그검색은 전체상태를 검색한다.
+		rcp.Items, err = SearchTag(session, rcp.SearchOption)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
-	// 태그는 전체 검색을 하고 #으로 시작한다.
+	// 태그는 전체 검색을 하고 "tag:"로 시작한다.
 	// Search 박스의 상태 옵션은 기본형이어야 한다
-	rcp.Searchop.Searchword = "tag:" + rcp.Searchop.Searchword
-	rcp.Searchop.setStatusDefault()
+	rcp.SearchOption.Searchword = "tag:" + rcp.SearchOption.Searchword
+	rcp.SearchOption.setStatusDefault()
 	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
@@ -1009,17 +1023,17 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		ID          string
 		Projectlist []string
 		Project     Project
-		Searchop    SearchOption
-		Totalnum    Infobarnum
-		Searchnum   Infobarnum
-		Items       []Item
-		Ddline3d    []string
-		Ddline2d    []string
-		Tags        []string
-		Assettags   []string
-		Dilog       string
-		Wfs         string
-		MailDNS     string
+		SearchOption
+		Totalnum  Infobarnum
+		Searchnum Infobarnum
+		Items     []Item
+		Ddline3d  []string
+		Ddline2d  []string
+		Tags      []string
+		Assettags []string
+		Dilog     string
+		Wfs       string
+		MailDNS   string
 	}
 	rcp := recipe{}
 	rcp.Dilog = *flagDILOG
@@ -1038,57 +1052,57 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	part := strings.Split(r.URL.Path, "/")[2]                   //2d,3d,_
-	rcp.Searchop.Project = strings.Split(r.URL.Path, "/")[3]    //project
-	rcp.Searchop.Searchword = strings.Split(r.URL.Path, "/")[4] //date
-	rcp.Searchop.setStatusDefault()
-	rcp.Searchop.Sortkey = "slug"
-	if rcp.Searchop.Project != "" && rcp.Searchop.Searchword != "" {
-		rcp.Searchop.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
-		rcp.Items, err = SearchDdline(session, rcp.Searchop, part)
+	part := strings.Split(r.URL.Path, "/")[2]                       //2d,3d,_
+	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[3]    //project
+	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[4] //date
+	rcp.SearchOption.setStatusDefault()
+	rcp.SearchOption.Sortkey = "slug"
+	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
+		rcp.SearchOption.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
+		rcp.Items, err = SearchDdline(session, rcp.SearchOption, part)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline3d")
+		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.Searchop.Project, "ddline2d")
+		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Tags, err = Distinct(session, rcp.Searchop.Project, "tag")
+		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Assettags, err = Distinct(session, rcp.Searchop.Project, "assettags")
+		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Totalnum, err = Totalnum(session, rcp.Searchop.Project)
+		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		rcp.Searchnum, err = Searchnum(rcp.Searchop.Project, rcp.Items)
+		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
-	rcp.Searchop.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
+	rcp.SearchOption.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
 	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
 	if err != nil {
 		log.Println(err)
@@ -1119,17 +1133,12 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		ID          string
 		Projectlist []string
-		Searchop    SearchOption
+		Searchnum   Infobarnum
+		SearchOption
 	}
 	rcp := recipe{}
 	rcp.ID = ssid.ID
-
-	// 쿠키에 저장된 Project 값이 있다면 rcp에 저장한다.
-	for _, cookie := range r.Cookies() {
-		if cookie.Name == "Project" {
-			rcp.Searchop.Project = cookie.Value
-		}
-	}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -1141,11 +1150,11 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//검색바 초기셋팅
-	rcp.Searchop.Assign = true
-	rcp.Searchop.Ready = true
-	rcp.Searchop.Wip = true
-	rcp.Searchop.Confirm = true
-	rcp.Searchop.Sortkey = "slug"
+	rcp.SearchOption.Assign = true
+	rcp.SearchOption.Ready = true
+	rcp.SearchOption.Wip = true
+	rcp.SearchOption.Confirm = true
+	rcp.SearchOption.Sortkey = "slug"
 	err = TEMPLATES.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
 		log.Println(err)
