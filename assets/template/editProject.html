@@ -469,6 +469,15 @@
 					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
 				</div>
 				<div class="form-group pt-1">
+					<label>AWS Setting</label>
+					<small class="form-text text-muted">AWS S3 Address</small>
+					<input type="text" name="AWSS3" class="form-control" placeholder="s3://project-bucketname" value="{{.Project.AWSS3}}">
+					<small class="form-text text-muted">AWS Profile</small>
+					<input type="text" name="AWSProfile" class="form-control" placeholder="profile name" value="{{.Project.AWSProfile}}">
+					<small class="form-text text-muted">Local Path</small>
+					<input type="text" name="AWSLocalpath" class="form-control" placeholder="~/project" value="{{.Project.AWSLocalpath}}">
+				</div>
+				<div class="form-group pt-1">
 					<hr>
 					<a href="/cmd?funcname=rmoverlaponsetnote&project={{.Project.ID}}" class="btn btn-warning">작업내용 중복값 제거</a>
 				</div>
