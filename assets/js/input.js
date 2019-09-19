@@ -330,7 +330,102 @@ function setTaskStatuses(project, task, status, token) {
                 project: project,
                 name: cboxes[i].getAttribute("id"),
                 task: task,
-                status, status,
+                status: status,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+function setTaskDate(project, name, task, date, token) {
+    console.log(project, name, task, date, token);
+    $.ajax({
+        url: "/api/settaskdate",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            date: date,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setTaskDates(project, task, date, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/settaskdate",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                task: task,
+                date: date,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+
+function setTaskPredate(project, name, task, date, token) {
+    console.log(project, name, task, date, token);
+    $.ajax({
+        url: "/api/settaskpredate",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            date: date,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setTaskPredates(project, task, date, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        $.ajax({
+            url: "/api/settaskpredate",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                task: task,
+                date: date,
             },
             headers: {
                 "Authorization": "Basic "+ token

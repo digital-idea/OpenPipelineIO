@@ -52,6 +52,8 @@ var funcMap = template.FuncMap{
 	"ShortPhoneNum":       ShortPhoneNum,
 	"TaskStatus":          TaskStatus,
 	"TaskUser":            TaskUser,
+	"TaskDate":            TaskDate,
+	"TaskPredate":         TaskPredate,
 }
 
 // 도움말 페이지 입니다.

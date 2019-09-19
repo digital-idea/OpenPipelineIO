@@ -460,3 +460,13 @@ func TaskStatus(i Item, task string) string {
 func TaskUser(i Item, task string) string {
 	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("User").String()
 }
+
+// TaskDate 템플릿 함수는 아이템과 Task 문자를 받아서 Date를 반환한다.
+func TaskDate(i Item, task string) string {
+	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("Date").String()
+}
+
+// TaskPredate 템플릿 함수는 아이템과 Task 문자를 받아서 Predate를 반환한다.
+func TaskPredate(i Item, task string) string {
+	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("Predate").String()
+}
