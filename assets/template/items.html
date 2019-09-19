@@ -76,23 +76,27 @@
         {{if and .JustIn .JustOut}}<div class="justFrames" title="Just Frames">{{Framecal .JustIn .JustOut}}f</div>{{end}}
       </div>
   {{- end}}
+
+  <!--set Tag start-->
   {{if eq .Type "asset" -}}
-  <p class="infotags">
-	{{if .Retimeplate}}
-	<a href="dilink://{{.Retimeplate}}"><retime>RETIME</retime></a>
-	{{end}}
-  </p>
+    <p class="infotags">
+      {{if .CrowdAsset}}
+        <crowdtag>CrowdAsset</crowdtag>
+      {{end}}
+    </p>
   {{- else -}}
-  <p class="infotags">
-	<span class="useType" title="Use Type">{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}</span>
-	{{if .Retimeplate}}
-	<a href="dilink://{{.Retimeplate}}"><retime>RETIME</retime></a>
-	{{end}}
-	{{if .ProductionCam.Projection}}
-	<span class="layout" title="layout">Layout</span>
-	{{end}}
-  </p>
+    <p class="infotags">
+    <span class="useType" title="Use Type">{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}</span>
+    {{if .Retimeplate}}
+      <a href="dilink://{{.Retimeplate}}"><retime>RETIME</retime></a>
+    {{end}}
+  
+    {{if .ProductionCam.Projection}}
+	    <span class="layout" title="layout">Layout</span>
+	  {{end}}
+    </p>
   {{- end}}
+  <!--set Tag end-->
 </td>
 <!--썸네일 끝-->
 

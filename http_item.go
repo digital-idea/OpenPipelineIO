@@ -1378,6 +1378,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("Name")
 	assettype := r.FormValue("Assettype")
 	construction := r.FormValue("Construction")
+	crowdAsset := str2bool(r.FormValue("CrowdAsset"))
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -1417,6 +1418,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
+		i.CrowdAsset = crowdAsset
 		err = addItem(session, project, i)
 		if err != nil {
 			a.Error = err.Error()

@@ -201,6 +201,18 @@ retime {
 	opacity:0.9;
 }
 
+crowdtag {
+	font-size: 12px;
+	font-family: NanumGothic, Helvetica, sans_serif, Verdana;
+	padding: 3px;
+	border-style : solid;
+	border-width : 1px;
+	border-color : #CD6060;
+	background: #CDBAAC;
+	border-radius : 4px;
+	opacity:0.9;
+}
+
 .useType {
 	font-size: 12px;
 	font-family: NanumGothic, Helvetica, sans_serif, Verdana;
