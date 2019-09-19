@@ -110,7 +110,9 @@
 			<!--2번째열-->
         	<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="form-group">
-					<label>공지사항 / 기본정보</label>
+					<label>공지사항 / 기본정보</label>	
+					<small class="form-text text-muted">설명 / Description</small>
+					<input type="text" name="Description" class="form-control" placeholder="Description" value={{.Project.Description}}>
 					<small class="form-text text-muted">공지사항(CSI 상단에 표기됩니다.)</small>
 					<input type="text" name="Message" class="form-control" placeholder="공지사항" value={{.Project.Message}}>
 					<small class="form-text text-muted">프로젝트 위키 URL</small>
@@ -433,10 +435,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group pt-2">
-					<label>설명 / Description</label>
-					<input type="text" name="Description" class="form-control" placeholder="Description" value={{.Project.Description}}>
+				<div class="form-group pt-1">
+					<label>ScreenX 셋팅</label>
+					<div class="form-check">
+						<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
+						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
+					</div>
+					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
+					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
 				</div>
+				
 				
 				
 			</div>
@@ -460,15 +468,6 @@
 					<input type="text" name="HoudiniImportScale" class="form-control" placeholder="Houdini Import Scale" value="{{.Project.HoudiniImportScale}}">
 				</div>
 				<div class="form-group pt-1">
-					<label>ScreenX 셋팅</label>
-					<div class="form-check">
-						<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
-						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
-					</div>
-					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
-					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
-				</div>
-				<div class="form-group pt-1">
 					<label>AWS Setting</label>
 					<small class="form-text text-muted">AWS S3 Address</small>
 					<input type="text" name="AWSS3" class="form-control" placeholder="s3://project-bucketname" value="{{.Project.AWSS3}}">
@@ -477,7 +476,7 @@
 					<small class="form-text text-muted">Local Path</small>
 					<input type="text" name="AWSLocalpath" class="form-control" placeholder="~/project" value="{{.Project.AWSLocalpath}}">
 				</div>
-				<div class="form-group pt-1">
+				<div class="form-group">
 					<hr>
 					<a href="/cmd?funcname=rmoverlaponsetnote&project={{.Project.ID}}" class="btn btn-warning">작업내용 중복값 제거</a>
 				</div>
@@ -495,6 +494,7 @@
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/csi.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 </html>
 {{end}}
