@@ -6,6 +6,11 @@
 		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxNone()">전체해제</button>
 		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxInvert()">선택반전</button>
 	</div>
+	{{if eq .SearchOption.Task ""}}
+	<div class="text-center">
+		작업자 배정을 위해서는 Task를 선택해 주세요.
+	</div>
+	{{else}}
 	<div class="text-right mr-3">
 		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#multi-input">멀티유저 등록</button>
 	</div>
@@ -45,6 +50,7 @@
 		</div>
 		</div>
 	</div>
+	{{end}}
 </div>
 
 <div class="row mx-auto">
