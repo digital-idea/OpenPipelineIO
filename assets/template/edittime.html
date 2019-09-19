@@ -2,6 +2,7 @@
 <div class="pt-5">
 	<div class="row mx-auto">
 		{{range .Items}}
+		{{if eq .Type "org" "left"}}
 		<div class="mx-auto">
 			<div class="card m-2" style="width: 18rem;">
 				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
@@ -98,6 +99,7 @@
 				</div>
 			</div>
 		</div>
+		{{end}}
 		{{end}}	
 	</div>
 </div>
