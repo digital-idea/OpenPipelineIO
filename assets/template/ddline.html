@@ -11,18 +11,21 @@
         Assets({{.Searchnum.Assets}})
     </div>
     <div class="ddlineInfo">
-        <b>2D마감: </b>{{range .Ddline2d -}}
-        {{if eq . $.SearchOption.Searchword -}}
-        <a href="/ddline/2d/{{$.SearchOption.Project}}/{{.}}"><div class="date_select">{{.}}</div></a>&nbsp;
-        {{- else -}}
-        <a href="/ddline/2d/{{$.SearchOption.Project}}/{{.}}"><div class="date{{CheckDdline .}}">{{.}}</div></a>&nbsp;
-        {{- end}}
-        {{- end}}/ <b>3D마감: </b>{{range .Ddline3d -}}
-        {{if eq . $.SearchOption.Searchword -}}
-        <a href="/ddline/3d/{{$.SearchOption.Project}}/{{.}}"><div class="date_select">{{.}}</div></a>&nbsp;
-        {{- else -}}
-        <a href="/ddline/3d/{{$.SearchOption.Project}}/{{.}}"><div class="date{{CheckDdline .}}">{{.}}</div></a>&nbsp;
-        {{- end}}
+        <b>2D마감: </b>
+        {{range .Ddline2d -}}
+            {{if eq . $.SearchOption.Searchword -}}
+                <a href="/ddline/2d/{{$.SearchOption.Project}}/{{ToShortTime .}}"><div class="date_select">{{ToShortTime .}}</div></a>&nbsp;
+            {{- else -}}
+                <a href="/ddline/2d/{{$.SearchOption.Project}}/{{ToShortTime .}}"><div class="date{{CheckDdline .}}">{{ToShortTime .}}</div></a>&nbsp;
+            {{- end}}
+        {{- end}}/ 
+        <b>3D마감: </b>
+        {{range .Ddline3d -}}
+            {{if eq . $.SearchOption.Searchword -}}
+                <a href="/ddline/3d/{{$.SearchOption.Project}}/{{ToShortTime .}}"><div class="date_select">{{ToShortTime .}}</div></a>&nbsp;
+            {{- else -}}
+                <a href="/ddline/3d/{{$.SearchOption.Project}}/{{ToShortTime .}}"><div class="date{{CheckDdline .}}">{{ToShortTime .}}</div></a>&nbsp;
+            {{- end}}
         {{- end}}
     </div>
 </div>

@@ -49,9 +49,9 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					<label for="{{.ID}}-deadline3d" class="col-form-label">Deadline 3D:</label>
-					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline3d}}" onchange="setDeadline3D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+					<input type=date class="form-control border-{{CheckDdlinev2 .Ddline3d}}" id="{{.ID}}" value="{{ToNormalTime .Ddline3d}}" onchange="setDeadline3D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 					<label for="{{.ID}}-deadline2d" class="col-form-label">Deadline 2D:</label>
-					<input type=date class="form-control" id="{{.ID}}" value="{{ToNormalTime .Ddline2d}}" onchange="setDeadline2D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+					<input type=date class="form-control border-{{CheckDdlinev2 .Ddline2d}}" id="{{.ID}}" value="{{ToNormalTime .Ddline2d}}" onchange="setDeadline2D('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 				</div>
 			</div>
 		</div>

@@ -39,6 +39,7 @@ var funcMap = template.FuncMap{
 	"CheckDate":           CheckDate,
 	"CheckUpdate":         CheckUpdate,
 	"CheckDdline":         CheckDdline,
+	"CheckDdlinev2":       CheckDdlinev2,
 	"ToHumantime":         ToHumantime,
 	"Framecal":            Framecal,
 	"Add":                 Add,

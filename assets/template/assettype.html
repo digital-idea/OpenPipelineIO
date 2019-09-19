@@ -53,10 +53,8 @@
 				</label>
 				<div class="card-body">
 					<h6 class="card-title">{{.Name}}({{.Type}})</h6>
-					<div class="">
-						{{if eq .Type "asset"}}
+					{{if eq .Type "asset"}}
 						<div class="form-group">
-							<label>Asset Type</label>
 							<select name="Assettype" class="form-control" onchange="setAssettype('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
 								<option value="prop" {{if eq .Assettype "prop" }}selected{{end}}>Prop (소품)</option>
 								<option value="char" {{if eq .Assettype "char" }}selected{{end}}>Char (캐릭터, 크리쳐)</option>
@@ -66,12 +64,11 @@
 								<option value="vehicle" {{if eq .Assettype "vehicle" }}selected{{end}}>Vehicle (탈것)</option>
 							</select>
 						</div>
-						{{else}}
-							<div>
-								<small>에셋 타입을 설정할 수 없습니다.</small>
-							</div>
-						{{end}}
-					</div>
+					{{else}}
+						<div>
+							<small>에셋 타입을 설정할 수 없습니다.</small>
+						</div>
+					{{end}}
 				</div>
 			</div>
 		</div>

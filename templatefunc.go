@@ -313,11 +313,18 @@ func ToHumantime(timestring string) string {
 
 // CheckDdline 템플릿함수는 해당 시간이 이번주에 해당하는지 다음주에 해당하는지 판단한다.
 func CheckDdline(t string) string {
-	// 1124을 시간형태로 바꾸고 7일안에 포함하는 형태인지 체크한다.
-	// 현재시간에서 체크할 시간을 뺀 수
-	if !MatchShortTime.MatchString(t) {
+	// 검색 태그가 있을 수 있다. 제거한다.
+	if strings.HasPrefix(t, "ddline2d:") {
+		t = strings.TrimLeft(t, "ddline2d:")
+	}
+	if strings.HasPrefix(t, "ddline3d:") {
+		t = strings.TrimLeft(t, "ddline3d:")
+	}
+	if !MatchNormalTime.MatchString(t) {
 		return ""
 	}
+	// 1124을 시간형태로 바꾸고 7일안에 포함하는 형태인지 체크한다.
+	// 현재시간에서 체크할 시간을 뺀 수
 	offset := str2time(ToFullTime(t)).Sub(time.Now()).Hours()
 	thisline := time.Hour * 24 * 7
 	nextline := time.Hour * 24 * 14
@@ -334,6 +341,39 @@ func CheckDdline(t string) string {
 	// 14일보다 크면 빈 문자열을 출력한다.
 	default:
 		return ""
+	}
+}
+
+// CheckDdlinev2 템플릿함수는 해당 시간이 이번주에 해당하는지 다음주에 해당하는지 판단한다.
+func CheckDdlinev2(t string) string {
+	// 검색 태그가 있을 수 있다. 제거한다.
+	if strings.HasPrefix(t, "ddline2d:") {
+		t = strings.TrimLeft(t, "ddline2d:")
+	}
+	if strings.HasPrefix(t, "ddline3d:") {
+		t = strings.TrimLeft(t, "ddline3d:")
+	}
+	if !(MatchNormalTime.MatchString(t) || MatchShortTime.MatchString(t) || MatchFullTime.MatchString(t)) {
+		return "outline-secondary"
+	}
+	// 1124을 시간형태로 바꾸고 7일안에 포함하는 형태인지 체크한다.
+	// 현재시간에서 체크할 시간을 뺀 수
+	offset := str2time(ToFullTime(t)).Sub(time.Now()).Hours()
+	thisline := time.Hour * 24 * 7
+	nextline := time.Hour * 24 * 14
+	switch {
+	// 시간이 지나면 빈 문자열을 출력한다.
+	case offset < 0:
+		return "outline-secondary"
+	// 7일 이전의 날짜라면 _this 문자를 반환한다.
+	case offset <= thisline.Hours():
+		return "danger"
+	// 7일보다 크고, 14일 이전의 날짜라면 _next 문자를 반환한다.
+	case thisline.Hours() < offset && offset < nextline.Hours():
+		return "warning"
+	// 14일보다 크면 빈 문자열을 출력한다.
+	default:
+		return "outline-secondary"
 	}
 }
 

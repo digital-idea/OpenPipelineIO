@@ -225,13 +225,13 @@ func DistinctDdline(session *mgo.Session, project string, key string) ([]string,
 	var datelist []string
 	for _, r := range result {
 		if r != "" {
-			shortdate := ToShortTime(r)
-			if shortdate == before {
+			date := ToNormalTime(r)
+			if date == before {
 				break
 			} else {
-				datelist = append(datelist, shortdate)
+				datelist = append(datelist, date)
 			}
-			before = shortdate
+			before = date
 		}
 	}
 	sort.Strings(datelist) //기존 CSI2의 4자리 수를 위하여 정렬한다. 추후 이 줄은 사라진다.
@@ -490,6 +490,10 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"tag": strings.TrimPrefix(word, "tag:")})
 		} else if strings.HasPrefix(word, "assettags:") {
 			query = append(query, bson.M{"assettags": strings.TrimPrefix(word, "assettags:")})
+		} else if strings.HasPrefix(word, "ddline2d:") {
+			query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline2d:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "ddline3d:") {
+			query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline3d:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
 				for _, task := range TASKS {
