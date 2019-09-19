@@ -44,7 +44,7 @@
 
 <div class="row mx-auto">
 	{{range .Items}}
-		{{if eq .Type "asset"}}
+		
 		<div class="mx-auto">
 			<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
 			<div class="card m-2" style="width: 18rem;">
@@ -54,6 +54,7 @@
 				<div class="card-body">
 					<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 					<div class="">
+						{{if eq .Type "asset"}}
 						<div class="form-group">
 							<label>Asset Type</label>
 							<select name="Assettype" class="form-control" onchange="setAssettype('{{.Project}}', '{{.Name}}', this.value, '{{$.User.Token}}')">
@@ -65,11 +66,15 @@
 								<option value="vehicle" {{if eq .Assettype "vehicle" }}selected{{end}}>Vehicle (탈것)</option>
 							</select>
 						</div>
+						{{else}}
+							<div>
+								<small>에셋 타입을 설정할 수 없습니다.</small>
+							</div>
+						{{end}}
 					</div>
 				</div>
 			</div>
 		</div>
-		{{end}}
 	{{end}}	
 </div>
 

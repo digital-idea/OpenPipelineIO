@@ -32,6 +32,8 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Tags        []string
 		Assettags   []string
 		SearchOption
+		Searchnum Infobarnum
+		Totalnum  Infobarnum
 	}
 	rcp := recipe{}
 	rcp.SearchOption.LoadCookie(r)
@@ -81,12 +83,25 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	q := r.URL.Query()
 	template := q.Get("template")
 	rcp.SearchOption.Template = template
 	rcp.Items, err = Searchv2(session, rcp.SearchOption)
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
+	if err != nil {
+		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -841,10 +841,10 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 	var results Infobarnum
 	results.Search = len(items)
 	for _, item := range items {
-		if item.Shottype == "2D" {
+		if item.Shottype == "2D" || item.Shottype == "2d" {
 			results.Shot2d++
 		}
-		if item.Shottype == "3D" {
+		if item.Shottype == "3D" || item.Shottype == "3d" {
 			results.Shot3d++
 		}
 		if item.Type == "asset" {

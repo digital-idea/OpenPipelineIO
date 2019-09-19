@@ -51,40 +51,40 @@
         <div class="row pl-3 pr-3">
             <div class="col">
 				<a class="btn btn-sm mb-2 bg-assign text-dark" href="/tag/{{.SearchOption.Project}}/assign">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>assign(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>assign({{.Searchnum.Assign}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-ready text-dark" href="/tag/{{.SearchOption.Project}}/ready">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>ready(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>ready({{.Searchnum.Ready}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-wip text-dark" href="/tag/{{.SearchOption.Project}}/wip">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>wip(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>wip({{.Searchnum.Wip}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-confirm text-dark" href="/tag/{{.SearchOption.Project}}/confirm">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>confirm(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>confirm({{.Searchnum.Confirm}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-done text-dark" href="/tag/{{.SearchOption.Project}}/done">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>done(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>done({{.Searchnum.Done}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-omit text-dark" href="/tag/{{.SearchOption.Project}}/omit">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>omit(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>omit({{.Searchnum.Omit}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-hold text-dark" href="/tag/{{.SearchOption.Project}}/hold">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>hold(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>hold({{.Searchnum.Hold}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-out text-dark" href="/tag/{{.SearchOption.Project}}/out">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>out(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>out({{.Searchnum.Out}})
 				</a>
 				<a class="btn btn-sm mb-2 bg-none text-dark" href="/tag/{{.SearchOption.Project}}/none">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>none(0)
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>none({{.Searchnum.None}})
 				</a>
             </div>
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
                 <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" onclick="selectmode()">선택모드</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D({{.Searchnum.Shot2d}})</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D({{.Searchnum.Shot3d}})</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset({{.Searchnum.Assets}})</a>
             </div>
 		</div>
 		<input type="hidden" name="Template" value="{{.SearchOption.Template}}">
