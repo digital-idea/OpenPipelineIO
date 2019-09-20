@@ -72,8 +72,10 @@ func handleEditDepartment(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Department
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -118,8 +120,10 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Team
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -164,8 +168,10 @@ func handleEditRole(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Role
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -210,8 +216,10 @@ func handleEditPosition(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Position
+		SearchOption
 	}
 	rcp := recipe{}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
