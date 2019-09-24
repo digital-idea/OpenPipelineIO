@@ -297,7 +297,11 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 		}
 		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
 	}
+	// "isleave":true 떠난 사람은 출력되지 않는다.
+	wordsQueries = append([]bson.M{}, bson.M{"isleave": false})
+
 	q := bson.M{"$and": wordsQueries}
+
 	var results []User
 	err := c.Find(q).Sort("id").All(&results)
 	if err != nil {
