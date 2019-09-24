@@ -675,13 +675,16 @@ function setTags(project, tags, token) {
         if(cboxes[i].checked === false) {
             continue
         }
+        name = cboxes[i].getAttribute("id");
+        document.getElementById("input-tag-"+name).value = tags;
+        console.log(name, tags);
         $.ajax({
             url: "/api/settags",
             type: "post",
             
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 tags: tags,
             },
             headers: {
