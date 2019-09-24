@@ -271,36 +271,37 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 		searchwords = append(searchwords, word)
 	}
 
-	wordsQueries := []bson.M{}
+	allQueries := []bson.M{}
 	if *flagDebug {
 		log.Println(searchwords)
 	}
 	for _, word := range searchwords {
-		wordQueries := []bson.M{}
+		orQueries := []bson.M{}
+		andQueries := []bson.M{}
+		andQueries = append(andQueries, bson.M{"isleave": false})
 		if strings.HasPrefix(word, "tag:") {
-			wordQueries = append(wordQueries, bson.M{"tags": strings.TrimPrefix(word, "tag:")})
+			orQueries = append(orQueries, bson.M{"tags": strings.TrimPrefix(word, "tag:")})
 		} else {
-			wordQueries = append(wordQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"lastnameeng": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"firstnamechn": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"lastnamechn": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"email": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"emailexternal": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
-			wordQueries = append(wordQueries, bson.M{"tags": &bson.RegEx{Pattern: word, Options: "i"}})
-			wordQueries = append(wordQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"lastnameeng": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"firstnamechn": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"lastnamechn": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"email": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"emailexternal": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"phone": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"hotline": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"location": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"tags": &bson.RegEx{Pattern: word, Options: "i"}})
+			orQueries = append(orQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
 		}
-		wordsQueries = append(wordsQueries, bson.M{"$or": wordQueries})
+		allQueries = append(allQueries, bson.M{"$or": orQueries})
+		allQueries = append(allQueries, bson.M{"$and": andQueries})
 	}
-	// "isleave":true 떠난 사람은 출력되지 않는다.
-	wordsQueries = append([]bson.M{}, bson.M{"isleave": false})
 
-	q := bson.M{"$and": wordsQueries}
+	q := bson.M{"$and": allQueries}
 
 	var results []User
 	err := c.Find(q).Sort("id").All(&results)
