@@ -677,7 +677,6 @@ function setTags(project, tags, token) {
         }
         name = cboxes[i].getAttribute("id");
         document.getElementById("input-tag-"+name).value = tags;
-        console.log(name, tags);
         $.ajax({
             url: "/api/settags",
             type: "post",
@@ -725,6 +724,17 @@ function rmTags(project, tag, token) {
         if(cboxes[i].checked === false) {
             continue
         }
+        name = cboxes[i].getAttribute("id");
+        if (document.getElementById("input-tag-"+name).value.startsWith(tag+",")) {
+            // 태그가 처음에 위치할 때
+            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(tag+",","");
+        } else if (document.getElementById("input-tag-"+name).value.includes(","+tag+",")) {
+            // 태그가 중간에 있을 때
+            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(","+tag,",");
+        } else {
+            // 태그가 끝에 있을 때
+            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(","+tag,"");
+        }
         console.log(project, cboxes[i].getAttribute("id"), tag, token);
         $.ajax({
             url: "/api/rmtag",
@@ -732,7 +742,7 @@ function rmTags(project, tag, token) {
             
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 tag: tag,
             },
             headers: {
