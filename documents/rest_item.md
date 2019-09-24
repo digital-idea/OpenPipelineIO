@@ -70,24 +70,27 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" http://10.0.90.251/api/setretimeplate`|
 
 
-#### 샷,에셋정보(Item) 가지고오기. Python2.7x
-- 군함도 S001_0001_org 샷 정보를 가지고 오기
+#### 샷정보 가지고오기. Python2.7x
+- TEMP 프로젝트 OPN_0010 샷 정보를 가지고 오기(암호화 토큰키 사용)
+- 일반적으로 샷은 org(일반), left(입체) 타입을 가지게 됩니다.
 
 ```python
+#!/usr/bin/python
 #coding:utf-8
-import json
 import urllib2
-
-restURL = "http://10.0.90.251/api/item?project=gunhamdo&id=S001_0001_org" # CSI에서 군함도, S001_0001_org 샷 정보를 가지고 옵니다.
+import json
 try:
-	data = json.load(urllib2.urlopen(restURL))
+    request = urllib2.Request("https://csi.lazypic.org/api/shot?project=TEMP&name=OPN_0010")
+    key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
+    request.add_header("Authorization", "Basic %s" % key)
+    result = urllib2.urlopen(request)
+    data = json.load(result)
 except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
+    print("RestAPI에 연결할 수 없습니다.")
+    # 이후 에러처리 할 것
 if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data)
+    print(data["error"])
+print(data["data"])
 ```
 
 #### 샷,에셋정보(Item) 가지고오기. Python3.7.x(블랜더)
@@ -100,7 +103,7 @@ r = requests.get(url=endpoint, headers=auth)
 print(r.json())
 ```
 
-`~/.csi/token` 토큰 파일을 읽어서 POST
+사용자 토큰기를 `~/.csi/token` 파일에 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
 ```python
 import os
 import requests
@@ -113,29 +116,6 @@ endpoint = "https://csi.lazypic.org/api/setoutputname"
 auth = {'Authorization': 'Basic ' + token}
 r = requests.post(url=endpoint, data=data, headers=auth)
 print(r.json())
-```
-
-#### Shot 정보 가지고오기.
-- 일반적으로 샷은 org타입이다.
-- 입체의 경우 샷이 left 타입이다.
-- 입체일 경우라도 컨버팅샷은 org 타입이다.
-- 이 과정에서 입체상황을 고려하지 않고 자동으로 타입을 결정해서 샷 정보를 가지고 오고 싶을땐 아래 코드를 사용한다.
-
-```
-#coding:utf-8
-import json
-import urllib2
-
-restURL = "http://10.0.90.251/api/shot?project=mkk3&name=JYW_0200" # mkk3에서 JYW_0200 샷 정보를 가지고 옵니다.
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
 ```
 
 #### 샷,에셋(Item) 검색하기
@@ -335,16 +315,6 @@ $ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/
 - 렌즈디스토션 사이즈 셋팅
 ```
 $ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/api/setdistortionsize
-```
-
-- 썸네일 mov 등록
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&path=/show/thumb/nail.mov" http://10.0.90.251/api/setthummov
-```
-
-- Task 상태 변경
-```
-curl -X POST -d "project=TEMP&name=SS_0011&task=mm&status=omit" http://10.0.90.251/api/setstatus
 ```
 
 - Task에 대한 시작일 설정
