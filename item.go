@@ -44,7 +44,7 @@ const (
 	TaskLevel5                   // 5 높은난이도
 )
 
-// Infobarnum 검색이후 나온 각 상태별 수를 담기위한 자료구조이다.
+// Infobarnum 검색결과에 대한 상태별 갯수를 담기위한 자료구조이다.
 type Infobarnum struct {
 	Assign  int
 	Ready   int
@@ -71,12 +71,19 @@ type Media struct {
 	Comments []Comment // 코맨트
 }
 
-// Comment 자료구조는 답글을 남길 때 사용하는 자료구조이다.
+// Comment 자료구조는 글을 작성할 때 사용하는 자료구조이다.
 type Comment struct {
 	Date   string // 코맨트 등록시간 RFC3339
 	Author string // 작성자
+	Text   string // 내용
+}
+
+// Source 자료구조는 글을 작성할 때 사용하는 자료구조이다.
+type Source struct {
+	Date   string // 코맨트 등록시간 RFC3339
+	Author string // 작성자
 	Title  string // 제목
-	Body   string // 내용
+	Path   string // 소스 경로
 }
 
 // Version 자료구조는 버전정보를 담을 때 사용하는 자료구조이다.
@@ -88,7 +95,7 @@ type Version struct {
 // Item 자료구조는 하나의 항목에 대한 자료구조이다.
 type Item struct {
 	Project string `json:"project"` // 프로젝트명
-	ID      string `json:"id"`      // id. 추후 slug를 대체한다.
+	ID      string `json:"id"`      // ID
 
 	// 현장정보
 	// 현장에서 사용하는 카메라 데이터 이름. 슈퍼바이저 툴과 연동하기 위해서 Key로 사용된다.
@@ -97,44 +104,44 @@ type Item struct {
 	Dataname string `json:"dataname"` // 영화카메라(Red,Alexa등)이 자동 생성시키는 이미지 파일명이다.
 
 	// 작업이 필요한 정보
-	Scanname    string   `json:"scanname"`    // 스캔이름
-	Platesize   string   `json:"platesize"`   // 플레이트 이미지사이즈
-	Name        string   `json:"name"`        // 샷이름 SS_0010
-	Seq         string   `json:"seq"`         // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
-	Type        string   `json:"type"`        // org, org1, src, asset..
-	Assettype   string   `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
-	CrowdAsset  bool     `json:"crowdasset"`  // 군중씬에서 사용하는 에셋인지 여부 체크
-	UseType     string   `json:"usetype"`     // 재스캔상황시 실제로 사용해야하는 타입표기
-	Scantime    string   `json:"scantime"`    // 스캔 등록시간 RFC3339
-	Thumpath    string   `json:"thumpath"`    // 썸네일경로
-	Thummov     string   `json:"thummov"`     // 썸네일 mov 경로
-	Beforemov   string   `json:"beforemov"`   // 전에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
-	Aftermov    string   `json:"aftermov"`    // 후에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
-	Retimeplate string   `json:"retimeplate"` // 리타임 플레이트 경로
-	Platepath   string   `json:"platepath"`   // 플레이트 경로
-	Slug        string   `json:"slug"`        // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
-	Shottype    string   `json:"shottype"`    // "", "2d", "3d"
-	Onsetnote   []string `json:"onsetnote"`   // 현장내용, 작업내용
-	Ddline3d    string   `json:"ddline3d"`    // 3D 데드라인 RFC3339
-	Ddline2d    string   `json:"ddline2d"`    // 2D 데드라인 RFC3339
-	Rnum        string   `json:"rnum"`        // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호 예) A0001. A는 1권을 H는 8권을 의미한다.
-	Tag         []string `json:"tag"`         // 태그리스트
-	Assettags   []string `json:"assettags"`   // 에셋그룹 태그
-	Pmnote      []string `json:"pmnote"`      // PM 수정사항
-	Finname     string   `json:"finname"`     // 파이널 파일이름
-	Finver      string   `json:"finver"`      // 파이널된 버젼
-	Findate     string   `json:"findate"`     // 파이널 데이터가 나간 날짜
-	Clientver   string   `json:"clientver"`   // 클라이언트에게 보낸 버전
-	Link        []string `json:"link"`        // 링크된 자료구조
-	Dsize       string   `json:"dsize"`       // 디스토션 사이즈
-	Rendersize  string   `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
-	Status      string   `json:"status"`      // 샷 상태.
-	Updatetime  string   `json:"updatetime"`  // 업데이트 시간 RFC3339
-	Focal       string   `json:"focal"`       // 렌즈 미리수
-	Stereotype  string   `json:"stereotype"`  // parallel(default), conversions
-	Stereoeye   string   `json:"stereoeye"`   // left(default), right
-	Outputname  string   `json:"outputname"`  // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
-	OCIOcc      string   `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
+	Scanname    string          `json:"scanname"`    // 스캔이름
+	Platesize   string          `json:"platesize"`   // 플레이트 이미지사이즈
+	Name        string          `json:"name"`        // 샷이름 SS_0010
+	Seq         string          `json:"seq"`         // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
+	Type        string          `json:"type"`        // org, org1, src, asset..
+	Assettype   string          `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
+	CrowdAsset  bool            `json:"crowdasset"`  // 군중씬에서 사용하는 에셋인지 여부 체크
+	UseType     string          `json:"usetype"`     // 재스캔상황시 실제로 사용해야하는 타입표기
+	Scantime    string          `json:"scantime"`    // 스캔 등록시간 RFC3339
+	Thumpath    string          `json:"thumpath"`    // 썸네일경로
+	Thummov     string          `json:"thummov"`     // 썸네일 mov 경로
+	Beforemov   string          `json:"beforemov"`   // 전에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
+	Aftermov    string          `json:"aftermov"`    // 후에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
+	Retimeplate string          `json:"retimeplate"` // 리타임 플레이트 경로
+	Platepath   string          `json:"platepath"`   // 플레이트 경로
+	Shottype    string          `json:"shottype"`    // "", "2d", "3d"
+	Ddline3d    string          `json:"ddline3d"`    // 3D 데드라인 RFC3339
+	Ddline2d    string          `json:"ddline2d"`    // 2D 데드라인 RFC3339
+	Rnum        string          `json:"rnum"`        // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호 예) A0001. A는 1권을 H는 8권을 의미한다.
+	Tag         []string        `json:"tag"`         // 태그리스트
+	Assettags   []string        `json:"assettags"`   // 에셋그룹 태그
+	Finname     string          `json:"finname"`     // 파이널 파일이름
+	Finver      string          `json:"finver"`      // 파이널된 버젼
+	Findate     string          `json:"findate"`     // 파이널 데이터가 나간 날짜
+	Clientver   string          `json:"clientver"`   // 클라이언트에게 보낸 버전
+	Dsize       string          `json:"dsize"`       // 디스토션 사이즈
+	Rendersize  string          `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
+	Status      string          `json:"status"`      // 샷 상태.
+	Updatetime  string          `json:"updatetime"`  // 업데이트 시간 RFC3339
+	Focal       string          `json:"focal"`       // 렌즈 미리수
+	Stereotype  string          `json:"stereotype"`  // parallel(default), conversions
+	Stereoeye   string          `json:"stereoeye"`   // left(default), right
+	Outputname  string          `json:"outputname"`  // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
+	OCIOcc      string          `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
+	Note        Comment         `json:"note"`        // 작업내용
+	Links       []Source        `json:"links"`       // 연결소스
+	Comments    []Comment       `json:"comments"`    // 수정내용
+	Tasks       map[string]Task `json:"tasks"`       // Task 리스트
 
 	//시간에 관련된 데이터이다.
 	ScanFrame       int                    `json:"scanframe"`       // 스캔 프레임수
@@ -157,49 +164,52 @@ type Item struct {
 	OnsetCam        `json:"onsetcam"`      // 현장 카메라 정보
 	ProductionCam   `json:"productioncam"` // 포스트 프로덕션 카메라 정보
 
-	//task
-	Model   Task `json:"model"`   // 모델링팀 정보.
-	Fur     Task `json:"fur"`     // 털
-	Mm      Task `json:"mm"`      // 매치무브
-	Ani     Task `json:"ani"`     // 에니메이션
-	Fx      Task `json:"fx"`      // FX
-	Mg      Task `json:"mg"`      // 모션그래픽
-	Light   Task `json:"light"`   // 라이팅
-	Texture Task `json:"texture"` // 텍스쳐
-	Lookdev Task `json:"lookdev"` // 룩뎁
-	Comp    Task `json:"comp"`    // 합성
-	Roto    Task `json:"roto"`    // 로토
-	Prep    Task `json:"prep"`    // 입체작업전 프렙작업
-	Stereo  Task `json:"stereo"`  // 입체작업
-	Matte   Task `json:"matte"`   // 매트
-	Env     Task `json:"env"`     // 환경
-	Sim     Task `json:"sim"`     // 시뮬레이션
-	Layout  Task `json:"layout"`  // 레이아웃
-	Crowd   Task `json:"crowd"`   // 군중
-	Temp1   Task `json:"temp1"`   // 기타1
-	Temp2   Task `json:"temp2"`   // 기타2
-	Concept Task `json:"concept"` // 컨셉
-	Previz  Task `json:"previz"`  // 프리비즈
+	// 레거시 자료구조. 추후 삭제될 예정이다.
+	Slug      string   `json:"slug"`      // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
+	Onsetnote []string `json:"onsetnote"` // 과거, 현장내용, 작업내용
+	Link      []string `json:"link"`      // 과거, 링크된 자료구조
+	Pmnote    []string `json:"pmnote"`    // 과거, PM 수정사항
+	Model     Task     `json:"model"`     // 모델링팀 정보.
+	Fur       Task     `json:"fur"`       // 털
+	Mm        Task     `json:"mm"`        // 매치무브
+	Ani       Task     `json:"ani"`       // 에니메이션
+	Fx        Task     `json:"fx"`        // FX
+	Mg        Task     `json:"mg"`        // 모션그래픽
+	Light     Task     `json:"light"`     // 라이팅
+	Texture   Task     `json:"texture"`   // 텍스쳐
+	Lookdev   Task     `json:"lookdev"`   // 룩뎁
+	Comp      Task     `json:"comp"`      // 합성
+	Roto      Task     `json:"roto"`      // 로토
+	Prep      Task     `json:"prep"`      // 입체작업전 프렙작업
+	Stereo    Task     `json:"stereo"`    // 입체작업
+	Matte     Task     `json:"matte"`     // 매트
+	Env       Task     `json:"env"`       // 환경
+	Sim       Task     `json:"sim"`       // 시뮬레이션
+	Layout    Task     `json:"layout"`    // 레이아웃
+	Crowd     Task     `json:"crowd"`     // 군중
+	Temp1     Task     `json:"temp1"`     // 기타1
+	Temp2     Task     `json:"temp2"`     // 기타2
+	Concept   Task     `json:"concept"`   // 컨셉
+	Previz    Task     `json:"previz"`    // 프리비즈
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
 type Task struct {
+	Title        string             `json:"title"`        // 테스크 네임
 	User         string             `json:"user"`         // 아티스트명
 	Status       string             `json:"status"`       // 상태
 	BeforeStatus string             `json:"beforestatus"` // 이전상태
 	Startdate    string             `json:"startdate"`    // 작업시작일 RFC3339
 	Predate      string             `json:"predate"`      // 1차 마감일 RFC3339
-	Date         string             `json:"date"`         // 마감일 RFC3339
+	Date         string             `json:"date"`         // 2차 마감일 RFC3339
 	Mov          string             `json:"mov"`          // mov 경로
-	Mdate        string             `json:"mdate"`        // mov 업데이트된 날짜 RFC3339
-	Note         []string           `json:"note"`         // 작업노트
-	Movhistory   []string           `json:"movhistory"`   // mov 히스토리
+	Mdate        string             `json:"mdate"`        // mov 업데이트 날짜 RFC3339
 	Pubfile      string             `json:"pubfile"`      // Pubfile
 	Due          int                `json:"due"`          // 예측 멘데이
-	Promday      int                `json:"promday"`      // 실제멘데이
-	Title        string             `json:"title"`        // 테스크 네임. Temp1, Temp2의 표기 네임을 바꾸기 위해서 사용함.
+	Promday      int                `json:"promday"`      // 실제 멘데이
 	UserNote     string             `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
 	TaskLevel    `json:"tasklevel"` // 샷 레벨
+	Version      `json:"version"`   // Pubfile 버전정보
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다.
