@@ -2193,6 +2193,26 @@ func AddNote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
+// SetNote 함수는 item에 작업내용을 추가한다.
+func SetNote(session *mgo.Session, project, name, userID, text string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"note.text": text, "note.author": userID, "note.date": time.Now().Format(time.RFC3339), "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RmNote 함수는 item에 작업내용을 삭제한다.
 func RmNote(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)

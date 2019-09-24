@@ -53,9 +53,10 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/addtag | tag 추가 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0010&tag=테스트" http://192.168.219.104/api/addtag` |
 | /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
 | /api/rmtag | tags 삭제 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0020&tag=태그3" http://192.168.219.114/api/rmtag` |
-| /api/addnote | 작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/addnote` |
-| /api/rmnote | 작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=삭제내용" http://192.168.219.104/api/rmnote` |
-| /api/setnotes | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setnotes` |
+| /api/addnote(레거시) | 작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/addnote` |
+| /api/setnote | 작업내용 변경 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/setnote` |
+| /api/rmnote(레거시) | 작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=삭제내용" http://192.168.219.104/api/rmnote` |
+| /api/setnotes(레거시) | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setnotes` |
 | /api/addcomment | 수정사항 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
 | /api/setcomments | 수정사항 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.31.172/api/setcomments` |

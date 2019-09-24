@@ -23,7 +23,7 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label for="{{.ID}}-comment" class="col-form-label">Note:</label>
-					<textarea class="form-control" id="multi-input-note"></textarea>
+					<textarea class="form-control" id="multi-input-note" rows=6></textarea>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -63,7 +63,7 @@
 								<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
 								<div class="form-group">
 									<label for="{{.ID}}-note" class="col-form-label">Notes:</label>
-									<textarea class="form-control" id="{{.ID}}-note"></textarea>
+									<textarea class="form-control" id="{{.ID}}-note" rows=6>{{.Note.Text}}</textarea>
 								</div>
 							</div>
 							<div class="modal-footer">

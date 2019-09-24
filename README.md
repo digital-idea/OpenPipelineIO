@@ -19,8 +19,8 @@
 - [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.6/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 ### Roadmap
-- [ ] PM입력기 웹 입력기로 대체
-- [ ] Multi Task 기능추가. (참고: CSI의 내부구조가 완전히 달라진다. 유저 자료구조 안정화이후 진행 시작)
+- [ ] PM입력기 웹 입력기 테스트 현 2명을 테스트로 두고 진행함.
+- [ ] Multi Task 기능추가. (참고: CSI의 내부구조가 완전히 달라진다. Tasks 자료구조 추가함.)
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전)
 - [ ] 통계툴을 내부에서 처리하도록 변경.(기존 Statistics 페이지 통합)
 - [ ] 현 작업내용,현장정보,수정사항이 "날짜;툴;작성자;내용" 형태인것을 맵으로 바꾸기(현재는 CSIv1 구조)
