@@ -204,8 +204,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u.Timezone = r.FormValue("Timezone")
-	u.LastIP = host
-	u.LastPort = port
 
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
 	u.OrganizationsForm = r.FormValue("OrganizationsForm")
