@@ -2846,12 +2846,11 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 			}
 			name = v
 		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+			if len(values) == 0 {
+				text = ""
+			} else {
+				text = values[0]
 			}
-			text = v
 		}
 	}
 	err = SetNote(session, project, name, userID, text)

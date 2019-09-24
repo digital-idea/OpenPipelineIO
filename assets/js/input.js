@@ -118,8 +118,26 @@ function setJustTimecodeOut(project, name, timecode, token) {
 }
 
 function addNote(project, name, text, token) {
+    // 레거시 코드
     $.ajax({
         url: "/api/addnote",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            text: text,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+    // 다음 사용될 API
+    $.ajax({
+        url: "/api/setnote",
         type: "post",
         data: {
             project: project,
@@ -142,12 +160,31 @@ function addNotes(project, text, token) {
         if(cboxes[i].checked === false) {
             continue
         }
+        name = cboxes[i].getAttribute("id")
+        // 레거시 API
         $.ajax({
             url: "/api/addnote",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
+                text: text,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+        // 다음 사용될 API
+        $.ajax({
+            url: "/api/setnote",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
                 text: text,
             },
             headers: {

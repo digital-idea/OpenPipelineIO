@@ -111,8 +111,8 @@ func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
 	http.Handle("/thumbnail/", maxAgeHandler(3600, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
-	http.HandleFunc("/", handleIndex)
 	// Item
+	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
 	http.HandleFunc("/tag/", handleTags)
 	http.HandleFunc("/assettags/", handleAssettags)
