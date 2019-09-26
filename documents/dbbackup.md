@@ -60,4 +60,9 @@ $ mongorestore --drop -d projectinfo -c adventure /dbbackup/projectinfo/18/proje
 http://127.0.0.1:28017/project/projectname/
 ```
 
+### 프로젝트 하나를 bson으로 백업하기
+추후 분석을 위해서 프로젝트를 .bson으로 백업합니다.
 
+```bash
+$ mongodump --db project --collection TEMP --out /backupdb/TEMP
+```
