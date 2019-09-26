@@ -692,10 +692,12 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Division
+		SearchOption
 	}
 	rcp := recipe{
 		Devmode: *flagDevmode,
 	}
+	rcp.SearchOption.LoadCookie(r)
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
