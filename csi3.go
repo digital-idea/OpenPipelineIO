@@ -37,8 +37,6 @@ var (
 	MAINVER = "v3.0"
 	// MINVER 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MINVER = ""
-	// DEVMODE 값은 컴파일 단계에서 지정한 값으로 바뀐다.
-	DEVMODE = "true"
 	// TEMPLATES 값은 웹서버 실행전 사용할 템플릿이다.
 	TEMPLATES = template.New("")
 
@@ -47,7 +45,7 @@ var (
 	flagMailDNS        = flag.String("maildns", MAILDNS, "mail DNS name")
 	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
-	flagDevmode        = flag.Bool("devmode", str2bool(DEVMODE), "dev mode")
+	flagDevmode        = flag.Bool("devmode", false, "dev mode")
 	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
 	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
 	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전

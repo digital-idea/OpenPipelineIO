@@ -1175,7 +1175,7 @@ func handleIndexV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 기본형태 리다이렉트 한다.
-	url := "/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword=all"
+	url := "/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword="
 	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
