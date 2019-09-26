@@ -1163,6 +1163,22 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleIndexV2 함수는 index 페이지이다.
+func handleIndexV2(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	// 기본형태 리다이렉트 한다.
+	url := "/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword=all"
+	http.Redirect(w, r, url, http.StatusSeeOther)
+}
+
 // handleAddShot 함수는 shot을 추가하는 페이지이다.
 func handleAddShot(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)

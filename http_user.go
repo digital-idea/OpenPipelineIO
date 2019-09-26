@@ -149,7 +149,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	_, _, err = net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
