@@ -26,25 +26,34 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		Projectlist []string
 		Items       []Item
-		Project     string
 		Ddline3d    []string
 		Ddline2d    []string
 		Tags        []string
 		Assettags   []string
 		SearchOption
-		Searchnum Infobarnum
-		Totalnum  Infobarnum
+		Searchnum   Infobarnum
+		Totalnum    Infobarnum
+		Projectinfo Project
+		MailDNS     string
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
-
 	rcp.Devmode = *flagDevmode
+	rcp.MailDNS = *flagMailDNS
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.SearchOption.LoadCookie(r)
+	if rcp.SearchOption.Project != "" {
+		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

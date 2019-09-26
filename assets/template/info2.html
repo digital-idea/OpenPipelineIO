@@ -1,0 +1,28 @@
+{{define "info2"}}
+<div class="">
+    <div class="p-2">
+        {{if .Projectinfo.Message}}
+            공지 : {{.Projectinfo.Message}}
+        {{end}}
+    </div>
+    <div class="p-2">
+        {{if .Projectinfo.Wiki}}
+            <a href="{{.Projectinfo.Wiki}}" class="btn btn-primary btn-sm">위키</a>
+        {{end}}
+    
+        <a href="mailto:{{.Projectinfo.ID}}@{{.MailDNS}}?subject=[{{if .Projectinfo.MailHead -}}{{.Projectinfo.MailHead}}{{- else -}}{{.Projectinfo.ID}}{{- end}}]" class="btn btn-primary btn-sm">프로젝트 메일보내기</a>
+
+        {{if .Projectinfo.Daily}}
+            <a href="dilink://{{.Projectinfo.Daily}}" class="btn btn-primary btn-sm">데일리폴더</a>
+        {{else}}
+            <a href="dilink:///show/{{.Projectinfo.ID}}/product/daily" class="btn btn-primary btn-sm">데일리폴더</a>
+        {{end}}
+        
+        {{if .Projectinfo.Edit}}
+            <a href="dilink://{{.Projectinfo.Edit}}" class="btn btn-primary btn-sm">편집본폴더</a>
+        {{else}}
+            <a href="dilink:///show/{{.Projectinfo.ID}}/product/edit" class="btn btn-primary btn-sm">편집본폴더</a>
+        {{end}}
+    </div>
+</div>
+{{end}}

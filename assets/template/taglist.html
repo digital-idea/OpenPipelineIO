@@ -18,7 +18,7 @@
 						hold={{$.SearchOption.Hold}}&
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
-						template=inputtags&
+						template={{$.SearchOption.Template}}&
 						task={{$.SearchOption.Task}}" class="btn btn-success btn-sm m-1">{{.}}</a>
 			{{else}}
 				<a href="/inputmode?project={{$.SearchOption.Project}}&
@@ -33,7 +33,7 @@
 						hold={{$.SearchOption.Hold}}&
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
-						template=inputtags&
+						template={{$.SearchOption.Template}}&
 						task={{$.SearchOption.Task}}" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 			{{end}}
 		{{end}}
@@ -55,7 +55,7 @@
 				hold={{$.SearchOption.Hold}}&
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
-				template=inputtags&
+				template={{$.SearchOption.Template}}&
 				task={{$.SearchOption.Task}}" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
 	{{end}}
 </div>

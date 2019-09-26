@@ -50,7 +50,8 @@ type Project struct {
 	Pa                       string        `json:"pa"`                       // PA
 	Message                  string        `json:"message"`                  // CSI 상단에 표시되는 공지사항
 	Wiki                     string        `json:"wiki"`                     // 위키 URL
-	Edit                     string        `json:"edit"`                     // 편집본 경로. 추후 URL
+	Edit                     string        `json:"edit"`                     // 편집본 경로
+	Daily                    string        `json:"daily"`                    // 데일리 경로
 	AspectRatio              float64       `json:"aspectratio"`              // 픽셀 AspectRatio. 아나모픽 렌즈를 사용한 프로젝트는 AspectRatio가 다르다.
 	Issue                    string        `json:"issue"`                    // 주요 CG내용. Preproduction 단계시 PostProject단계인 사람들에게 중요하게 표시되도록. - 부분장님 요청사항
 	Camera                   string        `json:"camera"`                   // 촬영에 사용된 카메라
