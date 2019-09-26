@@ -26,5 +26,9 @@ type Infobarnum struct {
 
 // Percent 메소드는 Infobarnum 자료구조를 분석해서 진행률을 계산한다.
 func (i *Infobarnum) calculatePercent() {
+	if i.Total == 0 {
+		i.Percent = 0.0
+		return
+	}
 	i.Percent = math.Round(float64(i.Done+i.Hold) / float64(i.Total-i.None-i.Omit) * 100)
 }

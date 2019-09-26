@@ -24,6 +24,11 @@
         <li class="nav-item">
             <a class="nav-link" href="/help">Help</a>
         </li>
+        {{if .Devmode}}
+        <li class="nav-item">
+          <a class="nav-link" href="/search?project=TEMP&searchword=all&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false">OldView</a>
+        </li>
+        {{end}}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Add
