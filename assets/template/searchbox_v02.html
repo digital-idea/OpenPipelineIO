@@ -42,7 +42,12 @@
 					</select>
 				</div>
 				<div class="input-group-append">
-					<button class="btn btn-primary" id="button">Search</button>
+					<button class="btn btn-secondary" id="button">
+						Search
+						{{if .Searchnum.Search}}
+							<span class="badge badge-light">{{.Searchnum.Search}}</span>
+						{{end}}
+					</button>
 				</div>
 			</div>
         </div>
@@ -51,43 +56,56 @@
         <div class="row pl-3 pr-3">
             <div class="col">
 				<a class="btn btn-sm mb-2 bg-assign text-dark" href="/tag/{{.SearchOption.Project}}/assign">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>assign({{.Searchnum.Assign}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>assign <span class="badge badge-light">{{.Searchnum.Assign}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-ready text-dark" href="/tag/{{.SearchOption.Project}}/ready">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>ready({{.Searchnum.Ready}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>ready <span class="badge badge-light">{{.Searchnum.Ready}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-wip text-dark" href="/tag/{{.SearchOption.Project}}/wip">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>wip({{.Searchnum.Wip}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>wip <span class="badge badge-light">{{.Searchnum.Wip}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-confirm text-dark" href="/tag/{{.SearchOption.Project}}/confirm">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>confirm({{.Searchnum.Confirm}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>confirm <span class="badge badge-light">{{.Searchnum.Confirm}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-done text-dark" href="/tag/{{.SearchOption.Project}}/done">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>done({{.Searchnum.Done}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>done <span class="badge badge-light">{{.Searchnum.Done}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-omit text-dark" href="/tag/{{.SearchOption.Project}}/omit">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>omit({{.Searchnum.Omit}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>omit <span class="badge badge-light">{{.Searchnum.Omit}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-hold text-dark" href="/tag/{{.SearchOption.Project}}/hold">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>hold({{.Searchnum.Hold}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>hold <span class="badge badge-light">{{.Searchnum.Hold}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-out text-dark" href="/tag/{{.SearchOption.Project}}/out">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>out({{.Searchnum.Out}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>out <span class="badge badge-light">{{.Searchnum.Out}}</span>
 				</a>
 				<a class="btn btn-sm mb-2 bg-none text-dark" href="/tag/{{.SearchOption.Project}}/none">
-					<input type="checkbox" class="mr-2 StatusCheckBox" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>none({{.Searchnum.None}})
+					<input type="checkbox" class="mr-2 StatusCheckBox" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>none <span class="badge badge-light">{{.Searchnum.None}}</span>
 				</a>
             </div>
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
                 <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" onclick="selectmode()">선택모드</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D({{.Searchnum.Shot2d}})</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D({{.Searchnum.Shot3d}})</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset({{.Searchnum.Assets}})</a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D <span class="badge badge-light">{{.Searchnum.Shot2d}}</span></a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D <span class="badge badge-light">{{.Searchnum.Shot3d}}</span></a>
+				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/shot">Shot <span class="badge badge-light">{{.Searchnum.Shot}}</span></a>
+				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset <span class="badge badge-light">{{.Searchnum.Assets}}</span></a>
             </div>
 		</div>
 		<input type="hidden" name="Template" value="{{.SearchOption.Template}}">
     </div>
 </form>
+
+
+
+<div class="p-1">
+	<div class="progress">
+		<div class="progress-bar bg-secondary" role="progressbar" style="width: {{.Totalnum.Percent}}%;" aria-valuenow="{{.Totalnum.Percent}}" aria-valuemin="0" aria-valuemax="100">
+			{{$totalExceptNone := Minus .Totalnum.Total .Totalnum.None }}
+			{{.Totalnum.Percent}}% ({{Add .Totalnum.Done .Totalnum.Hold}} / {{Minus $totalExceptNone .Totalnum.Omit}})
+		</div>
+	</div>			
+</div>
+
 {{end}}

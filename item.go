@@ -44,24 +44,6 @@ const (
 	TaskLevel5                   // 5 높은난이도
 )
 
-// Infobarnum 검색결과에 대한 상태별 갯수를 담기위한 자료구조이다.
-type Infobarnum struct {
-	Assign  int
-	Ready   int
-	Wip     int
-	Confirm int
-	Done    int
-	Omit    int
-	Hold    int
-	Out     int
-	None    int
-	Total   int
-	Search  int
-	Shot    int
-	Shot2d  int
-	Shot3d  int
-	Assets  int
-}
 
 // Media 자료구조는 미디어 형식을 담기위한 자료구조이다.
 type Media struct {
