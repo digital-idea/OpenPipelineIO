@@ -470,3 +470,8 @@ func TaskDate(i Item, task string) string {
 func TaskPredate(i Item, task string) string {
 	return reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("Predate").String()
 }
+
+// GetTaskLevel 템플릿 함수는 아이템과 Task 문자를 받아서 Tasklevel을 반환한다.
+func GetTaskLevel(i Item, task string) TaskLevel {
+	return TaskLevel(reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("TaskLevel").Int())
+}

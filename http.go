@@ -54,6 +54,7 @@ var funcMap = template.FuncMap{
 	"TaskUser":            TaskUser,
 	"TaskDate":            TaskDate,
 	"TaskPredate":         TaskPredate,
+	"GetTaskLevel":        GetTaskLevel,
 }
 
 // 도움말 페이지 입니다.
@@ -274,6 +275,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
 	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
+	http.HandleFunc("/api/settasklevel", handleAPISetTaskLevel)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

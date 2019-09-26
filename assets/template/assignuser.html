@@ -49,6 +49,17 @@
 					<label for="multi-input-date" class="col-form-label">2차마감</label>
 					<input type=date class="form-control" id="multi-input-date" value="" onchange="setTaskDates('{{.SearchOption.Project}}', '{{$.SearchOption.Task}}', document.getElementById('multi-input-date').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 				</div>
+				<div class="form-group">
+					<label for="multi-input-levels" class="col-form-label">난이도</label>
+					<select class="form-control" name="Status" id="multi-input-levels" onchange="setTaskLevels('{{.SearchOption.Project}}', '{{.SearchOption.Task}}', document.getElementById('multi-input-levels').value, '{{$.User.Token}}')">
+						<option value="0">Level 0</option>
+						<option value="1">Level 1</option>
+						<option value="2">Level 2</option>
+						<option value="3">Level 3</option>
+						<option value="4">Level 4</option>
+						<option value="5">Level 5</option>
+					</select>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -72,11 +83,11 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					{{if $.SearchOption.Task}}
-					<label for="{{.ID}}-user" class="col-form-label">{{$.SearchOption.Task}} User</label>
-					<input class="form-control" value="{{TaskUser . $.SearchOption.Task}}" type="text" onchange="setTaskUser('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', this.value, '{{$.User.Token}}')">
+					<label for="{{.ID}}-user" class="col-form-label col-form-label-sm">{{$.SearchOption.Task}} User</label>
+					<input class="form-control form-control-sm" value="{{TaskUser . $.SearchOption.Task}}" type="text" onchange="setTaskUser('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', this.value, '{{$.User.Token}}')">
 
-					<label for="{{.ID}}-status" class="col-form-label">Status</label>
-					<select class="form-control" name="Status" id="{{.ID}}-status" onchange="setTaskStatus('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-status').value, '{{$.User.Token}}')">
+					<label for="{{.ID}}-status" class="col-form-label col-form-label-sm">Status</label>
+					<select class="form-control form-control-sm" name="Status" id="{{.ID}}-status" onchange="setTaskStatus('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-status').value, '{{$.User.Token}}')">
 						{{$status := TaskStatus . $.SearchOption.Task}}
 						<option value="omit" {{if eq $status "8" }}selected{{end}}>Omit</option>
 						<option value="confirm" {{if eq $status "7" }}selected{{end}}>Confirm</option>
@@ -88,10 +99,26 @@
 						<option value="hold" {{if eq $status "1" }}selected{{end}}>Hold</option>
 						<option value="none" {{if eq $status "0" }}selected{{end}}>None</option>
 					</select>
-					<label for="{{.ID}}-predate" class="col-form-label">1차마감</label>
-					<input type=date class="form-control border-{{TaskPredate . $.SearchOption.Task | CheckDdlinev2}}" id="{{.ID}}-predate" value="{{TaskPredate . $.SearchOption.Task | ToNormalTime}}" onchange="setTaskPredate('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-predate').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
-					<label for="{{.ID}}-date" class="col-form-label">2차마감</label>
-					<input type=date class="form-control border-{{TaskDate . $.SearchOption.Task | CheckDdlinev2}}" id="{{.ID}}-date" value="{{TaskDate . $.SearchOption.Task | ToNormalTime}}" onchange="setTaskDate('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-date').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+					
+					<label for="{{.ID}}-predate" class="col-form-label col-form-label-sm">1차마감</label>
+					<input type=date class="form-control form-control-sm border-{{TaskPredate . $.SearchOption.Task | CheckDdlinev2}}" id="{{.ID}}-predate" value="{{TaskPredate . $.SearchOption.Task | ToNormalTime}}" onchange="setTaskPredate('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-predate').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+
+					<label for="{{.ID}}-date" class="col-form-label col-form-label-sm">2차마감</label>
+					<input type=date class="form-control form-control-sm border-{{TaskDate . $.SearchOption.Task | CheckDdlinev2}}" id="{{.ID}}-date" value="{{TaskDate . $.SearchOption.Task | ToNormalTime}}" onchange="setTaskDate('{{.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-date').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+
+					
+					<label for="{{.ID}}-level" class="col-form-label col-form-label-sm">Level</label>
+					<select class="form-control form-control-sm" name="Status" id="{{.ID}}-level" onchange="setTaskLevel('{{$.SearchOption.Project}}', '{{.Name}}', '{{$.SearchOption.Task}}', document.getElementById('{{.ID}}-level').value, '{{$.User.Token}}')">
+						{{$level := GetTaskLevel . $.SearchOption.Task}}
+						<option value="0" {{if eq $level 0 }}selected{{end}}>Level 0</option>
+						<option value="1" {{if eq $level 1 }}selected{{end}}>Level 1</option>
+						<option value="2" {{if eq $level 2 }}selected{{end}}>Level 2</option>
+						<option value="3" {{if eq $level 3 }}selected{{end}}>Level 3</option>
+						<option value="4" {{if eq $level 4 }}selected{{end}}>Level 4</option>
+						<option value="5" {{if eq $level 5 }}selected{{end}}>Level 5</option>
+					</select>
+					
+					
 					{{end}}
 				</div>
 			</div>

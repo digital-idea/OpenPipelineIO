@@ -3480,3 +3480,82 @@ func handleAPIDeadline3D(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleAPISetTaskLevel 함수는 Task에 level을 설정한다.
+func handleAPISetTaskLevel(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var name string
+	var task string
+	var level string
+	info := r.PostForm
+	for key, value := range info {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			project = v
+		case "name":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			name = v
+		case "task":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			err = validTask(v)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", err.Error())
+			}
+			task = v
+		case "level":
+			v, err := PostFormValueInList(key, value)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			level = v
+		default:
+			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, name, task, level 키값만 사용가능합니다.)")
+			return
+		}
+	}
+	if level == "" {
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "level 키값을 설정해주세요.")
+		return
+	}
+	if *flagDebug {
+		fmt.Println(project, name, task, level)
+	}
+	err = setTaskLevel(session, project, name, task, level)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+}

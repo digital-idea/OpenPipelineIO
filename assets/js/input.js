@@ -307,7 +307,6 @@ function setTaskUser(project, name, task, user, token) {
 }
 
 function setTaskUsers(project, task, user, token) {
-    console.log(project,task,user,token)
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
@@ -815,5 +814,53 @@ function selectCheckboxInvert() {
         } else {
             cboxes[i].checked = false;
         }
+    }
+}
+
+function setTaskLevel(project, name, task, level, token) {
+    $.ajax({
+        url: "/api/settasklevel",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            level: level,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+}
+
+function setTaskLevels(project, task, level, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        name = cboxes[i].getAttribute("id");
+        console.log(project,name,task,level);
+        $.ajax({
+            url: "/api/settasklevel",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                level, level,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
     }
 }
