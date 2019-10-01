@@ -501,6 +501,51 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
 		} else if strings.HasPrefix(word, "type:asset") {
 			query = append(query, bson.M{"type": "asset"})
+		} else if strings.HasPrefix(word, "status:") {
+			status := strings.ToLower(strings.TrimPrefix(word, "status:"))
+			if op.Task != "" {
+				switch status {
+				case "assign":
+					query = append(query, bson.M{op.Task + ".status": ASSIGN})
+				case "ready":
+					query = append(query, bson.M{op.Task + ".status": READY})
+				case "wip":
+					query = append(query, bson.M{op.Task + ".status": WIP})
+				case "confirm":
+					query = append(query, bson.M{op.Task + ".status": CONFIRM})
+				case "done":
+					query = append(query, bson.M{op.Task + ".status": DONE})
+				case "omit":
+					query = append(query, bson.M{op.Task + ".status": OMIT})
+				case "hold":
+					query = append(query, bson.M{op.Task + ".status": HOLD})
+				case "out":
+					query = append(query, bson.M{op.Task + ".status": OUT})
+				case "none":
+					query = append(query, bson.M{op.Task + ".status": NONE})
+				}
+			} else {
+				switch status {
+				case "assign":
+					query = append(query, bson.M{"status": ASSIGN})
+				case "ready":
+					query = append(query, bson.M{"status": READY})
+				case "wip":
+					query = append(query, bson.M{"status": WIP})
+				case "confirm":
+					query = append(query, bson.M{"status": CONFIRM})
+				case "done":
+					query = append(query, bson.M{"status": DONE})
+				case "omit":
+					query = append(query, bson.M{"status": OMIT})
+				case "hold":
+					query = append(query, bson.M{"status": HOLD})
+				case "out":
+					query = append(query, bson.M{"status": OUT})
+				case "none":
+					query = append(query, bson.M{"status": NONE})
+				}
+			}
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
 				for _, task := range TASKS {
@@ -509,7 +554,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			} else {
 				query = append(query, bson.M{op.Task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
 			}
-		} else if regexpRnum.MatchString(word) {
+		} else if regexpRnum.MatchString(word) { // 롤넘버 형태일 때
 			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
 		} else {
 			switch word {
@@ -855,26 +900,26 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 		}
 		if item.Type == "org" || item.Type == "left" {
 			results.Shot++
-			switch item.Status {
-			case ASSIGN:
-				results.Assign++
-			case READY:
-				results.Ready++
-			case WIP:
-				results.Wip++
-			case CONFIRM:
-				results.Confirm++
-			case DONE:
-				results.Done++
-			case OMIT:
-				results.Omit++
-			case HOLD:
-				results.Hold++
-			case OUT:
-				results.Out++
-			case NONE:
-				results.None++
-			}
+		}
+		switch item.Status {
+		case ASSIGN:
+			results.Assign++
+		case READY:
+			results.Ready++
+		case WIP:
+			results.Wip++
+		case CONFIRM:
+			results.Confirm++
+		case DONE:
+			results.Done++
+		case OMIT:
+			results.Omit++
+		case HOLD:
+			results.Hold++
+		case OUT:
+			results.Out++
+		case NONE:
+			results.None++
 		}
 	}
 	return results, nil
