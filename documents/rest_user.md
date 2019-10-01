@@ -61,3 +61,25 @@ macOS라면 ~/.profile, centOS 라면 ~/.bashrc 파일 입니다.
 ```bash
 export CSI_JWT_TOKEN_KEY="암호화,복호화에 사용될 문자"
 ```
+
+#### Python으로 validuser api 사용하기
+
+```python
+#!/usr/bin/python
+#coding:utf-8
+import urllib2
+import urllib
+import json
+
+url = "http://192.168.31.172/api/validuser"
+values = {}
+values["id"] = "userid"
+values["pw"] = "userpasss&;"
+data = urllib.urlencode(values) # 패스워드에는 특수문자가 포함될 수 있습니다. url encode 합니다.
+try:
+    req = urllib2.Request(url, data)
+    result = urllib2.urlopen(req)
+    print(json.load(result))
+except:
+    print "error"
+```
