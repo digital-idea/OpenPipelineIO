@@ -27,7 +27,8 @@ var funcMap = template.FuncMap{
 	"title":               strings.Title,
 	"itemStatus2color":    itemStatus2color,
 	"projectStatus2color": projectStatus2color,
-	"statusnum2string":    statusnum2string,
+	"Status2capString":    Status2capString, // regacy
+	"Status2string":       Status2string,
 	"name2seq":            name2seq,
 	"note2body":           note2body,
 	"pmnote2body":         pmnote2body,

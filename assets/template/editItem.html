@@ -7,7 +7,7 @@
 <!--프로젝트, 아이템 정보-->
 <table class="edit">
 	<tr>
-		<td class=edittitle colspan=6 bgcolor={{.Item.Status|itemStatus2color}} height=40><span id="projectTitle">{{.Project.ID}}</span> | <b><span id="slugTitle">{{.Item.Name}}({{.Item.Type}})</span></b> | {{.Item.Status|statusnum2string}}</td>
+		<td class=edittitle colspan=6 bgcolor={{.Item.Status|itemStatus2color}} height=40><span id="projectTitle">{{.Project.ID}}</span> | <b><span id="slugTitle">{{.Item.Name}}({{.Item.Type}})</span></b> | {{.Item.Status|Status2capString}}</td>
 	</tr>
 </table>
 <!--input form 정보-->

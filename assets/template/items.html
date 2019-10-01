@@ -106,7 +106,7 @@
 <tr><td bgcolor={{itemStatus2color .Status}} colspan=8 class=statusbar>
 {{if .Updatetime|CheckUpdate}}<new>UPDATE {{ToHumantime .Updatetime}}</new> {{end}}
 <a href="{{Review .Project .Name .Type ""}}" target="_blank" title="ily">
-{{statusnum2string .Status}}{{if eq .Status "2"}} / v{{.Finver}}{{if .Findate}}({{ToShortTime .Findate}}){{end}}{{end}}</td></tr>
+{{Status2capString .Status}}{{if eq .Status "2"}} / v{{.Finver}}{{if .Findate}}({{ToShortTime .Findate}}){{end}}{{end}}</td></tr>
 </a>
 <tr>
 <!--concept-->
@@ -256,7 +256,7 @@
 
 <!--작업내용 시작-->
 <td class=history>
-    <div class=historyContent>
+  <div class=historyContent>
 	<div class="container">
     
 	  <div class="subtitle">

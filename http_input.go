@@ -35,10 +35,14 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Totalnum    Infobarnum
 		Projectinfo Project
 		MailDNS     string
+		Dilog       string
+		Wfs         string
 	}
 	rcp := recipe{}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
+	rcp.Dilog = *flagDILOG
+	rcp.Wfs = *flagWFS
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {

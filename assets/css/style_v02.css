@@ -52,3 +52,39 @@ input[type=checkbox]:checked+div{
     border-width: 1px;
     border-color: rgb(205, 72, 0);
 }
+
+/*날짜가 검색되면 표시되는 색상*/
+.statusbox{
+	border:2px solid #555555;
+	color : #222222;
+	font-size: 7.5pt;
+	text-align: center;
+	font-family: NanumGothic, Helvetica, sans_serif, Verdana;
+	line-height: 13px;
+	text-indent: 0px;
+	width: 45px;
+}
+
+/*날짜가 검색되면 표시되는 색상*/
+.statusbox_deadline{
+	border:2px solid #D14B00;
+	color : #222222;
+	font-size: 7.5pt;
+	text-align: center;
+	font-family: NanumGothic, Helvetica, sans_serif, Verdana;
+	line-height: 13px;
+	text-indent: 0px;
+    width: 45px;
+}
+
+/*날짜가 검색되면 표시되는 색상*/
+.statusbox_daily{
+	border:2px solid #3E8CFE;
+	color : #222222;
+	font-size: 7.5pt;
+	text-align: center;
+	font-family: NanumGothic, Helvetica, sans_serif, Verdana;
+	line-height: 13px;
+	text-indent: 0px;
+    width: 45px;
+}

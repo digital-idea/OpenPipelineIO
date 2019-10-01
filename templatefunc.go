@@ -53,7 +53,8 @@ func projectStatus2color(status ProjectStatus) string {
 	}
 }
 
-func statusnum2string(num string) string {
+// Status2capString 템플릿함수는 status 값을 받아서 대문자를 반환한다.
+func Status2capString(num string) string {
 	switch num {
 	case OMIT:
 		return "OMIT"
@@ -75,6 +76,32 @@ func statusnum2string(num string) string {
 		return "NONE"
 	default:
 		return "NONE"
+	}
+}
+
+// Status2string 템플릿함수는 status 값을 받아서 소문자를 반환한다.
+func Status2string(status string) string {
+	switch status {
+	case OMIT:
+		return "omit"
+	case CONFIRM:
+		return "confirm"
+	case WIP:
+		return "wip"
+	case READY:
+		return "ready"
+	case ASSIGN:
+		return "assign"
+	case OUT:
+		return "out"
+	case DONE:
+		return "done"
+	case HOLD:
+		return "hold"
+	case NONE:
+		return "none"
+	default:
+		return "none"
 	}
 }
 
@@ -382,12 +409,12 @@ func Framecal(in int, out int) string {
 	// DB의 초기값은 0이다.
 	// 기본적으로 회사에서 사용하는 시작 프레임은 1001이다.
 	if in <= 0 || out <= 0 {
-		return ""
+		return "0000"
 	}
 	if in > out {
-		return ""
+		return "0000"
 	}
-	return fmt.Sprintf("%d", out-in+1)
+	return fmt.Sprintf("%04d", out-in+1)
 }
 
 // Add 함수는 template안에서 두 수를 더한다.
