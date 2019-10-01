@@ -354,7 +354,7 @@ func CheckDdlinev2(t string) string {
 		t = strings.TrimLeft(t, "ddline3d:")
 	}
 	if !(MatchNormalTime.MatchString(t) || MatchShortTime.MatchString(t) || MatchFullTime.MatchString(t)) {
-		return "outline-secondary"
+		return "secondary"
 	}
 	// 1124을 시간형태로 바꾸고 7일안에 포함하는 형태인지 체크한다.
 	// 현재시간에서 체크할 시간을 뺀 수
@@ -364,7 +364,7 @@ func CheckDdlinev2(t string) string {
 	switch {
 	// 시간이 지나면 빈 문자열을 출력한다.
 	case offset < 0:
-		return "outline-secondary"
+		return "secondary"
 	// 7일 이전의 날짜라면 _this 문자를 반환한다.
 	case offset <= thisline.Hours():
 		return "danger"
@@ -373,7 +373,7 @@ func CheckDdlinev2(t string) string {
 		return "warning"
 	// 14일보다 크면 빈 문자열을 출력한다.
 	default:
-		return "outline-secondary"
+		return "secondary"
 	}
 }
 

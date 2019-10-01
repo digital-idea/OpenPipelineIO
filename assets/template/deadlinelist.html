@@ -1,6 +1,7 @@
 {{define "deadlinelist" }}
 
-<div class="text-right m-3">3D:
+<div class="text-right mr-3">
+	<span class="badge badge-light">3D:</span>
 	{{range .Ddline3d}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
 				searchword=ddline3d:{{.}}&
@@ -15,11 +16,12 @@
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
 				template={{$.SearchOption.Template}}&
-				task={{$.SearchOption.Task}}" class="btn btn-{{CheckDdlinev2 .}} btn-sm">{{ToShortTime .}}</a>
+				task={{$.SearchOption.Task}}" class="badge badge-{{CheckDdlinev2 .}}">{{ToShortTime .}}</a>
 	{{end}}
 </div>
 
-<div class="text-right m-3">2D:
+<div class="text-right mr-3">
+	<span class="badge badge-light">2D:</span>
 	{{range .Ddline2d}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
 				searchword=ddline2d:{{.}}&
@@ -34,7 +36,7 @@
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
 				template={{$.SearchOption.Template}}&
-				task={{$.SearchOption.Task}}" class="btn btn-{{CheckDdlinev2 .}} btn-sm">{{ToShortTime .}}</a>
+				task={{$.SearchOption.Task}}" class="badge badge-{{CheckDdlinev2 .}}">{{ToShortTime .}}</a>
 	{{end}}
 </div>
 
