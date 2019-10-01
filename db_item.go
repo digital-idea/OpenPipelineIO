@@ -495,6 +495,12 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline2d:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "ddline3d:") {
 			query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline3d:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "shottype:") {
+			query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: strings.TrimPrefix(word, "shottype:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "type:shot") {
+			query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
+		} else if strings.HasPrefix(word, "type:asset") {
+			query = append(query, bson.M{"type": "asset"})
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
 				for _, task := range TASKS {
@@ -539,14 +545,6 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				} else {
 					query = append(query, bson.M{})
 				}
-			case "shot", "Shot", "SHOT", "샷", "전샷", "전체샷":
-				query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
-			case "asset", "Asset", "ASSET", "assets", "ASSETS", "에셋", "texture", "텍스쳐":
-				query = append(query, bson.M{"type": "asset"})
-			case "2d", "2D":
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "2d", Options: "i"}})
-			case "3d", "3D":
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "3d", Options: "i"}})
 			case "전권":
 				query = append(query, bson.M{"tag": "1권"})
 				query = append(query, bson.M{"tag": "2권"})

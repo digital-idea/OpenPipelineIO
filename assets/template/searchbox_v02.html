@@ -87,10 +87,66 @@
         <div class="row pl-3 pr-3">
             <div class="col">
                 <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" onclick="selectmode()">선택모드</a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/2d">2D <span class="badge badge-light">{{.Searchnum.Shot2d}}</span></a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/3d">3D <span class="badge badge-light">{{.Searchnum.Shot3d}}</span></a>
-				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/shot">Shot <span class="badge badge-light">{{.Searchnum.Shot}}</span></a>
-				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="tag/{{.SearchOption.Project}}/asset">Asset <span class="badge badge-light">{{.Searchnum.Assets}}</span></a>
+				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+																				project={{.SearchOption.Project}}&
+																				searchword=shottype:2d&
+																				sortkey={{.SearchOption.Sortkey}}&
+																				assign={{.SearchOption.Assign}}&
+																				ready={{.SearchOption.Ready}}&
+																				wip={{.SearchOption.Wip}}&
+																				confirm={{.SearchOption.Confirm}}&
+																				done={{.SearchOption.Done}}&
+																				omit={{.SearchOption.Omit}}&
+																				hold={{.SearchOption.Hold}}&
+																				out={{.SearchOption.Out}}&
+																				none={{.SearchOption.None}}&
+																				template={{.SearchOption.Template}}&
+																				task={{.SearchOption.Task}}">2D <span class="badge badge-light">{{.Searchnum.Shot2d}}</span></a>
+                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+																				project={{.SearchOption.Project}}&
+																				searchword=shottype:3d&
+																				sortkey={{.SearchOption.Sortkey}}&
+																				assign={{.SearchOption.Assign}}&
+																				ready={{.SearchOption.Ready}}&
+																				wip={{.SearchOption.Wip}}&
+																				confirm={{.SearchOption.Confirm}}&
+																				done={{.SearchOption.Done}}&
+																				omit={{.SearchOption.Omit}}&
+																				hold={{.SearchOption.Hold}}&
+																				out={{.SearchOption.Out}}&
+																				none={{.SearchOption.None}}&
+																				template={{.SearchOption.Template}}&
+																				task={{.SearchOption.Task}}">3D <span class="badge badge-light">{{.Searchnum.Shot3d}}</span></a>
+				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+																				project={{.SearchOption.Project}}&
+																				searchword=type:shot&
+																				sortkey={{.SearchOption.Sortkey}}&
+																				assign={{.SearchOption.Assign}}&
+																				ready={{.SearchOption.Ready}}&
+																				wip={{.SearchOption.Wip}}&
+																				confirm={{.SearchOption.Confirm}}&
+																				done={{.SearchOption.Done}}&
+																				omit={{.SearchOption.Omit}}&
+																				hold={{.SearchOption.Hold}}&
+																				out={{.SearchOption.Out}}&
+																				none={{.SearchOption.None}}&
+																				template={{.SearchOption.Template}}&
+																				task={{.SearchOption.Task}}">Shot <span class="badge badge-light">{{.Searchnum.Shot}}</span></a>
+				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+																				project={{.SearchOption.Project}}&
+																				searchword=type:asset&
+																				sortkey={{.SearchOption.Sortkey}}&
+																				assign={{.SearchOption.Assign}}&
+																				ready={{.SearchOption.Ready}}&
+																				wip={{.SearchOption.Wip}}&
+																				confirm={{.SearchOption.Confirm}}&
+																				done={{.SearchOption.Done}}&
+																				omit={{.SearchOption.Omit}}&
+																				hold={{.SearchOption.Hold}}&
+																				out={{.SearchOption.Out}}&
+																				none={{.SearchOption.None}}&
+																				template={{.SearchOption.Template}}&
+																				task={{.SearchOption.Task}}">Asset <span class="badge badge-light">{{.Searchnum.Assets}}</span></a>
             </div>
 		</div>
 		<input type="hidden" name="Template" value="{{.SearchOption.Template}}">
