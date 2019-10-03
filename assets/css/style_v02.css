@@ -6,43 +6,43 @@
 	max-width: 160px;
 }
 
-.bg-assign, .bg-assign:hover {
+.bg-assign, .bg-assign:hover, .badge-assign {
     background-color: #FFF76B;
 }
 
-.bg-ready, .bg-ready:hover {
+.bg-ready, .bg-ready:hover, .badge-ready {
     background-color: #BEEF37;
 }
 
-.bg-wip, .bg-wip:hover {
+.bg-wip, .bg-wip:hover, .badge-wip {
     background-color: #77BB40;
 }
 
-.bg-confirm, .bg-confirm:hover {
+.bg-confirm, .bg-confirm:hover, .badge-confirm {
     background-color: #54D6FD;
 }
 
-.bg-none, .bg-none:hover {
+.bg-none, .bg-none:hover, .badge-none {
     background-color: #F0F1F0;
 }
 
-.bg-omit, .bg-omit:hover {
+.bg-omit, .bg-omit:hover, .badge-omit {
     background-color: #FC9F55;
 }
 
-.bg-hold, .bg-hold:hover {
+.bg-hold, .bg-hold:hover, .badge-hold {
     background-color: #989898;
 }
 
-.bg-out, .bg-out:hover {
+.bg-out, .bg-out:hover, .badge-out {
     background-color: #EEA4F1;
 }
 
-.bg-done, .bg-done:hover {
+.bg-done, .bg-done:hover, .badge-done {
     background-color: #CCCDCC;
 }
 
-.bg-retake, .bg-retake:hover {
+.bg-retake, .bg-retake:hover, .badge-retake {
     background-color: #FC8F55;
 }
 
@@ -55,7 +55,6 @@ input[type=checkbox]:checked+div{
 
 /*날짜가 검색되면 표시되는 색상*/
 .statusbox{
-	border:2px solid #555555;
 	color : #222222;
 	font-size: 7.5pt;
 	text-align: center;
@@ -88,3 +87,9 @@ input[type=checkbox]:checked+div{
 	text-indent: 0px;
     width: 45px;
 }
+
+.fit-image {
+	width: 100%;
+	object-fit: cover;
+}
+	

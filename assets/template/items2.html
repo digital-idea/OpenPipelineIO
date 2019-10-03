@@ -14,13 +14,13 @@
 		{{if .Rendersize}}<p>Render: {{.Rendersize}}</p>{{else}}{{if .Dsize}}<p>Render: {{.Dsize}}</p>{{end}}{{end}}
 		
 			{{if eq .Type "asset" -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">EDIT</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary">DIR</a>
+				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">E</a>
+				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary">F</a>
 			{{- else -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">EDIT</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary">DIR</a>
+				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">E</a>
+				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary">F</a>
 			{{- end}}
-			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary">LOGS</a>
+			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary">L</a>
 	</div>
 	<!--Thumbnail-->
 	<div class="col-2">
@@ -37,13 +37,13 @@
 			{{if .JustTimecodeIn}}<span class="badge badge-warning">{{.JustTimecodeIn}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
 			{{if .JustTimecodeOut}}<span class="badge badge-warning">{{.JustTimecodeOut}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
 		</div>
-		<div>
+		<div class="mx-auto">
 			{{if .Thummov}}
 				<a href="dilink://{{.Thummov}}">
 			{{else}}
 				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
 			{{end}}
-			<img class="thumbimg{{if .OCIOcc}}OCIOcc{{end}}" src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" align="middle"  style="width: 18rem;"></a>
+			<img class="thumbimg{{if .OCIOcc}}OCIOcc{{end}}" src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="img-responsive fit-image"></a>
 		</div>
 
 		<div class="row">
@@ -101,44 +101,70 @@
 			{{else}}
 				<span class="badge badge-light">SETELLITE</span>
 			{{end}}
+			<!--Update Time-->
+			{{if .Updatetime|CheckUpdate}}
+				<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
+			{{end}}
+			<!--Status-->
+			<span class="badge badge-{{Status2string .Status}}">{{Status2capString .Status}}</span>
+			<!--Fin Version-->
+			{{if eq .Status "2"}}
+				<span class="badge badge-light">
+					v{{.Finver}}
+					{{if .Findate}}
+						({{ToShortTime .Findate}})
+					{{end}}
+				</span>
+			{{end}}
 		</div>
 		
 	</div>
 
 
 	<!--Task-->
-	<div class="col-2">
-		<div class="row">
-			<div class="bg-{{Status2string .Status}} mx-auto w-100">
-				{{if .Updatetime|CheckUpdate}}<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>{{end}}
-				{{Status2capString .Status}}{{if eq .Status "2"}} / v{{.Finver}}{{if .Findate}}({{ToShortTime .Findate}}){{end}}{{end}}
-			</div>
-		</div>
-		<div class="row">
+	<div class="col-3">
+		
+		<div>
 			<!--concept-->
-			<div class="bg-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">
-				{{if eq .Type "asset" -}}
-					{{if eq .Concept.Mov "" -}}concept<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">concept ▶</a><br>{{- end}}
-					{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
-					{{if .Concept.Predate}}{{ToShortTime .Concept.Predate}}<br>{{end}}{{ToShortTime .Concept.Date}}
-				{{- else -}}
-					{{if eq .Concept.Mov "" -}}concept<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">concept ▶</a><br>{{- end}}
-					{{if eq .Concept.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Concept.User}}</a><br>{{- end}}
-					{{if .Concept.Predate}}{{ToShortTime .Concept.Predate}}<br>{{end}}{{ToShortTime .Concept.Date}}
-				{{- end}}
+			<div class="row">
+				<span class="badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">concept</span>
+				{{if .Concept.Predate}}
+					<span class="badge badge-light">{{ToShortTime .Concept.Predate}}</span>
+				{{end}}
+				<span class="badge badge-light">{{ToShortTime .Concept.Date}}</span>
+				<span class="badge badge-light">{{ .Concept.User }}</span>
+				{{if .Concept.Mov }}
+					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+				{{else}}
+					<span class="badge badge-light">M</span>
+				{{end}}
+				{{if eq .Type "asset" }}
+					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+				{{else}}
+					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+				{{end}}
 			</div>
+
 			<!--model-->
-			<div class="bg-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">
-				{{if eq .Type "asset" -}}
-					{{if eq .Model.Mov "" -}}model<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">model ▶</a><br>{{- end}}
-					{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
-					{{if .Model.Predate}}{{ToShortTime .Model.Predate}}<br>{{end}}{{ToShortTime .Model.Date}}
-				{{- else -}}
-					{{if eq .Model.Mov "" -}}model<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">model ▶</a><br>{{- end}}
-					{{if eq .Model.User "" -}}.<br>{{- else -}}<a href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">{{.Model.User}}</a><br>{{- end}}
-					{{if .Model.Predate}}{{ToShortTime .Model.Predate}}<br>{{end}}{{ToShortTime .Model.Date}}
-				{{- end}}
+			<div class="row">
+				<span class="badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">model</span>
+				{{if .Model.Predate}}
+					<span class="badge badge-light">{{ToShortTime .Model.Predate}}</span>
+				{{end}}
+				<span class="badge badge-light">{{ToShortTime .Model.Date}}</span>
+				<span class="badge badge-light">{{ .Model.User }}</span>
+				{{if .Model.Mov }}
+					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+				{{else}}
+					<span class="badge badge-light">M</span>
+				{{end}}
+				{{if eq .Type "asset" }}
+					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+				{{else}}
+					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+				{{end}}
 			</div>
+
 			<!--mm-->
 			<div class="bg-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}">
 				{{if eq .Mm.Mov "" -}}mm<br>{{- else -}}<a href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">mm ▶</a><br>{{- end}}
@@ -268,7 +294,7 @@
 		</div>
 	</div>
 	<!--작업내용-->
-	<div class="col-3">
+	<div class="col-2">
 		<div class="container">
 			<div class="subtitle">
 				<sub>작업내용:</sub>
@@ -286,8 +312,8 @@
 				{{end}}
 			</div>
 		</div>
-		<div class=historyOnsetnote>
-			{{range .Onsetnote | ReverseStringSlice -}}{{note2body .}}<br>{{- end}}
+		<div class="note">
+			{{ .Note.Text }}
 		</div>
 		<!--연결소스-->
 		<sub>연결소스: </sub><br>
