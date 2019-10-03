@@ -410,7 +410,6 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 		Item    Item
 	}
 	rcp := recipe{}
-	defer session.Close()
 	rcp.Project, err = getProject(session, project)
 	if err != nil {
 		log.Println(err)

@@ -49,6 +49,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	rcp.SearchOption.LoadCookie(r)
 	if rcp.SearchOption.Project != "" {
 		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)

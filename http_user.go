@@ -50,6 +50,7 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	rcp.User, err = getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -95,6 +96,7 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	rcp.Divisions, err = allDivisions(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -161,6 +163,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	id := r.FormValue("ID")
 	if id != ssid.ID {
 		if ssid.AccessLevel != 10 {
@@ -315,6 +318,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	rcp.Divisions, err = allDivisions(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -683,6 +687,7 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	rcp.User, err = getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -883,6 +888,7 @@ func handleReplaceTagSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	// Tags replace
 	err = ReplaceTags(session, src, dst)
 	if err != nil {
