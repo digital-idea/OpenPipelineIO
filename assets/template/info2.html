@@ -2,26 +2,26 @@
 <div class="">
     <div class="pl-2">
         {{if .Projectinfo.Message}}
-            공지 : {{.Projectinfo.Message}}
+            notice : {{.Projectinfo.Message}}
         {{end}}
     </div>
     <div class="pl-2">
         {{if .Projectinfo.Wiki}}
-            <a href="{{.Projectinfo.Wiki}}" class="badge badge-light">위키</a>
+            <a href="{{.Projectinfo.Wiki}}" class="badge badge-light">wiki</a>
         {{end}}
     
-        <a href="mailto:{{.Projectinfo.ID}}@{{.MailDNS}}?subject=[{{if .Projectinfo.MailHead -}}{{.Projectinfo.MailHead}}{{- else -}}{{.Projectinfo.ID}}{{- end}}]" class="badge badge-light">프로젝트 메일보내기</a>
+        <a href="mailto:{{.Projectinfo.ID}}@{{.MailDNS}}?subject=[{{if .Projectinfo.MailHead -}}{{.Projectinfo.MailHead}}{{- else -}}{{.Projectinfo.ID}}{{- end}}]" class="badge badge-light">mail to project</a>
 
         {{if .Projectinfo.Daily}}
-            <a href="dilink://{{.Projectinfo.Daily}}" class="badge badge-light">데일리폴더</a>
+            <a href="dilink://{{.Projectinfo.Daily}}" class="badge badge-light">daily</a>
         {{else}}
-            <a href="dilink:///show/{{.Projectinfo.ID}}/product/daily" class="badge badge-light">데일리폴더</a>
+            <a href="dilink:///show/{{.Projectinfo.ID}}/product/daily" class="badge badge-light">daily</a>
         {{end}}
         
         {{if .Projectinfo.Edit}}
-            <a href="dilink://{{.Projectinfo.Edit}}" class="badge badge-light">편집본폴더</a>
+            <a href="dilink://{{.Projectinfo.Edit}}" class="badge badge-light">edit</a>
         {{else}}
-            <a href="dilink:///show/{{.Projectinfo.ID}}/product/edit" class="badge badge-light">편집본폴더</a>
+            <a href="dilink:///show/{{.Projectinfo.ID}}/product/edit" class="badge badge-light">edit</a>
         {{end}}
     </div>
 </div>

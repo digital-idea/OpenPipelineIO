@@ -5,22 +5,45 @@
 <div class="row">
 	<div class="col-1">
 		{{if .Rnum}}{{.Rnum}}{{end}}
-		<a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}">{{.Name}}</a> {{.Type}}<br>
-		{{if eq .Type "asset"}}{{.Assettype}}{{else}}{{.Shottype}}{{end}}<br>
-		3D마감: {{ToShortTime .Ddline3d}}<br>
-		2D마감: {{ToShortTime .Ddline2d}}<br>
-		Scansize: {{.Platesize}}<br>
-		{{if .Dsize}}<p>Undistort: {{.Dsize}}</p>{{end}}
-		{{if .Rendersize}}<p>Render: {{.Rendersize}}</p>{{else}}{{if .Dsize}}<p>Render: {{.Dsize}}</p>{{end}}{{end}}
+		<a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}">{{.Name}}</a>
+		<div class="row">
+			{{if eq .Type "asset"}}
+				<span class="badge badge-light">{{.Assettype}}</span>
+			{{else}}
+				<span class="badge badge-light">{{.Type}}</span>
+				<span class="badge badge-light">{{.Shottype}}</span>
+			{{end}}
+		</div>
 		
+		<div class="row">
+			<span class="badge badge-light">3D</span><span class="badge badge-secondary">{{ToShortTime .Ddline3d}}</span>
+		</div>
+		<div class="row">
+			<span class="badge badge-light">2D</span><span class="badge badge-secondary">{{ToShortTime .Ddline2d}}</span>
+		</div>
+		<div class="row">
+			<span class="badge badge-light">S</span>
+			<span class="badge badge-light">{{.Platesize}}</span>
+		</div>
+		<div class="row">
+			<span class="badge badge-light">U</span>
+			<span class="badge badge-light">{{.Dsize}}</span>
+		</div>
+		<div class="row">
+			<span class="badge badge-light">R</span>
+			<span class="badge badge-light">{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+		</div>
+		
+		<div class="row">
 			{{if eq .Type "asset" -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">E</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary">F</a>
+				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
 			{{- else -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger">E</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary">F</a>
+				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
 			{{- end}}
-			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary">L</a>
+			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary ml-1">Log</a>
+		</div>
 	</div>
 	<!--Thumbnail-->
 	<div class="col-2">
@@ -115,6 +138,20 @@
 						({{ToShortTime .Findate}})
 					{{end}}
 				</span>
+			{{end}}
+			<!--OCIOcc-->
+			{{if .OCIOcc}}
+				<span class="badge badge-info">OCIOcc</span>
+			{{else}}
+				<span class="badge badge-light">OCIOcc</span>
+			{{end}}
+
+			{{if .ProductionCam.PubTask}}
+				<span class="badge badge-info">{{.ProductionCam.PubTask}}</span>
+			{{end}}
+			
+			{{if .ProductionCam.PubPath}}
+				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-waring">campath</a>
 			{{end}}
 		</div>
 		
@@ -405,41 +442,28 @@
 			</div>
 		</div>
 	</div>
-	<!--작업내용-->
+	<!--작업내용 & Source-->
 	<div class="col-2">
-		<div class="container">
-			<div class="subtitle">
-				<sub>작업내용:</sub>
-			</div>
-			<div class="info">
-				{{if .ProductionCam.PubTask}}
-					<div class="camPub">
-					<div class="head"><img src="/assets/img/video.svg" alt="cam" title="카메라 퍼블리시 정보"></div>
-					<div title="카메라 퍼블리시 태스크">{{.ProductionCam.PubTask}}</div>
-					
-					{{if .ProductionCam.PubPath}}
-						<div><a href="dilink://{{.ProductionCam.PubPath}}"><img src="/assets/img/folder-open_regular.svg" alt="openPath" title="카메라 퍼블리시 경로 링크"></a></div>
-					{{end}}
-					</div>
-				{{end}}
-			</div>
-		</div>
+		<!--작업내용-->
+		<span class="badge badge-light">Note</span>
 		<div class="note">
 			{{ .Note.Text }}
 		</div>
 		<!--연결소스-->
-		<sub>연결소스: </sub><br>
-		{{range .Link | ReverseStringSlice }}
-			{{.|note2body|RemovePath}}<a class="reflink" href="dilink://{{.|note2body|GetPath}}">{{.|note2body|GetPath}}</a><br>
+		<span class="badge badge-light">Source</span>
+		{{range .Links}}
+			<a  href="dilink://{{.Path}}" class="badge badge-light" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
 		{{- end}}		
 	</div>
 
 	<!--수정사항-->
 	<div class="col-3">
-		{{range .Pmnote | ReverseStringSlice -}}
-			<span>{{pmnote2body .}}</span>
+		{{range .Comments}}
+			<span class="badge badge-light">{{.Date}}</span>
+			<span class="badge badge-light">{{.Author}}</span>
+			{{.Text}}
 			<hr size="1" noshade class="p-0 m-0">
-		{{- end}}
+		{{end}}
 	</div>
 	<!--Tags-->
 	<div class="col-1">
