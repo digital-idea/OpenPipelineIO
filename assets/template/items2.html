@@ -48,15 +48,6 @@
 	<!--Thumbnail-->
 	<div class="col-2">
 		<div class="row">
-			{{if .Scanname}}<span class="badge badge-light" title="scanname">{{.Scanname}}</span>{{else}}<span class="badge badge-light" title="scanname">no scan name</span>{{end}}
-			{{if .ScanFrame}}<span class="badge badge-warning" title="scanframe">{{.ScanFrame}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-
-			<!--스캔키코드 표기-->
-			{{if .ScanTimecodeIn}}<span class="badge badge-warning">{{.ScanTimecodeIn}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
-			{{if .ScanTimecodeOut}}<span class="badge badge-warning">{{.ScanTimecodeOut}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
-			{{if .Scantime}}<span class="badge badge-light" title="scanframe">{{.Scantime}}</span>{{end}}
-		</div>
-		<div class="row">
 			{{if .JustTimecodeIn}}<span class="badge badge-warning">{{.JustTimecodeIn}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
 			{{if .JustTimecodeOut}}<span class="badge badge-warning">{{.JustTimecodeOut}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
 		</div>
@@ -449,15 +440,45 @@
 	<!--작업내용 & Source-->
 	<div class="col-2">
 		<!--작업내용-->
-		<span class="badge badge-light">Note</span>
-		<div class="note">
+		<div class="row">
+			<span class="badge badge-light">Note</span>
+		</div>
+		<div class="row">
 			{{ .Note.Text }}
 		</div>
 		<!--연결소스-->
-		<span class="badge badge-light">Source</span>
-		{{range .Links}}
-			<a  href="dilink://{{.Path}}" class="badge badge-light" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
-		{{- end}}		
+		<div class="row">
+			<span class="badge badge-light">Source</span>
+		</div>
+		
+		<div class="row">
+			{{range .Links}}
+				<a  href="dilink://{{.Path}}" class="badge badge-light" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
+			{{- end}}
+		</div>
+		
+		<!--Scaninfo-->
+		<div class="row">
+			<span class="badge badge-light">ScanInfo:</span>
+		</div>
+		<div class="row">
+			
+			{{if .Scanname}}
+				<span class="badge badge-light" title="scanname">{{.Scanname}}</span>
+			{{end}}
+			{{if .ScanFrame}}
+				<span class="badge badge-warning" title="scanframe">{{.ScanFrame}} f</span>
+			{{end}}
+			{{if .ScanTimecodeIn}}
+				<span class="badge badge-warning">{{.ScanTimecodeIn}}</span>
+			{{end}}
+			{{if .ScanTimecodeOut}}
+				<span class="badge badge-warning">{{.ScanTimecodeOut}}</span>{{end}}
+			{{if .Scantime}}
+				<span class="badge badge-light" title="scanframe">{{.Scantime}}</span>
+			{{end}}
+		</div>
+
 	</div>
 
 	<!--수정사항-->
