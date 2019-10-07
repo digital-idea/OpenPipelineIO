@@ -98,6 +98,8 @@ input[type=checkbox]:checked+div{
 	position: relative;
 	text-align: center;
 	color: white;
+	width: 100%;
+	object-fit: cover;
 }
 
 /* Bottom left text */
@@ -119,7 +121,7 @@ input[type=checkbox]:checked+div{
 	position: absolute;
 	top: 8px;
 	right: 24px;
-	font-size: 12px;
+	font-size: 13px;
 }
   
 /* Bottom right text */
@@ -127,4 +129,39 @@ input[type=checkbox]:checked+div{
 	position: absolute;
 	bottom: 8px;
 	right: 16px;
+}
+
+.centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.centered-top {
+	position: absolute;
+	top: 8px;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+.centered-bottom {
+	position: absolute;
+	bottom: 8px;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+.centered-left {
+	position: absolute;
+	top: 50%;
+	left: 16px;
+	transform: translate(0px, -50%);
+}
+
+.centered-right {
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	transform: translate(-50%, -50%);
 }
