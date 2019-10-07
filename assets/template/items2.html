@@ -3,9 +3,14 @@
 {{range .Items}}
 <div class="pt-1"></div>
 <div class="row">
-	<div class="col-1">
-		{{if .Rnum}}{{.Rnum}}{{end}}
-		<a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}">{{.Name}}</a>
+	
+	<div class="col-2">
+		<div class="row">
+			<h5>
+				<a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}">{{.Name}}</a>
+				{{if .Rnum}}{{.Rnum}}{{end}}
+			</h5>
+		</div>
 		<div class="row">
 			{{if eq .Type "asset"}}
 				<span class="badge badge-light">{{.Assettype}}</span>
@@ -14,25 +19,14 @@
 				<span class="badge badge-light">{{.Shottype}}</span>
 			{{end}}
 		</div>
-		
+
 		<div class="row">
 			<span class="badge badge-light">3D</span><span class="badge badge-secondary">{{ToShortTime .Ddline3d}}</span>
 		</div>
 		<div class="row">
 			<span class="badge badge-light">2D</span><span class="badge badge-secondary">{{ToShortTime .Ddline2d}}</span>
 		</div>
-		<div class="row">
-			<span class="badge badge-light">S</span>
-			<span class="badge badge-light">{{.Platesize}}</span>
-		</div>
-		<div class="row">
-			<span class="badge badge-light">U</span>
-			<span class="badge badge-light">{{.Dsize}}</span>
-		</div>
-		<div class="row">
-			<span class="badge badge-light">R</span>
-			<span class="badge badge-light">{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
-		</div>
+		
 		
 		<div class="row">
 			{{if eq .Type "asset" -}}
@@ -44,20 +38,43 @@
 			{{- end}}
 			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary ml-1">Log</a>
 		</div>
-	</div>
-	<!--Thumbnail-->
-	<div class="col-2">
+	
+
+		
+				
+		<!--Thumbnail-->
+		<div class="row">
+			
+			
+				
+				
+			<div class="thumbnail">
+				{{if .Thummov}}
+					<a href="dilink://{{.Thummov}}">
+				{{else}}
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
+				{{end}}
+				<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" style="width:100%;">
+				</a>
+				<div class="bottom-left">Bottom Left</div>
+				<div class="top-left">Top Left</div>
+				<div class="top-right">
+					<div class="row">
+						S: {{.Platesize}}
+					</div>
+					<div class="row">
+						U: {{.Dsize}}
+					</div>
+					<div class="row">
+						R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}
+					</div>
+				</div>
+				<div class="bottom-right">Bottom Right</div>
+			</div>
+		</div>
 		<div class="row">
 			{{if .JustTimecodeIn}}<span class="badge badge-warning">{{.JustTimecodeIn}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
 			{{if .JustTimecodeOut}}<span class="badge badge-warning">{{.JustTimecodeOut}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
-		</div>
-		<div class="row">
-			{{if .Thummov}}
-				<a href="dilink://{{.Thummov}}">
-			{{else}}
-				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
-			{{end}}
-			<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="img-responsive fit-image"></a>
 		</div>
 
 		<div class="row">
@@ -438,7 +455,7 @@
 		</div>
 	</div>
 	<!--작업내용 & Source-->
-	<div class="col-2">
+	<div class="col-3">
 		<!--작업내용-->
 		<div class="row">
 			<span class="badge badge-light">Note</span>

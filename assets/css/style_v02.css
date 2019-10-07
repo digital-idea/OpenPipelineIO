@@ -92,4 +92,39 @@ input[type=checkbox]:checked+div{
 	width: 100%;
 	object-fit: cover;
 }
-	
+
+/* thumbnail */
+.thumbnail {
+	position: relative;
+	text-align: center;
+	color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+	position: absolute;
+	bottom: 8px;
+	left: 16px;
+}
+  
+/* Top left text */
+.top-left {
+	position: absolute;
+	top: 8px;
+	left: 16px;
+}
+  
+/* Top right text */
+.top-right {
+	position: absolute;
+	top: 8px;
+	right: 24px;
+	font-size: 12px;
+}
+  
+/* Bottom right text */
+.bottom-right {
+	position: absolute;
+	bottom: 8px;
+	right: 16px;
+}
