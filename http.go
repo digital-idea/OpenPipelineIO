@@ -25,6 +25,7 @@ func LoadTemplates() (*template.Template, error) {
 //템플릿 함수를 로딩합니다.
 var funcMap = template.FuncMap{
 	"title":               strings.Title,
+	"Split":               strings.Split,
 	"itemStatus2color":    itemStatus2color,
 	"projectStatus2color": projectStatus2color,
 	"Status2capString":    Status2capString, // regacy

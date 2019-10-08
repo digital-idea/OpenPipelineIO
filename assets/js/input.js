@@ -1,3 +1,11 @@
+function sleep( millisecondsToWait ) {
+    var now = new Date().getTime();
+    while ( new Date().getTime() < now + millisecondsToWait ) {
+        /* do nothing; this will exit once it reaches the time limit */
+        /* if you want you could do something and exit */
+    }
+}
+
 
 
 function setAssignTask(project, name, task, status, token) {
@@ -119,6 +127,7 @@ function setJustTimecodeOut(project, name, timecode, token) {
 
 function addNote(project, name, text, token) {
     // 레거시 코드
+    sleep(200);
     $.ajax({
         url: "/api/addnote",
         type: "post",
@@ -132,10 +141,11 @@ function addNote(project, name, text, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            // console.info(data)
         }
     });
     // 다음 사용될 API
+    sleep(200);
     $.ajax({
         url: "/api/setnote",
         type: "post",
@@ -149,7 +159,7 @@ function addNote(project, name, text, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            // console.info(data)
         }
     });
 }
@@ -162,6 +172,7 @@ function addNotes(project, text, token) {
         }
         name = cboxes[i].getAttribute("id")
         // 레거시 API
+        sleep(200);
         $.ajax({
             url: "/api/addnote",
             type: "post",
@@ -175,10 +186,11 @@ function addNotes(project, text, token) {
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                // console.info(data)
             }
         });
         // 다음 사용될 API
+        sleep(200);
         $.ajax({
             url: "/api/setnote",
             type: "post",
@@ -192,7 +204,7 @@ function addNotes(project, text, token) {
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                // console.info(data)
             }
         });
     }

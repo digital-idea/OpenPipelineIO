@@ -11,7 +11,7 @@
 }
 
 .border-assign {
-	border:2px solid #FFF76B;
+	outline:4px solid #FFF76B;
 }
 
 .bg-ready, .bg-ready:hover, .badge-ready {
@@ -19,7 +19,7 @@
 }
 
 .border-ready {
-	border:2px solid #BEEF37;
+	outline:4px solid #BEEF37;
 }
 
 .bg-wip, .bg-wip:hover, .badge-wip {
@@ -27,7 +27,7 @@
 }
 
 .border-wip {
-	border:2px solid #77BB40;
+	outline:4px solid #77BB40;
 }
 
 
@@ -36,7 +36,7 @@
 }
 
 .border-confirm {
-	border:2px solid #54D6FD;
+	outline:4px solid #54D6FD;
 }
 
 .bg-none, .bg-none:hover, .badge-none {
@@ -44,7 +44,7 @@
 }
 
 .border-none {
-	border:2px solid #F0F1F0;
+	outline:4px solid #F0F1F0;
 }
 
 .bg-omit, .bg-omit:hover, .badge-omit {
@@ -52,7 +52,7 @@
 }
 
 .border-omit {
-	border:2px solid #FC9F55;
+	outline:4px solid #FC9F55;
 }
 
 .bg-hold, .bg-hold:hover, .badge-hold {
@@ -60,7 +60,7 @@
 }
 
 .border-omit {
-	border:2px solid #989898;
+	outline:4px solid #989898;
 }
 
 .bg-out, .bg-out:hover, .badge-out {
@@ -68,7 +68,7 @@
 }
 
 .border-out {
-	border:2px solid #EEA4F1;
+	outline:4px solid #EEA4F1;
 }
 
 .bg-done, .bg-done:hover, .badge-done {
@@ -76,7 +76,7 @@
 }
 
 .border-out {
-	border:2px solid #CCCDCC;
+	outline:4px solid #CCCDCC;
 }
 
 .bg-retake, .bg-retake:hover, .badge-retake {
@@ -84,7 +84,7 @@
 }
 
 .border-retake {
-	border:2px solid #FC8F55;
+	outline:4px solid #FC8F55;
 }
 
 

@@ -6,7 +6,7 @@
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		<!--Thumbnail-->
 		<div class="row">
-			<div class="thumbnailbox">
+			<div class="thumbnailbox ml-1">
 				{{if .Thummov}}
 					<a href="dilink://{{.Thummov}}">
 				{{else}}
@@ -18,12 +18,16 @@
 					<div class="row">
 						<span class="black-opbg">{{.Rnum}}</span>
 					</div>
-					<div class="row">
-						<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>
-					</div>
-					<div class="row">
-						<span class="black-opbg">2D:{{ToShortTime .Ddline2d}}</span>
-					</div>
+					{{if .Ddline3d}}
+						<div class="row">
+							<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>
+						</div>
+					{{end}}
+					{{if .Ddline2d}}
+						<div class="row">
+							<span class="black-opbg">2D:{{ToShortTime .Ddline2d}}</span>
+						</div>
+					{{end}}
 				</div>
 				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}" class="text-white black-opbg">{{.Name}}</a></div>
 				<div class="top-right">
@@ -538,13 +542,57 @@
 	</div>
 	<!--작업내용 & Source-->
 	<div class="col-sm-12 col-md-12 col-lg-3">
+		<!--Tags-->
+		<div class="row">
+			<span class="badge badge-light">Tags:</span>
+			{{if eq .Type "asset"}}
+				{{range .Assettags}}
+					<a href="/inputmode?project={{$.SearchOption.Project}}&
+						searchword=assettags:{{.}}&
+						sortkey={{$.SearchOption.Sortkey}}&
+						sortkey={{$.SearchOption.Sortkey}}&
+						assign={{$.SearchOption.Assign}}&
+						ready={{$.SearchOption.Ready}}&
+						wip={{$.SearchOption.Wip}}&
+						confirm={{$.SearchOption.Confirm}}&
+						done={{$.SearchOption.Done}}&
+						omit={{$.SearchOption.Omit}}&
+						hold={{$.SearchOption.Hold}}&
+						out={{$.SearchOption.Out}}&
+						none={{$.SearchOption.None}}&
+						template={{$.SearchOption.Template}}&
+						task={{$.SearchOption.Task}}" class="badge badge-light">{{.}}</a>
+				{{- end}}
+			{{end}}
+			{{range .Tag}}
+				<a href="/inputmode?project={{$.SearchOption.Project}}&
+					searchword=tag:{{.}}&
+					sortkey={{$.SearchOption.Sortkey}}&
+					sortkey={{$.SearchOption.Sortkey}}&
+					assign={{$.SearchOption.Assign}}&
+					ready={{$.SearchOption.Ready}}&
+					wip={{$.SearchOption.Wip}}&
+					confirm={{$.SearchOption.Confirm}}&
+					done={{$.SearchOption.Done}}&
+					omit={{$.SearchOption.Omit}}&
+					hold={{$.SearchOption.Hold}}&
+					out={{$.SearchOption.Out}}&
+					none={{$.SearchOption.None}}&
+					template={{$.SearchOption.Template}}&
+					task={{$.SearchOption.Task}}" class="badge badge-light">{{.}}</a>
+			{{end}}
+		</div>
 		<!--작업내용-->
 		<div class="row">
 			<span class="badge badge-light">Note:</span>
 		</div>
-		<div class="row">
-			{{ .Note.Text }}
+		<div class="ml-1">
+			{{range Split .Note.Text "\n"}}
+				{{.}}<br>
+			{{end}}
 		</div>
+		
+		
 		<!--Katana ObjectID-->
 		{{if and .ObjectidIn .ObjectidOut}}
 		<div class="row">
@@ -569,7 +617,7 @@
 		
 		<!--연결소스-->
 		<div class="row">
-			<span class="badge badge-light">Source</span>
+			<span class="badge badge-light">Source:</span>
 		</div>
 		
 		<div class="row">
@@ -597,7 +645,7 @@
 	</div>
 
 	<!--수정사항-->
-	<div class="col-sm-12 col-md-12 col-lg-3">
+	<div class="col-sm-12 col-md-12 col-lg-4">
 		{{range .Comments}}
 			<span class="badge badge-light">{{.Date}}</span>
 			<span class="badge badge-light">{{.Author}}</span>
@@ -605,46 +653,8 @@
 			<hr size="1" noshade class="p-0 m-0">
 		{{end}}
 	</div>
-	<!--Tags-->
-	<div class="col-sm-12 col-md-12 col-lg-1">
-		{{if eq .Type "asset"}}
-			{{range .Assettags}}
-				<a href="/inputmode?project={{$.SearchOption.Project}}&
-					searchword=assettags:{{.}}&
-					sortkey={{$.SearchOption.Sortkey}}&
-					sortkey={{$.SearchOption.Sortkey}}&
-					assign={{$.SearchOption.Assign}}&
-					ready={{$.SearchOption.Ready}}&
-					wip={{$.SearchOption.Wip}}&
-					confirm={{$.SearchOption.Confirm}}&
-					done={{$.SearchOption.Done}}&
-					omit={{$.SearchOption.Omit}}&
-					hold={{$.SearchOption.Hold}}&
-					out={{$.SearchOption.Out}}&
-					none={{$.SearchOption.None}}&
-					template={{$.SearchOption.Template}}&
-					task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
-			{{- end}}
-		{{end}}
-		{{range .Tag}}
-			<a href="/inputmode?project={{$.SearchOption.Project}}&
-				searchword=tag:{{.}}&
-				sortkey={{$.SearchOption.Sortkey}}&
-				sortkey={{$.SearchOption.Sortkey}}&
-				assign={{$.SearchOption.Assign}}&
-				ready={{$.SearchOption.Ready}}&
-				wip={{$.SearchOption.Wip}}&
-				confirm={{$.SearchOption.Confirm}}&
-				done={{$.SearchOption.Done}}&
-				omit={{$.SearchOption.Omit}}&
-				hold={{$.SearchOption.Hold}}&
-				out={{$.SearchOption.Out}}&
-				none={{$.SearchOption.None}}&
-				template={{$.SearchOption.Template}}&
-				task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
-		{{end}}
-	</div>
 </div>
+<hr>
 {{end}}
 </div>
 
