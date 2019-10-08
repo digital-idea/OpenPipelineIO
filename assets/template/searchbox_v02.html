@@ -42,7 +42,7 @@
 					</select>
 				</div>
 				<div class="input-group-append">
-					<button class="btn btn-secondary" id="button">
+					<button class="btn btn-darkmode" id="button">
 						Search
 						{{if .Searchnum.Search}}
 							<span class="badge badge-light">{{.Searchnum.Search}}</span>
@@ -212,8 +212,8 @@
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" onclick="selectmode()">선택모드</a>
-				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+                <a class="btn btn-sm btn-outline-light mb-2 text-light" onclick="selectmode()">선택모드</a>
+				<a class="btn btn-sm btn-outline-light mb-2 text-light" href="/inputmode?
 																				project={{.SearchOption.Project}}&
 																				searchword=shottype:2d&
 																				sortkey={{.SearchOption.Sortkey}}&
@@ -228,7 +228,7 @@
 																				none={{.SearchOption.None}}&
 																				template={{.SearchOption.Template}}&
 																				task={{.SearchOption.Task}}">2D <span class="badge badge-light">{{.Searchnum.Shot2d}}</span></a>
-                <a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+                <a class="btn btn-sm btn-outline-light mb-2 text-light" href="/inputmode?
 																				project={{.SearchOption.Project}}&
 																				searchword=shottype:3d&
 																				sortkey={{.SearchOption.Sortkey}}&
@@ -243,7 +243,7 @@
 																				none={{.SearchOption.None}}&
 																				template={{.SearchOption.Template}}&
 																				task={{.SearchOption.Task}}">3D <span class="badge badge-light">{{.Searchnum.Shot3d}}</span></a>
-				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+				<a class="btn btn-sm btn-outline-light mb-2 text-light" href="/inputmode?
 																				project={{.SearchOption.Project}}&
 																				searchword=type:shot&
 																				sortkey={{.SearchOption.Sortkey}}&
@@ -258,7 +258,7 @@
 																				none={{.SearchOption.None}}&
 																				template={{.SearchOption.Template}}&
 																				task={{.SearchOption.Task}}">Shot <span class="badge badge-light">{{.Searchnum.Shot}}</span></a>
-				<a class="btn btn-sm btn-outline-secondary mb-2 text-dark" href="/inputmode?
+				<a class="btn btn-sm btn-outline-light mb-2 text-light" href="/inputmode?
 																				project={{.SearchOption.Project}}&
 																				searchword=type:asset&
 																				sortkey={{.SearchOption.Sortkey}}&
@@ -282,12 +282,14 @@
 
 
 <div class="p-0">
-	<div class="progress">
-		<div class="progress-bar bg-secondary" role="progressbar" style="width: {{.Totalnum.Percent}}%;" aria-valuenow="{{.Totalnum.Percent}}" aria-valuemin="0" aria-valuemax="100">
-			{{$totalExceptNone := Minus .Totalnum.Total .Totalnum.None }}
-			{{.Totalnum.Percent}}% ({{Add .Totalnum.Done .Totalnum.Hold}} / {{Minus $totalExceptNone .Totalnum.Omit}})
-		</div>
-	</div>			
+	<div class="text-light">
+		{{$totalExceptNone := Minus .Totalnum.Total .Totalnum.None }}
+		{{.Totalnum.Percent}}% ({{Add .Totalnum.Done .Totalnum.Hold}} / {{Minus $totalExceptNone .Totalnum.Omit}})
+	</div>
+		
+	<div class="progress" style="height: 1px;">
+		<div class="progress-bar bg-warning" role="progressbar" style="width: {{.Totalnum.Percent}}%;" aria-valuenow="{{.Totalnum.Percent}}" aria-valuemin="0" aria-valuemax="100"></div>
+	</div>		
 </div>
 
 {{end}}

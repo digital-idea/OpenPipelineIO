@@ -1,7 +1,7 @@
 {{define "taglist" }}
 
 <div class="text-right mb-1 mr-3">
-	<span class="badge badge-light">Asset tags:</span>
+	<span class="badge badge-dark">Asset tags:</span>
 	{{range .Assettags}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
 				searchword=assettags:{{.}}&
@@ -56,7 +56,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="btn btn-outline-secondary btn-sm m-1">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="btn btn-outline-light btn-sm m-1">{{.}}</a>
 			{{end}}
 		{{end}}
 	{{end}}

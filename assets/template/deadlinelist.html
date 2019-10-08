@@ -1,7 +1,7 @@
 {{define "deadlinelist" }}
 
 <div class="text-right mr-3">
-	<span class="badge badge-light">3D:</span>
+	<span class="badge badge-dark">3D:</span>
 	{{range .Ddline3d}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
 				searchword=ddline3d:{{.}}&
@@ -21,7 +21,7 @@
 </div>
 
 <div class="text-right mr-3">
-	<span class="badge badge-light">2D:</span>
+	<span class="badge badge-dark">2D:</span>
 	{{range .Ddline2d}}
 		<a href="/inputmode?project={{$.SearchOption.Project}}&
 				searchword=ddline2d:{{.}}&

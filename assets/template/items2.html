@@ -179,7 +179,7 @@
 
 
 	<!--Task-->
-	<div class="col-sm-12 col-md-6 col-lg-3">
+	<div class="col-sm-12 col-md-6 col-lg-2">
 		
 		<div class="ml-1">
 			{{if .Rollmedia}}
@@ -541,10 +541,10 @@
 		</div>
 	</div>
 	<!--작업내용 & Source-->
-	<div class="col-sm-12 col-md-12 col-lg-3">
+	<div class="col-sm-12 col-md-12 col-lg-4">
 		<!--Tags-->
 		<div class="row">
-			<span class="badge badge-light">Tags:</span>
+			<span class="badge badge-dark">Tags:</span>
 			{{if eq .Type "asset"}}
 				{{range .Assettags}}
 					<a href="/inputmode?project={{$.SearchOption.Project}}&
@@ -561,7 +561,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="badge badge-light">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
 				{{- end}}
 			{{end}}
 			{{range .Tag}}
@@ -579,14 +579,14 @@
 					out={{$.SearchOption.Out}}&
 					none={{$.SearchOption.None}}&
 					template={{$.SearchOption.Template}}&
-					task={{$.SearchOption.Task}}" class="badge badge-light">{{.}}</a>
+					task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
 			{{end}}
 		</div>
 		<!--작업내용-->
 		<div class="row">
-			<span class="badge badge-light">Note:</span>
+			<span class="badge badge-dark">Note:</span>
 		</div>
-		<div class="ml-1">
+		<div class="ml-1 text-light">
 			{{range Split .Note.Text "\n"}}
 				{{.}}<br>
 			{{end}}
@@ -601,7 +601,7 @@
 		{{end}}
 		<!--ProductionCam-->
 		<div class="row">
-			<span class="badge badge-light">CamInfo:</span>
+			<span class="badge badge-dark">CamInfo:</span>
 			{{if .ProductionCam.Projection}}
 				<span class="badge badge-info">Projection</span>
 			{{end}}
@@ -617,18 +617,18 @@
 		
 		<!--연결소스-->
 		<div class="row">
-			<span class="badge badge-light">Source:</span>
+			<span class="badge badge-dark">Source:</span>
 		</div>
 		
 		<div class="row">
 			{{range .Links}}
-				<a  href="dilink://{{.Path}}" class="badge badge-light" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
+				<a  href="dilink://{{.Path}}" class="badge badge-secondary" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
 			{{- end}}
 		</div>
 		
 		<!--Scaninfo-->
 		<div class="row">
-			<span class="badge badge-light">ScanInfo:</span>		
+			<span class="badge badge-dark">ScanInfo:</span>		
 			{{if .Scanname}}
 				<span class="badge badge-light" title="scanname">{{.Scanname}}</span>
 			{{end}}
