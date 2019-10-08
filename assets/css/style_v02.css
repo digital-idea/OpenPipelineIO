@@ -10,41 +10,83 @@
     background-color: #FFF76B;
 }
 
+.border-assign {
+	border:2px solid #FFF76B;
+}
+
 .bg-ready, .bg-ready:hover, .badge-ready {
     background-color: #BEEF37;
+}
+
+.border-ready {
+	border:2px solid #BEEF37;
 }
 
 .bg-wip, .bg-wip:hover, .badge-wip {
     background-color: #77BB40;
 }
 
+.border-wip {
+	border:2px solid #77BB40;
+}
+
+
 .bg-confirm, .bg-confirm:hover, .badge-confirm {
     background-color: #54D6FD;
+}
+
+.border-confirm {
+	border:2px solid #54D6FD;
 }
 
 .bg-none, .bg-none:hover, .badge-none {
     background-color: #F0F1F0;
 }
 
+.border-none {
+	border:2px solid #F0F1F0;
+}
+
 .bg-omit, .bg-omit:hover, .badge-omit {
     background-color: #FC9F55;
+}
+
+.border-omit {
+	border:2px solid #FC9F55;
 }
 
 .bg-hold, .bg-hold:hover, .badge-hold {
     background-color: #989898;
 }
 
+.border-omit {
+	border:2px solid #989898;
+}
+
 .bg-out, .bg-out:hover, .badge-out {
     background-color: #EEA4F1;
+}
+
+.border-out {
+	border:2px solid #EEA4F1;
 }
 
 .bg-done, .bg-done:hover, .badge-done {
     background-color: #CCCDCC;
 }
 
+.border-out {
+	border:2px solid #CCCDCC;
+}
+
 .bg-retake, .bg-retake:hover, .badge-retake {
     background-color: #FC8F55;
 }
+
+.border-retake {
+	border:2px solid #FC8F55;
+}
+
 
 input[type=checkbox]:checked+div{
     background-color: rgb(249, 234, 210);
@@ -93,27 +135,24 @@ input[type=checkbox]:checked+div{
 	object-fit: cover;
 }
 
-/* thumbnail */
 .thumbnail {
+	width: 100%;
+}
+
+/* thumbnailbox */
+.thumbnailbox {
 	position: relative;
 	text-align: center;
 	color: white;
 	width: 100%;
 	object-fit: cover;
 }
-
-/* Bottom left text */
-.bottom-left {
-	position: absolute;
-	bottom: 4px;
-	left: 16px;
-}
   
 /* Top left text */
 .top-left {
 	position: absolute;
 	top: 4px;
-	left: 8px;
+	left: 22px;
 	font-size: 13px;
 }
 
@@ -125,7 +164,15 @@ input[type=checkbox]:checked+div{
 .top-right {
 	position: absolute;
 	top: 4px;
-	right: 16px;
+	right: 18px;
+	font-size: 13px;
+}
+
+/* Bottom left text */
+.bottom-left {
+	position: absolute;
+	bottom: 4px;
+	left: 20px;
 	font-size: 13px;
 }
   
@@ -133,7 +180,8 @@ input[type=checkbox]:checked+div{
 .bottom-right {
 	position: absolute;
 	bottom: 4px;
-	right: 8px;
+	right: 20px;
+	font-size: 13px;
 }
 
 .centered {
@@ -168,6 +216,6 @@ input[type=checkbox]:checked+div{
 .centered-right {
 	position: absolute;
 	top: 50%;
-	right: 4px;
+	right: 6px;
 	transform: translate(0, -50%);
 }

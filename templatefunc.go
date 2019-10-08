@@ -409,12 +409,12 @@ func Framecal(in int, out int) string {
 	// DB의 초기값은 0이다.
 	// 기본적으로 회사에서 사용하는 시작 프레임은 1001이다.
 	if in <= 0 || out <= 0 {
-		return "0000"
+		return ""
 	}
 	if in > out {
-		return "0000"
+		return ""
 	}
-	return fmt.Sprintf("%04d", out-in+1)
+	return fmt.Sprintf("%d", out-in+1)
 }
 
 // Add 함수는 template안에서 두 수를 더한다.

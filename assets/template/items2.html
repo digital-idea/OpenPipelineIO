@@ -4,49 +4,61 @@
 <div class="pt-1"></div>
 <div class="row">
 	<div class="col-2">
-		<div class="row">
-			{{if eq .Type "asset" -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
-			{{- else -}}
-				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-				<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
-			{{- end}}
-			<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary ml-1">Log</a>
-		</div>
-	
-
-		
-				
 		<!--Thumbnail-->
 		<div class="row">
-			<div class="thumbnail">
+			<div class="thumbnailbox">
 				{{if .Thummov}}
 					<a href="dilink://{{.Thummov}}">
 				{{else}}
 					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
 				{{end}}
-				<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" style="width:100%;">
+				<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
 				</a>
-				<div class="top-left"><span class="black-opbg">{{.Rnum}}</span></div>
-				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}" class="text-white black-opbg">{{.Name}}</a></div>
-				<div class="bottom-left">Bottom Left</div>
-				<div class="top-right">
+				<div class="top-left">
 					<div class="row">
-						<span class="black-opbg">S: {{.Platesize}}</span>
+						<span class="black-opbg">{{.Rnum}}</span>
 					</div>
 					<div class="row">
-						<span class="black-opbg">U: {{.Dsize}}</span>
+						<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>
 					</div>
 					<div class="row">
-						<span class="black-opbg">R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+						<span class="black-opbg">2D:{{ToShortTime .Ddline2d}}</span>
 					</div>
 				</div>
-				<div class="bottom-right">Bottom Right</div>
-				<div class="centered">Centered</div>
+				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}" class="text-white black-opbg">{{.Name}}</a></div>
+				<div class="top-right">
+					{{if .Platesize}}
+						<div class="row">
+							<span class="black-opbg">S: {{.Platesize}}</span>
+						</div>
+					{{end}}
+					{{if .Dsize}}
+						<div class="row">
+							<span class="black-opbg">U: {{.Dsize}}</span>
+						</div>
+					{{end}}
+					{{if or .Rendersize .Dsize}}
+						<div class="row">
+							<span class="black-opbg">R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+						</div>
+					{{end}}
+				</div>
+				<div class="centered">
+					{{if eq .Status "2"}}
+						{{if .Finver}}
+							v{{.Finver}}
+						{{end}}
+						{{if .Findate}}
+							({{ToShortTime .Findate}})
+						{{end}}
+					{{end}}
+				</div>
 				<div class="centered-bottom">
 					{{if eq .Type "asset"}}
 						<span class="badge badge-light">{{.Assettype}}</span>
+						{{if .CrowdAsset}}
+							<span class="badge badge-warning">Crowd</span>
+						{{end}}
 					{{else}}
 						<!--재스캔 사용 플레이트 표기-->
 						{{if eq .Type "org" "left"}}
@@ -59,115 +71,114 @@
 						<span class="badge badge-light">{{.Shottype}}</span>
 					{{end}}
 				</div>
-				<div class="centered-left">
-					<div class="row">
-						<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>
-					</div>
-					<div class="row">
-						<span class="black-opbg">2D:{{ToShortTime .Ddline2d}}</span>
-					</div>
-				</div>
+				<div class="centered-left"></div>
 				<div class="centered-right">
+					<!--Retime-->
 					<div class="row">
-						<!--Retime-->
 						{{if .Retimeplate}}
 							<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
 						{{end}}
 					</div>
+					<!--Just Mark-->
 					<div class="row">
-						<!--Just Mark-->
 						{{if and .JustIn .JustOut}}
-							<span class="badge badge-danger mt-1">J</span>
+							<span class="badge badge-warning mt-1">J</span>
+						{{end}}
+					</div>
+					<!--OCIOcc-->
+					<div class="row">
+						{{if .OCIOcc}}
+							<span class="badge badge-info mt-1">N</span>
 						{{end}}
 					</div>
 				</div>
+				<div class="bottom-left">
+					<div class="row">
+						{{if and .HandleIn .HandleOut}}
+							<span class="text-white black-opbg" title="handle">({{.HandleIn}}/{{.HandleOut}})</span>
+						{{end}}
+					</div>
+					<div class="row">
+						{{if .PlateIn}}
+							<span class="text-white black-opbg" title="platein">{{.PlateIn}}</span>
+						{{end}}
+					</div>
+					<div class="row">
+						
+						{{if .JustIn}}
+							<span class="text-warning black-opbg" title="justin">{{.JustIn}}</span>
+						{{end}}
+					</div>
+					<div class="row">
+						{{if .JustTimecodeIn}}
+							<span class="text-warning black-opbg">{{.JustTimecodeIn}}</span>
+						{{end}}
+					</div>
+				</div>
+				<div class="bottom-right">
+					<div class="row">
+						<span class="text-white black-opbg" title="plateout">
+							{{if .PlateOut}}
+								{{.PlateOut}}
+							{{end}}
+							{{if and .PlateIn .PlateOut}}
+								({{Framecal .PlateIn .PlateOut}})
+							{{end}}
+						</span>
+					</div>
+					<div class="row">
+						<span class="text-warning black-opbg" title="justout">
+							{{if .JustOut}}
+								{{.JustOut}}
+							{{end}}
+							{{if and .JustIn .JustOut}}
+								({{Framecal .JustIn .JustOut}})
+							{{end}}
+						</span>
+					</div>
+					<div class="row">
+						{{if .JustTimecodeOut}}
+							<span class="text-warning black-opbg">{{.JustTimecodeOut}}</span>
+						{{end}}
+					</div>
+
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			{{if .JustTimecodeIn}}<span class="badge badge-warning">{{.JustTimecodeIn}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
-			{{if .JustTimecodeOut}}<span class="badge badge-warning">{{.JustTimecodeOut}}</span>{{else}}<span class="badge badge-secondary">00:00:00:00</span>{{end}}
-		</div>
 
-		<div class="row">
-			{{if .PlateIn}}<span class="badge badge-warning" title="platein">{{.PlateIn}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			{{if .PlateOut}}<span class="badge badge-warning" title="plateout">{{.PlateOut}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			<span class="badge badge-warning">{{Framecal .PlateIn .PlateOut}} f</span>
-		</div>
-		<div class="row">
-			{{if .HandleIn}}<span class="badge badge-warning" title="handlein">{{.HandleIn}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			{{if .JustIn}}<span class="badge badge-warning" title="justin">{{.JustIn}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			{{if .JustOut}}<span class="badge badge-warning" title="justout">{{.JustOut}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			{{if .HandleOut}}<span class="badge badge-warning" title="handleout">{{.HandleOut}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
-			{{if and .JustIn .JustOut}}<span class="badge badge-warning" title="just frame">{{Framecal .JustIn .JustOut}} f</span>{{end}}
-		</div>
-		<div class="row">
-			<!--군중에셋 표기-->
-			{{if eq .Type "asset"}}
-				{{if .CrowdAsset}}
-					<span class="badge badge-warning">CrowdAsset</span>
-				{{end}}
-			{{end}}
-			
-			
-
-			<!--Projection-->
-			{{if .Retimeplate}}
-				<span class="badge badge-warning">Projection</span>
-			{{else}}
-				<span class="badge badge-light">Projection</span>
-			{{end}}
-
-			<!--Katana ObjectID-->
-			{{if and .ObjectidIn .ObjectidOut}}
-				<span class="badge badge-warning">Katana: {{.ObjectidIn}}~{{.ObjectidOut}}</span>
-			{{else}}
-				<span class="badge badge-light">Katana: 0~0</span>
-			{{end}}
-
-			<!--Setellite-->
-			{{if .Rollmedia}}
-				<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="badge badge-warning" target="_blink" title="현장툴 데이터 링크">SETELLITE</a>
-			{{else}}
-				<span class="badge badge-light">SETELLITE</span>
-			{{end}}
-			<!--Update Time-->
-			{{if .Updatetime|CheckUpdate}}
-				<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
-			{{end}}
-			<!--Status-->
-			<span class="badge badge-{{Status2string .Status}}">{{Status2capString .Status}}</span>
-			<!--Fin Version-->
-			{{if eq .Status "2"}}
-				<span class="badge badge-light">
-					v{{.Finver}}
-					{{if .Findate}}
-						({{ToShortTime .Findate}})
-					{{end}}
-				</span>
-			{{end}}
-			<!--OCIOcc-->
-			{{if .OCIOcc}}
-				<span class="badge badge-info">OCIOcc</span>
-			{{else}}
-				<span class="badge badge-light">OCIOcc</span>
-			{{end}}
-
-			{{if .ProductionCam.PubTask}}
-				<span class="badge badge-info">{{.ProductionCam.PubTask}}</span>
-			{{end}}
-			
-			{{if .ProductionCam.PubPath}}
-				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-waring">campath</a>
-			{{end}}
-		</div>
 		
+		<div class="row">
+			<div class="text-right mx-auto">
+				{{if .Updatetime|CheckUpdate}}
+					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
+				{{end}}
+			
+				{{if eq .Type "asset" -}}
+					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
+				{{- else -}}
+					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
+				{{- end}}
+				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary ml-1">Log</a>
+			</div>
+		</div>
 	</div>
 
 
 	<!--Task-->
 	<div class="col-3">
 		
-		<div>
+		<div class="ml-1">
+			{{if .Rollmedia}}
+				<!--onset Setellite-->
+				<div class="row">
+					
+					<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="badge badge-done text-dark" target="_blink">onset</a>
+					
+				</div>
+			{{end}}
+			
 			<!--concept-->
 			<div class="row">
 				<h5 class="p-0 m-0">
@@ -456,11 +467,33 @@
 	<div class="col-3">
 		<!--작업내용-->
 		<div class="row">
-			<span class="badge badge-light">Note</span>
+			<span class="badge badge-light">Note:</span>
 		</div>
 		<div class="row">
 			{{ .Note.Text }}
 		</div>
+		<!--Katana ObjectID-->
+		{{if and .ObjectidIn .ObjectidOut}}
+		<div class="row">
+			<span class="badge badge-warning">Katana: {{.ObjectidIn}}-{{.ObjectidOut}}</span>
+		</div>
+		{{end}}
+		<!--ProductionCam-->
+		<div class="row">
+			<span class="badge badge-light">CamInfo:</span>
+			{{if .ProductionCam.Projection}}
+				<span class="badge badge-info">Projection</span>
+			{{end}}
+	
+			{{if .ProductionCam.PubTask}}
+				<span class="badge badge-info">{{.ProductionCam.PubTask}}</span>
+			{{end}}
+			
+			{{if .ProductionCam.PubPath}}
+				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-info">campath</a>
+			{{end}}
+		</div>
+		
 		<!--연결소스-->
 		<div class="row">
 			<span class="badge badge-light">Source</span>
@@ -474,23 +507,17 @@
 		
 		<!--Scaninfo-->
 		<div class="row">
-			<span class="badge badge-light">ScanInfo:</span>
-		</div>
-		<div class="row">
-			
+			<span class="badge badge-light">ScanInfo:</span>		
 			{{if .Scanname}}
 				<span class="badge badge-light" title="scanname">{{.Scanname}}</span>
 			{{end}}
 			{{if .ScanFrame}}
-				<span class="badge badge-warning" title="scanframe">{{.ScanFrame}} f</span>
+				<span class="badge badge-light" title="scanframe">{{.ScanFrame}} f</span>
 			{{end}}
-			{{if .ScanTimecodeIn}}
-				<span class="badge badge-warning">{{.ScanTimecodeIn}}</span>
-			{{end}}
-			{{if .ScanTimecodeOut}}
-				<span class="badge badge-warning">{{.ScanTimecodeOut}}</span>{{end}}
+			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+				<span class="badge badge-light">{{.ScanTimecodeIn}}-{{.ScanTimecodeOut}}</span>{{end}}
 			{{if .Scantime}}
-				<span class="badge badge-light" title="scanframe">{{.Scantime}}</span>
+				<span class="badge badge-light" title="scanframe">{{ToShortTime .Scantime}}</span>
 			{{end}}
 		</div>
 
