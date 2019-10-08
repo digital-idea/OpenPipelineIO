@@ -5,29 +5,6 @@
 <div class="row">
 	<div class="col-2">
 		<div class="row">
-			<h5>
-				<a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}">{{.Name}}</a>
-				{{if .Rnum}}{{.Rnum}}{{end}}
-			</h5>
-		</div>
-		<div class="row">
-			{{if eq .Type "asset"}}
-				<span class="badge badge-light">{{.Assettype}}</span>
-			{{else}}
-				<span class="badge badge-light">{{.Type}}</span>
-				<span class="badge badge-light">{{.Shottype}}</span>
-			{{end}}
-		</div>
-
-		<div class="row">
-			<span class="badge badge-light">3D</span><span class="badge badge-secondary">{{ToShortTime .Ddline3d}}</span>
-		</div>
-		<div class="row">
-			<span class="badge badge-light">2D</span><span class="badge badge-secondary">{{ToShortTime .Ddline2d}}</span>
-		</div>
-		
-		
-		<div class="row">
 			{{if eq .Type "asset" -}}
 				<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
 				<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
@@ -51,25 +28,59 @@
 				{{end}}
 				<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" style="width:100%;">
 				</a>
+				<div class="top-left"><span class="black-opbg">{{.Rnum}}</span></div>
+				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}" class="text-white black-opbg">{{.Name}}</a></div>
 				<div class="bottom-left">Bottom Left</div>
-				<div class="top-left">Top Left</div>
 				<div class="top-right">
 					<div class="row">
-						S: {{.Platesize}}
+						<span class="black-opbg">S: {{.Platesize}}</span>
 					</div>
 					<div class="row">
-						U: {{.Dsize}}
+						<span class="black-opbg">U: {{.Dsize}}</span>
 					</div>
 					<div class="row">
-						R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}
+						<span class="black-opbg">R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 					</div>
 				</div>
 				<div class="bottom-right">Bottom Right</div>
 				<div class="centered">Centered</div>
-				<div class="centered-top">Centered-top</div>
-				<div class="centered-bottom">Centered-bottom</div>
-				<div class="centered-left">L</div>
-				<div class="centered-right">R</div>
+				<div class="centered-bottom">
+					{{if eq .Type "asset"}}
+						<span class="badge badge-light">{{.Assettype}}</span>
+					{{else}}
+						<!--재스캔 사용 플레이트 표기-->
+						{{if eq .Type "org" "left"}}
+							{{if .UseType}}
+								<span class="badge badge-light">{{.UseType}}</span>
+							{{else}}
+								<span class="badge badge-light">{{.Type}}</span>
+							{{end}}
+						{{end}}
+						<span class="badge badge-light">{{.Shottype}}</span>
+					{{end}}
+				</div>
+				<div class="centered-left">
+					<div class="row">
+						<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>
+					</div>
+					<div class="row">
+						<span class="black-opbg">2D:{{ToShortTime .Ddline2d}}</span>
+					</div>
+				</div>
+				<div class="centered-right">
+					<div class="row">
+						<!--Retime-->
+						{{if .Retimeplate}}
+							<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
+						{{end}}
+					</div>
+					<div class="row">
+						<!--Just Mark-->
+						{{if and .JustIn .JustOut}}
+							<span class="badge badge-danger mt-1">J</span>
+						{{end}}
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -83,7 +94,6 @@
 			<span class="badge badge-warning">{{Framecal .PlateIn .PlateOut}} f</span>
 		</div>
 		<div class="row">
-			{{if and .JustIn .JustOut}}<span class="badge badge-danger">Just</span>{{else}}<span class="badge badge-light">Just</span>{{end}}
 			{{if .HandleIn}}<span class="badge badge-warning" title="handlein">{{.HandleIn}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
 			{{if .JustIn}}<span class="badge badge-warning" title="justin">{{.JustIn}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
 			{{if .JustOut}}<span class="badge badge-warning" title="justout">{{.JustOut}} f</span>{{else}}<span class="badge badge-secondary">0000 f</span>{{end}}
@@ -97,20 +107,8 @@
 					<span class="badge badge-warning">CrowdAsset</span>
 				{{end}}
 			{{end}}
-			<!--재스캔 사용 플레이트 표기-->
-			{{if eq .Type "org" "left"}}
-				{{if .UseType}}
-					<span class="badge badge-warning">{{.UseType}}</span>
-				{{else}}
-					<span class="badge badge-light">{{.Type}}</span>
-				{{end}}
-			{{end}}
-			<!--Retime-->
-			{{if .Retimeplate}}
-				<a href="dilink://{{.Retimeplate}}" class="badge badge-success">RETIME</a>
-			{{else}}
-				<span class="badge badge-light">RETIME</span>
-			{{end}}
+			
+			
 
 			<!--Projection-->
 			{{if .Retimeplate}}

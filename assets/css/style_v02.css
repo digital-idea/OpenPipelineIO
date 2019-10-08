@@ -105,30 +105,35 @@ input[type=checkbox]:checked+div{
 /* Bottom left text */
 .bottom-left {
 	position: absolute;
-	bottom: 8px;
+	bottom: 4px;
 	left: 16px;
 }
   
 /* Top left text */
 .top-left {
 	position: absolute;
-	top: 8px;
-	left: 16px;
+	top: 4px;
+	left: 8px;
+	font-size: 13px;
 }
-  
+
+.black-opbg {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
 /* Top right text */
 .top-right {
 	position: absolute;
-	top: 8px;
-	right: 24px;
+	top: 4px;
+	right: 16px;
 	font-size: 13px;
 }
   
 /* Bottom right text */
 .bottom-right {
 	position: absolute;
-	bottom: 8px;
-	right: 16px;
+	bottom: 4px;
+	right: 8px;
 }
 
 .centered {
@@ -140,14 +145,14 @@ input[type=checkbox]:checked+div{
 
 .centered-top {
 	position: absolute;
-	top: 8px;
+	top: 4px;
 	left: 50%;
 	transform: translate(-50%, 0);
 }
 
 .centered-bottom {
 	position: absolute;
-	bottom: 8px;
+	bottom: 4px;
 	left: 50%;
 	transform: translate(-50%, 0);
 }
@@ -156,12 +161,13 @@ input[type=checkbox]:checked+div{
 	position: absolute;
 	top: 50%;
 	left: 16px;
-	transform: translate(0px, -50%);
+	transform: translate(8px, -50%);
+	font-size: 11px;
 }
 
 .centered-right {
 	position: absolute;
 	top: 50%;
-	right: 8px;
-	transform: translate(-50%, -50%);
+	right: 4px;
+	transform: translate(0, -50%);
 }
