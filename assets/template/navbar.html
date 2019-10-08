@@ -6,6 +6,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        {{if .Devmode}}
+          <li class="nav-item">
+            <a class="nav-link" href="/search?project=TEMP&searchword=all&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false">OldView</a>
+          </li>
+        {{else}}
+          <li class="nav-item">
+            <a class="nav-link" href="/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword=">NewView</a>
+          </li>
+        {{end}}
         <li class="nav-item">
           <a class="nav-link" href="/projectinfo">Projects</a>
         </li>
@@ -24,11 +33,8 @@
         <li class="nav-item">
             <a class="nav-link" href="/help">Help</a>
         </li>
-        {{if .Devmode}}
-        <li class="nav-item">
-          <a class="nav-link" href="/search?project=TEMP&searchword=all&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false">OldView</a>
-        </li>
-        {{end}}
+        
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Add

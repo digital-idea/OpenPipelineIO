@@ -112,6 +112,10 @@
 					<div class="row">
 						{{if .JustTimecodeIn}}
 							<span class="text-warning black-opbg">{{.JustTimecodeIn}}</span>
+						{{else}}
+							{{if .ScanTimecodeIn}}
+								<span class="text-white black-opbg">{{.ScanTimecodeIn}}</span>
+							{{end}}
 						{{end}}
 					</div>
 				</div>
@@ -139,6 +143,10 @@
 					<div class="row">
 						{{if .JustTimecodeOut}}
 							<span class="text-warning black-opbg">{{.JustTimecodeOut}}</span>
+						{{else}}
+							{{if .ScanTimecodeOut}}
+								<span class="text-white black-opbg">{{.ScanTimecodeOut}}</span>
+							{{end}}
 						{{end}}
 					</div>
 
