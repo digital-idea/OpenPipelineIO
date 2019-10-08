@@ -38,8 +38,10 @@ $ sudo service mongod start
 
 macOS
 ```bash
-$ brew install mongodb
-$ brew services start mongodb
+$ brew uninstall mongodb
+$ brew tap mongodb/brew
+$ brew install mongodb-community
+$ brew services start mongodb-community
 ```
 
 Windows
