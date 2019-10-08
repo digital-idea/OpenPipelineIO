@@ -3,7 +3,7 @@
 {{range .Items}}
 <div class="pt-1"></div>
 <div class="row">
-	<div class="col-2">
+	<div class="col-sm-12 col-md-6 col-lg-2">
 		<!--Thumbnail-->
 		<div class="row">
 			<div class="thumbnailbox">
@@ -167,7 +167,7 @@
 
 
 	<!--Task-->
-	<div class="col-3">
+	<div class="col-sm-12 col-md-6 col-lg-3">
 		
 		<div class="ml-1">
 			{{if .Rollmedia}}
@@ -180,291 +180,356 @@
 			{{end}}
 			
 			<!--concept-->
-			<div class="row">
-				<h5 class="p-0 m-0">
-					<span class="badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">concept</span>
-					{{if .Concept.Predate}}
-						<span class="badge badge-light">{{ToShortTime .Concept.Predate}}</span>
-					{{end}}
-					<span class="badge badge-light">{{ToShortTime .Concept.Date}}</span>
-					<span class="badge badge-light">{{ .Concept.User }}</span>
-					{{if .Concept.Mov }}
-						<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-					{{else}}
-						<span class="badge badge-light">M</span>
-					{{end}}
-					{{if eq .Type "asset" }}
-						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-					{{else}}
-						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-					{{end}}
-				</h5>
-			</div>
+			{{if eq .Concept.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">concept</span>
+						{{if .Concept.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Concept.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Concept.Date}}</span>
+						<span class="badge badge-light">{{ .Concept.User }}</span>
+						{{if .Concept.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset" }}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 
 			<!--model-->
-			<div class="row">
-				<h5 class="p-0 m-0">
-					<span class="badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">model</span>
-					{{if .Model.Predate}}
-						<span class="badge badge-light">{{ToShortTime .Model.Predate}}</span>
-					{{end}}
-					<span class="badge badge-light">{{ToShortTime .Model.Date}}</span>
-					<span class="badge badge-light">{{ .Model.User }}</span>
-					{{if .Model.Mov }}
-						<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-					{{else}}
-						<span class="badge badge-light">M</span>
-					{{end}}
-					{{if eq .Type "asset" }}
-						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-					{{else}}
-						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-					{{end}}
-				</h5>
-			</div>
+			{{if eq .Model.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">model</span>
+						{{if .Model.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Model.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Model.Date}}</span>
+						<span class="badge badge-light">{{ .Model.User }}</span>
+						{{if .Model.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset" }}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 
 			<!--mm-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}">mm</span>
-				{{if .Mm.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Mm.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Mm.Date}}</span>
-				<span class="badge badge-light">{{ .Mm.User }}</span>
-				{{if .Mm.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Mm.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}">mm</span>
+						{{if .Mm.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Mm.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Mm.Date}}</span>
+						<span class="badge badge-light">{{ .Mm.User }}</span>
+						{{if .Mm.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
 
 			<!--layout-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}">layout</span>
-				{{if .Layout.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Layout.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Layout.Date}}</span>
-				<span class="badge badge-light">{{ .Layout.User }}</span>
-				{{if .Layout.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Layout.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}">layout</span>
+						{{if .Layout.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Layout.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Layout.Date}}</span>
+						<span class="badge badge-light">{{ .Layout.User }}</span>
+						{{if .Layout.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
+
 			<!--ani-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}">ani</span>
-				{{if .Ani.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Ani.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Ani.Date}}</span>
-				<span class="badge badge-light">{{ .Ani.User }}</span>
-				{{if .Ani.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				{{if eq .Type "asset"}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{else}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{end}}
-			</h5></div>
+			{{if eq .Ani.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}">ani</span>
+						{{if .Ani.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Ani.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Ani.Date}}</span>
+						<span class="badge badge-light">{{ .Ani.User }}</span>
+						{{if .Ani.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset"}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 			<!--fx-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}">fx</span>
-				{{if .Fx.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Fx.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Fx.Date}}</span>
-				<span class="badge badge-light">{{ .Fx.User }}</span>
-				{{if .Fx.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Fx.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}">fx</span>
+						{{if .Fx.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Fx.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Fx.Date}}</span>
+						<span class="badge badge-light">{{ .Fx.User }}</span>
+						{{if .Fx.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
 
 			<!--motion-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}">motion</span>
-				{{if .Mg.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Mg.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Mg.Date}}</span>
-				<span class="badge badge-light">{{ .Mg.User }}</span>
-				{{if .Mg.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Mg.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}">motion</span>
+						{{if .Mg.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Mg.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Mg.Date}}</span>
+						<span class="badge badge-light">{{ .Mg.User }}</span>
+						{{if .Mg.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
+
 			<!--temp1-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}">{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</span>
-				{{if .Temp1.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Temp1.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Temp1.Date}}</span>
-				<span class="badge badge-light">{{ .Temp1.User }}</span>
-				{{if .Temp1.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Temp1.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}">{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</span>
+						{{if .Temp1.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Temp1.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Temp1.Date}}</span>
+						<span class="badge badge-light">{{ .Temp1.User }}</span>
+						{{if .Temp1.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
+
 			<!--previz-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}">previz</span>
-				{{if .Previz.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Previz.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Previz.Date}}</span>
-				<span class="badge badge-light">{{ .Previz.User }}</span>
-				{{if .Previz.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Previz.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}">previz</span>
+						{{if .Previz.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Previz.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Previz.Date}}</span>
+						<span class="badge badge-light">{{ .Previz.User }}</span>
+						{{if .Previz.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
 			<!--fur-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}">fur</span>
-				{{if .Fur.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Fur.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Fur.Date}}</span>
-				<span class="badge badge-light">{{ .Fur.User }}</span>
-				{{if .Fur.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				{{if eq .Type "asset"}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{else}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{end}}
-			</h5></div>
+			{{if eq .Fur.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}">fur</span>
+						{{if .Fur.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Fur.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Fur.Date}}</span>
+						<span class="badge badge-light">{{ .Fur.User }}</span>
+						{{if .Fur.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset"}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 			<!--sim-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}">sim</span>
-				{{if .Sim.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Sim.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Sim.Date}}</span>
-				<span class="badge badge-light">{{ .Sim.User }}</span>
-				{{if .Sim.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				{{if eq .Type "asset"}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{else}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{end}}
-			</h5></div>
+			{{if eq .Sim.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}">sim</span>
+						{{if .Sim.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Sim.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Sim.Date}}</span>
+						<span class="badge badge-light">{{ .Sim.User }}</span>
+						{{if .Sim.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset"}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
+
 			<!--crowd-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}">crowd</span>
-				{{if .Crowd.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Crowd.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Crowd.Date}}</span>
-				<span class="badge badge-light">{{ .Crowd.User }}</span>
-				{{if .Crowd.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Crowd.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}">crowd</span>
+						{{if .Crowd.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Crowd.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Crowd.Date}}</span>
+						<span class="badge badge-light">{{ .Crowd.User }}</span>
+						{{if .Crowd.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
+
 			<!--light-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}">
-					{{if eq .Type "asset"}}
-						look
-					{{else}}
-						light
-					{{end}}
-				</span>
-				{{if .Light.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Light.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Light.Date}}</span>
-				<span class="badge badge-light">{{ .Light.User }}</span>
-				{{if .Light.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				{{if eq .Type "asset"}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{else}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{end}}
-			</h5></div>
+			{{if eq .Light.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}">
+							{{if eq .Type "asset"}}
+								look
+							{{else}}
+								light
+							{{end}}
+						</span>
+						{{if .Light.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Light.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Light.Date}}</span>
+						<span class="badge badge-light">{{ .Light.User }}</span>
+						{{if .Light.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset"}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 			<!--comp-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}">comp</span>
-				{{if .Comp.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Comp.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Comp.Date}}</span>
-				<span class="badge badge-light">{{ .Comp.User }}</span>
-				{{if .Comp.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				{{if eq .Type "asset"}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{else}}
-					<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-				{{end}}
-			</h5></div>
+			{{if eq .Comp.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}">comp</span>
+						{{if .Comp.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Comp.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Comp.Date}}</span>
+						<span class="badge badge-light">{{ .Comp.User }}</span>
+						{{if .Comp.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						{{if eq .Type "asset"}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{else}}
+							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+						{{end}}
+					</h5>
+				</div>
+			{{end}}
 			<!--matte-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}">matte</span>
-				{{if .Matte.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Matte.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Matte.Date}}</span>
-				<span class="badge badge-light">{{ .Matte.User }}</span>
-				{{if .Matte.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Matte.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}">matte</span>
+						{{if .Matte.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Matte.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Matte.Date}}</span>
+						<span class="badge badge-light">{{ .Matte.User }}</span>
+						{{if .Matte.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
 			<!--env-->
-			<div class="row"><h5 class="p-0 m-0">
-				<span class="badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}">env</span>
-				{{if .Env.Predate}}
-					<span class="badge badge-light">{{ToShortTime .Env.Predate}}</span>
-				{{end}}
-				<span class="badge badge-light">{{ToShortTime .Env.Date}}</span>
-				<span class="badge badge-light">{{ .Env.User }}</span>
-				{{if .Env.Mov }}
-					<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
-				{{else}}
-					<span class="badge badge-light">M</span>
-				{{end}}
-				<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
-			</h5></div>
+			{{if eq .Env.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
+				<div class="row">
+					<h5 class="p-0 m-0">
+						<span class="badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}">env</span>
+						{{if .Env.Predate}}
+							<span class="badge badge-light">{{ToShortTime .Env.Predate}}</span>
+						{{end}}
+						<span class="badge badge-light">{{ToShortTime .Env.Date}}</span>
+						<span class="badge badge-light">{{ .Env.User }}</span>
+						{{if .Env.Mov }}
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+						{{else}}
+							<span class="badge badge-light">M</span>
+						{{end}}
+						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
+					</h5>
+				</div>
+			{{end}}
 		</div>
 	</div>
 	<!--작업내용 & Source-->
-	<div class="col-3">
+	<div class="col-sm-12 col-md-12 col-lg-3">
 		<!--작업내용-->
 		<div class="row">
 			<span class="badge badge-light">Note:</span>
@@ -524,7 +589,7 @@
 	</div>
 
 	<!--수정사항-->
-	<div class="col-3">
+	<div class="col-sm-12 col-md-12 col-lg-3">
 		{{range .Comments}}
 			<span class="badge badge-light">{{.Date}}</span>
 			<span class="badge badge-light">{{.Author}}</span>
@@ -533,7 +598,7 @@
 		{{end}}
 	</div>
 	<!--Tags-->
-	<div class="col-1">
+	<div class="col-sm-12 col-md-12 col-lg-1">
 		{{if eq .Type "asset"}}
 			{{range .Assettags}}
 				<a href="/inputmode?project={{$.SearchOption.Project}}&
