@@ -51,14 +51,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	rcp.SearchOption = handleRequestToSearchOption(r)
-	/*
-		err = rcp.SearchOption.LoadCookie(session, r)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	*/
-
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
