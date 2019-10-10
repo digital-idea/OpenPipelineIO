@@ -1181,7 +1181,6 @@ func handleIndexV2(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	// 기본형태 리다이렉트 한다.
 	type recipe struct {
 		SearchOption
 	}

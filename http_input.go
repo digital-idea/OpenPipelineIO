@@ -50,18 +50,14 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if rcp.SearchOption.Project != "" {
-		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)
+	rcp.SearchOption = handleRequestToSearchOption(r)
+	/*
+		err = rcp.SearchOption.LoadCookie(session, r)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	}
+	*/
 
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -108,11 +104,13 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Totalnum.calculatePercent()
-
-	rcp.SearchOption = handleRequestToSearchOption(r)
-	q := r.URL.Query()
-	template := q.Get("template")
-	rcp.SearchOption.Template = template
+	if rcp.SearchOption.Project != "" {
+		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 	rcp.Items, err = Searchv2(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
