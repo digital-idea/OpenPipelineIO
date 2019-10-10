@@ -92,7 +92,11 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipy{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.User = u
 	rcp.Wfs = *flagWFS

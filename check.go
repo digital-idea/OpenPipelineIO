@@ -53,6 +53,13 @@ func str2bool(str string) bool {
 	return false
 }
 
+func bool2str(b bool) string {
+	if b {
+		return "true"
+	}
+	return "false"
+}
+
 // mov경로를 체크하는 함수이다.
 func isMov(path string) bool {
 	// 빈 문자열인지 체크

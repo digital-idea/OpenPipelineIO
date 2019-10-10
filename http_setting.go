@@ -34,7 +34,11 @@ func handleAdminSetting(w http.ResponseWriter, r *http.Request) {
 		Setting
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -96,7 +100,11 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -139,7 +147,11 @@ func handleSetAdminSetting(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {

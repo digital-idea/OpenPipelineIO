@@ -145,7 +145,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	// 쿠키값을 rcp로 보낸다.
 	rcp.ID = ssid.ID
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		log.Println(err)
@@ -1137,10 +1142,13 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.ID = ssid.ID
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1174,7 +1182,36 @@ func handleIndexV2(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 기본형태 리다이렉트 한다.
-	url := "/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword="
+	type recipe struct {
+		SearchOption
+	}
+	rcp := recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index2&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s",
+		rcp.SearchOption.Project,
+		rcp.SearchOption.Sortkey,
+		rcp.SearchOption.Assign,
+		rcp.SearchOption.Ready,
+		rcp.SearchOption.Wip,
+		rcp.SearchOption.Confirm,
+		rcp.SearchOption.Done,
+		rcp.SearchOption.Omit,
+		rcp.SearchOption.Hold,
+		rcp.SearchOption.Out,
+		rcp.SearchOption.None,
+		rcp.SearchOption.Task,
+		rcp.SearchOption.Searchword,
+	)
 	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
@@ -1204,7 +1241,11 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -1303,7 +1344,11 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
@@ -1349,7 +1394,11 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -1451,7 +1500,11 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
@@ -1497,7 +1550,11 @@ func handleRmShot(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -1577,7 +1634,11 @@ func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails
@@ -1623,7 +1684,11 @@ func handleRmAsset(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -1698,7 +1763,11 @@ func handleRmAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.Success = success
 	rcp.Fails = fails

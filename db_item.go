@@ -444,6 +444,13 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	if op.Searchword == "" {
 		return results, nil
 	}
+	if op.Project == "" {
+		plist, err := Projectlist(session)
+		if err != nil {
+			return results, err
+		}
+		op.Project = plist[0]
+	}
 	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
 	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
 		return results, nil

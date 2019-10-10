@@ -50,7 +50,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	if rcp.SearchOption.Project != "" {
 		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)
 		if err != nil {
@@ -137,6 +141,66 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	cookie = http.Cookie{
 		Name:   "Searchword",
 		Value:  base64.StdEncoding.EncodeToString([]byte(rcp.SearchOption.Searchword)), //  쿠키는 UTF-8을 저장할 때 에러가 발생한다.
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Assign",
+		Value:  bool2str(rcp.SearchOption.Assign),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Ready",
+		Value:  bool2str(rcp.SearchOption.Ready),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Wip",
+		Value:  bool2str(rcp.SearchOption.Wip),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Confirm",
+		Value:  bool2str(rcp.SearchOption.Confirm),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Done",
+		Value:  bool2str(rcp.SearchOption.Done),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Omit",
+		Value:  bool2str(rcp.SearchOption.Omit),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Hold",
+		Value:  bool2str(rcp.SearchOption.Hold),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Out",
+		Value:  bool2str(rcp.SearchOption.Out),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "None",
+		Value:  bool2str(rcp.SearchOption.None),
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Template",
+		Value:  rcp.SearchOption.Template,
 		MaxAge: 0,
 	}
 	http.SetCookie(w, &cookie)

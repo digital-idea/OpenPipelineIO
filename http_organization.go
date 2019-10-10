@@ -33,7 +33,11 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
@@ -75,7 +79,11 @@ func handleEditDepartment(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -123,7 +131,11 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -171,7 +183,11 @@ func handleEditRole(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -219,7 +235,11 @@ func handleEditPosition(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -449,7 +469,11 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Divisions, err = allDivisions(session)
@@ -498,7 +522,11 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Departments, err = allDepartments(session)
@@ -547,7 +575,11 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Teams, err = allTeams(session)
@@ -596,7 +628,11 @@ func handleRoles(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Roles, err = allRoles(session)
@@ -645,7 +681,11 @@ func handlePositions(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Positions, err = allPositions(session)
@@ -697,7 +737,11 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{
 		Devmode: *flagDevmode,
 	}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

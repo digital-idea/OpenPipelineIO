@@ -42,7 +42,6 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -51,6 +50,11 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.User, err = getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -680,7 +684,6 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
 	rcp.Devmode = *flagDevmode
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -688,6 +691,11 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.User, err = getUser(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -797,7 +805,11 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 	}
 	rcp := recipe{}
-	rcp.SearchOption.LoadCookie(r)
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Devmode = *flagDevmode
 	rcp.Searchword = searchword
 	rcp.User, err = getUser(session, ssid.ID)

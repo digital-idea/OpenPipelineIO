@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+
+	"gopkg.in/mgo.v2"
 )
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
@@ -90,7 +92,7 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 }
 
 // LoadCookie 메소드는 request에 이미 설정된 쿠키값을을 SearchOption 자료구조에 추가한다.
-func (op *SearchOption) LoadCookie(r *http.Request) {
+func (op *SearchOption) LoadCookie(session *mgo.Session, r *http.Request) error {
 	for _, cookie := range r.Cookies() {
 		if cookie.Name == "Project" {
 			op.Project = cookie.Value
@@ -105,9 +107,46 @@ func (op *SearchOption) LoadCookie(r *http.Request) {
 			}
 			op.Searchword = string(cookieByte)
 		}
+		if cookie.Name == "Assign" {
+			op.Assign = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Ready" {
+			op.Ready = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Wip" {
+			op.Wip = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Confirm" {
+			op.Confirm = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Done" {
+			op.Done = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Omit" {
+			op.Omit = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Hold" {
+			op.Hold = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Out" {
+			op.Out = str2bool(cookie.Value)
+		}
+		if cookie.Name == "None" {
+			op.None = str2bool(cookie.Value)
+		}
+		if cookie.Name == "Template" {
+			op.Template = cookie.Value
+		}
 	}
 	if op.Project == "" {
-		op.Project = "TEMP"
+		plist, err := Projectlist(session)
+		if err != nil {
+			return err
+		}
+		op.Project = plist[0]
 	}
-
+	if op.Template == "" {
+		op.Template = "index2"
+	}
+	return nil
 }
