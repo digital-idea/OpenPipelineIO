@@ -102,6 +102,24 @@ body {
 	color: #A7A59C!important;
 }
 
+.card {
+	outline:1px solid #A7A59C!important;
+}
+
+.card-title {
+	color: #A7A59C!important;
+}
+
+.card-header {
+	outline:1px solid rgb(77, 75, 72)!important;
+	background-color: #3a3939;
+	color: #A7A59C!important;
+}
+
+.card-text {
+	color: rgb(133, 131, 122)!important;
+}
+
 label {
 	color: #A7A59C;
 }
@@ -114,6 +132,10 @@ label {
 
 .bg-captcha {
 	background-color: #A7A59C;
+}
+
+.bg-darkmode {
+	background-color: #2e2d2d;
 }
 
 .bg-assign, .bg-assign:hover, .badge-assign {

@@ -6,8 +6,8 @@
 		
 <div class="p-4">
 	<div class="row">
-		<a href="/projectinfo" class="btn border-secondary text-secondary btn-sm m-1 border">전체</a>
-		<a href="/projectinfo?status=archive" class="btn border-secondary text-secondary btn-sm m-1 border">종료</a>
+		<a href="/projectinfo" class="btn btn-outline-darkmode btn-sm m-1">전체</a>
+		<a href="/projectinfo?status=archive" class="btn btn-outline-darkmode btn-sm m-1">종료</a>
 		<a href="/projectinfo?status=pre" class="btn btn-info btn-sm m-1">준비</a>
 		<a href="/projectinfo?status=post" class="btn btn-success btn-sm m-1">진행</a>
 		<a href="/projectinfo?status=layover" class="btn btn-warning btn-sm m-1">중단</a>
@@ -19,18 +19,21 @@
 	<div class="row">
 		{{range .Projects}}
 			<div class="col-lg-4 col-md-6 col-sm-12">
-				<div class="card m-2">
-					<h6 class="card-header {{projectStatus2color .Status}}">
-						{{.ID}}
-						{{if .Name}} [ {{.Name}} ]{{end}}
+				<div class="card m-2 bg-darkmode">
+					<h6 class="card-header ">
+						<span class="btn btn-sm {{projectStatus2color .Status}}">
+								{{.ID}}
+								{{if .Name}} [ {{.Name}} ]{{end}}
+						</span>
+						
 					</h6>
 					<div class="card-body">
 						<h6 class="card-title">
-							{{if .Style}}<span class="btn btn-sm border">{{.Style}}</span>{{end}}
+							{{if .Style}}<span class="btn btn-sm btn-outline-darkmode">{{.Style}}</span>{{end}}
 							{{if .Stereo}}<span class="btn btn-sm border">Stereo</span>{{end}}
 							{{if .Screenx}}<span class="btn btn-sm border">ScreenX</span>{{end}}
 							{{if .Lut}}<span class="btn btn-sm btn-warning">LUT 사용</span>{{else}}<span class="btn btn-sm border">LUT 비사용</span>{{end}}
-							<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]" class="btn btn-primary btn-sm">E-mail</a>
+							<a href="mailto:{{.ID}}@{{$.MailDNS}}?subject=[{{if .MailHead}}{{.MailHead}}{{else}}{{.ID}}{{end}}]" class="btn btn-darkmode btn-sm">E-mail</a>
 							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
 								<a href="/editproject?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
 							{{end}}
