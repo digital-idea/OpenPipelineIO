@@ -2477,6 +2477,35 @@ func AddLink(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
+// AddSource 함수는 item에 소스링크를 추가한다.
+func AddSource(session *mgo.Session, project, name, userID, title, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	s := Source{}
+	s.Date = time.Now().Format(time.RFC3339)
+	s.Author = userID
+	s.Title = title
+	s.Path = path
+	i.Sources = append(i.Sources, s)
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RmLink 함수는 item에 링크소스를 삭제합니다.
 func RmLink(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)

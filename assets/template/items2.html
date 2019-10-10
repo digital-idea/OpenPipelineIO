@@ -160,19 +160,19 @@
 
 		
 		<div class="row">
-			<div class="text-right mx-auto">
+			<div class="mx-auto pt-1">
 				{{if .Updatetime|CheckUpdate}}
 					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
 				{{end}}
 			
 				{{if eq .Type "asset" -}}
 					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
 				{{- else -}}
 					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-secondary ml-1">File</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
 				{{- end}}
-				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-secondary ml-1">Log</a>
+				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Log</a>
 			</div>
 		</div>
 	</div>
@@ -181,7 +181,7 @@
 	<!--Task-->
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		
-		<div class="ml-1">
+		<div class="ml-0">
 			{{if .Rollmedia}}
 				<!--onset Setellite-->
 				<div class="row">
@@ -544,7 +544,7 @@
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		<!--Tags-->
 		<div class="row">
-			<span class="badge badge-dark">Tags:</span>
+			<span class="text-badge">Tags:</span>
 			{{if eq .Type "asset"}}
 				{{range .Assettags}}
 					<a href="/inputmode?project={{$.SearchOption.Project}}&
@@ -561,7 +561,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode ml-1">{{.}}</a>
 				{{- end}}
 			{{end}}
 			{{range .Tag}}
@@ -579,12 +579,12 @@
 					out={{$.SearchOption.Out}}&
 					none={{$.SearchOption.None}}&
 					template={{$.SearchOption.Template}}&
-					task={{$.SearchOption.Task}}" class="badge badge-secondary">{{.}}</a>
+					task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode ml-1">{{.}}</a>
 			{{end}}
 		</div>
 		<!--작업내용-->
 		<div class="row">
-			<span class="badge badge-dark">Note:</span>
+			<span class="text-badge">Note:</span>
 		</div>
 		<div class="ml-1 text-light">
 			{{range Split .Note.Text "\n"}}
@@ -593,15 +593,16 @@
 		</div>
 		
 		
-		<!--Katana ObjectID-->
+		<!--ObjectID-->
 		{{if and .ObjectidIn .ObjectidOut}}
 		<div class="row">
-			<span class="badge badge-warning">Katana: {{.ObjectidIn}}-{{.ObjectidOut}}</span>
+			<span class="text-badge">Object ID:</span>
+			<span class="badge badge-warning">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
 		</div>
 		{{end}}
 		<!--ProductionCam-->
 		<div class="row">
-			<span class="badge badge-dark">CamInfo:</span>
+			<span class="text-badge">CamInfo:</span>
 			{{if .ProductionCam.Projection}}
 				<span class="badge badge-info">Projection</span>
 			{{end}}
@@ -617,29 +618,31 @@
 		
 		<!--연결소스-->
 		<div class="row">
-			<span class="badge badge-dark">Source:</span>
+			<span class="text-badge">Sources:</span>
 		</div>
 		
 		<div class="row">
-			{{range .Links}}
-				<a  href="dilink://{{.Path}}" class="badge badge-secondary" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}">Title</span>
-			{{- end}}
+			{{range .Sources}}
+				<a  href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+			{{end}}
 		</div>
 		
 		<!--Scaninfo-->
 		<div class="row">
-			<span class="badge badge-dark">ScanInfo:</span>		
+			<span class="text-badge">ScanInfo:</span>
+			{{if .Scantime}}
+				<span class="text-badge ml-1">{{ToShortTime .Scantime}}</span>
+			{{end}}	
 			{{if .Scanname}}
-				<span class="badge badge-light" title="scanname">{{.Scanname}}</span>
+				<span class="text-badge ml-1" title="scanname">/ {{.Scanname}}</span>
 			{{end}}
 			{{if .ScanFrame}}
-				<span class="badge badge-light" title="scanframe">{{.ScanFrame}} f</span>
+				<span class="text-badge ml-1" title="scanframe">/ {{.ScanFrame}} f</span>
 			{{end}}
 			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
-				<span class="badge badge-light">{{.ScanTimecodeIn}}-{{.ScanTimecodeOut}}</span>{{end}}
-			{{if .Scantime}}
-				<span class="badge badge-light" title="scanframe">{{ToShortTime .Scantime}}</span>
+				<span class="text-badge ml-1">/ {{.ScanTimecodeIn}} ~ {{.ScanTimecodeOut}}</span>
 			{{end}}
+			
 		</div>
 
 	</div>
@@ -654,7 +657,7 @@
 		{{end}}
 	</div>
 </div>
-<hr>
+<hr class="item-divider">
 {{end}}
 </div>
 

@@ -60,7 +60,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/addcomment | 수정사항 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
 | /api/setcomments | 수정사항 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.31.172/api/setcomments` |
-| /api/addlink | 링크소스 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/addlink` |
+| /api/addlink | 링크소스 추가(레거시) | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/addlink` |
+| /api/addsource | 링크소스 추가 | project, name, title, path | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
 | /api/rmlink | 링크소스 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/rmlink` |
 | /api/setlinks | 링크소스 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1,/show/src2" http://192.168.31.172/api/setlinks` |
 | /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |

@@ -57,6 +57,9 @@ var funcMap = template.FuncMap{
 	"TaskDate":            TaskDate,
 	"TaskPredate":         TaskPredate,
 	"GetTaskLevel":        GetTaskLevel,
+	"Protocol":            Protocol,
+	"RmProtocol":          RmProtocol,
+	"ProtocolTarget":      ProtocolTarget,
 }
 
 // 도움말 페이지 입니다.
@@ -265,7 +268,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/addcomment", handleAPIAddComment)
 	http.HandleFunc("/api/rmcommente", handleAPIRmComment)
 	http.HandleFunc("/api/setcomments", handleAPISetComments)
-	http.HandleFunc("/api/addlink", handleAPIAddLink)
+	http.HandleFunc("/api/addsource", handleAPIAddSource)
 	http.HandleFunc("/api/rmlink", handleAPIRmLink)
 	http.HandleFunc("/api/setlinks", handleAPISetLinks)
 	http.HandleFunc("/api/search", handleAPISearch)
@@ -291,6 +294,7 @@ func webserver(port string) {
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/search", handleSearch)
 	http.HandleFunc("/searchsubmit", handleSearchSubmit)
+	http.HandleFunc("/api/addlink", handleAPIAddLink)
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.

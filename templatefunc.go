@@ -295,7 +295,7 @@ func ToHumantime(timestring string) string {
 	// 2017-02-20T18:15:43+09:00 형태의 시간을 time.Duration으로 바꾸고,
 	// (-)48h26m17.016071813s 형태의 time.Duration 형식을 loop 하면서 처리한다.
 	// 읽기 쉽게 4개의 패턴으로만 나온다.
-	// 예) "2일전", "1시간30분전", "30분25초전", "15초전"
+	// 예) "2d", "1h30m", "30m분25s", "15s"
 	// 72시간이 지나면 아무 문자열도 나오지 않는다.
 	// time.Duration이 음수라면 아무 문자열도 나오지 않는다.
 	// Template function이라서 실패해도 아무 문자열도 나오지 않는다.
@@ -311,9 +311,9 @@ func ToHumantime(timestring string) string {
 		return ""
 	}
 	if due.Hours() > 24.0 {
-		return fmt.Sprintf("%d일전", int(due.Hours()/24.0))
+		return fmt.Sprintf("%dd", int(due.Hours()/24.0))
 	}
-	var kortime string
+	var timeStr string
 	section := 0 // 마디가 몇개인지 체크한다.
 	for _, r := range due.String() {
 		if section == 2 {
@@ -321,21 +321,20 @@ func ToHumantime(timestring string) string {
 		}
 		switch r {
 		case 'h':
-			kortime += "시간"
+			timeStr += "h"
 			section++
 		case 'm':
-			kortime += "분"
+			timeStr += "m"
 			section++
 		case '.':
-			kortime += "초"
+			timeStr += "s"
 			section = 2 // 만약 초만 있다면 마디가 1개여도 빠져나간다.
 			break
 		default:
-			kortime += string(r)
+			timeStr += string(r)
 		}
 	}
-	kortime += "전"
-	return kortime
+	return timeStr
 }
 
 // CheckDdline 템플릿함수는 해당 시간이 이번주에 해당하는지 다음주에 해당하는지 판단한다.
@@ -381,7 +380,7 @@ func CheckDdlinev2(t string) string {
 		t = strings.TrimLeft(t, "ddline3d:")
 	}
 	if !(MatchNormalTime.MatchString(t) || MatchShortTime.MatchString(t) || MatchFullTime.MatchString(t)) {
-		return "secondary"
+		return "darkmode"
 	}
 	// 1124을 시간형태로 바꾸고 7일안에 포함하는 형태인지 체크한다.
 	// 현재시간에서 체크할 시간을 뺀 수
@@ -391,7 +390,7 @@ func CheckDdlinev2(t string) string {
 	switch {
 	// 시간이 지나면 빈 문자열을 출력한다.
 	case offset < 0:
-		return "secondary"
+		return "darkmode"
 	// 7일 이전의 날짜라면 _this 문자를 반환한다.
 	case offset <= thisline.Hours():
 		return "danger"
@@ -400,7 +399,7 @@ func CheckDdlinev2(t string) string {
 		return "warning"
 	// 14일보다 크면 빈 문자열을 출력한다.
 	default:
-		return "secondary"
+		return "darkmode"
 	}
 }
 
@@ -440,6 +439,72 @@ func Review(project, name, typ, task string) string {
 		reviewURL += "&task=" + task
 	}
 	return reviewURL
+}
+
+// Protocol 템플릿 함수는 프로토콜 문자열을 반환한다.
+func Protocol(s string) string {
+	if strings.HasPrefix(s, "http://") {
+		return "http"
+	}
+	if strings.HasPrefix(s, "https://") {
+		return "https"
+	}
+	if strings.HasPrefix(s, "ftp://") {
+		return "ftp"
+	}
+	if strings.HasPrefix(s, "sftp://") {
+		return "sftp"
+	}
+	if strings.HasPrefix(s, "mailto://") {
+		return "mailto"
+	}
+	if strings.HasPrefix(s, "git://") {
+		return "git"
+	}
+	if strings.HasPrefix(s, "slack://") {
+		return "slack"
+	}
+	return "dilink"
+}
+
+// RmProtocol 템플릿 함수는 프로토콜 문자열을 반환한다.
+func RmProtocol(s string) string {
+	if strings.HasPrefix(s, "http://") {
+		return strings.TrimLeft(s, "http://")
+	}
+	if strings.HasPrefix(s, "https://") {
+		return strings.TrimLeft(s, "https://")
+	}
+	if strings.HasPrefix(s, "ftp://") {
+		return strings.TrimLeft(s, "ftp://")
+	}
+	if strings.HasPrefix(s, "sftp://") {
+		return strings.TrimLeft(s, "sftp://")
+	}
+	if strings.HasPrefix(s, "mailto://") {
+		return strings.TrimLeft(s, "mailto://")
+	}
+	if strings.HasPrefix(s, "dilink://") {
+		return strings.TrimLeft(s, "dilink://")
+	}
+	if strings.HasPrefix(s, "git://") {
+		return strings.TrimLeft(s, "git://")
+	}
+	if strings.HasPrefix(s, "slack://") {
+		return strings.TrimLeft(s, "slack://")
+	}
+	return s
+}
+
+// ProtocolTarget 템플릿 함수는 프로토콜 문자열을 반환한다.
+func ProtocolTarget(s string) string {
+	if strings.HasPrefix(s, "http://") {
+		return "_blank"
+	}
+	if strings.HasPrefix(s, "https://") {
+		return "_blank"
+	}
+	return "_self"
 }
 
 // Scanname2RollMedia 템플릿함수는 스캔이름으로 RollMedia를 반환한다.

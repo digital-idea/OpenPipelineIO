@@ -44,7 +44,6 @@ const (
 	TaskLevel5                   // 5 높은난이도
 )
 
-
 // Media 자료구조는 미디어 형식을 담기위한 자료구조이다.
 type Media struct {
 	ID       int       // 미디어 아이디. 추후 미디어 아이디를 발급받게 되면, 사용할 예정이다.
@@ -121,7 +120,7 @@ type Item struct {
 	Outputname  string          `json:"outputname"`  // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
 	OCIOcc      string          `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
 	Note        Comment         `json:"note"`        // 작업내용
-	Links       []Source        `json:"links"`       // 연결소스
+	Sources     []Source        `json:"links"`       // 연결소스
 	Comments    []Comment       `json:"comments"`    // 수정내용
 	Tasks       map[string]Task `json:"tasks"`       // Task 리스트
 

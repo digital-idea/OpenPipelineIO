@@ -27,13 +27,36 @@ body {
 	color: #A7A59C;
 }
 
+.text-badge {
+	color: rgb(143, 141, 134);
+	font-size: 9pt;
+}
+
 .dropdown-divider {
 	border:1px solid rgb(55, 55, 52);
 }
 
-.badge-darkmode {
+.item-divider {
+	border:1px solid rgb(69, 69, 65);
+}
+
+.badge-darkmode, .badge-darkmode:link {
 	background-color:  #A7A59C!important;
 	color: rgb(30, 29, 27);
+	text-decoration: none;
+}
+
+.badge-darkmode:active, .badge-darkmode:hover {
+	background-color:  rgb(188, 185, 173)!important;
+	color: rgb(30, 29, 27);
+	text-decoration: none;
+}
+
+.badge-outline-darkmode, .badge-outline-darkmode:link, .badge-outline-darkmode:active, .badge-outline-darkmode:hover {
+	background-color:  #212121!important;
+	border:1px solid #A7A59C;
+	color: #A7A59C;
+	text-decoration: none;
 }
 
 
@@ -143,7 +166,7 @@ label {
 }
 
 .border-assign {
-	outline:4px solid #FFF76B;
+	border:4px solid #FFF76B;
 }
 
 .bg-ready, .bg-ready:hover, .badge-ready {
@@ -151,7 +174,7 @@ label {
 }
 
 .border-ready {
-	outline:4px solid #BEEF37;
+	border:4px solid #BEEF37;
 }
 
 .bg-wip, .bg-wip:hover, .badge-wip {
@@ -159,7 +182,7 @@ label {
 }
 
 .border-wip {
-	outline:4px solid #77BB40;
+	border:4px solid #77BB40;
 }
 
 
@@ -168,7 +191,7 @@ label {
 }
 
 .border-confirm {
-	outline:4px solid #54D6FD;
+	border:4px solid #54D6FD;
 }
 
 .bg-none, .bg-none:hover, .badge-none {
@@ -176,7 +199,7 @@ label {
 }
 
 .border-none {
-	outline:4px solid #F0F1F0;
+	border:4px solid #F0F1F0;
 }
 
 .bg-omit, .bg-omit:hover, .badge-omit {
@@ -184,7 +207,7 @@ label {
 }
 
 .border-omit {
-	outline:4px solid #FC9F55;
+	border:4px solid #FC9F55;
 }
 
 .bg-hold, .bg-hold:hover, .badge-hold {
@@ -192,7 +215,7 @@ label {
 }
 
 .border-omit {
-	outline:4px solid #989898;
+	border:4px solid #989898;
 }
 
 .bg-out, .bg-out:hover, .badge-out {
@@ -200,7 +223,7 @@ label {
 }
 
 .border-out {
-	outline:4px solid #EEA4F1;
+	border:4px solid #EEA4F1;
 }
 
 .bg-done, .bg-done:hover, .badge-done {
@@ -208,7 +231,7 @@ label {
 }
 
 .border-out {
-	outline:4px solid #CCCDCC;
+	border:4px solid #CCCDCC;
 }
 
 .bg-retake, .bg-retake:hover, .badge-retake {
@@ -216,7 +239,7 @@ label {
 }
 
 .border-retake {
-	outline:4px solid #FC8F55;
+	border:4px solid #FC8F55;
 }
 
 
@@ -296,7 +319,7 @@ input[type=checkbox]:checked+div{
 .top-right {
 	position: absolute;
 	top: 4px;
-	right: 18px;
+	right: 20px;
 	font-size: 13px;
 }
 
@@ -348,6 +371,6 @@ input[type=checkbox]:checked+div{
 .centered-right {
 	position: absolute;
 	top: 50%;
-	right: 6px;
+	right: 8px;
 	transform: translate(0, -50%);
 }
