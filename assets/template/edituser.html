@@ -130,12 +130,12 @@
 
             <div class="row">
                 <div class="col-12">
-                    <span type="hidden" class="btn btn-danger w-100" id="addOrganization">조직정보 수정하기</span>
+                    <span type="hidden" class="btn btn-darkmode w-100" id="addOrganization">조직정보 수정하기</span>
                 </div>
             </div>
             
             <div class="form-group pt-3">
-                <small id="Warning" class="form-text text-danger">기존에 등록된 조직정보가 아래 출력됩니다.</small>
+                <small id="Warning" class="form-text text-warning">기존에 등록된 조직정보가 아래 출력됩니다.</small>
                 <div id="Organizations">
                     {{range .Organizations}}
                         <div class="alert alert-warning small" role="alert">
@@ -185,13 +185,13 @@
                     <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: Developer</option>
                     <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Admin</option>
                 </select>
-                <small class="form-text text-danger">사용자 Accesslevel을 선택합니다.</small>
+                <small class="form-text text-warning">사용자 Accesslevel을 선택합니다.</small>
             </div>
             {{end}}
         </div>
     </div>     
     <div class="text-center">
-        <button type="submit" class="btn btn-primary mt-5">UPDATE</button>
+        <button type="submit" class="btn btn-darkmode mt-5">UPDATE</button>
     </div>
     </form>
 </div>

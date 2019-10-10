@@ -141,12 +141,12 @@
 
             <div class="row">
                 <div class="col-12">
-                    <span class="btn btn-warning w-100" id="addOrganization">조직정보 추가하기</span>
+                    <span class="btn btn-darkmode w-100" id="addOrganization">조직정보 추가하기</span>
                 </div>
             </div>
             
             <div class="form-group py-1">
-                <small id="Warning" class="form-text text-danger">조직정보를 설정해주세요.</small>
+                <small id="Warning" class="form-text text-warning">조직정보를 설정해주세요.</small>
                 <div id="Organizations"></div>
             </div>
 
@@ -179,9 +179,9 @@
 
             <div class="form-group pt-4">
                 <label>Captcha <span class="text-danger">*</span></label>
-                <p>
+                <div class="bg-captcha my-1">
                     <img id="captcha" src="/captcha/{{.CaptchaID}}.png" alt="Captcha image">
-                </p>
+                </div>
                 <input type=hidden name="CaptchaID" id="CaptchaID" value="{{.CaptchaID}}">
                 <input type="text" name="CaptchaNum" id="CaptchaNum" class="form-control" placeholder="">
                 <small class="form-text text-muted">위 이미지에 보이는 숫자를 입력해주세요.</small>
@@ -189,7 +189,7 @@
         </div>
     </div>     
     <div class="text-center">
-        <button type="submit" class="btn btn-primary mt-5" id="SignUp">SIGN UP / 가입하기</button>
+        <button type="submit" class="btn btn-darkmode mt-5" id="SignUp">SIGN UP / 가입하기</button>
     </div>
     </form>
 </div>

@@ -4,18 +4,75 @@ body {
 	background-color: #212121;
 }
 
-.form-control:valid {
+.text-danger {
+	color: rgb(199, 11, 11)!important;
+}
+
+.form-control, .form-control:valid {
 	background-color:  #1C1C1C!important;
+	border:1px solid #A7A59C;
 	color: #A7A59C;
 }
 
 .custom-select {
-	background-color:  #1C1C1C!important;
+	background-color:  rgb(41, 41, 41)!important;
 	color: #A7A59C;
+	border:1px solid #A7A59C;
+	border-radius: 0px;
 }
 
 .btn-darkmode {
 	background-color:  #3A3A3A!important;
+	border:1px solid #A7A59C;
+	color: #A7A59C;
+}
+
+.btn-darkmode:hover {
+	background-color:  #3A3A3A!important;
+	color: rgb(189, 186, 174);
+}
+
+.navbar-darkmode {
+	background-color: #252525;
+}
+
+.navbar-nav {
+	background-color: #252525!important;
+}
+
+.nav-link {
+	color: #A7A59C;
+}
+
+.nav-link:hover {
+	color: rgb(191, 188, 175);
+}
+
+.navbar-brand {
+	color: #A7A59C!important;
+}
+
+.dropdown-menu {
+	background-color: #3f3f3f!important;
+}
+
+.dropdown-item {
+	color: #A7A59C;
+}
+
+.text-darkmode, .text-darkmode:hover {
+	color: #A7A59C;
+}
+
+.text-muted {
+	color: rgb(137, 135, 127)!important;
+}
+
+.section-heading {
+	color: #A7A59C!important;
+}
+
+label {
 	color: #A7A59C;
 }
 
@@ -23,6 +80,10 @@ body {
 .parts {
 	width: 160px;
 	max-width: 160px;
+}
+
+.bg-captcha {
+	background-color: #A7A59C;
 }
 
 .bg-assign, .bg-assign:hover, .badge-assign {
