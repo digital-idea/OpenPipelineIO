@@ -32,7 +32,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-darkmode" onclick="addSources('{{.SearchOption.Project}}', document.getElementById('multi-input-title').value, document.getElementById('multi-input-link').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+					<button type="button" class="btn btn-outline-warning" onclick="addSources('{{.SearchOption.Project}}', document.getElementById('multi-input-title').value, document.getElementById('multi-input-link').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
 				</div>
 			</div>
 		</div>
@@ -80,7 +80,7 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-darkmode" onclick="addSource('{{.Project}}', '{{.Name}}', document.getElementById('{{.ID}}-title').value, document.getElementById('{{.ID}}-link').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+								<button type="button" class="btn btn-outline-warning" onclick="addSource('{{.Project}}', '{{.Name}}', document.getElementById('{{.ID}}-title').value, document.getElementById('{{.ID}}-link').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
 							</div>
 						</div>
 						</div>
