@@ -419,8 +419,8 @@ input[type=checkbox]:checked+div{
 }
 
 .add {
-	color: #FFFFFF;
-	background-color: rgb(188, 136, 47);
+	color: #000000;
+	background-color: #FFB90B;
 	border-radius: 3px;
 	padding-left: 5px;
 	padding-right: 5px;
