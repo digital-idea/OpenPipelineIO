@@ -5,20 +5,20 @@
 
 <div class="p-3">
     <div class="row">
-        <div class="card w-10 mx-auto m-3">
+        <div class="card w-10 mx-auto m-3 bg-darkmode">
             <img class="card-img-top" src="{{if .User.Thumbnail}}/thumbnail/user/{{.User.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.User.ID}}">
             <div class="card-body text-center">
                 <h4 class="card-title">{{.User.LastNameKor}}{{.User.FirstNameKor}}{{if .User.FirstNameChn}}({{.User.LastNameChn}}{{.User.FirstNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">{{.User.FirstNameEng}} {{.User.LastNameEng}}<br>{{.User.ID}}</h6>
                 <p class="card-text">
-                    <a href="mailto:{{.User.Email}}">{{.User.Email}}</a><br>
-                    <a href="mailto:{{.User.EmailExternal}}">{{.User.EmailExternal}}</a><br>
-                    <a href="tel:{{.User.Hotline}}">{{ShortPhoneNum .User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
-                    <a href="tel:{{.User.Phone}}">{{.User.Phone}}</a><br>
+                    <a href="mailto:{{.User.Email}}" class="text-darkmode">{{.User.Email}}</a><br>
+                    <a href="mailto:{{.User.EmailExternal}}" class="text-darkmode">{{.User.EmailExternal}}</a><br>
+                    <a href="tel:{{.User.Hotline}}" class="text-darkmode">{{ShortPhoneNum .User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
+                    <a href="tel:{{.User.Phone}}" class="text-darkmode">{{.User.Phone}}</a><br>
                 </p>
                 <div class="col parts p-1">
                     {{range .User.Tags}}
-                        <a href="/users?search={{.}}" class="btn btn-outline-secondary btn-sm p-1 mt-1">{{.}}</a>
+                        <a href="/users?search={{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
                     {{end}}
                 </div>
             </div>
