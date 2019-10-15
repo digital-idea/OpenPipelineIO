@@ -28,6 +28,13 @@ body {
 	color: #A7A59C;
 }
 
+.btn-outline-danger {
+	background-color:  #1C1C1C!important;
+	border:1px solid rgb(191, 29, 29)!important;
+	color: rgb(193, 39, 39)!important;
+}
+
+
 .text-badge {
 	color: rgb(143, 141, 134);
 	font-size: 9pt;

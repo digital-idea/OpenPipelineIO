@@ -554,7 +554,7 @@
 		<div class="row">
 			<span class="text-badge">Note:</span>
 		</div>
-		<div class="ml-1 text-light">
+		<div class="ml-1 text-light small">
 			{{range Split .Note.Text "\n"}}
 				{{.}}<br>
 			{{end}}
@@ -563,24 +563,24 @@
 		
 		<!--ObjectID-->
 		{{if and .ObjectidIn .ObjectidOut}}
-		<div class="row">
+		<div class="row mt-2">
 			<span class="text-badge">Object ID:</span>
 			<span class="badge badge-warning">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
 		</div>
 		{{end}}
 		<!--ProductionCam-->
-		<div class="row">
+		<div class="row mt-2">
 			<span class="text-badge">CamInfo:</span>
 			{{if .ProductionCam.Projection}}
-				<span class="badge badge-info">Projection</span>
+				<span class="badge badge-info ml-1">Projection</span>
 			{{end}}
 	
 			{{if .ProductionCam.PubTask}}
-				<span class="badge badge-info">{{.ProductionCam.PubTask}}</span>
+				<span class="badge badge-info ml-1">{{.ProductionCam.PubTask}}</span>
 			{{end}}
 			
 			{{if .ProductionCam.PubPath}}
-				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-info">campath</a>
+				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-info ml-1">campath</a>
 			{{end}}
 		</div>
 		
@@ -591,7 +591,7 @@
 		
 		<div class="row">
 			{{range .Sources}}
-				<a  href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+				<a  href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
 			{{end}}
 		</div>
 		
