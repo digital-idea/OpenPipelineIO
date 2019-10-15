@@ -417,3 +417,13 @@ input[type=checkbox]:checked+div{
 	font-size: 12px;
 	cursor: pointer;
 }
+
+.add {
+	color: #FFFFFF;
+	background-color: rgb(188, 136, 47);
+	border-radius: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 12px;
+	cursor: pointer;
+}

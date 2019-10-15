@@ -618,6 +618,12 @@
 	<!--수정사항-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		{{$name := .Name}}
+		{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+			<div class="float-right">
+				<span class="add" onclick="addComment('{{$.SearchOption.Project}}', '{{$name}}', 'test', '{{$.User.Token}}')">+</span>
+			</div>
+		{{end}}
+		
 		{{range ReverseCommentSlice .Comments | CutSlice}}
 			<span class="text-badge">{{.Date}} / 
 				{{if eq .Author "unknown"}}
