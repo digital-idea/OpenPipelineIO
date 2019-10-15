@@ -1196,6 +1196,11 @@ func handleIndexV2(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 아무 상태도 선택되어있지 않다면 기본 상태설정으로 변경한다.
+	if rcp.SearchOption.isStatusOff() {
+		rcp.SearchOption.setStatusDefault()
+	}
+
 	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index2&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,

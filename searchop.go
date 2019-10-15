@@ -70,6 +70,14 @@ func (op *SearchOption) setStatusNone() {
 	op.None = false
 }
 
+// isStatusOff 메소드는 모든 상태가 꺼저 있는지 체크한다.
+func (op *SearchOption) isStatusOff() bool {
+	if op.Assign || op.Ready || op.Wip || op.Confirm || op.Done || op.Omit || op.Hold || op.Out || op.None {
+		return false
+	}
+	return true
+}
+
 func handleRequestToSearchOption(r *http.Request) SearchOption {
 	q := r.URL.Query()
 	op := SearchOption{
