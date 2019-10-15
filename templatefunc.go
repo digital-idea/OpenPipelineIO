@@ -173,6 +173,28 @@ func ReverseStringSlice(lists []string) []string {
 	return result
 }
 
+// ReverseCommentSlice 함수는 받아들인 string 슬라이스의 아이템 순서를 역순으로 변경한다.
+// 받아들인 값이 nil이라면 빈 string 슬라이스를 반환하는데,
+// 그 이유는 template 파싱중 패닉이 일어나지 않게 하기 위해서다.
+func ReverseCommentSlice(lists []Comment) []Comment {
+	if lists == nil {
+		return []Comment{}
+	}
+	var result []Comment
+	for i := len(lists); i > 0; i-- {
+		result = append(result, lists[i-1])
+	}
+	return result
+}
+
+// CutSlice 템플릿 함수는 3개의 리스트만 반환한다.
+func CutSlice(lists []Comment) []Comment {
+	if len(lists) < 4 {
+		return lists
+	}
+	return lists[:3]
+}
+
 // MatchShortTime 은 "1019" 형식의 레귤러 익스프레션
 var MatchShortTime = regexp.MustCompile(`^\d{4}$`)
 

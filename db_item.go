@@ -2379,9 +2379,17 @@ func AddComment(session *mgo.Session, project, name, userID, text string) error 
 	if err != nil {
 		return err
 	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	// 코멘트 추가.
+	c := Comment{}
+	c.Date = time.Now().Format(time.RFC3339)
+	c.Author = userID
+	c.Text = text
+	i.Comments = append(i.Comments, c)
+
+	// Legacy
 	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
 	i.Pmnote = append(i.Pmnote, note)
+
 	err = setItem(session, project, i)
 	if err != nil {
 		return err
@@ -2390,7 +2398,7 @@ func AddComment(session *mgo.Session, project, name, userID, text string) error 
 }
 
 // RmComment 함수는 item에 수정사항을 삭제합니다.
-func RmComment(session *mgo.Session, project, name, userID, text string) error {
+func RmComment(session *mgo.Session, project, name, userID, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2405,14 +2413,22 @@ func RmComment(session *mgo.Session, project, name, userID, text string) error {
 	if err != nil {
 		return err
 	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	var newComments []Comment
+	for _, comment := range i.Comments {
+		if comment.Date == date {
+			continue
+		}
+		newComments = append(newComments, comment)
+	}
+	i.Comments = newComments
+	// Legacy
 	var newPmnotes []string
 	for _, note := range i.Pmnote {
 		i := strings.LastIndex(note, ";")
 		if i == -1 {
 			continue
 		}
-		if note[i+1:] == text {
+		if note[i+1:] == date {
 			continue
 		}
 		newPmnotes = append(newPmnotes, note)

@@ -35,6 +35,8 @@ var funcMap = template.FuncMap{
 	"pmnote2body":         pmnote2body,
 	"GetPath":             GetPath,
 	"ReverseStringSlice":  ReverseStringSlice,
+	"ReverseCommentSlice": ReverseCommentSlice,
+	"CutSlice":            CutSlice,
 	"ToShortTime":         ToShortTime,
 	"ToNormalTime":        ToNormalTime,
 	"Tags2str":            Tags2str,
@@ -270,7 +272,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/rmnote", handleAPIRmNote)
 	http.HandleFunc("/api/setnotes", handleAPISetNotes)
 	http.HandleFunc("/api/addcomment", handleAPIAddComment)
-	http.HandleFunc("/api/rmcommente", handleAPIRmComment)
+	http.HandleFunc("/api/rmcomment", handleAPIRmComment)
 	http.HandleFunc("/api/setcomments", handleAPISetComments)
 	http.HandleFunc("/api/addsource", handleAPIAddSource)
 	http.HandleFunc("/api/rmsource", handleAPIRmSource)

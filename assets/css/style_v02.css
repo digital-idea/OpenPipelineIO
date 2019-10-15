@@ -44,6 +44,10 @@ body {
 	border:1px solid rgb(55, 55, 52);
 }
 
+.divider {
+	border:1px solid rgb(77, 77, 72);
+}
+
 .item-divider {
 	border:1px solid rgb(69, 69, 65);
 }
@@ -127,6 +131,7 @@ body {
 
 small {
 	color: rgb(137, 135, 125);
+	font-weight: 100;
 }
 
 .text-muted {
@@ -396,4 +401,18 @@ input[type=checkbox]:checked+div{
 	top: 50%;
 	right: 8px;
 	transform: translate(0, -50%);
+}
+
+.comments-box {
+	height: 250px;
+	overflow: auto;
+}
+
+.remove {
+	color: #FFFFFF;
+	background-color: rgb(188, 47, 47);
+	border-radius: 3px;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 12px;
 }

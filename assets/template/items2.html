@@ -172,7 +172,7 @@
 					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
 				{{- end}}
-				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Log</a>
+				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">Log</a>
 			</div>
 		</div>
 	</div>
@@ -617,11 +617,21 @@
 
 	<!--수정사항-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
-		{{range .Comments}}
-			<span class="badge badge-light">{{.Date}}</span>
-			<span class="badge badge-light">{{.Author}}</span>
-			{{.Text}}
-			<hr size="1" noshade class="p-0 m-0">
+		{{range ReverseCommentSlice .Comments | CutSlice}}
+			<span class="text-badge">{{.Date}} / 
+				{{if eq .Author "unknown"}}
+					{{.Author}}
+				{{else}}
+					<a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a>
+				{{end}}
+			</span>
+			<br>
+			<small class="text-white">
+				{{range Split .Text "\n"}}
+					{{.}}<br>
+				{{end}}
+			</small>
+			<hr class="my-1 p-0 m-0 divider">
 		{{end}}
 	</div>
 </div>
