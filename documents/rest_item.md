@@ -53,16 +53,12 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/addtag | tag 추가 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0010&tag=테스트" http://192.168.219.104/api/addtag` |
 | /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
 | /api/rmtag | tags 삭제 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0020&tag=태그3" http://192.168.219.114/api/rmtag` |
-| /api/addnote(레거시) | 작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/addnote` |
 | /api/setnote | 작업내용 변경 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/setnote` |
-| /api/rmnote(레거시) | 작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=삭제내용" http://192.168.219.104/api/rmnote` |
-| /api/setnotes(레거시) | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setnotes` |
 | /api/addcomment | 수정사항 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
 | /api/setcomments | 수정사항 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.31.172/api/setcomments` |
-| /api/addlink | 링크소스 추가(레거시) | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/addlink` |
 | /api/addsource | 링크소스 추가 | project, name, title, path | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
-| /api/rmlink | 링크소스 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/rmlink` |
+| /api/rmsource | 링크소스 삭제 | project, name, title | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" http://192.168.31.172/api/rmsource` |
 | /api/setlinks | 링크소스 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1,/show/src2" http://192.168.31.172/api/setlinks` |
 | /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
 | /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
@@ -72,6 +68,15 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" http://10.0.90.251/api/setretimeplate`|
 | /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -d "project=TEMP&name=SS_0020&task=comp&level=1" http://10.0.90.251/api/settasklevel`|
 
+
+## Post(Legacy)
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/addlink | 링크소스 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/addlink` |
+| /api/rmlink | 링크소스 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/rmlink` |
+| /api/addnote | 작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/addnote` |
+| /api/rmnote | 작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=삭제내용" http://192.168.219.104/api/rmnote` |
+| /api/setnotes | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setnotes` |
 
 #### 샷정보 가지고오기. Python2.7x
 - TEMP 프로젝트 OPN_0010 샷 정보를 가지고 오기(암호화 토큰키 사용)

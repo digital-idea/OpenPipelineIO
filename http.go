@@ -273,8 +273,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/rmcommente", handleAPIRmComment)
 	http.HandleFunc("/api/setcomments", handleAPISetComments)
 	http.HandleFunc("/api/addsource", handleAPIAddSource)
-	http.HandleFunc("/api/rmlink", handleAPIRmLink)
-	http.HandleFunc("/api/setlinks", handleAPISetLinks)
+	http.HandleFunc("/api/rmsource", handleAPIRmSource)
 	http.HandleFunc("/api/search", handleAPISearch)
 	http.HandleFunc("/api/deadline2d", handleAPIDeadline2D)
 	http.HandleFunc("/api/deadline3d", handleAPIDeadline3D)
@@ -299,6 +298,8 @@ func webserver(port string) {
 	http.HandleFunc("/search", handleSearch)
 	http.HandleFunc("/searchsubmit", handleSearchSubmit)
 	http.HandleFunc("/api/addlink", handleAPIAddLink)
+	http.HandleFunc("/api/rmlink", handleAPIRmLink)
+	http.HandleFunc("/api/setlinks", handleAPISetLinks)
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.

@@ -301,6 +301,33 @@ function addSources(project, title, path, token) {
     }
 }
 
+function rmSources(project, title, token) {
+    var cboxes = document.getElementsByName('selectID');
+    for (var i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === false) {
+            continue
+        }
+        sleep(200);
+        $.ajax({
+            url: "/api/rmsource",
+            type: "post",
+            data: {
+                project: project,
+                name: cboxes[i].getAttribute("id"),
+                title: title,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+    }
+}
+
+
 function setTaskUser(project, name, task, user, token) {
     $.ajax({
         url: "/api/settaskuser",

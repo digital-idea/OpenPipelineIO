@@ -2549,6 +2549,38 @@ func RmLink(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
+// RmSource 함수는 item에서 소스를 삭제합니다.
+func RmSource(session *mgo.Session, project, name, title string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
+	var newSources []Source
+	for _, source := range i.Sources {
+		if source.Title == title {
+			continue
+		}
+		newSources = append(newSources, source)
+	}
+	i.Sources = newSources
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetLinks 함수는 item에 소스링크를 교체합니다.
 func SetLinks(session *mgo.Session, project, name, userID string, texts []string) error {
 	session.SetMode(mgo.Monotonic, true)
