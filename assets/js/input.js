@@ -229,6 +229,26 @@ function addComment(project, name, text, token) {
     });
 }
 
+function rmComment(project, name, date, token) {
+    $.ajax({
+        url: "/api/rmcomment",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            date: date,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        }
+    });
+    alert(`${project}프로젝트 ${name}샷\n ${date} 일자\n 수정사항이 삭제되었습니다.\n새로고침 해주세요.`);
+}
+
 function addComments(project, text, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
@@ -300,6 +320,8 @@ function addSources(project, title, path, token) {
         });
     }
 }
+
+
 
 function rmSources(project, title, token) {
     var cboxes = document.getElementsByName('selectID');

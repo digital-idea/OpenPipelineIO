@@ -3007,7 +3007,7 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
-	var text string
+	var date string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -3025,16 +3025,16 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
-		case "text":
+		case "date", "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			text = v
+			date = v
 		}
 	}
-	err = RmComment(session, project, name, userID, text)
+	err = RmComment(session, project, name, userID, date)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
