@@ -3,21 +3,21 @@
 <!-- 멀티입력 -->
 <div class="">
 	<div class="text-right m-3">
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxAll()">전체선택</button>
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxNone()">전체해제</button>
-		<button type="button" class="btn btn-secondary btn-sm" onclick="selectCheckboxInvert()">선택반전</button>
+		<button type="button" class="btn btn-outline-darkmode btn-sm" onclick="selectCheckboxAll()">Select All</button>
+		<button type="button" class="btn btn-outline-darkmode btn-sm" onclick="selectCheckboxNone()">Select None</button>
+		<button type="button" class="btn btn-outline-darkmode btn-sm" onclick="selectCheckboxInvert()">Select Invert</button>
 	</div>
 	<div class="text-right mr-3">
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#multi-input">수정내용 일괄추가</button>
+		<button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#multi-input">수정내용 일괄추가</button>
 	</div>
 	<!-- Modal -->
 	<div class="modal fade" id="multi-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
-		<div class="modal-content">
+		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
 			<h5 class="modal-title" id="exampleModalLabel">수정내용 일괄추가</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
@@ -27,8 +27,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" onclick="addComments('{{.SearchOption.Project}}', document.getElementById('multi-input-comment').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addComments('{{.SearchOption.Project}}', document.getElementById('multi-input-comment').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
 			</div>
 		</div>
 		</div>
@@ -39,7 +39,7 @@
 	{{range .Items}}
 	<div class="mx-auto">
 		<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
-		<div class="card m-2" style="width: 18rem;" for="{{.ID}}">
+		<div class="card m-2 bg-darkmode" style="width: 18rem;" for="{{.ID}}">
 			<label for="{{.Name}}" class="p-0 m-0">
 				<img class="card-img-top" src="/thumbnail/{{.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'">
 			</label>
@@ -47,16 +47,16 @@
 				<h6 class="card-title">{{.Name}}({{.Type}})</h6>
 				<div class="row">
 					<div class="col pl-1 pr-1 pt-0 pb-0">
-						<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#{{.ID}}">수정내용추가</button>
+						<button type="button" class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#{{.ID}}">+</button>
 					</div>
 					<!-- Modal -->
 					<div class="modal fade" id="{{.ID}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog" role="document">
-						<div class="modal-content">
+						<div class="modal-content bg-darkmode">
 							<div class="modal-header">
 							<h5 class="modal-title" id="exampleModalLabel">{{.ID}}</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
+								<span aria-hidden="true" class="text-darkmode">&times;</span>
 							</button>
 							</div>
 							<div class="modal-body">
@@ -67,8 +67,8 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary" onclick="addComment('{{.Project}}', '{{.Name}}', document.getElementById('{{.ID}}-comment').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+								<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-outline-warning" onclick="addComment('{{.Project}}', '{{.Name}}', document.getElementById('{{.ID}}-comment').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
 							</div>
 						</div>
 						</div>

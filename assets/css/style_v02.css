@@ -118,6 +118,10 @@ body {
 	color: #A7A59C;
 }
 
+small {
+	color: rgb(137, 135, 125);
+}
+
 .text-muted {
 	color: rgb(137, 135, 127)!important;
 }
@@ -132,6 +136,18 @@ body {
 
 .card-title {
 	color: #A7A59C!important;
+}
+
+.modal-header {
+	border-bottom: 1px solid rgb(111, 110, 104);
+}
+
+.modal-footer{
+	border-top: 1px solid rgb(111, 110, 104);
+}
+
+.modal-title {
+	color: #A7A59C;
 }
 
 .card-header {
@@ -245,10 +261,9 @@ label {
 
 
 input[type=checkbox]:checked+div{
-    background-color: rgb(249, 234, 210);
-    border: solid;
-    border-width: 1px;
-    border-color: rgb(205, 72, 0);
+    background-color: #2e2d2d;
+	border: 2px solid rgb(205, 72, 0);
+	border-radius: 0;
 }
 
 /*날짜가 검색되면 표시되는 색상*/

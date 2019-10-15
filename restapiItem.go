@@ -3220,7 +3220,7 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			title = v
-		case "path":
+		case "path", "url":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)

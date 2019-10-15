@@ -254,14 +254,15 @@ function addComments(project, text, token) {
     }
 }
 
-function addLink(project, name, text, token) {
+function addSource(project, name, title, path, token) {
     $.ajax({
-        url: "/api/addlink",
+        url: "/api/addsource",
         type: "post",
         data: {
             project: project,
             name: name,
-            text: text,
+            title: title,
+            path: path,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -273,19 +274,21 @@ function addLink(project, name, text, token) {
     });
 }
 
-function addLinks(project, text, token) {
+function addSources(project, title, path, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
             continue
         }
+        sleep(200);
         $.ajax({
-            url: "/api/addlink",
+            url: "/api/addsource",
             type: "post",
             data: {
                 project: project,
                 name: cboxes[i].getAttribute("id"),
-                text: text,
+                title: title,
+                path: path,
             },
             headers: {
                 "Authorization": "Basic "+ token
