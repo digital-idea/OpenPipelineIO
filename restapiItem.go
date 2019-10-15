@@ -1514,7 +1514,7 @@ func handleAPISetAssignTask(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleAPISetUser 함수는 아이템의 task에 대한 유저를 설정한다.
+// handleAPISetTaskUser 함수는 아이템의 task에 대한 유저를 설정한다.
 func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	if r.Method != http.MethodPost {
@@ -1563,12 +1563,9 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 			}
 			task = v
 		case "user":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+			if len(value) == 1 {
+				user = value[0]
 			}
-			user = v
 		}
 	}
 	err = SetTaskUser(session, project, name, task, user)
