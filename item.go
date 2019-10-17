@@ -21,7 +21,7 @@ const (
 	READY = "5"
 	// ASSIGN 작업자 배정을 기다리는 상태
 	ASSIGN = "4"
-	// OUT 외주상태
+	// OUT 외주상태(삭제예정이다.)
 	OUT = "3"
 	// DONE 작업완료 상태
 	DONE = "2"
