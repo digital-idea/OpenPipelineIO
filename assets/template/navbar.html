@@ -7,9 +7,6 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         {{if .Devmode}}
-          <li class="nav-item">
-            <a class="nav-link" href="/search?project=TEMP&searchword=all&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false">OldView</a>
-          </li>
         {{else}}
           <li class="nav-item">
             <a class="nav-link" href="/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword=">NewView</a>
@@ -79,7 +76,6 @@
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputtags&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">태그설정</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputshottype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">샷 타입 설정</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassettype&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">에셋 타입 설정</a>
-            {{if .Devmode}}
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassigntasks&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">Assign Tasks</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputdeadline&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">마감일 설정</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputassignuser&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">Assign User</a>
@@ -87,8 +83,6 @@
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputedittime&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">시간정보 수정</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddnote&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">작업내용 입력</a>
             <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddlink&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">연결소스 입력</a>
-            <a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&sortkey=slug&template=inputaddcomment&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task={{$.SearchOption.Task}}&searchword={{$.SearchOption.Searchword}}">수정내용 입력</a>
-            {{end}}
           </div>
         </li>
         
