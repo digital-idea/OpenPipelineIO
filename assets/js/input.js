@@ -1,3 +1,5 @@
+var multiInput = false;
+
 function sleep( millisecondsToWait ) {
     var now = new Date().getTime();
     while ( new Date().getTime() < now + millisecondsToWait ) {
@@ -174,27 +176,60 @@ function addNotes(project, text, token) {
 }
 
 function addComment(project, name, text, userid, token) {
-    $.ajax({
-        url: "/api/addcomment",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            text: text,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
+    if (multiInput) {
+        var cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            currentName = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/addcomment",
+                type: "post",
+                data: {
+                    project: project,
+                    name: currentName,
+                    text: text,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                }
+            });
+            // comments-{{.Name}} 내부 내용에 추가한다.
+            let body = text.replace("\n","<br>")
+            let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
+            document.getElementById("comments-"+currentName).innerHTML = newComment + document.getElementById("comments-"+currentName).innerHTML;
         }
-    });
-    // comments-{{.Name}} 내부 내용에 추가한다.
-    let body = text.replace("\n","<br>")
-    let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
-    document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
+    } else {
+        $.ajax({
+            url: "/api/addcomment",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                text: text,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            }
+        });
+        // comments-{{.Name}} 내부 내용에 추가한다.
+        let body = text.replace("\n","<br>")
+        let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
+        document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
+    }
 }
 
 function rmComment(project, name, date, token) {
@@ -826,6 +861,7 @@ function rmTags(project, tag, token) {
 }
 
 function selectCheckboxAll() {
+    multiInput = true;
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         cboxes[i].checked = true;
@@ -833,6 +869,7 @@ function selectCheckboxAll() {
 }
 
 function selectCheckboxNone() {
+    multiInput = false;
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         cboxes[i].checked = false;
@@ -841,6 +878,9 @@ function selectCheckboxNone() {
 
 function selectCheckboxInvert() {
     var cboxes = document.getElementsByName('selectID');
+    if (cboxes.length > 0) {
+        multiInput = true;
+    }
     for (var i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
             cboxes[i].checked = true;
