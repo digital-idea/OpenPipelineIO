@@ -11,17 +11,17 @@
         <div>
             <label>Success Shots</label>
             {{range .Success}}
-                <div class="p-1"><span class="btn btn-sm btn-success">{{.Name}}</span> 정상</div>
+                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-success">{{.Name}}</span> 정상</div>
             {{end}}
         </div>
         <div class="pt-5">
             <label>Fail Shots</label>
             {{range .Fails}}
-                <div class="p-1"><span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}</div>
+                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}</div>
             {{end}}
         </div>
         <div class="text-center">
-            <a href="/" class="btn btn-primary mt-5">Home</a>
+            <a href="/" class="btn btn-darkmode mt-5">Home</a>
         </div>
     </div>
 </div>

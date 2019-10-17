@@ -2379,17 +2379,11 @@ func AddComment(session *mgo.Session, project, name, userID, text string) error 
 	if err != nil {
 		return err
 	}
-	// 코멘트 추가.
 	c := Comment{}
 	c.Date = time.Now().Format(time.RFC3339)
 	c.Author = userID
 	c.Text = text
 	i.Comments = append(i.Comments, c)
-
-	// Legacy
-	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-	i.Pmnote = append(i.Pmnote, note)
-
 	err = setItem(session, project, i)
 	if err != nil {
 		return err
@@ -2421,19 +2415,6 @@ func RmComment(session *mgo.Session, project, name, userID, date string) error {
 		newComments = append(newComments, comment)
 	}
 	i.Comments = newComments
-	// Legacy
-	var newPmnotes []string
-	for _, note := range i.Pmnote {
-		i := strings.LastIndex(note, ";")
-		if i == -1 {
-			continue
-		}
-		if note[i+1:] == date {
-			continue
-		}
-		newPmnotes = append(newPmnotes, note)
-	}
-	i.Pmnote = newPmnotes
 	err = setItem(session, project, i)
 	if err != nil {
 		return err

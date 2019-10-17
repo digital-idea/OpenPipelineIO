@@ -891,3 +891,8 @@ function setTaskLevels(project, task, level, token) {
         });
     }
 }
+
+// setModal 함수는 modalid와 value를 받아서 modal에 셋팅한다.
+function setModal(modalid, value) {
+    document.getElementById(modalid).value=value;
+}
