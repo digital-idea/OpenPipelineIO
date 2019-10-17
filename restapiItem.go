@@ -2951,6 +2951,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var text string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -2975,7 +2976,17 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			text = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			userid = v
 		}
+	}
+	if userID == "unknown" && userid != "" {
+		userID = userid
 	}
 	err = AddComment(session, project, name, userID, text)
 	if err != nil {

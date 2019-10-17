@@ -173,7 +173,7 @@ function addNotes(project, text, token) {
     }
 }
 
-function addComment(project, name, text, token) {
+function addComment(project, name, text, userid, token) {
     $.ajax({
         url: "/api/addcomment",
         type: "post",
@@ -181,6 +181,7 @@ function addComment(project, name, text, token) {
             project: project,
             name: name,
             text: text,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -190,6 +191,10 @@ function addComment(project, name, text, token) {
             console.info(data)
         }
     });
+    // comments-{{.Name}} 내부 내용에 추가한다.
+    let body = text.replace("\n","<br>")
+    let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
+    document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
 }
 
 function rmComment(project, name, date, token) {
@@ -209,10 +214,10 @@ function rmComment(project, name, date, token) {
             console.info(data)
         }
     });
-    alert(`${project}프로젝트 ${name}샷\n ${date} 일자\n 수정사항이 삭제되었습니다.\n새로고침 해주세요.`);
+    document.getElementById(`comments-${name}-${date}`).remove();
 }
 
-function addComments(project, text, token) {
+function addComments(project, text, userid, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
@@ -225,6 +230,7 @@ function addComments(project, text, token) {
                 project: project,
                 name: cboxes[i].getAttribute("id"),
                 text: text,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
