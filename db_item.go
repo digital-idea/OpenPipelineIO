@@ -608,9 +608,13 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"tag": "8권"})
 			default:
 				query = append(query, bson.M{"id": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}}) // legacy
+				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})    // legacy
+				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})      // legacy
+				query = append(query, bson.M{"comments.text": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"sources.title": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"sources.path": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"note.text": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
