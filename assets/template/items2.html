@@ -559,7 +559,11 @@
 				{{.}}<br>
 			{{end}}
 		</div>
-		
+		<!--작업내용 legacy start-->
+		<div class="ml-1 text-light small">
+			{{range .Onsetnote | ReverseStringSlice -}}{{note2body .}}<br>{{- end}}
+		</div>
+		<!--작업내용 legacy end-->
 		
 		<!--ObjectID-->
 		{{if and .ObjectidIn .ObjectidOut}}
@@ -624,7 +628,7 @@
 			</div>
 		{{end}}
 		
-		{{range ReverseCommentSlice .Comments | CutSlice}}
+		{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 			<span class="text-badge">{{.Date}} / 
 				{{if eq .Author "unknown"}}
 					{{.Author}}
@@ -643,6 +647,12 @@
 			</small>
 			<hr class="my-1 p-0 m-0 divider">
 		{{end}}
+		<!--수정내용 legacy start-->
+		{{range ReverseStringSlice .Pmnote | CutStringSlice -}}
+			<small class="text-white">{{pmnote2body .}}</small><br>
+			<hr class="my-1 p-0 m-0 divider">
+		{{- end}}
+		<!--수정내용 legacy end-->
 	</div>
 </div>
 <hr class="item-divider">

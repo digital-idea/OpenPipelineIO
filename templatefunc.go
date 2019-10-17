@@ -187,8 +187,16 @@ func ReverseCommentSlice(lists []Comment) []Comment {
 	return result
 }
 
-// CutSlice 템플릿 함수는 3개의 리스트만 반환한다.
-func CutSlice(lists []Comment) []Comment {
+// CutCommentSlice 템플릿 함수는 3개의 리스트만 반환한다.
+func CutCommentSlice(lists []Comment) []Comment {
+	if len(lists) < 4 {
+		return lists
+	}
+	return lists[:3]
+}
+
+// CutStringSlice 템플릿 함수는 3개의 리스트만 반환한다.
+func CutStringSlice(lists []string) []string {
 	if len(lists) < 4 {
 		return lists
 	}
