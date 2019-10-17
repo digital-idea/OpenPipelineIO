@@ -1,4 +1,10 @@
 {{define "items2" }}
+<div class="text-right m-3">
+	<span class="select" onclick="selectCheckboxAll()">Select All</span>
+	<span class="select" onclick="selectCheckboxNone()">Select None</span>
+	<span class="select" onclick="selectCheckboxInvert()">Select Invert</span>
+</div>
+
 <div class="p-3">
 
 <!-- Modal: Add Comment-->
@@ -220,7 +226,7 @@
 			<div class="mx-auto pt-1">
 				{{if eq .Type "org" "left" "asset"}}
 					<label for="{{.Name}}">
-						<span class="badge badge-info">SELECT</span>
+						<span class="select">SELECT</span>
 					</label>
 				{{end}}
 				{{if .Updatetime|CheckUpdate}}
