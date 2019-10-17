@@ -60,7 +60,9 @@
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		<!--Thumbnail-->
 		<div class="row">
-			<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
+			{{if eq .Type "org" "left" "asset"}}
+				<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
+			{{end}}
 			<div class="thumbnailbox ml-1">
 				{{if .Thummov}}
 					<a href="dilink://{{.Thummov}}">
@@ -216,9 +218,11 @@
 		
 		<div class="row">
 			<div class="mx-auto pt-1">
-				<label for="{{.Name}}">
-					<span class="badge badge-info">SELECT</span>
-				</label>
+				{{if eq .Type "org" "left" "asset"}}
+					<label for="{{.Name}}">
+						<span class="badge badge-info">SELECT</span>
+					</label>
+				{{end}}
 				{{if .Updatetime|CheckUpdate}}
 					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
 				{{end}}
