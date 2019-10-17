@@ -195,7 +195,7 @@
 			{{if eq .Concept.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}">concept</span>
+						<span class="badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Concept.Status}}">concept</span>
 						{{if .Concept.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Concept.Predate}}</span>
 						{{end}}
@@ -217,7 +217,7 @@
 			{{if eq .Model.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}">model</span>
+						<span class="badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Concept.Model}}">model</span>
 						{{if .Model.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Model.Predate}}</span>
 						{{end}}
@@ -239,7 +239,7 @@
 			{{if eq .Mm.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}">mm</span>
+						<span class="badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mm.Status}}">mm</span>
 						{{if .Mm.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Mm.Predate}}</span>
 						{{end}}
@@ -257,7 +257,7 @@
 			{{if eq .Layout.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}">layout</span>
+						<span class="badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Layout.Status}}">layout</span>
 						{{if .Layout.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Layout.Predate}}</span>
 						{{end}}
@@ -275,7 +275,7 @@
 			{{if eq .Ani.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}">ani</span>
+						<span class="badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Ani.Status}}">ani</span>
 						{{if .Ani.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Ani.Predate}}</span>
 						{{end}}
@@ -296,7 +296,7 @@
 			{{if eq .Fx.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}">fx</span>
+						<span class="badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fx.Status}}">fx</span>
 						{{if .Fx.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Fx.Predate}}</span>
 						{{end}}
@@ -314,7 +314,7 @@
 			{{if eq .Mg.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}">motion</span>
+						<span class="badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Motion.Status}}">motion</span>
 						{{if .Mg.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Mg.Predate}}</span>
 						{{end}}
@@ -332,7 +332,7 @@
 			{{if eq .Temp1.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}">{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</span>
+						<span class="badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Temp1.Status}}">{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</span>
 						{{if .Temp1.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Temp1.Predate}}</span>
 						{{end}}
@@ -350,7 +350,7 @@
 			{{if eq .Previz.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}">previz</span>
+						<span class="badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Previz.Status}}">previz</span>
 						{{if .Previz.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Previz.Predate}}</span>
 						{{end}}
@@ -367,7 +367,7 @@
 			{{if eq .Fur.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}">fur</span>
+						<span class="badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fur.Status}}">fur</span>
 						{{if .Fur.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Fur.Predate}}</span>
 						{{end}}
@@ -388,7 +388,7 @@
 			{{if eq .Sim.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}">sim</span>
+						<span class="badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Sim.Status}}">sim</span>
 						{{if .Sim.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Sim.Predate}}</span>
 						{{end}}
@@ -410,7 +410,7 @@
 			{{if eq .Crowd.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}">crowd</span>
+						<span class="badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Crowd.Status}}">crowd</span>
 						{{if .Crowd.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Crowd.Predate}}</span>
 						{{end}}
@@ -428,7 +428,7 @@
 			{{if eq .Light.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}">
+						<span class="badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Light.Status}}">
 							{{if eq .Type "asset"}}
 								look
 							{{else}}
@@ -455,7 +455,7 @@
 			{{if eq .Comp.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}">comp</span>
+						<span class="badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Comp.Status}}">comp</span>
 						{{if .Comp.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Comp.Predate}}</span>
 						{{end}}
@@ -476,7 +476,7 @@
 			{{if eq .Matte.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}">matte</span>
+						<span class="badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Matte.Status}}">matte</span>
 						{{if .Matte.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Matte.Predate}}</span>
 						{{end}}
@@ -493,7 +493,7 @@
 			{{if eq .Env.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<h5 class="p-0 m-0">
-						<span class="badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}">env</span>
+						<span class="badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Env.Status}}">env</span>
 						{{if .Env.Predate}}
 							<span class="badge badge-light">{{ToShortTime .Env.Predate}}</span>
 						{{end}}
