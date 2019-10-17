@@ -860,6 +860,13 @@ function rmTags(project, tag, token) {
     }
 }
 
+function selectCheckbox() {
+    var cboxes = document.getElementsByName('selectID');
+    if (cboxes.length > 0) {
+        multiInput = true;
+    }
+}
+
 function selectCheckboxAll() {
     multiInput = true;
     var cboxes = document.getElementsByName('selectID');

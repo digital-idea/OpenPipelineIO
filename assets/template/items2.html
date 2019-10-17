@@ -221,7 +221,7 @@
 			<div class="mx-auto pt-1">
 				{{if eq .Type "org" "left" "asset"}}
 					<label for="{{.Name}}">
-						<span class="select">SELECT</span>
+						<span class="select" onclick="selectCheckbox()">SELECT</span>
 					</label>
 				{{end}}
 				{{if .Updatetime|CheckUpdate}}
