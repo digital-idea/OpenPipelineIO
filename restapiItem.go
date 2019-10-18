@@ -2993,6 +2993,16 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	err = dilog.Add(*flagDBIP, host, "Add comment: "+text, project, name, "csi3", userID, 180)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
@@ -3019,6 +3029,7 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var date string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -3043,9 +3054,29 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			date = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			userid = v
 		}
 	}
-	err = RmComment(session, project, name, userID, date)
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
+	removeText, err := RmComment(session, project, name, userID, date)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	err = dilog.Add(*flagDBIP, host, "Remove comment: "+removeText, project, name, "csi3", userID, 180)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

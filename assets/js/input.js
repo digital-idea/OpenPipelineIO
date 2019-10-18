@@ -232,7 +232,7 @@ function addComment(project, name, text, userid, token) {
     }
 }
 
-function rmComment(project, name, date, token) {
+function rmComment(project, name, date, userid, token) {
     $.ajax({
         url: "/api/rmcomment",
         type: "post",
@@ -240,6 +240,7 @@ function rmComment(project, name, date, token) {
             project: project,
             name: name,
             date: date,
+            userid: userid
         },
         headers: {
             "Authorization": "Basic "+ token

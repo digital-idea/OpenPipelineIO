@@ -41,6 +41,7 @@
 			<div class="modal-body">				
 				<input type="hidden" class="form-control" id="rm-comment-name">
 				<input type="hidden" class="form-control" id="rm-comment-time">
+				<input type="hidden" class="form-control" id="rm-comment-userid">
 				<div class="form-group">
 					<label for="comment-text" class="col-form-label">아래 내용을 삭제하겠습니까?</label>
 					<textarea class="form-control" id="rm-comment-text" rows="4" disabled></textarea>
@@ -48,7 +49,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmComment('{{$.SearchOption.Project}}', document.getElementById('rm-comment-name').value, document.getElementById('rm-comment-time').value, '{{$.User.Token}}')" data-dismiss="modal">DELETE</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmComment('{{$.SearchOption.Project}}', document.getElementById('rm-comment-name').value, document.getElementById('rm-comment-time').value, document.getElementById('rm-comment-userid').value, '{{$.User.Token}}')" data-dismiss="modal">DELETE</button>
 			</div>
 		</div>
 	</div>
@@ -697,7 +698,7 @@
 				<div id="comments-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}')">x</span>
+						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">x</span>
 					{{end}}
 					<br>
 					<small class="text-white">
