@@ -408,7 +408,7 @@ input[type=checkbox]:checked+div{
 	overflow: auto;
 }
 
-.remove {
+.remove:hover {
 	color: #FFFFFF;
 	background-color: rgb(188, 47, 47);
 	border-radius: 3px;
@@ -418,7 +418,7 @@ input[type=checkbox]:checked+div{
 	cursor: pointer;
 }
 
-.add {
+.add:hover {
 	color: #000000;
 	background-color: #FFB90B;
 	border-radius: 3px;
@@ -428,7 +428,7 @@ input[type=checkbox]:checked+div{
 	cursor: pointer;
 }
 
-.select {
+.select, .add, .remove {
 	color: #A7A59C;
 	background-color: rgb(55, 54, 52);
 	border:1px solid #A7A59C;
