@@ -93,19 +93,30 @@
 			<input type="text" size="55" name="ProductionCamPubPath" value="{{.Item.ProductionCam.PubPath}}" class="form-control">
 			<small class="form-text text-muted">카메라 퍼블리쉬 경로를 설정합니다.</small>
 		</div>
-		<div class="form-check">
-			<input type="checkbox" id="ProductionCamProjection" name="ProductionCamProjection" class="form-check-input" value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}>
-			<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+		<div class="form-group">
+			<div class="form-check">
+				<input type="checkbox" id="ProductionCamProjection" name="ProductionCamProjection" class="form-check-input" value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}>
+				<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+			</div>
 		</div>
 	{{end}}
+
+	<div class="form-group">
+		<label>ObjectID 사용범위(Katana)</label>
+		<div class="row">
+			<div class="col-6 form-group">
+				<input type="text" size="5" maxlength="5" name="ObjectidIn" value="{{.Item.ObjectidIn}}" class="form-control">
+			</div>
+			<div class="col-6 form-group">
+				<input type="text" size="5" maxlength="5" name="ObjectidOut" value="{{.Item.ObjectidOut}}" class="form-control">	
+			</div>
+		</div>
+		<small class="form-text text-mute">카타나 라이팅팀에서 입력함.</small>
+	</div>
 	<div class="editTable">
 		<div class="body">
-			<div class="row">
-				<div class="cellRight">ObjectID 사용범위(Katana) : </div>
-				<div class="cell"><input type="text" size="5" maxlength="5" name="ObjectidIn" value="{{.Item.ObjectidIn}}">~<input type="text" size="5" maxlength="5" name="ObjectidOut" value="{{.Item.ObjectidOut}}">&nbsp;※ 카타나 라이팅팀에서 입력함. </div>
-			</div>
-			<div class="rowTitle"><div class="cell">스케줄</div><div class="cellRightTitle"></div></div>
-			<hr>
+			
+			
 			<div class="row">
 				<div class="cell center">
 <!--스케줄 영역-->
