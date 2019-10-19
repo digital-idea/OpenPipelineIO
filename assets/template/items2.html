@@ -230,10 +230,10 @@
 				{{end}}
 			
 				{{if eq .Type "asset" -}}
-					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
 				{{- else -}}
-					<a href="/edit?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
 				{{- end}}
 				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">Log</a>

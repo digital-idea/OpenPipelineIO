@@ -1,5 +1,21 @@
 var multiInput = false;
 
+function removeWhiteSpace(event) {
+	event.value = event.value.replace(/ /g, '');
+}
+
+// *문자를 x문자로 바꾼다.
+// X를 x문자로 바꾼다.
+// 공백을 제거한다.
+// 렌즈디스토션값을 입력시 2048*1280 -> 2048x1280 형태로 바꾸기 위함이다.
+// 숫자와 x를 제외한 영문입력시 삭제됩니다.
+function widthxHeight(event) {
+	event = event || window.event;
+	event.target.value = event.target.value.replace("*","x");
+	event.target.value = event.target.value.replace("X","x");
+	event.target.value = event.target.value.replace(/[^\d\x]/gi,"");
+}
+
 function sleep( millisecondsToWait ) {
     var now = new Date().getTime();
     while ( new Date().getTime() < now + millisecondsToWait ) {
@@ -363,7 +379,7 @@ function setTaskUser(project, name, task, user, token) {
             project: project,
             name: name,
             task: task,
-            user: user,
+            user: removeWhiteSpace(user),
         },
         headers: {
             "Authorization": "Basic "+ token

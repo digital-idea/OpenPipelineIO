@@ -1,0 +1,474 @@
+{{define "edit" }}
+{{template "head"}}
+<div id="content">
+<form action="/edit_item_submit" method="POST" enctype="multipart/form-data">
+<input type="text" name="project" value={{.Project.ID}} style="display:none">
+<input type="text" name="slug" value={{.Item.Slug}} style="display:none">
+<!--프로젝트, 아이템 정보-->
+<table class="edit">
+	<tr>
+		<td class=edittitle colspan=6 bgcolor={{.Item.Status|itemStatus2color}} height=40><span id="projectTitle">{{.Project.ID}}</span> | <b><span id="slugTitle">{{.Item.Name}}({{.Item.Type}})</span></b> | {{.Item.Status|Status2capString}}</td>
+	</tr>
+</table>
+<!--input form 정보-->
+	<div class="editTable">
+		<div class="body">
+			<!--기본 정보-->
+			<div class="rowTitle"><div class="cell">기본 정보</div></div>
+			<hr>
+			<div class="row">
+				<div class="cellRight">현장툴 Rollmedia : </div>
+				<div class="cell"><input type="text" size="55" maxlength="13" name="Rollmedia" value="{{.Item.Rollmedia}}"></div>
+			</div>
+{{if eq .Item.Type "org" "left"}}
+			<div class="row">
+				<div class="cellRight">롤넘버 : </div>
+				<div class="cell"><input type="text" size="6" maxlength="5" name="Rnum" value="{{.Item.Rnum}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">Plate In / Out : </div>
+				<div class="cell"><input type="text" size="5" maxlength="5" name="PlateIn" value="{{.Item.PlateIn}}">~<input type="text" size="5" maxlength="5" name="PlateOut" value="{{.Item.PlateOut}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">Just In / Out : </div>
+				<div class="cell"><input type="text" size="5" maxlength="5" name="JustIn" value="{{.Item.JustIn}}">~<input type="text" size="5" maxlength="5" name="JustOut" value="{{.Item.JustOut}}"></div>
+			</div>
+{{end}}
+			<div class="row">
+				<div class="cellRight">썸네일 이미지 변경 : </div>
+				<div class="cell"><input type="file" size="45" maxlength="256" name="Thumbnail"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">썸네일 MOV 변경 : </div>
+				<div class="cell"><input type="text" size="55" maxlength="256" name="thummov" value="{{.Item.Thummov}}"></div>
+			</div>
+{{if eq .Item.Type "org" "left"}}
+			<div class="row">
+				<div class="cellRight">앞쪽 연결될 MOV : </div>
+				<div class="cell"><input type="text" size="55" maxlength="256" name="Beforemov" value="{{.Item.Beforemov}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">뒤쪽 연결될 MOV : </div>
+				<div class="cell"><input type="text" size="55" maxlength="256" name="Aftermov" value="{{.Item.Aftermov}}"></div>
+			</div>
+
+{{end}}
+			<div class="rowTitle"><div class="cell">추가 정보</div></div>
+			<hr>
+			<div class="row">
+				<div class="cellRight">3D마감일 : </div>
+				<div class="cell"><input type="text" size="28" name="Ddline3d" class="DatePicker" value="{{.Item.Ddline3d}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">2D마감일 : </div>
+				<div class="cell"><input type="text" size="28" name="Ddline2d" class="DatePicker" value="{{.Item.Ddline2d}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">태그 : </div>
+				<div class="cell"><input type="text" size="55" maxlength="256" name="Tag" value="{{.Item.Tag|Tags2str}}"></div>
+			</div>
+{{if eq .Item.Type "org" "left"}}
+			<div class="row">
+				<div class="cellRight">OCIOcc : </div>
+				<div class="cell"><input type="text" size="55" name="OCIOcc" value="{{.Item.OCIOcc}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">리타임 플레이트 위치 : </div>
+				<div class="cell"><input type="text" size="55" maxlength="256" name="retimeplate" value="{{.Item.Retimeplate}}"></div>
+			</div>
+{{end}}
+{{if eq .Item.Type "asset"}}
+			<div class="row">
+				<div class="cellRight">에셋태그 : </div>
+				<div class="cell"><input type="text" size="55" name="Assettags" value="{{.Item.Assettags|Tags2str}}"><br>
+* 에셋태그는 assembly, component, type, parent를 선언하는 태그이다.</div>
+			</div>
+{{end}}
+			<!--사이즈 정보-->
+{{if eq .Item.Type "org" "left"}}
+			<div class="rowTitle"><div class="cell">사이즈 정보</div></div>
+			<hr>
+			<div class="row">
+				<div class="cellRight">플레이트사이즈 : </div>
+				<div class="cell"><input type="text" id="platesize" size="10" maxlength="13" name="Platesize" value="{{.Item.Platesize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자"> &nbsp;<red>※ 아티스트는 건드리지 마세요!</red></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">언디스토션사이즈 : </div>
+				<div class="cell"><input type="text" id="undistort" size="10" maxlength="13" name="Dsize" value="{{.Item.Dsize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">렌더사이즈 : </div>
+				<div class="cell"><input type="text" size="10" maxlength="13" name="Rendersize" value="{{.Item.Rendersize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자"> &nbsp;※ 렌즈왜곡사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k플레이트로 프로젝션하고 2K카메라로 프로젝션 화면을 잡는 상황.</div>
+			</div>
+{{end}}
+{{if eq .Item.Type "org" "left"}}
+			<div class="rowTitle"><div class="cell">카메라 정보</div></div>
+			<hr>
+			<div class="row">
+				<div class="cellRight">카메라 퍼블리시 태스크 : </div>
+				<div class="cell">
+					<select name="ProductionCamPubTask">
+						<option value="" {{if eq .Item.ProductionCam.PubTask ""}}selected{{end}}>none</option>
+						<option value="mm" {{if eq .Item.ProductionCam.PubTask "mm"}}selected{{end}}>mm</option>
+						<option value="layout" {{if eq .Item.ProductionCam.PubTask "layout"}}selected{{end}}>layout</option>
+						<option value="ani" {{if eq .Item.ProductionCam.PubTask "ani"}}selected{{end}}>ani</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="cellRight">카메라 퍼블리시 경로 : </div>
+				<div class="cell"><input type="text" size="55" name="ProductionCamPubPath" value="{{.Item.ProductionCam.PubPath}}"></div>
+			</div>
+			<div class="row">
+				<div class="cellRight">프로젝션 카메라를 이용하는 샷 입니까? : </div>
+				<div class="cell"><input type="checkbox" name="ProductionCamProjection"  value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}></div>
+			</div>
+{{end}}
+			<div class="rowTitle"><div class="cell">카타나(Katana)</div></div>
+			<hr>
+			<div class="row">
+				<div class="cellRight">ObjectID 사용범위 : </div>
+				<div class="cell"><input type="text" size="5" maxlength="5" name="ObjectidIn" value="{{.Item.ObjectidIn}}">~<input type="text" size="5" maxlength="5" name="ObjectidOut" value="{{.Item.ObjectidOut}}">&nbsp;※ 카타나 라이팅팀에서 입력함. </div>
+			</div>
+			<div class="rowTitle"><div class="cell">스케줄</div><div class="cellRightTitle"></div></div>
+			<hr>
+			<div class="row">
+				<div class="cell center">
+<!--스케줄 영역-->
+<div id="inputGuideBtn">입력방법 안내<span><img src="/assets/img/inputGuideBtn.png"></span></div>
+<table class="editSchedule">
+	<!--스케줄 Header1-->
+	<tr class="editteam"><td>CONCEPT</td><td>MODEL</td><td>MM</td><td>LAYOUT</td><td>ANI</td><td>FX</td><td>MG</td><td><input type="text" size="7" name="Temp1Title" value="{{.Item.Temp1.Title}}"></td></tr>
+	<!--스케줄1-->
+	<tr class="editteamform">
+		<td><select name="ConceptStatus">
+			<option value="7" {{if eq .Item.Concept.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Concept.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Concept.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Concept.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Concept.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Concept.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Concept.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Concept.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ConceptUser" value="{{.Item.Concept.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="ConceptUserNote">{{.Item.Concept.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="ConceptStartdate" value="{{.Item.Concept.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="ConceptDue" value="{{.Item.Concept.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="ConceptPredate" value="{{.Item.Concept.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="ConceptDate" value="{{.Item.Concept.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="ConceptMov" value="{{.Item.Concept.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="ModelStatus">
+			<option value="7" {{if eq .Item.Model.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Model.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Model.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Model.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Model.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Model.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Model.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Model.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="ModelUser" value="{{.Item.Model.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="ModelUserNote">{{.Item.Model.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="ModelStartdate" value="{{.Item.Model.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="ModelDue" value="{{.Item.Model.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="ModelPredate" value="{{.Item.Model.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="ModelDate" value="{{.Item.Model.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="ModelMov" value="{{.Item.Model.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="MmStatus">
+			<option value="7" {{if eq .Item.Mm.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Mm.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Mm.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Mm.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Mm.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Mm.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Mm.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Mm.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MmUser" value="{{.Item.Mm.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MmUserNote">{{.Item.Mm.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MmStartdate" value="{{.Item.Mm.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MmDue" value="{{.Item.Mm.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MmPredate" value="{{.Item.Mm.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MmDate" value={{.Item.Mm.Date}}><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="MmMov" value="{{.Item.Mm.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="LayoutStatus">
+			<option value="7" {{if eq .Item.Layout.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Layout.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Layout.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Layout.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Layout.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Layout.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Layout.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Layout.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LayoutUser" value="{{.Item.Layout.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="LayoutUserNote">{{.Item.Layout.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="LayoutStartdate" value="{{.Item.Layout.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="LayoutDue" value="{{.Item.Layout.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="LayoutPredate" value="{{.Item.Layout.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="LayoutDate" value="{{.Item.Layout.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="LayoutMov" value="{{.Item.Layout.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+
+		<td><select name="AniStatus">
+			<option value="7" {{if eq .Item.Ani.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Ani.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Ani.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Ani.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Ani.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Ani.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Ani.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Ani.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="AniUser" value="{{.Item.Ani.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="AniUserNote">{{.Item.Ani.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="AniStartdate" value="{{.Item.Ani.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="AniDue" value="{{.Item.Ani.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="AniPredate" value="{{.Item.Ani.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="AniDate" value="{{.Item.Ani.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="AniMov" value="{{.Item.Ani.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="FxStatus">
+			<option value="7" {{if eq .Item.Fx.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Fx.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Fx.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Fx.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Fx.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Fx.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Fx.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Fx.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="40" name="FxUser" value="{{.Item.Fx.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="FxUserNote">{{.Item.Fx.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="FxStartdate" value="{{.Item.Fx.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="FxDue" value="{{.Item.Fx.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="FxPredate" value="{{.Item.Fx.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="FxDate" value="{{.Item.Fx.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="FxMov" value="{{.Item.Fx.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="MgStatus">
+			<option value="7" {{if eq .Item.Mg.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Mg.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Mg.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Mg.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Mg.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Mg.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Mg.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Mg.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MgUser" value="{{.Item.Mg.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MgUserNote">{{.Item.Mg.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MgStartdate" value="{{.Item.Mg.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MgDue" value="{{.Item.Mg.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MgPredate" value="{{.Item.Mg.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MgDate" value="{{.Item.Mg.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="MgMov" value="{{.Item.Mg.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="Temp1Status">
+			<option value="7" {{if eq .Item.Temp1.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Temp1.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Temp1.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Temp1.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Temp1.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Temp1.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Temp1.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Temp1.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="Temp1User" value="{{.Item.Temp1.User}}" onfocusout="removeWhiteSpace(this)"}><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="Temp1UserNote">{{.Item.Temp1.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="Temp1Startdate" value="{{.Item.Temp1.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="Temp1Due" value="{{.Item.Temp1.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="Temp1Predate" value="{{.Item.Temp1.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="Temp1Date" value="{{.Item.Temp1.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="Temp1Mov" value="{{.Item.Temp1.Mov}}" ondrop="rmFileProtocol(event)"></td>
+	</tr>
+	<!--스케줄 Header2-->
+	<tr class="editteam">
+	{{if eq .Item.Type "asset"}}
+		<td>PREVIZ</td><td>FURSIM</td><td>RIG</td><td>CROWD</td><td>LOOKDEV</td><td>COMP</td><td>MATTE</td><td>ENV</td>
+	{{else}}
+		<td>PREVIZ</td><td>FUR</td><td>SIM</td><td>CROWD</td><td>LIGHT</td><td>COMP</td><td>MATTE</td><td>ENV</td>
+	{{end}}
+	</tr>
+	<!--스케줄2-->
+	<tr class="editteamform">
+		<td><select name="PrevizStatus">
+			<option value="7" {{if eq .Item.Previz.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Previz.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Previz.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Previz.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Previz.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Previz.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Previz.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Previz.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="PrevizUser" value="{{.Item.Previz.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="PrevizUserNote">{{.Item.Previz.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="PrevizStartdate" value="{{.Item.Previz.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="PrevizDue" value="{{.Item.Previz.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="PrevizPredate" value="{{.Item.Previz.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="PrevizDate" value="{{.Item.Previz.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="PrevizMov" value="{{.Item.Previz.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="FurStatus">
+			<option value="7" {{if eq .Item.Fur.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Fur.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Fur.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Fur.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Fur.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Fur.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Fur.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Fur.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="FurUser" value="{{.Item.Fur.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="FurUserNote">{{.Item.Fur.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="FurStartdate" value={{.Item.Fur.Startdate}}><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="FurDue" value="{{.Item.Fur.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="FurPredate" value="{{.Item.Fur.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="FurDate" value="{{.Item.Fur.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="FurMov" value="{{.Item.Fur.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="SimStatus">
+			<option value="7" {{if eq .Item.Sim.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Sim.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Sim.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Sim.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Sim.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Sim.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Sim.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Sim.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="SimUser" value="{{.Item.Sim.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="SimUserNote">{{.Item.Sim.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="SimStartdate" value="{{.Item.Sim.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="SimDue" value="{{.Item.Sim.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="SimPredate" value="{{.Item.Sim.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="SimDate" value="{{.Item.Sim.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="SimMov" value="{{.Item.Sim.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="CrowdStatus">
+			<option value="7" {{if eq .Item.Crowd.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Crowd.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Crowd.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Crowd.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Crowd.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Crowd.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Crowd.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Crowd.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CrowdUser" value="{{.Item.Crowd.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="CrowdUserNote">{{.Item.Crowd.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="CrowdStartdate" value="{{.Item.Crowd.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="CrowdDue" value="{{.Item.Crowd.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="CrowdPredate" value="{{.Item.Crowd.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="CrowdDate" value="{{.Item.Crowd.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="CrowdMov" value="{{.Item.Crowd.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="LightStatus">
+			<option value="7" {{if eq .Item.Light.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Light.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Light.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Light.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Light.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Light.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Light.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Light.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="LightUser" value="{{.Item.Light.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="LightUserNote">{{.Item.Light.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="LightStartdate" value="{{.Item.Light.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="LightDue" value="{{.Item.Light.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="LightPredate" value="{{.Item.Light.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="LightDate" value={{.Item.Light.Date}}><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="LightMov" value="{{.Item.Light.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="CompStatus">
+			<option value="8" {{if eq .Item.Comp.Status "8"}}selected{{end}}>omit</option>
+			<option value="7" {{if eq .Item.Comp.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Comp.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Comp.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Comp.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Comp.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Comp.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Comp.Status "1"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Comp.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/girl.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="CompUser" value="{{.Item.Comp.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="CompUserNote">{{.Item.Comp.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="CompStartdate" value="{{.Item.Comp.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="CompDue" value="{{.Item.Comp.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="CompPredate" value="{{.Item.Comp.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="CompDate" value="{{.Item.Comp.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="CompMov" value="{{.Item.Comp.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="MatteStatus">
+			<option value="7" {{if eq .Item.Matte.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Matte.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Matte.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Matte.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Matte.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Matte.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Matte.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Matte.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="MatteUser" value="{{.Item.Matte.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="MatteUserNote">{{.Item.Matte.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="MatteStartdate" value="{{.Item.Matte.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="MatteDue" value="{{.Item.Matte.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MattePredate" value="{{.Item.Matte.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="MatteDate" value="{{.Item.Matte.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="MatteMov" value="{{.Item.Matte.Mov}}" ondrop="rmFileProtocol(event)"></td>
+
+		<td><select name="EnvStatus">
+			<option value="7" {{if eq .Item.Env.Status "7"}}selected{{end}}>confirm</option>
+			<option value="6" {{if eq .Item.Env.Status "6"}}selected{{end}}>wip</option>
+			<option value="5" {{if eq .Item.Env.Status "5"}}selected{{end}}>ready</option>
+			<option value="4" {{if eq .Item.Env.Status "4"}}selected{{end}}>assign</option>
+			<!--<option value="3" {{if eq .Item.Env.Status "3"}}selected{{end}}>out</option>-->
+			<option value="2" {{if eq .Item.Env.Status "2"}}selected{{end}}>done</option>
+			<option value="1" {{if eq .Item.Env.Status "1" "8"}}selected{{end}}>hold</option>
+			<option value="0" {{if eq .Item.Env.Status "" "0"}}selected{{end}}>none</option>
+		</select>
+		<br>
+		<img class="smallicon" src="/assets/img/boy.svg" title="아티스트"><input type="text" size="20" maxlength="20" name="EnvUser" value="{{.Item.Env.User}}" onfocusout="removeWhiteSpace(this)"><br>
+		<img class="smallicon smalliconTop" src="/assets/img/edit.png" title="userNote"><textarea class="userNote" name="EnvUserNote">{{.Item.Env.UserNote}}</textarea><br>
+		<img class="smallicon" src="/assets/img/start.svg" title="시작일"><input type="text" size="20" class="DatePicker" maxlength="25" name="EnvStartdate" value="{{.Item.Env.Startdate}}"><br>
+		<img class="smallicon" src="/assets/img/due.svg" title="예상일수"><input type="text" size="20" maxlength="25" name="EnvDue" value="{{.Item.Env.Due}}"><br>
+		<img class="smallicon" src="/assets/img/predate.svg" title="1차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="EnvPredate" value="{{.Item.Env.Predate}}"><br>
+		<img class="smallicon" src="/assets/img/date.svg" title="2차마감"><input type="text" size="20" class="DatePicker" maxlength="25" name="EnvDate" value="{{.Item.Env.Date}}"><br>
+		<img class="smallicon" src="/assets/img/mov.svg" title="결과물"><input type="text" size="20" maxlength="250" name="EnvMov" value="{{.Item.Env.Mov}}" ondrop="rmFileProtocol(event)"></td>
+	</tr>
+</table>
+<!--스케줄 영역 끝-->
+			</div>
+			</div>
+			<div class="row">
+				<div class="cell marginTB"><center><button id="button">수정</button><br>* 작업자 항목에 "작업자,작업자" 형태로 기입하면 2명을 등록할 수 있습니다.<br>수정을 누르면 전화면으로 넘어갑니다. 웹브라우져 캐쉬문제로 Ctrl+F5를 눌러서 업데이트해주세요.<br></center></div>
+			</div>
+		</div>
+	</div>
+	<!--정보 end-->
+</form>
+</div>
+
+{{template "footer"}}
+{{end}}
