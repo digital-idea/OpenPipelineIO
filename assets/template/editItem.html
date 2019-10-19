@@ -9,247 +9,489 @@
 		<span class="text-dark">{{.Item.Status|Status2capString}}</span>
 	</div>
 			
-<form action="/edititem-submit" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="project" value={{.Project.ID}}>
-<input type="hidden" name="slug" value={{.Item.Slug}}>
-<!--프로젝트, 아이템 정보-->
+	<form action="/edititem-submit" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="project" value={{.Project.ID}}>
+		<input type="hidden" name="slug" value={{.Item.Slug}}>
+		<div class="form-group">
+			<label>Thumbnail 이미지 변경</label>
+			<input type="file" name="Thumbnail" class="form-control">
+			<small class="form-text text-muted">Thumbnail 이미지를 업데이트 합니다.</small>
+		</div>
 
-
-<!--input form 정보-->
-	<div class="form-group">
-		<label>현장툴 Rollmedia</label>
-		<input type="text" maxlength="13" name="Rollmedia" value="{{.Item.Rollmedia}}" class="form-control">
-		<small class="form-text text-muted">Setellite에서 사용한 Rollmedia를 입력해주세요.</small>
-	</div>
-	<div class="form-group">
-		<label>Thumbnail 이미지 변경</label>
-		<input type="file" name="Thumbnail" class="form-control">
-		<small class="form-text text-muted">Thumbnail 이미지를 업데이트 합니다.</small>
-	</div>
-	<div class="form-group">
-		<label>Thumbnail MOV</label>
-		<input type="text" size="55" maxlength="256" name="thummov" value="{{.Item.Thummov}}" class="form-control">
-		<small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
-	</div>
-	{{if eq .Item.Type "org" "left"}}
 		<div class="form-group">
-			<label>앞쪽 연결 MOV</label>
-			<input type="text" size="55" maxlength="256" name="Beforemov" value="{{.Item.Beforemov}}" class="form-control">
-			<small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
+			<label>현장툴 Rollmedia</label>
+			<input type="text" maxlength="13" name="Rollmedia" value="{{.Item.Rollmedia}}" class="form-control">
+			<small class="form-text text-muted">Setellite에서 사용한 Rollmedia를 입력해주세요.</small>
 		</div>
+		
 		<div class="form-group">
-			<label>뒤쪽 연결 MOV</label>
-			<input type="text" size="55" maxlength="256" name="Aftermov" value="{{.Item.Aftermov}}" class="form-control">
-			<small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
+			<label>Thumbnail MOV</label>
+			<input type="text" size="55" maxlength="256" name="thummov" value="{{.Item.Thummov}}" class="form-control">
+			<small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
 		</div>
-		<div class="form-group">
-			<label>OCIOcc</label>
-			<input type="text" size="55" name="OCIOcc" value="{{.Item.OCIOcc}}" class="form-control">
-			<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
-		</div>
-		<div class="form-group">
-			<label>리타임 플레이트 위치</label>
-			<input type="text" size="55" maxlength="256" name="retimeplate" value="{{.Item.Retimeplate}}" class="form-control">
-			<small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
-		</div>
-	{{end}}
-	{{if eq .Item.Type "asset"}}
-		<div class="form-group">
-			<label>에셋태그</label>
-			<input type="text" size="55" name="Assettags" value="{{.Item.Assettags|Tags2str}}" class="form-control">
-			<small class="form-text text-muted">에셋태그를 설정합니다. 예) assembly, component, type, parent</small>
-		</div>
-	{{end}}
-	{{if eq .Item.Type "org" "left"}}
-		<div class="form-group">
-			<label>플레이트사이즈</label>
-			<input type="text" id="platesize" size="10" maxlength="13" name="Platesize" value="{{.Item.Platesize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-			<small class="form-text text-warning">※ 아티스트는 건드리지 마세요!</small>
-		</div>
-		<div class="form-group">
-			<label>언디스토션사이즈</label>
-			<input type="text" id="undistort" size="10" maxlength="13" name="Dsize" value="{{.Item.Dsize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-			<small class="form-text text-mute">매치무브 작업자가 설정합니다.</small>
-		</div>
-		<div class="form-group">
-			<label>렌더사이즈</label>
-			<input type="text" size="10" maxlength="13" name="Rendersize" value="{{.Item.Rendersize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-			<small class="form-text text-mute">렌즈왜곡사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k플레이트로 프로젝션하고 2K카메라로 프로젝션 화면 설정시</small>
-		</div>
-	{{end}}
-	{{if eq .Item.Type "org" "left"}}
-		<div class="form-group">
-			<label>Camera Publish Task</label>
-			<select name="ProductionCamPubTask" class="form-control">
-				<option value="" {{if eq .Item.ProductionCam.PubTask "" }}selected{{end}}>none</option>
-				<option value="mm" {{if eq .Item.ProductionCam.PubTask "mm" }}selected{{end}}>mm</option>
-				<option value="layout" {{if eq .Item.ProductionCam.PubTask "layout" }}selected{{end}}>layout</option>
-				<option value="ani" {{if eq .Item.ProductionCam.PubTask "ani" }}selected{{end}}>ani</option>
-			</select>
-			<small class="form-text text-mute">카메라를 Publish 하는 팀을 설정합니다.</small>
-		</div>
-		<div class="form-group">
-			<label>카메라 퍼블리쉬 경로</label>
-			<input type="text" size="55" name="ProductionCamPubPath" value="{{.Item.ProductionCam.PubPath}}" class="form-control">
-			<small class="form-text text-muted">카메라 퍼블리쉬 경로를 설정합니다.</small>
-		</div>
-		<div class="form-group">
-			<div class="form-check">
-				<input type="checkbox" id="ProductionCamProjection" name="ProductionCamProjection" class="form-check-input" value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}>
-				<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+		{{if eq .Item.Type "org" "left"}}
+			<div class="form-group">
+				<div class="row">
+					<div class="col-6 form-group">
+						<label>앞쪽 연결 MOV</label>
+						<input type="text" size="55" maxlength="256" name="Beforemov" value="{{.Item.Beforemov}}" class="form-control">
+						<small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
+					</div>
+					<div class="col-6 form-group">
+						<label>뒤쪽 연결 MOV</label>
+						<input type="text" size="55" maxlength="256" name="Aftermov" value="{{.Item.Aftermov}}" class="form-control">
+						<small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
+					</div>
+				</div>
 			</div>
-		</div>
-	{{end}}
-
-	<div class="form-group">
-		<label>ObjectID 사용범위(Katana)</label>
-		<div class="row">
-			<div class="col-6 form-group">
-				<input type="text" size="5" maxlength="5" name="ObjectidIn" value="{{.Item.ObjectidIn}}" class="form-control">
+			
+			<div class="form-group">
+				<label>OCIOcc</label>
+				<input type="text" size="55" name="OCIOcc" value="{{.Item.OCIOcc}}" class="form-control">
+				<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
 			</div>
-			<div class="col-6 form-group">
-				<input type="text" size="5" maxlength="5" name="ObjectidOut" value="{{.Item.ObjectidOut}}" class="form-control">	
+			<div class="form-group">
+				<label>리타임 플레이트 위치</label>
+				<input type="text" size="55" maxlength="256" name="retimeplate" value="{{.Item.Retimeplate}}" class="form-control">
+				<small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
 			</div>
-		</div>
-		<small class="form-text text-mute">카타나 라이팅팀에서 입력함.</small>
-	</div>
-	<div class="editTable">
-		<div class="body">
+		{{end}}
+		{{if eq .Item.Type "asset"}}
+			<div class="form-group">
+				<label>에셋태그</label>
+				<input type="text" size="55" name="Assettags" value="{{.Item.Assettags|Tags2str}}" class="form-control">
+				<small class="form-text text-muted">에셋태그를 설정합니다. 예) assembly, component, type, parent</small>
+			</div>
+		{{end}}
+		{{if eq .Item.Type "org" "left"}}
+			<div class="form-group">
+				<div class="row">
+					<div class="col-4 form-group">
+						<label>플레이트사이즈</label>
+						<input type="text" id="platesize" size="10" maxlength="13" name="Platesize" value="{{.Item.Platesize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
+						<small class="form-text text-warning">※ 아티스트는 건드리지 마세요!</small>
+					</div>
+					<div class="col-4 form-group">
+						<label>언디스토션</label>
+						<input type="text" id="undistort" size="10" maxlength="13" name="Dsize" value="{{.Item.Dsize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
+						<small class="form-text text-mute">매치무브 작업자가 설정합니다.</small>
+					</div>
+					<div class="col-4 form-group">
+						<label>렌더사이즈</label>
+						<input type="text" size="10" maxlength="13" name="Rendersize" value="{{.Item.Rendersize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
+						<small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
+					</div>
+				</div>
+			</div>
+			
+		{{end}}
+		{{if eq .Item.Type "org" "left"}}
+			<div class="form-group">
+				<div class="row">
+					<div class="col-5 form-group">
+						<label>Cam PubTask</label>
+						<select name="ProductionCamPubTask" class="form-control">
+							<option value="" {{if eq .Item.ProductionCam.PubTask "" }}selected{{end}}>none</option>
+							<option value="mm" {{if eq .Item.ProductionCam.PubTask "mm" }}selected{{end}}>mm</option>
+							<option value="layout" {{if eq .Item.ProductionCam.PubTask "layout" }}selected{{end}}>layout</option>
+							<option value="ani" {{if eq .Item.ProductionCam.PubTask "ani" }}selected{{end}}>ani</option>
+						</select>
+						<small class="form-text text-mute">카메라 Publish 팀</small>
+					</div>
+					<div class="col-7 form-group">
+						<label>Cam PubPath</label>
+						<input type="text" size="55" name="ProductionCamPubPath" value="{{.Item.ProductionCam.PubPath}}" class="form-control">
+						<small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-check">
+						<input type="checkbox" id="ProductionCamProjection" name="ProductionCamProjection" class="form-check-input" value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}>
+						<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+					</div>
+				</div>
+			</div>
 			
 			
+		{{end}}
+
+		<div class="form-group">
+			<label>ObjectID 사용범위(Katana)</label>
 			<div class="row">
-				<div class="cell center">
-<!--스케줄 영역-->
-<table class="editSchedule">
-	<!--스케줄 Header1-->
-	<tr class="editteam"><td>CONCEPT</td><td>MODEL</td><td>MM</td><td>LAYOUT</td><td>ANI</td><td>FX</td><td>MG</td><td><input type="text" size="7" name="Temp1Title" value="{{.Item.Temp1.Title}}"></td></tr>
-	<!--스케줄1-->
-	<tr class="editteamform">
-		<td>
-		Note:<textarea class="userNote" name="ConceptUserNote">{{.Item.Concept.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="ConceptStartdate" value="{{.Item.Concept.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="ConceptDue" value="{{.Item.Concept.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="ConceptMov" value="{{.Item.Concept.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-		Note:<textarea class="userNote" name="ModelUserNote">{{.Item.Model.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="ModelStartdate" value="{{.Item.Model.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="ModelDue" value="{{.Item.Model.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="ModelMov" value="{{.Item.Model.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="MmUserNote">{{.Item.Mm.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="MmStartdate" value="{{.Item.Mm.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="MmDue" value="{{.Item.Mm.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="MmMov" value="{{.Item.Mm.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="LayoutUserNote">{{.Item.Layout.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="LayoutStartdate" value="{{.Item.Layout.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="LayoutDue" value="{{.Item.Layout.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="LayoutMov" value="{{.Item.Layout.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-
-		<td>
-			Note:<textarea class="userNote" name="AniUserNote">{{.Item.Ani.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="AniStartdate" value="{{.Item.Ani.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="AniDue" value="{{.Item.Ani.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="AniMov" value="{{.Item.Ani.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="FxUserNote">{{.Item.Fx.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="FxStartdate" value="{{.Item.Fx.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="FxDue" value="{{.Item.Fx.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="FxMov" value="{{.Item.Fx.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="MgUserNote">{{.Item.Mg.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="MgStartdate" value="{{.Item.Mg.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="MgDue" value="{{.Item.Mg.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="MgMov" value="{{.Item.Mg.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="Temp1UserNote">{{.Item.Temp1.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="Temp1Startdate" value="{{.Item.Temp1.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="Temp1Due" value="{{.Item.Temp1.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="Temp1Mov" value="{{.Item.Temp1.Mov}}" ondrop="rmFileProtocol(event)"></td>
-	</tr>
-	<!--스케줄 Header2-->
-	<tr class="editteam">
-	{{if eq .Item.Type "asset"}}
-		<td>PREVIZ</td><td>FURSIM</td><td>RIG</td><td>CROWD</td><td>LOOKDEV</td><td>COMP</td><td>MATTE</td><td>ENV</td>
-	{{else}}
-		<td>PREVIZ</td><td>FUR</td><td>SIM</td><td>CROWD</td><td>LIGHT</td><td>COMP</td><td>MATTE</td><td>ENV</td>
-	{{end}}
-	</tr>
-	<!--스케줄2-->
-	<tr class="editteamform">
-		<td>
-			Note:<textarea class="userNote" name="PrevizUserNote">{{.Item.Previz.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="PrevizStartdate" value="{{.Item.Previz.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="PrevizDue" value="{{.Item.Previz.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="PrevizMov" value="{{.Item.Previz.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="FurUserNote">{{.Item.Fur.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="FurStartdate" value={{.Item.Fur.Startdate}}><br>
-		due:<input type="text" size="20" maxlength="25" name="FurDue" value="{{.Item.Fur.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="FurMov" value="{{.Item.Fur.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="SimUserNote">{{.Item.Sim.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="SimStartdate" value="{{.Item.Sim.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="SimDue" value="{{.Item.Sim.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="SimMov" value="{{.Item.Sim.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="CrowdUserNote">{{.Item.Crowd.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="CrowdStartdate" value="{{.Item.Crowd.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="CrowdDue" value="{{.Item.Crowd.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="CrowdMov" value="{{.Item.Crowd.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="LightUserNote">{{.Item.Light.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="LightStartdate" value="{{.Item.Light.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="LightDue" value="{{.Item.Light.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="LightMov" value="{{.Item.Light.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="CompUserNote">{{.Item.Comp.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="CompStartdate" value="{{.Item.Comp.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="CompDue" value="{{.Item.Comp.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="CompMov" value="{{.Item.Comp.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="MatteUserNote">{{.Item.Matte.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="MatteStartdate" value="{{.Item.Matte.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="MatteDue" value="{{.Item.Matte.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="MatteMov" value="{{.Item.Matte.Mov}}" ondrop="rmFileProtocol(event)"></td>
-
-		<td>
-			Note:<textarea class="userNote" name="EnvUserNote">{{.Item.Env.UserNote}}</textarea><br>
-		start:<input type="text" size="20" class="DatePicker" maxlength="25" name="EnvStartdate" value="{{.Item.Env.Startdate}}"><br>
-		due:<input type="text" size="20" maxlength="25" name="EnvDue" value="{{.Item.Env.Due}}"><br>
-		mov:<input type="text" size="20" maxlength="250" name="EnvMov" value="{{.Item.Env.Mov}}" ondrop="rmFileProtocol(event)"></td>
-	</tr>
-</table>
-<!--스케줄 영역 끝-->
+				<div class="col-6 form-group">
+					<input type="text" size="5" maxlength="5" name="ObjectidIn" value="{{.Item.ObjectidIn}}" class="form-control">
+					<small class="form-text text-mute">Katana ObjectID In</small>
+				</div>
+				<div class="col-6 form-group">
+					<input type="text" size="5" maxlength="5" name="ObjectidOut" value="{{.Item.ObjectidOut}}" class="form-control">
+					<small class="form-text text-mute">Katana ObjectID Out</small>
+				</div>
 			</div>
-			</div>
+			
+		</div>
+		<div class="form-group">
+			<label>CONCEPT</label>
 			<div class="row">
-				<div class="text-center">
-					<button class="btn btn-outline-warning" id="button">Edit</button>
-					<br>
-					<span class="text-darkmode">
-						* 작업자 항목에 "작업자,작업자" 형태로 기입하면 2명을 등록할 수 있습니다.<br>
-						수정을 누르면 전화면으로 넘어갑니다. 웹브라우져 캐쉬문제로 Ctrl+F5를 눌러서 업데이트해주세요.<br>
-					</span>
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="ConceptMov" class="form-control" value="{{.Item.Concept.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="ConceptUserNote" value="{{.Item.Concept.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-6 form-group">
+					<input type="date" name="ConceptStartdate" class="form-control" value="{{.Item.Concept.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-6 form-group">
+					<input type="text" maxlength="25" name="ConceptDue" class="form-control" value="{{.Item.Concept.Due}}">
+					<small class="form-text text-mute">예상일</small>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!--정보 end-->
-</form>
+
+		<div class="form-group">
+			<label>PREVIZ</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="PrevizMov" class="form-control" value="{{.Item.Previz.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="PrevizUserNote" value="{{.Item.Previz.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-6 form-group">
+					<input type="date" name="PrevizStartdate" class="form-control" value="{{.Item.Previz.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-6 form-group">
+					<input type="text" maxlength="25" name="PrevizDue" class="form-control" value="{{.Item.Previz.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="form-group">
+			<label>MODEL</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="ModelMov" class="form-control" value="{{.Item.Model.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="ModelUserNote" value="{{.Item.Model.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="ModelStartdate" class="form-control" value="{{.Item.Model.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="ModelDue" class="form-control" value="{{.Item.Model.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>MM</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="MmMov" class="form-control" value="{{.Item.Mm.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="MmUserNote" value="{{.Item.Mm.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="MmStartdate" class="form-control" value="{{.Item.Mm.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="MmDue" class="form-control" value="{{.Item.Mm.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>LAYOUT</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="LayoutMov" class="form-control" value="{{.Item.Layout.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="LayoutUserNote" value="{{.Item.Layout.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="LayoutStartdate" class="form-control" value="{{.Item.Layout.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="LayoutDue" class="form-control" value="{{.Item.Layout.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>ANI</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="AniMov" class="form-control" value="{{.Item.Ani.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="AniUserNote" value="{{.Item.Ani.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="AniStartdate" class="form-control" value="{{.Item.Ani.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="AniDue" class="form-control" value="{{.Item.Ani.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>FX</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="FxMov" class="form-control" value="{{.Item.Fx.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="FxUserNote" value="{{.Item.Fx.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="FxStartdate" class="form-control" value="{{.Item.Fx.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="FxDue" class="form-control" value="{{.Item.Fx.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>MG</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="MgMov" class="form-control" value="{{.Item.Mg.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="MgUserNote" value="{{.Item.Mg.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="MgStartdate" class="form-control" value="{{.Item.Mg.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="MgDue" class="form-control" value="{{.Item.Mg.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label>{{if eq .Item.Type "asset"}}FURSIM{{else}}FUR{{end}}</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="FurMov" class="form-control" value="{{.Item.Fur.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="FurUserNote" value="{{.Item.Fur.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="FurStartdate" class="form-control" value="{{.Item.Fur.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="FurDue" class="form-control" value="{{.Item.Fur.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>{{if eq .Item.Type "asset"}}RIG{{else}}SIM{{end}}</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="SimMov" class="form-control" value="{{.Item.Sim.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="SimUserNote" value="{{.Item.Sim.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="SimStartdate" class="form-control" value="{{.Item.Sim.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="SimDue" class="form-control" value="{{.Item.Sim.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+			
+		</div>
+		<div class="form-group">
+			<label>CROWD</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="CrowdMov" class="form-control" value="{{.Item.Crowd.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="CrowdUserNote" value="{{.Item.Crowd.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="CrowdStartdate" class="form-control" value="{{.Item.Crowd.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="CrowdDue" class="form-control" value="{{.Item.Crowd.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>{{if eq .Item.Type "asset"}}LOOKDEV{{else}}LIGHT{{end}}</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="LightMov" class="form-control" value="{{.Item.Light.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="LightUserNote" value="{{.Item.Light.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="LightStartdate" class="form-control" value="{{.Item.Light.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="LightDue" class="form-control" value="{{.Item.Light.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>COMP</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="CompMov" class="form-control" value="{{.Item.Comp.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="CompUserNote" value="{{.Item.Comp.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="CompStartdate" class="form-control" value="{{.Item.Comp.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="CompDue" class="form-control" value="{{.Item.Comp.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>Matte</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="MatteMov" class="form-control" value="{{.Item.Matte.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="MatteUserNote" value="{{.Item.Matte.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="MatteStartdate" class="form-control" value="{{.Item.Matte.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="MatteDue" class="form-control" value="{{.Item.Matte.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label>ENV</label>
+			<div class="row">
+				<div class="col-lg-5 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="EnvMov" class="form-control" value="{{.Item.Env.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="EnvUserNote" value="{{.Item.Env.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="EnvStartdate" class="form-control" value="{{.Item.Env.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="EnvDue" class="form-control" value="{{.Item.Env.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>{{if .Item.Temp1.Title}}{{.Item.Temp1.Title}}{{else}}TEMP1{{end}}</label>
+			<div class="row">
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" maxlength="250" name="Temp1Mov" class="form-control" value="{{.Item.Temp1.Mov}}" ondrop="rmFileProtocol(event)">
+					<small class="form-text text-mute">MOV</small>
+				</div>
+				<div class="col-lg-3 col-sm-12 form-group">
+					<input type="text" class="form-control" name="Temp1Title" value="{{.Item.Temp1.Title}}" placeholder="Title">
+					<small class="form-text text-mute">임시 타이틀</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" class="form-control" name="Temp1UserNote" value="{{.Item.Temp1.UserNote}}" placeholder="Note">
+					<small class="form-text text-mute">Note</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="date" name="Temp1Startdate" class="form-control" value="{{.Item.Temp1.Startdate}}" placeholder="YYYY-MM-DD">
+					<small class="form-text text-mute">시작일</small>
+				</div>
+				<div class="col-lg-2 col-sm-12 form-group">
+					<input type="text" maxlength="25" name="Temp1Due" class="form-control" value="{{.Item.Temp1.Due}}">
+					<small class="form-text text-mute">예상일</small>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="row">
+			<div class="mx-auto text-center">
+				<button class="btn btn-outline-warning my-3" id="button">Edit</button>
+				<br>
+				<span class="text-darkmode">
+					* 작업자 항목에 "작업자,작업자" 형태로 기입하면 2명을 등록할 수 있습니다.<br>
+					수정을 누르면 전화면으로 넘어갑니다. 웹브라우져 캐쉬문제로 Ctrl+F5를 눌러서 업데이트해주세요.<br>
+				</span>
+			</div>
+		</div>
+			
+
+	</form>
 </div>
 
 {{template "footerBootstrap"}}
