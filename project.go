@@ -88,6 +88,7 @@ type Project struct {
 	AWSS3                    string        `json:"awss3"`                    // AWS S3 버킷주소
 	AWSProfile               string        `json:"awsprofile"`               // AWS Profile 이름
 	AWSLocalpath             string        `json:"awslocalpath"`             // AWS S3와 동기화할 로컬경로
+	SlackWebhookURL          string        `json:"slackwebhookurl"`          // Slack Webhook URL
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.

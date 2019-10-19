@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/ashwanthkumar/slack-go-webhook"
 	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
 )
@@ -2998,10 +3000,33 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+	// log
 	err = dilog.Add(*flagDBIP, host, "Add comment: "+text, project, name, "csi3", userID, 180)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
+	}
+	// slack
+	p, err := getProject(session, project)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if p.SlackWebhookURL != "" {
+		attachment1 := slack.Attachment{}
+		attachment1.AddField(slack.Field{Title: "Project", Value: project}).AddField(slack.Field{Title: "Name", Value: name}).AddField(slack.Field{Title: "Author", Value: userID})
+		payload := slack.Payload{
+			Text:        "Add comment: " + text,
+			Username:    "csi",
+			Channel:     "#" + project,
+			Attachments: []slack.Attachment{attachment1},
+		}
+		err := slack.Send(p.SlackWebhookURL, "", payload)
+		if len(err) > 0 {
+			for _, e := range err {
+				log.Println(e)
+			}
+		}
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }

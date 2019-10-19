@@ -312,6 +312,7 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal.AWSS3 = r.FormValue("AWSS3")
 	renewal.AWSProfile = r.FormValue("AWSProfile")
 	renewal.AWSLocalpath = r.FormValue("AWSLocalpath")
+	renewal.SlackWebhookURL = r.FormValue("SlackWebhookURL")
 	// 새로 변경된 정보를 DB에 저장한다.
 	err = setProject(session, renewal)
 	if err != nil {

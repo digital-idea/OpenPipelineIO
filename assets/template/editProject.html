@@ -478,6 +478,11 @@
 					<small class="form-text text-muted">Local Path</small>
 					<input type="text" name="AWSLocalpath" class="form-control" placeholder="~/project" value="{{.Project.AWSLocalpath}}">
 				</div>
+				<div class="form-group pt-1">
+					<label>Slack</label>
+					<small class="form-text text-muted"><a href="https://api.slack.com/apps/AEGKLE3T3/incoming-webhooks?">Slack Webhook URL</a></small>
+					<input type="text" name="SlackWebhookURL" class="form-control" placeholder="https://hooks.slack.com/services/..." value="{{.Project.SlackWebhookURL}}">
+				</div>
 				<div class="form-group">
 					<hr>
 					<a href="/cmd?funcname=rmoverlaponsetnote&project={{.Project.ID}}" class="btn btn-warning">작업내용 중복값 제거</a>

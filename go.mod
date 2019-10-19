@@ -4,6 +4,7 @@ go 1.12
 
 require (
 	github.com/GeertJohan/go.rice v1.0.0
+	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20181208062437-4a19b1a876b7
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -16,6 +17,8 @@ require (
 	github.com/kr/pty v1.1.5 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/nkovacs/streamquote v1.0.0 // indirect
+	github.com/parnurzeal/gorequest v0.2.16 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190527155220-6a4d4a70508b
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
 	golang.org/x/crypto v0.0.0-20190611184440-5c40567a22f8
@@ -26,4 +29,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 	gopkg.in/yaml.v2 v2.2.2 // indirect
+	moul.io/http2curl v1.0.0 // indirect
 )
