@@ -3006,20 +3006,16 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
-	// slack
+	// slack logging
 	p, err := getProject(session, project)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	if p.SlackWebhookURL != "" {
-		attachment1 := slack.Attachment{}
-		attachment1.AddField(slack.Field{Title: "Project", Value: project}).AddField(slack.Field{Title: "Name", Value: name}).AddField(slack.Field{Title: "Author", Value: userID})
 		payload := slack.Payload{
-			Text:        "Add comment: " + text,
-			Username:    "csi",
-			Channel:     "#" + project,
-			Attachments: []slack.Attachment{attachment1},
+			Text:    "Add comment: " + text + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Channel: "#" + project,
 		}
 		err := slack.Send(p.SlackWebhookURL, "", payload)
 		if len(err) > 0 {
