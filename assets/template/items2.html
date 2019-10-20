@@ -66,9 +66,14 @@
 				<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
 			{{end}}
 			<div class="thumbnailbox ml-1">
-				<label class="p-0 m-0 thumbnail" for="{{.Name}}" onclick="selectCheckbox()">
+				{{if eq .Type "org" "left" "asset"}}
+					<!--org,left,asset 만 선택할 수 있어야 한다.-->
+					<label class="p-0 m-0 thumbnail" for="{{.Name}}" onclick="selectCheckbox()">
+						<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					</label>
+				{{else}}
 					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
-				</label>
+				{{end}}
 				<div class="top-left">
 					<div class="row">
 						<span class="black-opbg">{{.Rnum}}</span>
@@ -126,6 +131,8 @@
 							{{else}}
 								<span class="badge badge-light">{{.Type}}</span>
 							{{end}}
+						{{else}}
+							<span class="badge badge-light">{{.Type}}</span>
 						{{end}}
 						<span class="badge badge-light">{{.Shottype}}</span>
 					{{end}}
