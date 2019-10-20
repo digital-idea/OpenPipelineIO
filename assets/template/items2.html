@@ -66,13 +66,9 @@
 				<input type="checkbox" class="form-check-input" id="{{.Name}}" name="selectID" style="opacity:0; position:absolute;">
 			{{end}}
 			<div class="thumbnailbox ml-1">
-				{{if .Thummov}}
-					<a href="dilink://{{.Thummov}}">
-				{{else}}
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
-				{{end}}
-				<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
-				</a>
+				<label class="p-0 m-0 thumbnail" for="{{.Name}}" onclick="selectCheckbox()">
+					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+				</label>
 				<div class="top-left">
 					<div class="row">
 						<span class="black-opbg">{{.Rnum}}</span>
@@ -221,9 +217,13 @@
 		<div class="row">
 			<div class="mx-auto pt-1">
 				{{if eq .Type "org" "left" "asset"}}
-					<label for="{{.Name}}">
-						<span class="select" onclick="selectCheckbox()">SELECT</span>
-					</label>
+					{{if .Thummov}}
+						<a href="dilink://{{.Thummov}}">
+					{{else}}
+						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
+					{{end}}
+						<span class="select">▶</span>
+					</a>
 				{{end}}
 				{{if .Updatetime|CheckUpdate}}
 					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
@@ -266,7 +266,7 @@
 						<span class="badge badge-light">{{ToShortTime .Concept.Date}}</span>
 						<span class="badge badge-light">{{ .Concept.User }}</span>
 						{{if .Concept.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset" }}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -288,7 +288,7 @@
 						<span class="badge badge-light">{{ToShortTime .Model.Date}}</span>
 						<span class="badge badge-light">{{ .Model.User }}</span>
 						{{if .Model.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset" }}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -310,7 +310,7 @@
 						<span class="badge badge-light">{{ToShortTime .Mm.Date}}</span>
 						<span class="badge badge-light">{{ .Mm.User }}</span>
 						{{if .Mm.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -328,7 +328,7 @@
 						<span class="badge badge-light">{{ToShortTime .Layout.Date}}</span>
 						<span class="badge badge-light">{{ .Layout.User }}</span>
 						{{if .Layout.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -346,7 +346,7 @@
 						<span class="badge badge-light">{{ToShortTime .Ani.Date}}</span>
 						<span class="badge badge-light">{{ .Ani.User }}</span>
 						{{if .Ani.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset"}}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -367,7 +367,7 @@
 						<span class="badge badge-light">{{ToShortTime .Fx.Date}}</span>
 						<span class="badge badge-light">{{ .Fx.User }}</span>
 						{{if .Fx.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -385,7 +385,7 @@
 						<span class="badge badge-light">{{ToShortTime .Mg.Date}}</span>
 						<span class="badge badge-light">{{ .Mg.User }}</span>
 						{{if .Mg.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -403,7 +403,7 @@
 						<span class="badge badge-light">{{ToShortTime .Temp1.Date}}</span>
 						<span class="badge badge-light">{{ .Temp1.User }}</span>
 						{{if .Temp1.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -421,7 +421,7 @@
 						<span class="badge badge-light">{{ToShortTime .Previz.Date}}</span>
 						<span class="badge badge-light">{{ .Previz.User }}</span>
 						{{if .Previz.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -438,7 +438,7 @@
 						<span class="badge badge-light">{{ToShortTime .Fur.Date}}</span>
 						<span class="badge badge-light">{{ .Fur.User }}</span>
 						{{if .Fur.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset"}}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -459,7 +459,7 @@
 						<span class="badge badge-light">{{ToShortTime .Sim.Date}}</span>
 						<span class="badge badge-light">{{ .Sim.User }}</span>
 						{{if .Sim.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset"}}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -481,7 +481,7 @@
 						<span class="badge badge-light">{{ToShortTime .Crowd.Date}}</span>
 						<span class="badge badge-light">{{ .Crowd.User }}</span>
 						{{if .Crowd.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -505,7 +505,7 @@
 						<span class="badge badge-light">{{ToShortTime .Light.Date}}</span>
 						<span class="badge badge-light">{{ .Light.User }}</span>
 						{{if .Light.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset"}}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -526,7 +526,7 @@
 						<span class="badge badge-light">{{ToShortTime .Comp.Date}}</span>
 						<span class="badge badge-light">{{ .Comp.User }}</span>
 						{{if .Comp.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						{{if eq .Type "asset"}}
 							<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
@@ -547,7 +547,7 @@
 						<span class="badge badge-light">{{ToShortTime .Matte.Date}}</span>
 						<span class="badge badge-light">{{ .Matte.User }}</span>
 						{{if .Matte.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -564,7 +564,7 @@
 						<span class="badge badge-light">{{ToShortTime .Env.Date}}</span>
 						<span class="badge badge-light">{{ .Env.User }}</span>
 						{{if .Env.Mov }}
-							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">M</a>
+							<a class="badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 						<a class="badge badge-light" href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;">F</a>
 					</h5>
@@ -720,7 +720,7 @@
 		</div>
 	</div>
 </div>
-<hr class="item-divider">
+<hr class="item-divider my-4">
 {{end}}
 </div>
 
