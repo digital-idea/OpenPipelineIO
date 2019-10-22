@@ -409,7 +409,7 @@ input[type=checkbox]:checked+div{
 }
 
 
-.add {
+.play, .select, .add {
 	color: #A7A59C;
 	background-color: rgb(55, 54, 52);
 	border:1px solid #A7A59C;
