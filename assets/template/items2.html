@@ -59,6 +59,34 @@
 	</div>
 </div>
 
+<!-- Modal: Set Rnum-->
+<div class="modal fade" id="setrnum" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-darkmode">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Set Roll Number</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">				
+				<input type="hidden" class="form-control" id="set-rnum-name">
+				<input type="hidden" class="form-control" id="set-rnum-userid">
+				<div class="form-group">
+					<label for="comment-text" class="col-form-label">Roll Number:</label>
+					<input type="text" class="form-control" id="set-rnum-text">
+					<small class="form-text text-muted">A0001 형태로 각 권을 뜻하는 A,B,C,D,E,F 문자와 편집본 순서를 입력해주세요.</small>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setRnum('{{$.SearchOption.Project}}', document.getElementById('set-rnum-name').value, document.getElementById('set-rnum-text').value, document.getElementById('set-rnum-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal: Rm Comment-->
 <div class="modal fade" id="rmcomment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -106,9 +134,15 @@
 					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
 				{{end}}
 				<div class="top-left">
-					<div class="row">
-						<span class="black-opbg">{{.Rnum}}</span>
-					</div>
+					{{if eq .Type "org" "left"}}
+						<div class="row">
+							{{if .Rnum}}
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}}id="rnum-{{.Name}}" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
+							{{else}}
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}}id="rnum-{{.Name}}" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
+							{{end}}
+						</div>
+					{{end}}
 					{{if .Ddline3d}}
 						<div class="row">
 							<span class="black-opbg">3D:{{ToShortTime .Ddline3d}}</span>

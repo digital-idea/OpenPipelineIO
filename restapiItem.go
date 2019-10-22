@@ -2121,7 +2121,7 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	userID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2130,6 +2130,7 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var rnum string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -2147,16 +2148,25 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
-		case "rnum":
+		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			rnum = v
+			userid = v
+		case "rnum":
+			if len(values) == 0 {
+				rnum = ""
+			} else {
+				rnum = values[0]
+			}
 		}
 	}
-	if !regexpRnum.MatchString(rnum) {
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
+	if rnum != "" && !regexpRnum.MatchString(rnum) {
 		fmt.Fprintf(w, "{\"error\":\"%s 값은 A0001 형식이 아닙니다.\"}\n", rnum)
 		return
 	}
@@ -2164,6 +2174,36 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
+	}
+	// log
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rnum, project, name, "csi3", userID, 180)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+
+	// slack logging
+	p, err := getProject(session, project)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if p.SlackWebhookURL != "" {
+		payload := slack.Payload{
+			Text:    "Set Rnum: " + rnum + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Channel: "#" + project,
+		}
+		err := slack.Send(p.SlackWebhookURL, "", payload)
+		if len(err) > 0 {
+			for _, e := range err {
+				log.Println(e)
+			}
+		}
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }

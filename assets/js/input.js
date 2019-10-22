@@ -754,7 +754,7 @@ function setAssettypes(project, assettype, token) {
     }
 }
 
-function setRnum(project, name, rnum, token) {
+function setRnum(project, name, rnum, userid, token) {
     $.ajax({
         url: "/api/setrnum",
         type: "post",
@@ -762,6 +762,7 @@ function setRnum(project, name, rnum, token) {
             project: project,
             name: name,
             rnum: rnum,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -771,6 +772,11 @@ function setRnum(project, name, rnum, token) {
             console.info(data)
         }
     });
+    if (rnum !== "") {
+        document.getElementById("rnum-"+name).innerHTML = rnum;
+    } else {
+        document.getElementById("rnum-"+name).innerHTML = "no rnum";
+    }
 }
 
 function addTags(project, tag, token) {
