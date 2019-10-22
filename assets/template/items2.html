@@ -657,9 +657,13 @@
 			<span class="text-badge">Note:</span>
 		</div>
 		<div class="ml-1 text-light small">
-			<div class="float-right" id="note-{{.Name}}-addbutton">
-				<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
-			</div>
+			{{if eq .Type "org" "left" "asset"}}
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					<div class="float-right" id="note-{{.Name}}-addbutton">
+						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
+					</div>
+				{{end}}
+			{{end}}
 			<div id="note-{{.Name}}">{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}</div>
 			
 		</div>
