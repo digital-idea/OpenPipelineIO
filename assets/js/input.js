@@ -143,35 +143,39 @@ function setJustTimecodeOut(project, name, timecode, token) {
     });
 }
 
-function addNote(project, name, text, token) {
-    sleep(200);
-    $.ajax({
-        url: "/api/setnote",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            text: text,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            // console.info(data)
+function setNote(project, name, text, userid, token) {
+    if (multiInput) {
+        var cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            currentName = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/setnote",
+                type: "post",
+                data: {
+                    project: project,
+                    name: currentName,
+                    text: text,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                }
+            });
+            // note-{{.Name}} 내부 내용에 추가한다.
+            document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            // 내용이 바뀐후 바로 수정하고 싶다면 "+" 버튼을 눌렀을 때 바뀐 내용이 이미 입력되어있어야 한다.
+            document.getElementById("note-"+currentName+"-addbutton").innerHTML = `<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '${text}');setModal('set-note-name', '${currentName}');setModal('set-note-userid', '${userid}')">+</span>`
         }
-    });
-}
-
-function addNotes(project, text, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        name = cboxes[i].getAttribute("id")
-        // 다음 사용될 API
-        sleep(200);
+    } else {
         $.ajax({
             url: "/api/setnote",
             type: "post",
@@ -179,15 +183,20 @@ function addNotes(project, text, token) {
                 project: project,
                 name: name,
                 text: text,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                // console.info(data)
+                console.info(data)
             }
         });
+        // note-{{.Name}} 내부 내용에 추가한다.
+        document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        // 내용이 바뀐후 바로 수정하고 싶다면 "+" 버튼을 눌렀을 때 바뀐 내용이 이미 입력되어있어야 한다.
+        document.getElementById("note-"+name+"-addbutton").innerHTML = `<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '${text}');setModal('set-note-name', '${name}');setModal('set-note-userid', '${userid}')">+</span>`
     }
 }
 
@@ -219,7 +228,7 @@ function addComment(project, name, text, userid, token) {
                 }
             });
             // comments-{{.Name}} 내부 내용에 추가한다.
-            let body = text.replace("\n","<br>")
+            let body = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
             let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
             document.getElementById("comments-"+currentName).innerHTML = newComment + document.getElementById("comments-"+currentName).innerHTML;
         }
@@ -242,7 +251,7 @@ function addComment(project, name, text, userid, token) {
             }
         });
         // comments-{{.Name}} 내부 내용에 추가한다.
-        let body = text.replace("\n","<br>")
+        let body = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
         let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
         document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
     }
@@ -962,7 +971,7 @@ function setTaskLevels(project, task, level, token) {
     }
 }
 
-// setModal 함수는 modalid와 value를 받아서 modal에 셋팅한다.
-function setModal(modalid, value) {
-    document.getElementById(modalid).value=value;
+// setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
+function setModal(modalID, value) {
+    document.getElementById(modalID).value=value;
 }

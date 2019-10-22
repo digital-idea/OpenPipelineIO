@@ -2827,6 +2827,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var text string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -2844,6 +2845,13 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			userid = v
 		case "text":
 			if len(values) == 0 {
 				text = ""
@@ -2852,10 +2860,43 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
 	err = SetNote(session, project, name, userID, text)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
+	}
+
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, "Set Note: "+text, project, name, "csi3", userID, 180)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	// slack logging
+	p, err := getProject(session, project)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if p.SlackWebhookURL != "" {
+		payload := slack.Payload{
+			Text:    "Set Note: " + text + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Channel: "#" + project,
+		}
+		err := slack.Send(p.SlackWebhookURL, "", payload)
+		if len(err) > 0 {
+			for _, e := range err {
+				log.Println(e)
+			}
+		}
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }

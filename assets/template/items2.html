@@ -28,6 +28,32 @@
 	</div>
 </div>
 
+<!-- Modal: Set Note-->
+<div class="modal fade" id="setnote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-darkmode">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Set Note</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">				
+				<input type="hidden" class="form-control" id="set-note-name">
+				<input type="hidden" class="form-control" id="set-note-userid">
+				<div class="form-group">
+					<label for="comment-text" class="col-form-label">Note:</label>
+					<textarea class="form-control" id="set-note-text" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-name').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal: Rm Comment-->
 <div class="modal fade" id="rmcomment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -626,9 +652,15 @@
 			<span class="text-badge">Note:</span>
 		</div>
 		<div class="ml-1 text-light small">
-			{{range Split .Note.Text "\n"}}
-				{{.}}<br>
-			{{end}}
+			<div class="float-right" id="note-{{.Name}}-addbutton">
+				<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '{{.Note.Text}}');setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
+			</div>
+			<div id="note-{{.Name}}">
+				{{range Split .Note.Text "\n"}}
+					{{.}}<br>
+				{{end}}
+			</div>
+			
 		</div>
 		{{if ne $.Devmode true}}
 			<!--작업내용 legacy start-->

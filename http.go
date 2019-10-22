@@ -270,13 +270,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/addtag", handleAPIAddTag)
 	http.HandleFunc("/api/rmtag", handleAPIRmTag)
 	http.HandleFunc("/api/settags", handleAPISetTags)
-	http.HandleFunc("/api/addnote", handleAPIAddNote)
 	http.HandleFunc("/api/setnote", handleAPISetNote)
-	http.HandleFunc("/api/rmnote", handleAPIRmNote)
-	http.HandleFunc("/api/setnotes", handleAPISetNotes)
 	http.HandleFunc("/api/addcomment", handleAPIAddComment)
 	http.HandleFunc("/api/rmcomment", handleAPIRmComment)
-	http.HandleFunc("/api/setcomments", handleAPISetComments)
 	http.HandleFunc("/api/addsource", handleAPIAddSource)
 	http.HandleFunc("/api/rmsource", handleAPIRmSource)
 	http.HandleFunc("/api/search", handleAPISearch)
@@ -300,11 +296,15 @@ func webserver(port string) {
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
-	http.HandleFunc("/search", handleSearch)
-	http.HandleFunc("/searchsubmit", handleSearchSubmit)
-	http.HandleFunc("/api/addlink", handleAPIAddLink)
-	http.HandleFunc("/api/rmlink", handleAPIRmLink)
-	http.HandleFunc("/api/setlinks", handleAPISetLinks)
+	http.HandleFunc("/search", handleSearch)                  // legacy
+	http.HandleFunc("/searchsubmit", handleSearchSubmit)      // legacy
+	http.HandleFunc("/api/addlink", handleAPIAddLink)         // legacy
+	http.HandleFunc("/api/rmlink", handleAPIRmLink)           // legacy
+	http.HandleFunc("/api/setlinks", handleAPISetLinks)       // legacy
+	http.HandleFunc("/api/addnote", handleAPIAddNote)         // legacy
+	http.HandleFunc("/api/rmnote", handleAPIRmNote)           // legacy
+	http.HandleFunc("/api/setnotes", handleAPISetNotes)       // legacy
+	http.HandleFunc("/api/setcomments", handleAPISetComments) // legacy
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.

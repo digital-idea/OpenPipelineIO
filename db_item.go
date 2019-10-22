@@ -2253,7 +2253,7 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	return nil
 }
 
-// AddNote 함수는 item에 작업,현장내용을 추가한다.
+// AddNote 함수는 item에 작업,현장내용을 추가한다.  //legacy
 func AddNote(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
@@ -2299,7 +2299,7 @@ func SetNote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// RmNote 함수는 item에 작업내용을 삭제한다.
+// RmNote 함수는 item에 작업내용을 삭제한다. //legacy
 func RmNote(session *mgo.Session, project, name, userID, text string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
@@ -2335,7 +2335,7 @@ func RmNote(session *mgo.Session, project, name, userID, text string) error {
 	return nil
 }
 
-// SetNotes 함수는 item에 작업,현장내용을 추가한다.
+// SetNotes 함수는 item에 작업,현장내용을 추가한다.  //legacy
 func SetNotes(session *mgo.Session, project, name, userID string, texts []string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
