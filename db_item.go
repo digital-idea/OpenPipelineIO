@@ -2280,23 +2280,37 @@ func AddNote(session *mgo.Session, project, name, userID, text string) error {
 }
 
 // SetNote 함수는 item에 작업내용을 추가한다.
-func SetNote(session *mgo.Session, project, name, userID, text string) error {
+func SetNote(session *mgo.Session, project, name, userID, text string, overwrite bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"note.text": text, "note.author": userID, "note.date": time.Now().Format(time.RFC3339), "updatetime": time.Now().Format(time.RFC3339)}})
-	if err != nil {
-		return err
+	var note string
+	if overwrite {
+		note = text
+	} else {
+		i, err := getItem(session, project, id)
+		if err != nil {
+			return "", err
+		}
+		if strings.HasSuffix(i.Note.Text, "\n") {
+			note = text + i.Note.Text
+		} else {
+			note = text + "\n " + i.Note.Text
+		}
 	}
-	return nil
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"note.text": note, "note.author": userID, "note.date": time.Now().Format(time.RFC3339), "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return "", err
+	}
+	return note, nil
 }
 
 // RmNote 함수는 item에 작업내용을 삭제한다. //legacy

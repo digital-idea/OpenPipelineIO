@@ -45,10 +45,15 @@
 					<label for="comment-text" class="col-form-label">Note:</label>
 					<textarea class="form-control" id="set-note-text" rows="3"></textarea>
 				</div>
+				<div class="form-check">
+					<input type="checkbox" id="set-note-overwrite" name="overwrite-note" class="form-check-input">
+					<label class="form-check-label" for="set-note-overwrite">Overwrite</label>
+				</div>
 			</div>
+			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-name').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-name').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value, document.getElementById('set-note-overwrite').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
 			</div>
 		</div>
 	</div>
@@ -653,13 +658,9 @@
 		</div>
 		<div class="ml-1 text-light small">
 			<div class="float-right" id="note-{{.Name}}-addbutton">
-				<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '{{.Note.Text}}');setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
+				<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
 			</div>
-			<div id="note-{{.Name}}">
-				{{range Split .Note.Text "\n"}}
-					{{.}}<br>
-				{{end}}
-			</div>
+			<div id="note-{{.Name}}">{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}</div>
 			
 		</div>
 		{{if ne $.Devmode true}}

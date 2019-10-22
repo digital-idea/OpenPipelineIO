@@ -2828,6 +2828,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	var name string
 	var text string
 	var userid string
+	var overwrite string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -2852,6 +2853,13 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			userid = v
+		case "overwrite":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			overwrite = v
 		case "text":
 			if len(values) == 0 {
 				text = ""
@@ -2863,7 +2871,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	if userID == "unknown" && userid != "" {
 		userID = userid
 	}
-	err = SetNote(session, project, name, userID, text)
+	note, err := SetNote(session, project, name, userID, text, str2bool(overwrite))
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -2875,11 +2883,12 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, "Set Note: "+text, project, name, "csi3", userID, 180)
+	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, project, name, "csi3", userID, 180)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+
 	// slack logging
 	p, err := getProject(session, project)
 	if err != nil {
@@ -2888,7 +2897,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	}
 	if p.SlackWebhookURL != "" {
 		payload := slack.Payload{
-			Text:    "Set Note: " + text + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Text:    "Set Note: " + note + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
 			Channel: "#" + project,
 		}
 		err := slack.Send(p.SlackWebhookURL, "", payload)

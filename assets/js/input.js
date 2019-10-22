@@ -143,7 +143,7 @@ function setJustTimecodeOut(project, name, timecode, token) {
     });
 }
 
-function setNote(project, name, text, userid, token) {
+function setNote(project, name, text, userid, overwrite, token) {
     if (multiInput) {
         var cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -161,6 +161,7 @@ function setNote(project, name, text, userid, token) {
                     name: currentName,
                     text: text,
                     userid: userid,
+                    overwrite: document.getElementById("set-note-overwrite").checked,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -170,10 +171,13 @@ function setNote(project, name, text, userid, token) {
                     console.info(data)
                 }
             });
-            // note-{{.Name}} 내부 내용에 추가한다.
-            document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-            // 내용이 바뀐후 바로 수정하고 싶다면 "+" 버튼을 눌렀을 때 바뀐 내용이 이미 입력되어있어야 한다.
-            document.getElementById("note-"+currentName+"-addbutton").innerHTML = `<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '${text}');setModal('set-note-name', '${currentName}');setModal('set-note-userid', '${userid}')">+</span>`
+            if (document.getElementById("set-note-overwrite").checked) {
+                // note-{{.Name}} 내부 내용을 교체한다.
+                document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            } else {
+                // note-{{.Name}} 내부 내용에 추가한다.
+                document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+currentName).innerHTML;
+            }
         }
     } else {
         $.ajax({
@@ -184,6 +188,7 @@ function setNote(project, name, text, userid, token) {
                 name: name,
                 text: text,
                 userid: userid,
+                overwrite: document.getElementById("set-note-overwrite").checked,
             },
             headers: {
                 "Authorization": "Basic "+ token
@@ -193,10 +198,13 @@ function setNote(project, name, text, userid, token) {
                 console.info(data)
             }
         });
-        // note-{{.Name}} 내부 내용에 추가한다.
-        document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        // 내용이 바뀐후 바로 수정하고 싶다면 "+" 버튼을 눌렀을 때 바뀐 내용이 이미 입력되어있어야 한다.
-        document.getElementById("note-"+name+"-addbutton").innerHTML = `<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '${text}');setModal('set-note-name', '${name}');setModal('set-note-userid', '${userid}')">+</span>`
+        if (document.getElementById("set-note-overwrite").checked) {
+            // note-{{.Name}} 내부 내용을 교체한다.
+            document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        } else {
+            // note-{{.Name}} 내부 내용에 추가한다.
+            document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+name).innerHTML;
+        }
     }
 }
 
