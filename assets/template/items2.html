@@ -658,7 +658,7 @@
 		</div>
 		<div class="ml-1 text-light small">
 			{{if eq .Type "org" "left" "asset"}}
-				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+				{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 					<div class="float-right" id="note-{{.Name}}-addbutton">
 						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
 					</div>
@@ -732,7 +732,7 @@
 	<!--수정사항-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		{{$name := .Name}}
-		{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+		{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 			<div class="float-right">
 				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-name', '{{.Name}}');setModal('add-comment-userid', '{{$.User.ID}}')">+</span>
 			</div>
@@ -741,7 +741,7 @@
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 				<div id="comments-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
-					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">x</span>
 					{{end}}
 					<br>
