@@ -3406,15 +3406,15 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 			path = v
 		}
 	}
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
 	err = AddSource(session, project, name, userID, title, path)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
 	// log
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
