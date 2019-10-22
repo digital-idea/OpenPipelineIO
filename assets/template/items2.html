@@ -694,7 +694,7 @@
 			{{if eq .Type "org" "left" "asset"}}
 				{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 					<div class="float-right" id="note-{{.Name}}-addbutton">
-						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">+</span>
+						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">＋</span>
 					</div>
 				{{end}}
 			{{end}}
@@ -738,9 +738,22 @@
 		</div>
 		
 		<div class="row">
-			{{range .Sources}}
-				<a  href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
-			{{end}}
+			<div id="links-{{.Name}}">
+				{{range .Sources -}}<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>{{- end}}
+			</div>
+			
+			<div>
+				{{if eq .Type "org" "left" "asset"}}
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+						<span class="add ml-1" data-toggle="modal" data-target="#addlink" onclick="setModal('add-link-title', '' );setModal('add-link-path', '' );setModal('add-link-name', '{{.Name}}');setModal('add-link-userid', '{{$.User.ID}}')">＋</span>
+						{{if .Sources}}	
+							<span class="remove ml-0" data-toggle="modal" data-target="#rmlink" onclick="setModal('rm-link-title', '' );setModal('rm-link-name', '{{.Name}}');setModal('rm-link-userid', '{{$.User.ID}}')">－</span>
+						{{end}}
+					{{end}}
+				{{end}}
+
+			</div>
+			
 		</div>
 		
 		<!--Scaninfo-->
@@ -768,7 +781,7 @@
 		{{$name := .Name}}
 		{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 			<div class="float-right">
-				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-name', '{{.Name}}');setModal('add-comment-userid', '{{$.User.ID}}')">+</span>
+				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-name', '{{.Name}}');setModal('add-comment-userid', '{{$.User.ID}}')">＋</span>
 			</div>
 		{{end}}
 		<div id="comments-{{.Name}}">
@@ -776,7 +789,7 @@
 				<div id="comments-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
-						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">x</span>
+						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">×</span>
 					{{end}}
 					<br>
 					<small class="text-white">
