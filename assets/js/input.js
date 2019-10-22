@@ -286,19 +286,52 @@ function rmComment(project, name, date, userid, token) {
     document.getElementById(`comments-${name}-${date}`).remove();
 }
 
-function addComments(project, text, userid, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
+
+function addSource(project, name, title, path, userid, token) {
+    if (multiInput) {
+        var cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200);
+            currentName = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/addsource",
+                type: "post",
+                data: {
+                    project: project,
+                    name: currentName,
+                    title: title,
+                    path: path,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                }
+            });
+            // 기존 Sources 추가된다.
+            var source = "";
+            if (path.startsWith("http")) {
+                source = `<a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+            } else {
+                source = `<a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+            }
+            document.getElementById("sources-"+currentName).innerHTML = document.getElementById("sources-"+currentName).innerHTML + source;
         }
+    } else {
         $.ajax({
-            url: "/api/addcomment",
+            url: "/api/addsource",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
-                text: text,
+                name: name,
+                title: title,
+                path: path,
                 userid: userid,
             },
             headers: {
@@ -309,56 +342,16 @@ function addComments(project, text, userid, token) {
                 console.info(data)
             }
         });
+        // 기존 Sources 추가된다.
+        var source = "";
+        if (path.startsWith("http")) {
+            source = `<a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+        } else {
+            source = `<a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+        }
+        document.getElementById("sources-"+name).innerHTML = document.getElementById("sources-"+name).innerHTML + source;
     }
 }
-
-function addSource(project, name, title, path, token) {
-    $.ajax({
-        url: "/api/addsource",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            title: title,
-            path: path,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        }
-    });
-}
-
-function addSources(project, title, path, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        sleep(200);
-        $.ajax({
-            url: "/api/addsource",
-            type: "post",
-            data: {
-                project: project,
-                name: cboxes[i].getAttribute("id"),
-                title: title,
-                path: path,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                console.info(data)
-            }
-        });
-    }
-}
-
 
 
 function rmSources(project, title, token) {

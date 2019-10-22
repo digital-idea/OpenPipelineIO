@@ -2163,9 +2163,6 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
 	if rnum != "" && !regexpRnum.MatchString(rnum) {
 		fmt.Fprintf(w, "{\"error\":\"%s 값은 A0001 형식이 아닙니다.\"}\n", rnum)
 		return
@@ -2176,6 +2173,9 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// log
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -3365,6 +3365,7 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 	var name string
 	var title string
 	var path string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -3389,6 +3390,13 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			title = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			userid = v
 		case "path", "url":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -3402,6 +3410,39 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
+	}
+	// log
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", title, path), project, name, "csi3", userID, 180)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+
+	// slack logging
+	p, err := getProject(session, project)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if p.SlackWebhookURL != "" {
+		payload := slack.Payload{
+			Text:    fmt.Sprintf("Add Source: %s, %s", title, path) + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Channel: "#" + project,
+		}
+		err := slack.Send(p.SlackWebhookURL, "", payload)
+		if len(err) > 0 {
+			for _, e := range err {
+				log.Println(e)
+			}
+		}
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
