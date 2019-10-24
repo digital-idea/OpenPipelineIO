@@ -56,8 +56,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/setnote` |
 | /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
-| /api/addsource | 링크소스 추가 | project, name, title, path | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
-| /api/rmsource | 링크소스 삭제 | project, name, title | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" http://192.168.31.172/api/rmsource` |
+| /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
+| /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" http://192.168.31.172/api/rmsource` |
 | /api/setlinks | 링크소스 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1,/show/src2" http://192.168.31.172/api/setlinks` |
 | /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
 | /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|

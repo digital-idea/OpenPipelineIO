@@ -3518,7 +3518,7 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	userID, _, err := TokenHandler(r, session)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -3527,6 +3527,7 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 	var project string
 	var name string
 	var title string
+	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
@@ -3544,6 +3545,13 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				return
+			}
+			userid = v
 		case "title":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -3553,10 +3561,43 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 			title = v
 		}
 	}
+	if userID == "unknown" && userid != "" {
+		userID = userid
+	}
 	err = RmSource(session, project, name, title)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
+	}
+	// log
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Source: %s", title), project, name, "csi3", userID, 180)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+
+	// slack logging
+	p, err := getProject(session, project)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	if p.SlackWebhookURL != "" {
+		payload := slack.Payload{
+			Text:    fmt.Sprintf("Rm Source: %s", title) + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
+			Channel: "#" + project,
+		}
+		err := slack.Send(p.SlackWebhookURL, "", payload)
+		if len(err) > 0 {
+			for _, e := range err {
+				log.Println(e)
+			}
+		}
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }

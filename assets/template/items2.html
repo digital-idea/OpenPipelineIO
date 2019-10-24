@@ -38,7 +38,7 @@
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
-			<div class="modal-body">				
+			<div class="modal-body">
 				<input type="hidden" class="form-control" id="set-note-name">
 				<input type="hidden" class="form-control" id="set-note-userid">
 				<div class="form-group">
@@ -115,6 +115,36 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-outline-warning" onclick="addSource('{{$.SearchOption.Project}}', document.getElementById('add-source-name').value, document.getElementById('add-source-title').value, document.getElementById('add-source-path').value, document.getElementById('add-source-userid').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal: Rm Source-->
+<div class="modal fade" id="rmsource" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-darkmode">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Rm Source</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">				
+				<input type="hidden" class="form-control" id="rm-source-name">
+				<input type="hidden" class="form-control" id="rm-source-userid">
+				<div class="form-group">
+					<div class="form-group">
+						<label for="multi-input-title" class="col-form-label">Title:</label>
+						<input type="text" class="form-control" id="rm-source-title">
+						<small class="text-danger">삭제할 소스의 이름을 입력해주세요.</small>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmSource('{{$.SearchOption.Project}}', document.getElementById('rm-source-name').value, document.getElementById('rm-source-title').value, document.getElementById('rm-source-userid').value, '{{$.User.Token}}')" data-dismiss="modal">REMOVE</button>
 			</div>
 		</div>
 	</div>
@@ -778,12 +808,12 @@
 					</div>
 				{{- end}}
 			</div>
-			<div class="ml-3">
+			<div class="ml-3" id="source-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
 						<span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '{{.Name}}');setModal('add-source-userid', '{{$.User.ID}}')">＋</span>
 						{{if .Sources}}	
-							<span class="remove ml-0" data-toggle="modal" data-target="#rmlink" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '{{.Name}}');setModal('rm-source-userid', '{{$.User.ID}}')">－</span>
+							<span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '{{.Name}}');setModal('rm-source-userid', '{{$.User.ID}}')">－</span>
 						{{end}}
 					{{end}}
 				{{end}}
