@@ -1644,8 +1644,9 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	names := strings.FieldsFunc(name, f)
 	type Shot struct {
-		Name  string
-		Error string
+		Project string
+		Name    string
+		Error   string
 	}
 	var success []Shot
 	var fails []Shot
@@ -1654,6 +1655,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		s := Shot{}
+		s.Project = project
 		s.Name = n
 		if !regexpShotname.MatchString(n) {
 			s.Error = "SS_0010 형식의 이름이 아닙니다"
@@ -1800,8 +1802,9 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	names := strings.FieldsFunc(name, f)
 	type Asset struct {
-		Name  string
-		Error string
+		Project string
+		Name    string
+		Error   string
 	}
 	var success []Asset
 	var fails []Asset
@@ -1810,6 +1813,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		a := Asset{}
+		a.Project = project
 		a.Name = n
 		if !regexpAssetname.MatchString(n) {
 			a.Error = "stone 또는 stone01 형식의 이름이 아닙니다"

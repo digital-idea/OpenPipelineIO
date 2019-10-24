@@ -11,13 +11,17 @@
         <div>
             <label>Success Shots</label>
             {{range .Success}}
-                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-success">{{.Name}}</span> 정상</div>
+                <div class="p-1 text-darkmode">
+                    <a href="/inputmode?project={{.Project}}&searchword={{.Name}}&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=" class="btn btn-sm btn-success">{{.Name}}</a> 정상
+                </div>
             {{end}}
         </div>
         <div class="pt-5">
             <label>Fail Shots</label>
             {{range .Fails}}
-                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}</div>
+                <div class="p-1 text-darkmode">
+                    <span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}
+                </div>
             {{end}}
         </div>
         <div class="text-center">
