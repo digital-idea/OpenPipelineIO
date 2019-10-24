@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/mgo.v2"
 	"net/http"
 	"strings"
-	"gopkg.in/mgo.v2"
 )
 
 // handleAPISetPmnotes 함수는 아이템에 수정사항 리스트를 교체합니다.

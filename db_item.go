@@ -2253,32 +2253,6 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	return nil
 }
 
-// AddNote 함수는 item에 작업,현장내용을 추가한다.  //legacy
-func AddNote(session *mgo.Session, project, name, userID, text string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-	i.Onsetnote = append(i.Onsetnote, note)
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // SetNote 함수는 item에 작업내용을 추가한다.
 func SetNote(session *mgo.Session, project, name, userID, text string, overwrite bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
@@ -2311,74 +2285,6 @@ func SetNote(session *mgo.Session, project, name, userID, text string, overwrite
 		return "", err
 	}
 	return note, nil
-}
-
-// RmNote 함수는 item에 작업내용을 삭제한다. //legacy
-func RmNote(session *mgo.Session, project, name, userID, text string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	var notes []string
-	for _, note := range i.Onsetnote {
-		i := strings.LastIndex(note, ";")
-		if i == -1 {
-			continue
-		}
-		if note[i+1:] == text {
-			continue
-		}
-		notes = append(notes, note)
-	}
-	i.Onsetnote = notes
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// SetNotes 함수는 item에 작업,현장내용을 추가한다.  //legacy
-func SetNotes(session *mgo.Session, project, name, userID string, texts []string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	i.Onsetnote = []string{}
-	for _, text := range texts {
-		if text == "" {
-			continue
-		}
-		note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-		i.Onsetnote = append(i.Onsetnote, note)
-	}
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // AddComment 함수는 item에 수정사항을 추가한다.
@@ -2440,65 +2346,6 @@ func RmComment(session *mgo.Session, project, name, userID, date string) (string
 		return "", err
 	}
 	return removeText, nil
-}
-
-// SetComments 함수는 item에 수정내용을 교체합니다.
-func SetComments(session *mgo.Session, project, name, userID string, texts []string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	var pmnotes []string
-	for _, text := range texts {
-		if text == "" {
-			continue
-		}
-		note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-		pmnotes = append(pmnotes, note)
-	}
-	i.Pmnote = pmnotes
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// AddLink 함수는 item에 소스링크를 추가한다.
-func AddLink(session *mgo.Session, project, name, userID, text string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-	i.Link = append(i.Link, note)
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // AddSource 함수는 item에 소스링크를 추가한다.
@@ -2582,7 +2429,6 @@ func RmSource(session *mgo.Session, project, name, title string) error {
 	if err != nil {
 		return err
 	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
 	var newSources []Source
 	for _, source := range i.Sources {
 		if source.Title == title {
@@ -2591,39 +2437,6 @@ func RmSource(session *mgo.Session, project, name, title string) error {
 		newSources = append(newSources, source)
 	}
 	i.Sources = newSources
-	err = setItem(session, project, i)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-// SetLinks 함수는 item에 소스링크를 교체합니다.
-func SetLinks(session *mgo.Session, project, name, userID string, texts []string) error {
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	i, err := getItem(session, project, id)
-	if err != nil {
-		return err
-	}
-	// 이 부분은 나중에 좋은 구조로 다시 바꾸어야 한다. 호환성을 위해서 현재는 CSI1의 구조로 현장노트를 입력한다.
-	var links []string
-	for _, text := range texts {
-		if text == "" {
-			continue
-		}
-		note := fmt.Sprintf("%s;restapi;%s;%s", time.Now().Format(time.RFC3339), userID, text)
-		links = append(links, note)
-	}
-	i.Link = links
 	err = setItem(session, project, i)
 	if err != nil {
 		return err
