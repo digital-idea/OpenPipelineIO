@@ -1,3 +1,19 @@
+// modal이 뜨면 오토포커스가 되어야 한다.
+$('#addcomment').on('shown.bs.modal', function () {
+    $('#add-comment-text').trigger('focus')
+})
+$('#setnote').on('shown.bs.modal', function () {
+    $('#set-note-text').trigger('focus')
+})
+$('#addsource').on('shown.bs.modal', function () {
+    $('#add-source-title').trigger('focus')
+})
+$('#setrnum').on('shown.bs.modal', function () {
+    $('#set-rnum-text').trigger('focus')
+})
+
+
+
 var multiInput = false;
 
 function removeWhiteSpace(event) {
