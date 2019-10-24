@@ -3038,8 +3038,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := Recipe{}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	args := r.PostForm
-	for key, values := range args {
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
@@ -3092,33 +3091,20 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	err = dilog.Add(*flagDBIP, host, "Add Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		rcp.Error = err.Error()
-		return
 	}
 	// slack log
-	p, err := getProject(session, rcp.Project)
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		rcp.Error = err.Error()
 	}
-	if p.SlackWebhookURL != "" {
-		payload := slack.Payload{
-			Text:    "Add Comment: " + fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID),
-			Channel: "#" + rcp.Project,
-		}
-		err := slack.Send(p.SlackWebhookURL, "", payload)
-		if len(err) > 0 {
-			for _, e := range err {
-				log.Println(e)
-			}
-		}
-	}
 	// json 으로 결과 전송
-	callback, err := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
 	if err != nil {
 		log.Println(err)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write(callback)
+	w.Write(data)
 }
 
 // handleAPIRmComment 함수는 아이템에서 수정사항을 삭제합니다.
