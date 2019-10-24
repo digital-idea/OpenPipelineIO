@@ -764,18 +764,21 @@
 				<a href="dilink://{{.ProductionCam.PubPath}}" class="badge badge-info ml-1">campath</a>
 			{{end}}
 		</div>
-		
+		{{$name := .Name}}
 		<!--연결소스-->
 		<div class="row">
 			<span class="text-badge">Sources:</span>
 		</div>
-		
-		<div class="row">
-			<div id="sources-{{.Name}}">
-				{{range .Sources -}}<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>{{- end}}
+
+		<div class="ml-2 row">
+			<div id="sources-{{.Name}}" class="row">
+				{{range .Sources -}}
+					<div id="source-{{$name}}-{{.Title}}">
+						<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+					</div>
+				{{- end}}
 			</div>
-			
-			<div>
+			<div class="ml-3">
 				{{if eq .Type "org" "left" "asset"}}
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
 						<span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '{{.Name}}');setModal('add-source-userid', '{{$.User.ID}}')">＋</span>
@@ -784,10 +787,9 @@
 						{{end}}
 					{{end}}
 				{{end}}
-
 			</div>
-			
 		</div>
+		
 		
 		<!--Scaninfo-->
 		<div class="row">
@@ -811,7 +813,7 @@
 
 	<!--수정사항-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
-		{{$name := .Name}}
+		
 		{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 			<div class="float-right">
 				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-name', '{{.Name}}');setModal('add-comment-userid', '{{$.User.ID}}')">＋</span>

@@ -333,9 +333,9 @@ function addSource(project, name, title, path, userid, token) {
             // 기존 Sources 추가된다.
             var source = "";
             if (path.startsWith("http")) {
-                source = `<a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+                source = `<div id="source-${currentName}-${title}"><a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a></div>`;
             } else {
-                source = `<a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+                source = `<div id="source-${currentName}-${title}"><a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a></div>`;
             }
             document.getElementById("sources-"+currentName).innerHTML = document.getElementById("sources-"+currentName).innerHTML + source;
         }
@@ -361,9 +361,9 @@ function addSource(project, name, title, path, userid, token) {
         // 기존 Sources 추가된다.
         var source = "";
         if (path.startsWith("http")) {
-            source = `<a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+            source = `<div id="source-${name}-${title}"><a href="${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a></div>`;
         } else {
-            source = `<a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a>`;
+            source = `<div id="source-${name}-${title}"><a href="dilink://${path}" class="badge badge-outline-darkmode ml-1" alt="${userid}" title="${userid}">${title}</a></div>`;
         }
         document.getElementById("sources-"+name).innerHTML = document.getElementById("sources-"+name).innerHTML + source;
     }
