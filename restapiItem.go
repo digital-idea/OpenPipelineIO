@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/ashwanthkumar/slack-go-webhook"
 	"github.com/digital-idea/dilog"
@@ -3027,85 +3028,81 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Date    string `json:"date"`
+		Text    string `json:"text"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
 	}
-	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
+	rcp := Recipe{}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	var userid string
 	args := r.PostForm
 	for key, values := range args {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+				rcp.Error = err.Error()
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+				rcp.Error = err.Error()
 			}
-			name = v
+			rcp.Name = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+				rcp.Error = err.Error()
 			}
-			text = v
+			rcp.Text = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+				rcp.Error = err.Error()
 			}
-			userid = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		}
 	}
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
-	err = AddComment(session, project, name, userID, text)
+	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
+		rcp.Error = err.Error()
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		rcp.Error = err.Error()
+	}
+	rcp.Date = time.Now().Format(time.RFC3339)
+	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text)
+	if err != nil {
+		rcp.Error = err.Error()
 	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
+		rcp.Error = err.Error()
 	}
+
 	// log
-	err = dilog.Add(*flagDBIP, host, "Add comment: "+text, project, name, "csi3", userID, 180)
+	err = dilog.Add(*flagDBIP, host, "Add Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
 		return
 	}
-	// slack logging
-	p, err := getProject(session, project)
+	// slack log
+	p, err := getProject(session, rcp.Project)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
+		rcp.Error = err.Error()
 	}
 	if p.SlackWebhookURL != "" {
 		payload := slack.Payload{
-			Text:    "Add comment: " + text + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
-			Channel: "#" + project,
+			Text:    "Add Comment: " + fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID),
+			Channel: "#" + rcp.Project,
 		}
 		err := slack.Send(p.SlackWebhookURL, "", payload)
 		if len(err) > 0 {
@@ -3114,7 +3111,14 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// json 으로 결과 전송
+	callback, err := json.Marshal(rcp)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(callback)
 }
 
 // handleAPIRmComment 함수는 아이템에서 수정사항을 삭제합니다.
@@ -3210,76 +3214,6 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 				log.Println(e)
 			}
 		}
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
-}
-
-// handleAPISetPmnotes 함수는 아이템에 수정사항 리스트를 교체합니다.
-func handleAPISetComments(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	args := r.PostForm
-	for key, values := range args {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			text = v
-		}
-	}
-	var texts []string
-	// 문장의 끝을 의미하는 마침표를 이용하여 각 문장을 분리한다.
-	for _, text := range strings.Split(text, ".") {
-		if text == "" {
-			continue
-		}
-		texts = append(texts, strings.TrimSpace(text)+".")
-	}
-	// 문장이 통째로 바뀔 때는 순서대로 보여야 한다. Reverse 한다.
-	for i, j := 0, len(texts)-1; i < j; i, j = i+1, j-1 {
-		texts[i], texts[j] = texts[j], texts[i]
-	}
-
-	err = SetComments(session, project, name, userID, texts)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }

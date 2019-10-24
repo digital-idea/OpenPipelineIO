@@ -226,13 +226,12 @@ function setNote(project, name, text, userid, overwrite, token) {
 
 function addComment(project, name, text, userid, token) {
     if (multiInput) {
-        var cboxes = document.getElementsByName('selectID');
-        for (var i = 0; i < cboxes.length; ++i) {
-            
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            currentName = cboxes[i].getAttribute("id");
+            let currentName = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/addcomment",
@@ -248,13 +247,18 @@ function addComment(project, name, text, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.info(data)
+                    // comments-{{.Name}} 내부 내용에 추가한다.
+                    let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    let newComment = `<div id="comments-${data.name}-${data.date}">
+                    <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                    <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
+                    <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
+                    document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
+                },
+                error: function(data){
+                    alert(data.error);
                 }
             });
-            // comments-{{.Name}} 내부 내용에 추가한다.
-            let body = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-            let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
-            document.getElementById("comments-"+currentName).innerHTML = newComment + document.getElementById("comments-"+currentName).innerHTML;
         }
     } else {
         $.ajax({
@@ -271,13 +275,18 @@ function addComment(project, name, text, userid, token) {
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                // comments-{{.Name}} 내부 내용에 추가한다.
+                let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                let newComment = `<div id="comments-${data.name}-${data.date}">
+                <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
+                <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
+                document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
+            },
+            error: function(data){
+                alert(data.error);
             }
         });
-        // comments-{{.Name}} 내부 내용에 추가한다.
-        let body = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        let newComment = `<span class="text-badge">Now / <a href="/user?id=${userid}" class="text-darkmode">${userid}</a></span><br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr>`
-        document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
     }
 }
 
