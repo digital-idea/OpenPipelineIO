@@ -950,17 +950,20 @@ function setRnum(project, name, rnum, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.error !== "") {
+                alert(data.error)
+                return
+            }
+            if (data.rnum !== "") {
+                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '${data.rnum}' );setModal('set-rnum-name', '${data.name}');setModal('set-rnum-userid', '${data.userid}')"{{end}}>${data.rnum}</span>`;
+            } else {
+                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '${data.rnum}' );setModal('set-rnum-name', '${data.name}');setModal('set-rnum-userid', '${data.userid}')"{{end}}>no rnum</span>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
-    if (rnum !== "") {
-        document.getElementById("rnum-"+name).innerHTML = rnum;
-    } else {
-        document.getElementById("rnum-"+name).innerHTML = "no rnum";
-    }
 }
 
 function addTags(project, tag, token) {

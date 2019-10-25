@@ -2110,103 +2110,125 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetRnum 함수는 아이템에 롤넘버를 설정합니다.
 func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Rnum    string `json:"rnum"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var rnum string
-	var userid string
-	args := r.PostForm
-	for key, values := range args {
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			userid = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "rnum":
 			if len(values) == 0 {
-				rnum = ""
+				rcp.Rnum = ""
 			} else {
-				rnum = values[0]
+				rcp.Rnum = values[0]
 			}
 		}
 	}
-	if rnum != "" && !regexpRnum.MatchString(rnum) {
-		fmt.Fprintf(w, "{\"error\":\"%s 값은 A0001 형식이 아닙니다.\"}\n", rnum)
+	if rcp.Rnum != "" && !regexpRnum.MatchString(rcp.Rnum) {
+		rcp.Error = fmt.Sprintf("%s 값은 A0001 형식이 아닙니다.", rcp.Rnum)
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(data)
 		return
 	}
-	err = SetRnum(session, project, name, rnum)
+	err = SetRnum(session, rcp.Project, rcp.Name, rcp.Rnum)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	// log
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
-	err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rnum, project, name, "csi3", userID, 180)
+	// log
+	err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rcp.Rnum, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-
-	// slack logging
-	p, err := getProject(session, project)
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Rnum: %s\nProject: %s, Name: %s, Author: %s", rcp.Rnum, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-	if p.SlackWebhookURL != "" {
-		payload := slack.Payload{
-			Text:    "Set Rnum: " + rnum + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
-			Channel: "#" + project,
-		}
-		err := slack.Send(p.SlackWebhookURL, "", payload)
-		if len(err) > 0 {
-			for _, e := range err {
-				log.Println(e)
-			}
-		}
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetScanTimecodeIn 함수는 아이템에 Scan TimecodeIn 값을 설정한다.

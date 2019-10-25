@@ -198,11 +198,11 @@
 				{{end}}
 				<div class="top-left">
 					{{if eq .Type "org" "left"}}
-						<div class="row">
+						<div class="row" id="rnum-{{.Name}}">
 							{{if .Rnum}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}}id="rnum-{{.Name}}" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
 							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}}id="rnum-{{.Name}}" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
 							{{end}}
 						</div>
 					{{end}}
