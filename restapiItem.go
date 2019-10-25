@@ -2869,178 +2869,130 @@ func handleAPIRmNote(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetNote 함수는 아이템에 작업내용을 설정합니다.
 func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		Text      string `json:"text"`
+		Overwrite bool   `json:"overwrite"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	var userid string
-	var overwrite string
-	args := r.PostForm
-	for key, values := range args {
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			userid = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "overwrite":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			overwrite = v
+			rcp.Overwrite = str2bool(v)
 		case "text":
 			if len(values) == 0 {
-				text = ""
+				rcp.Text = ""
 			} else {
-				text = values[0]
+				rcp.Text = values[0]
 			}
 		}
 	}
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
-	note, err := SetNote(session, project, name, userID, text, str2bool(overwrite))
+	note, err := SetNote(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Text, rcp.Overwrite)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, project, name, "csi3", userID, 180)
+	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 
-	// slack logging
-	p, err := getProject(session, project)
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-	if p.SlackWebhookURL != "" {
-		payload := slack.Payload{
-			Text:    "Set Note: " + note + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
-			Channel: "#" + project,
-		}
-		err := slack.Send(p.SlackWebhookURL, "", payload)
-		if len(err) > 0 {
-			for _, e := range err {
-				log.Println(e)
-			}
-		}
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
-}
-
-// handleAPISetNotes 함수는 아이템에 작업내용을 교체합니다.
-func handleAPISetNotes(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	args := r.PostForm
-	for key, values := range args {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			text = v
-		}
-	}
-	var texts []string
-	// 문장의 끝을 의미하는 마침표를 이용하여 각 문장을 분리한다.
-	for _, text := range strings.Split(text, ".") {
-		if text == "" {
-			continue
-		}
-		texts = append(texts, strings.TrimSpace(text)+".")
-	}
-	// 문장이 통째로 바뀔 때는 순서대로 보여야 한다. Reverse 한다.
-	for i, j := 0, len(texts)-1; i < j; i, j = i+1, j-1 {
-		texts[i], texts[j] = texts[j], texts[i]
-	}
-
-	err = SetNotes(session, project, name, userID, texts)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIAddComment 함수는 아이템에 수정사항을 추가합니다.

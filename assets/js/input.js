@@ -184,7 +184,7 @@ function setNote(project, name, text, userid, overwrite, token) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            currentName = cboxes[i].getAttribute("id");
+            let currentName = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/setnote",
@@ -194,26 +194,29 @@ function setNote(project, name, text, userid, overwrite, token) {
                     name: currentName,
                     text: text,
                     userid: userid,
-                    overwrite: document.getElementById("set-note-overwrite").checked,
+                    overwrite: overwrite,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.info(data)
+                    if (data.error !== "") {
+                        alert(data.error)
+                        return
+                    }
+                    if (document.getElementById("set-note-overwrite").checked) {
+                        // note-{{.Name}} 내부 내용을 교체한다.
+                        document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    } else {
+                        // note-{{.Name}} 내부 내용에 추가한다.
+                        document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.name).innerHTML;
+                    }
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             });
-            if (document.getElementById("set-note-overwrite").checked) {
-                // note-{{.Name}} 내부 내용을 교체한다.
-                document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-            } else {
-                // note-{{.Name}} 내부 내용에 추가한다.
-                document.getElementById("note-"+currentName).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+currentName).innerHTML;
-            }
         }
     } else {
         $.ajax({
@@ -224,26 +227,29 @@ function setNote(project, name, text, userid, overwrite, token) {
                 name: name,
                 text: text,
                 userid: userid,
-                overwrite: document.getElementById("set-note-overwrite").checked,
+                overwrite: overwrite,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                if (data.error !== "") {
+                    alert(data.error)
+                    return
+                }
+                if (document.getElementById("set-note-overwrite").checked) {
+                    // note-{{.Name}} 내부 내용을 교체한다.
+                    document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                } else {
+                    // note-{{.Name}} 내부 내용에 추가한다.
+                    document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.name).innerHTML;
+                }
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
-        if (document.getElementById("set-note-overwrite").checked) {
-            // note-{{.Name}} 내부 내용을 교체한다.
-            document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        } else {
-            // note-{{.Name}} 내부 내용에 추가한다.
-            document.getElementById("note-"+name).innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+name).innerHTML;
-        }
     }
 }
 
