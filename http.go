@@ -138,13 +138,6 @@ func webserver(port string) {
 		http.HandleFunc("/", handleIndex) // legacy
 	}
 	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
-	http.HandleFunc("/tag/", handleTags)
-	http.HandleFunc("/assettags/", handleAssettags)
-	http.HandleFunc("/ddline/", handleDdline)
-
-	http.HandleFunc("/edititem", handleEditItem)
-	http.HandleFunc("/editeditem", handleEditedItem)
-	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2)
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)
@@ -302,17 +295,23 @@ func webserver(port string) {
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
-	http.HandleFunc("/search", handleSearch)                   // legacy
-	http.HandleFunc("/searchsubmit", handleSearchSubmit)       // legacy
-	http.HandleFunc("/edit", handleEdit)                       // legacy
-	http.HandleFunc("/edit_item_submit", handleEditItemSubmit) // legacy
-	http.HandleFunc("/api/addlink", handleAPIAddLink)          // legacy
-	http.HandleFunc("/api/rmlink", handleAPIRmLink)            // legacy
-	http.HandleFunc("/api/setlinks", handleAPISetLinks)        // legacy
-	http.HandleFunc("/api/addnote", handleAPIAddNote)          // legacy
-	http.HandleFunc("/api/rmnote", handleAPIRmNote)            // legacy
-	http.HandleFunc("/api/setnotes", handleAPISetNotes)        // legacy
-	http.HandleFunc("/api/setcomments", handleAPISetComments)  // legacy
+	http.HandleFunc("/search", handleSearch)                    // legacy
+	http.HandleFunc("/searchsubmit", handleSearchSubmit)        // legacy
+	http.HandleFunc("/edit", handleEdit)                        // legacy
+	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)  // legacy
+	http.HandleFunc("/api/addlink", handleAPIAddLink)           // legacy
+	http.HandleFunc("/api/rmlink", handleAPIRmLink)             // legacy
+	http.HandleFunc("/api/setlinks", handleAPISetLinks)         // legacy
+	http.HandleFunc("/api/addnote", handleAPIAddNote)           // legacy
+	http.HandleFunc("/api/rmnote", handleAPIRmNote)             // legacy
+	http.HandleFunc("/api/setnotes", handleAPISetNotes)         // legacy
+	http.HandleFunc("/api/setcomments", handleAPISetComments)   // legacy
+	http.HandleFunc("/tag/", handleTags)                        // legacy
+	http.HandleFunc("/assettags/", handleAssettags)             // legacy
+	http.HandleFunc("/ddline/", handleDdline)                   // legacy
+	http.HandleFunc("/edititem", handleEditItem)                // legacy
+	http.HandleFunc("/editeditem", handleEditedItem)            // legacy
+	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2) // legacy
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
