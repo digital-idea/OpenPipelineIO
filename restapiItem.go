@@ -3027,6 +3027,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -3039,11 +3040,19 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
+		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	for key, values := range r.PostForm {
@@ -3052,24 +3061,40 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Name = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Text = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
 				rcp.UserID = v
@@ -3080,27 +3105,39 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
+		return
 	}
 	// log
 	err = dilog.Add(*flagDBIP, host, "Add Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	// json 으로 결과 전송
-	data, err := json.Marshal(rcp)
-	if err != nil {
-		log.Println(err)
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	data, _ := json.Marshal(rcp)
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
@@ -3111,6 +3148,7 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -3123,11 +3161,19 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
+		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	for key, values := range r.PostForm {
@@ -3136,24 +3182,40 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Name = v
 		case "date", "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			rcp.Date = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
+				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
 				rcp.UserID = v
@@ -3163,27 +3225,39 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	rcp.Text, err = RmComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
+		return
 	}
 	// log
 	err = dilog.Add(*flagDBIP, host, "Rm Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
+		return
 	}
 	// json 으로 결과 전송
-	data, err := json.Marshal(rcp)
-	if err != nil {
-		log.Println(err)
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	data, _ := json.Marshal(rcp)
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
