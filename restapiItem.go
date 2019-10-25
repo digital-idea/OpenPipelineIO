@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/ashwanthkumar/slack-go-webhook"
 	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
 )
@@ -3238,206 +3236,251 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 
 // handleAPIAddSource 함수는 아이템에 소스를 추가합니다.
 func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Title   string `json:"title"`
+		Path    string `json:"path"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var title string
-	var path string
-	var userid string
-	args := r.PostForm
-	for key, values := range args {
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "title":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			title = v
+			rcp.Title = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			userid = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "path", "url":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			path = v
+			rcp.Path = v
 		}
 	}
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
-	err = AddSource(session, project, name, userID, title, path)
+	err = AddSource(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Title, rcp.Path)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	// log
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", title, path), project, name, "csi3", userID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", rcp.Title, rcp.Path), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-
-	// slack logging
-	p, err := getProject(session, project)
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Source: %s, %s\nProject: %s, Name: %s, Author: %s", rcp.Title, rcp.Path, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-	if p.SlackWebhookURL != "" {
-		payload := slack.Payload{
-			Text:    fmt.Sprintf("Add Source: %s, %s", title, path) + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
-			Channel: "#" + project,
-		}
-		err := slack.Send(p.SlackWebhookURL, "", payload)
-		if len(err) > 0 {
-			for _, e := range err {
-				log.Println(e)
-			}
-		}
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIRmSource 함수는 아이템에서 링크소스를 삭제합니다.
 func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Title   string `json:"title"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var title string
-	var userid string
-	args := r.PostForm
-	for key, values := range args {
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			userid = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "title":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				rcp.Error = err.Error()
+				data, _ := json.Marshal(rcp)
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write(data)
 				return
 			}
-			title = v
+			rcp.Title = v
 		}
 	}
-	if userID == "unknown" && userid != "" {
-		userID = userid
-	}
-	err = RmSource(session, project, name, title)
+	err = RmSource(session, rcp.Project, rcp.Name, rcp.Title)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
 	// log
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write(data)
 		return
 	}
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Source: %s", title), project, name, "csi3", userID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Source: %s", rcp.Title), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-
-	// slack logging
-	p, err := getProject(session, project)
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Source: %s\nProject: %s, Name: %s, Author: %s", rcp.Title, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		rcp.Error = err.Error()
+		data, _ := json.Marshal(rcp)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(data)
 		return
 	}
-	if p.SlackWebhookURL != "" {
-		payload := slack.Payload{
-			Text:    fmt.Sprintf("Rm Source: %s", title) + fmt.Sprintf("\nProject: %s, Name: %s, Author: %s", project, name, userID),
-			Channel: "#" + project,
-		}
-		err := slack.Send(p.SlackWebhookURL, "", payload)
-		if len(err) > 0 {
-			for _, e := range err {
-				log.Println(e)
-			}
-		}
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISearch 함수는 아이템을 검색합니다.
