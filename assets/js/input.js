@@ -270,6 +270,10 @@ function addComment(project, name, text, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
+                    if (data.error !== "") {
+                        alert(data.error)
+                        return
+                    }
                     // comments-{{.Name}} 내부 내용에 추가한다.
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comments-${data.name}-${data.date}">
@@ -298,6 +302,10 @@ function addComment(project, name, text, userid, token) {
             },
             dataType: "json",
             success: function(data) {
+                if (data.error !== "") {
+                    alert(data.error)
+                    return
+                }
                 // comments-{{.Name}} 내부 내용에 추가한다.
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comments-${data.name}-${data.date}">

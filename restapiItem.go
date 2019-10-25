@@ -3037,6 +3037,15 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		Error   string `json:"error"`
 	}
 	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		rcp.Error = err.Error()
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		rcp.Error = err.Error()
+	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	for key, values := range r.PostForm {
 		switch key {
@@ -3067,15 +3076,6 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		}
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		rcp.Error = err.Error()
-	}
-	defer session.Close()
-	rcp.UserID, _, err = TokenHandler(r, session)
-	if err != nil {
-		rcp.Error = err.Error()
 	}
 	rcp.Date = time.Now().Format(time.RFC3339)
 	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text)
