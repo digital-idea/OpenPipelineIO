@@ -58,8 +58,10 @@ function setAssignTask(project, name, task, status, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
-
     });
 }
 
@@ -78,6 +80,9 @@ function setFrame(mode, project, name, frame, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -98,6 +103,9 @@ function setScanTimecodeIn(project, name, timecode, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -117,6 +125,9 @@ function setScanTimecodeOut(project, name, timecode, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -136,6 +147,9 @@ function setJustTimecodeIn(project, name, timecode, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -155,6 +169,9 @@ function setJustTimecodeOut(project, name, timecode, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -185,6 +202,9 @@ function setNote(project, name, text, userid, overwrite, token) {
                 dataType: "json",
                 success: function(data) {
                     console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             if (document.getElementById("set-note-overwrite").checked) {
@@ -212,6 +232,9 @@ function setNote(project, name, text, userid, overwrite, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
         if (document.getElementById("set-note-overwrite").checked) {
@@ -255,8 +278,8 @@ function addComment(project, name, text, userid, token) {
                     <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
                     document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
                 },
-                error: function(data){
-                    alert(data.error);
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -283,8 +306,8 @@ function addComment(project, name, text, userid, token) {
                 <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
                 document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
             },
-            error: function(data){
-                alert(data.error);
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -306,6 +329,9 @@ function rmComment(project, name, date, userid, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
     document.getElementById(`comments-${name}-${date}`).remove();
@@ -337,6 +363,9 @@ function addSource(project, name, title, path, userid, token) {
                 dataType: "json",
                 success: function(data) {
                     console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             // 기존 Sources 추가된다.
@@ -376,6 +405,9 @@ function addSource(project, name, title, path, userid, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
         // 기존 Sources 추가된다.
@@ -425,6 +457,9 @@ function rmSource(project, name, title, userid, token) {
                 dataType: "json",
                 success: function(data) {
                     console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             document.getElementById(`source-${currentName}-${title}`).remove();
@@ -455,6 +490,9 @@ function rmSource(project, name, title, userid, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
         document.getElementById(`source-${name}-${title}`).remove();
@@ -488,6 +526,9 @@ function setTaskUser(project, name, task, user, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -513,6 +554,9 @@ function setTaskUsers(project, task, user, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -535,6 +579,9 @@ function setTaskStatus(project, name, task, status, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -560,6 +607,9 @@ function setTaskStatuses(project, task, status, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -582,6 +632,9 @@ function setTaskDate(project, name, task, date, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -607,6 +660,9 @@ function setTaskDates(project, task, date, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -630,6 +686,9 @@ function setTaskPredate(project, name, task, date, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -655,6 +714,9 @@ function setTaskPredates(project, task, date, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -675,6 +737,9 @@ function setDeadline2D(project, name, date, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -700,6 +765,9 @@ function setDeadline2Ds(project, date, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -720,6 +788,9 @@ function setDeadline3D(project, name, date, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -745,6 +816,9 @@ function setDeadline3Ds(project, date, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -765,6 +839,9 @@ function setShottype(project, name, shottype, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -789,6 +866,9 @@ function setShottypes(project, shottype, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -809,6 +889,9 @@ function setAssettype(project, name, assettype, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -833,6 +916,9 @@ function setAssettypes(project, assettype, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -854,6 +940,9 @@ function setRnum(project, name, rnum, userid, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
     if (rnum !== "") {
@@ -892,6 +981,9 @@ function addTags(project, tag, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -920,6 +1012,9 @@ function setTags(project, tags, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -941,6 +1036,9 @@ function setTag(project, name, tags, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -963,7 +1061,6 @@ function rmTags(project, tag, token) {
             // 태그가 끝에 있을 때
             document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(","+tag,"");
         }
-        console.log(project, cboxes[i].getAttribute("id"), tag, token);
         $.ajax({
             url: "/api/rmtag",
             type: "post",
@@ -979,6 +1076,9 @@ function rmTags(project, tag, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1037,6 +1137,9 @@ function setTaskLevel(project, name, task, level, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1048,7 +1151,6 @@ function setTaskLevels(project, task, level, token) {
             continue
         }
         name = cboxes[i].getAttribute("id");
-        console.log(project,name,task,level);
         $.ajax({
             url: "/api/settasklevel",
             type: "post",
@@ -1064,6 +1166,9 @@ function setTaskLevels(project, task, level, token) {
             dataType: "json",
             success: function(data) {
                 console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
