@@ -1464,6 +1464,11 @@ func handleDdline(w http.ResponseWriter, r *http.Request) {
 
 // handleIndex 함수는 index 페이지이다.
 func handleIndex(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		// 등록되지 않은 URL을 처리한다.
+		errorHandler(w, r, http.StatusNotFound)
+		return
+	}
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -1519,6 +1524,11 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 
 // handleIndexV2 함수는 index 페이지이다.
 func handleIndexV2(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		// 등록되지 않은 URL을 처리한다.
+		errorHandler(w, r, http.StatusNotFound)
+		return
+	}
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)

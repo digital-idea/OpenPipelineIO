@@ -65,6 +65,13 @@ var funcMap = template.FuncMap{
 	"ProtocolTarget":      ProtocolTarget,
 }
 
+func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	w.WriteHeader(status)
+	if status == http.StatusNotFound {
+		fmt.Fprint(w, "NotFound 404")
+	}
+}
+
 // 도움말 페이지 입니다.
 func handleHelp(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
