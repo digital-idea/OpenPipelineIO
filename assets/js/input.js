@@ -276,7 +276,7 @@ function addComment(project, name, text, userid, token) {
                     }
                     // comments-{{.Name}} 내부 내용에 추가한다.
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                    let newComment = `<div id="comments-${data.name}-${data.date}">
+                    let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                     <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
                     <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
@@ -308,7 +308,7 @@ function addComment(project, name, text, userid, token) {
                 }
                 // comments-{{.Name}} 내부 내용에 추가한다.
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                let newComment = `<div id="comments-${data.name}-${data.date}">
+                let newComment = `<div id="comment-${data.name}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                 <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
                 <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
@@ -336,13 +336,16 @@ function rmComment(project, name, date, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.error !== "") {
+                alert(data.error)
+                return
+            }
+            document.getElementById(`comment-${data.name}-${data.date}`).remove();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     });
-    document.getElementById(`comments-${name}-${date}`).remove();
 }
 
 

@@ -851,7 +851,7 @@
 		{{end}}
 		<div id="comments-{{.Name}}">
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
-				<div id="comments-{{$name}}-{{.Date}}">
+				<div id="comment-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
 						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">×</span>
