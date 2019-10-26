@@ -962,10 +962,6 @@ function setRnum(project, name, rnum, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            if (data.error !== "") {
-                alert(data.error)
-                return
-            }
             if (data.rnum !== "") {
                 document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '${data.rnum}' );setModal('set-rnum-name', '${data.name}');setModal('set-rnum-userid', '${data.userid}')"{{end}}>${data.rnum}</span>`;
             } else {
@@ -973,7 +969,7 @@ function setRnum(project, name, rnum, userid, token) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
