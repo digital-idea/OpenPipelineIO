@@ -60,7 +60,7 @@ function setAssignTask(project, name, task, status, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -82,7 +82,7 @@ function setFrame(mode, project, name, frame, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -105,7 +105,7 @@ function setScanTimecodeIn(project, name, timecode, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -127,7 +127,7 @@ function setScanTimecodeOut(project, name, timecode, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -149,7 +149,7 @@ function setJustTimecodeIn(project, name, timecode, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -171,7 +171,7 @@ function setJustTimecodeOut(project, name, timecode, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -214,7 +214,7 @@ function setNote(project, name, text, userid, overwrite, token) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -247,7 +247,7 @@ function setNote(project, name, text, userid, overwrite, token) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -276,10 +276,6 @@ function addComment(project, name, text, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.error !== "") {
-                        alert(data.error)
-                        return
-                    }
                     // comments-{{.Name}} 내부 내용에 추가한다.
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.name}-${data.date}">
@@ -289,7 +285,7 @@ function addComment(project, name, text, userid, token) {
                     document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -308,10 +304,6 @@ function addComment(project, name, text, userid, token) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.error !== "") {
-                    alert(data.error)
-                    return
-                }
                 // comments-{{.Name}} 내부 내용에 추가한다.
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comment-${data.name}-${data.date}">
@@ -321,7 +313,7 @@ function addComment(project, name, text, userid, token) {
                 document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -342,14 +334,10 @@ function rmComment(project, name, date, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            if (data.error !== "") {
-                alert(data.error)
-                return
-            }
             document.getElementById(`comment-${data.name}-${data.date}`).remove();
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -379,10 +367,6 @@ function addSource(project, name, title, path, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.error !== "") {
-                        alert(data.error)
-                        return
-                    }
                     // 기존 Sources 추가된다.
                     let source = "";
                     if (path.startsWith("http")) {
@@ -404,7 +388,7 @@ function addSource(project, name, title, path, userid, token) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -425,10 +409,6 @@ function addSource(project, name, title, path, userid, token) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.error !== "") {
-                    alert(data.error)
-                    return
-                }
                 // 기존 Sources 추가된다.
                 let source = "";
                 if (path.startsWith("http")) {
@@ -450,7 +430,7 @@ function addSource(project, name, title, path, userid, token) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -493,7 +473,7 @@ function rmSource(project, name, title, userid, token) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -526,7 +506,7 @@ function rmSource(project, name, title, userid, token) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -551,7 +531,7 @@ function setTaskUser(project, name, task, user, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -579,7 +559,7 @@ function setTaskUsers(project, task, user, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -604,7 +584,7 @@ function setTaskStatus(project, name, task, status, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -632,7 +612,7 @@ function setTaskStatuses(project, task, status, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -657,7 +637,7 @@ function setTaskDate(project, name, task, date, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -685,7 +665,7 @@ function setTaskDates(project, task, date, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -711,7 +691,7 @@ function setTaskPredate(project, name, task, date, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -739,7 +719,7 @@ function setTaskPredates(project, task, date, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -762,7 +742,7 @@ function setDeadline2D(project, name, date, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -790,7 +770,7 @@ function setDeadline2Ds(project, date, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -813,7 +793,7 @@ function setDeadline3D(project, name, date, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -841,7 +821,7 @@ function setDeadline3Ds(project, date, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -864,7 +844,7 @@ function setShottype(project, name, shottype, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -891,7 +871,7 @@ function setShottypes(project, shottype, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -914,7 +894,7 @@ function setAssettype(project, name, assettype, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -941,7 +921,7 @@ function setAssettypes(project, assettype, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1005,7 +985,7 @@ function addTags(project, tag, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1036,7 +1016,7 @@ function setTags(project, tags, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1060,7 +1040,7 @@ function setTag(project, name, tags, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1100,7 +1080,7 @@ function rmTags(project, tag, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1161,7 +1141,7 @@ function setTaskLevel(project, name, task, level, token) {
             console.info(data)
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1190,7 +1170,7 @@ function setTaskLevels(project, task, level, token) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+JSON.parse(request.responseText).error+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }

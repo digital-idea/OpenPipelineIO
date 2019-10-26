@@ -2112,7 +2112,6 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -2129,7 +2128,12 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -2176,12 +2180,6 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// log
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	// log
 	err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rcp.Rnum, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -2195,6 +2193,7 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
@@ -2594,69 +2593,6 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPISetTags 함수는 아이템에 태그를 교체합니다.
-func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	tokenID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var tags string
-	args := r.PostForm
-	for key, values := range args {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "tag", "tags":
-			if len(values) == 0 {
-				tags = ""
-			} else {
-				tags = values[0]
-			}
-		}
-	}
-	err = SetTags(session, project, name, Str2Tags(tags))
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	// 로그처리
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	dilog.Add(*flagDBIP, host, fmt.Sprintf("Edit tag: %s", tags), project, name, "csi3", tokenID, 180)
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
-}
-
 // handleAPIRmTag 함수는 아이템에 태그를 삭제합니다.
 func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
@@ -2721,120 +2657,6 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
 
-// handleAPIAddNote 함수는 아이템에 작업내용을 추가합니다.
-func handleAPIAddNote(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	args := r.PostForm
-	for key, values := range args {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			text = v
-		}
-	}
-	err = AddNote(session, project, name, userID, text)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
-}
-
-// handleAPIRmNote 함수는 아이템에서 작업내용을 삭제합니다.
-func handleAPIRmNote(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	userID, _, err := TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var text string
-	args := r.PostForm
-	for key, values := range args {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			text = v
-		}
-	}
-	err = RmNote(session, project, name, userID, text)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
-}
-
 // handleAPISetNote 함수는 아이템에 작업내용을 설정합니다.
 func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -2853,19 +2675,18 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -2874,30 +2695,21 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Name = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
@@ -2906,10 +2718,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 		case "overwrite":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Overwrite = str2bool(v)
@@ -2923,38 +2732,21 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	}
 	note, err := SetNote(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Text, rcp.Overwrite)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
-		return
-	}
 	// log
 	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
@@ -2969,7 +2761,6 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -2981,19 +2772,18 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -3002,40 +2792,28 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Name = v
 		case "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Text = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
@@ -3046,40 +2824,24 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	rcp.Date = time.Now().Format(time.RFC3339)
 	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
-		return
-	}
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
 	err = dilog.Add(*flagDBIP, host, "Add Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
@@ -3090,7 +2852,6 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -3102,19 +2863,18 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
@@ -3123,40 +2883,28 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Name = v
 		case "date", "text":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Date = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
@@ -3166,40 +2914,24 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Text, err = RmComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
-		return
-	}
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
 	err = dilog.Add(*flagDBIP, host, "Rm Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
@@ -3210,7 +2942,6 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -3222,19 +2953,18 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm()
@@ -3243,40 +2973,28 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Name = v
 		case "title":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Title = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
@@ -3285,10 +3003,7 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 		case "path", "url":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Path = v
@@ -3296,40 +3011,24 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 	}
 	err = AddSource(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Title, rcp.Path)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
-		return
-	}
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", rcp.Title, rcp.Path), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Source: %s, %s\nProject: %s, Name: %s, Author: %s", rcp.Title, rcp.Path, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
@@ -3340,7 +3039,6 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
@@ -3351,19 +3049,18 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm()
@@ -3372,30 +3069,21 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Name = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			if rcp.UserID == "unknown" && v != "" {
@@ -3404,10 +3092,7 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 		case "title":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				rcp.Error = err.Error()
-				data, _ := json.Marshal(rcp)
-				w.WriteHeader(http.StatusBadRequest)
-				w.Write(data)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			rcp.Title = v
@@ -3415,40 +3100,24 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 	}
 	err = RmSource(session, rcp.Project, rcp.Name, rcp.Title)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write(data)
-		return
-	}
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Source: %s", rcp.Title), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Source: %s\nProject: %s, Name: %s, Author: %s", rcp.Title, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
-		rcp.Error = err.Error()
-		data, _ := json.Marshal(rcp)
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(data)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
