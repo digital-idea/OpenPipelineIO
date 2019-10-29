@@ -188,15 +188,16 @@ function setJustTimecodeOut(project, name, timecode, token) {
     });
 }
 
-function setNote(project, name, text, userid, overwrite, token) {
+function setNote(project, name, text, userid, token) {
     if (multiInput) {
-        var cboxes = document.getElementsByName('selectID');
+        let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             
             if(cboxes[i].checked === false) {
                 continue
             }
             let currentName = cboxes[i].getAttribute("id");
+            let overwrite = document.getElementById("set-note-overwrite").checked;
             sleep(200);
             $.ajax({
                 url: "/api/setnote",
@@ -213,11 +214,7 @@ function setNote(project, name, text, userid, overwrite, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.error !== "") {
-                        alert(data.error)
-                        return
-                    }
-                    if (document.getElementById("set-note-overwrite").checked) {
+                    if (overwrite) {
                         // note-{{.Name}} 내부 내용을 교체한다.
                         document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     } else {
@@ -231,6 +228,7 @@ function setNote(project, name, text, userid, overwrite, token) {
             });
         }
     } else {
+        let overwrite = document.getElementById("set-note-overwrite").checked;
         $.ajax({
             url: "/api/setnote",
             type: "post",
@@ -246,11 +244,7 @@ function setNote(project, name, text, userid, overwrite, token) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.error !== "") {
-                    alert(data.error)
-                    return
-                }
-                if (document.getElementById("set-note-overwrite").checked) {
+                if (overwrite) {
                     // note-{{.Name}} 내부 내용을 교체한다.
                     document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 } else {
