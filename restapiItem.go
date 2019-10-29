@@ -2503,12 +2503,11 @@ func handleAPISetJustTimecodeIn(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		case "timecode":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+			if len(values) == 0 {
+				rcp.Timecode = ""
+			} else {
+				rcp.Timecode = values[0]
 			}
-			rcp.Timecode = v
 		}
 	}
 	err = SetJustTimecodeIn(session, rcp.Project, rcp.Name, rcp.Timecode)
@@ -2592,12 +2591,11 @@ func handleAPISetJustTimecodeOut(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		case "timecode":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
+			if len(values) == 0 {
+				rcp.Timecode = ""
+			} else {
+				rcp.Timecode = values[0]
 			}
-			rcp.Timecode = v
 		}
 	}
 	err = SetJustTimecodeOut(session, rcp.Project, rcp.Name, rcp.Timecode)

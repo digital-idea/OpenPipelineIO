@@ -2084,7 +2084,7 @@ func SetJustTimecodeIn(session *mgo.Session, project, name, timecode string) err
 		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
-	if !regexpTimecode.MatchString(timecode) {
+	if !(regexpTimecode.MatchString(timecode) || timecode == "") {
 		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
 	}
 	c := session.DB("project").C(project)
@@ -2110,7 +2110,7 @@ func SetJustTimecodeOut(session *mgo.Session, project, name, timecode string) er
 		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
-	if !regexpTimecode.MatchString(timecode) {
+	if !(regexpTimecode.MatchString(timecode) || timecode == "") {
 		return fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
 	}
 	c := session.DB("project").C(project)
