@@ -613,18 +613,18 @@
 						{{end}}
 					</div>
 					<div class="row">
-						
 						{{if .JustIn}}
 							<span class="text-warning black-opbg" title="justin">{{.JustIn}}</span>
+						{{end}}
+					</div>
+					<div class="row" id="scantimecodein-{{.Name}}">
+						{{if .ScanTimecodeIn}}
+							<span class="text-white black-opbg">{{.ScanTimecodeIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{.Name}}">
 						{{if .JustTimecodeIn}}
 							<span class="text-warning black-opbg">{{.JustTimecodeIn}}</span>
-						{{else}}
-							{{if .ScanTimecodeIn}}
-								<span class="text-white black-opbg">{{.ScanTimecodeIn}}</span>
-							{{end}}
 						{{end}}
 					</div>
 				</div>
@@ -649,16 +649,16 @@
 							{{end}}
 						</span>
 					</div>
+					<div class="row" id="scantimecodeout-{{.Name}}" >
+						{{if .ScanTimecodeOut}}
+							<span class="text-white black-opbg">{{.ScanTimecodeOut}}</span>
+						{{end}}
+					</div>
 					<div class="row" id="justtimecodeout-{{.Name}}" >
 						{{if .JustTimecodeOut}}
 							<span class="text-warning black-opbg">{{.JustTimecodeOut}}</span>
-						{{else}}
-							{{if .ScanTimecodeOut}}
-								<span class="text-white black-opbg">{{.ScanTimecodeOut}}</span>
-							{{end}}
 						{{end}}
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -1190,7 +1190,10 @@
 				<span class="text-badge ml-1" title="scanframe">/ {{.ScanFrame}} f</span>
 			{{end}}
 			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
-				<span class="text-badge ml-1">/ {{.ScanTimecodeIn}} ~ {{.ScanTimecodeOut}}</span>
+				<span class="text-badge ml-1">/ </span>
+				<span class="text-badge ml-1" id="note-scantimecodein-{{.Name}}">{{.ScanTimecodeIn}}</span>
+				<span class="text-badge ml-1">~</span>
+				<span class="text-badge ml-1" id="note-scantimecodeout-{{.Name}}">{{.ScanTimecodeOut}}</span>
 			{{end}}
 			
 		</div>

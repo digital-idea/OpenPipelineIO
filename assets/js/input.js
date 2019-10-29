@@ -100,7 +100,7 @@ function setFrame(mode, project, name, frame, token) {
 }
 
 
-function setScanTimecodeIn(project, name, timecode, token) {
+function setScanTimecodeIn(project, name, timecode, userid, token) {
     $.ajax({
         url: "/api/setscantimecodein",
         type: "post",
@@ -108,13 +108,15 @@ function setScanTimecodeIn(project, name, timecode, token) {
             project: project,
             name: name,
             timecode: timecode,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("scantimecodein-"+data.name).innerHTML = `<span class="text-white black-opbg">${data.timecode}</span>`;
+            document.getElementById("note-scantimecodein-"+data.name).innerHTML = data.timecode;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -122,7 +124,7 @@ function setScanTimecodeIn(project, name, timecode, token) {
     });
 }
 
-function setScanTimecodeOut(project, name, timecode, token) {
+function setScanTimecodeOut(project, name, timecode, userid, token) {
     $.ajax({
         url: "/api/setscantimecodeout",
         type: "post",
@@ -130,13 +132,15 @@ function setScanTimecodeOut(project, name, timecode, token) {
             project: project,
             name: name,
             timecode: timecode,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("scantimecodeout-"+data.name).innerHTML = `<span class="text-white black-opbg">${data.timecode}</span>`;
+            document.getElementById("note-scantimecodeout-"+data.name).innerHTML = data.timecode;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
