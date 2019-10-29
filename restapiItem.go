@@ -1952,58 +1952,90 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetShotType 함수는 아이템의 shot type을 설정한다.
 func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Type    string `json:"type"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var typ string
-	args := r.PostForm
-	for key, value := range args {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, value := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
-		case "shottype":
+			rcp.Name = v
+		case "userid":
 			v, err := PostFormValueInList(key, value)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			typ = v
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
+		case "shottype":
+			if len(value) == 0 {
+				rcp.Type = ""
+			} else {
+				rcp.Type = value[0]
+			}
 		}
 	}
-	err = SetShotType(session, project, name, typ)
+	err = SetShotType(session, rcp.Project, rcp.Name, rcp.Type)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Shottype: %s", rcp.Type), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Shottype: %s\nProject: %s, Name: %s, Author: %s", rcp.Type, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetOutputName 함수는 아이템의 shot의 아웃풋 이름을 설정합니다.

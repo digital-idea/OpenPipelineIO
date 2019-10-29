@@ -289,6 +289,38 @@
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="shottype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	<div class="modal-content bg-darkmode">
+		<div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Shot Type</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true" class="text-darkmode">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body">
+			<input type="hidden" class="form-control" id="shottype-name">
+			<input type="hidden" class="form-control" id="shottype-userid">
+		
+			<div class="radio">
+				<label><input type="radio" name="shottype" value="" checked> None</label>
+			</div>
+			<div class="radio">
+				<label><input type="radio" name="shottype" value="2d"> 2D</label>
+			</div>
+			<div class="radio">
+				<label><input type="radio" name="shottype" value="3d"> 3D</label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setShottype('{{$.SearchOption.Project}}', document.getElementById('shottype-name').value, document.getElementById('shottype-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+		</div>
+	</div>
+	</div>
+</div>
+
 {{range .Items}}
 <div class="pt-1"></div>
 
@@ -366,24 +398,37 @@
 						{{end}}
 					{{end}}
 				</div>
-				<div class="centered-bottom">
+				<div class="centered-bottom row">
 					{{if eq .Type "asset"}}
-						<span class="badge badge-light">{{.Assettype}}</span>
+						<div id="assettype-{{.Name}}">
+							<span class="badge badge-light">{{.Assettype}}</span>
+						</div>
 						{{if .CrowdAsset}}
-							<span class="badge badge-warning">Crowd</span>
+							<div id="crowdasset-{{.Name}}">
+								<span class="badge badge-warning">Crowd</span>
+							</div>
 						{{end}}
 					{{else}}
 						<!--재스캔 사용 플레이트 표기-->
 						{{if eq .Type "org" "left"}}
 							{{if .UseType}}
-								<span class="badge badge-light">{{.UseType}}</span>
+								<div id="usetype-{{.Name}}">
+									<span class="badge badge-light">{{.UseType}}</span>
+								</div>
 							{{else}}
-								<span class="badge badge-light">{{.Type}}</span>
+								<div id="type-{{.Name}}">
+									<span class="badge badge-light">{{.Type}}</span>
+								</div>
 							{{end}}
 						{{else}}
-							<span class="badge badge-light">{{.Type}}</span>
+							<!--기타 소스, 레퍼런스등-->
+							<div id="type-{{.Name}}">
+								<span class="badge badge-light ml-1">{{.Type}}</span>
+							</div>
 						{{end}}
-						<span class="badge badge-light">{{.Shottype}}</span>
+						<div id="shottype-{{.Name}}">
+							<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
+						</div>
 					{{end}}
 				</div>
 				<div class="centered-left"></div>

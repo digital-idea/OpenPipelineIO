@@ -837,48 +837,59 @@ function setDeadline3D(project, name, date, userid, token) {
     }
 }
 
-function setShottype(project, name, shottype, token) {
-    $.ajax({
-        url: "/api/setshottype",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            shottype: shottype,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+function setShottype(project, name, userid, token) {
+    let shottypes = document.getElementsByName('shottype');
+    let shottype = "";
+    for (var i = 0, length = shottypes.length; i < length; i++) {
+        if (shottypes[i].checked) {
+            shottype = shottypes[i].value
+            break;
         }
-    });
-}
-
-function setShottypes(project, shottype, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
+    }
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setshottype",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    shottype: shottype,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '${data.name}');setModal('shottype-userid', '${data.userid}')">${data.type}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
+    } else {
         $.ajax({
             url: "/api/setshottype",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 shottype: shottype,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '${data.name}');setModal('shottype-userid', '${data.userid}')">${data.type}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
