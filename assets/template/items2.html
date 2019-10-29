@@ -772,29 +772,36 @@
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		<!--Tags-->
 		<div class="row">
-			<span class="text-badge">Tags:</span>
+			<div>
+				<span class="text-badge">Tags:</span>
+			</div>
+			
 			{{if eq .Type "asset"}}
-				{{range .Assettags}}
-					<a href="/inputmode?project={{$.SearchOption.Project}}&
-						searchword=assettags:{{.}}&
-						sortkey={{$.SearchOption.Sortkey}}&
-						sortkey={{$.SearchOption.Sortkey}}&
-						assign={{$.SearchOption.Assign}}&
-						ready={{$.SearchOption.Ready}}&
-						wip={{$.SearchOption.Wip}}&
-						confirm={{$.SearchOption.Confirm}}&
-						done={{$.SearchOption.Done}}&
-						omit={{$.SearchOption.Omit}}&
-						hold={{$.SearchOption.Hold}}&
-						out={{$.SearchOption.Out}}&
-						none={{$.SearchOption.None}}&
-						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode ml-1">{{.}}</a>
-				{{- end}}
-			{{end}}
-			<div id="tags-{{.Name}}" class="row ml-2">
+				<div id="assettags-{{.Name}}" class="row ml-1">
+					{{range .Assettags}}
+						<div id="assettag-{{$name}}-{{.}}" class="ml-1">
+							<a href="/inputmode?project={{$.SearchOption.Project}}&
+							searchword=assettags:{{.}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							assign={{$.SearchOption.Assign}}&
+							ready={{$.SearchOption.Ready}}&
+							wip={{$.SearchOption.Wip}}&
+							confirm={{$.SearchOption.Confirm}}&
+							done={{$.SearchOption.Done}}&
+							omit={{$.SearchOption.Omit}}&
+							hold={{$.SearchOption.Hold}}&
+							out={{$.SearchOption.Out}}&
+							none={{$.SearchOption.None}}&
+							template={{$.SearchOption.Template}}&
+							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
+						</div>
+					{{- end}}
+				</div>
+			{{end}}			
+			<div id="tags-{{.Name}}" class="row ml-3">
 				{{range .Tag}}
-					<div id="tag-{{$name}}-{{.}}">
+					<div id="tag-{{$name}}-{{.}}" class="ml-1">
 						<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
 						sortkey={{$.SearchOption.Sortkey}}&
@@ -809,7 +816,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode ml-1">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
 					</div>
 				{{end}}
 			</div>
