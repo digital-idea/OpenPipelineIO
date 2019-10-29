@@ -954,20 +954,51 @@ function setRnum(project, name, rnum, userid, token) {
     });
 }
 
-function addTags(project, tag, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
+function addTag(project, name, tag, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/addtag",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    name: name,
+                    tag: tag,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    // 기존 Tags에 추가된다.
+                    let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
+                    source = `<div id="tag-${data.name}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                    document.getElementById("tags-"+data.name).innerHTML = document.getElementById("tags-"+data.name).innerHTML + source;
+                    // 요소갯수에 따라 버튼을 설정한다.
+                    if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
+                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                        `
+                    } else {
+                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        `
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-        name = cboxes[i].getAttribute("id");
-        // 기존 폼에 있는 값에도 태그를 추가한다.
-        before = document.getElementById("input-tag-" + name).value;
-        let splitString = ","
-        if (before === "") {
-            splitString = ""
-        }
-        document.getElementById("input-tag-" + name).value = before + splitString + tag;
+    } else {
         $.ajax({
             url: "/api/addtag",
             type: "post",
@@ -976,13 +1007,28 @@ function addTags(project, tag, token) {
                 project: project,
                 name: name,
                 tag: tag,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                // 기존 Tags에 추가된다.
+                let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
+                let source = `<div id="tag-${data.name}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                document.getElementById("tags-"+data.name).innerHTML = document.getElementById("tags-"+data.name).innerHTML + source;
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
+                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                    `
+                } else {
+                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    `
+                }
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -991,78 +1037,48 @@ function addTags(project, tag, token) {
     }
 }
 
-function setTags(project, tags, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        name = cboxes[i].getAttribute("id");
-        document.getElementById("input-tag-"+name).value = tags;
-        $.ajax({
-            url: "/api/settags",
-            type: "post",
-            
-            data: {
-                project: project,
-                name: name,
-                tags: tags,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                console.info(data)
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+function rmTag(project, name, tag, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
             }
-        });
-    }
-}
-
-function setTag(project, name, tags, token) {
-    $.ajax({
-        url: "/api/settags",
-        type: "post",
-        
-        data: {
-            project: project,
-            name: name,
-            tags: tags,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/rmtag",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    name: name,
+                    tag: tag,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById(`tag-${data.name}-${data.tag}`).remove();
+                    // 요소갯수에 따라 버튼을 설정한다.
+                    if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
+                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                        `;
+                    } else {
+                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        `;
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-
-function rmTags(project, tag, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        name = cboxes[i].getAttribute("id");
-        if (document.getElementById("input-tag-"+name).value.startsWith(tag+",")) {
-            // 태그가 처음에 위치할 때
-            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(tag+",","");
-        } else if (document.getElementById("input-tag-"+name).value.includes(","+tag+",")) {
-            // 태그가 중간에 있을 때
-            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(","+tag,",");
-        } else {
-            // 태그가 끝에 있을 때
-            document.getElementById("input-tag-"+name).value = document.getElementById("input-tag-"+name).value.replace(","+tag,"");
-        }
+    } else {
         $.ajax({
             url: "/api/rmtag",
             type: "post",
@@ -1071,13 +1087,25 @@ function rmTags(project, tag, token) {
                 project: project,
                 name: name,
                 tag: tag,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById(`tag-${data.name}-${data.tag}`).remove();
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
+                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                    `;
+                } else {
+                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    `;
+                }
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1085,6 +1113,8 @@ function rmTags(project, tag, token) {
         });
     }
 }
+
+
 
 function selectCheckbox() {
     var cboxes = document.getElementsByName('selectID');

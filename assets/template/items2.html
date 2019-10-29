@@ -817,9 +817,9 @@
 			<div class="ml-3" id="tag-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-						<span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-source-name', '{{.Name}}');setModal('add-source-userid', '{{$.User.ID}}')">＋</span>
+						<span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '{{.Name}}');setModal('add-tag-userid', '{{$.User.ID}}')">＋</span>
 						{{if .Tag}}	
-							<span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-source-name', '{{.Name}}');setModal('rm-source-userid', '{{$.User.ID}}')">－</span>
+							<span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '{{.Name}}');setModal('rm-tag-userid', '{{$.User.ID}}')">－</span>
 						{{end}}
 					{{end}}
 				{{end}}

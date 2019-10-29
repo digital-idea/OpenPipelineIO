@@ -2183,8 +2183,7 @@ func AddTag(session *mgo.Session, project, name, inputTag string) error {
 	}
 	for _, tag := range i.Tag {
 		if inputTag == tag {
-			// 태그가 존재한다. 프로세스를 진행시킬 필요가 없다.
-			return nil
+			return errors.New("Tag already exists")
 		}
 	}
 	newTags := append(i.Tag, inputTag)
