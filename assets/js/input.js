@@ -725,49 +725,51 @@ function setTaskPredates(project, task, date, token) {
     }
 }
 
-function setDeadline2D(project, name, date, token) {
-    $.ajax({
-        url: "/api/setdeadline2d",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            date: date,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+function setDeadline2D(project, name, date, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setdeadline2d",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '${data.date}');setModal('deadline2d-name', '${data.name}');setModal('deadline2d-userid', '${data.userid}')">2D:${data.shortdate}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-function setDeadline2Ds(project, date, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        console.log(project, cboxes[i].getAttribute("id"), date)
+    } else {
         $.ajax({
             url: "/api/setdeadline2d",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 date: date,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '${data.date}');setModal('deadline2d-name', '${data.name}');setModal('deadline2d-userid', '${data.userid}')">2D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -776,49 +778,51 @@ function setDeadline2Ds(project, date, token) {
     }
 }
 
-function setDeadline3D(project, name, date, token) {
-    $.ajax({
-        url: "/api/setdeadline3d",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            date: date,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+function setDeadline3D(project, name, date, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setdeadline3d",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '${data.date}');setModal('deadline3d-name', '${data.name}');setModal('deadline3d-userid', '${data.userid}')">3D:${data.shortdate}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-function setDeadline3Ds(project, date, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        console.log(project, cboxes[i].getAttribute("id"), date)
+    } else {
         $.ajax({
             url: "/api/setdeadline3d",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 date: date,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '${data.date}');setModal('deadline3d-name', '${data.name}');setModal('deadline3d-userid', '${data.userid}')">3D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

@@ -1642,114 +1642,184 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetDeadline2D 함수는 아이템의 2D 마감일을 설정한다.
 func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		Date      string `json:"date"`
+		ShortDate string `json:"shortdate"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var date string
-	args := r.PostForm
-	for key, values := range args {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "date":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			date = v
+			rcp.Date = v
 		}
 	}
-	err = SetDeadline2D(session, project, name, date)
+	err = SetDeadline2D(session, rcp.Project, rcp.Name, rcp.Date)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline2D: %s", rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Deadline2D: %s\nProject: %s, Name: %s, Author: %s", rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	rcp.ShortDate = ToShortTime(rcp.Date) // 웹사이트에 렌더링시 사용한다.
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetDeadline3D 함수는 아이템의 3D 마감일을 설정한다.
 func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		Date      string `json:"date"`
+		ShortDate string `json:"shortdate"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var date string
-	args := r.PostForm
-	for key, values := range args {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "date":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			date = v
+			rcp.Date = v
 		}
 	}
-	err = SetDeadline3D(session, project, name, date)
+	err = SetDeadline3D(session, rcp.Project, rcp.Name, rcp.Date)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline3D: %s", rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Deadline3D: %s\nProject: %s, Name: %s, Author: %s", rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	rcp.ShortDate = ToShortTime(rcp.Date) // 웹사이트에 렌더링시 사용한다.
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetTaskPredate 함수는 아이템의 task에 대한 1차마감일을 설정한다.
@@ -2599,6 +2669,7 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Tag: %s", rcp.Tag), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
