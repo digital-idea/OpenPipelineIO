@@ -898,48 +898,53 @@ function setShottype(project, name, userid, token) {
     }
 }
 
-function setAssettype(project, name, assettype, token) {
-    $.ajax({
-        url: "/api/setassettype",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            assettype: assettype,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+function setAssettype(project, name, userid, token) {
+    let types = document.getElementById("assettypes");
+    let assettype = types.options[types.selectedIndex].value;
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setassettype",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    assettype: assettype,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-function setAssettypes(project, assettype, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
+    } else {
         $.ajax({
             url: "/api/setassettype",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 assettype: assettype,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
