@@ -11,6 +11,18 @@ $('#addsource').on('shown.bs.modal', function () {
 $('#setrnum').on('shown.bs.modal', function () {
     $('#set-rnum-text').trigger('focus')
 })
+$('#addtag').on('shown.bs.modal', function () {
+    $('#add-tag-text').trigger('focus')
+})
+$('#rmtag').on('shown.bs.modal', function () {
+    $('#rm-tag-text').trigger('focus')
+})
+$('#deadline2d').on('shown.bs.modal', function () {
+    $('#deadline2d-date').trigger('focus')
+})
+$('#deadline3d').on('shown.bs.modal', function () {
+    $('#deadline3d-date').trigger('focus')
+})
 
 
 
