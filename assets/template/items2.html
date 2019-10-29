@@ -404,7 +404,7 @@
 							<span class="badge badge-light">{{.Assettype}}</span>
 						</div>
 						{{if .CrowdAsset}}
-							<div id="crowdasset-{{.Name}}">
+							<div id="crowdasset-{{.Name}}" class="ml-1">
 								<span class="badge badge-warning">Crowd</span>
 							</div>
 						{{end}}
@@ -427,7 +427,11 @@
 							</div>
 						{{end}}
 						<div id="shottype-{{.Name}}">
-							<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
+							{{if .Shottype}}
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
+							{{else}}
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>none</span>
+							{{end}}
 						</div>
 					{{end}}
 				</div>

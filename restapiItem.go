@@ -2032,6 +2032,9 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
+	if rcp.Type == "" { // template에서 렌더링시에는 빈 문자열이면 눈에 보이지 않기 때문에 none으로 반환한다.
+		rcp.Type = "none"
+	}
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
