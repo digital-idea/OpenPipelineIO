@@ -2448,112 +2448,180 @@ func handleAPISetScanTimecodeOut(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetJustTimecodeIn 함수는 아이템에 Just TimecodeIn 값을 설정한다.
 func handleAPISetJustTimecodeIn(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		Timecode string `json:"timecode"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm()
-	var project string
-	var name string
-	var timecode string
 	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "timecode":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			timecode = v
+			rcp.Timecode = v
 		}
 	}
-	err = SetJustTimecodeIn(session, project, name, timecode)
+	err = SetJustTimecodeIn(session, rcp.Project, rcp.Name, rcp.Timecode)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("JustTimecodeIn: %s", rcp.Timecode), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("JustTimecodeIn: %s\nProject: %s, Name: %s, Author: %s", rcp.Timecode, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetJustTimecodeOut 함수는 아이템에 Just TimecodeOut 값을 설정한다.
 func handleAPISetJustTimecodeOut(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		Timecode string `json:"timecode"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	r.ParseForm()
-	var project string
-	var name string
-	var timecode string
 	for key, values := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "timecode":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 				return
 			}
-			timecode = v
+			rcp.Timecode = v
 		}
 	}
-	err = SetJustTimecodeOut(session, project, name, timecode)
+	err = SetJustTimecodeOut(session, rcp.Project, rcp.Name, rcp.Timecode)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("JustTimecodeOut: %s", rcp.Timecode), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("JustTimecodeOut: %s\nProject: %s, Name: %s, Author: %s", rcp.Timecode, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetFinver 함수는 아이템에 파이널 버전값을 설정한다.

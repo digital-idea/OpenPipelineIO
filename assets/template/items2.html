@@ -321,7 +321,7 @@
 	</div>
 </div>
 
-<!-- Modal: Shottype -->
+<!-- Modal: Assettype -->
 <div class="modal fade" id="assettype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 	<div class="modal-content bg-darkmode">
@@ -349,6 +349,118 @@
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
 			<button type="button" class="btn btn-outline-warning" onclick="setAssettype('{{$.SearchOption.Project}}', document.getElementById('assettype-name').value, document.getElementById('assettype-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+		</div>
+	</div>
+	</div>
+</div>
+
+<!-- Modal: EditTime -->
+<div class="modal fade" id="edittime" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	<div class="modal-content bg-darkmode">
+		<div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Edit Time</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true" class="text-darkmode">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body">
+			<input type="hidden" class="form-control" id="edittime-name">
+			<input type="hidden" class="form-control" id="edittime-userid">
+
+			<div class="row">
+				<div class="col pl-1 pr-1 pt-0 pb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">ScanIn</small>
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pt-0 pb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">ScanOut</small>
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pt-0 pb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">ScanFrame</small>
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">ScanTimecodeIn</small>
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">ScanTimecodeOut</small>
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">PlateIn</small>
+						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">HandleIn</small>
+						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">JustIn</small>
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">PlateOut</small>
+						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">HandleOut</small>
+						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">JustOut</small>
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">JustTimecodeIn</small>
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>
+				</div>
+				<div class="col pl-1 pr-1 pb-0 mb-0">
+					<div class="form-group p-0 m-0">
+						<small class="form-text text-muted">JustTimecodeIn</small>
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+					</div>			
+				</div>
+			</div>
+		
+			
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
 		</div>
 	</div>
 	</div>
@@ -506,7 +618,7 @@
 							<span class="text-warning black-opbg" title="justin">{{.JustIn}}</span>
 						{{end}}
 					</div>
-					<div class="row">
+					<div class="row" id="justtimecodein-{{.Name}}">
 						{{if .JustTimecodeIn}}
 							<span class="text-warning black-opbg">{{.JustTimecodeIn}}</span>
 						{{else}}
@@ -537,7 +649,7 @@
 							{{end}}
 						</span>
 					</div>
-					<div class="row">
+					<div class="row" id="justtimecodeout-{{.Name}}" >
 						{{if .JustTimecodeOut}}
 							<span class="text-warning black-opbg">{{.JustTimecodeOut}}</span>
 						{{else}}
@@ -554,27 +666,45 @@
 		
 		<div class="row">
 			<div class="mx-auto pt-1">
-				{{if eq .Type "org" "left" "asset"}}
-					{{if .Thummov}}
-						<a href="dilink://{{.Thummov}}">
-					{{else}}
-						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
-					{{end}}
-						<span class="play">▶</span>
-					</a>
-				{{end}}
 				{{if .Updatetime|CheckUpdate}}
 					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
 				{{end}}
+				
+				{{if .Thummov}}
+					<a href="dilink://{{.Thummov}}">
+				{{else}}
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
+				{{end}}
+					<span class="play">▶</span>
+				</a>
+				
 			
 				{{if eq .Type "asset" -}}
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- else -}}
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">Edit</a>
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">File</a>
+					<span class="badge badge-darkmode ml-1 finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="
+					setModal('edittime-name', '{{.Name}}');
+					setModal('edittime-userid', '{{$.User.ID}}');
+					setModal('scanin', '{{.ScanIn}}');
+					setModal('scanout', '{{.ScanOut}}');
+					setModal('scanframe', '{{.ScanFrame}}');
+					setModal('scantimecodein', '{{.ScanTimecodeIn}}');
+					setModal('scantimecodeout', '{{.ScanTimecodeOut}}');
+					setModal('platein', '{{.PlateIn}}');
+					setModal('plateout', '{{.PlateOut}}');
+					setModal('handlein', '{{.HandleIn}}');
+					setModal('handleout', '{{.HandleOut}}');
+					setModal('justin', '{{.JustIn}}');
+					setModal('justout', '{{.JustOut}}');
+					setModal('justtimecodein', '{{.JustTimecodeIn}}');
+					setModal('justtimecodeout', '{{.JustTimecodeOut}}');
+					"{{end}}>T</span>
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- end}}
-				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">Log</a>
+				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>
+				
 			</div>
 		</div>
 	</div>

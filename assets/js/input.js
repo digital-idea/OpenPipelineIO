@@ -144,7 +144,7 @@ function setScanTimecodeOut(project, name, timecode, token) {
     });
 }
 
-function setJustTimecodeIn(project, name, timecode, token) {
+function setJustTimecodeIn(project, name, timecode, userid, token) {
     $.ajax({
         url: "/api/setjusttimecodein",
         type: "post",
@@ -152,13 +152,14 @@ function setJustTimecodeIn(project, name, timecode, token) {
             project: project,
             name: name,
             timecode: timecode,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("justtimecodein-"+data.name).innerHTML = `<span class="text-warning black-opbg">${data.timecode}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -166,7 +167,7 @@ function setJustTimecodeIn(project, name, timecode, token) {
     });
 }
 
-function setJustTimecodeOut(project, name, timecode, token) {
+function setJustTimecodeOut(project, name, timecode, userid, token) {
     $.ajax({
         url: "/api/setjusttimecodeout",
         type: "post",
@@ -174,13 +175,14 @@ function setJustTimecodeOut(project, name, timecode, token) {
             project: project,
             name: name,
             timecode: timecode,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("justtimecodeout-"+data.name).innerHTML = `<span class="text-warning black-opbg">${data.timecode}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
