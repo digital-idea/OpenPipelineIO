@@ -1093,9 +1093,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
 	NewItem := CurrentItem //과거값을 먼저 복사한다.
 	NewItem.Rollmedia = r.FormValue("Rollmedia")
-	NewItem.Platesize = r.FormValue("Platesize")
-	NewItem.Dsize = r.FormValue("Dsize")
-	NewItem.Rendersize = r.FormValue("Rendersize")
 	NewItem.Thummov = r.FormValue("thummov")
 	NewItem.Beforemov = r.FormValue("Beforemov")
 	NewItem.Aftermov = r.FormValue("Aftermov")

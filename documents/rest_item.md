@@ -64,6 +64,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" http://10.0.90.251/api/setdeadline3d`|
 | /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" http://10.0.90.251/api/setretimeplate`|
 | /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -d "project=TEMP&name=SS_0020&task=comp&level=1" http://10.0.90.251/api/settasklevel`|
+| /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setplatesize`|
+| /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setundistortionsize`|
+| /api/rendersize | Reder Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setrendersize`|
 
 
 ## Post(Legacy)
@@ -309,21 +312,6 @@ csi3.Setmov("TEMP", "SS_0010", "mm", "SS_0010.mov")
 
 #### curl을 사용한 restAPI 셋팅
 - 아래 예제부터는 따로 코드를 작성하지 않고 curl 예제만 다룬다.
-
-- 렌더 사이즈 셋팅
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/api/setrendersize
-```
-
-- 플레이트 사이즈 셋팅
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/api/setplatesize
-```
-
-- 렌즈디스토션 사이즈 셋팅
-```
-$ curl -X POST -d "project=TEMP&name=SS_0010&size=2048x1152" http://10.0.90.251/api/setdistortionsize
-```
 
 - Task에 대한 시작일 설정
 ```

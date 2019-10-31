@@ -66,28 +66,6 @@
 		{{if eq .Item.Type "org" "left"}}
 			<div class="form-group">
 				<div class="row">
-					<div class="col-4 form-group">
-						<label>플레이트사이즈</label>
-						<input type="text" id="platesize" size="10" maxlength="13" name="Platesize" value="{{.Item.Platesize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-						<small class="form-text text-warning">※ 아티스트는 건드리지 마세요!</small>
-					</div>
-					<div class="col-4 form-group">
-						<label>언디스토션</label>
-						<input type="text" id="undistort" size="10" maxlength="13" name="Dsize" value="{{.Item.Dsize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-						<small class="form-text text-mute">매치무브 작업자가 설정합니다.</small>
-					</div>
-					<div class="col-4 form-group">
-						<label>렌더사이즈</label>
-						<input type="text" size="10" maxlength="13" name="Rendersize" value="{{.Item.Rendersize}}" onkeyup="widthxHeight(event)" placeholder="숫자x숫자" class="form-control">
-						<small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
-					</div>
-				</div>
-			</div>
-			
-		{{end}}
-		{{if eq .Item.Type "org" "left"}}
-			<div class="form-group">
-				<div class="row">
 					<div class="col-5 form-group">
 						<label>Cam PubTask</label>
 						<select name="ProductionCamPubTask" class="form-control">

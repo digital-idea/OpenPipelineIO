@@ -24,6 +24,10 @@ $('#deadline3d').on('shown.bs.modal', function () {
     $('#deadline3d-date').trigger('focus')
 })
 
+// setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
+function setModal(modalID, value) {
+    document.getElementById(modalID).value=value;
+}
 
 
 var multiInput = false;
@@ -1277,7 +1281,167 @@ function setTaskLevels(project, task, level, token) {
     }
 }
 
-// setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
-function setModal(modalID, value) {
-    document.getElementById(modalID).value=value;
+function setPlatesize(project, name, size, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setplatesize",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    name: name,
+                    size: size,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '${data.size}');setModal('platesize-name', '${data.name}');setModal('platesize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setplatesize",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: name,
+                size: size,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '${data.size}');setModal('platesize-name', '${data.name}');setModal('platesize-userid', '${data.userid}')">S: ${data.size}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setUndistortionsize(project, name, size, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setundistortionsize",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    name: name,
+                    size: size,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setundistortionsize",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: name,
+                size: size,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">S: ${data.size}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setRendersize(project, name, size, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setrendersize",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    name: name,
+                    size: size,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setrendersize",
+            type: "post",
+            
+            data: {
+                project: project,
+                name: name,
+                size: size,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">S: ${data.size}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
 }
