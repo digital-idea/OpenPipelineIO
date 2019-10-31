@@ -259,6 +259,23 @@ func (item *Item) setRnumTag() {
 	item.Tag = newTags
 }
 
+// setAssettags는 Assettype 이 변경시 Assettags 리스트를 변경한다.
+func (item *Item) setAssettags() {
+	var tags []string
+	if item.Assettype != "" {
+		tags = append(tags, item.Assettype)
+	}
+	for _, t := range item.Assettags {
+		b, _ := validAssettype(t)
+		if b {
+			continue
+		}
+		tags = append(tags, t)
+	}
+	sort.Strings(tags)
+	item.Assettags = tags
+}
+
 // 팀의 mov가 업데이트 되었다면 업데이트된 시간을 DB에 저장한다.
 func (item *Item) updateMdate(olditem *Item) {
 	if item.Model.Mov != olditem.Model.Mov {

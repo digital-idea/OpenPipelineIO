@@ -1992,8 +1992,12 @@ func SetRnum(session *mgo.Session, project, name, rnum string) error {
 
 // SetAssetType 함수는 item에 assettype을 셋팅한다.
 func SetAssetType(session *mgo.Session, project, name, assettype string) error {
+	_, err := validAssettype(assettype)
+	if err != nil {
+		return err
+	}
 	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
+	err = HasProject(session, project)
 	if err != nil {
 		return err
 	}
@@ -2005,12 +2009,13 @@ func SetAssetType(session *mgo.Session, project, name, assettype string) error {
 		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
-	err = validAssettype(assettype)
+	i, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
-	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"assettype": assettype, "updatetime": time.Now().Format(time.RFC3339)}})
+	i.Assettype = assettype
+	i.setAssettags()
+	err = setItem(session, project, i)
 	if err != nil {
 		return err
 	}

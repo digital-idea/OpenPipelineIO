@@ -141,7 +141,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		log.Fatal("assettype을 입력해주세요.")
 	}
 	// 유효한 에셋타입인지 체크.
-	err := validAssettype(assettype)
+	_, err := validAssettype(assettype)
 	if err != nil {
 		log.Fatal(err)
 	}
