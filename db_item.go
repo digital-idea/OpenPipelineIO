@@ -1991,35 +1991,37 @@ func SetRnum(session *mgo.Session, project, name, rnum string) error {
 }
 
 // SetAssetType 함수는 item에 assettype을 셋팅한다.
-func SetAssetType(session *mgo.Session, project, name, assettype string) error {
+func SetAssetType(session *mgo.Session, project, name, assettype string) (string, string, error) {
 	_, err := validAssettype(assettype)
 	if err != nil {
-		return err
+		return "", assettype, err
 	}
 	session.SetMode(mgo.Monotonic, true)
 	err = HasProject(session, project)
 	if err != nil {
-		return err
+		return "", assettype, err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", assettype, err
 	}
 	if typ != "asset" {
-		return fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
+		return "", assettype, fmt.Errorf("%s 아이템은 %s 타입입니다. 처리할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return "", assettype, err
 	}
+	var old string
+	old = i.Assettype
 	i.Assettype = assettype
 	i.setAssettags()
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return old, assettype, err
 	}
-	return nil
+	return old, assettype, nil
 }
 
 // SetScanTimecodeIn 함수는 item에 Scan Timecode In을 셋팅한다.

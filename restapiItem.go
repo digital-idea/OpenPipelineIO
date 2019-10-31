@@ -2462,6 +2462,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 		Project string `json:"project"`
 		Name    string `json:"name"`
 		Type    string `json:"type"`
+		OldType string `json:"oldtype"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
 	}
@@ -2517,7 +2518,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 			rcp.Type = v
 		}
 	}
-	err = SetAssetType(session, rcp.Project, rcp.Name, rcp.Type)
+	old, _, err := SetAssetType(session, rcp.Project, rcp.Name, rcp.Type)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -2535,6 +2536,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
+	rcp.OldType = old // 브라우저에 기존에 드로잉된 에셋태그를 제거하기 위해서 사용한다.
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

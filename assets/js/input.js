@@ -953,7 +953,14 @@ function setAssettype(project, name, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
+                    // assettype button update
                     document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
+                    // remove old assettype tag
+                    document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
+                    // add new assettype tag
+                    let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`;
+                    source = `<div id="tag-${data.name}-${data.type}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.type}</a></div>`;
+                    document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -975,7 +982,14 @@ function setAssettype(project, name, userid, token) {
             },
             dataType: "json",
             success: function(data) {
+                // assettype button update
                 document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
+                // remove old assettype tag
+                document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
+                // add new assettype tag
+                let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`;
+                source = `<div id="tag-${data.name}-${data.type}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.type}</a></div>`;
+                document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
