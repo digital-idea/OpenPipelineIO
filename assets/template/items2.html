@@ -603,23 +603,18 @@
 				</div>
 				<div class="bottom-left">
 					<div class="row">
-						{{if and .HandleIn .HandleOut}}
-							<span class="text-white black-opbg" title="handle">({{.HandleIn}}/{{.HandleOut}})</span>
-						{{end}}
+						<span class="text-white black-opbg" id="handlein-{{.Name}}">{{.HandleIn}}</span>
+						<span class="text-white black-opbg">/</span>
+						<span class="text-white black-opbg" id="handleout-{{.Name}}">{{.HandleOut}}</span>						
 					</div>
-					<div class="row">
+					<div class="row" id="platein-{{.Name}}">
 						{{if .PlateIn}}
 							<span class="text-white black-opbg" title="platein">{{.PlateIn}}</span>
 						{{end}}
 					</div>
-					<div class="row">
+					<div class="row" id="justin-{{.Name}}">
 						{{if .JustIn}}
 							<span class="text-warning black-opbg" title="justin">{{.JustIn}}</span>
-						{{end}}
-					</div>
-					<div class="row" id="scantimecodein-{{.Name}}">
-						{{if .ScanTimecodeIn}}
-							<span class="text-white black-opbg">{{.ScanTimecodeIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{.Name}}">
@@ -629,29 +624,24 @@
 					</div>
 				</div>
 				<div class="bottom-right">
-					<div class="row">
-						<span class="text-white black-opbg" title="plateout">
-							{{if .PlateOut}}
+					<div class="row" id="plateout-{{.Name}}">
+						{{if .PlateOut}}
+							<span class="text-white black-opbg" title="plateout">
 								{{.PlateOut}}
-							{{end}}
-							{{if and .PlateIn .PlateOut}}
-								({{Framecal .PlateIn .PlateOut}})
-							{{end}}
-						</span>
+								{{if and .PlateIn .PlateOut}}
+									({{Framecal .PlateIn .PlateOut}})
+								{{end}}
+							</span>
+						{{end}}
 					</div>
-					<div class="row">
-						<span class="text-warning black-opbg" title="justout">
-							{{if .JustOut}}
+					<div class="row" id="justout-{{.Name}}">
+						{{if .JustOut}}
+							<span class="text-warning black-opbg" title="justout">
 								{{.JustOut}}
-							{{end}}
-							{{if and .JustIn .JustOut}}
-								({{Framecal .JustIn .JustOut}})
-							{{end}}
-						</span>
-					</div>
-					<div class="row" id="scantimecodeout-{{.Name}}" >
-						{{if .ScanTimecodeOut}}
-							<span class="text-white black-opbg">{{.ScanTimecodeOut}}</span>
+								{{if and .JustIn .JustOut}}
+									({{Framecal .JustIn .JustOut}})
+								{{end}}
+							</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodeout-{{.Name}}" >
@@ -1179,22 +1169,59 @@
 		
 		<!--Scaninfo-->
 		<div class="row">
-			<span class="text-badge">ScanInfo:</span>
-			{{if .Scantime}}
-				<span class="text-badge ml-1">{{ToShortTime .Scantime}}</span>
-			{{end}}	
-			{{if .Scanname}}
-				<span class="text-badge ml-1" title="scanname">/ {{.Scanname}}</span>
+			<div id="scaninfo-{{.Name}}">
+				<span class="text-badge">ScanInfo:</span>
+			</div>
+			<div id="scantime-{{.Name}}">
+				{{if .Scantime}}
+					<span class="text-badge ml-1">{{ToShortTime .Scantime}} /</span>
+				{{end}}
+			</div>
+			<div id="scanname-{{.Name}}">
+				{{if .Scanname}}
+					<span class="text-badge ml-1" title="scanname">{{.Scanname}}</span>
+				{{end}}
+			</div>
+			<div id="scanin-{{.Name}}">
+				{{if .ScanIn}}
+					<span class="text-badge ml-1">{{.ScanIn}}</span>
+				{{end}}
+			</div>
+			{{if and .ScanIn .ScanOut}}
+				<div>
+					<span class="text-badge ml-1">-</span>
+				</div>
 			{{end}}
-			{{if .ScanFrame}}
-				<span class="text-badge ml-1" title="scanframe">/ {{.ScanFrame}} f</span>
-			{{end}}
+			<div id="scanout-{{.Name}}">
+				{{if .ScanOut}}
+					<span class="text-badge ml-1">{{.ScanOut}}</span>
+				{{end}}
+			</div>
+			<div id="scanframe-{{.Name}}">
+				{{if .ScanFrame}}
+					<span class="text-badge ml-1">({{.ScanFrame}})</span>
+				{{end}}
+			</div>
 			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
-				<span class="text-badge ml-1">/ </span>
-				<span class="text-badge ml-1" id="note-scantimecodein-{{.Name}}">{{.ScanTimecodeIn}}</span>
-				<span class="text-badge ml-1">~</span>
-				<span class="text-badge ml-1" id="note-scantimecodeout-{{.Name}}">{{.ScanTimecodeOut}}</span>
+				<div>
+					<span class="text-badge ml-1">/</span>
+				</div>
 			{{end}}
+			<div id="scantimecodein-{{.Name}}">
+				{{if .ScanTimecodeIn}}
+					<span class="text-badge ml-1">{{.ScanTimecodeIn}}</span>
+				{{end}}
+			</div>
+			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+				<div>
+					<span class="text-badge ml-1">-</span>
+				</div>
+			{{end}}
+			<div id="scantimecodeout-{{.Name}}">
+				{{if .ScanTimecodeOut}}
+					<span class="text-badge ml-1">{{.ScanTimecodeOut}}</span>
+				{{end}}
+			</div>
 			
 		</div>
 

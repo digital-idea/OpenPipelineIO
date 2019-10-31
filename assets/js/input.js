@@ -77,7 +77,7 @@ function setAssignTask(project, name, task, status, token) {
     });
 }
 
-function setFrame(mode, project, name, frame, token) {
+function setFrame(mode, project, name, frame, userid, token) {
     $.ajax({
         url: "/api/" + mode,
         type: "post",
@@ -85,13 +85,40 @@ function setFrame(mode, project, name, frame, token) {
             project: project,
             name: name,
             frame: frame,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (mode === "setscanin") {
+                document.getElementById("scanin-"+data.name).innerHTML = `<span class="text-badge ml-1" title="scanin">${data.frame}</span>`;
+            }
+            if (mode === "setscanout") {
+                document.getElementById("scanout-"+data.name).innerHTML = `<span class="text-badge ml-1" title="scanout">${data.frame}</span>`;
+            }
+            if (mode === "setscanframe") {
+                document.getElementById("scanframe-"+data.name).innerHTML = `<span class="text-badge ml-1" title="scanframe">(${data.frame})</span>`;
+            }
+            if (mode === "sethandlein") {
+                document.getElementById("handlein-"+data.name).innerHTML = data.frame;
+            }
+            if (mode === "sethandleout") {
+                document.getElementById("handleout-"+data.name).innerHTML = data.frame;
+            }
+            if (mode === "setplatein") {
+                document.getElementById("platein-"+data.name).innerHTML = `<span class="text-white black-opbg" title="platein">${data.frame}</span>`;
+            }
+            if (mode === "setplateout") {
+                document.getElementById("plateout-"+data.name).innerHTML = `<span class="text-white black-opbg" title="plateout">${data.frame}</span>`;
+            }
+            if (mode === "setjustin") {
+                document.getElementById("justin-"+data.name).innerHTML = `<span class="text-warning black-opbg" title="justin">${data.frame}</span>`;
+            }
+            if (mode === "setjustout") {
+                document.getElementById("justout-"+data.name).innerHTML = `<span class="text-warning black-opbg" title="justout">${data.frame}</span>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -115,8 +142,7 @@ function setScanTimecodeIn(project, name, timecode, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("scantimecodein-"+data.name).innerHTML = `<span class="text-white black-opbg">${data.timecode}</span>`;
-            document.getElementById("note-scantimecodein-"+data.name).innerHTML = data.timecode;
+            document.getElementById("scantimecodein-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.timecode}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -139,8 +165,7 @@ function setScanTimecodeOut(project, name, timecode, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("scantimecodeout-"+data.name).innerHTML = `<span class="text-white black-opbg">${data.timecode}</span>`;
-            document.getElementById("note-scantimecodeout-"+data.name).innerHTML = data.timecode;
+            document.getElementById("scantimecodeout-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.timecode}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
