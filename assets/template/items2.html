@@ -692,9 +692,9 @@
 				</div>
 				<div class="bottom-left">
 					<div class="row">
-						<span class="text-white black-opbg" id="handlein-{{.Name}}">{{.HandleIn}}</span>
+						<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleIn}}</span>
 						<span class="text-white black-opbg">/</span>
-						<span class="text-white black-opbg" id="handleout-{{.Name}}">{{.HandleOut}}</span>						
+						<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleOut}}</span>						
 					</div>
 					<div class="row" id="platein-{{.Name}}">
 						{{if .PlateIn}}
@@ -762,23 +762,7 @@
 					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- else -}}
-					<span class="badge badge-darkmode ml-1 finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="
-					setModal('edittime-name', '{{.Name}}');
-					setModal('edittime-userid', '{{$.User.ID}}');
-					setModal('scanin', '{{.ScanIn}}');
-					setModal('scanout', '{{.ScanOut}}');
-					setModal('scanframe', '{{.ScanFrame}}');
-					setModal('scantimecodein', '{{.ScanTimecodeIn}}');
-					setModal('scantimecodeout', '{{.ScanTimecodeOut}}');
-					setModal('platein', '{{.PlateIn}}');
-					setModal('plateout', '{{.PlateOut}}');
-					setModal('handlein', '{{.HandleIn}}');
-					setModal('handleout', '{{.HandleOut}}');
-					setModal('justin', '{{.JustIn}}');
-					setModal('justout', '{{.JustOut}}');
-					setModal('justtimecodein', '{{.JustTimecodeIn}}');
-					setModal('justtimecodeout', '{{.JustTimecodeOut}}');
-					"{{end}}>T</span>
+					<span class="badge badge-darkmode ml-1 finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>T</span>
 					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- end}}
