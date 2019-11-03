@@ -698,24 +698,24 @@
 					</div>
 					<div class="row" id="platein-{{.Name}}">
 						{{if .PlateIn}}
-							<span class="text-white black-opbg" title="platein">{{.PlateIn}}</span>
+							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.PlateIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justin-{{.Name}}">
 						{{if .JustIn}}
-							<span class="text-warning black-opbg" title="justin">{{.JustIn}}</span>
+							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{.Name}}">
 						{{if .JustTimecodeIn}}
-							<span class="text-warning black-opbg">{{.JustTimecodeIn}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeIn}}</span>
 						{{end}}
 					</div>
 				</div>
 				<div class="bottom-right">
 					<div class="row" id="plateout-{{.Name}}">
 						{{if .PlateOut}}
-							<span class="text-white black-opbg" title="plateout">
+							<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
 								{{.PlateOut}}
 								{{if and .PlateIn .PlateOut}}
 									({{Framecal .PlateIn .PlateOut}})
@@ -725,7 +725,7 @@
 					</div>
 					<div class="row" id="justout-{{.Name}}">
 						{{if .JustOut}}
-							<span class="text-warning black-opbg" title="justout">
+							<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
 								{{.JustOut}}
 								{{if and .JustIn .JustOut}}
 									({{Framecal .JustIn .JustOut}})
@@ -735,7 +735,7 @@
 					</div>
 					<div class="row" id="justtimecodeout-{{.Name}}" >
 						{{if .JustTimecodeOut}}
-							<span class="text-warning black-opbg">{{.JustTimecodeOut}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeOut}}</span>
 						{{end}}
 					</div>
 				</div>
@@ -762,12 +762,10 @@
 					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- else -}}
-					<span class="badge badge-darkmode ml-1 finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>T</span>
 					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
 					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- end}}
-				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>
-				
+				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
 			</div>
 		</div>
 	</div>
