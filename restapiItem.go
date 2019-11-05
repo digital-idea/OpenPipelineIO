@@ -1785,7 +1785,6 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskStatus 함수는 아이템의 task에 대한 상태를 설정한다.
 func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
@@ -1807,8 +1806,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	var name string
 	var task string
 	var status string
-	args := r.PostForm
-	for key, value := range args {
+	for key, value := range r.PostForm {
 		switch key {
 		case "project":
 			v, err := PostFormValueInList(key, value)

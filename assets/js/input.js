@@ -32,10 +32,6 @@ function setModal(modalID, value) {
 
 var multiInput = false;
 
-function removeWhiteSpace(event) {
-	event.value = event.value.replace(/ /g, '');
-}
-
 // *문자를 x문자로 바꾼다.
 // X를 x문자로 바꾼다.
 // 공백을 제거한다.
@@ -562,7 +558,7 @@ function setTaskUser(project, name, task, user, token) {
             project: project,
             name: name,
             task: task,
-            user: removeWhiteSpace(user),
+            user: user,
         },
         headers: {
             "Authorization": "Basic "+ token
