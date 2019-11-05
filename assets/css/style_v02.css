@@ -456,3 +456,8 @@ input[type=checkbox]:checked+div{
 .finger {
 	cursor: pointer;
 }
+
+.itemname {
+	font-size: 18px;
+	font-weight: bold;
+}
