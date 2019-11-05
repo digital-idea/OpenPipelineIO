@@ -509,6 +509,59 @@
 	</div>
 </div>
 
+<!-- Modal: ItemInfo -->
+<div class="modal fade" id="modal-iteminfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	<div class="modal-content bg-darkmode">
+		<div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Item Setting</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true" class="text-darkmode">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body">
+			<input type="hidden" class="form-control" id="iteminfo-name">
+			<input type="hidden" class="form-control" id="iteminfo-userid">
+			<div class="form-group">
+				<label>Thumbnail MOV</label>
+				<input type="text" size="55" maxlength="256" id="thummov" value="" class="form-control">
+				<small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
+			</div>
+				
+			<div class="form-group">
+				<label>앞쪽 연결 MOV</label>
+				<input type="text" size="55" maxlength="256" id="beforemov" value="" class="form-control">
+				<small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
+			</div>
+
+			<div class="form-group">
+				<label>뒤쪽 연결 MOV</label>
+				<input type="text" size="55" maxlength="256" id="aftermov" value="" class="form-control">
+				<small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
+			</div>
+			<div class="form-group">
+				<label>리타임 플레이트 위치</label>
+				<input type="text" size="55" maxlength="256" id="retimeplate" value="" class="form-control">
+				<small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
+			</div>
+			<div class="form-group">
+				<label>OCIOcc</label>
+				<input type="text" size="55" id="ociocc" value="" class="form-control">
+				<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
+			</div>
+			<div class="form-group">
+				<label>현장툴 Rollmedia</label>
+				<input type="text" maxlength="13" id="rollmedia" value="" class="form-control">
+				<small class="form-text text-muted">Setellite에서 사용한 Rollmedia 값을 입력해주세요.</small>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+	</div>
+</div>
+
 <!-- Modal: EditTime -->
 <div class="modal fade" id="edittime" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -829,13 +882,12 @@
 					<span class="play">▶</span>
 				</a>
 				
-			
-				{{if eq .Type "asset" -}}
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
+				<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E(old)</a>
+				<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" onclick="setModal('iteminfo-name', '{{.Name}}');setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
+				{{if eq .Type "asset" -}}	
 					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- else -}}
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E</a>
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 				{{- end}}
 				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
 			</div>
