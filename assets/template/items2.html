@@ -1211,21 +1211,25 @@
 		{{end}}
 		
 		<!--ObjectID-->
-		{{if and .ObjectidIn .ObjectidOut}}
-		<div class="row mt-2">
-			<span class="text-badge">Object ID:</span>
-			<span class="badge badge-warning">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
+		<div class="row">
+			<div id="objectid-{{.Name}}">
+				<span class="text-badge">ObjectID:</span>
+			</div>
+			{{if and .ObjectidIn .ObjectidOut}}
+				<div id="objectidnum-{{.Name}}">
+					<span class="text-badge ml-1">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
+				</div>
+			{{end}}
 		</div>
-		{{end}}
+		
 		<!--ProductionCam-->
 		{{if eq .Type "org" "left"}}
-		<div class="row mt-2">
-			<div data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModal('cameraoption-userid', '{{$.User.ID}}')">
-				<span class="text-badge">
+		<div class="row">
+			<div id="caminfo-{{.Name}}">
+				<span class="text-badge" data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModalCheckbox('cameraoption-projection','{{.ProductionCam.Projection}}');setModal('cameraoption-userid', '{{$.User.ID}}')">
 					CamInfo:
 				</span>
 			</div>
-			
 			<div id="campubtask-{{.Name}}">
 				{{if .ProductionCam.PubTask}}
 					<span class="text-badge ml-1" id="campubtask-{{.Name}}">Pub: {{.ProductionCam.PubTask}},</span>

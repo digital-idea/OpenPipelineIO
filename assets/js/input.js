@@ -29,6 +29,14 @@ function setModal(modalID, value) {
     document.getElementById(modalID).value=value;
 }
 
+function setModalCheckbox(modalID, value) {
+    if (value === "true") {
+        document.getElementById(modalID).checked = true;
+    } else {
+        document.getElementById(modalID).checked = false;
+    }
+}
+
 
 var multiInput = false;
 
@@ -730,7 +738,6 @@ function setTaskStatuses(project, task, status, token) {
 }
 
 function setTaskDate(project, name, task, date, token) {
-    console.log(project, name, task, date, token);
     $.ajax({
         url: "/api/settaskdate",
         type: "post",
@@ -784,7 +791,6 @@ function setTaskDates(project, task, date, token) {
 
 
 function setTaskPredate(project, name, task, date, token) {
-    console.log(project, name, task, date, token);
     $.ajax({
         url: "/api/settaskpredate",
         type: "post",
