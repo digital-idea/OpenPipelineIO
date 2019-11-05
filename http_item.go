@@ -1100,14 +1100,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if CurrentItem.Type == "org" || CurrentItem.Type == "left" { // 일반상황과 입체상황을 체크한다.
 		NewItem.OCIOcc = r.FormValue("OCIOcc")
 	}
-	NewItem.ObjectidIn, err = strconv.Atoi(r.FormValue("ObjectidIn"))
-	if err != nil {
-		NewItem.ObjectidIn = CurrentItem.ObjectidIn // 에러가 나면 과거값으로 놔둔다.
-	}
-	NewItem.ObjectidOut, err = strconv.Atoi(r.FormValue("ObjectidOut"))
-	if err != nil {
-		NewItem.ObjectidOut = CurrentItem.ObjectidOut // 에러가 나면 과거값으로 놔둔다.
-	}
 	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
 
 	//model

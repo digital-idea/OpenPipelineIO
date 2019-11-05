@@ -1827,6 +1827,109 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetObjectID 함수는 아이템의 ObjectID 값을 설정한다.
+func handleAPISetObjectID(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		In      int    `json:"in"`
+		Out     int    `json:"out"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Name = v
+		case "in":
+			if len(values) == 1 {
+				rcp.In, err = strconv.Atoi(values[0])
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+			} else {
+				rcp.In = 0
+			}
+		case "out":
+			if len(values) == 1 {
+				rcp.Out, err = strconv.Atoi(values[0])
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+			} else {
+				rcp.Out = 0
+			}
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
+		}
+	}
+	err = SetObjectID(session, rcp.Project, rcp.Name, rcp.In, rcp.Out)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("ObjectID: %d - %d", rcp.In, rcp.Out), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("ObjectID: %d - %d\nProject: %s, Name: %s, Author: %s", rcp.In, rcp.Out, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetThummov 함수는 아이템의 Thummov 값을 설정한다.
 func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()

@@ -173,7 +173,7 @@ function setCameraPubTask(project, name, task, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub: ${data.task},</span>`;
+            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub-${data.task},</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1320,6 +1320,30 @@ function setTaskLevel(project, name, task, level, token) {
         dataType: "json",
         success: function(data) {
             console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setObjectID(project, name, innum, outnum, userid, token) {
+    $.ajax({
+        url: "/api/setobjectid",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            in: innum,
+            out: outnum,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("objectidnum-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.in}-${data.out}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

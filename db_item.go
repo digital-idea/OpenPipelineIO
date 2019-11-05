@@ -1364,6 +1364,28 @@ func SetCameraProjection(session *mgo.Session, project, name string, isProjectio
 	return nil
 }
 
+// SetObjectID 함수는 Item에 Object In, Out 값을 설정한다.
+func SetObjectID(session *mgo.Session, project, name string, in, out int) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ != "asset" {
+		return errors.New("asset 타입이 아닙니다")
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"objectidin": in, "objectidout": out, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetThummov 함수는 item에 Thummov값을 셋팅한다.
 func SetThummov(session *mgo.Session, project, name, path string) error {
 	session.SetMode(mgo.Monotonic, true)

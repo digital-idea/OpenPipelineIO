@@ -284,6 +284,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
 	http.HandleFunc("/api/settasklevel", handleAPISetTaskLevel)
+	http.HandleFunc("/api/setobjectid", handleAPISetObjectID)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
