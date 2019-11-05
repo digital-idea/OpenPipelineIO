@@ -468,7 +468,7 @@
 			<div class="form-group">
 				<div class="form-check">
 					<input type="checkbox" id="cameraoption-projection" class="form-check-input" onchange="setCameraProjection('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
-					<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+					<label class="form-check-label" for="cameraoption-projection">프로젝션 카메라를 이용하는 샷 입니까?</label>
 				</div>
 			</div>
 		</div>
@@ -1220,20 +1220,27 @@
 		<!--ProductionCam-->
 		{{if eq .Type "org" "left"}}
 		<div class="row mt-2">
-			<span class="text-badge" data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModal('cameraoption-userid', '{{$.User.ID}}')">
-				CamInfo:
-			</span>
-			{{if .ProductionCam.PubTask}}
-				<span class="text-badge ml-1">Pub: {{.ProductionCam.PubTask}},</span>
-			{{end}}
+			<div data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModal('cameraoption-userid', '{{$.User.ID}}')">
+				<span class="text-badge">
+					CamInfo:
+				</span>
+			</div>
 			
-			{{if .ProductionCam.PubPath}}
-				<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>,
-			{{end}}
-
-			{{if .ProductionCam.Projection}}
-				<span class="text-badge ml-1">Projection</span>
-			{{end}}
+			<div id="campubtask-{{.Name}}">
+				{{if .ProductionCam.PubTask}}
+					<span class="text-badge ml-1" id="campubtask-{{.Name}}">Pub: {{.ProductionCam.PubTask}},</span>
+				{{end}}
+			</div>
+			<div id="campubpath-{{.Name}}">
+				{{if .ProductionCam.PubPath}}
+					<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a><span class="text-badge">,</span>
+				{{end}}
+			</div>
+			<div id="camprojection-{{.Name}}">
+				{{if .ProductionCam.Projection}}
+					<span class="text-badge ml-1">Projection</span>
+				{{end}}
+			</div>
 		</div>
 		{{end}}
 		

@@ -63,35 +63,6 @@
 				<small class="form-text text-muted">에셋태그를 설정합니다. 예) assembly, component, type, parent</small>
 			</div>
 		{{end}}
-		{{if eq .Item.Type "org" "left"}}
-			<div class="form-group">
-				<div class="row">
-					<div class="col-5 form-group">
-						<label>Cam PubTask</label>
-						<select name="ProductionCamPubTask" class="form-control">
-							<option value="" {{if eq .Item.ProductionCam.PubTask "" }}selected{{end}}>none</option>
-							<option value="mm" {{if eq .Item.ProductionCam.PubTask "mm" }}selected{{end}}>mm</option>
-							<option value="layout" {{if eq .Item.ProductionCam.PubTask "layout" }}selected{{end}}>layout</option>
-							<option value="ani" {{if eq .Item.ProductionCam.PubTask "ani" }}selected{{end}}>ani</option>
-						</select>
-						<small class="form-text text-mute">카메라 Publish 팀</small>
-					</div>
-					<div class="col-7 form-group">
-						<label>Cam PubPath</label>
-						<input type="text" size="55" name="ProductionCamPubPath" value="{{.Item.ProductionCam.PubPath}}" class="form-control">
-						<small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="form-check">
-						<input type="checkbox" id="ProductionCamProjection" name="ProductionCamProjection" class="form-check-input" value="true" {{if .Item.ProductionCam.Projection}}checked{{end}}>
-						<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
-					</div>
-				</div>
-			</div>
-			
-			
-		{{end}}
 
 		<div class="form-group">
 			<label>ObjectID 사용범위(Katana)</label>

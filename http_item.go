@@ -1109,10 +1109,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		NewItem.ObjectidOut = CurrentItem.ObjectidOut // 에러가 나면 과거값으로 놔둔다.
 	}
 	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
-	// 카메라 퍼블리쉬 관련 셋팅
-	NewItem.ProductionCam.PubTask = r.FormValue("ProductionCamPubTask")
-	NewItem.ProductionCam.PubPath = r.FormValue("ProductionCamPubPath")
-	NewItem.ProductionCam.Projection = str2bool(r.FormValue("ProductionCamProjection"))
 
 	//model
 	NewItem.Model.UserNote = r.FormValue("ModelUserNote")

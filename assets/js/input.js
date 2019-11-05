@@ -165,7 +165,7 @@ function setCameraPubTask(project, name, task, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub: ${data.task},</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -188,7 +188,7 @@ function setCameraPubPath(project, name, path, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            document.getElementById("campubpath-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a><span class="text-badge">,</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -212,7 +212,11 @@ function setCameraProjection(project, name, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.projection === true) {
+                document.getElementById("camprojection-"+data.name).innerHTML = `<span class="text-badge ml-1">Projection</span>`;
+            } else {
+                document.getElementById("camprojection-"+data.name).innerHTML = "";
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
