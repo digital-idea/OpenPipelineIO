@@ -452,7 +452,7 @@
 			<input type="hidden" class="form-control" id="cameraoption-userid">
 			<div class="form-group">
 				<label>Cam PubTask</label>
-				<select name="ProductionCamPubTask" class="form-control">
+				<select name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
 					<option value="">none</option>
 					<option value="mm">mm</option>
 					<option value="layout">layout</option>
@@ -461,20 +461,19 @@
 				<small class="form-text text-mute">카메라 Publish 팀</small>
 			</div>
 			<div class="form-group">
-				<label>Cam PubPath</label>
-				<input type="text" size="55" id="cameraoption-pubpath" value="" class="form-control">
+				<label>Camera Publish Path</label>
+				<input type="text" size="55" id="cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
 			</div>
 			<div class="form-group">
 				<div class="form-check">
-					<input type="checkbox" id="cameraoption-projection" class="form-check-input" value="true">
+					<input type="checkbox" id="cameraoption-projection" class="form-check-input" onchange="setCameraProjection('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
 					<label class="form-check-label" for="ProductionCamProjection">프로젝션 카메라를 이용하는 샷 입니까?</label>
 				</div>
 			</div>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setRendersize('{{$.SearchOption.Project}}', document.getElementById('rendersize-name').value, document.getElementById('rendersize').value, document.getElementById('rendersize-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -1220,20 +1219,20 @@
 		{{end}}
 		<!--ProductionCam-->
 		{{if eq .Type "org" "left"}}
-		<div class="row mt-2" id="cameraoption-{{.Name}}">
-			<span class="text-badge" data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubTask}}' );setModal('cameraoption-name', '{{.Name}}' );setModal('cameraoption-userid', '{{$.User.ID}}')">
+		<div class="row mt-2">
+			<span class="text-badge" data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModal('cameraoption-userid', '{{$.User.ID}}')">
 				CamInfo:
 			</span>
-			{{if .ProductionCam.Projection}}
-				<span class="text-badge ml-1">Projection,</span>
-			{{end}}
-	
 			{{if .ProductionCam.PubTask}}
 				<span class="text-badge ml-1">Pub: {{.ProductionCam.PubTask}},</span>
 			{{end}}
 			
 			{{if .ProductionCam.PubPath}}
-				<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">Pubpath</a>
+				<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>,
+			{{end}}
+
+			{{if .ProductionCam.Projection}}
+				<span class="text-badge ml-1">Projection</span>
 			{{end}}
 		</div>
 		{{end}}

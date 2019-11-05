@@ -150,6 +150,76 @@ function setScanTimecodeIn(project, name, timecode, userid, token) {
     });
 }
 
+function setCameraPubTask(project, name, task, userid, token) {
+    $.ajax({
+        url: "/api/setcamerapubtask",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setCameraPubPath(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setcamerapubpath",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setCameraProjection(project, name, userid, token) {
+    let projection = document.getElementById("cameraoption-projection").checked;
+    $.ajax({
+        url: "/api/setcameraprojection",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            projection: projection,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setScanTimecodeOut(project, name, timecode, userid, token) {
     $.ajax({
         url: "/api/setscantimecodeout",
