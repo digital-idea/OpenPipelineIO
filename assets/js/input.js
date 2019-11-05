@@ -1514,7 +1514,7 @@ function setRendersize(project, name, size, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">R: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1537,7 +1537,7 @@ function setRendersize(project, name, size, userid, token) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">R: ${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
