@@ -1789,60 +1789,95 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Task    string `json:"task"`
+		Status  string `json:"status"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var task string
-	var status string
-	for key, value := range r.PostForm {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "project":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "task":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			task = v
+			rcp.Task = v
 		case "status":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			status = v
+			rcp.Status = v
 		}
 	}
-	err = SetTaskStatus(session, project, name, task, status)
+	err = SetTaskStatus(session, rcp.Project, rcp.Name, rcp.Task, rcp.Status)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task Status: %s %s", rcp.Task, rcp.Status), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task Status: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Status, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetAssignTask 함수는 아이템의 task에 대한 Assign 상태를 설정한다.
@@ -1952,7 +1987,7 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 		Project  string `json:"project"`
 		Name     string `json:"name"`
 		Task     string `json:"task"`
-		Username string `json:"task"`
+		Username string `json:"username"`
 		UserID   string `json:"userid"`
 		Error    string `json:"error"`
 	}
@@ -2284,130 +2319,196 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskPredate 함수는 아이템의 task에 대한 1차마감일을 설정한다.
 func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Date    string `json:"date"`
+		Task    string `json:"task"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var task string
-	var date string
-	args := r.PostForm
-	for key, value := range args {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "task":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			task = v
-		case "date", "predate":
-			v, err := PostFormValueInList(key, value)
+			rcp.Task = v
+		case "date":
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			date = v
+			rcp.Date = v
 		}
 	}
-	err = SetTaskPredate(session, project, name, task, date)
+	err = SetTaskPredate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Pre Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Pre Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetTaskDate 함수는 아이템의 task에 대한 최종마감일을 설정한다.
 func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Date    string `json:"date"`
+		Task    string `json:"task"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var task string
-	var date string
-	args := r.PostForm
-	for key, value := range args {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		case "task":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			task = v
+			rcp.Task = v
 		case "date":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			date = v
+			rcp.Date = v
 		}
 	}
-	err = SetTaskDate(session, project, name, task, date)
+	err = SetTaskDate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISetShotType 함수는 아이템의 shot type을 설정한다.
@@ -4087,80 +4188,102 @@ func handleAPIDeadline3D(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskLevel 함수는 Task에 level을 설정한다.
 func handleAPISetTaskLevel(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Task    string `json:"task"`
+		Level   string `json:"level"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Name = v
+		case "task":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Task = v
+		case "level":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Level = v
+		}
+	}
+	if rcp.Level == "" {
+		http.Error(w, "level 값을 설정해주세요.", http.StatusInternalServerError)
 		return
 	}
 
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var task string
-	var level string
-	info := r.PostForm
-	for key, value := range info {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			name = v
-		case "task":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			err = validTask(v)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", err.Error())
-			}
-			task = v
-		case "level":
-			v, err := PostFormValueInList(key, value)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			level = v
-		default:
-			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, name, task, level 키값만 사용가능합니다.)")
-			return
-		}
-	}
-	if level == "" {
-		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "level 키값을 설정해주세요.")
-		return
-	}
-	if *flagDebug {
-		fmt.Println(project, name, task, level)
-	}
-	err = setTaskLevel(session, project, name, task, level)
+	err = setTaskLevel(session, rcp.Project, rcp.Name, rcp.Task, rcp.Level)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Fprintf(w, "{\"error\":\"\"}\n")
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task Level: %s %s", rcp.Task, rcp.Level), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task Level: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Level, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
