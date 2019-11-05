@@ -57,9 +57,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
 | /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
 | /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" http://192.168.31.172/api/rmsource` |
-| /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
-| /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
-| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath`|
+| /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection, (userid) | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
+| /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task, (userid) | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
+| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath`|
 | /api/setdeadline2d | 2D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" http://10.0.90.251/api/setdeadline2d`|
 | /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" http://10.0.90.251/api/setdeadline3d`|
 | /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" http://10.0.90.251/api/setretimeplate`|
