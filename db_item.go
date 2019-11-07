@@ -1140,6 +1140,33 @@ func setTaskMov(session *mgo.Session, project, name, task, mov string) error {
 	return nil
 }
 
+// setTaskDue함수는 해당 샷에 mov를 설정하는 함수이다.
+func setTaskDue(session *mgo.Session, project, name, task string, due int) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	var items []Item
+	err = c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+	if err != nil {
+		return err
+	}
+	if len(items) == 0 {
+		return errors.New(name + "을 DB에서 찾을 수 없습니다.")
+	}
+	if len(items) != 1 {
+		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
+	}
+	typ := items[0].Type
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{task + ".due": due, task + ".mdate": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // setTaskLevel함수는 해당 샷에 level를 설정하는 함수이다.
 func setTaskLevel(session *mgo.Session, project, name, task, level string) error {
 	session.SetMode(mgo.Monotonic, true)

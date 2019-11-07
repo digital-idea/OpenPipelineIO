@@ -976,7 +976,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'concept' );setModal('edittask-path', '{{.Concept.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Concept.Due}}' );setModal('edittask-task', 'concept' );setModal('edittask-path', '{{.Concept.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1000,7 +1000,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'model' );setModal('edittask-path', '{{.Model.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Model.Due}}' );setModal('edittask-task', 'model' );setModal('edittask-path', '{{.Model.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1020,7 +1020,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'mm' );setModal('edittask-path', '{{.Mm.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Mm.Due}}' );setModal('edittask-task', 'mm' );setModal('edittask-path', '{{.Mm.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1040,7 +1040,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'layout' );setModal('edittask-path', '{{.Layout.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Layout.Due}}' );setModal('edittask-task', 'layout' );setModal('edittask-path', '{{.Layout.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1064,7 +1064,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'ani' );setModal('edittask-path', '{{.Ani.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Ani.Due}}' );setModal('edittask-task', 'ani' );setModal('edittask-path', '{{.Ani.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1083,7 +1083,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'fx' );setModal('edittask-path', '{{.Fx.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Fx.Due}}' );setModal('edittask-task', 'fx' );setModal('edittask-path', '{{.Fx.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1103,7 +1103,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'mg' );setModal('edittask-path', '{{.Mg.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Mg.Due}}' );setModal('edittask-task', 'mg' );setModal('edittask-path', '{{.Mg.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1123,7 +1123,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'temp1' );setModal('edittask-path', '{{.Temp1.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Temp1.Due}}' );setModal('edittask-task', 'temp1' );setModal('edittask-path', '{{.Temp1.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1143,7 +1143,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'previz' );setModal('edittask-path', '{{.Previz.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Previz.Due}}' );setModal('edittask-task', 'previz' );setModal('edittask-path', '{{.Previz.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1166,7 +1166,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'fur' );setModal('edittask-path', '{{.Fur.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Fur.Due}}' );setModal('edittask-task', 'fur' );setModal('edittask-path', '{{.Fur.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1189,7 +1189,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'sim' );setModal('edittask-path', '{{.Sim.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Sim.Due}}' );setModal('edittask-task', 'sim' );setModal('edittask-path', '{{.Sim.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1209,7 +1209,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'crowd' );setModal('edittask-path', '{{.Crowd.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Crowd.Due}}' );setModal('edittask-task', 'crowd' );setModal('edittask-path', '{{.Crowd.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1233,7 +1233,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'light' );setModal('edittask-path', '{{.Light.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Light.Due}}' );setModal('edittask-task', 'light' );setModal('edittask-path', '{{.Light.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1259,7 +1259,7 @@
 						{{end}}
 					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'comp' );setModal('edittask-path', '{{.Comp.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Comp.Due}}' );setModal('edittask-task', 'comp' );setModal('edittask-path', '{{.Comp.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1279,7 +1279,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'matte' );setModal('edittask-path', '{{.Matte.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Matte.Due}}' );setModal('edittask-task', 'matte' );setModal('edittask-path', '{{.Matte.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1299,7 +1299,7 @@
 						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 					{{end}}
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-task', 'env' );setModal('edittask-path', '{{.Env.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Env.Due}}' );setModal('edittask-task', 'env' );setModal('edittask-path', '{{.Env.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}

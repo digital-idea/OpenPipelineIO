@@ -810,6 +810,30 @@ function setTaskMov(project, name, task, mov, userid, token) {
     });
 }
 
+function setTaskDue(project, name, task, due, userid, token) {
+    $.ajax({
+        url: "/api/settaskdue",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            due: due,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setTaskUser(project, name, task, user, token) {
     $.ajax({
         url: "/api/settaskuser",

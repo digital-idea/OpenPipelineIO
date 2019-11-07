@@ -1093,110 +1093,63 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	//model
 	NewItem.Model.UserNote = r.FormValue("ModelUserNote")
 	NewItem.Model.Startdate = ToFullTime(r.FormValue("ModelStartdate"))
-	NewItem.Model.Due, err = strconv.Atoi(r.FormValue("ModelDue"))
-	if err != nil {
-		NewItem.Model.Due = CurrentItem.Model.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//mm
 	NewItem.Mm.UserNote = r.FormValue("MmUserNote")
 	NewItem.Mm.Startdate = ToFullTime(r.FormValue("MmStartdate"))
-	NewItem.Mm.Due, err = strconv.Atoi(r.FormValue("MmDue"))
-	if err != nil {
-		NewItem.Mm.Due = CurrentItem.Mm.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//layout
 	NewItem.Layout.UserNote = r.FormValue("LayoutUserNote")
 	NewItem.Layout.Startdate = ToFullTime(r.FormValue("LayoutStartdate"))
-	NewItem.Layout.Due, err = strconv.Atoi(r.FormValue("LayoutDue"))
-	if err != nil {
-		NewItem.Layout.Due = CurrentItem.Layout.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//ani
 	NewItem.Ani.UserNote = r.FormValue("AniUserNote")
 	NewItem.Ani.Startdate = ToFullTime(r.FormValue("AniStartdate"))
-	NewItem.Ani.Due, err = strconv.Atoi(r.FormValue("AniDue"))
-	if err != nil {
-		NewItem.Ani.Due = CurrentItem.Ani.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//fx
 	NewItem.Fx.UserNote = r.FormValue("FxUserNote")
 	NewItem.Fx.Startdate = ToFullTime(r.FormValue("FxStartdate"))
-	NewItem.Fx.Due, err = strconv.Atoi(r.FormValue("FxDue"))
-	if err != nil {
-		NewItem.Fx.Due = CurrentItem.Fx.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//mg
 	NewItem.Mg.UserNote = r.FormValue("MgUserNote")
 	NewItem.Mg.Startdate = ToFullTime(r.FormValue("MgStartdate"))
-	NewItem.Mg.Due, err = strconv.Atoi(r.FormValue("MgDue"))
-	if err != nil {
-		NewItem.Mg.Due = CurrentItem.Mg.Due //에러가 나면 과거값으로 놔둔다.
-	}
 
 	//temp1
 	NewItem.Temp1.Title = r.FormValue("Temp1Title")
 	NewItem.Temp1.UserNote = r.FormValue("Temp1UserNote")
 	NewItem.Temp1.Startdate = ToFullTime(r.FormValue("Temp1Startdate"))
-	NewItem.Temp1.Due, err = strconv.Atoi(r.FormValue("Temp1Due"))
-	if err != nil {
-		NewItem.Temp1.Due = CurrentItem.Temp1.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//previz
 	NewItem.Previz.UserNote = r.FormValue("PrevizUserNote")
 	NewItem.Previz.Startdate = ToFullTime(r.FormValue("PrevizStartdate"))
-	NewItem.Previz.Due, err = strconv.Atoi(r.FormValue("PrevizDue"))
-	if err != nil {
-		NewItem.Previz.Due = CurrentItem.Previz.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//fur
 	NewItem.Fur.UserNote = r.FormValue("FurUserNote")
 	NewItem.Fur.Startdate = ToFullTime(r.FormValue("FurStartdate"))
-	NewItem.Fur.Due, err = strconv.Atoi(r.FormValue("FurDue"))
-	if err != nil {
-		NewItem.Fur.Due = CurrentItem.Fur.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//sim
 	NewItem.Sim.UserNote = r.FormValue("SimUserNote")
 	NewItem.Sim.Startdate = ToFullTime(r.FormValue("SimStartdate"))
-	NewItem.Sim.Due, err = strconv.Atoi(r.FormValue("SimDue"))
-	if err != nil {
-		NewItem.Sim.Due = CurrentItem.Sim.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//crowd
 	NewItem.Crowd.UserNote = r.FormValue("CrowdUserNote")
 	NewItem.Crowd.Startdate = ToFullTime(r.FormValue("CrowdStartdate"))
-	NewItem.Crowd.Due, err = strconv.Atoi(r.FormValue("CrowdDue"))
-	if err != nil {
-		NewItem.Crowd.Due = CurrentItem.Crowd.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//light
 	NewItem.Light.UserNote = r.FormValue("LightUserNote")
 	NewItem.Light.Startdate = ToFullTime(r.FormValue("LightStartdate"))
-	NewItem.Light.Due, err = strconv.Atoi(r.FormValue("LightDue"))
-	if err != nil {
-		NewItem.Light.Due = CurrentItem.Light.Due //에러가 나면 과거값으로 놔둔다.
-	}
+
 	//comp
 	NewItem.Comp.UserNote = r.FormValue("CompUserNote")
 	NewItem.Comp.Startdate = ToFullTime(r.FormValue("CompStartdate"))
-	NewItem.Comp.Due, err = strconv.Atoi(r.FormValue("CompDue"))
-	if err != nil {
-		NewItem.Comp.Due = CurrentItem.Comp.Due // 에러가 나면 과거값으로 놔둔다.
-	}
+
 	//matte
 	NewItem.Matte.UserNote = r.FormValue("MatteUserNote")
 	NewItem.Matte.Startdate = ToFullTime(r.FormValue("MatteStartdate"))
-	NewItem.Matte.Due, err = strconv.Atoi(r.FormValue("MatteDue"))
-	if err != nil {
-		NewItem.Matte.Due = CurrentItem.Matte.Due // 에러가 나면 과거값으로 놔둔다.
-	}
+
 	//env
 	NewItem.Env.UserNote = r.FormValue("EnvUserNote")
 	NewItem.Env.Startdate = ToFullTime(r.FormValue("EnvStartdate"))
-	NewItem.Env.Due, err = strconv.Atoi(r.FormValue("EnvDue"))
-	if err != nil {
-		NewItem.Env.Due = CurrentItem.Env.Due // 에러가 나면 과거값으로 놔둔다.
-	}
 
 	file, fileHandler, fileErr := r.FormFile("Thumbnail")
 	if fileErr == nil {

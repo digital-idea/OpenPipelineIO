@@ -255,6 +255,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/settaskstartdate", handleAPISetTaskStartdate)
 	http.HandleFunc("/api/settaskpredate", handleAPISetTaskPredate)
 	http.HandleFunc("/api/settaskdate", handleAPISetTaskDate)
+	http.HandleFunc("/api/settaskdue", handleAPISetTaskDue)
 	http.HandleFunc("/api/setshottype", handleAPISetShotType)
 	http.HandleFunc("/api/setassettype", handleAPISetAssetType)
 	http.HandleFunc("/api/setoutputname", handleAPISetOutputName)
