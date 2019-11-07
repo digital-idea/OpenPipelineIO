@@ -962,6 +962,30 @@ function setTaskDate(project, name, task, date, token) {
     });
 }
 
+function setTaskStartdate(project, name, task, date, userid, token) {
+    $.ajax({
+        url: "/api/settaskstartdate",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            date: date,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setTaskDates(project, task, date, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
@@ -1506,7 +1530,7 @@ function selectCheckboxInvert() {
     }
 }
 
-function setTaskLevel(project, name, task, level, token) {
+function setTaskLevel(project, name, task, level, userid, token) {
     $.ajax({
         url: "/api/settasklevel",
         type: "post",
@@ -1515,6 +1539,7 @@ function setTaskLevel(project, name, task, level, token) {
             name: name,
             task: task,
             level: level,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
