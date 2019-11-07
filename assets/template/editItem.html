@@ -8,6 +8,13 @@
 		<span class="text-dark">{{.Item.Name}}({{.Item.Type}})</span>
 		<span class="text-dark">{{.Item.Status|Status2capString}}</span>
 	</div>
+	<!--
+	<form action="/thumbnail-upload" class="dropzone">
+		<div class="fallback">
+		  <input name="file" type="file" />
+		</div>
+	</form>
+	-->
 			
 	<form action="/edititem-submit" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="project" value={{.Project.ID}}>
@@ -28,10 +35,6 @@
 		<div class="form-group">
 			<label>CONCEPT</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="ConceptMov" class="form-control" value="{{.Item.Concept.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="ConceptUserNote" value="{{.Item.Concept.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -50,10 +53,6 @@
 		<div class="form-group">
 			<label>PREVIZ</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="PrevizMov" class="form-control" value="{{.Item.Previz.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="PrevizUserNote" value="{{.Item.Previz.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -73,10 +72,6 @@
 		<div class="form-group">
 			<label>MODEL</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="ModelMov" class="form-control" value="{{.Item.Model.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="ModelUserNote" value="{{.Item.Model.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -95,10 +90,6 @@
 		<div class="form-group">
 			<label>MM</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="MmMov" class="form-control" value="{{.Item.Mm.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="MmUserNote" value="{{.Item.Mm.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -116,10 +107,6 @@
 		<div class="form-group">
 			<label>LAYOUT</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="LayoutMov" class="form-control" value="{{.Item.Layout.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="LayoutUserNote" value="{{.Item.Layout.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -137,10 +124,6 @@
 		<div class="form-group">
 			<label>ANI</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="AniMov" class="form-control" value="{{.Item.Ani.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="AniUserNote" value="{{.Item.Ani.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -158,10 +141,6 @@
 		<div class="form-group">
 			<label>FX</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="FxMov" class="form-control" value="{{.Item.Fx.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="FxUserNote" value="{{.Item.Fx.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -179,10 +158,6 @@
 		<div class="form-group">
 			<label>MG</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="MgMov" class="form-control" value="{{.Item.Mg.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="MgUserNote" value="{{.Item.Mg.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -201,10 +176,6 @@
 		<div class="form-group">
 			<label>{{if eq .Item.Type "asset"}}FURSIM{{else}}FUR{{end}}</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="FurMov" class="form-control" value="{{.Item.Fur.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="FurUserNote" value="{{.Item.Fur.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -223,10 +194,6 @@
 		<div class="form-group">
 			<label>{{if eq .Item.Type "asset"}}RIG{{else}}SIM{{end}}</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="SimMov" class="form-control" value="{{.Item.Sim.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="SimUserNote" value="{{.Item.Sim.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -245,10 +212,6 @@
 		<div class="form-group">
 			<label>CROWD</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="CrowdMov" class="form-control" value="{{.Item.Crowd.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="CrowdUserNote" value="{{.Item.Crowd.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -266,10 +229,6 @@
 		<div class="form-group">
 			<label>{{if eq .Item.Type "asset"}}LOOKDEV{{else}}LIGHT{{end}}</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="LightMov" class="form-control" value="{{.Item.Light.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="LightUserNote" value="{{.Item.Light.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -287,10 +246,6 @@
 		<div class="form-group">
 			<label>COMP</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="CompMov" class="form-control" value="{{.Item.Comp.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="CompUserNote" value="{{.Item.Comp.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -308,10 +263,6 @@
 		<div class="form-group">
 			<label>Matte</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="MatteMov" class="form-control" value="{{.Item.Matte.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="MatteUserNote" value="{{.Item.Matte.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -329,10 +280,6 @@
 		<div class="form-group">
 			<label>ENV</label>
 			<div class="row">
-				<div class="col-lg-5 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="EnvMov" class="form-control" value="{{.Item.Env.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="EnvUserNote" value="{{.Item.Env.UserNote}}" placeholder="Note">
 					<small class="form-text text-mute">Note</small>
@@ -351,10 +298,6 @@
 		<div class="form-group">
 			<label>{{if .Item.Temp1.Title}}{{.Item.Temp1.Title}}{{else}}TEMP1{{end}}</label>
 			<div class="row">
-				<div class="col-lg-3 col-sm-12 form-group">
-					<input type="text" maxlength="250" name="Temp1Mov" class="form-control" value="{{.Item.Temp1.Mov}}" ondrop="rmFileProtocol(event)">
-					<small class="form-text text-mute">MOV</small>
-				</div>
 				<div class="col-lg-3 col-sm-12 form-group">
 					<input type="text" class="form-control" name="Temp1Title" value="{{.Item.Temp1.Title}}" placeholder="Title">
 					<small class="form-text text-mute">임시 타이틀</small>
@@ -394,6 +337,7 @@
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 <script src="/assets/js/input.js"></script>
+<script src="/assets/js/dropzone.js"></script>
 </html>
 
 {{end}}

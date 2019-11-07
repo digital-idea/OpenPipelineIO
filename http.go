@@ -231,7 +231,6 @@ func webserver(port string) {
 	http.HandleFunc("/api/seqs", handleAPISeqs)
 	http.HandleFunc("/api/shots", handleAPIShots)
 	http.HandleFunc("/api/shot", handleAPIShot)
-	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	http.HandleFunc("/api/setundistortionsize", handleAPISetUnDistortionSize)
 	http.HandleFunc("/api/setrendersize", handleAPISetRenderSize)
@@ -283,7 +282,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
-	http.HandleFunc("/api/setmov", handleAPISetTaskMov)
+	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
 	http.HandleFunc("/api/settasklevel", handleAPISetTaskLevel)
 	http.HandleFunc("/api/setobjectid", handleAPISetObjectID)
@@ -317,6 +316,7 @@ func webserver(port string) {
 	http.HandleFunc("/edititem", handleEditItem)                // legacy
 	http.HandleFunc("/editeditem", handleEditedItem)            // legacy
 	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2) // legacy
+	http.HandleFunc("/api/setmov", handleAPISetTaskMov)         // legacy
 
 	// Web Cmd
 	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.

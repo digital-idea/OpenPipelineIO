@@ -770,11 +770,38 @@ function setRollmedia(project, name, rollmedia, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data);
             if (data.rollmedia === "") {
                 document.getElementById("button-onset-"+data.name).innerHTML = "";
             } else {
                 document.getElementById("button-onset-"+data.name).innerHTML = `<a href="/setellite?project=${project}&searchword=${data.rollmedia}" class="badge badge-done text-dark" target="_blink">onset</a>`;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setTaskMov(project, name, task, mov, userid, token) {
+    $.ajax({
+        url: "/api/settaskmov",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            mov: mov,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            if (data.mov === "") {
+                document.getElementById("button-task-comp-play-"+data.name).innerHTML = "";
+            } else {
+                document.getElementById("button-task-comp-play-"+data.name).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
             }
         },
         error: function(request,status,error){

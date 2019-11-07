@@ -1049,9 +1049,6 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
-	//DB업데이트
-	NewItem.updateMdate(&CurrentItem) //팀의 mov를 비교하고 달라졌다면 mov 업데이트 날짜를 변경한다.
 	err = setItem(session, project, NewItem)
 	if err != nil {
 		log.Println(err)
@@ -1092,7 +1089,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	}
 	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
 	NewItem := CurrentItem //과거값을 먼저 복사한다.
-	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
 
 	//model
 	NewItem.Model.UserNote = r.FormValue("ModelUserNote")
@@ -1101,12 +1097,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Model.Due = CurrentItem.Model.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	if *flagCompany == "digitalidea" {
-		// 모델링팀 일부는 ZBrush로 인해 윈도우즈를 사용한다.
-		NewItem.Model.Mov = dipath.Win2lin(r.FormValue("ModelMov"))
-	} else {
-		NewItem.Model.Mov = r.FormValue("ModelMov")
-	}
 	//mm
 	NewItem.Mm.UserNote = r.FormValue("MmUserNote")
 	NewItem.Mm.Startdate = ToFullTime(r.FormValue("MmStartdate"))
@@ -1114,7 +1104,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Mm.Due = CurrentItem.Mm.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Mm.Mov = r.FormValue("MmMov")
 	//layout
 	NewItem.Layout.UserNote = r.FormValue("LayoutUserNote")
 	NewItem.Layout.Startdate = ToFullTime(r.FormValue("LayoutStartdate"))
@@ -1122,7 +1111,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Layout.Due = CurrentItem.Layout.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Layout.Mov = r.FormValue("LayoutMov")
 	//ani
 	NewItem.Ani.UserNote = r.FormValue("AniUserNote")
 	NewItem.Ani.Startdate = ToFullTime(r.FormValue("AniStartdate"))
@@ -1130,7 +1118,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Ani.Due = CurrentItem.Ani.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Ani.Mov = r.FormValue("AniMov")
 	//fx
 	NewItem.Fx.UserNote = r.FormValue("FxUserNote")
 	NewItem.Fx.Startdate = ToFullTime(r.FormValue("FxStartdate"))
@@ -1138,19 +1125,12 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Fx.Due = CurrentItem.Fx.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Fx.Mov = r.FormValue("FxMov")
 	//mg
 	NewItem.Mg.UserNote = r.FormValue("MgUserNote")
 	NewItem.Mg.Startdate = ToFullTime(r.FormValue("MgStartdate"))
 	NewItem.Mg.Due, err = strconv.Atoi(r.FormValue("MgDue"))
 	if err != nil {
 		NewItem.Mg.Due = CurrentItem.Mg.Due //에러가 나면 과거값으로 놔둔다.
-	}
-	if *flagCompany == "digitalidea" {
-		// 모션그래픽팀은 에프터이펙트로 인해 윈도우즈를 사용한다.
-		NewItem.Mg.Mov = dipath.Win2lin(r.FormValue("MgMov"))
-	} else {
-		NewItem.Mg.Mov = r.FormValue("MgMov")
 	}
 
 	//temp1
@@ -1161,7 +1141,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Temp1.Due = CurrentItem.Temp1.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Temp1.Mov = r.FormValue("Temp1Mov")
 	//previz
 	NewItem.Previz.UserNote = r.FormValue("PrevizUserNote")
 	NewItem.Previz.Startdate = ToFullTime(r.FormValue("PrevizStartdate"))
@@ -1169,7 +1148,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Previz.Due = CurrentItem.Previz.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Previz.Mov = r.FormValue("PrevizMov")
 	//fur
 	NewItem.Fur.UserNote = r.FormValue("FurUserNote")
 	NewItem.Fur.Startdate = ToFullTime(r.FormValue("FurStartdate"))
@@ -1177,7 +1155,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Fur.Due = CurrentItem.Fur.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Fur.Mov = r.FormValue("FurMov")
 	//sim
 	NewItem.Sim.UserNote = r.FormValue("SimUserNote")
 	NewItem.Sim.Startdate = ToFullTime(r.FormValue("SimStartdate"))
@@ -1185,7 +1162,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Sim.Due = CurrentItem.Sim.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Sim.Mov = r.FormValue("SimMov")
 	//crowd
 	NewItem.Crowd.UserNote = r.FormValue("CrowdUserNote")
 	NewItem.Crowd.Startdate = ToFullTime(r.FormValue("CrowdStartdate"))
@@ -1193,7 +1169,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Crowd.Due = CurrentItem.Crowd.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Crowd.Mov = r.FormValue("CrowdMov")
 	//light
 	NewItem.Light.UserNote = r.FormValue("LightUserNote")
 	NewItem.Light.Startdate = ToFullTime(r.FormValue("LightStartdate"))
@@ -1201,7 +1176,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Light.Due = CurrentItem.Light.Due //에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Light.Mov = r.FormValue("LightMov")
 	//comp
 	NewItem.Comp.UserNote = r.FormValue("CompUserNote")
 	NewItem.Comp.Startdate = ToFullTime(r.FormValue("CompStartdate"))
@@ -1209,7 +1183,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Comp.Due = CurrentItem.Comp.Due // 에러가 나면 과거값으로 놔둔다.
 	}
-	NewItem.Comp.Mov = r.FormValue("CompMov")
 	//matte
 	NewItem.Matte.UserNote = r.FormValue("MatteUserNote")
 	NewItem.Matte.Startdate = ToFullTime(r.FormValue("MatteStartdate"))
@@ -1217,24 +1190,12 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		NewItem.Matte.Due = CurrentItem.Matte.Due // 에러가 나면 과거값으로 놔둔다.
 	}
-	if *flagCompany == "digitalidea" {
-		// 매트팀은 포토샵등의 툴로 인해 윈도우즈를 사용한다.
-		NewItem.Matte.Mov = dipath.Win2lin(r.FormValue("MatteMov"))
-	} else {
-		NewItem.Matte.Mov = r.FormValue("MatteMov")
-	}
 	//env
 	NewItem.Env.UserNote = r.FormValue("EnvUserNote")
 	NewItem.Env.Startdate = ToFullTime(r.FormValue("EnvStartdate"))
 	NewItem.Env.Due, err = strconv.Atoi(r.FormValue("EnvDue"))
 	if err != nil {
 		NewItem.Env.Due = CurrentItem.Env.Due // 에러가 나면 과거값으로 놔둔다.
-	}
-	if *flagCompany == "digitalidea" {
-		// 환경팀은 간혹 윈도우즈를 사용한다.
-		NewItem.Env.Mov = dipath.Win2lin(r.FormValue("EnvMov"))
-	} else {
-		NewItem.Env.Mov = r.FormValue("EnvMov")
 	}
 
 	file, fileHandler, fileErr := r.FormFile("Thumbnail")

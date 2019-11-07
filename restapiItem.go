@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/digital-idea/dilog"
+	"github.com/digital-idea/dipath"
 	"gopkg.in/mgo.v2"
 )
 
@@ -339,75 +340,102 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskMov 함수는 Task에 mov를 설정한다.
 func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Task    string `json:"task"`
+		Mov     string `json:"mov"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+	rcp.UserID, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var task string
-	var mov string
-	info := r.PostForm
-	for key, value := range info {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
 		switch key {
 		case "project":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			project = v
+			rcp.Project = v
 		case "name", "shot", "asset":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			name = v
+			rcp.Name = v
 		case "task":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			err = validTask(v)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%s\"}\n", err.Error())
+				http.Error(w, err.Error(), http.StatusBadRequest)
 			}
-			task = v
+			rcp.Task = v
 		case "mov": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
-			mov = strings.Join(value, ";")
+			rcp.Mov = strings.Join(values, ";")
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
 		default:
-			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, shot, asset, task, mov 키값만 사용가능합니다.)")
+			http.Error(w, key+"키는 사용할 수 없습니다.(project, shot, asset, task, mov 키값만 사용가능합니다.)", http.StatusBadRequest)
 			return
 		}
 	}
-	if mov == "" {
-		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "mov 키값을 설정해주세요.")
-		return
-	}
-	if *flagDebug {
-		fmt.Println(project, name, task, mov)
-	}
-	err = setTaskMov(session, project, name, task, mov)
+	rcp.Mov = dipath.Win2lin(rcp.Mov) // 내부적으로 모든 경로는 unix 경로를 사용한다.
+	err = setTaskMov(session, rcp.Project, rcp.Name, rcp.Task, rcp.Mov)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Setmov: %s %s", rcp.Task, rcp.Mov), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Setmov: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Mov, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIRenderSize 함수는 아이템에 RenderSize를 설정한다.
@@ -2076,12 +2104,11 @@ func handleAPISetBeforemov(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		case "path":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+			if len(values) != 1 {
+				rcp.Path = ""
+			} else {
+				rcp.Path = values[0]
 			}
-			rcp.Path = v
 		}
 	}
 	err = SetBeforemov(session, rcp.Project, rcp.Name, rcp.Path)
@@ -2165,12 +2192,11 @@ func handleAPISetAftermov(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		case "path":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+			if len(values) != 1 {
+				rcp.Path = ""
+			} else {
+				rcp.Path = values[0]
 			}
-			rcp.Path = v
 		}
 	}
 	err = SetAftermov(session, rcp.Project, rcp.Name, rcp.Path)
