@@ -986,6 +986,30 @@ function setTaskStartdate(project, name, task, date, userid, token) {
     });
 }
 
+function setTaskUserNote(project, name, task, usernote, userid, token) {
+    $.ajax({
+        url: "/api/settaskusernote",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            usernote: usernote,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setTaskDates(project, task, date, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {

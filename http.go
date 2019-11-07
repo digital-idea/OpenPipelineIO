@@ -252,7 +252,6 @@ func webserver(port string) {
 	http.HandleFunc("/api/setscanframe", handleAPISetScanFrame)
 	http.HandleFunc("/api/sethandlein", handleAPISetHandleIn)
 	http.HandleFunc("/api/sethandleout", handleAPISetHandleOut)
-	http.HandleFunc("/api/settaskstartdate", handleAPISetTaskStartdate)
 	http.HandleFunc("/api/settaskpredate", handleAPISetTaskPredate)
 	http.HandleFunc("/api/settaskdate", handleAPISetTaskDate)
 	http.HandleFunc("/api/settaskdue", handleAPISetTaskDue)
@@ -282,8 +281,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/items", handleAPIItems)
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setpredate", handleAPISetTaskPredate)
-	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate)
+	http.HandleFunc("/api/settaskstartdate", handleAPISetTaskStartdate)
 	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
+	http.HandleFunc("/api/settaskusernote", handleAPISetTaskUserNote)
 	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
 	http.HandleFunc("/api/settasklevel", handleAPISetTaskLevel)
 	http.HandleFunc("/api/setobjectid", handleAPISetObjectID)
@@ -300,27 +300,26 @@ func webserver(port string) {
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
-	http.HandleFunc("/search", handleSearch)                    // legacy
-	http.HandleFunc("/searchsubmit", handleSearchSubmit)        // legacy
-	http.HandleFunc("/edit", handleEdit)                        // legacy
-	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)  // legacy
-	http.HandleFunc("/api/addlink", handleAPIAddLink)           // legacy
-	http.HandleFunc("/api/rmlink", handleAPIRmLink)             // legacy
-	http.HandleFunc("/api/setlinks", handleAPISetLinks)         // legacy
-	http.HandleFunc("/api/addnote", handleAPIAddNote)           // legacy
-	http.HandleFunc("/api/rmnote", handleAPIRmNote)             // legacy
-	http.HandleFunc("/api/setnotes", handleAPISetNotes)         // legacy
-	http.HandleFunc("/api/setcomments", handleAPISetComments)   // legacy
-	http.HandleFunc("/tag/", handleTags)                        // legacy
-	http.HandleFunc("/assettags/", handleAssettags)             // legacy
-	http.HandleFunc("/ddline/", handleDdline)                   // legacy
-	http.HandleFunc("/edititem", handleEditItem)                // legacy
-	http.HandleFunc("/editeditem", handleEditedItem)            // legacy
-	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2) // legacy
-	http.HandleFunc("/api/setmov", handleAPISetTaskMov)         // legacy
-
-	// Web Cmd
-	http.HandleFunc("/cmd", handleCmd) // 리펙토링이 필요해보임.
+	http.HandleFunc("/search", handleSearch)                        // legacy
+	http.HandleFunc("/searchsubmit", handleSearchSubmit)            // legacy
+	http.HandleFunc("/edit", handleEdit)                            // legacy
+	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)      // legacy
+	http.HandleFunc("/api/addlink", handleAPIAddLink)               // legacy
+	http.HandleFunc("/api/rmlink", handleAPIRmLink)                 // legacy
+	http.HandleFunc("/api/setlinks", handleAPISetLinks)             // legacy
+	http.HandleFunc("/api/addnote", handleAPIAddNote)               // legacy
+	http.HandleFunc("/api/rmnote", handleAPIRmNote)                 // legacy
+	http.HandleFunc("/api/setnotes", handleAPISetNotes)             // legacy
+	http.HandleFunc("/api/setcomments", handleAPISetComments)       // legacy
+	http.HandleFunc("/tag/", handleTags)                            // legacy
+	http.HandleFunc("/assettags/", handleAssettags)                 // legacy
+	http.HandleFunc("/ddline/", handleDdline)                       // legacy
+	http.HandleFunc("/edititem", handleEditItem)                    // legacy
+	http.HandleFunc("/editeditem", handleEditedItem)                // legacy
+	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2)     // legacy
+	http.HandleFunc("/api/setmov", handleAPISetTaskMov)             // legacy
+	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate) // legacy
+	http.HandleFunc("/cmd", handleCmd)                              // legacy
 
 	if port == ":443" || port == ":8443" { // https ports
 		err := http.ListenAndServeTLS(port, *flagCertFullchanin, *flagCertPrivkey, nil)

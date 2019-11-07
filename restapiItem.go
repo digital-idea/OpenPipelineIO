@@ -2712,6 +2712,102 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetTaskUserNote 함수는 아이템의 task에 대한 시작일을 설정한다.
+func handleAPISetTaskUserNote(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		Task     string `json:"task"`
+		UserNote string `json:"usernote"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Name = v
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
+		case "task":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Task = v
+		case "note", "usernote":
+			if len(values) != 1 {
+				rcp.UserNote = ""
+			} else {
+				rcp.UserNote = values[0]
+			}
+		}
+	}
+	err = SetTaskUserNote(session, rcp.Project, rcp.Name, rcp.Task, rcp.UserNote)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task UserNote: %s", rcp.Task, rcp.UserNote), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task UserNote: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.UserNote, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetDeadline2D 함수는 아이템의 2D 마감일을 설정한다.
 func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
