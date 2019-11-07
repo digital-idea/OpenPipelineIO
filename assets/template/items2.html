@@ -101,17 +101,61 @@
 				<input type="hidden" class="form-control" id="edittask-name">
 				<input type="hidden" class="form-control" id="edittask-userid">
 				<div class="form-group">
-					<div class="form-group">
-						<label for="multi-input-title" class="col-form-label">Task:</label>
-						<input type="text" class="form-control" id="edittask-task" disabled>
+					<div class="row">
+						<div class="col-6 form-group">
+							<label class="col-form-label col-form-label-sm">Task:</label>
+							<input type="text" class="form-control form-control-sm" id="edittask-task" disabled>
+						</div>
+						<div class="col-6 form-group">
+							<label class="col-form-label col-form-label-sm">Status</label>
+							<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, '{{$.User.Token}}')">
+								<option value="omit">Omit</option>
+								<option value="confirm">Confirm</option>
+								<option value="wip">Wip</option>
+								<option value="ready">Ready</option>
+								<option value="assign">Assign</option>
+								<option value="done">Done</option>
+								<option value="hold">Hold</option>
+								<option value="none">None</option>
+							</select>
+						</div>
 					</div>
+					
 					<div class="form-group">
 						<label for="multi-input-link" class="col-form-label">Mov Path:</label>
-						<input type="text" class="form-control" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
 					</div>
+					<div class="row">
+						<div class="col-6 form-group">
+							<label class="col-form-label col-form-label-sm">시작일</label>
+							<input type=date class="form-control form-control-sm" id="edittask-startdate" value="" onchange="setTaskStart('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+						</div>
+						<div class="col-3 form-group">
+							<label class="col-form-label col-form-label-sm">작업예상일</label>
+							<input type="number" step="1" class="form-control form-control-sm" id="edittask-due" onchange="setTaskDue('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						</div>
+						<div class="col-3 form-group">
+							<label class="col-form-label col-form-label-sm">Level</label>
+							<input type="number" min="0" max="5" step="1" class="form-control form-control-sm" id="edittask-level" onchange="setTaskLevel('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6 form-group">
+							<label class="col-form-label col-form-label-sm">1차마감</label>
+							<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+						</div>
+						<div class="col-6 form-group">
+							<label class="col-form-label col-form-label-sm">2차마감</label>
+							<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+						</div>
+					</div>
+					
+					
+					
 					<div class="form-group">
-						<label for="multi-input-link" class="col-form-label">작업예상일:</label>
-						<input type="number" step="1" class="form-control" id="edittask-due" onchange="setTaskDue('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						<label for="multi-input-link" class="col-form-label">Note:</label>
+						<input type="text" id="edittask-note" class="form-control form-control-sm" value="" placeholder="Note">
+						<small class="form-text text-mute">Task 작업노트</small>
 					</div>
 				</div>
 			</div>			
@@ -917,7 +961,7 @@
 					{{end}}
 				</div>
 				<div id="button-editold-{{.Name}}">
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E(old)</a>
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Thumb</a>
 				</div>
 				<div id="button-edit-{{.Name}}">
 					<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" 
