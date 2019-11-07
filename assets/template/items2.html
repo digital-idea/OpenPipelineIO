@@ -149,11 +149,8 @@
 							<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 						</div>
 					</div>
-					
-					
-					
 					<div class="form-group">
-						<label for="multi-input-link" class="col-form-label">Note:</label>
+						<label for="multi-input-link" class="col-form-label col-form-label-sm">Note:</label>
 						<input type="text" id="edittask-note" class="form-control form-control-sm" value="" placeholder="Note">
 						<small class="form-text text-mute">Task 작업노트</small>
 					</div>
@@ -1303,7 +1300,16 @@
 						{{end}}
 					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Comp.Due}}' );setModal('edittask-task', 'comp' );setModal('edittask-path', '{{.Comp.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{.Comp.Startdate}}');
+							setModal('edittask-due', '{{.Comp.Due}}');
+							setModal('edittask-level', '{{.Comp.Level}}');
+							setModal('edittask-predate', '{{.Comp.Predate}}');
+							setModal('edittask-date', '{{.Comp.date}}');
+							setModal('edittask-task', 'comp' );
+							setModal('edittask-path', '{{.Comp.Mov}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
