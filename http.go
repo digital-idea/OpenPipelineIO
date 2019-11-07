@@ -239,6 +239,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcamerapubtask", handleAPISetCameraPubTask)
 	http.HandleFunc("/api/setcameraprojection", handleAPISetCameraProjection)
 	http.HandleFunc("/api/setthummov", handleAPISetThummov)
+	http.HandleFunc("/api/setbeforemov", handleAPISetBeforemov)
+	http.HandleFunc("/api/setaftermov", handleAPISetAftermov)
 	http.HandleFunc("/api/settaskstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setassigntask", handleAPISetAssignTask)
 	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)

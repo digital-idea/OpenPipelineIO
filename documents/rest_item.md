@@ -29,7 +29,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" http://192.168.31.172/api/settaskdate` |
 | /api/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" http://192.168.31.172/api/settaskmov` |
 | /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&shottype=3d" http://192.168.0.11/api/setshottype` |
-| /api/setthummov | 썸네일mov변경 | project, name, path | `$ curl -d "project=TEMP&name=SS_0030&path=/show/test.mov" http://192.168.0.11/api/setthummov` |
+| /api/setthummov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" http://192.168.0.11/api/setthummov` |
+| /api/setbeforemov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/before.mov" http://192.168.0.11/api/setbeforemov` |
+| /api/setaftermov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/after.mov" http://192.168.0.11/api/setaftermov` |
 | /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" http://192.168.0.11/api/setassettype` |
 | /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -d "project=TEMP&name=SS_0010&outputname=S101_010_010" http://192.168.31.172/api/setoutputname` |
 | /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -d "project=TEMP&name=SS_0010&rnum=A0001" http://192.168.31.172/api/setrnum` |

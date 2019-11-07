@@ -1398,7 +1398,45 @@ func SetThummov(session *mgo.Session, project, name, path string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"thummov": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetBeforemov 함수는 item에 Before mov값을 셋팅한다.
+func SetBeforemov(session *mgo.Session, project, name, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"beforemov": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetAftermov 함수는 item에 After mov값을 셋팅한다.
+func SetAftermov(session *mgo.Session, project, name, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"aftermov": path, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1971,10 +2009,7 @@ func SetRetimePlate(session *mgo.Session, project, name, retimeplate string) err
 		return err
 	}
 	if typ == "asset" {
-		return fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
-	}
-	if retimeplate == "" {
-		return errors.New("outputname 이 빈 문자열 입니다")
+		return fmt.Errorf("%s 는 %s type 입니다. retime plate를 설정할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
 	c := session.DB("project").C(project)

@@ -631,6 +631,103 @@ function rmSource(project, name, title, userid, token) {
     }
 }
 
+function setThummov(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setthummov",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="play">▶</a>`;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setBeforemov(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setbeforemov",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setAftermov(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setaftermov",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+
+function setRetimeplate(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setretimeplate",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
+            if (data.path === "") {
+                document.getElementById("button-retime-"+data.name).innerHTML = "";
+            } else {
+                document.getElementById("button-retime-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="badge badge-danger">R</a>`;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
 
 function setTaskUser(project, name, task, user, token) {
     $.ajax({

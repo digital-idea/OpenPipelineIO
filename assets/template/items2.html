@@ -524,24 +524,24 @@
 			<input type="hidden" class="form-control" id="iteminfo-userid">
 			<div class="form-group">
 				<label>Thumbnail MOV</label>
-				<input type="text" size="55" maxlength="256" id="thummov" value="" class="form-control">
+				<input type="text" size="55" maxlength="256" id="iteminfo-thummov" value="" class="form-control" onchange="setThummov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
 			</div>
 				
 			<div class="form-group">
 				<label>앞쪽 연결 MOV</label>
-				<input type="text" size="55" maxlength="256" id="beforemov" value="" class="form-control">
+				<input type="text" size="55" maxlength="256" id="iteminfo-beforemov" value="" class="form-control" onchange="setBeforemov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
 			</div>
 
 			<div class="form-group">
 				<label>뒤쪽 연결 MOV</label>
-				<input type="text" size="55" maxlength="256" id="aftermov" value="" class="form-control">
+				<input type="text" size="55" maxlength="256" id="iteminfo-aftermov" value="" class="form-control" onchange="setAftermov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
 			</div>
 			<div class="form-group">
 				<label>리타임 플레이트 위치</label>
-				<input type="text" size="55" maxlength="256" id="retimeplate" value="" class="form-control">
+				<input type="text" size="55" maxlength="256" id="iteminfo-retimeplate" value="" class="form-control" onchange="setRetimeplate('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
 			</div>
 			<div class="form-group">
@@ -797,7 +797,7 @@
 				<div class="centered-left"></div>
 				<div class="centered-right">
 					<!--Retime-->
-					<div class="row">
+					<div class="row" id="button-retime-{{.Name}}">
 						{{if .Retimeplate}}
 							<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
 						{{end}}
@@ -867,29 +867,43 @@
 			</div>
 		</div>
 
-		
 		<div class="row">
-			<div class="mx-auto pt-1">
-				{{if .Updatetime|CheckUpdate}}
-					<span class="badge badge-warning">UPDATE {{ToHumantime .Updatetime}}</span>
-				{{end}}
-				
-				{{if .Thummov}}
-					<a href="dilink://{{.Thummov}}">
-				{{else}}
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov">
-				{{end}}
-					<span class="play">▶</span>
-				</a>
-				
-				<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E(old)</a>
-				<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" onclick="setModal('iteminfo-name', '{{.Name}}');setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
-				{{if eq .Type "asset" -}}	
-					<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
-				{{- else -}}
-					<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
-				{{- end}}
-				<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
+			<div class="mx-auto pt-1 row">
+				<div id="update-{{.Name}}">
+					{{if .Updatetime|CheckUpdate}}
+						<span class="badge badge-warning ml-1 mr-1">UPDATE {{ToHumantime .Updatetime}}</span>
+					{{end}}
+				</div>
+				<div id="button-thumbplay-{{.Name}}">
+					{{if .Thummov}}
+						<a href="dilink://{{.Thummov}}" class="play">▶</a>
+					{{else}}
+						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov" class="play">▶</a>
+					{{end}}
+				</div>
+				<div id="button-editold-{{.Name}}">
+					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-danger ml-1">E(old)</a>
+				</div>
+				<div id="button-edit-{{.Name}}">
+					<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" 
+					onclick="
+					setModal('iteminfo-thummov', '{{.Thummov}}');
+					setModal('iteminfo-beforemov', '{{.Beforemov}}');
+					setModal('iteminfo-aftermov', '{{.Aftermov}}');
+					setModal('iteminfo-retimeplate', '{{.Retimeplate}}');
+					setModal('iteminfo-name', '{{.Name}}');
+					setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
+				</div>
+				<div id="button-dir-{{.Name}}">
+					{{if eq .Type "asset" -}}	
+						<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+					{{- else -}}
+						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+					{{- end}}
+				</div>
+				<div id="button-log-{{.Name}}">
+					<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
+				</div>
 			</div>
 		</div>
 	</div>
