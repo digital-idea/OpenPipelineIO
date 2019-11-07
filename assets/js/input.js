@@ -716,12 +716,61 @@ function setRetimeplate(project, name, path, userid, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data);
             if (data.path === "") {
                 document.getElementById("button-retime-"+data.name).innerHTML = "";
             } else {
                 document.getElementById("button-retime-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="badge badge-danger">R</a>`;
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setOCIOcc(project, name, path, userid, token) {
+    $.ajax({
+        url: "/api/setociocc",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            if (data.path === "") {
+                document.getElementById("button-ociocc-"+data.name).innerHTML = "";
+            } else {
+                document.getElementById("button-ociocc-"+data.name).innerHTML = `<span class="badge badge-info mt-1">N</span>`;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setRollmedia(project, name, rollmedia, userid, token) {
+    $.ajax({
+        url: "/api/setrollmedia",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            rollmedia: rollmedia,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

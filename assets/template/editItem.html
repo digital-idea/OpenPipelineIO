@@ -18,19 +18,6 @@
 			<small class="form-text text-muted">Thumbnail 이미지를 업데이트 합니다.</small>
 		</div>
 
-		<div class="form-group">
-			<label>현장툴 Rollmedia</label>
-			<input type="text" maxlength="13" name="Rollmedia" value="{{.Item.Rollmedia}}" class="form-control">
-			<small class="form-text text-muted">Setellite에서 사용한 Rollmedia를 입력해주세요.</small>
-		</div>
-		
-		{{if eq .Item.Type "org" "left"}}
-			<div class="form-group">
-				<label>OCIOcc</label>
-				<input type="text" size="55" name="OCIOcc" value="{{.Item.OCIOcc}}" class="form-control">
-				<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
-			</div>
-		{{end}}
 		{{if eq .Item.Type "asset"}}
 			<div class="form-group">
 				<label>에셋태그</label>

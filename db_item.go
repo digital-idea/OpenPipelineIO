@@ -2020,6 +2020,49 @@ func SetRetimePlate(session *mgo.Session, project, name, retimeplate string) err
 	return nil
 }
 
+// SetOCIOcc 함수는 item에 OCIO .cc를 셋팅한다.
+func SetOCIOcc(session *mgo.Session, project, name, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	if typ == "asset" {
+		return fmt.Errorf("%s 는 %s type 입니다. 설정할 수 없습니다", name, typ)
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ociocc": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetRollmedia 함수는 item에 Setellite Rollmedia를 셋팅한다.
+func SetRollmedia(session *mgo.Session, project, name, rollmedia string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"rollmedia": rollmedia, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetRnum 함수는 샷에 롤넘버를 설정한다.
 func SetRnum(session *mgo.Session, project, name, rnum string) error {
 	session.SetMode(mgo.Monotonic, true)

@@ -546,12 +546,12 @@
 			</div>
 			<div class="form-group">
 				<label>OCIOcc</label>
-				<input type="text" size="55" id="ociocc" value="" class="form-control">
+				<input type="text" size="55" id="iteminfo-ociocc" value="" class="form-control" onchange="setOCIOcc('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
 			</div>
 			<div class="form-group">
 				<label>현장툴 Rollmedia</label>
-				<input type="text" maxlength="13" id="rollmedia" value="" class="form-control">
+				<input type="text" maxlength="13" id="iteminfo-rollmedia" value="" class="form-control" onchange="setRollmedia('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
 				<small class="form-text text-muted">Setellite에서 사용한 Rollmedia 값을 입력해주세요.</small>
 			</div>
 		</div>
@@ -803,13 +803,13 @@
 						{{end}}
 					</div>
 					<!--Just Mark-->
-					<div class="row">
+					<div class="row" id="button-just-{{.Name}}">
 						{{if and .JustIn .JustOut}}
 							<span class="badge badge-warning mt-1">J</span>
 						{{end}}
 					</div>
 					<!--OCIOcc-->
-					<div class="row">
+					<div class="row" id="button-ociocc-{{.Name}}">
 						{{if .OCIOcc}}
 							<span class="badge badge-info mt-1">N</span>
 						{{end}}
@@ -891,6 +891,8 @@
 					setModal('iteminfo-beforemov', '{{.Beforemov}}');
 					setModal('iteminfo-aftermov', '{{.Aftermov}}');
 					setModal('iteminfo-retimeplate', '{{.Retimeplate}}');
+					setModal('iteminfo-ociocc', '{{.OCIOcc}}');
+					setModal('iteminfo-rollmedia', '{{.Rollmedia}}');
 					setModal('iteminfo-name', '{{.Name}}');
 					setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
 				</div>

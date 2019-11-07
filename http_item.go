@@ -1092,10 +1092,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	}
 	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
 	NewItem := CurrentItem //과거값을 먼저 복사한다.
-	NewItem.Rollmedia = r.FormValue("Rollmedia")
-	if CurrentItem.Type == "org" || CurrentItem.Type == "left" { // 일반상황과 입체상황을 체크한다.
-		NewItem.OCIOcc = r.FormValue("OCIOcc")
-	}
 	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
 
 	//model
