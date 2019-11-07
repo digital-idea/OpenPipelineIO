@@ -914,12 +914,13 @@
 	<!--Task-->
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		<div class="ml-1 mb-3">
-			{{if .Rollmedia}}
-				<!--onset Setellite-->
-				<div class="row">
+			
+			<!--onset Setellite-->
+			<div class="row" id="button-onset-{{.Name}}">
+				{{if .Rollmedia}}
 					<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="badge badge-done text-dark" target="_blink">onset</a>
-				</div>
-			{{end}}
+				{{end}}
+			</div>
 			
 			<!--concept-->
 			{{if eq .Concept.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}

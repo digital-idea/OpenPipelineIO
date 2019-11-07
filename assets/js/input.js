@@ -771,6 +771,11 @@ function setRollmedia(project, name, rollmedia, userid, token) {
         dataType: "json",
         success: function(data) {
             console.info(data);
+            if (data.rollmedia === "") {
+                document.getElementById("button-onset-"+data.name).innerHTML = "";
+            } else {
+                document.getElementById("button-onset-"+data.name).innerHTML = `<a href="/setellite?project=${project}&searchword=${data.rollmedia}" class="badge badge-done text-dark" target="_blink">onset</a>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
