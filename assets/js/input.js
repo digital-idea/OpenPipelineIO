@@ -953,7 +953,7 @@ function setTaskStatus(project, name, task, status, userid, token) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.info(data)
+                    document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -976,7 +976,7 @@ function setTaskStatus(project, name, task, status, userid, token) {
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
