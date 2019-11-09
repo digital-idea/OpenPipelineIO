@@ -132,7 +132,7 @@
 					<div class="row">
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">시작일</label>
-							<input type=date class="form-control form-control-sm" id="edittask-startdate" value="" onchange="setTaskStartdate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+							<input type=date class="form-control form-control-sm" id="edittask-startdate" value="" onchange="setTaskStartdate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
 						</div>
 						<div class="col-3 form-group">
 							<label class="col-form-label col-form-label-sm">작업예상일</label>
