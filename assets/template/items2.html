@@ -109,6 +109,7 @@
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">Status</label>
 							<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, '{{$.User.Token}}')">
+								<option value="">변경없음</option>
 								<option value="omit">Omit</option>
 								<option value="confirm">Confirm</option>
 								<option value="wip">Wip</option>
@@ -120,7 +121,10 @@
 							</select>
 						</div>
 					</div>
-					
+					<div class="form-group">
+						<label for="multi-input-link" class="col-form-label">User:</label>
+						<input type="text" class="form-control form-control-sm" id="edittask-user" onchange="setTaskUser('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+					</div>
 					<div class="form-group">
 						<label for="multi-input-link" class="col-form-label">Mov Path:</label>
 						<input type="text" class="form-control form-control-sm" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
@@ -1008,16 +1012,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>concept</a>
-					{{if .Concept.Predate}}
+					<div id="{{.Name}}-task-concept-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Concept.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Concept.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Concept.User }}</span>
-					{{if .Concept.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-concept-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Concept.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-concept-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Concept.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-concept-playbutton">
+						{{if .Concept.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Concept.Due}}' );setModal('edittask-task', 'concept' );setModal('edittask-path', '{{.Concept.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Concept.Startdate}}');
+							setModal('edittask-due', '{{.Concept.Due}}');
+							setModal('edittask-level', '{{.Concept.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Concept.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Concept.Date}}');
+							setModal('edittask-task', 'concept' );
+							setModal('edittask-path', '{{.Concept.Mov}}' );
+							setModal('edittask-usernote', '{{.Concept.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Concept.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1032,16 +1053,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>model</a>
-					{{if .Model.Predate}}
+					<div id="{{.Name}}-task-model-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Model.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Model.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Model.User }}</span>
-					{{if .Model.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-model-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Model.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-model-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Model.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-model-playbutton">
+						{{if .Model.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Model.Due}}' );setModal('edittask-task', 'model' );setModal('edittask-path', '{{.Model.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Model.Startdate}}');
+							setModal('edittask-due', '{{.Model.Due}}');
+							setModal('edittask-level', '{{.Model.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Model.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Model.Date}}');
+							setModal('edittask-task', 'model' );
+							setModal('edittask-path', '{{.Model.Mov}}' );
+							setModal('edittask-usernote', '{{.Model.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Model.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1052,16 +1090,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mm.Status}}"
 					href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>mm</a>
-					{{if .Mm.Predate}}
+					<div id="{{.Name}}-task-mm-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mm.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mm.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Mm.User }}</span>
-					{{if .Mm.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-mm-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mm.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-mm-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Mm.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-mm-playbutton">
+						{{if .Mm.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Mm.Due}}' );setModal('edittask-task', 'mm' );setModal('edittask-path', '{{.Mm.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Mm.Startdate}}');
+							setModal('edittask-due', '{{.Mm.Due}}');
+							setModal('edittask-level', '{{.Mm.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Mm.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Mm.Date}}');
+							setModal('edittask-task', 'mm' );
+							setModal('edittask-path', '{{.Mm.Mov}}' );
+							setModal('edittask-usernote', '{{.Mm.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Mm.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1072,16 +1127,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Layout.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>layout</a>
-					{{if .Layout.Predate}}
+					<div id="{{.Name}}-task-layout-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Layout.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Layout.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Layout.User }}</span>
-					{{if .Layout.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-layout-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Layout.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-layout-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Layout.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-layout-playbutton">
+						{{if .Layout.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Layout.Due}}' );setModal('edittask-task', 'layout' );setModal('edittask-path', '{{.Layout.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Layout.Startdate}}');
+							setModal('edittask-due', '{{.Layout.Due}}');
+							setModal('edittask-level', '{{.Layout.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Layout.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Layout.Date}}');
+							setModal('edittask-task', 'layout' );
+							setModal('edittask-path', '{{.Layout.Mov}}' );
+							setModal('edittask-usernote', '{{.Layout.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Layout.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1096,16 +1168,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>ani</a>
-					{{if .Ani.Predate}}
+					<div id="{{.Name}}-task-ani-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Ani.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Ani.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Ani.User }}</span>
-					{{if .Ani.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-ani-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Ani.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-ani-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Ani.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-ani-playbutton">
+						{{if .Ani.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Ani.Due}}' );setModal('edittask-task', 'ani' );setModal('edittask-path', '{{.Ani.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Ani.Startdate}}');
+							setModal('edittask-due', '{{.Ani.Due}}');
+							setModal('edittask-level', '{{.Ani.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Ani.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Ani.Date}}');
+							setModal('edittask-task', 'ani' );
+							setModal('edittask-path', '{{.Ani.Mov}}' );
+							setModal('edittask-usernote', '{{.Ani.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Ani.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1115,36 +1204,70 @@
 					<a class="mt-1 badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fx.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>fx</a>
-					{{if .Fx.Predate}}
+					<div id="{{.Name}}-task-fx-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fx.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fx.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Fx.User }}</span>
-					{{if .Fx.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-fx-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fx.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-fx-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Fx.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-fx-playbutton">
+						{{if .Fx.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Fx.Due}}' );setModal('edittask-task', 'fx' );setModal('edittask-path', '{{.Fx.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Fx.Startdate}}');
+							setModal('edittask-due', '{{.Fx.Due}}');
+							setModal('edittask-level', '{{.Fx.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Fx.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Fx.Date}}');
+							setModal('edittask-task', 'fx' );
+							setModal('edittask-path', '{{.Fx.Mov}}' );
+							setModal('edittask-usernote', '{{.Fx.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Fx.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
 
-			<!--motion-->
+			<!--mg: motion-->
 			{{if eq .Mg.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row">
 					<a class="mt-1 badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mg.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>motion</a>
-					{{if .Mg.Predate}}
+					<div id="{{.Name}}-task-mg-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mg.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mg.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Mg.User }}</span>
-					{{if .Mg.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-mg-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Mg.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-mg-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Mg.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-mg-playbutton">
+						{{if .Mg.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Mg.Due}}' );setModal('edittask-task', 'mg' );setModal('edittask-path', '{{.Mg.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Mg.Startdate}}');
+							setModal('edittask-due', '{{.Mg.Due}}');
+							setModal('edittask-level', '{{.Mg.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Mg.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Mg.Date}}');
+							setModal('edittask-task', 'mg' );
+							setModal('edittask-path', '{{.Mg.Mov}}' );
+							setModal('edittask-usernote', '{{.Mg.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Mg.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1155,16 +1278,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Temp1.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</a>
-					{{if .Temp1.Predate}}
+					<div id="{{.Name}}-task-temp1-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Temp1.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Temp1.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Temp1.User }}</span>
-					{{if .Temp1.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-temp1-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Temp1.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-temp1-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Temp1.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-temp1-playbutton">
+						{{if .Temp1.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Temp1.Due}}' );setModal('edittask-task', 'temp1' );setModal('edittask-path', '{{.Temp1.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Temp1.Startdate}}');
+							setModal('edittask-due', '{{.Temp1.Due}}');
+							setModal('edittask-level', '{{.Temp1.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Temp1.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Temp1.Date}}');
+							setModal('edittask-task', 'temp1' );
+							setModal('edittask-path', '{{.Temp1.Mov}}' );
+							setModal('edittask-usernote', '{{.Temp1.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Temp1.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1175,16 +1315,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Previz.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>previz</a>
-					{{if .Previz.Predate}}
+					<div id="{{.Name}}-task-previz-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Previz.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Previz.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Previz.User }}</span>
-					{{if .Previz.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-previz-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Previz.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-previz-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Previz.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-previz-playbutton">
+						{{if .Previz.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Previz.Due}}' );setModal('edittask-task', 'previz' );setModal('edittask-path', '{{.Previz.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Previz.Startdate}}');
+							setModal('edittask-due', '{{.Previz.Due}}');
+							setModal('edittask-level', '{{.Previz.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Previz.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Previz.Date}}');
+							setModal('edittask-task', 'previz' );
+							setModal('edittask-path', '{{.Previz.Mov}}' );
+							setModal('edittask-usernote', '{{.Previz.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Previz.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1198,16 +1355,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>fur</a>
-					{{if .Fur.Predate}}
+					<div id="{{.Name}}-task-fur-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fur.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fur.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Fur.User }}</span>
-					{{if .Fur.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-fur-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Fur.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-fur-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Fur.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-fur-playbutton">
+						{{if .Fur.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Fur.Due}}' );setModal('edittask-task', 'fur' );setModal('edittask-path', '{{.Fur.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Fur.Startdate}}');
+							setModal('edittask-due', '{{.Fur.Due}}');
+							setModal('edittask-level', '{{.Fur.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Fur.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Fur.Date}}');
+							setModal('edittask-task', 'fur' );
+							setModal('edittask-path', '{{.Fur.Mov}}' );
+							setModal('edittask-usernote', '{{.Fur.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Fur.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1221,16 +1395,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>sim</a>
-					{{if .Sim.Predate}}
+					<div id="{{.Name}}-task-sim-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Sim.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Sim.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Sim.User }}</span>
-					{{if .Sim.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-sim-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Sim.Date}}</span>	
+					</div>
+					<div id="{{.Name}}-task-sim-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Sim.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-sim-playbutton">
+						{{if .Sim.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Sim.Due}}' );setModal('edittask-task', 'sim' );setModal('edittask-path', '{{.Sim.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Sim.Startdate}}');
+							setModal('edittask-due', '{{.Sim.Due}}');
+							setModal('edittask-level', '{{.Sim.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Sim.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Sim.Date}}');
+							setModal('edittask-task', 'sim' );
+							setModal('edittask-path', '{{.Sim.Mov}}' );
+							setModal('edittask-usernote', '{{.Sim.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Sim.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1241,16 +1432,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Crowd.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>crowd</a>
-					{{if .Crowd.Predate}}
+					<div id="{{.Name}}-task-crowd-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Crowd.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Crowd.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Crowd.User }}</span>
-					{{if .Crowd.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-crowd-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Crowd.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-crowd-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Crowd.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-crowd-playbutton">
+						{{if .Crowd.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Crowd.Due}}' );setModal('edittask-task', 'crowd' );setModal('edittask-path', '{{.Crowd.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Crowd.Startdate}}');
+							setModal('edittask-due', '{{.Crowd.Due}}');
+							setModal('edittask-level', '{{.Crowd.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Crowd.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Crowd.Date}}');
+							setModal('edittask-task', 'crowd' );
+							setModal('edittask-path', '{{.Crowd.Mov}}' );
+							setModal('edittask-usernote', '{{.Crowd.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Crowd.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1265,16 +1473,33 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>{{if eq .Type "asset"}}look{{else}}light{{end}}</a>
-					{{if .Light.Predate}}
+					<div id="{{.Name}}-task-light-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Light.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Light.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Light.User }}</span>
-					{{if .Light.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-light-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Light.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-light-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Light.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-light-playbutton">
+						{{if .Light.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Light.Due}}' );setModal('edittask-task', 'light' );setModal('edittask-path', '{{.Light.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Light.Startdate}}');
+							setModal('edittask-due', '{{.Light.Due}}');
+							setModal('edittask-level', '{{.Light.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Light.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Light.Date}}');
+							setModal('edittask-task', 'light' );
+							setModal('edittask-path', '{{.Light.Mov}}' );
+							setModal('edittask-usernote', '{{.Light.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Light.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1289,12 +1514,16 @@
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					{{end}}
 					>comp</a>
-					{{if .Comp.Predate}}
+					<div id="{{.Name}}-task-comp-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Comp.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Comp.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Comp.User }}</span>
-					<div id="button-task-comp-play-{{.Name}}">
+					</div>
+					<div id="{{.Name}}-task-comp-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Comp.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-comp-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Comp.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-comp-playbutton">
 						{{if .Comp.Mov }}
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
@@ -1310,6 +1539,7 @@
 							setModal('edittask-path', '{{.Comp.Mov}}' );
 							setModal('edittask-usernote', '{{.Comp.UserNote}}' );
 							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Comp.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
@@ -1321,16 +1551,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Matte.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>matte</a>
-					{{if .Matte.Predate}}
+					<div id="{{.Name}}-task-matte-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Matte.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Matte.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Matte.User }}</span>
-					{{if .Matte.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-matte-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Matte.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-matte-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Matte.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-matte-playbutton">
+						{{if .Matte.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Matte.Due}}' );setModal('edittask-task', 'matte' );setModal('edittask-path', '{{.Matte.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Matte.Startdate}}');
+							setModal('edittask-due', '{{.Matte.Due}}');
+							setModal('edittask-level', '{{.Matte.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Matte.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Matte.Date}}');
+							setModal('edittask-task', 'matte' );
+							setModal('edittask-path', '{{.Matte.Mov}}' );
+							setModal('edittask-usernote', '{{.Matte.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Matte.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}
@@ -1341,16 +1588,33 @@
 					<a class="mt-1 badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Env.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
 					>env</a>
-					{{if .Env.Predate}}
+					<div id="{{.Name}}-task-env-predate">
 						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Env.Predate}}</span>
-					{{end}}
-					<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Env.Date}}</span>
-					<span class="mt-1 ml-1 badge badge-light">{{ .Env.User }}</span>
-					{{if .Env.Mov }}
-						<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
-					{{end}}
+					</div>
+					<div id="{{.Name}}-task-env-date">
+						<span class="mt-1 ml-1 badge badge-light">{{ToShortTime .Env.Date}}</span>
+					</div>
+					<div id="{{.Name}}-task-env-user">
+						<span class="mt-1 ml-1 badge badge-light">{{ .Env.User }}</span>
+					</div>
+					<div id="{{.Name}}-task-env-playbutton">
+						{{if .Env.Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
+						{{end}}
+					</div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="setModal('edittask-due', '{{.Env.Due}}' );setModal('edittask-task', 'env' );setModal('edittask-path', '{{.Env.Mov}}' );setModal('edittask-name', '{{.Name}}');setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '{{ToNormalTime .Env.Startdate}}');
+							setModal('edittask-due', '{{.Env.Due}}');
+							setModal('edittask-level', '{{.Env.TaskLevel}}');
+							setModal('edittask-predate', '{{ToNormalTime .Env.Predate}}');
+							setModal('edittask-date', '{{ToNormalTime .Env.Date}}');
+							setModal('edittask-task', 'env' );
+							setModal('edittask-path', '{{.Env.Mov}}' );
+							setModal('edittask-usernote', '{{.Env.UserNote}}' );
+							setModal('edittask-name', '{{.Name}}');
+							setModal('edittask-user', '{{.Env.User}}');
+							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
 				</div>
 			{{end}}

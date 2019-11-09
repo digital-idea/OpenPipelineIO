@@ -2997,12 +2997,13 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		Date    string `json:"date"`
-		Task    string `json:"task"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		Date      string `json:"date"`
+		ShortDate string `json:"shortdate"`
+		Task      string `json:"task"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -3081,6 +3082,7 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
+	rcp.ShortDate = ToShortTime(rcp.Date)
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
@@ -3094,12 +3096,13 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		Date    string `json:"date"`
-		Task    string `json:"task"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		Date      string `json:"date"`
+		ShortDate string `json:"shortdate"`
+		Task      string `json:"task"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -3178,6 +3181,7 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
+	rcp.ShortDate = ToShortTime(rcp.Date)
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

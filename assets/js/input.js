@@ -799,9 +799,9 @@ function setTaskMov(project, name, task, mov, userid, token) {
         dataType: "json",
         success: function(data) {
             if (data.mov === "") {
-                document.getElementById("button-task-comp-play-"+data.name).innerHTML = "";
+                document.getElementById(`${data.name}-task-${data.task}-playbutton`).innerHTML = "";
             } else {
-                document.getElementById("button-task-comp-play-"+data.name).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
+                document.getElementById(`${data.name}-task-${data.task}-playbutton`).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
             }
         },
         error: function(request,status,error){
@@ -834,7 +834,7 @@ function setTaskDue(project, name, task, due, userid, token) {
     });
 }
 
-function setTaskUser(project, name, task, user, token) {
+function setTaskUser(project, name, task, user, userid, token) {
     $.ajax({
         url: "/api/settaskuser",
         type: "post",
@@ -843,13 +843,18 @@ function setTaskUser(project, name, task, user, token) {
             name: name,
             task: task,
             user: user,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.mov === "") {
+                document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
+            } else {
+                document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -857,7 +862,7 @@ function setTaskUser(project, name, task, user, token) {
     });
 }
 
-function setTaskUsers(project, task, user, token) {
+function setTaskUsers(project, task, user, userid, token) {
     var cboxes = document.getElementsByName('selectID');
     for (var i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
@@ -870,7 +875,8 @@ function setTaskUsers(project, task, user, token) {
                 project: project,
                 name: cboxes[i].getAttribute("id"),
                 task: task,
-                user, user,
+                user: user,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
@@ -954,7 +960,11 @@ function setTaskDate(project, name, task, date, token) {
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.mov === "") {
+                document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
+            } else {
+                document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1040,7 +1050,7 @@ function setTaskDates(project, task, date, token) {
 }
 
 
-function setTaskPredate(project, name, task, date, token) {
+function setTaskPredate(project, name, task, date, userid, token) {
     $.ajax({
         url: "/api/settaskpredate",
         type: "post",
@@ -1049,13 +1059,18 @@ function setTaskPredate(project, name, task, date, token) {
             name: name,
             task: task,
             date: date,
+            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
         success: function(data) {
-            console.info(data)
+            if (data.mov === "") {
+                document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
+            } else {
+                document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
