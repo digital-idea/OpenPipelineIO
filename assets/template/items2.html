@@ -146,16 +146,16 @@
 					<div class="row">
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">1차마감</label>
-							<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+							<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
 						</div>
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">2차마감</label>
-							<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+							<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="multi-input-link" class="col-form-label col-form-label-sm">User Note:</label>
-						<input type="text" id="edittask-usernote" class="form-control form-control-sm" value="" placeholder="User Note" onchange="setTaskUserNote('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, '{{$.User.Token}}')">
+						<input type="text" id="edittask-usernote" class="form-control form-control-sm" value="" placeholder="User Note" onchange="setTaskUserNote('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
 						<small class="form-text text-mute">Task 작업노트</small>
 					</div>
 				</div>
