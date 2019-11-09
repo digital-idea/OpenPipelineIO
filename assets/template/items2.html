@@ -108,7 +108,7 @@
 						</div>
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">Status</label>
-							<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, '{{$.User.Token}}')">
+							<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
 								<option value="">변경없음</option>
 								<option value="omit">Omit</option>
 								<option value="confirm">Confirm</option>
