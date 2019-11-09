@@ -811,71 +811,340 @@ function setTaskMov(project, name, task, mov, userid, token) {
 }
 
 function setTaskDue(project, name, task, due, userid, token) {
-    $.ajax({
-        url: "/api/settaskdue",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            due: due,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data);
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/settaskdue",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    due: due,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data);
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
+    } else {
+        $.ajax({
+            url: "/api/settaskdue",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                due: due,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data);
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
 }
 
 function setTaskUser(project, name, task, user, userid, token) {
-    $.ajax({
-        url: "/api/settaskuser",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            user: user,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            if (data.mov === "") {
-                document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
-            } else {
-                document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
             }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            let name = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/settaskuser",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    user: user,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.mov === "") {
+                        document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
+                    } else {
+                        document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-function setTaskUsers(project, task, user, userid, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
+    } else {
         $.ajax({
             url: "/api/settaskuser",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 task: task,
                 user: user,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                if (data.mov === "") {
+                    document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
+                } else {
+                    document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskStatus(project, name, task, status, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/settaskstatus",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    status: status,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskstatus",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                status: status,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskDate(project, name, task, date, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200)
+            let name = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/settaskdate",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.mov === "") {
+                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
+                    } else {
+                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskdate",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                date: date,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                if (data.mov === "") {
+                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
+                } else {
+                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskStartdate(project, name, task, date, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200)
+            let name = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/settaskstartdate",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskstartdate",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                date: date,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskUserNote(project, name, task, usernote, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200)
+            let name = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/settaskusernote",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    usernote: usernote,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskusernote",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                usernote: usernote,
                 userid: userid,
             },
             headers: {
@@ -893,212 +1162,63 @@ function setTaskUsers(project, task, user, userid, token) {
 }
 
 
-function setTaskStatus(project, name, task, status, token) {
-    $.ajax({
-        url: "/api/settaskstatus",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            status: status,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setTaskStatuses(project, task, status, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        $.ajax({
-            url: "/api/settaskstatus",
-            type: "post",
-            data: {
-                project: project,
-                name: cboxes[i].getAttribute("id"),
-                task: task,
-                status: status,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                console.info(data)
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-    }
-}
-
-function setTaskDate(project, name, task, date, token) {
-    $.ajax({
-        url: "/api/settaskdate",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            date: date,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            if (data.mov === "") {
-                document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
-            } else {
-                document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
-            }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setTaskStartdate(project, name, task, date, userid, token) {
-    $.ajax({
-        url: "/api/settaskstartdate",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            date: date,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setTaskUserNote(project, name, task, usernote, userid, token) {
-    $.ajax({
-        url: "/api/settaskusernote",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            usernote: usernote,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setTaskDates(project, task, date, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        $.ajax({
-            url: "/api/settaskdate",
-            type: "post",
-            data: {
-                project: project,
-                name: cboxes[i].getAttribute("id"),
-                task: task,
-                date: date,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                console.info(data)
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-    }
-}
-
 
 function setTaskPredate(project, name, task, date, userid, token) {
-    $.ajax({
-        url: "/api/settaskpredate",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            date: date,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            if (data.mov === "") {
-                document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
-            } else {
-                document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
             }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            let name = cboxes[i].getAttribute("id");
+            sleep(200)
+            $.ajax({
+                url: "/api/settaskpredate",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.mov === "") {
+                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
+                    } else {
+                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
-}
-
-function setTaskPredates(project, task, date, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
+    } else {
         $.ajax({
             url: "/api/settaskpredate",
             type: "post",
             data: {
                 project: project,
-                name: cboxes[i].getAttribute("id"),
+                name: name,
                 task: task,
                 date: date,
+                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                if (data.mov === "") {
+                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
+                } else {
+                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                }
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1106,6 +1226,7 @@ function setTaskPredates(project, task, date, token) {
         });
     }
 }
+
 
 function setDeadline2D(project, name, date, userid, token) {
     if (multiInput) {
@@ -1570,27 +1691,58 @@ function selectCheckboxInvert() {
 }
 
 function setTaskLevel(project, name, task, level, userid, token) {
-    $.ajax({
-        url: "/api/settasklevel",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            level: level,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/settasklevel",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    level: level,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         }
-    });
+    } else {
+        $.ajax({
+            url: "/api/settasklevel",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                level: level,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data)
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
 }
 
 function setObjectID(project, name, innum, outnum, userid, token) {
