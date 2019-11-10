@@ -109,6 +109,7 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - Maintainer: Jason / jason@lazypic.org
 - Committer: Bailey / bailey@lazypic.org
 - Contributors:
+- 체험계정 ID/PW: guest
 
 ### Infomation
 - [CSI의 역사](documents/history.md)
