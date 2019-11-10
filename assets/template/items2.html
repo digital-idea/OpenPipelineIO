@@ -213,7 +213,7 @@
 						<input type="text" class="form-control form-control-sm" id="edittask-user" onchange="setTaskUser('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
 					</div>
 					<div class="form-group">
-						<label for="multi-input-link" class="col-form-label">Mov Path:</label>
+						<label for="multi-input-link" class="col-form-label">Media Path:</label>
 						<input type="text" class="form-control form-control-sm" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
 					</div>
 					<div class="row">
@@ -234,10 +234,12 @@
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">1차마감</label>
 							<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+							<small class="form-text text-mute">협업을 위해 1차 데이터를 넘기는 날짜</small>
 						</div>
 						<div class="col-6 form-group">
 							<label class="col-form-label col-form-label-sm">2차마감</label>
 							<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+							<small class="form-text text-mute">최종마감일</small>
 						</div>
 					</div>
 					<div class="form-group">
