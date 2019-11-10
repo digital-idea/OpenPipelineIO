@@ -87,6 +87,93 @@
 	</div>
 </div>
 
+<!-- Modal: Add Task-->
+<div class="modal fade" id="addtask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-darkmode">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Add Task</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">				
+				<input type="hidden" class="form-control" id="addtask-name">
+				<input type="hidden" class="form-control" id="addtask-userid">
+				<div class="form-group">
+					<label class="col-form-label col-form-label-sm">Select Task</label>
+					<select class="form-control form-control-sm" id="addtask-taskname">
+						<option value="">None</option>
+						<option value="comp">comp</option>
+						<option value="concept">concept</option>
+						<option value="model">model</option>
+						<option value="mm">mm</option>
+						<option value="layout">layout</option>
+						<option value="ani">ani</option>
+						<option value="fx">fx</option>
+						<option value="mg">mg</option>
+						<option value="previz">previz</option>
+						<option value="fur">fur</option>
+						<option value="sim">sim</option>
+						<option value="crowd">crowd</option>
+						<option value="light">light</option>
+						<option value="matte">matte</option>
+						<option value="env">env</option>
+					</select>
+				</div>
+			</div>			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addTask('{{$.SearchOption.Project}}', document.getElementById('addtask-name').value, document.getElementById('addtask-taskname').value, document.getElementById('addtask-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Add</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal: Rm Task-->
+<div class="modal fade" id="rmtask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content bg-darkmode">
+			<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Rm Task</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="text-darkmode">&times;</span>
+			</button>
+			</div>
+			<div class="modal-body">				
+				<input type="hidden" class="form-control" id="rmtask-name">
+				<input type="hidden" class="form-control" id="rmtask-userid">
+				<div class="form-group">
+					<label class="col-form-label col-form-label-sm">Select Task</label>
+					<select class="form-control form-control-sm" id="rmtask-taskname">
+						<option value="">None</option>
+						<option value="comp">comp</option>
+						<option value="concept">concept</option>
+						<option value="model">model</option>
+						<option value="mm">mm</option>
+						<option value="layout">layout</option>
+						<option value="ani">ani</option>
+						<option value="fx">fx</option>
+						<option value="mg">mg</option>
+						<option value="previz">previz</option>
+						<option value="fur">fur</option>
+						<option value="sim">sim</option>
+						<option value="crowd">crowd</option>
+						<option value="light">light</option>
+						<option value="matte">matte</option>
+						<option value="env">env</option>
+					</select>
+				</div>
+			</div>			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmTask('{{$.SearchOption.Project}}', document.getElementById('rmtask-name').value, document.getElementById('rmtask-taskname').value, document.getElementById('rmtask-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Remove</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal: Edit Task-->
 <div class="modal fade" id="edittask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -993,18 +1080,24 @@
 
 	<!--Task-->
 	<div class="col-sm-12 col-md-6 col-lg-2">
-		<div class="ml-1 mb-3">
+		<div class="" id="{{.Name}}-add-taskbutton}}">
+			{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+				<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');setModal('addtask-userid', '{{$.User.ID}}')">＋</span>
+				<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');setModal('rmtask-userid', '{{$.User.ID}}')">－</span>
+			{{end}}
+		</div>
+		<div class="mt-1 ml-1 mb-3" id="{{.Name}}-tasks">
 			
 			<!--onset Setellite-->
-			<div class="row" id="button-onset-{{.Name}}">
+			<div class="row" id="{{.Name}}-onsetbutton">
 				{{if .Rollmedia}}
-					<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="badge badge-done text-dark" target="_blink">onset</a>
+					<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="badge badge-done statusbox text-dark" target="_blink">onset</a>
 				{{end}}
 			</div>
 			
 			<!--concept-->
 			{{if eq .Concept.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-concept">
 					<div id="{{.Name}}-task-concept-status">
 						<a class="mt-1 badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Concept.Status}}"
 						{{if eq .Type "asset" }}
@@ -1047,7 +1140,7 @@
 
 			<!--model-->
 			{{if eq .Model.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-model">
 					<div id="{{.Name}}-task-model-status">
 						<a class="mt-1 badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Model.Status}}"
 						{{if eq .Type "asset" }}
@@ -1090,7 +1183,7 @@
 
 			<!--mm-->
 			{{if eq .Mm.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-mm">
 					<div id="{{.Name}}-task-mm-status">
 						<a class="mt-1 badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mm.Status}}"
 						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1129,7 +1222,7 @@
 
 			<!--layout-->
 			{{if eq .Layout.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-layout">
 					<div id="{{.Name}}-task-layout-status">
 						<a class="mt-1 badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Layout.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1168,7 +1261,7 @@
 
 			<!--ani-->
 			{{if eq .Ani.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-ani">
 					<div id="{{.Name}}-task-ani-status">
 						<a class="mt-1 badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Ani.Status}}"
 						{{if eq .Type "asset" }}
@@ -1210,7 +1303,7 @@
 			{{end}}
 			<!--fx-->
 			{{if eq .Fx.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-fx">
 					<div id="{{.Name}}-task-fx-status">
 						<a class="mt-1 badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fx.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1249,7 +1342,7 @@
 
 			<!--mg: motion-->
 			{{if eq .Mg.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-mg">
 					<div id="{{.Name}}-task-mg-status">
 						<a class="mt-1 badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mg.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1288,7 +1381,7 @@
 
 			<!--temp1-->
 			{{if eq .Temp1.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-temp1">
 					<div id="{{.Name}}-task-temp1-status">
 						<a class="mt-1 badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Temp1.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1327,7 +1420,7 @@
 
 			<!--previz-->
 			{{if eq .Previz.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-previz">
 					<div id="{{.Name}}-task-previz-status">
 						<a class="mt-1 badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Previz.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1365,7 +1458,7 @@
 			{{end}}
 			<!--fur-->
 			{{if eq .Fur.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-fur">
 					<div id="{{.Name}}-task-fur-status">
 						<a class="mt-1 badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fur.Status}}"
 						{{if eq .Type "asset" }}
@@ -1407,7 +1500,7 @@
 			{{end}}
 			<!--sim-->
 			{{if eq .Sim.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-sim">
 					<div id="{{.Name}}-task-sim-status">
 						<a class="mt-1 badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Sim.Status}}"
 						{{if eq .Type "asset" }}
@@ -1450,7 +1543,7 @@
 
 			<!--crowd-->
 			{{if eq .Crowd.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-crowd">
 					<div id="{{.Name}}-task-crowd-status">
 						<a class="mt-1 badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Crowd.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1489,7 +1582,7 @@
 
 			<!--light-->
 			{{if eq .Light.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-light">
 					<div id="{{.Name}}-task-light-status">
 						<a class="mt-1 badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Light.Status}}"
 						{{if eq .Type "asset" }}
@@ -1532,7 +1625,7 @@
 
 			<!--comp-->
 			{{if eq .Comp.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-comp">
 					<div id="{{.Name}}-task-comp-status">
 						<a class="mt-1 badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Comp.Status}}"
 						{{if eq .Type "asset" }}
@@ -1575,7 +1668,7 @@
 
 			<!--matte-->
 			{{if eq .Matte.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-matte">
 					<div id="{{.Name}}-task-matte-status">
 						<a class="mt-1 badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Matte.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
@@ -1614,7 +1707,7 @@
 
 			<!--env-->
 			{{if eq .Env.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-				<div class="row">
+				<div class="row" id="{{.Name}}-task-env">
 					<div id="{{.Name}}-task-env-status">
 						<a class="mt-1 badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Env.Status}}"
 							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"

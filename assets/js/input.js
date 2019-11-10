@@ -61,6 +61,164 @@ function sleep( millisecondsToWait ) {
 }
 
 
+function addTask(project, name, task, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/setassigntask",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    status: 'true',
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    let newItem = `<div class="row" id="${data.name}-task-${data.task}">
+					<div id="${data.name}-${data.task}-light-status">
+						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
+					</div>
+					<div id="${data.name}-task-${data.task}-predate"></div>
+					<div id="${data.name}-task-${data.task}-date"></div>
+					<div id="${data.name}-task-${data.task}-user"></div>
+					<div id="${data.name}-task-${data.task}-playbutton"></div>
+					<div class="ml-1">
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '');
+							setModal('edittask-due', '');
+							setModal('edittask-level', '');
+							setModal('edittask-predate', '');
+							setModal('edittask-date', '');
+							setModal('edittask-task', '${data.task}' );
+							setModal('edittask-path', '' );
+							setModal('edittask-usernote', '' );
+							setModal('edittask-name', '${data.name}');
+							setModal('edittask-user', '');
+							setModal('edittask-userid', '${data.userid}')">≡</span>
+					</div>
+                    </div>`;
+                    document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+
+    } else {
+        $.ajax({
+            url: "/api/setassigntask",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                status: 'true',
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                let newItem = `<div class="row" id="${data.name}-task-${data.task}">
+					<div id="${data.name}-${data.task}-light-status">
+						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
+					</div>
+					<div id="${data.name}-task-${data.task}-predate"></div>
+					<div id="${data.name}-task-${data.task}-date"></div>
+					<div id="${data.name}-task-${data.task}-user"></div>
+					<div id="${data.name}-task-${data.task}-playbutton"></div>
+					<div class="ml-1">
+						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+							setModal('edittask-startdate', '');
+							setModal('edittask-due', '');
+							setModal('edittask-level', '');
+							setModal('edittask-predate', '');
+							setModal('edittask-date', '');
+							setModal('edittask-task', '${data.task}' );
+							setModal('edittask-path', '' );
+							setModal('edittask-usernote', '' );
+							setModal('edittask-name', '${data.name}');
+							setModal('edittask-user', '');
+							setModal('edittask-userid', '${data.userid}')">≡</span>
+					</div>
+				</div>`;
+                document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function rmTask(project, name, task, userid, token) {
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let name = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/setassigntask",
+                type: "post",
+                data: {
+                    project: project,
+                    name: name,
+                    task: task,
+                    status: 'false',
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById(`${data.name}-task-${data.task}`).remove();
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setassigntask",
+            type: "post",
+            data: {
+                project: project,
+                name: name,
+                task: task,
+                status: 'false',
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById(`${data.name}-task-${data.task}`).remove();
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
 
 function setAssignTask(project, name, task, status, token) {
     $.ajax({
@@ -771,9 +929,9 @@ function setRollmedia(project, name, rollmedia, userid, token) {
         dataType: "json",
         success: function(data) {
             if (data.rollmedia === "") {
-                document.getElementById("button-onset-"+data.name).innerHTML = "";
+                document.getElementById(data.name+"-onsetbutton").innerHTML = "";
             } else {
-                document.getElementById("button-onset-"+data.name).innerHTML = `<a href="/setellite?project=${project}&searchword=${data.rollmedia}" class="badge badge-done text-dark" target="_blink">onset</a>`;
+                document.getElementById(data.name+"-onsetbutton").innerHTML = `<a href="/setellite?project=${project}&searchword=${data.rollmedia}" class="badge badge-done statusbox text-dark" target="_blink">onset</a>`;
             }
         },
         error: function(request,status,error){
