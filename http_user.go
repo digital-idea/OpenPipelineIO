@@ -646,7 +646,22 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	err = TEMPLATES.ExecuteTemplate(w, "signin_success", nil)
+	type recipe struct {
+		User
+	}
+	rcp := recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "signin_success", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

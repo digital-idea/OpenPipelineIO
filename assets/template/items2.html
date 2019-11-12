@@ -1050,21 +1050,24 @@
 						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov" class="play">▶</a>
 					{{end}}
 				</div>
-				<div id="button-editold-{{.Name}}">
-					<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Thumb</a>
-				</div>
-				<div id="button-edit-{{.Name}}">
-					<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" 
-					onclick="
-					setModal('iteminfo-thummov', '{{.Thummov}}');
-					setModal('iteminfo-beforemov', '{{.Beforemov}}');
-					setModal('iteminfo-aftermov', '{{.Aftermov}}');
-					setModal('iteminfo-retimeplate', '{{.Retimeplate}}');
-					setModal('iteminfo-ociocc', '{{.OCIOcc}}');
-					setModal('iteminfo-rollmedia', '{{.Rollmedia}}');
-					setModal('iteminfo-name', '{{.Name}}');
-					setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
-				</div>
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+					<div id="button-thumb-{{.Name}}">
+						<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Thumb</a>
+					</div>
+				
+					<div id="button-edit-{{.Name}}">
+						<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" 
+						onclick="
+						setModal('iteminfo-thummov', '{{.Thummov}}');
+						setModal('iteminfo-beforemov', '{{.Beforemov}}');
+						setModal('iteminfo-aftermov', '{{.Aftermov}}');
+						setModal('iteminfo-retimeplate', '{{.Retimeplate}}');
+						setModal('iteminfo-ociocc', '{{.OCIOcc}}');
+						setModal('iteminfo-rollmedia', '{{.Rollmedia}}');
+						setModal('iteminfo-name', '{{.Name}}');
+						setModal('iteminfo-userid', '{{$.User.ID}}')"{{end}}>E</span>
+					</div>
+				{{end}}
 				<div id="button-dir-{{.Name}}">
 					{{if eq .Type "asset" -}}	
 						<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
@@ -1072,9 +1075,11 @@
 						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 					{{- end}}
 				</div>
-				<div id="button-log-{{.Name}}">
-					<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
-				</div>
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+					<div id="button-log-{{.Name}}">
+						<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
+					</div>
+				{{end}}
 			</div>
 		</div>
 	</div>
@@ -1123,20 +1128,22 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Concept.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
-					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
-							setModal('edittask-startdate', '{{ToNormalTime .Concept.Startdate}}');
-							setModal('edittask-due', '{{.Concept.Due}}');
-							setModal('edittask-level', '{{.Concept.TaskLevel}}');
-							setModal('edittask-predate', '{{ToNormalTime .Concept.Predate}}');
-							setModal('edittask-date', '{{ToNormalTime .Concept.Date}}');
-							setModal('edittask-task', 'concept' );
-							setModal('edittask-path', '{{.Concept.Mov}}' );
-							setModal('edittask-usernote', '{{.Concept.UserNote}}' );
-							setModal('edittask-name', '{{.Name}}');
-							setModal('edittask-user', '{{.Concept.User}}');
-							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
-					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+						<div class="ml-1">
+							<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+								setModal('edittask-startdate', '{{ToNormalTime .Concept.Startdate}}');
+								setModal('edittask-due', '{{.Concept.Due}}');
+								setModal('edittask-level', '{{.Concept.TaskLevel}}');
+								setModal('edittask-predate', '{{ToNormalTime .Concept.Predate}}');
+								setModal('edittask-date', '{{ToNormalTime .Concept.Date}}');
+								setModal('edittask-task', 'concept' );
+								setModal('edittask-path', '{{.Concept.Mov}}' );
+								setModal('edittask-usernote', '{{.Concept.UserNote}}' );
+								setModal('edittask-name', '{{.Name}}');
+								setModal('edittask-user', '{{.Concept.User}}');
+								setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
+						</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1166,6 +1173,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Model.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Model.Startdate}}');
@@ -1180,6 +1188,7 @@
 							setModal('edittask-user', '{{.Model.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1205,6 +1214,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mm.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Mm.Startdate}}');
@@ -1219,6 +1229,7 @@
 							setModal('edittask-user', '{{.Mm.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1244,6 +1255,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Layout.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Layout.Startdate}}');
@@ -1258,6 +1270,7 @@
 							setModal('edittask-user', '{{.Layout.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1287,6 +1300,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Ani.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Ani.Startdate}}');
@@ -1301,6 +1315,7 @@
 							setModal('edittask-user', '{{.Ani.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 			<!--fx-->
@@ -1325,6 +1340,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fx.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Fx.Startdate}}');
@@ -1339,6 +1355,7 @@
 							setModal('edittask-user', '{{.Fx.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1364,6 +1381,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Mg.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Mg.Startdate}}');
@@ -1378,6 +1396,7 @@
 							setModal('edittask-user', '{{.Mg.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1403,6 +1422,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Temp1.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Temp1.Startdate}}');
@@ -1417,6 +1437,7 @@
 							setModal('edittask-user', '{{.Temp1.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1442,6 +1463,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Previz.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Previz.Startdate}}');
@@ -1456,6 +1478,7 @@
 							setModal('edittask-user', '{{.Previz.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 			<!--fur-->
@@ -1484,6 +1507,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Fur.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Fur.Startdate}}');
@@ -1498,6 +1522,7 @@
 							setModal('edittask-user', '{{.Fur.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 			<!--sim-->
@@ -1526,6 +1551,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Sim.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Sim.Startdate}}');
@@ -1540,6 +1566,7 @@
 							setModal('edittask-user', '{{.Sim.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1565,6 +1592,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Crowd.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Crowd.Startdate}}');
@@ -1579,6 +1607,7 @@
 							setModal('edittask-user', '{{.Crowd.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1608,6 +1637,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Light.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Light.Startdate}}');
@@ -1622,6 +1652,7 @@
 							setModal('edittask-user', '{{.Light.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1651,6 +1682,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Comp.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Comp.Startdate}}');
@@ -1665,6 +1697,7 @@
 							setModal('edittask-user', '{{.Comp.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1690,6 +1723,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Matte.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Matte.Startdate}}');
@@ -1704,6 +1738,7 @@
 							setModal('edittask-user', '{{.Matte.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 
@@ -1729,6 +1764,7 @@
 							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if .Beforemov}}{{.Beforemov}};{{end}}{{.Env.Mov}}{{if .Aftermov}};{{.Aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 							setModal('edittask-startdate', '{{ToNormalTime .Env.Startdate}}');
@@ -1743,6 +1779,7 @@
 							setModal('edittask-user', '{{.Env.User}}');
 							setModal('edittask-userid', '{{$.User.ID}}')">≡</span>
 					</div>
+					{{end}}
 				</div>
 			{{end}}
 		</div>
