@@ -1170,7 +1170,7 @@ function setTaskDate(project, name, task, date, userid, token) {
                     if (data.mov === "") {
                         document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -1197,7 +1197,7 @@ function setTaskDate(project, name, task, date, userid, token) {
                 if (data.mov === "") {
                     document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
                 }
             },
             error: function(request,status,error){
@@ -1348,7 +1348,7 @@ function setTaskPredate(project, name, task, date, userid, token) {
                     if (data.mov === "") {
                         document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -1375,7 +1375,7 @@ function setTaskPredate(project, name, task, date, userid, token) {
                 if (data.mov === "") {
                     document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.shortdate}</span>`;
+                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
                 }
             },
             error: function(request,status,error){
