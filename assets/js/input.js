@@ -86,7 +86,7 @@ function addTask(project, name, task, userid, token) {
                 dataType: "json",
                 success: function(data) {
                     let newItem = `<div class="row" id="${data.name}-task-${data.task}">
-					<div id="${data.name}-${data.task}-light-status">
+					<div id="${data.name}-task-${data.task}-status">
 						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
 					</div>
 					<div id="${data.name}-task-${data.task}-predate"></div>
@@ -133,7 +133,7 @@ function addTask(project, name, task, userid, token) {
             dataType: "json",
             success: function(data) {
                 let newItem = `<div class="row" id="${data.name}-task-${data.task}">
-					<div id="${data.name}-${data.task}-light-status">
+					<div id="${data.name}-task-${data.task}-status">
 						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
 					</div>
 					<div id="${data.name}-task-${data.task}-predate"></div>
