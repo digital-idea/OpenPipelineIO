@@ -99,13 +99,11 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "%v", err)
 		}
 		path := tmp + "/" + header.Filename // 업로드한 파일 리스트를 불러오기 위해 뒤에 붙는 Unixtime을 제거한다.
-		fmt.Println(path)
 		err = ioutil.WriteFile(path, data, 0666)
 		if err != nil {
 			fmt.Fprintf(w, "%v", err)
 			return
 		}
-		fmt.Println(path)
 	case "application/vnd.ms-excel":
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
@@ -122,7 +120,6 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "%v", err)
 			return
 		}
-		fmt.Println(path)
 	default:
 		// 지원하지 않는 파일. 저장하지 않는다.
 
