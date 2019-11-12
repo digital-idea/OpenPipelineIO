@@ -12,6 +12,19 @@
             <a class="nav-link" href="/inputmode?project=TEMP&sortkey=slug&template=index2&endpoint=searchv2&assign=true&ready=true&wip=true&confirm=true&task=&searchword=">NewView</a>
           </li>
         {{end}}
+        {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                File
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/importexcel">Import .xlsx (Excel-준비중)</a>
+                
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/exportexcel">Export .xlsx (Excel-준비중)</a>
+              </div>
+          </li>
+        {{end}}
         <li class="nav-item">
           <a class="nav-link" href="/projectinfo">Projects</a>
         </li>
