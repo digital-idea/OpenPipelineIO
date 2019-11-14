@@ -40,6 +40,17 @@ body {
 	font-size: 9pt;
 }
 
+.no-decoration-text-button {
+	color: rgb(143, 141, 134);
+	font-size: 9pt;
+}
+
+.no-decoration-text-button:hover {
+	color: rgb(192, 189, 178);
+	font-size: 9pt;
+	text-decoration: underline;
+}
+
 .dropdown-divider {
 	border:1px solid rgb(55, 55, 52);
 }
