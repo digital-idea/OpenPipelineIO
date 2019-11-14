@@ -35,8 +35,8 @@
                             <td class="text-darkmode">{{.Name}}</td>
                             <td class="text-darkmode">{{.Shottype}}</td>
                             <td class="text-darkmode">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="text-darkmode">{{.Comment}}</td>
-                            <td class="text-darkmode">{{.Link}}</td>
+                            <td class="text-darkmode">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="text-darkmode">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode">{{.Ddline3D}}</td>
                             <td class="text-darkmode">{{.Ddline2D}}</td>
                             <td class="text-darkmode">{{.Findate}}</td>
