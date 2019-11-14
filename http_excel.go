@@ -266,7 +266,6 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		row.JustTimecodeOut = line[14] // JUST타임코드OUT
 		rows = append(rows, row)
 	}
-	fmt.Println(project, sheet, overwrite, rows)
 
 	type recipe struct {
 		Project   string
