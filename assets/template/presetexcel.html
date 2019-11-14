@@ -29,17 +29,13 @@
                             <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
                         {{end}}
                     </select>
-                    <small class="form-text text-muted">.csv을 import 할 프로젝트를 선택해주세요.</small>
+                    <small class="form-text text-muted">.xlsx을 import 할 프로젝트를 선택해주세요.</small>
                 </div>
 
                 <div class="form-group">
-                    <label>Separator</label>
-                    <select name="separator" class="form-control">
-                        <option value=",">,</option>
-                        <option value=";">;</option>
-                        <option value=":">:</option>
-                    </select>
-                    <small class="form-text text-muted">.csv의 구분자를 선택해주세요. 기본형은 "," 입니다.</small>
+                    <label>Sheet</label>
+                    <input type="text" class="form-control" value="Sheet1" name="sheet">
+                    <small class="form-text text-muted">데이터가 저장된 .xlsx 의 Sheet명을 입력해주세요. 기본값은 Sheet1 입니다.</small>
                 </div>
 
                 <div class="row">

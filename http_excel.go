@@ -1,14 +1,13 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"gopkg.in/mgo.v2"
 )
 
@@ -157,7 +156,7 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Println(path)
-	case "application/vnd.ms-excel":
+	case "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": // MS-Excel, Google & Libre Excel
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
 			fmt.Fprintf(w, "%v", err)
@@ -175,13 +174,13 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 		}
 	default:
 		// 지원하지 않는 파일. 저장하지 않는다.
-
+		log.Printf("Not support: %s", mimeType)
 	}
 }
 
-// RowCSV 자료구조는 .csv 형식의 자료구조이다.
+// Row 자료구조는 .xlsx 형식의 자료구조이다.
 // 샷네임;작업종류(2D,3D);작업내용;수정사항;링크자료(제목:경로);3D마감;2D마감;FIN날짜;FIN버젼;테그;롤넘버;핸들IN;핸들OUT;JUST타임코드IN;JUST타임코드OUT
-type RowCSV struct {
+type Row struct {
 	Name            string
 	Shottype        string
 	Note            string
@@ -222,43 +221,34 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("project")
 	filename := r.FormValue("filename")
-	separator := r.FormValue("separator")
+	sheet := r.FormValue("sheet")
 	overwrite := str2bool(r.FormValue("overwrite"))
 	tmppath, err := userTemppath(ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// csv 파일을 읽는다.
-	csvFile, err := os.Open(tmppath + "/" + filename)
+	// .xlsx 파일을 읽는다.
+	f, err := excelize.OpenFile(tmppath + "/" + filename)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	reader := csv.NewReader(csvFile)
-	switch separator {
-	case ";":
-		reader.Comma = ';'
-	case ":":
-		reader.Comma = ':'
-	default:
-		reader.Comma = ','
+	var rows []Row
+	excelRows := f.GetRows(sheet)
+	if len(excelRows) == 0 {
+		http.Error(w, sheet+"값이 비어있습니다.", http.StatusBadRequest)
+		return
 	}
-	reader.Comment = '#'
-	var rows []RowCSV
-	for {
-		line, err := reader.Read()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			http.Error(w, ".csv 파일을 읽다가 에러가 발생했습니다", http.StatusBadRequest)
+	for _, line := range excelRows {
+		if len(line) != 15 {
+			http.Error(w, "약속된 Cell 갯수가 다릅니다", http.StatusBadRequest)
 			return
 		}
-		if len(line) != 15 { // Template 요소의 갯수가 다르다.
-			http.Error(w, ".csv 열의 갯수가 약속된 형식과 다릅니다", http.StatusBadRequest)
-			return
+		if line[0] == "샷네임" {
+			continue
 		}
-		row := RowCSV{}
+		row := Row{}
 		row.Name = line[0]             // item name
 		row.Shottype = line[1]         // shottype 2d,3d
 		row.Note = line[2]             // 작업내용
@@ -276,17 +266,14 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		row.JustTimecodeOut = line[14] // JUST타임코드OUT
 		rows = append(rows, row)
 	}
+	fmt.Println(project, sheet, overwrite, rows)
 
-	if len(rows) == 0 {
-		http.Error(w, ".csv 파일 내부가 비어있습니다", http.StatusBadRequest)
-		return
-	}
 	type recipe struct {
 		Project   string
 		Filename  string
-		Separator string
+		Sheet     string
 		Overwrite bool
-		Rows      []RowCSV
+		Rows      []Row
 		User
 		SessionID string
 		Devmode   bool
@@ -305,15 +292,16 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	rcp.Rows = rows
 	rcp.Project = project
 	rcp.Filename = filename
-	rcp.Separator = separator
+	rcp.Sheet = sheet
 	rcp.Overwrite = overwrite
 	fmt.Println(rows)
 	// project에 샷이 존재하는지 체크한다.
 	// 각 col 값이 정상적인지 체크한다.
 	// 결과 보고서를 만든다.
-	err = TEMPLATES.ExecuteTemplate(w, "reportcsv", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "reportexcel", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 }

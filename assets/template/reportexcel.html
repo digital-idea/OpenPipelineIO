@@ -1,4 +1,4 @@
-{{define "reportcsv"}}
+{{define "reportexcel"}}
 
 {{template "headBootstrap"}}
 {{template "navbar" .}}
@@ -7,7 +7,7 @@
     <div class="p-5">
         <div class="col-12 mx-auto">
             <div class="pt-3 pb-3">
-                <h2 class="section-heading">Report CSV</h2>
+                <h2 class="section-heading">Report Excel</h2>
             </div>
             <table class="table table-sm">
                 <thead>
@@ -34,7 +34,7 @@
                         <tr>
                             <td class="text-darkmode">{{.Name}}</td>
                             <td class="text-darkmode">{{.Shottype}}</td>
-                            <td class="text-darkmode">{{.Note}}</td>
+                            <td class="text-darkmode">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode">{{.Comment}}</td>
                             <td class="text-darkmode">{{.Link}}</td>
                             <td class="text-darkmode">{{.Ddline3D}}</td>
@@ -54,7 +54,7 @@
             
         </div>
         <div class="text-center pt-5">
-            <a href="/processcsv" class="btn btn-outline-warning">Process CSV</a>
+            <a href="/processexcel" class="btn btn-outline-warning">Process Excel</a>
         </div>
     </div>
 
