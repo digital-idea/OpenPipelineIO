@@ -104,6 +104,7 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "%v", err)
 			return
 		}
+		fmt.Println(path)
 	case "application/vnd.ms-excel":
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
