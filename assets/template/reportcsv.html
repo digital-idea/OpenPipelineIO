@@ -1,0 +1,70 @@
+{{define "reportcsv"}}
+
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+    <div class="p-5">
+        <div class="col-12 mx-auto">
+            <div class="pt-3 pb-3">
+                <h2 class="section-heading">Report CSV</h2>
+            </div>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-darkmode">Name</th>
+                        <th scope="col" class="text-darkmode">작업종류</th>
+                        <th scope="col" class="text-darkmode">작업내용</th>
+                        <th scope="col" class="text-darkmode">수정사항</th>
+                        <th scope="col" class="text-darkmode">링크자료(제목:경로)</th>
+                        <th scope="col" class="text-darkmode">3D마감</th>
+                        <th scope="col" class="text-darkmode">2D마감</th>
+                        <th scope="col" class="text-darkmode">FIN날짜</th>
+                        <th scope="col" class="text-darkmode">FIN버전</th>
+                        <th scope="col" class="text-darkmode">태그</th>
+                        <th scope="col" class="text-darkmode">롤넘버</th>
+                        <th scope="col" class="text-darkmode">핸들IN</th>
+                        <th scope="col" class="text-darkmode">핸들OUT</th>
+                        <th scope="col" class="text-darkmode">JUST타임코드IN</th>
+                        <th scope="col" class="text-darkmode">JUST타임코드OUT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Rows}}
+                        <tr>
+                            <td class="text-darkmode">{{.Name}}</td>
+                            <td class="text-darkmode">{{.Shottype}}</td>
+                            <td class="text-darkmode">{{.Note}}</td>
+                            <td class="text-darkmode">{{.Comment}}</td>
+                            <td class="text-darkmode">{{.Link}}</td>
+                            <td class="text-darkmode">{{.Ddline3D}}</td>
+                            <td class="text-darkmode">{{.Ddline2D}}</td>
+                            <td class="text-darkmode">{{.Findate}}</td>
+                            <td class="text-darkmode">{{.Finver}}</td>
+                            <td class="text-darkmode">{{.Tags}}</td>
+                            <td class="text-darkmode">{{.Rnum}}</td>
+                            <td class="text-darkmode">{{.HandleIn}}</td>
+                            <td class="text-darkmode">{{.HandleOut}}</td>
+                            <td class="text-darkmode">{{.JustTimecodeIn}}</td>
+                            <td class="text-darkmode">{{.JustTimecodeOut}}</td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="text-center pt-5">
+            <a href="/processcsv" class="btn btn-outline-warning">Process CSV</a>
+        </div>
+    </div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+</html>
+
+{{end}}

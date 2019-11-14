@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-// userTemppath 함수는 id를 받아서 각 유저별 Temp 경로를 반환한다.
+// userTemppath 함수는 id를 받아서 각 유저별 Temp 경로를 생성 반환한다.
 func userTemppath(id string) (string, error) {
 	tempDir, err := ioutil.TempDir("", "")
 	if err != nil {

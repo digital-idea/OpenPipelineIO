@@ -1,0 +1,69 @@
+{{define "presetexcel"}}
+
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+    <div class="container p-5">
+        <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+            <form action="/presetexcel_submit" method="POST">
+                
+                <div class="pt-3 pb-3">
+                    <h2 class="section-heading">Preset Excel</h2>
+                </div>
+
+                <div class="form-group">
+                    <label>Select .CSV</label>
+                    <select name="filename" class="form-control">
+                        {{range .Files}}
+                            <option value="{{.}}">{{.}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">업로드한 .csv을 선택해주세요. 선택한 파일을 토대로 검토합니다.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Project</label>
+                    <select name="project" class="form-control">
+                        {{range .Projectlist}}
+                            <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">.csv을 import 할 프로젝트를 선택해주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Separator</label>
+                    <select name="separator" class="form-control">
+                        <option value=",">,</option>
+                        <option value=";">;</option>
+                        <option value=":">:</option>
+                    </select>
+                    <small class="form-text text-muted">.csv의 구분자를 선택해주세요. 기본형은 "," 입니다.</small>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-check">
+                            <input type="checkbox" id="overwrite" name="overwrite" class="form-check-input" value="true">
+                            <label class="form-check-label" for="overwrite">작업내용 덮어쓰기 여부</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-warning mt-5">DATA CHECK</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+</html>
+
+{{end}}
