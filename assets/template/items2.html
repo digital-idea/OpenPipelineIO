@@ -903,16 +903,16 @@
 					</div>
 					<div class="row" id="undistortionsize-{{.Name}}">
 						{{if .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '{{.Dsize}}');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U: {{.Dsize}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '{{.Dsize}}');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U: {{.Dsize}}</span>
 						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U:</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U:</span>
 						{{end}}
 					</div>
 					<div class="row" id="rendersize-{{.Name}}">
 						{{if or .Rendersize .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R:</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R:</span>
 						{{end}}
 					</div>
 				</div>
