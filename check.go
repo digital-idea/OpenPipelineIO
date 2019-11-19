@@ -24,11 +24,17 @@ var regexpID = regexp.MustCompile(`^[a-z0-9]+$`)
 // 롤미디어 정규식: 00_A03C001_180113_A001 형태
 var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 
-// Timecode 정규식: 00:00:00:00 형태
-var regexpTimecode = regexp.MustCompile(`^\d{2}:\d{2}:\d{2}:\d{2}$`)
+// Timecode 정규식: 00:00:00:00 또는 00:00:00;00 형태 ref: https://en.wikipedia.org/wiki/SMPTE_timecode
+var regexpTimecode = regexp.MustCompile(`^\d{2}[:;.]\d{2}[:;.]\d{2}[:;.]\d{2}$`)
 
 // Rnum 정규식: A0001
 var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
+
+// Handle 정규식: 5, 10
+var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)
+
+// Version 정규식: 5, 10, 103
+var regexpVersion = regexp.MustCompile(`^\d{1,3}$`)
 
 // Alexa 카메라의 형태 : N_AAAACCCC_YYMMDD_RRRR
 // - N : order

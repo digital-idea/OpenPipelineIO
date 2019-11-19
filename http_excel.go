@@ -178,26 +178,6 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Row 자료구조는 .xlsx 형식의 자료구조이다.
-// 샷네임;작업종류(2D,3D);작업내용;수정사항;링크자료(제목:경로);3D마감;2D마감;FIN날짜;FIN버젼;테그;롤넘버;핸들IN;핸들OUT;JUST타임코드IN;JUST타임코드OUT
-type Row struct {
-	Name            string
-	Shottype        string
-	Note            string
-	Comment         string
-	Link            string
-	Ddline3D        string
-	Ddline2D        string
-	Findate         string
-	Finver          string
-	Tags            string
-	Rnum            string
-	HandleIn        string
-	HandleOut       string
-	JustTimecodeIn  string
-	JustTimecodeOut string
-}
-
 // handlePresetExcelSubmit 함수는 excel 파일을 체크하고 분석 보고서로 Redirection 한다.
 func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -234,7 +214,7 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	var rows []Row
+	var rows []Excelrow
 	excelRows := f.GetRows(sheet)
 	if len(excelRows) == 0 {
 		http.Error(w, sheet+"값이 비어있습니다.", http.StatusBadRequest)
@@ -248,7 +228,7 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if line[0] == "샷네임" {
 			continue
 		}
-		row := Row{}
+		row := Excelrow{}
 		row.Name = line[0]             // item name
 		row.Shottype = line[1]         // shottype 2d,3d
 		row.Note = line[2]             // 작업내용
@@ -264,6 +244,7 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		row.HandleOut = line[12]       // 핸들OUT
 		row.JustTimecodeIn = line[13]  // JUST타임코드IN
 		row.JustTimecodeOut = line[14] // JUST타임코드OUT
+		row.checkerror()               // 각 값을 에러체크한다.
 		rows = append(rows, row)
 	}
 
@@ -272,7 +253,7 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		Filename  string
 		Sheet     string
 		Overwrite bool
-		Rows      []Row
+		Rows      []Excelrow
 		User
 		SessionID string
 		Devmode   bool

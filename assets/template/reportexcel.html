@@ -32,21 +32,21 @@
                 <tbody>
                     {{range .Rows}}
                         <tr>
-                            <td class="text-darkmode">{{.Name}}</td>
-                            <td class="text-darkmode">{{.Shottype}}</td>
+                            <td class="{{if .NameError}}text-danger{{else}}text-darkmode{{end}}" title="{{.NameError}}">{{.Name}}</td>
+                            <td class="{{if .ShottypeError}}text-danger{{else}}text-darkmode{{end}}" title="{{.ShottypeError}}">{{.Shottype}}</td>
                             <td class="text-darkmode">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="text-darkmode">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="{{if .LinkError}}text-danger{{else}}text-darkmode{{end}}" title="{{.LinkError}}">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode">{{.Ddline3D}}</td>
                             <td class="text-darkmode">{{.Ddline2D}}</td>
                             <td class="text-darkmode">{{.Findate}}</td>
-                            <td class="text-darkmode">{{.Finver}}</td>
+                            <td class="{{if .FinverError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FinverError}}">{{.Finver}}</td>
                             <td class="text-darkmode">{{.Tags}}</td>
-                            <td class="text-darkmode">{{.Rnum}}</td>
-                            <td class="text-darkmode">{{.HandleIn}}</td>
-                            <td class="text-darkmode">{{.HandleOut}}</td>
-                            <td class="text-darkmode">{{.JustTimecodeIn}}</td>
-                            <td class="text-darkmode">{{.JustTimecodeOut}}</td>
+                            <td class="{{if .RnumError}}text-danger{{else}}text-darkmode{{end}}" title="{{.RnumError}}">{{.Rnum}}</td>
+                            <td class="{{if .HandleInError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleInError}}">{{.HandleIn}}</td>
+                            <td class="{{if .HandleOutError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleOutError}}">{{.HandleOut}}</td>
+                            <td class="{{if .JustTimecodeInError}}text-danger{{else}}text-darkmode{{end}}" title="{{.JustTimecodeInError}}">{{.JustTimecodeIn}}</td>
+                            <td class="{{if .JustTimecodeOutError}}text-danger{{else}}text-darkmode{{end}}" title="{{.JustTimecodeOutError}}">{{.JustTimecodeOut}}</td>
                         </tr>
                     {{end}}
                 </tbody>
