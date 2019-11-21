@@ -160,12 +160,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
-	
-	// 파일안에서 시트명을 구한다.
-	sheet := "Sheet1" //r.FormValue("sheet")
-	
-	
+	}	
 	type recipe struct {
 		Project   string
 		Filename  string
@@ -180,15 +175,16 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 	}
 	rcp := recipe{}
+	rcp.Sheet = "Sheet1"
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	var rows []Excelrow
-	excelRows := f.GetRows(sheet)
+	excelRows := f.GetRows(rcp.Sheet)
 	if len(excelRows) == 0 {
-		http.Error(w, sheet+"값이 비어있습니다.", http.StatusBadRequest)
+		http.Error(w, rcp.Sheet+"값이 비어있습니다.", http.StatusBadRequest)
 		return
 	}
 	for _, line := range excelRows {
@@ -228,7 +224,6 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Rows = rows
-	rcp.Sheet = sheet
 	// project에 샷이 존재하는지 체크한다.
 	// 각 col 값이 정상적인지 체크한다.
 	// 결과 보고서를 만든다.
