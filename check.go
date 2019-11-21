@@ -33,8 +33,8 @@ var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
 // Handle 정규식: 5, 10
 var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)
 
-// Version 정규식: 5, 10, 103
-var regexpVersion = regexp.MustCompile(`^\d{1,3}$`)
+// Version 정규식: 5, 10, 103, v5 v10, v100, v1001, V001, V1
+var regexpVersion = regexp.MustCompile(`[vV]?\d{1,4}`)
 
 // Alexa 카메라의 형태 : N_AAAACCCC_YYMMDD_RRRR
 // - N : order

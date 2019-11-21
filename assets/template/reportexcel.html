@@ -34,9 +34,9 @@
                         <tr>
                             <td class="{{if .NameError}}text-danger{{else}}text-darkmode{{end}}" title="{{.NameError}}">{{if .Name}}{{.Name}}{{else}}NO_NAME{{end}}</td>
                             <td class="{{if .ShottypeError}}text-danger{{else}}text-darkmode{{end}}" title="{{.ShottypeError}}">{{.Shottype}}</td>
-                            <td class="text-darkmode">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="text-darkmode">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="{{if .LinkError}}text-danger{{else}}text-darkmode{{end}}" title="{{.LinkError}}">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="text-darkmode small">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="text-darkmode small">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="small {{if .LinkError}}text-danger{{else}}text-darkmode{{end}}" title="{{.LinkError}}">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="{{if .Ddline3DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline3DError}}">{{ToNormalTime .Ddline3D}}</td>
                             <td class="{{if .Ddline2DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline2DError}}">{{ToNormalTime .Ddline2D}}</td>
                             <td class="{{if .FindateError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FindateError}}">{{ToNormalTime .Findate}}</td>

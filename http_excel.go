@@ -345,8 +345,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if sources != "" {
 			for _, s := range strings.Split(sources, "\n") {
 				source := strings.Split(s, ":")
-				title := source[0]
-				path := source[1]
+				title := strings.TrimSpace(source[0])
+				path := strings.TrimSpace(source[1])
 				err = AddSource(session, project, name, ssid.ID, title, path)
 				if err != nil {
 					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
