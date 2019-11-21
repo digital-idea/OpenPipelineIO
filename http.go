@@ -210,8 +210,8 @@ func webserver(port string) {
 	http.HandleFunc("/addrolesubmit", handleAddRoleSubmit)
 	http.HandleFunc("/addpositionsubmit", handleAddPositionSubmit)
 	http.HandleFunc("/importexcel", handleImportExcel)
-	http.HandleFunc("/presetexcel", handlePresetExcel)
-	http.HandleFunc("/presetexcel_submit", handlePresetExcelSubmit)
+	http.HandleFunc("/reportexcel", handleReportExcel)
+	//http.HandleFunc("/reportexcel_submit", handleReportExcelSubmit)
 	http.HandleFunc("/upload-excel", handleUploadExcel)
 
 	// Input

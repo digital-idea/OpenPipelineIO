@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 	"gopkg.in/mgo.v2"
@@ -42,6 +41,18 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 기존 Temp 경로 내부 데이터를 삭제한다.
+	tmp, err := userTemppath(ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = RemoveXLSX(tmp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	err = TEMPLATES.ExecuteTemplate(w, "importexcel", rcp)
 	if err != nil {
 		log.Println(err)
@@ -50,8 +61,9 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleImportExcel 함수는 엑셀파일을 Import 하는 페이지 이다.
-func handlePresetExcel(w http.ResponseWriter, r *http.Request) {
+/*
+// handleReportExcel 함수는 엑셀파일을 Import 하는 페이지 이다.
+func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -120,6 +132,7 @@ func handlePresetExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+*/
 
 func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -178,10 +191,10 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handlePresetExcelSubmit 함수는 excel 파일을 체크하고 분석 보고서로 Redirection 한다.
-func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+// handleReportExcel 함수는 excel 파일을 체크하고 분석 보고서로 Redirection 한다.
+func handleReportExcel(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
 	ssid, err := GetSessionID(r)
@@ -199,21 +212,31 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	project := r.FormValue("project")
-	filename := r.FormValue("filename")
-	sheet := r.FormValue("sheet")
-	overwrite := str2bool(r.FormValue("overwrite"))
+	// 파일네임을 구한다.
 	tmppath, err := userTemppath(ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// .xlsx 파일을 읽는다.
-	f, err := excelize.OpenFile(tmppath + "/" + filename)
+	xlsxs, err := GetXLSX(tmppath)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	if len(xlsxs) != 1 {
+		http.Redirect(w, r, "/importexcel", http.StatusSeeOther)
+		return
+	}
+ 	f, err := excelize.OpenFile(xlsxs[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	// 파일안에서 시트명을 구한다.
+	sheet := "Sheet1" //r.FormValue("sheet")
+	
 	
 	type recipe struct {
 		Project   string
@@ -226,8 +249,14 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		SearchOption
 		Errornum int
+		Projectlist []string
 	}
 	rcp := recipe{}
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	var rows []Excelrow
 	excelRows := f.GetRows(sheet)
 	if len(excelRows) == 0 {
@@ -274,10 +303,7 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Rows = rows
-	rcp.Project = project
-	rcp.Filename = filename
 	rcp.Sheet = sheet
-	rcp.Overwrite = overwrite
 	// project에 샷이 존재하는지 체크한다.
 	// 각 col 값이 정상적인지 체크한다.
 	// 결과 보고서를 만든다.
