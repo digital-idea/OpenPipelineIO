@@ -1,6 +1,7 @@
 # CSI
 
-![travisCI](https://secure.travis-ci.org/digital-idea/csi3.png)
+![travisCI](https://secure.travis-ci.org/digital-idea/csi3.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/digital-idea/csi3)](https://goreportcard.com/report/github.com/digital-idea/csi3)
 
 ![screenshot](figures/screenshot.png)
 
