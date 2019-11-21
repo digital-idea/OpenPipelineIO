@@ -41,7 +41,7 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// 기존 Temp 경로 내부 데이터를 삭제한다.
+	// 기존 Temp 경로 내부 .xlsx 데이터를 삭제한다.
 	tmp, err := userTemppath(ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -61,78 +61,6 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/*
-// handleReportExcel 함수는 엑셀파일을 Import 하는 페이지 이다.
-func handleReportExcel(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	type recipe struct {
-		User
-		SessionID   string
-		Devmode     bool
-		Projectlist []string
-		Files       []string
-		SearchOption
-	}
-	rcp := recipe{}
-	rcp.Devmode = *flagDevmode
-	rcp.SessionID = ssid.ID
-	tmp, err := userTemppath(ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	f, err := os.Open(tmp)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	files, err := f.Readdir(-1)
-	f.Close()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	for _, file := range files {
-		rcp.Files = append(rcp.Files, file.Name())
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	rcp.SearchOption = handleRequestToSearchOption(r)
-	rcp.User, err = getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Projectlist, err = OnProjectlist(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if len(rcp.Projectlist) == 0 {
-		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
-		return
-	}
-	err = TEMPLATES.ExecuteTemplate(w, "presetexcel", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-*/
 
 func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -291,11 +219,8 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
 	}
-
-	
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
-
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
