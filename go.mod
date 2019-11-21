@@ -11,7 +11,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/digital-idea/dilog v1.0.4
 	github.com/digital-idea/dipath v0.0.0-20190606073246-5cc149f252b0
-	github.com/digital-idea/ditime v0.0.0-20190606072845-9258d383539f
+	github.com/digital-idea/ditime v0.0.4
 	github.com/disintegration/imaging v1.6.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/kr/pretty v0.1.0 // indirect

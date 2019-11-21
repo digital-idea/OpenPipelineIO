@@ -32,14 +32,14 @@
                 <tbody>
                     {{range .Rows}}
                         <tr>
-                            <td class="{{if .NameError}}text-danger{{else}}text-darkmode{{end}}" title="{{.NameError}}">{{.Name}}</td>
+                            <td class="{{if .NameError}}text-danger{{else}}text-darkmode{{end}}" title="{{.NameError}}">{{if .Name}}{{.Name}}{{else}}NO_NAME{{end}}</td>
                             <td class="{{if .ShottypeError}}text-danger{{else}}text-darkmode{{end}}" title="{{.ShottypeError}}">{{.Shottype}}</td>
                             <td class="text-darkmode">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="{{if .LinkError}}text-danger{{else}}text-darkmode{{end}}" title="{{.LinkError}}">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="text-darkmode">{{.Ddline3D}}</td>
-                            <td class="text-darkmode">{{.Ddline2D}}</td>
-                            <td class="text-darkmode">{{.Findate}}</td>
+                            <td class="{{if .Ddline3DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline3DError}}">{{ToNormalTime .Ddline3D}}</td>
+                            <td class="{{if .Ddline2DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline2DError}}">{{ToNormalTime .Ddline2D}}</td>
+                            <td class="{{if .FindateError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FindateError}}">{{ToNormalTime .Findate}}</td>
                             <td class="{{if .FinverError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FinverError}}">{{.Finver}}</td>
                             <td class="text-darkmode">{{.Tags}}</td>
                             <td class="{{if .RnumError}}text-danger{{else}}text-darkmode{{end}}" title="{{.RnumError}}">{{.Rnum}}</td>
@@ -53,9 +53,15 @@
             </table>
             
         </div>
-        <div class="text-center pt-5">
-            <a href="/processexcel" class="btn btn-outline-warning">Process Excel</a>
-        </div>
+        {{if eq .Errornum 0}}
+            <div class="text-center pt-5">
+                <a href="/processexcel" class="btn btn-outline-warning">Process Excel</a>
+            </div>
+        {{else}}
+            <div class="text-center pt-5">
+                <span class="btn btn-outline-danger">Error ({{.Errornum}})</span>
+            </div>
+        {{end}}
     </div>
 
 {{template "footerBootstrap"}}

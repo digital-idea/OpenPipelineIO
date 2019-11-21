@@ -214,6 +214,20 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	
+	type recipe struct {
+		Project   string
+		Filename  string
+		Sheet     string
+		Overwrite bool
+		Rows      []Excelrow
+		User
+		SessionID string
+		Devmode   bool
+		SearchOption
+		Errornum int
+	}
+	rcp := recipe{}
 	var rows []Excelrow
 	excelRows := f.GetRows(sheet)
 	if len(excelRows) == 0 {
@@ -229,13 +243,13 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		row := Excelrow{}
-		row.Name = line[0]             // item name
-		row.Shottype = line[1]         // shottype 2d,3d
-		row.Note = line[2]             // 작업내용
-		row.Comment = line[3]          // 수정사항
-		row.Link = line[4]             // 링크자료(제목:경로)
-		row.Ddline3D = line[5]         // 3D마감
-		row.Ddline2D = line[6]         // 2D마감
+		row.Name = line[0]     // item name
+		row.Shottype = line[1] // shottype 2d,3d
+		row.Note = line[2]     // 작업내용
+		row.Comment = line[3]  // 수정사항
+		row.Link = line[4]     // 링크자료(제목:경로)
+		row.Ddline3D = line[5] // 3D마감
+		row.Ddline2D = line[6] // 2D마감
 		row.Findate = line[7]          // FIN날짜
 		row.Finver = line[8]           // FIN버전
 		row.Tags = line[9]             // 태그
@@ -245,21 +259,11 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		row.JustTimecodeIn = line[13]  // JUST타임코드IN
 		row.JustTimecodeOut = line[14] // JUST타임코드OUT
 		row.checkerror()               // 각 값을 에러체크한다.
+		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
 	}
 
-	type recipe struct {
-		Project   string
-		Filename  string
-		Sheet     string
-		Overwrite bool
-		Rows      []Excelrow
-		User
-		SessionID string
-		Devmode   bool
-		SearchOption
-	}
-	rcp := recipe{}
+	
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
 
@@ -274,7 +278,6 @@ func handlePresetExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	rcp.Filename = filename
 	rcp.Sheet = sheet
 	rcp.Overwrite = overwrite
-	fmt.Println(rows)
 	// project에 샷이 존재하는지 체크한다.
 	// 각 col 값이 정상적인지 체크한다.
 	// 결과 보고서를 만든다.

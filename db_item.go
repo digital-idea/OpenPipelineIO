@@ -1846,7 +1846,7 @@ func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	if err != nil {
 		return err
 	}
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
@@ -1869,7 +1869,7 @@ func SetDeadline2D(session *mgo.Session, project, name, date string) error {
 		return err
 	}
 	id := name + "_" + typ
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
@@ -1893,7 +1893,7 @@ func SetDeadline3D(session *mgo.Session, project, name, date string) error {
 		return err
 	}
 	id := name + "_" + typ
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
@@ -1923,7 +1923,7 @@ func SetTaskStartdate(session *mgo.Session, project, name, task, date string) er
 	if err != nil {
 		return err
 	}
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
@@ -1980,7 +1980,7 @@ func SetTaskPredate(session *mgo.Session, project, name, task, date string) erro
 	if err != nil {
 		return err
 	}
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
@@ -2307,7 +2307,7 @@ func SetFindate(session *mgo.Session, project, name, date string) error {
 		return err
 	}
 	id := name + "_" + typ
-	fullTime, err := ditime.ToFullTime("end", date)
+	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
