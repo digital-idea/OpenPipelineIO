@@ -61,7 +61,6 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -156,11 +155,11 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/importexcel", http.StatusSeeOther)
 		return
 	}
- 	f, err := excelize.OpenFile(xlsxs[0])
+	f, err := excelize.OpenFile(xlsxs[0])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}	
+	}
 	type recipe struct {
 		Project   string
 		Filename  string
@@ -171,7 +170,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
-		Errornum int
+		Errornum    int
 		Projectlist []string
 	}
 	rcp := recipe{}
@@ -196,13 +195,13 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		row := Excelrow{}
-		row.Name = line[0]     // item name
-		row.Shottype = line[1] // shottype 2d,3d
-		row.Note = line[2]     // 작업내용
-		row.Comment = line[3]  // 수정사항
-		row.Link = line[4]     // 링크자료(제목:경로)
-		row.Ddline3D = line[5] // 3D마감
-		row.Ddline2D = line[6] // 2D마감
+		row.Name = line[0]             // item name
+		row.Shottype = line[1]         // shottype 2d,3d
+		row.Note = line[2]             // 작업내용
+		row.Comment = line[3]          // 수정사항
+		row.Link = line[4]             // 링크자료(제목:경로)
+		row.Ddline3D = line[5]         // 3D마감
+		row.Ddline2D = line[6]         // 2D마감
 		row.Findate = line[7]          // FIN날짜
 		row.Finver = line[8]           // FIN버전
 		row.Tags = line[9]             // 태그
