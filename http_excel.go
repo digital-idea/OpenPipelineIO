@@ -321,33 +321,24 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if shottype != "" {
 			err := SetShotType(session, project, name, shottype)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		note := line[2] // 작업내용
 		if note != "" {
 			_, err = SetNote(session, project, name, ssid.ID, note, overwrite)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		comment := line[3] // 수정사항
 		if comment != "" {
 			err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		sources := line[4] // 소스자료(제목:경로)
@@ -358,11 +349,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				path := source[1]
 				err = AddSource(session, project, name, ssid.ID, title, path)
 				if err != nil {
-					i := ErrorItem{
-						Name:  name,
-						Error: err.Error(),
-					}
-					rcp.ErrorItems = append(rcp.ErrorItems, i)
+					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+					continue
 				}
 			}
 		}
@@ -371,68 +359,47 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if ddline3d != "" {
 			date, err := ditime.ToFullTime(19, ddline3d)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 			err = SetDeadline3D(session, project, name, date)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		ddline2d := line[6] // 2D마감
 		if ddline2d != "" {
 			date, err := ditime.ToFullTime(19, ddline2d)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 			err = SetDeadline2D(session, project, name, date)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		findate := line[7] // FIN날짜
 		if findate != "" {
 			date, err := ditime.ToFullTime(19, findate)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 			err = SetFindate(session, project, name, date)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		finver := line[8] // FIN버전
 		if finver != "" {
 			err = SetFinver(session, project, name, finver)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 
@@ -440,82 +407,58 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if tags != "" {
 			err = SetTags(session, project, name, strings.Split(tags, ","))
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		rnum := line[10] // 롤넘버
 		if rnum != "" {
 			err = SetRnum(session, project, name, rnum)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		handleIn := line[11] // 핸들IN
 		if handleIn != "" {
 			num, err := strconv.Atoi(handleIn)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 			err = SetFrame(session, project, name, "handlein", num)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		handleOut := line[12] // 핸들OUT
 		if handleOut != "" {
 			num, err := strconv.Atoi(handleOut)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 			err = SetFrame(session, project, name, "handleout", num)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		justTimecodeIn := line[13] // JUST타임코드IN
 		if justTimecodeIn != "" {
 			err = SetJustTimecodeIn(session, project, name, justTimecodeIn)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 		justTimecodeOut := line[14] // JUST타임코드OUT
 		if justTimecodeOut != "" {
 			err = SetJustTimecodeIn(session, project, name, justTimecodeOut)
 			if err != nil {
-				i := ErrorItem{
-					Name:  name,
-					Error: err.Error(),
-				}
-				rcp.ErrorItems = append(rcp.ErrorItems, i)
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
 			}
 		}
 	}
