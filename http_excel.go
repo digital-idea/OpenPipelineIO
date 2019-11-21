@@ -5,8 +5,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
+	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
 
@@ -223,10 +227,299 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Rows = rows
-	// project에 샷이 존재하는지 체크한다.
-	// 각 col 값이 정상적인지 체크한다.
-	// 결과 보고서를 만든다.
 	err = TEMPLATES.ExecuteTemplate(w, "reportexcel", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
+
+// handleExcelSubmit 함수는 excel 파일을 전송한다.
+func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	// 파일네임을 구한다.
+	tmppath, err := userTemppath(ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// .xlsx 파일을 읽는다.
+	xlsxs, err := GetXLSX(tmppath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(xlsxs) != 1 {
+		http.Redirect(w, r, "/importexcel", http.StatusSeeOther)
+		return
+	}
+	f, err := excelize.OpenFile(xlsxs[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type ErrorItem struct {
+		Name  string
+		Error string
+	}
+	type recipe struct {
+		Filename string
+		Sheet    string
+		User
+		SessionID string
+		Devmode   bool
+		SearchOption
+		ErrorItems []ErrorItem
+	}
+	rcp := recipe{}
+	rcp.SessionID = ssid.ID
+	rcp.Devmode = *flagDevmode
+	rcp.SearchOption = handleRequestToSearchOption(r)
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Sheet = "Sheet1"
+	project := r.FormValue("project")
+	overwrite := str2bool(r.FormValue("overwrite"))
+
+	excelRows := f.GetRows(rcp.Sheet)
+	if len(excelRows) == 0 {
+		http.Error(w, rcp.Sheet+"값이 비어있습니다.", http.StatusBadRequest)
+		return
+	}
+	for _, line := range excelRows {
+		if len(line) != 15 {
+			http.Error(w, "약속된 Cell 갯수가 다릅니다", http.StatusBadRequest)
+			return
+		}
+		if line[0] == "샷네임" {
+			continue
+		}
+		name := line[0]     // item name
+		shottype := line[1] // shottype 2d,3d
+		if shottype != "" {
+			err := SetShotType(session, project, name, shottype)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		note := line[2] // 작업내용
+		if note != "" {
+			_, err = SetNote(session, project, name, ssid.ID, note, overwrite)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		comment := line[3] // 수정사항
+		if comment != "" {
+			err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		sources := line[4] // 소스자료(제목:경로)
+		if sources != "" {
+			for _, s := range strings.Split(sources, "\n") {
+				source := strings.Split(s, ":")
+				title := source[0]
+				path := source[1]
+				err = AddSource(session, project, name, ssid.ID, title, path)
+				if err != nil {
+					i := ErrorItem{
+						Name:  name,
+						Error: err.Error(),
+					}
+					rcp.ErrorItems = append(rcp.ErrorItems, i)
+				}
+			}
+		}
+
+		ddline3d := line[5] // 3D마감
+		if ddline3d != "" {
+			date, err := ditime.ToFullTime(19, ddline3d)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+			err = SetDeadline3D(session, project, name, date)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		ddline2d := line[6] // 2D마감
+		if ddline2d != "" {
+			date, err := ditime.ToFullTime(19, ddline2d)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+			err = SetDeadline2D(session, project, name, date)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		findate := line[7] // FIN날짜
+		if findate != "" {
+			date, err := ditime.ToFullTime(19, findate)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+			err = SetFindate(session, project, name, date)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		finver := line[8] // FIN버전
+		if finver != "" {
+			err = SetFinver(session, project, name, finver)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+
+		tags := line[9] // 태그
+		if tags != "" {
+			err = SetTags(session, project, name, strings.Split(tags, ","))
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		rnum := line[10] // 롤넘버
+		if rnum != "" {
+			err = SetRnum(session, project, name, rnum)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		handleIn := line[11] // 핸들IN
+		if handleIn != "" {
+			num, err := strconv.Atoi(handleIn)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+			err = SetFrame(session, project, name, "handlein", num)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		handleOut := line[12] // 핸들OUT
+		if handleOut != "" {
+			num, err := strconv.Atoi(handleOut)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+			err = SetFrame(session, project, name, "handleout", num)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		justTimecodeIn := line[13] // JUST타임코드IN
+		if justTimecodeIn != "" {
+			err = SetJustTimecodeIn(session, project, name, justTimecodeIn)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+		justTimecodeOut := line[14] // JUST타임코드OUT
+		if justTimecodeOut != "" {
+			err = SetJustTimecodeIn(session, project, name, justTimecodeOut)
+			if err != nil {
+				i := ErrorItem{
+					Name:  name,
+					Error: err.Error(),
+				}
+				rcp.ErrorItems = append(rcp.ErrorItems, i)
+			}
+		}
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "resultexcel", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -2406,7 +2406,7 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	return nil
 }
 
-// SetNote 함수는 item에 작업내용을 추가한다.
+// SetNote 함수는 item에 작업내용을 추가한다. 노트내용과 에러를 반환한다.
 func SetNote(session *mgo.Session, project, name, userID, text string, overwrite bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)

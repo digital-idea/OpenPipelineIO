@@ -1,0 +1,29 @@
+{{define "resultexcel"}}
+
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+    <div class="container p-5">
+        <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+            <div class="pt-3 pb-3">
+                <h2 class="section-heading">Result Excel</h2>
+            </div>
+            {{if .ErrorItems}}
+                {{range .ErrorItems}}
+                    {{.Name}}:{{.Error}}
+                {{end}}
+            {{end}}
+        </div>
+        
+    </div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+</html>
+
+{{end}}

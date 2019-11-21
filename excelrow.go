@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+
 	"github.com/digital-idea/ditime"
 )
 
@@ -35,7 +36,7 @@ type Excelrow struct {
 	JustTimecodeInError  string
 	JustTimecodeOut      string
 	JustTimecodeOutError string
-	Errornum int
+	Errornum             int
 }
 
 func (r *Excelrow) checkerror() {
