@@ -20,7 +20,7 @@
 - [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.6/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 ### Roadmap
-- [ ] 기존 QT방식 PM입력기를 제거하기 -> 웹입력기 전환으로 얻을 수 있는 것: 로그 일괄처리, Multi Task, 로그인 계정을 이용한 정보설정
+- [ ] Excel Export ( 기존 QT방식 PM입력기를 제거하기 )
 - [ ] 작업자 배정이 ID로 설정되도록 진행
 - [ ] Multi Task 기능추가
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전) with USD
