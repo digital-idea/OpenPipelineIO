@@ -32,10 +32,6 @@
 ### 데이터베이스(mongoDB) 설치, 실행
 
 CentOS
-```bash
-$ sudo yum install mongodb mongodb-server
-$ sudo service mongod start
-```
 - [CentOS7에서 mongoDB 설정](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
 
 macOS
@@ -68,6 +64,15 @@ CSI는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로
 ```bash
 $ dilog -http :8080
 $ wfs -http :8081
+```
+
+### CentOS 방화벽 설정
+다른 컴퓨터에서 접근하기 위해서는 해당 포트를 방화벽 해제합니다.
+
+```
+# firewall-cmd --zone=public --add-port=80/tcp --permanent
+success
+# firewall-cmd --reload
 ```
 
 ### 터미널 명령어 / CommandLine
