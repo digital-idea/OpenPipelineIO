@@ -514,3 +514,30 @@ func handleExportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleExportExcelSubmit 함수는 export excel을 처리한다.
+func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("project")
+	format := r.FormValue("format")
+	task := r.FormValue("task")
+	fmt.Println(project, format, task)
+}

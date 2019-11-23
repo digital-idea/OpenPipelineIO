@@ -213,6 +213,7 @@ func webserver(port string) {
 	http.HandleFunc("/exportexcel", handleExportExcel)
 	http.HandleFunc("/reportexcel", handleReportExcel)
 	http.HandleFunc("/excel-submit", handleExcelSubmit)
+	http.HandleFunc("/exportexcel-submit", handleExportExcelSubmit)
 	http.HandleFunc("/upload-excel", handleUploadExcel)
 
 	// Input
