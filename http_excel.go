@@ -469,3 +469,48 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+// handleExportExcel 함수는 엑셀파일을 Export 하는 페이지 이다.
+func handleExportExcel(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		User
+		Projectlist []string
+		SessionID   string
+		Devmode     bool
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.SessionID = ssid.ID
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = TEMPLATES.ExecuteTemplate(w, "exportexcel", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
