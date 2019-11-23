@@ -56,6 +56,9 @@ func GetSessionID(r *http.Request) (JwtToken, error) {
 			token, err := jwt.Parse(cookie.Value, func(token *jwt.Token) (interface{}, error) {
 				return []byte(os.Getenv("CSI_JWT_SIGN_KEY")), nil
 			})
+			if err != nil {
+				return jt, err
+			}
 			token, err = jwt.ParseWithClaims(cookie.Value, &jt, func(token *jwt.Token) (interface{}, error) {
 				return []byte(os.Getenv("CSI_JWT_SIGN_KEY")), nil
 			})

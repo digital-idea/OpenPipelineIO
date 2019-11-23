@@ -825,8 +825,7 @@ func SearchKey(session *mgo.Session, op SearchOption, key string) ([]Item, error
 		status = append(status, bson.M{"status": NONE})
 	}
 
-	q := bson.M{}
-	q = bson.M{"$and": []bson.M{
+	q := bson.M{"$and": []bson.M{
 		bson.M{"$or": query},
 		bson.M{"$or": status},
 	}}
@@ -881,8 +880,7 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 		status = append(status, bson.M{"status": NONE})
 	}
 
-	q := bson.M{}
-	q = bson.M{"$and": []bson.M{
+	q := bson.M{"$and": []bson.M{
 		bson.M{"$or": query},
 		bson.M{"$or": status},
 	}}
@@ -970,8 +968,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	wip := bson.M{}
-	wip = bson.M{"$and": []bson.M{
+	wip := bson.M{"$and": []bson.M{
 		bson.M{"status": WIP},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}
@@ -994,8 +991,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	done := bson.M{}
-	done = bson.M{"$and": []bson.M{
+	done := bson.M{"$and": []bson.M{
 		bson.M{"status": DONE},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}
@@ -1006,8 +1002,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	omit := bson.M{}
-	omit = bson.M{"$and": []bson.M{
+	omit := bson.M{"$and": []bson.M{
 		bson.M{"status": OMIT},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}
@@ -1018,8 +1013,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	hold := bson.M{}
-	hold = bson.M{"$and": []bson.M{
+	hold := bson.M{"$and": []bson.M{
 		bson.M{"status": HOLD},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}
@@ -1030,8 +1024,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	out := bson.M{}
-	out = bson.M{"$and": []bson.M{
+	out := bson.M{"$and": []bson.M{
 		bson.M{"status": OUT},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}
@@ -1042,8 +1035,7 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 		return Infobarnum{}, err
 	}
 
-	none := bson.M{}
-	none = bson.M{"$and": []bson.M{
+	none := bson.M{"$and": []bson.M{
 		bson.M{"status": NONE},
 		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
 	}}

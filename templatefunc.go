@@ -287,8 +287,8 @@ func Str2Tags(tags string) []string {
 
 // CheckDate 함수는 1차마감, 2차마감, mov업데이이트날짜와 검색어를 비교하여 statusbox의 색깔을 반영
 // 검색어에 날짜형식의 검색어만 적용된다.(2017-12-05, 1205)
-func CheckDate(predate, date, mdate, searchs string) string {
-	for _, search := range strings.Split(searchs, " ") {
+func CheckDate(predate, date, mdate, searches string) string {
+	for _, search := range strings.Split(searches, " ") {
 		if MatchNormalTime.MatchString(search) && ToNormalTime(mdate) == search {
 			return "_daily" // 파랑색
 		}
