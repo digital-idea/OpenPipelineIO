@@ -645,9 +645,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		fmt.Println(i.Note.Text)
 		f.SetCellValue(sheet, noteAN, i.Note.Text)
-
 		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
 		if err != nil {
 			log.Println(err)
