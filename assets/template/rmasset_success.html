@@ -11,13 +11,13 @@
         <div>
             <label>Success Assets</label>
             {{range .Success}}
-                <div class="p-1"><span class="btn btn-sm btn-success">{{.Name}}</span> 정상</div>
+                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-success">{{.Name}}</span> 정상</div>
             {{end}}
         </div>
         <div class="pt-5">
             <label>Fail Assets</label>
             {{range .Fails}}
-                <div class="p-1"><span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}</div>
+                <div class="p-1 text-darkmode"><span class="btn btn-sm btn-danger">{{.Name}}</span> {{.Error}}</div>
             {{end}}
         </div>
         <div class="text-center">
