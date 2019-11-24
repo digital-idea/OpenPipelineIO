@@ -569,26 +569,27 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	f.SetCellValue(sheet, "D1", "샷타입")
 	f.SetCellValue(sheet, "E1", "상태")
 	f.SetCellValue(sheet, "F1", "작업내용")
-	f.SetCellValue(sheet, "G1", "수정사항")
-	f.SetCellValue(sheet, "H1", "2D마감")
-	f.SetCellValue(sheet, "I1", "JustTimecodeIn")
-	f.SetCellValue(sheet, "J1", "JustTimecodeOut")
-	f.SetCellValue(sheet, "K1", "comp")
-	f.SetCellValue(sheet, "L1", "matte")
-	f.SetCellValue(sheet, "M1", "mg")
-	f.SetCellValue(sheet, "N1", "3D마감")
-	f.SetCellValue(sheet, "O1", "model")
-	f.SetCellValue(sheet, "P1", "mm")
-	f.SetCellValue(sheet, "Q1", "layout")
-	f.SetCellValue(sheet, "R1", "ani")
-	f.SetCellValue(sheet, "S1", "fur")
-	f.SetCellValue(sheet, "T1", "sim")
-	f.SetCellValue(sheet, "U1", "crowd")
-	f.SetCellValue(sheet, "V1", "fx")
-	f.SetCellValue(sheet, "W1", "light")
-	f.SetCellValue(sheet, "X1", "previz")
-	f.SetColWidth(sheet, "A", "X", 20)
-	f.SetCellStyle(sheet, "A1", "X1", style)
+	f.SetCellValue(sheet, "G1", "태그")
+	f.SetCellValue(sheet, "H1", "수정사항")
+	f.SetCellValue(sheet, "I1", "2D마감")
+	f.SetCellValue(sheet, "J1", "JustTimecodeIn")
+	f.SetCellValue(sheet, "K1", "JustTimecodeOut")
+	f.SetCellValue(sheet, "L1", "comp")
+	f.SetCellValue(sheet, "M1", "matte")
+	f.SetCellValue(sheet, "N1", "mg")
+	f.SetCellValue(sheet, "O1", "3D마감")
+	f.SetCellValue(sheet, "P1", "model")
+	f.SetCellValue(sheet, "Q1", "mm")
+	f.SetCellValue(sheet, "R1", "layout")
+	f.SetCellValue(sheet, "S1", "ani")
+	f.SetCellValue(sheet, "T1", "fur")
+	f.SetCellValue(sheet, "U1", "sim")
+	f.SetCellValue(sheet, "V1", "crowd")
+	f.SetCellValue(sheet, "W1", "fx")
+	f.SetCellValue(sheet, "X1", "light")
+	f.SetCellValue(sheet, "Y1", "previz")
+	f.SetColWidth(sheet, "A", "Y", 20)
+	f.SetCellStyle(sheet, "A1", "Y1", style)
 	// 엑셀파일 생성
 	for n, i := range items {
 		f.SetRowHeight(sheet, n+2, 60)
@@ -651,7 +652,32 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		f.SetCellStyle(sheet, noteAN, noteAN, style)
+		// 태그
+		tagAN, err := excelize.CoordinatesToCellName(7, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, tagAN, strings.Join(i.Tag, ","))
+		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellStyle(sheet, tagAN, tagAN, style)
 		// 수정사항
+		commentsAN, err := excelize.CoordinatesToCellName(8, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		comments := []string{}
+		for _, c := range ReverseCommentSlice(i.Comments) {
+			comments = append(comments, c.Text)
+		}
+		f.SetCellValue(sheet, commentsAN, strings.Join(comments, "\n"))
+		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellStyle(sheet, commentsAN, commentsAN, style)
 	}
 	tempDir, err := ioutil.TempDir("", "excel")
 	if err != nil {
