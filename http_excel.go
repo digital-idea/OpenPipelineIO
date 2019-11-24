@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	excelize "github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
@@ -556,14 +556,56 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	f := excelize.NewFile()
 	index := f.NewSheet("Sheet1")
 	f.SetActiveSheet(index)
+	// 스타일
+	style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center"}}`)
+	if err != nil {
+		log.Println(err)
+	}
 	// 제목생성
+	f.SetCellValue("Sheet1", "A1", "Name")
+	f.SetCellValue("Sheet1", "B1", "Thumbnail")
+	f.SetCellValue("Sheet1", "C1", "롤넘버")
+	f.SetCellValue("Sheet1", "D1", "샷타입")
+	f.SetCellValue("Sheet1", "E1", "상태")
+	f.SetCellValue("Sheet1", "F1", "작업내용")
+	f.SetCellValue("Sheet1", "G1", "수정사항")
+	f.SetCellValue("Sheet1", "H1", "2D마감")
+	f.SetCellValue("Sheet1", "I1", "JustTimecodeIn")
+	f.SetCellValue("Sheet1", "J1", "JustTimecodeOut")
+	f.SetCellValue("Sheet1", "K1", "comp")
+	f.SetCellValue("Sheet1", "L1", "matte")
+	f.SetCellValue("Sheet1", "M1", "mg")
+	f.SetCellValue("Sheet1", "N1", "3D마감")
+	f.SetCellValue("Sheet1", "O1", "model")
+	f.SetCellValue("Sheet1", "P1", "mm")
+	f.SetCellValue("Sheet1", "Q1", "layout")
+	f.SetCellValue("Sheet1", "R1", "ani")
+	f.SetCellValue("Sheet1", "S1", "fur")
+	f.SetCellValue("Sheet1", "T1", "sim")
+	f.SetCellValue("Sheet1", "U1", "crowd")
+	f.SetCellValue("Sheet1", "V1", "fx")
+	f.SetCellValue("Sheet1", "W1", "light")
+	f.SetCellValue("Sheet1", "X1", "previz")
+	f.SetColWidth("Sheet1", "A", "X", 20)
+	f.SetCellStyle("Sheet1", "A1", "X1", style)
 	// 엑셀파일 생성
 	for n, i := range items {
+		// 이름
 		nameAN, err := excelize.CoordinatesToCellName(1, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue("Sheet1", nameAN, i.Name)
+		f.SetRowHeight("Sheet1", n+2, 60)
+		f.SetCellStyle("Sheet1", nameAN, nameAN, style)
+		// 썸네일
+		thumbAN, err := excelize.CoordinatesToCellName(2, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
+		f.AddPicture("Sheet1", thumbAN, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
+		// 롤넘버
 	}
 	tempDir, err := ioutil.TempDir("", "excel")
 	if err != nil {
