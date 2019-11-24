@@ -554,7 +554,8 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	f := excelize.NewFile()
-	index := f.NewSheet("Sheet1")
+	sheet := "Sheet1"
+	index := f.NewSheet(sheet)
 	f.SetActiveSheet(index)
 	// 스타일
 	style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center"}}`)
@@ -562,50 +563,97 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	// 제목생성
-	f.SetCellValue("Sheet1", "A1", "Name")
-	f.SetCellValue("Sheet1", "B1", "Thumbnail")
-	f.SetCellValue("Sheet1", "C1", "롤넘버")
-	f.SetCellValue("Sheet1", "D1", "샷타입")
-	f.SetCellValue("Sheet1", "E1", "상태")
-	f.SetCellValue("Sheet1", "F1", "작업내용")
-	f.SetCellValue("Sheet1", "G1", "수정사항")
-	f.SetCellValue("Sheet1", "H1", "2D마감")
-	f.SetCellValue("Sheet1", "I1", "JustTimecodeIn")
-	f.SetCellValue("Sheet1", "J1", "JustTimecodeOut")
-	f.SetCellValue("Sheet1", "K1", "comp")
-	f.SetCellValue("Sheet1", "L1", "matte")
-	f.SetCellValue("Sheet1", "M1", "mg")
-	f.SetCellValue("Sheet1", "N1", "3D마감")
-	f.SetCellValue("Sheet1", "O1", "model")
-	f.SetCellValue("Sheet1", "P1", "mm")
-	f.SetCellValue("Sheet1", "Q1", "layout")
-	f.SetCellValue("Sheet1", "R1", "ani")
-	f.SetCellValue("Sheet1", "S1", "fur")
-	f.SetCellValue("Sheet1", "T1", "sim")
-	f.SetCellValue("Sheet1", "U1", "crowd")
-	f.SetCellValue("Sheet1", "V1", "fx")
-	f.SetCellValue("Sheet1", "W1", "light")
-	f.SetCellValue("Sheet1", "X1", "previz")
-	f.SetColWidth("Sheet1", "A", "X", 20)
-	f.SetCellStyle("Sheet1", "A1", "X1", style)
+	f.SetCellValue(sheet, "A1", "Name")
+	f.SetCellValue(sheet, "B1", "Thumbnail")
+	f.SetCellValue(sheet, "C1", "롤넘버")
+	f.SetCellValue(sheet, "D1", "샷타입")
+	f.SetCellValue(sheet, "E1", "상태")
+	f.SetCellValue(sheet, "F1", "작업내용")
+	f.SetCellValue(sheet, "G1", "수정사항")
+	f.SetCellValue(sheet, "H1", "2D마감")
+	f.SetCellValue(sheet, "I1", "JustTimecodeIn")
+	f.SetCellValue(sheet, "J1", "JustTimecodeOut")
+	f.SetCellValue(sheet, "K1", "comp")
+	f.SetCellValue(sheet, "L1", "matte")
+	f.SetCellValue(sheet, "M1", "mg")
+	f.SetCellValue(sheet, "N1", "3D마감")
+	f.SetCellValue(sheet, "O1", "model")
+	f.SetCellValue(sheet, "P1", "mm")
+	f.SetCellValue(sheet, "Q1", "layout")
+	f.SetCellValue(sheet, "R1", "ani")
+	f.SetCellValue(sheet, "S1", "fur")
+	f.SetCellValue(sheet, "T1", "sim")
+	f.SetCellValue(sheet, "U1", "crowd")
+	f.SetCellValue(sheet, "V1", "fx")
+	f.SetCellValue(sheet, "W1", "light")
+	f.SetCellValue(sheet, "X1", "previz")
+	f.SetColWidth(sheet, "A", "X", 20)
+	f.SetCellStyle(sheet, "A1", "X1", style)
 	// 엑셀파일 생성
 	for n, i := range items {
+		f.SetRowHeight(sheet, n+2, 60)
 		// 이름
 		nameAN, err := excelize.CoordinatesToCellName(1, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue("Sheet1", nameAN, i.Name)
-		f.SetRowHeight("Sheet1", n+2, 60)
-		f.SetCellStyle("Sheet1", nameAN, nameAN, style)
+		f.SetCellValue(sheet, nameAN, i.Name)
+		f.SetCellStyle(sheet, nameAN, nameAN, style)
 		// 썸네일
 		thumbAN, err := excelize.CoordinatesToCellName(2, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
-		f.AddPicture("Sheet1", thumbAN, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
+		f.AddPicture(sheet, thumbAN, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// 롤넘버
+		rnumAN, err := excelize.CoordinatesToCellName(3, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, rnumAN, i.Rnum)
+		f.SetCellStyle(sheet, rnumAN, rnumAN, style)
+		// 샷타입
+		shotTypeAN, err := excelize.CoordinatesToCellName(4, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, shotTypeAN, strings.ToUpper(i.Shottype))
+		f.SetCellStyle(sheet, shotTypeAN, shotTypeAN, style)
+		// 상태
+		statusAN, err := excelize.CoordinatesToCellName(5, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		style, err := f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center"},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, statusAN, Status2capString(i.Status))
+		f.SetCellStyle(sheet, statusAN, statusAN, style)
+		// 작업내용
+		noteAN, err := excelize.CoordinatesToCellName(6, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Println(i.Note.Text)
+		f.SetCellValue(sheet, noteAN, i.Note.Text)
+
+		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellStyle(sheet, noteAN, noteAN, style)
+		// 수정사항
 	}
 	tempDir, err := ioutil.TempDir("", "excel")
 	if err != nil {
