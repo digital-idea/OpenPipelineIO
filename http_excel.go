@@ -578,11 +578,6 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
-	sendData, err := os.Open(tempDir + "/" + filename)
-	if err != nil {
-		log.Println(err)
-	}
-	defer sendData.Close()
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s.xlsx", project, format))
-	http.ServeContent(w, r, filename, time.Now(), sendData)
+	http.ServeFile(w, r, tempDir+"/"+filename)
 }
