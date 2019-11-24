@@ -614,7 +614,6 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	defer os.RemoveAll(tempDir)
 	filename := format + ".xlsx"
 	fmt.Println(task)
-	fmt.Println(tempDir + "/" + filename)
 	err = f.SaveAs(tempDir + "/" + filename)
 	if err != nil {
 		log.Println(err)
