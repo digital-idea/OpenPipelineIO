@@ -548,7 +548,6 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("project")
 	format := r.FormValue("format")
 	task := r.FormValue("task")
-	fmt.Println(format, task)
 	items, err := SearchAllShot(session, project)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -557,13 +556,14 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	f := excelize.NewFile()
 	index := f.NewSheet("Sheet1")
 	f.SetActiveSheet(index)
-
+	// 제목생성
+	// 엑셀파일 생성
 	for n, i := range items {
-		alphaNumeric, err := excelize.CoordinatesToCellName(1, n+2)
+		nameAN, err := excelize.CoordinatesToCellName(1, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue("Sheet1", alphaNumeric, i.Name)
+		f.SetCellValue("Sheet1", nameAN, i.Name)
 	}
 	tempDir, err := ioutil.TempDir("", "excel")
 	if err != nil {
@@ -571,17 +571,18 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer os.RemoveAll(tempDir)
 	filename := format + ".xlsx"
+	fmt.Println(task)
 	fmt.Println(tempDir + "/" + filename)
 	err = f.SaveAs(tempDir + "/" + filename)
 	if err != nil {
 		log.Println(err)
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
-	w.Header().Add("Content-Disposition", "Attachment")
 	sendData, err := os.Open(tempDir + "/" + filename)
 	if err != nil {
 		log.Println(err)
 	}
 	defer sendData.Close()
-	http.ServeContent(w, r, fmt.Sprintf("%s.xlsx", format), time.Now(), sendData)
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s.xlsx", project, format))
+	http.ServeContent(w, r, filename, time.Now(), sendData)
 }
