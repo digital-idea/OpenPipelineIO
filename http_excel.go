@@ -547,18 +547,37 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("project")
 	format := r.FormValue("format")
-	task := r.FormValue("task")
-	items, err := SearchAllShot(session, project)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	var items []Item
+	if format == "cglist-shot" {
+		items, err = SearchAllShot(session, project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else if format == "cglist-asset" {
+		items, err = SearchAllAsset(session, project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		items, err = SearchAll(session, project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
+
 	f := excelize.NewFile()
 	sheet := "Sheet1"
 	index := f.NewSheet(sheet)
 	f.SetActiveSheet(index)
 	// 스타일
-	style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center"}}`)
+	style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true}}`)
+	if err != nil {
+		log.Println(err)
+	}
+	textStyle, err := f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
 	if err != nil {
 		log.Println(err)
 	}
@@ -566,14 +585,14 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	f.SetCellValue(sheet, "A1", "Name")
 	f.SetCellValue(sheet, "B1", "Thumbnail")
 	f.SetCellValue(sheet, "C1", "롤넘버")
-	f.SetCellValue(sheet, "D1", "샷타입")
+	f.SetCellValue(sheet, "D1", "Type")
 	f.SetCellValue(sheet, "E1", "상태")
 	f.SetCellValue(sheet, "F1", "작업내용")
 	f.SetCellValue(sheet, "G1", "태그")
 	f.SetCellValue(sheet, "H1", "수정사항")
-	f.SetCellValue(sheet, "I1", "2D마감")
-	f.SetCellValue(sheet, "J1", "JustTimecodeIn")
-	f.SetCellValue(sheet, "K1", "JustTimecodeOut")
+	f.SetCellValue(sheet, "I1", "JustTimecodeIn")
+	f.SetCellValue(sheet, "J1", "JustTimecodeOut")
+	f.SetCellValue(sheet, "K1", "2D마감")
 	f.SetCellValue(sheet, "L1", "comp")
 	f.SetCellValue(sheet, "M1", "matte")
 	f.SetCellValue(sheet, "N1", "mg")
@@ -594,39 +613,43 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	for n, i := range items {
 		f.SetRowHeight(sheet, n+2, 60)
 		// 이름
-		nameAN, err := excelize.CoordinatesToCellName(1, n+2)
+		pos, err := excelize.CoordinatesToCellName(1, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, nameAN, i.Name)
-		f.SetCellStyle(sheet, nameAN, nameAN, style)
+		f.SetCellValue(sheet, pos, i.Name)
+		f.SetCellStyle(sheet, pos, pos, style)
 		// 썸네일
-		thumbAN, err := excelize.CoordinatesToCellName(2, n+2)
+		pos, err = excelize.CoordinatesToCellName(2, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
-		f.AddPicture(sheet, thumbAN, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
+		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// 롤넘버
-		rnumAN, err := excelize.CoordinatesToCellName(3, n+2)
+		pos, err = excelize.CoordinatesToCellName(3, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, rnumAN, i.Rnum)
-		f.SetCellStyle(sheet, rnumAN, rnumAN, style)
-		// 샷타입
-		shotTypeAN, err := excelize.CoordinatesToCellName(4, n+2)
+		f.SetCellValue(sheet, pos, i.Rnum)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// Type
+		pos, err = excelize.CoordinatesToCellName(4, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, shotTypeAN, strings.ToUpper(i.Shottype))
-		f.SetCellStyle(sheet, shotTypeAN, shotTypeAN, style)
+		if i.Type == "asset" {
+			f.SetCellValue(sheet, pos, strings.ToUpper(i.Assettype))
+		} else {
+			f.SetCellValue(sheet, pos, strings.ToUpper(i.Shottype))
+		}
+		f.SetCellStyle(sheet, pos, pos, style)
 		// 상태
-		statusAN, err := excelize.CoordinatesToCellName(5, n+2)
+		pos, err = excelize.CoordinatesToCellName(5, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		style, err := f.NewStyle(
+		statusStyle, err := f.NewStyle(
 			fmt.Sprintf(`
 			{"alignment":{"horizontal":"center","vertical":"center"},
 			"fill":{"type":"pattern","color":["%s"],"pattern":1},
@@ -639,32 +662,26 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, statusAN, Status2capString(i.Status))
-		f.SetCellStyle(sheet, statusAN, statusAN, style)
+		f.SetCellValue(sheet, pos, Status2capString(i.Status))
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
 		// 작업내용
-		noteAN, err := excelize.CoordinatesToCellName(6, n+2)
+		pos, err = excelize.CoordinatesToCellName(6, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, noteAN, i.Note.Text)
-		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
-		if err != nil {
-			log.Println(err)
-		}
-		f.SetCellStyle(sheet, noteAN, noteAN, style)
+		f.SetCellValue(sheet, pos, i.Note.Text)
+
+		f.SetCellStyle(sheet, pos, pos, textStyle)
 		// 태그
-		tagAN, err := excelize.CoordinatesToCellName(7, n+2)
+		pos, err = excelize.CoordinatesToCellName(7, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellValue(sheet, tagAN, strings.Join(i.Tag, ","))
-		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
-		if err != nil {
-			log.Println(err)
-		}
-		f.SetCellStyle(sheet, tagAN, tagAN, style)
+		f.SetCellValue(sheet, pos, strings.Join(i.Tag, ","))
+
+		f.SetCellStyle(sheet, pos, pos, style)
 		// 수정사항
-		commentsAN, err := excelize.CoordinatesToCellName(8, n+2)
+		pos, err = excelize.CoordinatesToCellName(8, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -672,12 +689,348 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		for _, c := range ReverseCommentSlice(i.Comments) {
 			comments = append(comments, c.Text)
 		}
-		f.SetCellValue(sheet, commentsAN, strings.Join(comments, "\n"))
-		style, err = f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
+		f.SetCellValue(sheet, pos, strings.Join(comments, "\n"))
+		f.SetCellStyle(sheet, pos, pos, textStyle)
+		// JustTimecodeIn
+		pos, err = excelize.CoordinatesToCellName(9, n+2)
 		if err != nil {
 			log.Println(err)
 		}
-		f.SetCellStyle(sheet, commentsAN, commentsAN, style)
+		f.SetCellValue(sheet, pos, i.JustTimecodeIn)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// JustTimecodeOut
+		pos, err = excelize.CoordinatesToCellName(10, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, i.JustTimecodeOut)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// Deadline2D
+		pos, err = excelize.CoordinatesToCellName(11, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline2d))
+		f.SetCellStyle(sheet, pos, pos, style)
+		// Comp
+		pos, err = excelize.CoordinatesToCellName(12, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Comp.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text := Status2capString(i.Comp.Status)
+		text += "\n" + i.Comp.User
+		text += "\n" + ToNormalTime(i.Comp.Predate)
+		text += "\n" + ToNormalTime(i.Comp.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Matte
+		pos, err = excelize.CoordinatesToCellName(13, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Matte.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Matte.Status)
+		text += "\n" + i.Matte.User
+		text += "\n" + ToNormalTime(i.Matte.Predate)
+		text += "\n" + ToNormalTime(i.Matte.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Mg
+		pos, err = excelize.CoordinatesToCellName(14, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Mg.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Mg.Status)
+		text += "\n" + i.Mg.User
+		text += "\n" + ToNormalTime(i.Mg.Predate)
+		text += "\n" + ToNormalTime(i.Mg.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Deadline3D
+		pos, err = excelize.CoordinatesToCellName(15, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline3d))
+		f.SetCellStyle(sheet, pos, pos, style)
+		// Model
+		pos, err = excelize.CoordinatesToCellName(16, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Model.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Model.Status)
+		text += "\n" + i.Model.User
+		text += "\n" + ToNormalTime(i.Model.Predate)
+		text += "\n" + ToNormalTime(i.Model.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Mm
+		pos, err = excelize.CoordinatesToCellName(17, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Mm.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Mm.Status)
+		text += "\n" + i.Mm.User
+		text += "\n" + ToNormalTime(i.Mm.Predate)
+		text += "\n" + ToNormalTime(i.Mm.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Layout
+		pos, err = excelize.CoordinatesToCellName(18, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Layout.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Layout.Status)
+		text += "\n" + i.Layout.User
+		text += "\n" + ToNormalTime(i.Layout.Predate)
+		text += "\n" + ToNormalTime(i.Layout.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Ani
+		pos, err = excelize.CoordinatesToCellName(19, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Ani.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Ani.Status)
+		text += "\n" + i.Ani.User
+		text += "\n" + ToNormalTime(i.Ani.Predate)
+		text += "\n" + ToNormalTime(i.Ani.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Fur
+		pos, err = excelize.CoordinatesToCellName(20, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Fur.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Fur.Status)
+		text += "\n" + i.Fur.User
+		text += "\n" + ToNormalTime(i.Fur.Predate)
+		text += "\n" + ToNormalTime(i.Fur.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Sim
+		pos, err = excelize.CoordinatesToCellName(21, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Sim.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Sim.Status)
+		text += "\n" + i.Sim.User
+		text += "\n" + ToNormalTime(i.Sim.Predate)
+		text += "\n" + ToNormalTime(i.Sim.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Crowd
+		pos, err = excelize.CoordinatesToCellName(22, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Crowd.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Crowd.Status)
+		text += "\n" + i.Crowd.User
+		text += "\n" + ToNormalTime(i.Crowd.Predate)
+		text += "\n" + ToNormalTime(i.Crowd.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Fx
+		pos, err = excelize.CoordinatesToCellName(23, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Fx.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Fx.Status)
+		text += "\n" + i.Fx.User
+		text += "\n" + ToNormalTime(i.Fx.Predate)
+		text += "\n" + ToNormalTime(i.Fx.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Light
+		pos, err = excelize.CoordinatesToCellName(24, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Light.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Light.Status)
+		text += "\n" + i.Light.User
+		text += "\n" + ToNormalTime(i.Light.Predate)
+		text += "\n" + ToNormalTime(i.Light.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
+		// Priviz
+		pos, err = excelize.CoordinatesToCellName(25, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		statusStyle, err = f.NewStyle(
+			fmt.Sprintf(`
+			{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+			"fill":{"type":"pattern","color":["%s"],"pattern":1},
+			"border":[
+				{"type":"left","color":"888888","style":1},
+				{"type":"top","color":"888888","style":1},
+				{"type":"bottom","color":"888888","style":1},
+				{"type":"right","color":"888888","style":1}]
+				}`, itemStatus2color(i.Previz.Status)))
+		if err != nil {
+			log.Println(err)
+		}
+		text = Status2capString(i.Previz.Status)
+		text += "\n" + i.Previz.User
+		text += "\n" + ToNormalTime(i.Previz.Predate)
+		text += "\n" + ToNormalTime(i.Previz.Date)
+		f.SetCellValue(sheet, pos, text)
+		f.SetCellStyle(sheet, pos, pos, statusStyle)
 	}
 	tempDir, err := ioutil.TempDir("", "excel")
 	if err != nil {
@@ -685,7 +1038,6 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer os.RemoveAll(tempDir)
 	filename := format + ".xlsx"
-	fmt.Println(task)
 	err = f.SaveAs(tempDir + "/" + filename)
 	if err != nil {
 		log.Println(err)
