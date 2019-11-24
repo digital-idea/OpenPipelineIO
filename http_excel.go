@@ -5,11 +5,12 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/360EntSecGroup-Skylar/excelize"
+	excelize "github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
@@ -185,7 +186,11 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var rows []Excelrow
-	excelRows := f.GetRows(rcp.Sheet)
+	excelRows, err := f.GetRows(rcp.Sheet)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	if len(excelRows) == 0 {
 		http.Error(w, rcp.Sheet+"값이 비어있습니다.", http.StatusBadRequest)
 		return
@@ -303,7 +308,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("project")
 	overwrite := str2bool(r.FormValue("overwrite"))
 
-	excelRows := f.GetRows(rcp.Sheet)
+	excelRows, err := f.GetRows(rcp.Sheet)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	if len(excelRows) == 0 {
 		http.Error(w, rcp.Sheet+"값이 비어있습니다.", http.StatusBadRequest)
 		return
@@ -539,5 +548,40 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("project")
 	format := r.FormValue("format")
 	task := r.FormValue("task")
-	fmt.Println(project, format, task)
+	fmt.Println(format, task)
+	items, err := SearchAllShot(session, project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	f := excelize.NewFile()
+	index := f.NewSheet("Sheet1")
+	f.SetActiveSheet(index)
+
+	for n, i := range items {
+		alphaNumeric, err := excelize.CoordinatesToCellName(1, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue("Sheet1", alphaNumeric, i.Name)
+	}
+	tempDir, err := ioutil.TempDir("", "excel")
+	if err != nil {
+		log.Println(err)
+	}
+	defer os.RemoveAll(tempDir)
+	filename := format + ".xlsx"
+	fmt.Println(tempDir + "/" + filename)
+	err = f.SaveAs(tempDir + "/" + filename)
+	if err != nil {
+		log.Println(err)
+	}
+	// 저장된 Excel 파일을 다운로드 시킨다.
+	w.Header().Add("Content-Disposition", "Attachment")
+	sendData, err := os.Open(tempDir + "/" + filename)
+	if err != nil {
+		log.Println(err)
+	}
+	defer sendData.Close()
+	http.ServeContent(w, r, fmt.Sprintf("%s.xlsx", format), time.Now(), sendData)
 }

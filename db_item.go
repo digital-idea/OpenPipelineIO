@@ -691,6 +691,34 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	return results, nil
 }
 
+// SearchAllShot 함수는 모든 Shot 데이터를 반환한다. Excel을 뽑을 때 사용한다.
+func SearchAllShot(session *mgo.Session, project string) ([]Item, error) {
+	results := []Item{}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	queries := []bson.M{}
+	queries = append(queries, bson.M{"type": "org"})
+	queries = append(queries, bson.M{"type": "left"})
+	q := bson.M{"$or": queries}
+	err := c.Find(q).Sort("name").All(&results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+// SearchAllAsset 함수는 모든 Asset 데이터를 반환한다. Excel을 뽑을 때 사용한다.
+func SearchAllAsset(session *mgo.Session, project string) ([]Item, error) {
+	results := []Item{}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Find(bson.M{"type": "asset"}).Sort("name").All(&results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 // SearchTag 함수는 태그를 검색할때 사용한다.
 // SearchTags라고 이름을 붙히지 않은 이유는 CSI 자료구조의 필드명이 Tag이기 때문이다.
 // 미래에 Tag필드를  Tags 필드로 바꾼후 이 함수의 이름을 SearchTags로 바꿀 예정이다.

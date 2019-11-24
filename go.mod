@@ -1,9 +1,9 @@
 module github.com/digital-idea/csi3
 
-go 1.12
+go 1.13
 
 require (
-	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/360EntSecGroup-Skylar/excelize/v2 v2.0.2
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20181208062437-4a19b1a876b7
 	github.com/daaku/go.zipexe v1.0.1 // indirect
