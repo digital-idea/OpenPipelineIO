@@ -2136,7 +2136,7 @@ function autocomplete(inp) {
             arr = data.users;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
     /*the autocomplete function takes two arguments,

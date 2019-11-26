@@ -201,14 +201,16 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, accesslevel, err := TokenHandler(r, session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-	if int(accesslevel) < 3 {
-		http.Error(w, "permission is low", http.StatusUnauthorized)
-		return
+	if *flagAuthmode { // 보안모드로 실행하면, 철저하게 검사해야 한다.
+		_, accesslevel, err := TokenHandler(r, session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		if int(accesslevel) < 3 {
+			http.Error(w, "permission is low", http.StatusUnauthorized)
+			return
+		}
 	}
 	users, err := allUsers(session)
 	if err != nil {
@@ -220,7 +222,7 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	for _, user := range users {
-		rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s)", user.ID, user.FirstNameKor))
+		rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s%s)", user.ID, user.LastNameKor, user.FirstNameKor))
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
