@@ -13,40 +13,41 @@
                 <thead>
                     <tr>
                         <th scope="col" class="text-darkmode">Name</th>
-                        <th scope="col" class="text-darkmode">작업종류</th>
+                        <th scope="col" class="text-darkmode">Rollnum</th>
+                        <th scope="col" class="text-darkmode">Type</th>
                         <th scope="col" class="text-darkmode">작업내용</th>
                         <th scope="col" class="text-darkmode">수정사항</th>
-                        <th scope="col" class="text-darkmode">링크자료(제목:경로)</th>
-                        <th scope="col" class="text-darkmode">3D마감</th>
+                        <th scope="col" class="text-darkmode">Tags</th>
+                        <th scope="col" class="text-darkmode">Source(제목:경로)</th>
+                        <th scope="col" class="text-darkmode">JustTCIn</th>
+                        <th scope="col" class="text-darkmode">JustTCOut</th>
                         <th scope="col" class="text-darkmode">2D마감</th>
-                        <th scope="col" class="text-darkmode">FIN날짜</th>
-                        <th scope="col" class="text-darkmode">FIN버전</th>
-                        <th scope="col" class="text-darkmode">태그</th>
-                        <th scope="col" class="text-darkmode">롤넘버</th>
-                        <th scope="col" class="text-darkmode">핸들IN</th>
-                        <th scope="col" class="text-darkmode">핸들OUT</th>
-                        <th scope="col" class="text-darkmode">JUST타임코드IN</th>
-                        <th scope="col" class="text-darkmode">JUST타임코드OUT</th>
+                        <th scope="col" class="text-darkmode">3D마감</th>
+                        <th scope="col" class="text-darkmode">Final Date</th>
+                        <th scope="col" class="text-darkmode">Final Version</th>
+                        <th scope="col" class="text-darkmode">HandleIn</th>
+                        <th scope="col" class="text-darkmode">HandleOut</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                     {{range .Rows}}
                         <tr>
                             <td class="{{if .NameError}}text-danger{{else}}text-darkmode{{end}}" title="{{.NameError}}">{{if .Name}}{{.Name}}{{else}}NO_NAME{{end}}</td>
+                            <td class="{{if .RnumError}}text-danger{{else}}text-darkmode{{end}}" title="{{.RnumError}}">{{.Rnum}}</td>
                             <td class="{{if .ShottypeError}}text-danger{{else}}text-darkmode{{end}}" title="{{.ShottypeError}}">{{.Shottype}}</td>
                             <td class="text-darkmode small">{{range Split .Note "\n" -}}{{.}}<br>{{- end}}</td>
                             <td class="text-darkmode small">{{range Split .Comment "\n" -}}{{.}}<br>{{- end}}</td>
+                            <td class="text-darkmode small">{{.Tags}}</td>
                             <td class="small {{if .LinkError}}text-danger{{else}}text-darkmode{{end}}" title="{{.LinkError}}">{{range Split .Link "\n" -}}{{.}}<br>{{- end}}</td>
-                            <td class="{{if .Ddline3DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline3DError}}">{{ToNormalTime .Ddline3D}}</td>
-                            <td class="{{if .Ddline2DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline2DError}}">{{ToNormalTime .Ddline2D}}</td>
-                            <td class="{{if .FindateError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FindateError}}">{{ToNormalTime .Findate}}</td>
-                            <td class="{{if .FinverError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FinverError}}">{{.Finver}}</td>
-                            <td class="text-darkmode">{{.Tags}}</td>
-                            <td class="{{if .RnumError}}text-danger{{else}}text-darkmode{{end}}" title="{{.RnumError}}">{{.Rnum}}</td>
-                            <td class="{{if .HandleInError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleInError}}">{{.HandleIn}}</td>
-                            <td class="{{if .HandleOutError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleOutError}}">{{.HandleOut}}</td>
                             <td class="{{if .JustTimecodeInError}}text-danger{{else}}text-darkmode{{end}}" title="{{.JustTimecodeInError}}">{{.JustTimecodeIn}}</td>
                             <td class="{{if .JustTimecodeOutError}}text-danger{{else}}text-darkmode{{end}}" title="{{.JustTimecodeOutError}}">{{.JustTimecodeOut}}</td>
+                            <td class="{{if .Ddline2DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline2DError}}">{{ToNormalTime .Ddline2D}}</td>
+                            <td class="{{if .Ddline3DError}}text-danger{{else}}text-darkmode{{end}}" title="{{.Ddline3DError}}">{{ToNormalTime .Ddline3D}}</td>
+                            <td class="{{if .FindateError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FindateError}}">{{ToNormalTime .Findate}}</td>
+                            <td class="{{if .FinverError}}text-danger{{else}}text-darkmode{{end}}" title="{{.FinverError}}">{{.Finver}}</td>
+                            <td class="{{if .HandleInError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleInError}}">{{.HandleIn}}</td>
+                            <td class="{{if .HandleOutError}}text-danger{{else}}text-darkmode{{end}}" title="{{.HandleOutError}}">{{.HandleOut}}</td>
                         </tr>
                     {{end}}
                 </tbody>

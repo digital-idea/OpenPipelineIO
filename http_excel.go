@@ -209,79 +209,81 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if row.Name == "" { // excelize는 아래 3줄까지 로딩한다.
+		if row.Name == "" { // Name이 비어있다면 넘긴다.
 			continue
 		}
-		row.Shottype, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1)) // shottype 2d,3d
+		row.Rnum, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1)) // Rollnumber
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Note, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1)) // 작업내용
+		row.Shottype, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1)) // Shottype(2d,3d)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Comment, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1)) // 수정사항
+		row.Note, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1)) // 작업내용
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Link, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1)) // 링크자료(제목:경로)
+		row.Comment, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1)) // 수정사항
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Ddline3D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1)) // 3D마감
+		row.Tags, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1)) // Tags
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Ddline2D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1)) // 2D마감
+		row.Link, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1)) // Source(제목:경로)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Findate, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1)) // FIN날짜
+		row.JustTimecodeIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1)) // JustTimecodeIn
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Finver, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1)) // FIN버전
+		row.JustTimecodeOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1)) // JustTimecodeOut
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Tags, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1)) // 태그
+		row.Ddline2D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1)) // 2D마감
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.Rnum, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1)) // 롤넘버
+		row.Ddline3D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1)) // 3D마감
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.HandleIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1)) // 핸들IN
+		row.Findate, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1)) // FIN날짜
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.HandleOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1)) // 핸들OUT
+		row.Finver, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1)) // FIN버전
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.JustTimecodeIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1)) // JUST타임코드IN
+
+		row.HandleIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1)) // 핸들IN
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		row.JustTimecodeOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1)) // JUST타임코드OUT
+		row.HandleOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1)) // 핸들OUT
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
 		row.checkerror() // 각 값을 에러체크한다.
 		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
@@ -396,7 +398,21 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if name == "" { // 샷이름이 없다면 넘긴다.
 			continue
 		}
-		shottype, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1)) // shottype 2d,3d
+		// 롤넘버
+		rnum, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if rnum != "" {
+			err = SetRnum(session, project, name, rnum)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+		}
+		// Shottype 2d,3d
+		shottype, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -408,7 +424,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		note, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1)) // 작업내용
+		// 작업내용
+		note, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -420,7 +437,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		comment, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1)) // 수정사항
+		// 수정사항
+		comment, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -432,7 +450,21 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		sources, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1)) // 링크자료(제목:경로)
+		// Tags
+		tags, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if tags != "" {
+			err = SetTags(session, project, name, strings.Split(tags, ","))
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+		}
+		// 링크자료(제목:경로)
+		sources, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -449,24 +481,34 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-		ddline3d, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1)) // 3D마감
+		// JustTimecodeIn
+		justTimecodeIn, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if ddline3d != "" {
-			date, err := ditime.ToFullTime(19, ddline3d)
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
-			}
-			err = SetDeadline3D(session, project, name, date)
+		if justTimecodeIn != "" {
+			err = SetJustTimecodeIn(session, project, name, justTimecodeIn)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
 		}
-		ddline2d, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1)) // 2D마감
+		// JustTimecoeOut
+		justTimecodeOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if justTimecodeOut != "" {
+			err = SetJustTimecodeIn(session, project, name, justTimecodeOut)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+		}
+		// 2D마감
+		ddline2d, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -483,7 +525,26 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		findate, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1)) // FIN날짜
+		// 3D마감
+		ddline3d, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if ddline3d != "" {
+			date, err := ditime.ToFullTime(19, ddline3d)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = SetDeadline3D(session, project, name, date)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+		}
+		// FIN날짜
+		findate, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -500,7 +561,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		finver, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1)) // FIN버전
+		// FIN버전
+		finver, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -512,32 +574,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-
-		tags, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1)) // 태그
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		if tags != "" {
-			err = SetTags(session, project, name, strings.Split(tags, ","))
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
-			}
-		}
-		rnum, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1)) // 롤넘버
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		if rnum != "" {
-			err = SetRnum(session, project, name, rnum)
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
-			}
-		}
-		handleIn, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1)) // 핸들IN
+		// HandleIn
+		handleIn, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -554,7 +592,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		handleOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1)) // 핸들OUT
+		// HandleOut
+		handleOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -571,30 +610,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 		}
-		justTimecodeIn, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1)) // JUST타임코드IN
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		if justTimecodeIn != "" {
-			err = SetJustTimecodeIn(session, project, name, justTimecodeIn)
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
-			}
-		}
-		justTimecodeOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1)) // JUST타임코드OUT
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		if justTimecodeOut != "" {
-			err = SetJustTimecodeIn(session, project, name, justTimecodeOut)
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
-			}
-		}
+
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "resultexcel", rcp)
 	if err != nil {
@@ -708,13 +724,13 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 제목생성
 	f.SetCellValue(sheet, "A1", "Name")
-	f.SetCellValue(sheet, "B1", "Thumbnail")
-	f.SetCellValue(sheet, "C1", "롤넘버")
-	f.SetCellValue(sheet, "D1", "Type")
+	f.SetCellValue(sheet, "B1", "Rollnumber")
+	f.SetCellValue(sheet, "C1", "Thumbnail")
+	f.SetCellValue(sheet, "D1", "Type(2d/3d)")
 	f.SetCellValue(sheet, "E1", "상태")
 	f.SetCellValue(sheet, "F1", "작업내용")
-	f.SetCellValue(sheet, "G1", "태그")
-	f.SetCellValue(sheet, "H1", "수정사항")
+	f.SetCellValue(sheet, "G1", "수정사항")
+	f.SetCellValue(sheet, "H1", "Tags")
 	f.SetCellValue(sheet, "I1", "JustTimecodeIn")
 	f.SetCellValue(sheet, "J1", "JustTimecodeOut")
 	f.SetCellValue(sheet, "K1", "2D마감")
@@ -744,20 +760,20 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		f.SetCellValue(sheet, pos, i.Name)
 		f.SetCellStyle(sheet, pos, pos, style)
-		// 썸네일
-		pos, err = excelize.CoordinatesToCellName(2, n+2)
-		if err != nil {
-			log.Println(err)
-		}
-		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
-		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// 롤넘버
-		pos, err = excelize.CoordinatesToCellName(3, n+2)
+		pos, err = excelize.CoordinatesToCellName(2, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.Rnum)
 		f.SetCellStyle(sheet, pos, pos, style)
+		// 썸네일
+		pos, err = excelize.CoordinatesToCellName(3, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
+		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// Type
 		pos, err = excelize.CoordinatesToCellName(4, n+2)
 		if err != nil {
@@ -797,16 +813,8 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		f.SetCellValue(sheet, pos, i.Note.Text)
 
 		f.SetCellStyle(sheet, pos, pos, textStyle)
-		// 태그
-		pos, err = excelize.CoordinatesToCellName(7, n+2)
-		if err != nil {
-			log.Println(err)
-		}
-		f.SetCellValue(sheet, pos, strings.Join(i.Tag, ","))
-
-		f.SetCellStyle(sheet, pos, pos, style)
 		// 수정사항
-		pos, err = excelize.CoordinatesToCellName(8, n+2)
+		pos, err = excelize.CoordinatesToCellName(7, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -816,6 +824,14 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		f.SetCellValue(sheet, pos, strings.Join(comments, "\n"))
 		f.SetCellStyle(sheet, pos, pos, textStyle)
+		// Tags
+		pos, err = excelize.CoordinatesToCellName(8, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, strings.Join(i.Tag, ","))
+
+		f.SetCellStyle(sheet, pos, pos, style)
 		// JustTimecodeIn
 		pos, err = excelize.CoordinatesToCellName(9, n+2)
 		if err != nil {
@@ -1169,5 +1185,68 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s.xlsx", project, format))
+	http.ServeFile(w, r, tempDir+"/"+filename)
+}
+
+// handleDownloadExcelTemplate 함수는 export template을 다운로드 한다.
+func handleDownloadExcelTemplate(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+
+	f := excelize.NewFile()
+	sheet := "Sheet1"
+	index := f.NewSheet(sheet)
+	f.SetActiveSheet(index)
+	// 스타일
+	style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true}}`)
+	if err != nil {
+		log.Println(err)
+	}
+	// Template 제목생성
+	f.SetCellValue(sheet, "A1", "Name")
+	f.SetCellValue(sheet, "B1", "Rollnumber")
+	f.SetCellValue(sheet, "C1", "Type(2d/3d)")
+	f.SetCellValue(sheet, "D1", "작업내용")
+	f.SetCellValue(sheet, "E1", "수정사항")
+	f.SetCellValue(sheet, "F1", "Tags")
+	f.SetCellValue(sheet, "G1", "Source(Key:Value)")
+	f.SetCellValue(sheet, "H1", "JustTimecodeIn")
+	f.SetCellValue(sheet, "I1", "JustTimecodeOut")
+	f.SetCellValue(sheet, "J1", "2D마감")
+	f.SetCellValue(sheet, "K1", "3D마감")
+	f.SetCellValue(sheet, "L1", "Final Date")
+	f.SetCellValue(sheet, "M1", "Final Version")
+	f.SetCellValue(sheet, "N1", "Handle In")
+	f.SetCellValue(sheet, "O1", "Handle Out")
+	f.SetColWidth(sheet, "A", "O", 20)
+	f.SetCellStyle(sheet, "A1", "O1", style)
+	tempDir, err := ioutil.TempDir("", "excel")
+	if err != nil {
+		log.Println(err)
+	}
+	defer os.RemoveAll(tempDir)
+	filename := "template.xlsx"
+	err = f.SaveAs(tempDir + "/" + filename)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s.xlsx", filename))
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
