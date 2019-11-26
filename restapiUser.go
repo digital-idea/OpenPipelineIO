@@ -188,3 +188,43 @@ func handleAPISetLeaveUser(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "{\"error\":\"\"}\n")
 }
+
+// handleAPIAutoCompliteUsers 함수는 form에서 autocomplite 에 사용되는 사용자 데이터를 반환한다.
+func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, accesslevel, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if int(accesslevel) < 3 {
+		http.Error(w, "permission is low", http.StatusUnauthorized)
+		return
+	}
+	users, err := allUsers(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type recipe struct {
+		Users []string `json:"users"`
+	}
+	rcp := recipe{}
+	for _, user := range users {
+		rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s)", user.ID, user.FirstNameKor))
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

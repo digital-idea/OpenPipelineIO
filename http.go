@@ -302,6 +302,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/users", handleAPISearchUser)
 	http.HandleFunc("/api/validuser", handleAPIValidUser)
 	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
+	http.HandleFunc("/api/autocompliteusers", handleAPIAutoCompliteUsers)
 
 	// restAPI Organization
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
