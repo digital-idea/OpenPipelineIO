@@ -8,6 +8,7 @@
 | /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=팀장` |
 | /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=합성팀,1팀,팀장` |
 | /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=개발팀,1팀` |
+| /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl http://192.168.219.104/api/autocompliteusers` |
 
 
 ## Post
