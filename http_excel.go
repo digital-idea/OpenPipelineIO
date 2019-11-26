@@ -204,22 +204,82 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		row := Excelrow{}
-		row.Name, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("A%d", n+1))            // Name
-		row.Shottype, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1))        // shottype 2d,3d
-		row.Note, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1))            // 작업내용
-		row.Comment, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1))         // 수정사항
-		row.Link, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1))            // 링크자료(제목:경로)
-		row.Ddline3D, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1))        // 3D마감
-		row.Ddline2D, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1))        // 2D마감
-		row.Findate, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1))         // FIN날짜
-		row.Finver, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1))          // FIN버전
-		row.Tags, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1))            // 태그
-		row.Rnum, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1))            // 롤넘버
-		row.HandleIn, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1))        // 핸들IN
-		row.HandleOut, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1))       // 핸들OUT
-		row.JustTimecodeIn, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1))  // JUST타임코드IN
-		row.JustTimecodeOut, _ = f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1)) // JUST타임코드OUT
-		row.checkerror()                                                            // 각 값을 에러체크한다.
+		row.Name, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("A%d", n+1)) // Name
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Shottype, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1)) // shottype 2d,3d
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Note, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1)) // 작업내용
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Comment, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("D%d", n+1)) // 수정사항
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Link, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1)) // 링크자료(제목:경로)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Ddline3D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("F%d", n+1)) // 3D마감
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Ddline2D, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1)) // 2D마감
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Findate, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1)) // FIN날짜
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Finver, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1)) // FIN버전
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Tags, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("J%d", n+1)) // 태그
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.Rnum, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1)) // 롤넘버
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.HandleIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("L%d", n+1)) // 핸들IN
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.HandleOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1)) // 핸들OUT
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.JustTimecodeIn, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("N%d", n+1)) // JUST타임코드IN
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.JustTimecodeOut, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1)) // JUST타임코드OUT
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		row.checkerror() // 각 값을 에러체크한다.
 		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
 	}
