@@ -418,16 +418,16 @@ func CheckDdlinev2(t string) string {
 	thisline := time.Hour * 24 * 7
 	nextline := time.Hour * 24 * 14
 	switch {
-	// 시간이 지나면 빈 문자열을 출력한다.
+	// 지난시간
 	case offset < 0:
-		return "darkmode"
-	// 7일 이전의 날짜라면 _this 문자를 반환한다.
+		return "fade"
+	// 이번주: 7일 이전의 날짜
 	case offset <= thisline.Hours():
 		return "danger"
-	// 7일보다 크고, 14일 이전의 날짜라면 _next 문자를 반환한다.
+	// 다음주: 7일보다 크고, 14일 이전의 날짜
 	case thisline.Hours() < offset && offset < nextline.Hours():
 		return "warning"
-	// 14일보다 크면 빈 문자열을 출력한다.
+	// 일반모드: 14일보다 클때
 	default:
 		return "darkmode"
 	}
