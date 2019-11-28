@@ -61,7 +61,8 @@ function sleep( millisecondsToWait ) {
 }
 
 
-function addTask(project, name, task, userid, token) {
+function addTask(project, name, task, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -164,7 +165,8 @@ function addTask(project, name, task, userid, token) {
     }
 }
 
-function rmTask(project, name, task, userid, token) {
+function rmTask(project, name, task, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -220,30 +222,8 @@ function rmTask(project, name, task, userid, token) {
     }
 }
 
-function setAssignTask(project, name, task, status, token) {
-    $.ajax({
-        url: "/api/setassigntask",
-        type: "post",
-        data: {
-            project: project,
-            name: name,
-            task: task,
-            status: status,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            console.info(data)
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setFrame(mode, project, name, frame, userid, token) {
+function setFrame(mode, project, name, frame, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/" + mode,
         type: "post",
@@ -293,7 +273,8 @@ function setFrame(mode, project, name, frame, userid, token) {
 }
 
 
-function setScanTimecodeIn(project, name, timecode, userid, token) {
+function setScanTimecodeIn(project, name, timecode, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setscantimecodein",
         type: "post",
@@ -316,7 +297,8 @@ function setScanTimecodeIn(project, name, timecode, userid, token) {
     });
 }
 
-function setCameraPubTask(project, name, task, userid, token) {
+function setCameraPubTask(project, name, task, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setcamerapubtask",
         type: "post",
@@ -339,7 +321,8 @@ function setCameraPubTask(project, name, task, userid, token) {
     });
 }
 
-function setCameraPubPath(project, name, path, userid, token) {
+function setCameraPubPath(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setcamerapubpath",
         type: "post",
@@ -362,7 +345,8 @@ function setCameraPubPath(project, name, path, userid, token) {
     });
 }
 
-function setCameraProjection(project, name, userid, token) {
+function setCameraProjection(project, name, userid) {
+    let token = document.getElementById("token").value;
     let projection = document.getElementById("cameraoption-projection").checked;
     $.ajax({
         url: "/api/setcameraprojection",
@@ -390,7 +374,8 @@ function setCameraProjection(project, name, userid, token) {
     });
 }
 
-function setScanTimecodeOut(project, name, timecode, userid, token) {
+function setScanTimecodeOut(project, name, timecode, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setscantimecodeout",
         type: "post",
@@ -413,7 +398,8 @@ function setScanTimecodeOut(project, name, timecode, userid, token) {
     });
 }
 
-function setJustTimecodeIn(project, name, timecode, userid, token) {
+function setJustTimecodeIn(project, name, timecode, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setjusttimecodein",
         type: "post",
@@ -436,7 +422,8 @@ function setJustTimecodeIn(project, name, timecode, userid, token) {
     });
 }
 
-function setJustTimecodeOut(project, name, timecode, userid, token) {
+function setJustTimecodeOut(project, name, timecode, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setjusttimecodeout",
         type: "post",
@@ -459,7 +446,8 @@ function setJustTimecodeOut(project, name, timecode, userid, token) {
     });
 }
 
-function setNote(project, name, text, userid, token) {
+function setNote(project, name, text, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -530,7 +518,8 @@ function setNote(project, name, text, userid, token) {
     }
 }
 
-function addComment(project, name, text, userid, token) {
+function addComment(project, name, text, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -596,7 +585,8 @@ function addComment(project, name, text, userid, token) {
     }
 }
 
-function rmComment(project, name, date, userid, token) {
+function rmComment(project, name, date, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/rmcomment",
         type: "post",
@@ -620,7 +610,8 @@ function rmComment(project, name, date, userid, token) {
 }
 
 
-function addSource(project, name, title, path, userid, token) {
+function addSource(project, name, title, path, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -714,7 +705,8 @@ function addSource(project, name, title, path, userid, token) {
 }
 
 
-function rmSource(project, name, title, userid, token) {
+function rmSource(project, name, title, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         var cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -789,7 +781,8 @@ function rmSource(project, name, title, userid, token) {
     }
 }
 
-function setThummov(project, name, path, userid, token) {
+function setThummov(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setthummov",
         type: "post",
@@ -812,7 +805,8 @@ function setThummov(project, name, path, userid, token) {
     });
 }
 
-function setBeforemov(project, name, path, userid, token) {
+function setBeforemov(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setbeforemov",
         type: "post",
@@ -835,7 +829,8 @@ function setBeforemov(project, name, path, userid, token) {
     });
 }
 
-function setAftermov(project, name, path, userid, token) {
+function setAftermov(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setaftermov",
         type: "post",
@@ -859,7 +854,8 @@ function setAftermov(project, name, path, userid, token) {
 }
 
 
-function setRetimeplate(project, name, path, userid, token) {
+function setRetimeplate(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setretimeplate",
         type: "post",
@@ -886,7 +882,8 @@ function setRetimeplate(project, name, path, userid, token) {
     });
 }
 
-function setOCIOcc(project, name, path, userid, token) {
+function setOCIOcc(project, name, path, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setociocc",
         type: "post",
@@ -940,7 +937,8 @@ function setRollmedia(project, name, rollmedia, userid, token) {
     });
 }
 
-function setTaskMov(project, name, task, mov, userid, token) {
+function setTaskMov(project, name, task, mov, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/settaskmov",
         type: "post",
@@ -968,7 +966,8 @@ function setTaskMov(project, name, task, mov, userid, token) {
     });
 }
 
-function setTaskDue(project, name, task, due, userid, token) {
+function setTaskDue(project, name, task, due, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1023,7 +1022,8 @@ function setTaskDue(project, name, task, due, userid, token) {
     }
 }
 
-function setTaskUser(project, name, task, user, userid, token) {
+function setTaskUser(project, name, task, user, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1087,7 +1087,8 @@ function setTaskUser(project, name, task, user, userid, token) {
     }
 }
 
-function setTaskStatus(project, name, task, status, userid, token) {
+function setTaskStatus(project, name, task, status, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -1143,7 +1144,8 @@ function setTaskStatus(project, name, task, status, userid, token) {
     }
 }
 
-function setTaskDate(project, name, task, date, userid, token) {
+function setTaskDate(project, name, task, date, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1207,7 +1209,8 @@ function setTaskDate(project, name, task, date, userid, token) {
     }
 }
 
-function setTaskStartdate(project, name, task, date, userid, token) {
+function setTaskStartdate(project, name, task, date, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1263,7 +1266,8 @@ function setTaskStartdate(project, name, task, date, userid, token) {
     }
 }
 
-function setTaskUserNote(project, name, task, usernote, userid, token) {
+function setTaskUserNote(project, name, task, usernote, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1321,7 +1325,8 @@ function setTaskUserNote(project, name, task, usernote, userid, token) {
 
 
 
-function setTaskPredate(project, name, task, date, userid, token) {
+function setTaskPredate(project, name, task, date, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -1386,7 +1391,8 @@ function setTaskPredate(project, name, task, date, userid, token) {
 }
 
 
-function setDeadline2D(project, name, date, userid, token) {
+function setDeadline2D(project, name, date, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1439,7 +1445,8 @@ function setDeadline2D(project, name, date, userid, token) {
     }
 }
 
-function setDeadline3D(project, name, date, userid, token) {
+function setDeadline3D(project, name, date, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1492,7 +1499,8 @@ function setDeadline3D(project, name, date, userid, token) {
     }
 }
 
-function setShottype(project, name, userid, token) {
+function setShottype(project, name, userid) {
+    let token = document.getElementById("token").value;
     let shottypes = document.getElementsByName('shottype');
     let shottype = "";
     for (var i = 0, length = shottypes.length; i < length; i++) {
@@ -1553,7 +1561,8 @@ function setShottype(project, name, userid, token) {
     }
 }
 
-function setAssettype(project, name, userid, token) {
+function setAssettype(project, name, userid) {
+    let token = document.getElementById("token").value;
     let types = document.getElementById("assettypes");
     let assettype = types.options[types.selectedIndex].value;
     if (multiInput) {
@@ -1622,7 +1631,8 @@ function setAssettype(project, name, userid, token) {
     }
 }
 
-function setRnum(project, name, rnum, userid, token) {
+function setRnum(project, name, rnum, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setrnum",
         type: "post",
@@ -1649,7 +1659,8 @@ function setRnum(project, name, rnum, userid, token) {
     });
 }
 
-function addTag(project, name, tag, userid, token) {
+function addTag(project, name, tag, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1732,7 +1743,8 @@ function addTag(project, name, tag, userid, token) {
     }
 }
 
-function rmTag(project, name, tag, userid, token) {
+function rmTag(project, name, tag, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1848,7 +1860,8 @@ function selectCheckboxInvert() {
     }
 }
 
-function setTaskLevel(project, name, task, level, userid, token) {
+function setTaskLevel(project, name, task, level, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1903,7 +1916,8 @@ function setTaskLevel(project, name, task, level, userid, token) {
     }
 }
 
-function setObjectID(project, name, innum, outnum, userid, token) {
+function setObjectID(project, name, innum, outnum, userid) {
+    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setobjectid",
         type: "post",
@@ -1927,37 +1941,10 @@ function setObjectID(project, name, innum, outnum, userid, token) {
     });
 }
 
-function setTaskLevels(project, task, level, token) {
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
-        if(cboxes[i].checked === false) {
-            continue
-        }
-        name = cboxes[i].getAttribute("id");
-        $.ajax({
-            url: "/api/settasklevel",
-            type: "post",
-            data: {
-                project: project,
-                name: name,
-                task: task,
-                level, level,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                console.info(data)
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-    }
-}
 
-function setPlatesize(project, name, size, userid, token) {
+
+function setPlatesize(project, name, size, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2012,7 +1999,8 @@ function setPlatesize(project, name, size, userid, token) {
     }
 }
 
-function setUndistortionsize(project, name, size, userid, token) {
+function setUndistortionsize(project, name, size, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2067,7 +2055,8 @@ function setUndistortionsize(project, name, size, userid, token) {
     }
 }
 
-function setRendersize(project, name, size, userid, token) {
+function setRendersize(project, name, size, userid) {
+    let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {

@@ -1,7 +1,8 @@
 {{define "items2" }}
 
 <div class="p-3">
-
+<!-- Modal: Preset value-->
+<input type="hidden" id="token" value="{{$.User.Token}}">
 <!-- Modal: Add Comment-->
 <div class="modal fade" id="addcomment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -22,7 +23,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addComment('{{$.SearchOption.Project}}', document.getElementById('add-comment-name').value, document.getElementById('add-comment-text').value, document.getElementById('add-comment-userid').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addComment('{{$.SearchOption.Project}}', document.getElementById('add-comment-name').value, document.getElementById('add-comment-text').value, document.getElementById('add-comment-userid').value)" data-dismiss="modal">ADD</button>
 			</div>
 		</div>
 	</div>
@@ -53,7 +54,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-name').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-name').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value)" data-dismiss="modal">Edit</button>
 			</div>
 		</div>
 	</div>
@@ -81,7 +82,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setRnum('{{$.SearchOption.Project}}', document.getElementById('set-rnum-name').value, document.getElementById('set-rnum-text').value, document.getElementById('set-rnum-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Edit</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setRnum('{{$.SearchOption.Project}}', document.getElementById('set-rnum-name').value, document.getElementById('set-rnum-text').value, document.getElementById('set-rnum-userid').value)" data-dismiss="modal">Edit</button>
 			</div>
 		</div>
 	</div>
@@ -124,7 +125,7 @@
 			</div>			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addTask('{{$.SearchOption.Project}}', document.getElementById('addtask-name').value, document.getElementById('addtask-taskname').value, document.getElementById('addtask-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Add</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addTask('{{$.SearchOption.Project}}', document.getElementById('addtask-name').value, document.getElementById('addtask-taskname').value, document.getElementById('addtask-userid').value)" data-dismiss="modal">Add</button>
 			</div>
 		</div>
 	</div>
@@ -168,7 +169,7 @@
 			</div>			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmTask('{{$.SearchOption.Project}}', document.getElementById('rmtask-name').value, document.getElementById('rmtask-taskname').value, document.getElementById('rmtask-userid').value, '{{$.User.Token}}')" data-dismiss="modal">Remove</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmTask('{{$.SearchOption.Project}}', document.getElementById('rmtask-name').value, document.getElementById('rmtask-taskname').value, document.getElementById('rmtask-userid').value)" data-dismiss="modal">Remove</button>
 			</div>
 		</div>
 	</div>
@@ -188,17 +189,16 @@
 				<label class="col-form-label">User:</label>
 				<div class="row form-group">
 					<div class="col-9">
-						<input type="text" class="form-control form-control-sm" id="edittask-user" autocomplete="false">
+						<input type="text" class="form-control form-control-sm" id="edittask-user" autocomplete="off">
 					</div>
 					<div class="col-3">
-						<button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-user').value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">SET USER</button>
+						<button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-user').value, document.getElementById('edittask-userid').value)">SET USER</button>
 					</div>
 				</div>
 			</div>
 			<div class="modal-body">
 				<input type="hidden" class="form-control" id="edittask-name">
 				<input type="hidden" class="form-control" id="edittask-userid">
-				<input type="hidden" class="form-control" id="token" value="{{$.User.Token}}">
 				
 				<div class="row">
 					<div class="col-6 form-group">
@@ -207,7 +207,7 @@
 					</div>
 					<div class="col-6 form-group">
 						<label class="col-form-label">Status</label>
-						<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value, document.getElementById('edittask-userid').value)">
 							<option value="">변경없음</option>
 							<option value="omit">Omit</option>
 							<option value="confirm">Confirm</option>
@@ -223,37 +223,37 @@
 				
 				<div class="form-group">
 					<label class="col-form-label">Media Path:</label>
-					<input type="text" class="form-control form-control-sm" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+					<input type="text" class="form-control form-control-sm" id="edittask-path" onchange="setTaskMov('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)">
 				</div>
 				<div class="row">
 					<div class="col-6 form-group">
 						<label class="col-form-label col-form-label-sm">시작일</label>
-						<input type=date class="form-control form-control-sm" id="edittask-startdate" value="" onchange="setTaskStartdate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+						<input type=date class="form-control form-control-sm" id="edittask-startdate" value="" onchange="setTaskStartdate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)"  placeholder="YYYY-MM-DD" >
 					</div>
 					<div class="col-3 form-group">
 						<label class="col-form-label col-form-label-sm">작업예상일</label>
-						<input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="edittask-due" onchange="setTaskDue('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						<input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="edittask-due" onchange="setTaskDue('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)">
 					</div>
 					<div class="col-3 form-group">
 						<label class="col-form-label col-form-label-sm">Level</label>
-						<input type="number" min="0" max="5" step="1" class="form-control form-control-sm" id="edittask-level" onchange="setTaskLevel('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+						<input type="number" min="0" max="5" step="1" class="form-control form-control-sm" id="edittask-level" onchange="setTaskLevel('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-6 form-group">
 						<label class="col-form-label col-form-label-sm">1차마감</label>
-						<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')"  placeholder="YYYY-MM-DD" >
+						<input type=date class="form-control form-control-sm" id="edittask-predate" value="" onchange="setTaskPredate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)"  placeholder="YYYY-MM-DD" >
 						<small class="form-text text-mute">협업을 위해 1차 데이터를 넘기는 날짜</small>
 					</div>
 					<div class="col-6 form-group">
 						<label class="col-form-label col-form-label-sm">2차마감</label>
-						<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')" placeholder="YYYY-MM-DD">
+						<input type=date class="form-control form-control-sm" id="edittask-date" value="" onchange="setTaskDate('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)" placeholder="YYYY-MM-DD">
 						<small class="form-text text-mute">최종마감일</small>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="multi-input-link" class="col-form-label col-form-label-sm">User Note:</label>
-					<input type="text" id="edittask-usernote" class="form-control form-control-sm" value="" placeholder="User Note" onchange="setTaskUserNote('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value, '{{$.User.Token}}')">
+					<input type="text" id="edittask-usernote" class="form-control form-control-sm" value="" placeholder="User Note" onchange="setTaskUserNote('{{$.SearchOption.Project}}', document.getElementById('edittask-name').value, document.getElementById('edittask-task').value, this.value, document.getElementById('edittask-userid').value)">
 					<small class="form-text text-mute">Task 작업노트</small>
 				</div>
 				
@@ -292,7 +292,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addSource('{{$.SearchOption.Project}}', document.getElementById('add-source-name').value, document.getElementById('add-source-title').value, document.getElementById('add-source-path').value, document.getElementById('add-source-userid').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addSource('{{$.SearchOption.Project}}', document.getElementById('add-source-name').value, document.getElementById('add-source-title').value, document.getElementById('add-source-path').value, document.getElementById('add-source-userid').value)" data-dismiss="modal">ADD</button>
 			</div>
 		</div>
 	</div>
@@ -322,7 +322,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmSource('{{$.SearchOption.Project}}', document.getElementById('rm-source-name').value, document.getElementById('rm-source-title').value, document.getElementById('rm-source-userid').value, '{{$.User.Token}}')" data-dismiss="modal">REMOVE</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmSource('{{$.SearchOption.Project}}', document.getElementById('rm-source-name').value, document.getElementById('rm-source-title').value, document.getElementById('rm-source-userid').value)" data-dismiss="modal">REMOVE</button>
 			</div>
 		</div>
 	</div>
@@ -351,7 +351,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addTag('{{$.SearchOption.Project}}', document.getElementById('add-tag-name').value, document.getElementById('add-tag-text').value, document.getElementById('add-tag-userid').value, '{{$.User.Token}}')" data-dismiss="modal">ADD</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addTag('{{$.SearchOption.Project}}', document.getElementById('add-tag-name').value, document.getElementById('add-tag-text').value, document.getElementById('add-tag-userid').value)" data-dismiss="modal">ADD</button>
 			</div>
 		</div>
 	</div>
@@ -381,7 +381,7 @@
 			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmTag('{{$.SearchOption.Project}}', document.getElementById('rm-tag-name').value, document.getElementById('rm-tag-text').value, document.getElementById('rm-tag-userid').value, '{{$.User.Token}}')" data-dismiss="modal">REMOVE</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmTag('{{$.SearchOption.Project}}', document.getElementById('rm-tag-name').value, document.getElementById('rm-tag-text').value, document.getElementById('rm-tag-userid').value)" data-dismiss="modal">REMOVE</button>
 			</div>
 		</div>
 	</div>
@@ -409,7 +409,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmComment('{{$.SearchOption.Project}}', document.getElementById('rm-comment-name').value, document.getElementById('rm-comment-time').value, document.getElementById('rm-comment-userid').value, '{{$.User.Token}}')" data-dismiss="modal">DELETE</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmComment('{{$.SearchOption.Project}}', document.getElementById('rm-comment-name').value, document.getElementById('rm-comment-time').value, document.getElementById('rm-comment-userid').value)" data-dismiss="modal">DELETE</button>
 			</div>
 		</div>
 	</div>
@@ -435,7 +435,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setDeadline2D('{{$.SearchOption.Project}}', document.getElementById('deadline2d-name').value, document.getElementById('deadline2d-date').value, document.getElementById('deadline2d-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setDeadline2D('{{$.SearchOption.Project}}', document.getElementById('deadline2d-name').value, document.getElementById('deadline2d-date').value, document.getElementById('deadline2d-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -461,7 +461,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setDeadline3D('{{$.SearchOption.Project}}', document.getElementById('deadline3d-name').value, document.getElementById('deadline3d-date').value, document.getElementById('deadline3d-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setDeadline3D('{{$.SearchOption.Project}}', document.getElementById('deadline3d-name').value, document.getElementById('deadline3d-date').value, document.getElementById('deadline3d-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -493,7 +493,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setShottype('{{$.SearchOption.Project}}', document.getElementById('shottype-name').value, document.getElementById('shottype-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setShottype('{{$.SearchOption.Project}}', document.getElementById('shottype-name').value, document.getElementById('shottype-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -526,7 +526,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setAssettype('{{$.SearchOption.Project}}', document.getElementById('assettype-name').value, document.getElementById('assettype-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setAssettype('{{$.SearchOption.Project}}', document.getElementById('assettype-name').value, document.getElementById('assettype-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -553,7 +553,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setPlatesize('{{$.SearchOption.Project}}', document.getElementById('platesize-name').value, document.getElementById('platesize').value, document.getElementById('platesize-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setPlatesize('{{$.SearchOption.Project}}', document.getElementById('platesize-name').value, document.getElementById('platesize').value, document.getElementById('platesize-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -581,7 +581,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setUndistortionsize('{{$.SearchOption.Project}}', document.getElementById('undistortionsize-name').value, document.getElementById('undistortionsize').value, document.getElementById('undistortionsize-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setUndistortionsize('{{$.SearchOption.Project}}', document.getElementById('undistortionsize-name').value, document.getElementById('undistortionsize').value, document.getElementById('undistortionsize-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -608,7 +608,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setRendersize('{{$.SearchOption.Project}}', document.getElementById('rendersize-name').value, document.getElementById('rendersize').value, document.getElementById('rendersize-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setRendersize('{{$.SearchOption.Project}}', document.getElementById('rendersize-name').value, document.getElementById('rendersize').value, document.getElementById('rendersize-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -629,7 +629,7 @@
 			<input type="hidden" class="form-control" id="cameraoption-userid">
 			<div class="form-group">
 				<label>Cam PubTask</label>
-				<select name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
+				<select name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value)">
 					<option value="">none</option>
 					<option value="mm">mm</option>
 					<option value="layout">layout</option>
@@ -639,12 +639,12 @@
 			</div>
 			<div class="form-group">
 				<label>Camera Publish Path</label>
-				<input type="text" size="55" id="cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" id="cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, this.value, document.getElementById('cameraoption-userid').value)">
 				<small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
 			</div>
 			<div class="form-group">
 				<div class="form-check">
-					<input type="checkbox" id="cameraoption-projection" class="form-check-input" onchange="setCameraProjection('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, document.getElementById('cameraoption-userid').value, '{{$.User.Token}}')">
+					<input type="checkbox" id="cameraoption-projection" class="form-check-input" onchange="setCameraProjection('{{$.SearchOption.Project}}', document.getElementById('cameraoption-name').value, document.getElementById('cameraoption-userid').value)">
 					<label class="form-check-label" for="cameraoption-projection">프로젝션 카메라를 이용하는 샷 입니까?</label>
 				</div>
 			</div>
@@ -680,7 +680,7 @@
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-			<button type="button" class="btn btn-outline-warning" onclick="setObjectID('{{$.SearchOption.Project}}', document.getElementById('objectid-name').value, document.getElementById('objectidin').value, document.getElementById('objectidout').value, document.getElementById('objectid-userid').value, '{{$.User.Token}}')" data-dismiss="modal">EDIT</button>
+			<button type="button" class="btn btn-outline-warning" onclick="setObjectID('{{$.SearchOption.Project}}', document.getElementById('objectid-name').value, document.getElementById('objectidin').value, document.getElementById('objectidout').value, document.getElementById('objectid-userid').value)" data-dismiss="modal">EDIT</button>
 		</div>
 	</div>
 	</div>
@@ -701,29 +701,29 @@
 			<input type="hidden" class="form-control" id="iteminfo-userid">
 			<div class="form-group">
 				<label>Thumbnail MOV</label>
-				<input type="text" size="55" maxlength="256" id="iteminfo-thummov" value="" class="form-control form-control-sm" onchange="setThummov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" maxlength="256" id="iteminfo-thummov" value="" class="form-control form-control-sm" onchange="setThummov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value)">
 				<small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
 			</div>
 				
 			<div class="form-group">
 				<label>앞쪽 연결 MOV</label>
-				<input type="text" size="55" maxlength="256" id="iteminfo-beforemov" value="" class="form-control form-control-sm" onchange="setBeforemov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" maxlength="256" id="iteminfo-beforemov" value="" class="form-control form-control-sm" onchange="setBeforemov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value)">
 				<small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
 			</div>
 
 			<div class="form-group">
 				<label>뒤쪽 연결 MOV</label>
-				<input type="text" size="55" maxlength="256" id="iteminfo-aftermov" value="" class="form-control form-control-sm" onchange="setAftermov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" maxlength="256" id="iteminfo-aftermov" value="" class="form-control form-control-sm" onchange="setAftermov('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value)">
 				<small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
 			</div>
 			<div class="form-group">
 				<label>리타임 플레이트 위치</label>
-				<input type="text" size="55" maxlength="256" id="iteminfo-retimeplate" value="" class="form-control form-control-sm" onchange="setRetimeplate('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" maxlength="256" id="iteminfo-retimeplate" value="" class="form-control form-control-sm" onchange="setRetimeplate('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value)">
 				<small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
 			</div>
 			<div class="form-group">
 				<label>OCIOcc</label>
-				<input type="text" size="55" id="iteminfo-ociocc" value="" class="form-control form-control-sm" onchange="setOCIOcc('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value, '{{$.User.Token}}')">
+				<input type="text" size="55" id="iteminfo-ociocc" value="" class="form-control form-control-sm" onchange="setOCIOcc('{{$.SearchOption.Project}}', document.getElementById('iteminfo-name').value, this.value, document.getElementById('iteminfo-userid').value)">
 				<small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
 			</div>
 			<div class="form-group">
@@ -757,19 +757,19 @@
 				<div class="col pl-1 pr-1 pt-0 pb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">ScanIn</small>
-						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pt-0 pb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">ScanOut</small>
-						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pt-0 pb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">ScanFrame</small>
-						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 			</div>
@@ -777,13 +777,13 @@
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">ScanTimecodeIn</small>
-						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">ScanTimecodeOut</small>
-						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 			</div>
@@ -791,19 +791,19 @@
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">PlateIn</small>
-						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">HandleIn</small>
-						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">JustIn</small>
-						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 			</div>
@@ -811,19 +811,19 @@
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">PlateOut</small>
-						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">HandleOut</small>
-						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">JustOut</small>
-						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', '{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 			</div>
@@ -831,13 +831,13 @@
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">JustTimecodeIn</small>
-						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>
 				</div>
 				<div class="col pl-1 pr-1 pb-0 mb-0">
 					<div class="form-group p-0 m-0">
 						<small class="form-text text-muted">JustTimecodeIn</small>
-						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value, '{{$.User.Token}}')">
+						<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-name').value, this.value, document.getElementById('edittime-userid').value)">
 					</div>			
 				</div>
 			</div>
