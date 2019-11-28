@@ -4578,12 +4578,9 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 			}
 			rcp.Text = v
 		case "media":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+			if len(values) == 1 {
+				rcp.Media = values[0]
 			}
-			rcp.Media = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
