@@ -285,7 +285,6 @@ label {
 
 input[type=checkbox]:checked+div{
     background-color: #464444;
-	/*border: 4px solid rgb(205, 72, 0);*/
 	outline-style: solid;
 	outline-color: rgb(205, 72, 0);
 	outline-width: 4px;
