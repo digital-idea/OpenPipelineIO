@@ -222,7 +222,15 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	for _, user := range users {
-		rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s%s)", user.ID, user.LastNameKor, user.FirstNameKor))
+		displayName := user.LastNameKor + user.FirstNameKor
+		if displayName == "" { // 한글이름이 존재하지 않으면, 영문이름을 찾는다.
+			displayName = user.FirstNameEng
+		}
+		if displayName == "" { // 영문이름이 존재하지 않으면 ID만 넣는다.
+			rcp.Users = append(rcp.Users, user.ID)
+		} else {
+			rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s)", user.ID, displayName))
+		}
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
