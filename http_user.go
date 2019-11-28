@@ -157,7 +157,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	_, _, err = net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -171,7 +170,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	id := r.FormValue("ID")
 	if id != ssid.ID {
 		if ssid.AccessLevel != 10 {
-			http.Error(w, "사용자를 수정하기 위해서는 Accesslevel 10이 필요합니다", http.StatusInternalServerError)
+			http.Error(w, "사용자를 수정하기 위해서는 Accesslevel 10이 필요합니다", http.StatusUnauthorized)
 			return
 		}
 	}
@@ -291,6 +290,29 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 사용자 수정이후 처리할 스크립트가 admin setting에 선언되어 있다면, 실행합니다.
+	setting, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if setting.RunScriptAfterEditUserProfile != "" {
+		for _, line := range strings.Split(setting.RunScriptAfterEditUserProfile, "\r\n") {
+			cmds := strings.Split(line, " ")
+			if len(cmds) < 2 {
+				err := exec.Command(line).Run()
+				if err != nil {
+					log.Println(err)
+				}
+			} else {
+				err := exec.Command(cmds[0], cmds[1:]...).Run()
+				if err != nil {
+					log.Println(err)
+				}
+			}
+		}
+	}
+	// 리다이렉션
 	if id != ssid.ID {
 		// 관리자가 일반유저를 수정하는 경우 리다이렉션 URL
 		http.Redirect(w, r, "/users?search="+id, http.StatusSeeOther)
@@ -433,22 +455,19 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if !captcha.VerifyString(r.FormValue("CaptchaID"), r.FormValue("CaptchaNum")) {
 		err := errors.New("CaptchaID 값과 CaptchaNum 값이 다릅니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	if r.FormValue("ID") == "" {
-		err := errors.New("ID 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "ID 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
 	if r.FormValue("Password") == "" {
-		err := errors.New("Password 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
 	if r.FormValue("Password") != r.FormValue("ConfirmPassword") {
-		err := errors.New("입력받은 2개의 패스워드가 서로 다릅니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "입력받은 2개의 패스워드가 서로 다릅니다", http.StatusInternalServerError)
 		return
 	}
 	id := r.FormValue("ID")
@@ -474,7 +493,6 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Timezone = r.FormValue("Timezone")
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -513,6 +531,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	setting, err := GetAdminSetting(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	if setting.RunScriptAfterSignup != "" {
 		for _, line := range strings.Split(setting.RunScriptAfterSignup, "\r\n") {
@@ -534,7 +553,6 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	// 가입완료 페이지로 이동
 	err = TEMPLATES.ExecuteTemplate(w, "signup_success", u)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -565,7 +583,6 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	rcp.Company = strings.Title(*flagCompany)
 	err := TEMPLATES.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

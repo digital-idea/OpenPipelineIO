@@ -85,9 +85,11 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	runScriptAfterSingup := r.FormValue("RunScriptAfterSignup")
+	runScriptAfterEditUserProfile := r.FormValue("RunScriptAfterEditUserProfile")
 	s := Setting{}
 	s.ID = "admin"
 	s.RunScriptAfterSignup = runScriptAfterSingup
+	s.RunScriptAfterEditUserProfile = runScriptAfterEditUserProfile
 
 	err = SetAdminSetting(session, s)
 	if err != nil {
