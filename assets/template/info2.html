@@ -1,11 +1,11 @@
 {{define "info2"}}
-<div class="">
-    <div class="pl-2 text-darkmode">
-        {{if .Projectinfo.Message}}
+<div class="ml-4 mr-4">
+    {{if .Projectinfo.Message}}
+        <div class="text-darkmode">
             notice : {{.Projectinfo.Message}}
-        {{end}}
-    </div>
-    <div class="pl-2">
+        </div>
+    {{end}}
+    <div class="">
         {{if .Projectinfo.Wiki}}
             <a href="{{.Projectinfo.Wiki}}" class="badge badge-darkmode">wiki</a>
         {{end}}
