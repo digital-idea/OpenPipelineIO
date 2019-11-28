@@ -518,8 +518,9 @@ function setNote(project, name, text, userid) {
     }
 }
 
-function addComment(project, name, text, userid) {
+function addComment(project, name, text, media) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -535,6 +536,7 @@ function addComment(project, name, text, userid) {
                     project: project,
                     name: currentName,
                     text: text,
+                    media: media,
                     userid: userid,
                 },
                 headers: {
@@ -547,7 +549,15 @@ function addComment(project, name, text, userid) {
                     let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                     <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
-                    <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
+                    <br><small class="text-white">${body}</small>`
+                    if (data.media != "") {
+                        if (data.media.includes("http")) {
+                            newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                        } else {
+                            newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                        }
+                    }
+                    newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
                     document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
                 },
                 error: function(request,status,error){
@@ -563,6 +573,7 @@ function addComment(project, name, text, userid) {
                 project: project,
                 name: name,
                 text: text,
+                media: media,
                 userid: userid,
             },
             headers: {
@@ -575,7 +586,15 @@ function addComment(project, name, text, userid) {
                 let newComment = `<div id="comment-${data.name}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                 <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
-                <br><small class="text-white">${body}</small><hr class="my-1 p-0 m-0 divider"></hr></div>`
+                <br><small class="text-white">${body}</small>`
+                if (data.media != "") {
+                    if (data.media.includes("http")) {
+                        newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                    } else {
+                        newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                    }
+                }
+                newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
                 document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
             },
             error: function(request,status,error){

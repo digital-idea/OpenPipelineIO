@@ -44,19 +44,12 @@ const (
 	TaskLevel5                   // 5 높은난이도
 )
 
-// Media 자료구조는 미디어 형식을 담기위한 자료구조이다.
-type Media struct {
-	ID       int       // 미디어 아이디. 추후 미디어 아이디를 발급받게 되면, 사용할 예정이다.
-	Path     string    // 미디어 경로
-	Versions Version   // 버전정보
-	Comments []Comment // 코맨트
-}
-
 // Comment 자료구조는 글을 작성할 때 사용하는 자료구조이다.
 type Comment struct {
 	Date   string // 코맨트 등록시간 RFC3339
 	Author string // 작성자
 	Text   string // 내용
+	Media  string // media 경로
 }
 
 // Source 자료구조는 글을 작성할 때 사용하는 자료구조이다.

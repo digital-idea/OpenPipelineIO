@@ -4532,6 +4532,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		Name    string `json:"name"`
 		Date    string `json:"date"`
 		Text    string `json:"text"`
+		Media   string `json:"media"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
 	}
@@ -4576,6 +4577,13 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Text = v
+		case "media":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Media = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -4588,19 +4596,19 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Date = time.Now().Format(time.RFC3339)
-	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text)
+	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, "Add Comment: "+rcp.Text, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Comment: %s, Media: %s", rcp.Text, rcp.Media), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Comment: %s\nMeida: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Media, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

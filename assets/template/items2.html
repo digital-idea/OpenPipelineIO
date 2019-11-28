@@ -3,6 +3,7 @@
 <div class="p-3">
 <!-- Modal: Preset value-->
 <input type="hidden" id="token" value="{{$.User.Token}}">
+<input type="hidden" id="userid" value="{{$.User.ID}}">
 <!-- Modal: Add Comment-->
 <div class="modal fade" id="addcomment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -17,13 +18,18 @@
 				<input type="hidden" class="form-control" id="add-comment-name">
 				<input type="hidden" class="form-control" id="add-comment-userid">
 				<div class="form-group">
-					<label for="comment-text" class="col-form-label">Comment:</label>
+					<label for="add-comment-text" class="col-form-label">Comment:</label>
 					<textarea class="form-control" id="add-comment-text" rows="3"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="add-comment-media-text" class="col-form-label">Media</label>
+					<input type="text" class="form-control" id="add-comment-media">
+					<small class="form-text text-muted">스케치, 사진, 영상, 보이스파일, 촬영데이터가 있다면 경로를 입력해주세요.</small>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addComment('{{$.SearchOption.Project}}', document.getElementById('add-comment-name').value, document.getElementById('add-comment-text').value, document.getElementById('add-comment-userid').value)" data-dismiss="modal">ADD</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addComment('{{$.SearchOption.Project}}', document.getElementById('add-comment-name').value, document.getElementById('add-comment-text').value, document.getElementById('add-comment-media').value)" data-dismiss="modal">ADD</button>
 			</div>
 		</div>
 	</div>
@@ -2025,6 +2031,9 @@
 					<small class="text-white">
 						{{range Split .Text "\n"}}
 							{{.}}<br>
+						{{end}}
+						{{if .Media}}
+							<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" class="link">∞</a>
 						{{end}}
 					</small>
 					<hr class="my-1 p-0 m-0 divider">
