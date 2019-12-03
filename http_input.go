@@ -37,8 +37,10 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		MailDNS     string
 		Dilog       string
 		Wfs         string
+		OS          string
 	}
 	rcp := recipe{}
+	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Dilog = *flagDILOG
