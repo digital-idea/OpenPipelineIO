@@ -1574,6 +1574,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
 		i.Seq = strings.Split(i.Name, "_")[0]
+		i.Cut = strings.Split(i.Name, "_")[1]
 		i.Status = ASSIGN
 		i.Comp.Status = ASSIGN
 		i.Shottype = "2d"

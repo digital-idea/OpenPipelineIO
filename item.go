@@ -82,6 +82,7 @@ type Item struct {
 	Platesize   string          `json:"platesize"`   // 플레이트 이미지사이즈
 	Name        string          `json:"name"`        // 샷이름 SS_0010
 	Seq         string          `json:"seq"`         // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
+	Cut         string          `json:"cut"`         // 시퀀스이름 SS_0010 에서 0010문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
 	Type        string          `json:"type"`        // org, org1, src, asset..
 	Assettype   string          `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
 	CrowdAsset  bool            `json:"crowdasset"`  // 군중씬에서 사용하는 에셋인지 여부 체크

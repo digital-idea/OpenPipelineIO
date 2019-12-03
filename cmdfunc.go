@@ -62,11 +62,13 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		log.Fatal("샷 이름 규칙이 아닙니다.")
 	}
 	seq := strings.Split(name, "_")[0]
+	cut := strings.Split(name, "_")[1]
 	now := time.Now().Format(time.RFC3339)
 	i := Item{
 		Project:    project,
 		Name:       name,
 		Seq:        seq,
+		Cut:        cut,
 		Type:       typ,
 		Slug:       name + "_" + typ,
 		ID:         name + "_" + typ,
