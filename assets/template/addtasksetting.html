@@ -1,0 +1,41 @@
+{{define "addtasksetting" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <form action="/addtasksetting-submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Add Task</h2>
+        </div>
+            
+        <div class="form-group">
+            <label>Task Name</label>
+            <input type="text" name="name" class="form-control" placeholder="taskname">
+            <small class="form-text text-muted">생성할 Task 이름을 입력해주세요. comp, light</small>
+        </div>
+        
+        <div class="form-group">
+            <label>Type</label>
+            <select name="type" class="form-control">
+                <option value="shot">shot</option>
+                <option value="asset">asset</option>
+            </select>
+            <small class="form-text text-muted">Task의 타입을 선택해 주세요.</small>
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-warning mt-5">Add Task</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

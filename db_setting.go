@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -41,4 +43,45 @@ func GetAdminSetting(session *mgo.Session) (Setting, error) {
 		return s, err
 	}
 	return s, nil
+}
+
+// AddTaskSetting 함수는 tasksetting을 DB에 추가한다.
+func AddTaskSetting(session *mgo.Session, t Tasksetting) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	num, err := c.Find(bson.M{"id": t.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if num > 0 {
+		return errors.New("이미 Tasksetting이 존재합니다")
+	}
+	err = c.Insert(t)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// RmTaskSetting 함수는 tasksetting을 DB에 추가한다.
+func RmTaskSetting(session *mgo.Session, name, typ string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	err := c.Remove(bson.M{"name": name, "type": typ})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// AllTaskSettings 함수는 모든 tasksetting값을 가지고 온다.
+func AllTaskSettings(session *mgo.Session) ([]Tasksetting, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	results := []Tasksetting{}
+	err := c.Find(bson.M{}).Sort("id").All(&results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }

@@ -217,6 +217,13 @@ func webserver(port string) {
 	http.HandleFunc("/upload-excel", handleUploadExcel)
 	http.HandleFunc("/download-excel-template", handleDownloadExcelTemplate)
 
+	// Task
+	http.HandleFunc("/addtasksetting", handleAddTasksetting)
+	http.HandleFunc("/rmtasksetting", handleRmTasksetting)
+	http.HandleFunc("/tasksettings", handleTasksettings)
+	http.HandleFunc("/addtasksetting-submit", handleAddTasksettingSubmit)
+	http.HandleFunc("/rmtasksetting-submit", handleRmTasksettingSubmit)
+
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
 

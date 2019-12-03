@@ -1,0 +1,45 @@
+{{define "tasksettings" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+		
+<div class="p-2">
+	<div class="row">
+		{{range .Tasksettings}}
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="card m-2 bg-darkmode">
+					<h6 class="card-header">
+						<span class="btn btn-sm">
+							{{.Name}}({{.Type}})
+						</span>
+						
+					</h6>
+					<div class="card-body">
+						<h6 class="card-title">
+							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+								<a href="/edittasksetting?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
+							{{end}}
+						</h6>
+						<p class="card-text m-0 p-0">
+							LinuxDev: {{.LinuxDev}}<br>
+							LinuxPub: {{.LinuxPub}}<br>
+							WindowDev: {{.WindowDev}}<br>
+							WindowPub: {{.WindowPub}}<br>
+							MacOSDev: {{.MacOSDev}}<br>
+							MacOSPub: {{.MacOSPub}}<br>
+						</p>
+						
+					</div>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}

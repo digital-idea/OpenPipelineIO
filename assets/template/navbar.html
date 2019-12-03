@@ -25,25 +25,28 @@
               </div>
           </li>
         {{end}}
-        <li class="nav-item">
-          <a class="nav-link" href="/projectinfo">Projects</a>
-        </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Organization
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/divisions">Divisions(본부)</a>
-              <a class="dropdown-item" href="/departments">Departments(부서)</a>
-              <a class="dropdown-item" href="/teams">Teams(팀)</a>
-              <a class="dropdown-item" href="/roles">Roles(직책)</a>
-              <a class="dropdown-item" href="/positions">Positions(직급)</a>
-            </div>
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            List
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/projectinfo">Projects</a>
+            <div class="dropdown-divider"></div>
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+              <a class="dropdown-item" href="/users">Users</a>
+              <div class="dropdown-divider"></div>
+            {{end}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+              <a class="dropdown-item" href="/tasksettings">Task(준비중)</a>
+              <div class="dropdown-divider"></div>
+            {{end}}
+            <a class="dropdown-item" href="/divisions">Divisions(본부)</a>
+            <a class="dropdown-item" href="/departments">Departments(부서)</a>
+            <a class="dropdown-item" href="/teams">Teams(팀)</a>
+            <a class="dropdown-item" href="/roles">Roles(직책)</a>
+            <a class="dropdown-item" href="/positions">Positions(직급)</a>
+          </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/help">Help</a>
-        </li>
-        
         {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,6 +59,8 @@
                 <a class="dropdown-item" href="/addproject">Project</a>
                 <a class="dropdown-item" href="/addshot">Shot</a>
                 <a class="dropdown-item" href="/addasset">Asset</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/addtasksetting">Task(준비중)</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/adddivision">Division(본부)</a>
                 <a class="dropdown-item" href="/adddepartment">Department(부서)</a>
@@ -77,14 +82,16 @@
             {{end}}
             <a class="dropdown-item text-danger" href="/rmshot">Shot</a>
             <a class="dropdown-item text-danger" href="/rmasset">Asset</a>
+            {{if eq .User.AccessLevel 5 6 7 8 9 10}}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-danger" href="/rmtasksetting">Task(준비중)</a>
+            {{end}}
           </div>
         </li>
         {{end}}
-        {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
-          <li class="nav-item">
-            <a class="nav-link" href="/users">Users</a>
-          </li>
-        {{end}}
+        <li class="nav-item">
+            <a class="nav-link" href="/help">Help</a>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                {{.User.ID}}
