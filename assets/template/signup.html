@@ -91,7 +91,7 @@
                     <select class="form-control" name="Division" id="Division">
                         <option value="unknown">해당없음</option>
                         {{range .Divisions}}
-                            <option value="{{.ID}}">{{.Name}}</option>
+                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
                 </div>
@@ -101,7 +101,7 @@
                     <select class="form-control" name="Department" id="Department">
                         <option value="unknown">해당없음</option>
                         {{range .Departments}}
-                            <option value="{{.ID}}">{{.Name}}</option>
+                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
                 </div>
@@ -111,7 +111,7 @@
                     <select class="form-control" name="Team" id="Team">
                         <option value="unknown">해당없음</option>
                         {{range .Teams}}
-                            <option value="{{.ID}}">{{.Name}}</option>
+                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
                 </div>
@@ -123,7 +123,7 @@
                     <select class="form-control" name="Role" id="Role">
                         <option value="unknown">해당없음</option>
                         {{range .Roles}}
-                            <option value="{{.ID}}">{{.Name}}</option>
+                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
                 </div>
@@ -133,7 +133,7 @@
                     <select class="form-control" name="Position" id="Position">
                         <option value="unknown">해당없음</option>
                         {{range .Positions}}
-                            <option value="{{.ID}}">{{.Name}}</option>
+                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
                 </div>
