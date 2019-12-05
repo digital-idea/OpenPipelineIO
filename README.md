@@ -5,7 +5,7 @@
 
 ![screenshot](figures/screenshot.png)
 
-콘텐츠 제작을 위한 프로젝트 매니징 웹 어플리케이션 입니다.
+CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매니징 웹 어플리케이션 입니다.
 
 - 속도, 검색어 방식, 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
 - 내부, 외부 서버에 설치가 가능합니다.
