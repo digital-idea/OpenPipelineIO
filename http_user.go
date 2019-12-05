@@ -526,6 +526,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// JWT 토큰으로 쿠키를 저장한다.
 	SetSessionID(w, u.ID, u.AccessLevel, "")
 	// 가입이후 처리할 스크립트가 admin setting에 선언되어 있다면, 실행합니다.
 	setting, err := GetAdminSetting(session)
@@ -569,7 +570,7 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	q := r.URL.Query()
 	errorCode := q.Get("status")
-	id := q.Get("id")
+	rcp.ID = q.Get("id")
 	passwordAttempt := q.Get("passwordattempt")
 	switch errorCode {
 	case "wrongpw":
@@ -579,8 +580,16 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 			rcp.Message = "패스워드를 틀렸습니다. 다시 로그인 해주세요."
 		}
 	}
-	rcp.ID = id
 	rcp.Company = strings.Title(*flagCompany)
+	if rcp.ID == "" {
+		// ID가 없다면 저장된 쿠키 ID를 가지고 온다.
+		c, err := r.Cookie("CookieUserID")
+		if err != nil {
+			rcp.ID = ""
+		} else {
+			rcp.ID = c.Value
+		}
+	}
 	err := TEMPLATES.ExecuteTemplate(w, "signin", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -591,20 +600,17 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 // handleSigninSubmit 함수는 회원가입 페이지이다.
 func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("ID") == "" {
-		err := errors.New("ID 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "ID 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
 	if r.FormValue("Password") == "" {
-		err := errors.New("Password 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
 	id := r.FormValue("ID")
 	pw := r.FormValue("Password")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -612,7 +618,7 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 	// 사용자가 과거에 패스워드를 5회이상 틀렸다면 로그인을 허용하지 않는다.
 	u, err := getUser(session, id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	if u.PasswordAttempt > 4 {
@@ -659,6 +665,14 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+	// 로그인에 성공하면 CookieUserID 값을 쿠키에 저장한다.
+	c := http.Cookie{
+		Name:   "CookieUserID",
+		Value:  ssid.ID,
+		MaxAge: int(*flagCookieAge),
+	}
+	http.SetCookie(w, &c)
+
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
