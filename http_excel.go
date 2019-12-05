@@ -1247,6 +1247,6 @@ func handleDownloadExcelTemplate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s.xlsx", filename))
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s", filename))
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }

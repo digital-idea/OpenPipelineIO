@@ -12,15 +12,15 @@
 - 사용자별 토큰키, 암호화키, 직급별 접근권한 사용이 가능합니다.
 
 ### 다운로드
-- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_linux_x86-64.tgz)
-- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_darwin_x86-64.tgz)
-- [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_windows_x86-64.tgz)
-- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.0.9/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_linux_x86-64.tgz)
+- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_darwin_x86-64.tgz)
+- [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_windows_x86-64.tgz)
+- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.1/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 ### Roadmap
-- [ ] Multi Task 기능추가(VFX, 수많은 FX Task, 애니메이션, 게임지원)
+- [ ] 진행중: Multi Task 기능추가(VFX, 수많은 FX Task, 애니메이션, 게임지원) 2019년 12월 까지
 - [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전) with USD
 - [ ] 통계툴을 내부에서 일괄 처리하도록 통합(기존 Statistics 서비스 통합)
 - [ ] 사용자별 샷 갯수, 리스트가 나오도록 처리하기.

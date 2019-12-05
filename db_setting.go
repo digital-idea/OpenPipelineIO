@@ -74,6 +74,17 @@ func RmTaskSetting(session *mgo.Session, name, typ string) error {
 	return nil
 }
 
+// SetTaskSetting 함수는 Tasksetting 값을 바꾼다.
+func SetTaskSetting(session *mgo.Session, t Tasksetting) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	err := c.Update(bson.M{"id": t.ID}, t)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // AllTaskSettings 함수는 모든 tasksetting값을 가지고 온다.
 func AllTaskSettings(session *mgo.Session) ([]Tasksetting, error) {
 	session.SetMode(mgo.Monotonic, true)
@@ -84,4 +95,16 @@ func AllTaskSettings(session *mgo.Session) ([]Tasksetting, error) {
 		return nil, err
 	}
 	return results, nil
+}
+
+// TaskSetting 함수는 id를 입력받아서 tasksetting값을 가지고 온다.
+func getTaskSetting(session *mgo.Session, id string) (Tasksetting, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	result := Tasksetting{}
+	err := c.Find(bson.M{"id": id}).One(&result)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
 }

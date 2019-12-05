@@ -1,0 +1,53 @@
+{{define "edittasksetting" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+<body>
+
+<div class="container p-5">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <form action="/edittasksetting-submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Edit Task Setting - {{.Tasksetting.Name}}({{.Tasksetting.Type}})</h2>
+        </div>
+        <input type="hidden" name="id" value={{.Tasksetting.ID}}>
+        <div class="form-group">
+            <label>Linux Path</label>
+            <input type="text" name="linuxpath" class="form-control" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Tasksetting.LinuxPath}}>
+            <small class="form-text text-muted">dilink 클릭시 열리는 경로.</small>
+        </div>
+        <div class="form-group">
+            <label>macOS Path</label>
+            <input type="text" name="macospath" class="form-control" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Tasksetting.MacOSPath}}>
+            <small class="form-text text-muted">dilink 클릭시 열리는 경로.</small>
+        </div>
+        <div class="form-group">
+            <label>Window Path</label>
+            <input type="text" name="windowpath" class="form-control" placeholder="//10.0.1.2/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Tasksetting.MacOSPath}}>
+            <small class="form-text text-muted">dilink 클릭시 열리는 경로.</small>
+        </div>
+        <div class="form-group">
+            <label>사용할 수 있는 인수</label>
+            <small class="form-text text-muted">&#123;&#123;.Project&#125;&#125;: 프로젝트 코드</small>
+            <small class="form-text text-muted">&#123;&#123;.Task&#125;&#125;: 태스크</small>
+            <small class="form-text text-muted">&#123;&#123;.Name&#125;&#125;: 샷이름(SS_0010), 에셋이름</small>
+            <small class="form-text text-muted">&#123;&#123;.Seq&#125;&#125;: 시퀀스 SS</small>
+            <small class="form-text text-muted">&#123;&#123;.Cut&#125;&#125;: 컷 0010</small>
+            <small class="form-text text-muted">&#123;&#123;.Type&#125;&#125;: 타입: shot, asset</small>
+            <small class="form-text text-muted">&#123;&#123;.Assettype&#125;&#125;: 에셋타입</small>
+            
+        </div>
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-warning mt-5">Edit Task</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
+

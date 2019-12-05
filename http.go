@@ -209,6 +209,10 @@ func webserver(port string) {
 	http.HandleFunc("/addteamsubmit", handleAddTeamSubmit)
 	http.HandleFunc("/addrolesubmit", handleAddRoleSubmit)
 	http.HandleFunc("/addpositionsubmit", handleAddPositionSubmit)
+	http.HandleFunc("/rmorganization", handleRmOrganization)
+	http.HandleFunc("/rmorganization-submit", handleRmOrganizationSubmit)
+
+	// Excel
 	http.HandleFunc("/importexcel", handleImportExcel)
 	http.HandleFunc("/exportexcel", handleExportExcel)
 	http.HandleFunc("/reportexcel", handleReportExcel)
@@ -218,11 +222,13 @@ func webserver(port string) {
 	http.HandleFunc("/download-excel-template", handleDownloadExcelTemplate)
 
 	// Task
+	http.HandleFunc("/tasksettings", handleTasksettings)
 	http.HandleFunc("/addtasksetting", handleAddTasksetting)
 	http.HandleFunc("/rmtasksetting", handleRmTasksetting)
-	http.HandleFunc("/tasksettings", handleTasksettings)
+	http.HandleFunc("/edittasksetting", handleEditTasksetting)
 	http.HandleFunc("/addtasksetting-submit", handleAddTasksettingSubmit)
 	http.HandleFunc("/rmtasksetting-submit", handleRmTasksettingSubmit)
+	http.HandleFunc("/edittasksetting-submit", handleEditTasksettingSubmit)
 
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
@@ -313,6 +319,9 @@ func webserver(port string) {
 
 	// restAPI Organization
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
+
+	// restAPI Tasksetting
+	http.HandleFunc("/api/tasksetting", handleAPITasksetting)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/search", handleSearch)                        // legacy

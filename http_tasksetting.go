@@ -94,6 +94,57 @@ func handleTasksettings(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleEditTasksetting 함수는 task를 편집하는 페이지이다.
+func handleEditTasksetting(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 4 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User    User
+		Devmode bool
+		SearchOption
+		Tasksetting
+	}
+	rcp := recipe{}
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	q := r.URL.Query()
+	id := q.Get("id")
+	rcp.Tasksetting, err = getTaskSetting(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "edittasksetting", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // handleAddTasksettingSubmit 함수는 Task를 추가합니다.
 func handleAddTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
@@ -197,6 +248,43 @@ func handleRmTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	typ := r.FormValue("type")
 	err = RmTaskSetting(session, name, typ)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/tasksettings", http.StatusSeeOther)
+}
+
+// handleEditTasksettingSubmit 함수는 Task를 편집합니다.
+func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 4 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("id")
+	windowPath := r.FormValue("windowpath")
+	linuxPath := r.FormValue("linuxpath")
+	macosPath := r.FormValue("macospath")
+	t, err := getTaskSetting(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	t.WindowPath = windowPath
+	t.LinuxPath = linuxPath
+	t.MacOSPath = macosPath
+	err = SetTaskSetting(session, t)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

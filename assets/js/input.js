@@ -2042,7 +2042,7 @@ function setUndistortionsize(project, name, size, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">U: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2065,7 +2065,7 @@ function setUndistortionsize(project, name, size, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">U: ${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

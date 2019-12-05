@@ -1120,13 +1120,9 @@
 			{{if eq .Concept.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-concept">
 					<div id="{{.Name}}-task-concept-status">
-						<a class="mt-1 badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Concept.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'wfs', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/concept/dev" onclick="window.open(this.href, 'wfs', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
-						>concept</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Concept.Status}} statusbox{{CheckDate .Concept.Predate .Concept.Date .Concept.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Concept.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'concept', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>concept</span>
 					</div>
 					<div id="{{.Name}}-task-concept-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Concept.Predate}}</span>
@@ -1165,13 +1161,9 @@
 			{{if eq .Model.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-model">
 					<div id="{{.Name}}-task-model-status">
-						<a class="mt-1 badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Model.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/model/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
-						>model</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Model.Status}} statusbox{{CheckDate .Model.Predate .Model.Date .Model.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Model.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'model', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>model</span>
 					</div>
 					<div id="{{.Name}}-task-model-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Model.Predate}}</span>
@@ -1210,9 +1202,9 @@
 			{{if eq .Mm.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-mm">
 					<div id="{{.Name}}-task-mm-status">
-						<a class="mt-1 badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mm.Status}}"
-						href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matchmove/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>mm</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Mm.Status}} statusbox{{CheckDate .Mm.Predate .Mm.Date .Mm.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mm.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'model', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>mm</span>
 					</div>
 					<div id="{{.Name}}-task-mm-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Mm.Predate}}</span>
@@ -1251,9 +1243,9 @@
 			{{if eq .Layout.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-layout">
 					<div id="{{.Name}}-task-layout-status">
-						<a class="mt-1 badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Layout.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/layout/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>layout</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Layout.Status}} statusbox{{CheckDate .Layout.Predate .Layout.Date .Layout.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Layout.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'layout', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>layout</span>
 					</div>
 					<div id="{{.Name}}-task-layout-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Layout.Predate}}</span>
@@ -1292,13 +1284,9 @@
 			{{if eq .Ani.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-ani">
 					<div id="{{.Name}}-task-ani-status">
-						<a class="mt-1 badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Ani.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/ani/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
-						>ani</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Ani.Status}} statusbox{{CheckDate .Ani.Predate .Ani.Date .Ani.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Ani.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'ani', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>ani</span>
 					</div>
 					<div id="{{.Name}}-task-ani-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Ani.Predate}}</span>
@@ -1336,9 +1324,9 @@
 			{{if eq .Fx.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-fx">
 					<div id="{{.Name}}-task-fx-status">
-						<a class="mt-1 badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fx.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fx/dev{{if Username2Elements .Fx.User}}?elements={{Username2Elements .Fx.User}}{{end}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>fx</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Fx.Status}} statusbox{{CheckDate .Fx.Predate .Fx.Date .Fx.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fx.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'fx', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>fx</span>
 					</div>
 					<div id="{{.Name}}-task-fx-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Fx.Predate}}</span>
@@ -1377,9 +1365,9 @@
 			{{if eq .Mg.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-mg">
 					<div id="{{.Name}}-task-mg-status">
-						<a class="mt-1 badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mg.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/mg/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>mg</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Mg.Status}} statusbox{{CheckDate .Mg.Predate .Mg.Date .Mg.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Mg.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'mg', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>mg</span>
 					</div>
 					<div id="{{.Name}}-task-mg-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Mg.Predate}}</span>
@@ -1418,9 +1406,9 @@
 			{{if eq .Temp1.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-temp1">
 					<div id="{{.Name}}-task-temp1-status">
-						<a class="mt-1 badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Temp1.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/{{.Temp1.Title}}" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Temp1.Status}} statusbox{{CheckDate .Temp1.Predate .Temp1.Date .Temp1.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Temp1.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'temp1', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>{{if .Temp1.Title}}{{.Temp1.Title}}{{else}}temp1{{end}}</span>
 					</div>
 					<div id="{{.Name}}-task-temp1-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Temp1.Predate}}</span>
@@ -1459,9 +1447,9 @@
 			{{if eq .Previz.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-previz">
 					<div id="{{.Name}}-task-previz-status">
-						<a class="mt-1 badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Previz.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/previz/product/out" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>previz</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Previz.Status}} statusbox{{CheckDate .Previz.Predate .Previz.Date .Previz.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Previz.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'previz', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>previz</span>
 					</div>
 					<div id="{{.Name}}-task-previz-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Previz.Predate}}</span>
@@ -1499,13 +1487,9 @@
 			{{if eq .Fur.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-fur">
 					<div id="{{.Name}}-task-fur-status">
-						<a class="mt-1 badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fur.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/fur/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/fursim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
-						>fur</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Fur.Status}} statusbox{{CheckDate .Fur.Predate .Fur.Date .Fur.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Fur.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'fur', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>fur</span>
 					</div>
 					<div id="{{.Name}}-task-fur-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Fur.Predate}}</span>
@@ -1543,12 +1527,8 @@
 			{{if eq .Sim.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-sim">
 					<div id="{{.Name}}-task-sim-status">
-						<a class="mt-1 badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Sim.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/rig/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/sim/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
+						<span class="finger mt-1 badge badge-{{Status2string .Sim.Status}} statusbox{{CheckDate .Sim.Predate .Sim.Date .Sim.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Sim.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'sim', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
 						>sim</a>
 					</div>
 					<div id="{{.Name}}-task-sim-predate">
@@ -1588,9 +1568,9 @@
 			{{if eq .Crowd.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-crowd">
 					<div id="{{.Name}}-task-crowd-status">
-						<a class="mt-1 badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Crowd.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/crowd/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>crowd</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Crowd.Status}} statusbox{{CheckDate .Crowd.Predate .Crowd.Date .Crowd.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Crowd.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'crowd', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>crowd</span>
 					</div>
 					<div id="{{.Name}}-task-crowd-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Crowd.Predate}}</span>
@@ -1629,13 +1609,9 @@
 			{{if eq .Light.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-light">
 					<div id="{{.Name}}-task-light-status">
-						<a class="mt-1 badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Light.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}/lookdev/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/light/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
-						>{{if eq .Type "asset"}}look{{else}}light{{end}}</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Light.Status}} statusbox{{CheckDate .Light.Predate .Light.Date .Light.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Light.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'light', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>light</span>
 					</div>
 					<div id="{{.Name}}-task-light-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Light.Predate}}</span>
@@ -1674,12 +1650,8 @@
 			{{if eq .Comp.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-comp">
 					<div id="{{.Name}}-task-comp-status">
-						<a class="mt-1 badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Comp.Status}}"
-						{{if eq .Type "asset" }}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/assets/comp/nk" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{else}}
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/comp/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						{{end}}
+						<a class="finger mt-1 badge badge-{{Status2string .Comp.Status}} statusbox{{CheckDate .Comp.Predate .Comp.Date .Comp.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Comp.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'comp', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
 						>comp</a>
 					</div>
 					<div id="{{.Name}}-task-comp-predate">
@@ -1719,9 +1691,9 @@
 			{{if eq .Matte.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-matte">
 					<div id="{{.Name}}-task-matte-status">
-						<a class="mt-1 badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Matte.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/matte/pub" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>matte</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Matte.Status}} statusbox{{CheckDate .Matte.Predate .Matte.Date .Matte.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Matte.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'matte', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>matte</span>
 					</div>
 					<div id="{{.Name}}-task-matte-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Matte.Predate}}</span>
@@ -1760,9 +1732,9 @@
 			{{if eq .Env.Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 				<div class="row" id="{{.Name}}-task-env">
 					<div id="{{.Name}}-task-env-status">
-						<a class="mt-1 badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Env.Status}}"
-							href="{{$.Wfs}}/show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}/env/dev" onclick="window.open(this.href, 'nuke', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus(); return false;"
-						>env</a>
+						<span class="finger mt-1 badge badge-{{Status2string .Env.Status}} statusbox{{CheckDate .Env.Predate .Env.Date .Env.Mdate $.SearchOption.Searchword}}" title="{{Status2string .Env.Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{$.OS}}', 'env', '{{.Type}}', '{{.Assettype}}', '{{$.SearchOption.Project}}', '{{.Name}}', '{{.Seq}}', '{{.Cut}}', '{{$.User.Token}}');"
+						>env</span>
 					</div>
 					<div id="{{.Name}}-task-env-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Env.Predate}}</span>

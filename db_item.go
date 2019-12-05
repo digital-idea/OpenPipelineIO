@@ -1279,7 +1279,7 @@ func SetImageSize(session *mgo.Session, project, name, key, size string) error {
 }
 
 // SetTimecode 함수는 item에 Timecode를 설정한다.
-// ScanTimecodeIn,ScanTimecodeOut,JustTimecodeIn,JustTimecodeOut 문자를 key로 사용할 수 있다.
+// ScanTimecodeIn,ScanTimecodeOut,JustTimecodeIn,JustTimecoeOut 문자를 key로 사용할 수 있다.
 func SetTimecode(session *mgo.Session, project, name, key, timecode string) error {
 	key = strings.ToLower(key)
 	if !(key == "scantimecodein" ||

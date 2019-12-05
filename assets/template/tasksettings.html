@@ -12,24 +12,20 @@
 					<h6 class="card-header">
 						<span class="btn btn-sm">
 							{{.Name}}({{.Type}})
+							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+								<a href="/edittasksetting?id={{.ID}}" class="ml-2 btn btn-outline-danger btn-sm">Edit</a>
+							{{end}}
 						</span>
-						
 					</h6>
 					<div class="card-body">
 						<h6 class="card-title">
-							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-								<a href="/edittasksetting?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
-							{{end}}
+							
 						</h6>
-						<p class="card-text m-0 p-0">
-							LinuxDev: {{.LinuxDev}}<br>
-							LinuxPub: {{.LinuxPub}}<br>
-							WindowDev: {{.WindowDev}}<br>
-							WindowPub: {{.WindowPub}}<br>
-							MacOSDev: {{.MacOSDev}}<br>
-							MacOSPub: {{.MacOSPub}}<br>
+						<p class="card-text m-0 p-0 small">
+							LinuxPath: {{.LinuxPath}}<br>
+							WindowPath: {{.WindowPath}}<br>
+							MacOSPath: {{.MacOSPath}}
 						</p>
-						
 					</div>
 				</div>
 			</div>

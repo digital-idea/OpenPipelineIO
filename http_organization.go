@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -51,6 +52,110 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+// handleRmOrganization 함수는 조직구조를 삭제하는 페이지이다.
+func handleRmOrganization(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User    User
+		Devmode bool
+		SearchOption
+	}
+	rcp := recipe{}
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = TEMPLATES.ExecuteTemplate(w, "rmorganization", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleRmOrganizationSubmit 함수는 Organization을 삭제합니다.
+func handleRmOrganizationSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel != 10 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	typ := r.FormValue("organizationtype")
+	id := r.FormValue("id")
+	if !regexpTask.MatchString(id) {
+		http.Error(w, "task 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
+		return
+	}
+	switch typ {
+	case "division":
+		err = rmDivision(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "department":
+		err = rmDepartment(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "team":
+		err = rmTeam(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "role":
+		err = rmRole(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "position":
+		err = rmPosition(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "defalut":
+		http.Error(w, "지원하지 않는 Organization 입니다", http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/%ss", typ), http.StatusSeeOther)
 }
 
 // handleEditDepartment 함수는 Department를 편집하는 페이지이다.

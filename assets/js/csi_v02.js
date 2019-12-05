@@ -194,3 +194,35 @@ function checkScreenx(event) {
 		document.getElementById("screenxoverlay").value = 1.0;
 	}
 }
+
+
+function wfs(host, os, task, type, assettype, project, name, seq, cut, token) {
+	let WFSPATH = "";
+	$.ajax({
+		url: "/api/tasksetting",
+		type: "post",
+		data: {
+			os: os,
+			task: task,
+			type: type,
+			assettype: assettype,
+			project: project,
+			name: name,
+			seq: seq,
+			cut: cut,
+		},
+		headers: {
+			"Authorization": "Basic "+ token
+		},
+		async:false,
+		dataType: "json",
+		success: function(data) {
+			WFSPATH = data.path
+		},
+		error: function(request,status,error){
+			alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+		}
+	});
+	window.open(host + WFSPATH, 'WebFileSystem', 'left=20, top=20, width=500, height=500, toolbar=0, resizable=1, scrollbars=1').focus();
+}
+	
