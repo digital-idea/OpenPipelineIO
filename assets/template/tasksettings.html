@@ -6,27 +6,40 @@
 		
 <div class="p-2">
 	<div class="row">
-		{{range .Tasksettings}}
-			<div class="col-lg-4 col-md-6 col-sm-12">
-				<div class="card m-2 bg-darkmode">
-					<h6 class="card-header">
-						<span class="btn btn-sm">
-							{{.Name}}({{.Type}})
-							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-								<a href="/edittasksetting?id={{.ID}}" class="ml-2 btn btn-outline-danger btn-sm">Edit</a>
-							{{end}}
-						</span>
-					</h6>
-					<div class="card-body">
-						<h6 class="card-title">
-							
+		{{if .Tasksettings}}
+			{{range .Tasksettings}}
+				<div class="col-lg-4 col-md-6 col-sm-12">
+					<div class="card m-2 bg-darkmode">
+						<h6 class="card-header">
+							<span class="btn btn-sm">
+								{{.Name}}({{.Type}})
+								{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+									<a href="/edittasksetting?id={{.ID}}" class="ml-2 btn btn-outline-danger btn-sm">Edit</a>
+								{{end}}
+							</span>
 						</h6>
-						<p class="card-text m-0 p-0 small">
-							LinuxPath: {{.LinuxPath}}<br>
-							WindowPath: {{.WindowPath}}<br>
-							MacOSPath: {{.MacOSPath}}
-						</p>
+						<div class="card-body">
+							<h6 class="card-title">
+								
+							</h6>
+							<p class="card-text m-0 p-0 small">
+								LinuxPath: {{.LinuxPath}}<br>
+								WindowPath: {{.WindowPath}}<br>
+								MacOSPath: {{.MacOSPath}}
+							</p>
+						</div>
 					</div>
+				</div>
+			{{end}}
+		{{else}}
+			<div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+				<div class="text-center mt-5">
+					<span class="text-darkmode">Task가 없습니다. Task를 생성해주세요.</span>
+				</div>
+				<div class="text-center">
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+						<a href="/addtasksetting" class="mt-5 mb-5 btn btn-outline-warning">Add Task</a>
+					{{end}}
 				</div>
 			</div>
 		{{end}}

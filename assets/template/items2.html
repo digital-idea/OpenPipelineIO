@@ -1101,12 +1101,14 @@
 
 	<!--Task-->
 	<div class="col-sm-12 col-md-6 col-lg-2">
-		<div class="" id="{{.Name}}-add-taskbutton}}">
-			{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-				<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');setModal('addtask-userid', '{{$.User.ID}}')">＋</span>
-				<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');setModal('rmtask-userid', '{{$.User.ID}}')">－</span>
-			{{end}}
-		</div>
+		{{if eq .Type "org" "left" "asset"}}
+			<div class="" id="{{.Name}}-add-taskbutton}}">
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');setModal('addtask-userid', '{{$.User.ID}}')">＋</span>
+					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');setModal('rmtask-userid', '{{$.User.ID}}')">－</span>
+				{{end}}
+			</div>
+		{{end}}
 		<div class="mt-1 ml-2 mb-3" id="{{.Name}}-tasks">
 			
 			<!--onset Setellite-->
