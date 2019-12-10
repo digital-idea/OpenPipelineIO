@@ -74,17 +74,6 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" http://10.0.90.251/api/setrollmedia`|
 
 
-## Post(Legacy)
-| uri | description | attribute name | example |
-| --- | --- | --- | --- |
-| /api/addlink | 링크소스 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/addlink` |
-| /api/rmlink | 링크소스 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1/test.mov" http://192.168.31.172/api/rmlink` |
-| /api/addnote | 작업내용 추가 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/addnote` |
-| /api/rmnote | 작업내용 삭제 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=삭제내용" http://192.168.219.104/api/rmnote` |
-| /api/setnotes | 현장,작업내용 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.219.104/api/setnotes` |
-| /api/setcomments | 수정사항 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=첫번째줄. 두번째줄.세번째줄." http://192.168.31.172/api/setcomments` |
-| /api/settags | tags 변경 | project, name, tags | `$ curl -d "project=TEMP&name=SS_0010&tags=태그1,태그2" http://192.168.219.114/api/settags` |
-| /api/setlinks | 링크소스 교체 | project, name, text | `$ curl -d "project=TEMP&name=SS_0020&text=/show/src1,/show/src2" http://192.168.31.172/api/setlinks` |
 
 #### 샷정보 가지고오기. Python2.7x
 - TEMP 프로젝트 OPN_0010 샷 정보를 가지고 오기(암호화 토큰키 사용)
@@ -280,13 +269,13 @@ print(data["data"])
 circle 프로젝트 SS_0010 샷에 light 테스크에 /show/test.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" http://127.0.0.1/api/setmov
+$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" http://127.0.0.1/api/settaskmov
 ```
 
 circle 프로젝트 mamma 에셋 fur 테스크에 /show/fur.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" http://127.0.0.1/api/setmov
+$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" http://127.0.0.1/api/settaskmov
 ```
 
 #### python에서 샷 mov등록하기
@@ -294,14 +283,14 @@ $ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" http://127.0.0.
 - 아래는 파이썬에서 urllib2.request를 이용하여 mov를 등록하는 예제이다.
 
 ```
-def Setmov(project, shot, task, mov):
+def SetTaskmov(project, shot, task, mov):
     """
 	CSI에 mov를 등록한다.
 	에러문자열을 반환한다. 에러가 없다면 ""문자를 반환한다.
 	"""
 	data = "project=%s&shot=&s&task=%s&mov=%s" % (project, shot, task, mov)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setmov", data)
+		request = urllib2.Request("http://10.0.90.251/api/settaskmov", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -312,7 +301,7 @@ def Setmov(project, shot, task, mov):
 
 ```
 import csi3
-csi3.Setmov("TEMP", "SS_0010", "mm", "SS_0010.mov")
+csi3.SetTaskmov("TEMP", "SS_0010", "mm", "SS_0010.mov")
 ```
 
 #### curl을 사용한 restAPI 셋팅
