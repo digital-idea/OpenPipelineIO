@@ -1253,7 +1253,7 @@ function setTaskStartdate(project, name, task, date, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.info(data)
+                    console.log(data.date);
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1276,7 +1276,7 @@ function setTaskStartdate(project, name, task, date, userid) {
             },
             dataType: "json",
             success: function(data) {
-                console.info(data)
+                console.log(data.date);
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
