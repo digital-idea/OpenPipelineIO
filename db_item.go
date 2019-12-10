@@ -1518,96 +1518,47 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 	if err != nil {
 		return err
 	}
-	slug := name + "_" + typ
-	item, err := getItem(session, project, slug)
+	id := name + "_" + typ
+	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
-	hasStatus := ""
+	statusNum := ""
 	switch strings.ToLower(status) {
 	case READY, "ready":
-		hasStatus = READY
+		statusNum = READY
 	case ASSIGN, "assign":
-		hasStatus = ASSIGN
+		statusNum = ASSIGN
 	case WIP, "wip":
-		hasStatus = WIP
+		statusNum = WIP
 	case CONFIRM, "confirm":
-		hasStatus = CONFIRM
+		statusNum = CONFIRM
 	case DONE, "done":
-		hasStatus = DONE
+		statusNum = DONE
 	case OMIT, "omit":
-		hasStatus = OMIT
+		statusNum = OMIT
 	case HOLD, "hold":
-		hasStatus = HOLD
+		statusNum = HOLD
 	case OUT, "out":
-		hasStatus = OUT
+		statusNum = OUT
 	case NONE, "none":
-		hasStatus = NONE
+		statusNum = NONE
 	}
-	if hasStatus == "" {
+	if statusNum == "" {
 		return errors.New("올바른 status가 아닙니다")
 	}
+	if _, found := item.Tasks[strings.ToLower(task)]; !found {
+		return errors.New("task가 존재하지 않습니다")
+	}
+	t := item.Tasks[task]
+	t.BeforeStatus = t.Status
+	t.Status = statusNum
+	item.Tasks[task] = t
 
-	hasTask := true
-	switch strings.ToLower(task) {
-	case "model":
-		item.Model.BeforeStatus = item.Model.Status
-		item.Model.Status = hasStatus
-	case "mm":
-		item.Mm.BeforeStatus = item.Mm.Status
-		item.Mm.Status = hasStatus
-	case "layout":
-		item.Layout.BeforeStatus = item.Layout.Status
-		item.Layout.Status = hasStatus
-	case "ani":
-		item.Ani.BeforeStatus = item.Ani.Status
-		item.Ani.Status = hasStatus
-	case "fx":
-		item.Fx.BeforeStatus = item.Fx.Status
-		item.Fx.Status = hasStatus
-	case "mg":
-		item.Mg.BeforeStatus = item.Mg.Status
-		item.Mg.Status = hasStatus
-	case "fur":
-		item.Fur.BeforeStatus = item.Fur.Status
-		item.Fur.Status = hasStatus
-	case "sim":
-		item.Sim.BeforeStatus = item.Sim.Status
-		item.Sim.Status = hasStatus
-	case "crowd":
-		item.Crowd.BeforeStatus = item.Crowd.Status
-		item.Crowd.Status = hasStatus
-	case "light":
-		item.Light.BeforeStatus = item.Light.Status
-		item.Light.Status = hasStatus
-	case "comp":
-		item.Comp.BeforeStatus = item.Comp.Status
-		item.Comp.Status = hasStatus
-	case "matte":
-		item.Matte.BeforeStatus = item.Matte.Status
-		item.Matte.Status = hasStatus
-	case "env":
-		item.Env.BeforeStatus = item.Env.Status
-		item.Env.Status = hasStatus
-	case "concept":
-		item.Concept.BeforeStatus = item.Concept.Status
-		item.Concept.Status = hasStatus
-	case "previz":
-		item.Previz.BeforeStatus = item.Previz.Status
-		item.Previz.Status = hasStatus
-	case "temp1":
-		item.Temp1.BeforeStatus = item.Temp1.Status
-		item.Temp1.Status = hasStatus
-	default:
-		hasTask = false
-	}
-	if !hasTask {
-		return errors.New("올바른 task가 아닙니다")
-	}
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	item.updateStatus()
-	err = c.Update(bson.M{"slug": item.Slug}, item)
+	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
 		return err
 	}
@@ -1615,7 +1566,7 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 }
 
 // SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
-func SetAssignTask(session *mgo.Session, project, name, task string, assign bool) error {
+func SetAssignTask(session *mgo.Session, project, name, taskname string, assign bool) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1630,198 +1581,14 @@ func SetAssignTask(session *mgo.Session, project, name, task string, assign bool
 	if err != nil {
 		return err
 	}
-	if assign {
-		// 만약 이전 상태가 none이면 assign이 되어야 한다.
-		// 이전상태가 none 이나라면 이전상태로 되돌린다.
-		switch strings.ToLower(task) {
-		case "model":
-			if item.Model.BeforeStatus == "" || item.Model.BeforeStatus == NONE {
-				item.Model.Status = ASSIGN
-			} else {
-				item.Model.Status = item.Model.BeforeStatus
-			}
-		case "mm":
-			if item.Mm.BeforeStatus == "" || item.Mm.BeforeStatus == NONE {
-				item.Mm.Status = ASSIGN
-			} else {
-				item.Mm.Status = item.Mm.BeforeStatus
-			}
-		case "layout":
-			if item.Layout.BeforeStatus == "" || item.Layout.BeforeStatus == NONE {
-				item.Layout.Status = ASSIGN
-			} else {
-				item.Layout.Status = item.Layout.BeforeStatus
-			}
-		case "ani":
-			if item.Ani.BeforeStatus == "" || item.Ani.BeforeStatus == NONE {
-				item.Ani.Status = ASSIGN
-			} else {
-				item.Ani.Status = item.Ani.BeforeStatus
-			}
-		case "fx":
-			if item.Fx.BeforeStatus == "" || item.Fx.BeforeStatus == NONE {
-				item.Fx.Status = ASSIGN
-			} else {
-				item.Fx.Status = item.Fx.BeforeStatus
-			}
-		case "mg":
-			if item.Mg.BeforeStatus == "" || item.Mg.BeforeStatus == NONE {
-				item.Mg.Status = ASSIGN
-			} else {
-				item.Mg.Status = item.Mg.BeforeStatus
-			}
-		case "fur":
-			if item.Fur.BeforeStatus == "" || item.Fur.BeforeStatus == NONE {
-				item.Fur.Status = ASSIGN
-			} else {
-				item.Fur.Status = item.Fur.BeforeStatus
-			}
-		case "sim":
-			if item.Sim.BeforeStatus == "" || item.Sim.BeforeStatus == NONE {
-				item.Sim.Status = ASSIGN
-			} else {
-				item.Sim.Status = item.Sim.BeforeStatus
-			}
-		case "crowd":
-			if item.Crowd.BeforeStatus == "" || item.Crowd.BeforeStatus == NONE {
-				item.Crowd.Status = ASSIGN
-			} else {
-				item.Crowd.Status = item.Crowd.BeforeStatus
-			}
-		case "light":
-			if item.Light.BeforeStatus == "" || item.Light.BeforeStatus == NONE {
-				item.Light.Status = ASSIGN
-			} else {
-				item.Light.Status = item.Light.BeforeStatus
-			}
-		case "comp":
-			if item.Comp.BeforeStatus == "" || item.Comp.BeforeStatus == NONE {
-				item.Comp.Status = ASSIGN
-			} else {
-				item.Comp.Status = item.Comp.BeforeStatus
-			}
-		case "matte":
-			if item.Matte.BeforeStatus == "" || item.Matte.BeforeStatus == NONE {
-				item.Matte.Status = ASSIGN
-			} else {
-				item.Matte.Status = item.Matte.BeforeStatus
-			}
-		case "env":
-			if item.Env.BeforeStatus == "" || item.Env.BeforeStatus == NONE {
-				item.Env.Status = ASSIGN
-			} else {
-				item.Env.Status = item.Env.BeforeStatus
-			}
-		case "concept":
-			if item.Concept.BeforeStatus == "" || item.Concept.BeforeStatus == NONE {
-				item.Concept.Status = ASSIGN
-			} else {
-				item.Concept.Status = item.Concept.BeforeStatus
-			}
-		case "previz":
-			if item.Previz.BeforeStatus == "" || item.Previz.BeforeStatus == NONE {
-				item.Previz.Status = ASSIGN
-			} else {
-				item.Previz.Status = item.Previz.BeforeStatus
-			}
-		case "temp1":
-			if item.Temp1.BeforeStatus == "" || item.Temp1.BeforeStatus == NONE {
-				item.Temp1.Status = ASSIGN
-			} else {
-				item.Temp1.Status = item.Temp1.BeforeStatus
-			}
-		default:
-			return errors.New("지원하지 않는 Task 입니다")
+	task := strings.ToLower(taskname)
+	if _, found := item.Tasks[task]; !found {
+		t := Task{
+			Title:  task,
+			Status: ASSIGN,
 		}
-	} else {
-		// 만약 Assign 상태를 false할때 이전 상태를 가지고 있다면, BeforeStatus에 이전 상태를 저장한다.
-		// 그리고 현재상태를 None으로 설정한다.
-		switch strings.ToLower(task) {
-		case "model":
-			if !(item.Model.Status == "" || item.Model.Status == NONE) {
-				item.Model.BeforeStatus = item.Model.Status
-			}
-			item.Model.Status = NONE
-		case "mm":
-			if !(item.Mm.Status == "" || item.Mm.Status == NONE) {
-				item.Mm.BeforeStatus = item.Mm.Status
-			}
-			item.Mm.Status = NONE
-		case "layout":
-			if !(item.Layout.Status == "" || item.Layout.Status == NONE) {
-				item.Layout.BeforeStatus = item.Layout.Status
-			}
-			item.Layout.Status = NONE
-		case "ani":
-			if !(item.Ani.Status == "" || item.Ani.Status == NONE) {
-				item.Ani.BeforeStatus = item.Ani.Status
-			}
-			item.Ani.Status = NONE
-		case "fx":
-			if !(item.Fx.Status == "" || item.Fx.Status == NONE) {
-				item.Fx.BeforeStatus = item.Fx.Status
-			}
-			item.Fx.Status = NONE
-		case "mg":
-			if !(item.Mg.Status == "" || item.Mg.Status == NONE) {
-				item.Mg.BeforeStatus = item.Mg.Status
-			}
-			item.Mg.Status = NONE
-		case "fur":
-			if !(item.Fur.Status == "" || item.Fur.Status == NONE) {
-				item.Fur.BeforeStatus = item.Fur.Status
-			}
-			item.Fur.Status = NONE
-		case "sim":
-			if !(item.Sim.Status == "" || item.Sim.Status == NONE) {
-				item.Sim.BeforeStatus = item.Sim.Status
-			}
-			item.Sim.Status = NONE
-		case "crowd":
-			if !(item.Sim.Status == "" || item.Sim.Status == NONE) {
-				item.Sim.BeforeStatus = item.Sim.Status
-			}
-			item.Sim.Status = NONE
-		case "light":
-			if !(item.Light.Status == "" || item.Light.Status == NONE) {
-				item.Light.BeforeStatus = item.Light.Status
-			}
-			item.Light.Status = NONE
-		case "comp":
-			if !(item.Comp.Status == "" || item.Comp.Status == NONE) {
-				item.Comp.BeforeStatus = item.Comp.Status
-			}
-			item.Comp.Status = NONE
-		case "matte":
-			if !(item.Matte.Status == "" || item.Matte.Status == NONE) {
-				item.Matte.BeforeStatus = item.Matte.Status
-			}
-			item.Matte.Status = NONE
-		case "env":
-			if !(item.Env.Status == "" || item.Env.Status == NONE) {
-				item.Env.BeforeStatus = item.Env.Status
-			}
-			item.Env.Status = NONE
-		case "concept":
-			if !(item.Concept.Status == "" || item.Concept.Status == NONE) {
-				item.Concept.BeforeStatus = item.Concept.Status
-			}
-			item.Concept.Status = NONE
-		case "previz":
-			if !(item.Previz.Status == "" || item.Previz.Status == NONE) {
-				item.Previz.BeforeStatus = item.Previz.Status
-			}
-			item.Previz.Status = NONE
-		case "temp1":
-			if !(item.Temp1.Status == "" || item.Temp1.Status == NONE) {
-				item.Temp1.BeforeStatus = item.Temp1.Status
-			}
-			item.Temp1.Status = NONE
-		default:
-			return errors.New("지원하지 않는 Task 입니다")
-		}
+		item.Tasks[task] = t
 	}
-
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	item.updateStatus()

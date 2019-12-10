@@ -189,35 +189,16 @@ type Task struct {
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다.
 func (item *Item) updateStatus() {
-	tasks := []Task{
-		item.Concept,
-		item.Model,
-		item.Fur,
-		item.Mm,
-		item.Ani,
-		item.Fx,
-		item.Mg,
-		item.Light,
-		item.Texture,
-		item.Lookdev,
-		item.Comp,
-		item.Matte,
-		item.Env,
-		item.Sim,
-		item.Layout,
-		item.Crowd,
-		item.Temp1,
-	}
 	maxstatus := "0"
-	for _, t := range tasks {
-		if t.Status > maxstatus {
-			maxstatus = t.Status
+	for _, value := range item.Tasks {
+		if value.Status > maxstatus {
+			maxstatus = value.Status
 		}
 	}
 	item.Status = maxstatus
 }
 
-// setRumTag는 특정 항목이 입력이 되었을때 알맞은 태그를 자동으로 넣거나 삭제할 때 사용한다.
+// setRumTag 는 특정 항목이 입력이 되었을때 알맞은 태그를 자동으로 넣거나 삭제할 때 사용한다.
 // 예를 들어 "A0001" 이라는 롤넘버가 셋팅되면 태그리스트에 "1권" 이라는 단어를 넣어준다.
 func (item *Item) setRnumTag() {
 	if item.Rnum == "" {
