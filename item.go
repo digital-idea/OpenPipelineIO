@@ -2,11 +2,7 @@ package main
 
 import (
 	"sort"
-	"time"
 )
-
-// TASKS 는 작업에 사용되는 테스크 리스트이다.
-var TASKS = []string{"Model", "Mm", "Ani", "Fx", "Mg", "Fur", "Sim", "Light", "Comp", "Matte", "Crowd", "Layout", "Env", "Temp1", "Concept", "Previz"}
 
 const (
 	// CLIENT 클라이언트 컨펌상태
@@ -142,28 +138,6 @@ type Item struct {
 	// 레거시 자료구조. 추후 삭제될 예정이다.
 	Slug      string   `json:"slug"`      // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
 	Onsetnote []string `json:"onsetnote"` // 과거, 현장내용, 작업내용
-	Model     Task     `json:"model"`     // 모델링팀 정보.
-	Fur       Task     `json:"fur"`       // 털
-	Mm        Task     `json:"mm"`        // 매치무브
-	Ani       Task     `json:"ani"`       // 에니메이션
-	Fx        Task     `json:"fx"`        // FX
-	Mg        Task     `json:"mg"`        // 모션그래픽
-	Light     Task     `json:"light"`     // 라이팅
-	Texture   Task     `json:"texture"`   // 텍스쳐
-	Lookdev   Task     `json:"lookdev"`   // 룩뎁
-	Comp      Task     `json:"comp"`      // 합성
-	Roto      Task     `json:"roto"`      // 로토
-	Prep      Task     `json:"prep"`      // 입체작업전 프렙작업
-	Stereo    Task     `json:"stereo"`    // 입체작업
-	Matte     Task     `json:"matte"`     // 매트
-	Env       Task     `json:"env"`       // 환경
-	Sim       Task     `json:"sim"`       // 시뮬레이션
-	Layout    Task     `json:"layout"`    // 레이아웃
-	Crowd     Task     `json:"crowd"`     // 군중
-	Temp1     Task     `json:"temp1"`     // 기타1
-	Temp2     Task     `json:"temp2"`     // 기타2
-	Concept   Task     `json:"concept"`   // 컨셉
-	Previz    Task     `json:"previz"`    // 프리비즈
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
@@ -247,50 +221,4 @@ func (item *Item) setAssettags() {
 	}
 	sort.Strings(tags)
 	item.Assettags = tags
-}
-
-// 팀의 mov가 업데이트 되었다면 업데이트된 시간을 DB에 저장한다.
-func (item *Item) updateMdate(olditem *Item) {
-	if item.Model.Mov != olditem.Model.Mov {
-		item.Model.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Mm.Mov != olditem.Mm.Mov {
-		item.Mm.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Layout.Mov != olditem.Layout.Mov {
-		item.Layout.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Ani.Mov != olditem.Ani.Mov {
-		item.Ani.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Fx.Mov != olditem.Fx.Mov {
-		item.Fx.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Mg.Mov != olditem.Mg.Mov {
-		item.Mg.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Temp1.Mov != olditem.Temp1.Mov {
-		item.Temp1.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Fur.Mov != olditem.Fur.Mov {
-		item.Fur.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Sim.Mov != olditem.Sim.Mov {
-		item.Sim.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Crowd.Mov != olditem.Crowd.Mov {
-		item.Crowd.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Light.Mov != olditem.Light.Mov {
-		item.Light.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Comp.Mov != olditem.Comp.Mov {
-		item.Comp.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Matte.Mov != olditem.Matte.Mov {
-		item.Matte.Mdate = time.Now().Format(time.RFC3339)
-	}
-	if item.Env.Mov != olditem.Env.Mov {
-		item.Env.Mdate = time.Now().Format(time.RFC3339)
-	}
 }

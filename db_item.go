@@ -260,199 +260,6 @@ func DistinctDdline(session *mgo.Session, project string, key string) ([]string,
 	return datelist, nil
 }
 
-// Searchv1 함수는 csi 검색함수이다.
-func Searchv1(session *mgo.Session, op SearchOption) ([]Item, error) {
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("project").C(op.Project)
-	hasTeamName := false
-	wordQueries := []bson.M{}
-
-	// 'task:' 로 시작하는 검색어는 검색어 뒤에 붙은 task만 검색한다.
-	// '#태그명' 형태로 들어왔을때 해당 태그명에 대한 검색이다.
-	searchword := SearchwordParser(op.Searchword)
-	if len(searchword.tags) > 0 && len(searchword.words) == 1 && searchword.words[0] == "''" {
-		op.setStatusAll() // 모든 상태를 검색한다.
-		searchword.words[0] = searchword.tags[0]
-	}
-	for _, word := range searchword.words {
-		query := []bson.M{}
-		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
-			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
-			if len(searchword.tasks) == 0 {
-				for _, task := range TASKS {
-					query = append(query, bson.M{strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
-					query = append(query, bson.M{strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
-				}
-			} else {
-				for _, task := range searchword.tasks {
-					query = append(query, bson.M{strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
-					query = append(query, bson.M{strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
-				}
-			}
-			query = append(query, bson.M{"name": &bson.RegEx{Pattern: word}}) // 샷 이름에 숫자가 포함되는 경우도 검색한다.
-		} else if MatchNormalTime.MatchString(word) {
-			// 데일리 날짜를 검색한다.
-			// 2016-11-21 형태는 데일리로 간주합니다.
-			// jquery 달력의 기본형식이기도 합니다.
-			regFullTime := fmt.Sprintf(`^%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word)
-			if len(searchword.tasks) == 0 {
-				for _, task := range TASKS {
-					query = append(query, bson.M{strings.ToLower(task) + ".mdate": &bson.RegEx{Pattern: regFullTime}})
-				}
-			} else {
-				for _, task := range searchword.tasks {
-					query = append(query, bson.M{strings.ToLower(task) + ".mdate": &bson.RegEx{Pattern: regFullTime}})
-				}
-			}
-		} else {
-			switch word {
-			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":
-				query = append(query, bson.M{})
-			case "shot", "SHOT", "샷", "전샷", "전체샷":
-				query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
-			case "asset", "ASSET", "assets", "ASSETS", "에셋", "texture", "텍스쳐":
-				query = append(query, bson.M{"type": "asset"})
-			case "2d", "2D":
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "2d", Options: "i"}})
-			case "3d", "3D":
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "3d", Options: "i"}})
-			case "전권":
-				query = append(query, bson.M{"tag": "1권"})
-				query = append(query, bson.M{"tag": "2권"})
-				query = append(query, bson.M{"tag": "3권"})
-				query = append(query, bson.M{"tag": "4권"})
-				query = append(query, bson.M{"tag": "5권"})
-				query = append(query, bson.M{"tag": "6권"})
-				query = append(query, bson.M{"tag": "7권"})
-				query = append(query, bson.M{"tag": "8권"})
-			case "model", "mm", "layout", "ani", "fx", "mg", "fur", "sim", "crowd", "light", "comp", "matte", "env", "concept", "previz", "temp1":
-				hasTeamName = true
-				if op.Assign {
-					query = append(query, bson.M{word + ".status": ASSIGN})
-				}
-				if op.Ready {
-					query = append(query, bson.M{word + ".status": READY})
-				}
-				if op.Wip {
-					query = append(query, bson.M{word + ".status": WIP})
-				}
-				if op.Confirm {
-					query = append(query, bson.M{word + ".status": CONFIRM})
-				}
-				if op.Done {
-					query = append(query, bson.M{word + ".status": DONE})
-				}
-				if op.Omit {
-					query = append(query, bson.M{word + ".status": OMIT})
-				}
-				if op.Hold {
-					query = append(query, bson.M{word + ".status": HOLD})
-				}
-				if op.Out {
-					query = append(query, bson.M{word + ".status": OUT})
-				}
-				if op.None {
-					query = append(query, bson.M{word + ".status": NONE})
-				}
-			default:
-				query = append(query, bson.M{"id": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
-				// #태그명으로 검색시 검색어를 패턴 검색하지 않는다.
-				if len(searchword.tags) > 0 {
-					query = append(query, bson.M{"tag": word})
-					query = append(query, bson.M{"assettags": word})
-				} else {
-					query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
-					query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
-				}
-				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"justtimecodein": word})
-				query = append(query, bson.M{"justtimecodeout": word})
-				query = append(query, bson.M{"scantimecodein": word})
-				query = append(query, bson.M{"scantimecodeout": word})
-				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
-				if len(searchword.tasks) == 0 {
-					for _, task := range TASKS {
-						query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
-					}
-				} else {
-					for _, task := range searchword.tasks {
-						query = append(query, bson.M{strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
-					}
-				}
-			}
-		}
-		wordQueries = append(wordQueries, bson.M{"$or": query})
-	}
-
-	results := []Item{}
-	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
-		// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
-		return results, nil
-	}
-	statusQueries := []bson.M{}
-	if !hasTeamName {
-		if op.Assign {
-			statusQueries = append(statusQueries, bson.M{"status": ASSIGN})
-		}
-		if op.Ready {
-			statusQueries = append(statusQueries, bson.M{"status": READY})
-		}
-		if op.Wip {
-			statusQueries = append(statusQueries, bson.M{"status": WIP})
-		}
-		if op.Confirm {
-			statusQueries = append(statusQueries, bson.M{"status": CONFIRM})
-		}
-		if op.Done {
-			statusQueries = append(statusQueries, bson.M{"status": DONE})
-		}
-		if op.Omit {
-			statusQueries = append(statusQueries, bson.M{"status": OMIT})
-		}
-		if op.Hold {
-			statusQueries = append(statusQueries, bson.M{"status": HOLD})
-		}
-		if op.Out {
-			statusQueries = append(statusQueries, bson.M{"status": OUT})
-		}
-		if op.None {
-			statusQueries = append(statusQueries, bson.M{"status": NONE})
-		}
-	}
-
-	queries := []bson.M{
-		bson.M{"$and": wordQueries},
-	}
-	if len(statusQueries) != 0 {
-		queries = append(queries, bson.M{"$or": statusQueries})
-	}
-	q := bson.M{"$and": queries}
-	if *flagDebug {
-		fmt.Println("검색에 사용한 쿼리리스트")
-		fmt.Println(q)
-		fmt.Println()
-	}
-	switch op.Sortkey {
-	// 스캔길이, 스캔날짜는 역순으로 정렬한다.
-	// 스캔길이는 보통 난이도를 결정하기 때문에 역순(긴 길이순)을 매니저인 팀장,실장은 우선적으로 봐야한다.
-	// 스캔날짜는 IO팀에서 최근 등록한 데이터를 많이 검토하기 때문에 역순(최근등록순)으로 봐야한다.
-	case "scanframe", "scantime":
-		op.Sortkey = "-" + op.Sortkey
-	case "":
-		op.Sortkey = "slug"
-	}
-	err := c.Find(q).Sort(op.Sortkey).All(&results)
-	if err != nil {
-		log.Println("DB Find Err : ", err)
-		return nil, err
-	}
-	return results, nil
-}
-
 // Searchv2 함수는 다음 검색함수이다.
 func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	results := []Item{}
@@ -474,6 +281,10 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(op.Project)
+	tasks, err := TasksettingNames(session)
+	if err != nil {
+		log.Println(err)
+	}
 	wordQueries := []bson.M{}
 
 	for _, word := range strings.Split(op.Searchword, " ") {
@@ -484,7 +295,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
 			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
 			if op.Task == "" {
-				for _, task := range TASKS {
+				for _, task := range tasks {
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
 				}
@@ -499,7 +310,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			// jquery 달력의 기본형식이기도 합니다.
 			regFullTime := fmt.Sprintf(`^%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word)
 			if op.Task == "" {
-				for _, task := range TASKS {
+				for _, task := range tasks {
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".mdate": &bson.RegEx{Pattern: regFullTime}})
 				}
 			} else {
@@ -571,7 +382,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			}
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
-				for _, task := range TASKS {
+				for _, task := range tasks {
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
 				}
 			} else {
@@ -636,7 +447,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
 				// 느슨한 유저체크
 				if op.Task == "" {
-					for _, task := range TASKS {
+					for _, task := range tasks {
 						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
 					}
 				} else {
@@ -699,7 +510,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	case "":
 		op.Sortkey = "slug"
 	}
-	err := c.Find(q).Sort(op.Sortkey).All(&results)
+	err = c.Find(q).Sort(op.Sortkey).All(&results)
 	if err != nil {
 		log.Println("DB Find Err : ", err)
 		return nil, err

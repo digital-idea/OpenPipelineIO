@@ -207,7 +207,7 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		Type3d:     str2bool(q.Get("type3d")),
 		Type2d:     str2bool(q.Get("type2d")),
 	}
-	result, err := Searchv1(session, op)
+	result, err := Searchv2(session, op)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -4958,7 +4958,7 @@ func handleAPISearch(w http.ResponseWriter, r *http.Request) {
 		Out:        true,
 		None:       true,
 	}
-	items, err := Searchv1(session, searchOp)
+	items, err := Searchv2(session, searchOp)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

@@ -448,7 +448,7 @@ func main() {
 				Out:        true,
 				Sortkey:    "slug",
 			}
-			items, err := Searchv1(session, op)
+			items, err := Searchv2(session, op)
 			if err != nil {
 				log.Println(err)
 				os.Exit(1)
@@ -457,8 +457,12 @@ func main() {
 			// 만약 태스크명을 입력받았다면, 태스크명이 유효한지 체크하는 부분.
 			if *flagTask != "" {
 				hastask := false
-				for _, task := range TASKS {
-					if *flagTask == strings.ToLower(task) {
+				tasks, err := TasksettingNames(session)
+				if err != nil {
+					log.Fatal(err)
+				}
+				for _, t := range tasks {
+					if *flagTask == strings.ToLower(t) {
 						hastask = true
 					}
 				}
@@ -468,50 +472,17 @@ func main() {
 			}
 			// 검색 옵션을 이용해서 daily 리스트를 만든다.
 			for _, item := range items {
-				if *flagDate == ToNormalTime(item.Concept.Mdate) && isMov(item.Concept.Mov) && (*flagTask == "concept" || *flagTask == "") {
-					playlist = append(playlist, item.Concept.Mov)
+				tasks, err := TasksettingNames(session)
+				if err != nil {
+					log.Println(err)
 				}
-				if *flagDate == ToNormalTime(item.Model.Mdate) && isMov(item.Model.Mov) && (*flagTask == "model" || *flagTask == "") {
-					playlist = append(playlist, item.Model.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Mm.Mdate) && isMov(item.Mm.Mov) && (*flagTask == "mm" || *flagTask == "") {
-					playlist = append(playlist, item.Mm.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Ani.Mdate) && isMov(item.Ani.Mov) && (*flagTask == "ani" || *flagTask == "") {
-					playlist = append(playlist, item.Ani.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Fx.Mdate) && isMov(item.Fx.Mov) && (*flagTask == "fx" || *flagTask == "") {
-					playlist = append(playlist, item.Fx.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Mg.Mdate) && isMov(item.Mg.Mov) && (*flagTask == "mg" || *flagTask == "") {
-					playlist = append(playlist, item.Mg.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Previz.Mdate) && isMov(item.Previz.Mov) && (*flagTask == "previz" || *flagTask == "") {
-					playlist = append(playlist, item.Previz.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Fur.Mdate) && isMov(item.Fur.Mov) && (*flagTask == "fur" || *flagTask == "") {
-					playlist = append(playlist, item.Fur.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Sim.Mdate) && isMov(item.Sim.Mov) && (*flagTask == "sim" || *flagTask == "") {
-					playlist = append(playlist, item.Sim.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Light.Mdate) && isMov(item.Light.Mov) && (*flagTask == "light" || *flagTask == "") {
-					playlist = append(playlist, item.Light.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Comp.Mdate) && isMov(item.Comp.Mov) && (*flagTask == "comp" || *flagTask == "") {
-					playlist = append(playlist, item.Comp.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Matte.Mdate) && isMov(item.Matte.Mov) && (*flagTask == "matte" || *flagTask == "") {
-					playlist = append(playlist, item.Matte.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Crowd.Mdate) && isMov(item.Crowd.Mov) && (*flagTask == "crowd" || *flagTask == "") {
-					playlist = append(playlist, item.Crowd.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Layout.Mdate) && isMov(item.Layout.Mov) && (*flagTask == "layout" || *flagTask == "") {
-					playlist = append(playlist, item.Layout.Mov)
-				}
-				if *flagDate == ToNormalTime(item.Env.Mdate) && isMov(item.Env.Mov) && (*flagTask == "env" || *flagTask == "") {
-					playlist = append(playlist, item.Env.Mov)
+				for _, t := range tasks {
+					if _, found := item.Tasks[t]; !found {
+						continue
+					}
+					if *flagDate == ToNormalTime(item.Tasks[t].Mdate) && isMov(item.Tasks[t].Mov) {
+						playlist = append(playlist, item.Tasks[t].Mov)
+					}
 				}
 			}
 		}
