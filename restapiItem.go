@@ -87,29 +87,36 @@ func handleAPIRmItem(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	var project string
 	var name string
+	var typ string
 	info := r.PostForm
-	for key, value := range info {
+	for key, values := range info {
 		switch key {
 		case "project":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			project = v
 		case "name":
-			v, err := PostFormValueInList(key, value)
+			v, err := PostFormValueInList(key, values)
 			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
 			name = v
+		case "type":
+			if len(values) == 1 {
+				typ = values[0]
+			} else {
+				typ = ""
+			}
 		default:
-			fmt.Fprintf(w, "{\"error\":\"%s\"}\n", key+"키는 사용할 수 없습니다.(project, name 키값만 사용가능합니다.)")
+			http.Error(w, key+"키는 사용할 수 없습니다.(project, name 키값만 사용가능합니다.)", http.StatusBadRequest)
 			return
 		}
 	}
-	err = rmItem(session, project, name)
+	err = rmItem(session, project, name, typ)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

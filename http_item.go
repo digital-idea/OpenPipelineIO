@@ -1896,7 +1896,7 @@ func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		if typ == "" {
-			err = rmItem(session, project, n)
+			err = rmItem(session, project, n, "")
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
@@ -2034,7 +2034,7 @@ func handleRmAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		s := Asset{}
 		s.Name = n
-		err = rmItem(session, project, n)
+		err = rmItem(session, project, n, "asset")
 		if err != nil {
 			s.Error = err.Error()
 			fails = append(fails, s)
