@@ -114,7 +114,7 @@ func getShotTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("tasksetting")
 	results := []Tasksetting{}
-	err := c.Find(bson.M{"type": "shot"}).All(&results)
+	err := c.Find(bson.M{"type": "shot"}).Sort("name").All(&results)
 	if err != nil {
 		return results, err
 	}
@@ -126,7 +126,7 @@ func getAssetTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("tasksetting")
 	results := []Tasksetting{}
-	err := c.Find(bson.M{"type": "asset"}).All(&results)
+	err := c.Find(bson.M{"type": "asset"}).Sort("name").All(&results)
 	if err != nil {
 		return results, err
 	}

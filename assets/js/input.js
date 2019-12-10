@@ -2247,3 +2247,107 @@ function autocomplete(inp) {
 }
 
 autocomplete(document.getElementById("edittask-user"));
+
+function inputAddTasksetting(type) {
+    let token = document.getElementById("token").value;
+    if (type === "org" || type === "left") {
+        $.ajax({
+            url: "/api/shottasksetting",
+            type: "get",
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                let tasks = data["Tasksettings"];
+                let addtasks = document.getElementById('addtask-taskname');
+                addtasks.innerHTML = "";
+                for (let i = 0; i < tasks.length; i++){
+                    let opt = document.createElement('option');
+                    opt.value = tasks[i].name;
+                    opt.innerHTML = tasks[i].name;
+                    addtasks.appendChild(opt);
+                }
+            },
+            error: function(request,status,error){
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+    if (type === "asset") {
+        $.ajax({
+            url: "/api/assettasksetting",
+            type: "get",
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                let tasks = data["Tasksettings"]
+                let addtasks = document.getElementById('addtask-taskname');
+                addtasks.innerHTML = "";
+                for (let i = 0; i < tasks.length; i++){
+                    let opt = document.createElement('option');
+                    opt.value = tasks[i].name;
+                    opt.innerHTML = tasks[i].name;
+                    addtasks.appendChild(opt);
+                }
+            },
+            error: function(request,status,error){
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function inputRmTasksetting(type) {
+    let token = document.getElementById("token").value;
+    if (type === "org" || type === "left") {
+        $.ajax({
+            url: "/api/shottasksetting",
+            type: "get",
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                let tasks = data["Tasksettings"];
+                let rmtasks = document.getElementById('rmtask-taskname');
+                rmtasks.innerHTML = "";
+                for (let i = 0; i < tasks.length; i++){
+                    let opt = document.createElement('option');
+                    opt.value = tasks[i].name;
+                    opt.innerHTML = tasks[i].name;
+                    rmtasks.appendChild(opt);
+                }
+            },
+            error: function(request,status,error){
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+    if (type === "asset") {
+        $.ajax({
+            url: "/api/assettasksetting",
+            type: "get",
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                let tasks = data["Tasksettings"]
+                let rmtasks = document.getElementById('rmtask-taskname');
+                rmtasks.innerHTML = "";
+                for (let i = 0; i < tasks.length; i++){
+                    let opt = document.createElement('option');
+                    opt.value = tasks[i].name;
+                    opt.innerHTML = tasks[i].name;
+                    rmtasks.appendChild(opt);
+                }
+            },
+            error: function(request,status,error){
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}

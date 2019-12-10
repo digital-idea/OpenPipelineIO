@@ -109,22 +109,6 @@
 				<div class="form-group">
 					<label class="col-form-label col-form-label-sm">Select Task</label>
 					<select class="form-control form-control-sm" id="addtask-taskname">
-						<option value="">None</option>
-						<option value="comp">comp</option>
-						<option value="concept">concept</option>
-						<option value="model">model</option>
-						<option value="mm">mm</option>
-						<option value="layout">layout</option>
-						<option value="ani">ani</option>
-						<option value="fx">fx</option>
-						<option value="mg">mg</option>
-						<option value="previz">previz</option>
-						<option value="fur">fur</option>
-						<option value="sim">sim</option>
-						<option value="crowd">crowd</option>
-						<option value="light">light</option>
-						<option value="matte">matte</option>
-						<option value="env">env</option>
 					</select>
 				</div>
 			</div>			
@@ -152,22 +136,6 @@
 				<div class="form-group">
 					<label class="col-form-label col-form-label-sm">Select Task</label>
 					<select class="form-control form-control-sm" id="rmtask-taskname">
-						<option value="">None</option>
-						<option value="comp">comp</option>
-						<option value="concept">concept</option>
-						<option value="model">model</option>
-						<option value="mm">mm</option>
-						<option value="layout">layout</option>
-						<option value="ani">ani</option>
-						<option value="fx">fx</option>
-						<option value="mg">mg</option>
-						<option value="previz">previz</option>
-						<option value="fur">fur</option>
-						<option value="sim">sim</option>
-						<option value="crowd">crowd</option>
-						<option value="light">light</option>
-						<option value="matte">matte</option>
-						<option value="env">env</option>
 					</select>
 				</div>
 			</div>			
@@ -1102,8 +1070,8 @@
 		{{if eq .Type "org" "left" "asset"}}
 			<div class="" id="{{.Name}}-add-taskbutton}}">
 				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-					<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');">＋</span>
-					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');">－</span>
+					<span class="add" data-toggle="modal" data-target="#addtask" onclick="inputAddTasksetting('{{.Type}}');setModal('addtask-name', '{{.Name}}');">＋</span>
+					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="inputRmTasksetting('{{.Type}}');setModal('rmtask-name', '{{.Name}}');">－</span>
 				{{end}}
 			</div>
 		{{end}}
