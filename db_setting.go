@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"sort"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -138,9 +139,10 @@ func TasksettingNames(session *mgo.Session) ([]string, error) {
 	var results []string
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("tasksetting")
-	err := c.Find(bson.M{}).Sort("name").Distinct("name", &results)
+	err := c.Find(bson.M{}).Distinct("name", &results)
 	if err != nil {
 		return nil, err
 	}
+	sort.Strings(results)
 	return results, nil
 }
