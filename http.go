@@ -330,13 +330,7 @@ func webserver(port string) {
 	http.HandleFunc("/searchsubmit", handleSearchSubmit)            // legacy
 	http.HandleFunc("/edit", handleEdit)                            // legacy
 	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)      // legacy
-	http.HandleFunc("/api/addlink", handleAPIAddLink)               // legacy
 	http.HandleFunc("/api/rmlink", handleAPIRmLink)                 // legacy
-	http.HandleFunc("/api/setlinks", handleAPISetLinks)             // legacy
-	http.HandleFunc("/api/addnote", handleAPIAddNote)               // legacy
-	http.HandleFunc("/api/rmnote", handleAPIRmNote)                 // legacy
-	http.HandleFunc("/api/setnotes", handleAPISetNotes)             // legacy
-	http.HandleFunc("/api/setcomments", handleAPISetComments)       // legacy
 	http.HandleFunc("/tag/", handleTags)                            // legacy
 	http.HandleFunc("/assettags/", handleAssettags)                 // legacy
 	http.HandleFunc("/ddline/", handleDdline)                       // legacy

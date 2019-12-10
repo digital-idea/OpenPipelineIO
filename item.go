@@ -143,7 +143,6 @@ type Item struct {
 	Slug      string   `json:"slug"`      // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
 	Onsetnote []string `json:"onsetnote"` // 과거, 현장내용, 작업내용
 	Link      []string `json:"link"`      // 과거, 링크된 자료구조
-	Pmnote    []string `json:"pmnote"`    // 과거, PM 수정사항
 	Model     Task     `json:"model"`     // 모델링팀 정보.
 	Fur       Task     `json:"fur"`       // 털
 	Mm        Task     `json:"mm"`        // 매치무브
