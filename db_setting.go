@@ -132,3 +132,15 @@ func getAssetTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
 	}
 	return results, nil
 }
+
+// TasksettingNames 함수는 Tasksetting 이름을 수집하여 반환한다.
+func TasksettingNames(session *mgo.Session) ([]string, error) {
+	var results []string
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	err := c.Find(bson.M{}).Sort("name").Distinct("name", &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}

@@ -31,13 +31,14 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Tags        []string
 		Assettags   []string
 		SearchOption
-		Searchnum   Infobarnum
-		Totalnum    Infobarnum
-		Projectinfo Project
-		MailDNS     string
-		Dilog       string
-		Wfs         string
-		OS          string
+		Searchnum        Infobarnum
+		Totalnum         Infobarnum
+		Projectinfo      Project
+		MailDNS          string
+		Dilog            string
+		Wfs              string
+		OS               string
+		TasksettingNames []string
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -52,6 +53,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	rcp.TasksettingNames, err = TasksettingNames(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
