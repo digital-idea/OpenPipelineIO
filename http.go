@@ -342,10 +342,8 @@ func webserver(port string) {
 	http.HandleFunc("/ddline/", handleDdline)                       // legacy
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy
 	http.HandleFunc("/editeditem", handleEditedItem)                // legacy
-	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2)     // legacy
 	http.HandleFunc("/api/setmov", handleAPISetTaskMov)             // legacy
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate) // legacy
-	http.HandleFunc("/cmd", handleCmd)                              // legacy
 
 	if port == ":443" || port == ":8443" { // https ports
 		err := http.ListenAndServeTLS(port, *flagCertFullchanin, *flagCertPrivkey, nil)

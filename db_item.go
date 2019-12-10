@@ -1128,44 +1128,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	return results, nil
 }
 
-// RmOverlapOnsetnote 함수는 PM이 입력한 작업내용에 중복되어있다면 중복값을 삭제하는 함수이다.
-func RmOverlapOnsetnote(session *mgo.Session, project string) error {
-	// 프로젝트가 존재하는지 체크한다.
-	session.SetMode(mgo.Monotonic, true)
-	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	c := session.DB("project").C(project)
-	var items []Item
-	err = c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}}).All(&items)
-	if err != nil {
-		return err
-	}
-	for _, i := range items {
-		// note 리스트를 맵으로 바꾼다.
-		aftermap := make(map[string]string)
-		for _, n := range i.Onsetnote {
-			key := strings.SplitN(n, ";", 2)[1]
-			value := strings.SplitN(n, ";", 2)[0]
-			aftermap[key] = value
-		}
-		// 맵을 다시 리스트로 바꾼다.
-		var after []string
-		for key, value := range aftermap {
-			after = append(after, value+";"+key)
-		}
-		sort.Strings(after) // 시간순으로 정렬한다.
-
-		// notes를 업데이트 한다.
-		err = c.Update(bson.M{"slug": i.Slug}, bson.M{"$set": bson.M{"onsetnote": after}})
-		if err != nil {
-			log.Println(err)
-		}
-	}
-	return nil
-}
-
 // setTaskMov함수는 해당 샷에 mov를 설정하는 함수이다.
 func setTaskMov(session *mgo.Session, project, name, task, mov string) error {
 	session.SetMode(mgo.Monotonic, true)

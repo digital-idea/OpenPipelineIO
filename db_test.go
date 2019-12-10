@@ -35,27 +35,3 @@ func Test_projeclist(t *testing.T) {
 	}
 	return
 }
-
-func Test_RmOverlapOnsetnote(t *testing.T) {
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer session.Close()
-	// TravisCI 테스트용 프로젝트를 생성한다.
-	testName := "TravisCI"
-	p := *NewProject(testName)
-	err = addProject(session, p)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = RmOverlapOnsetnote(session, testName)
-	if err != nil {
-		t.Fatal(err)
-	}
-	// TravisCI 테스트가 끝나면 다시 프로젝트를 제거한다.
-	err = rmProject(session, testName)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
