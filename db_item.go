@@ -1158,19 +1158,12 @@ func setTaskMov(session *mgo.Session, project, name, task, mov string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	var items []Item
-	err = c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+	typ, err := Type(session, project, name)
 	if err != nil {
 		return err
 	}
-	if len(items) == 0 {
-		return errors.New(name + "을 DB에서 찾을 수 없습니다.")
-	}
-	if len(items) != 1 {
-		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
-	}
-	typestr := items[0].Type
-	err = c.Update(bson.M{"slug": name + "_" + typestr}, bson.M{"$set": bson.M{task + ".mov": mov, task + ".mdate": time.Now().Format(time.RFC3339)}})
+	id := name + "_" + typ
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".mov": mov, task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1185,19 +1178,12 @@ func setTaskDue(session *mgo.Session, project, name, task string, due int) error
 		return err
 	}
 	c := session.DB("project").C(project)
-	var items []Item
-	err = c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+	typ, err := Type(session, project, name)
 	if err != nil {
 		return err
 	}
-	if len(items) == 0 {
-		return errors.New(name + "을 DB에서 찾을 수 없습니다.")
-	}
-	if len(items) != 1 {
-		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
-	}
-	typ := items[0].Type
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{task + ".due": due, task + ".mdate": time.Now().Format(time.RFC3339)}})
+	id := name + "_" + typ
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".due": due, task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1212,23 +1198,17 @@ func setTaskLevel(session *mgo.Session, project, name, task, level string) error
 		return err
 	}
 	c := session.DB("project").C(project)
-	var items []Item
-	err = c.Find(bson.M{"$or": []bson.M{bson.M{"name": name, "type": "org"}, bson.M{"name": name, "type": "left"}, bson.M{"name": name, "type": "asset"}}}).All(&items)
+
+	typ, err := Type(session, project, name)
 	if err != nil {
 		return err
 	}
-	if len(items) == 0 {
-		return errors.New(name + "을 DB에서 찾을 수 없습니다.")
-	}
-	if len(items) != 1 {
-		return errors.New(name + "값이 DB에서 고유하지 않습니다.")
-	}
-	typestr := items[0].Type
+	id := name + "_" + typ
 	l, err := strconv.Atoi(level)
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": name + "_" + typestr}, bson.M{"$set": bson.M{task + ".tasklevel": TaskLevel(l)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".tasklevel": TaskLevel(l)}})
 	if err != nil {
 		return err
 	}
@@ -1367,9 +1347,6 @@ func SetFrame(session *mgo.Session, project, name, key string, frame int) error 
 
 // SetCameraPubPath 함수는 해당 카메라 퍼블리쉬 경로를 설정한다.
 func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
-	if path == "" {
-		return errors.New("path가 빈 문자열입니다")
-	}
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1566,7 +1543,7 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 }
 
 // SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
-func SetAssignTask(session *mgo.Session, project, name, taskname string, assign bool) error {
+func SetAssignTask(session *mgo.Session, project, name, taskname string, visable bool) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1582,11 +1559,22 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, assign 
 		return err
 	}
 	task := strings.ToLower(taskname)
+	// 기존에 Task가 없다면 추가한다.
 	if _, found := item.Tasks[task]; !found {
 		t := Task{
 			Title:  task,
 			Status: ASSIGN,
 		}
+		item.Tasks[task] = t
+	} else {
+		// 이미 Task가 존재하면
+		t := item.Tasks[task]
+		t.Status = ASSIGN
+		item.Tasks[task] = t
+	}
+	if !visable {
+		t := item.Tasks[task]
+		t.Status = NONE
 		item.Tasks[task] = t
 	}
 	c := session.DB("project").C(project)
@@ -1610,25 +1598,20 @@ func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
 	if err != nil {
 		return err
 	}
-	slug := name + "_" + typ
-	item, err := getItem(session, project, slug)
+	id := name + "_" + typ
+	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
 	c := session.DB("project").C(project)
-	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
-	err = validTask(task)
-	if err != nil {
-		return err
-	}
-	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".user": user, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".user": user, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// SetTaskDate 함수는 item에 task에 마감일값을 셋팅한다.
+// SetTaskDate 함수는 item에 task에 마감일을 셋팅한다.
 func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
@@ -1639,22 +1622,17 @@ func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	if err != nil {
 		return err
 	}
-	slug := name + "_" + typ
-	item, err := getItem(session, project, slug)
+	id := name + "_" + typ
+	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
 	c := session.DB("project").C(project)
-	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
-	err = validTask(task)
-	if err != nil {
-		return err
-	}
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".date": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".date": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1722,16 +1700,11 @@ func SetTaskStartdate(session *mgo.Session, project, name, task, date string) er
 	}
 	id := name + "_" + typ
 	c := session.DB("project").C(project)
-	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
-	err = validTask(task)
-	if err != nil {
-		return err
-	}
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{renameTask(task) + ".startdate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1750,12 +1723,8 @@ func SetTaskUserNote(session *mgo.Session, project, name, task, usernote string)
 		return err
 	}
 	id := name + "_" + typ
-	err = validTask(task)
-	if err != nil {
-		return err
-	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{renameTask(task) + ".usernote": usernote, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".usernote": usernote, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1773,22 +1742,17 @@ func SetTaskPredate(session *mgo.Session, project, name, task, date string) erro
 	if err != nil {
 		return err
 	}
-	slug := name + "_" + typ
-	item, err := getItem(session, project, slug)
+	id := name + "_" + typ
+	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
 	c := session.DB("project").C(project)
-	// 아래처럼 코드를 작성하면 미래에 멀티테스크 지원시 리펙토링이 편리해진다.
-	err = validTask(task)
-	if err != nil {
-		return err
-	}
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"slug": item.Slug}, bson.M{"$set": bson.M{renameTask(task) + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

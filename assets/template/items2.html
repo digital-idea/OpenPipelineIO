@@ -1245,16 +1245,18 @@
 			</div>
 			<div id="campubtask-{{.Name}}">
 				{{if .ProductionCam.PubTask}}
-					<span class="text-badge ml-1" id="campubtask-{{.Name}}">Pub-{{.ProductionCam.PubTask}},</span>
+					<span class="text-badge ml-1" id="campubtask-{{.Name}}">Pub-{{.ProductionCam.PubTask}}</span>
 				{{end}}
 			</div>
 			<div id="campubpath-{{.Name}}">
 				{{if .ProductionCam.PubPath}}
-					<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a><span class="text-badge">,</span>
+					<span class="text-badge">,</span>
+					<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
 				{{end}}
 			</div>
 			<div id="camprojection-{{.Name}}">
 				{{if .ProductionCam.Projection}}
+					<span class="text-badge">,</span>
 					<span class="text-badge ml-1">Projection</span>
 				{{end}}
 			</div>

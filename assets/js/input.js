@@ -315,7 +315,7 @@ function setCameraPubTask(project, name, task, userid) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub-${data.task},</span>`;
+            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub-${data.task}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -339,7 +339,7 @@ function setCameraPubPath(project, name, path, userid) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubpath-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a><span class="text-badge">,</span>`;
+            document.getElementById("campubpath-"+data.name).innerHTML = `, <a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -365,7 +365,7 @@ function setCameraProjection(project, name, userid) {
         dataType: "json",
         success: function(data) {
             if (data.projection === true) {
-                document.getElementById("camprojection-"+data.name).innerHTML = `<span class="text-badge ml-1">Projection</span>`;
+                document.getElementById("camprojection-"+data.name).innerHTML = `<span class="text-badge ml-1">, Projection</span>`;
             } else {
                 document.getElementById("camprojection-"+data.name).innerHTML = "";
             }

@@ -392,10 +392,6 @@ func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			err = validTask(v)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-			}
 			rcp.Task = v
 		case "mov": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
 			rcp.Mov = strings.Join(values, ";")
@@ -491,10 +487,6 @@ func handleAPISetTaskDue(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
-			}
-			err = validTask(v)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
 			}
 			rcp.Task = v
 		case "due": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
@@ -1747,12 +1739,11 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 				rcp.UserID = v
 			}
 		case "path":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+			if len(values) == 1 {
+				rcp.Path = values[0]
+			} else {
+				rcp.Path = ""
 			}
-			rcp.Path = v
 		}
 	}
 	err = SetCameraPubPath(session, rcp.Project, rcp.Name, rcp.Path)
