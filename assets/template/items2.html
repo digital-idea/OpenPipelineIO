@@ -106,7 +106,6 @@
 			</div>
 			<div class="modal-body">				
 				<input type="hidden" class="form-control" id="addtask-name">
-				<input type="hidden" class="form-control" id="addtask-userid">
 				<div class="form-group">
 					<label class="col-form-label col-form-label-sm">Select Task</label>
 					<select class="form-control form-control-sm" id="addtask-taskname">
@@ -131,7 +130,7 @@
 			</div>			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="addTask('{{$.SearchOption.Project}}', document.getElementById('addtask-name').value, document.getElementById('addtask-taskname').value, document.getElementById('addtask-userid').value)" data-dismiss="modal">Add</button>
+				<button type="button" class="btn btn-outline-warning" onclick="addTask('{{$.SearchOption.Project}}', document.getElementById('addtask-name').value, document.getElementById('addtask-taskname').value)" data-dismiss="modal">Add</button>
 			</div>
 		</div>
 	</div>
@@ -150,7 +149,6 @@
 			</div>
 			<div class="modal-body">				
 				<input type="hidden" class="form-control" id="rmtask-name">
-				<input type="hidden" class="form-control" id="rmtask-userid">
 				<div class="form-group">
 					<label class="col-form-label col-form-label-sm">Select Task</label>
 					<select class="form-control form-control-sm" id="rmtask-taskname">
@@ -175,7 +173,7 @@
 			</div>			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-danger" onclick="rmTask('{{$.SearchOption.Project}}', document.getElementById('rmtask-name').value, document.getElementById('rmtask-taskname').value, document.getElementById('rmtask-userid').value)" data-dismiss="modal">Remove</button>
+				<button type="button" class="btn btn-outline-danger" onclick="rmTask('{{$.SearchOption.Project}}', document.getElementById('rmtask-name').value, document.getElementById('rmtask-taskname').value)" data-dismiss="modal">Remove</button>
 			</div>
 		</div>
 	</div>
@@ -1104,8 +1102,8 @@
 		{{if eq .Type "org" "left" "asset"}}
 			<div class="" id="{{.Name}}-add-taskbutton}}">
 				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
-					<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');setModal('addtask-userid', '{{$.User.ID}}')">＋</span>
-					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');setModal('rmtask-userid', '{{$.User.ID}}')">－</span>
+					<span class="add" data-toggle="modal" data-target="#addtask" onclick="setModal('addtask-name', '{{.Name}}' );setModal('addtask-taskname', '');">＋</span>
+					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="setModal('rmtask-name', '{{.Name}}' );setModal('rmtask-taskname', '');">－</span>
 				{{end}}
 			</div>
 		{{end}}

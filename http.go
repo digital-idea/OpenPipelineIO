@@ -313,7 +313,7 @@ func webserver(port string) {
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
 	http.HandleFunc("/api/users", handleAPISearchUser)
-	http.HandleFunc("/api/validuser", handleAPIValidUser)
+	http.HandleFunc("/api/validuser", handleAPIValidUser) // 보안취약점 이슈가 있다.
 	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
 	http.HandleFunc("/api/autocompliteusers", handleAPIAutoCompliteUsers)
 
@@ -322,6 +322,8 @@ func webserver(port string) {
 
 	// restAPI Tasksetting
 	http.HandleFunc("/api/tasksetting", handleAPITasksetting)
+	http.HandleFunc("/api/shottasksetting", handleAPIShotTasksetting)
+	http.HandleFunc("/api/assettasksetting", handleAPIAssetTasksetting)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/search", handleSearch)                        // legacy

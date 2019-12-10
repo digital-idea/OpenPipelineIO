@@ -61,8 +61,9 @@ function sleep( millisecondsToWait ) {
 }
 
 
-function addTask(project, name, task, userid) {
+function addTask(project, name, task) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -165,8 +166,9 @@ function addTask(project, name, task, userid) {
     }
 }
 
-function rmTask(project, name, task, userid) {
+function rmTask(project, name, task) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {

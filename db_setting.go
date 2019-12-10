@@ -97,7 +97,7 @@ func AllTaskSettings(session *mgo.Session) ([]Tasksetting, error) {
 	return results, nil
 }
 
-// TaskSetting 함수는 id를 입력받아서 tasksetting값을 가지고 온다.
+// getTaskSetting 함수는 id를 입력받아서 tasksetting값을 가지고 온다.
 func getTaskSetting(session *mgo.Session, id string) (Tasksetting, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("tasksetting")
@@ -107,4 +107,28 @@ func getTaskSetting(session *mgo.Session, id string) (Tasksetting, error) {
 		return result, err
 	}
 	return result, nil
+}
+
+// getShotTaskSetting 함수는 type이 shot인 tasksetting값을 가지고 온다.
+func getShotTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	results := []Tasksetting{}
+	err := c.Find(bson.M{"type": "shot"}).All(&results)
+	if err != nil {
+		return results, err
+	}
+	return results, nil
+}
+
+// getAssetTaskSetting 함수는 type이 asset인 tasksetting값을 가지고 온다.
+func getAssetTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	results := []Tasksetting{}
+	err := c.Find(bson.M{"type": "asset"}).All(&results)
+	if err != nil {
+		return results, err
+	}
+	return results, nil
 }
