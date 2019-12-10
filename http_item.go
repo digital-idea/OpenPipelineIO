@@ -1565,24 +1565,25 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		i := Item{}
 		i.Name = n
+		i.Type = "org"
 		if stereo == "true" {
 			i.Type = "left"
-		} else {
-			i.Type = "org"
 		}
 		i.Project = project
 		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
 		i.Seq = strings.Split(i.Name, "_")[0]
 		i.Cut = strings.Split(i.Name, "_")[1]
-		i.Status = ASSIGN
-		i.Comp.Status = ASSIGN
 		i.Shottype = "2d"
 		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
 		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
 		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
 		i.Scantime = time.Now().Format(time.RFC3339)
 		i.Updatetime = time.Now().Format(time.RFC3339)
+		i.Status = ASSIGN
+		// 기본적으로 comp Task를 추가한다.
+		i.Tasks = make(map[string]Task)
+		i.Tasks["comp"] = Task{Status: ASSIGN, Title: "comp"}
 		err = addItem(session, project, i)
 		if err != nil {
 			s.Error = err.Error()
@@ -1728,19 +1729,37 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
-		if assettype == "comp" {
-			i.Comp.Status = ASSIGN
-		} else if assettype == "env" {
-			i.Env.Status = ASSIGN
-			i.Matte.Status = ASSIGN
-		} else {
-			i.Model.Status = ASSIGN
-		}
 		i.Status = ASSIGN
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
 		i.CrowdAsset = crowdAsset
+		// 기본적인 Task를 추가한다.
+		i.Tasks = make(map[string]Task)
+		if assettype == "comp" {
+			t := Task{
+				Status: ASSIGN,
+				Title:  "comp",
+			}
+			i.Tasks["comp"] = t
+		} else if assettype == "env" {
+			t := Task{
+				Status: ASSIGN,
+				Title:  "env",
+			}
+			i.Tasks["env"] = t
+			t = Task{
+				Status: ASSIGN,
+				Title:  "matte",
+			}
+			i.Tasks["matte"] = t
+		} else {
+			t := Task{
+				Status: ASSIGN,
+				Title:  "model",
+			}
+			i.Tasks["model"] = t
+		}
 		err = addItem(session, project, i)
 		if err != nil {
 			a.Error = err.Error()
@@ -1854,6 +1873,7 @@ func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
+	typ := r.FormValue("Type")
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -1875,13 +1895,23 @@ func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
 			fails = append(fails, s)
 			continue
 		}
-		err = rmItem(session, project, n)
-		if err != nil {
-			s.Error = err.Error()
-			fails = append(fails, s)
-			continue
+		if typ == "" {
+			err = rmItem(session, project, n)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			success = append(success, s)
+		} else {
+			err = rmItemAndType(session, project, n, typ)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			success = append(success, s)
 		}
-		success = append(success, s)
 	}
 
 	type recipe struct {

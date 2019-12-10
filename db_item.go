@@ -31,7 +31,6 @@ func addItem(session *mgo.Session, project string, i Item) error {
 	c = session.DB("project").C(project)
 	num, err = c.Find(bson.M{"name": i.Name, "type": i.Type}).Count()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if num != 0 {
@@ -39,7 +38,6 @@ func addItem(session *mgo.Session, project string, i Item) error {
 	}
 	err = c.Insert(i)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil
@@ -80,19 +78,19 @@ func Shot(session *mgo.Session, project string, name string) (Item, error) {
 	c := session.DB("project").C(project)
 	var result Item
 	// org, left 갯수를 구한다.
-	orgnum, err := c.Find(bson.M{"slug": name + "_org"}).Count()
+	orgnum, err := c.Find(bson.M{"id": name + "_org"}).Count()
 	if err != nil {
 		log.Println(err)
 		return Item{}, err
 	}
-	leftnum, err := c.Find(bson.M{"slug": name + "_left"}).Count()
+	leftnum, err := c.Find(bson.M{"id": name + "_left"}).Count()
 	if err != nil {
 		log.Println(err)
 		return Item{}, err
 	}
-	q := bson.M{"slug": name + "_org"}
+	q := bson.M{"id": name + "_org"}
 	if leftnum == 1 && orgnum == 0 {
-		q = bson.M{"slug": name + "_left"}
+		q = bson.M{"id": name + "_left"}
 	}
 	err = c.Find(q).One(&result)
 	if err != nil {
@@ -176,6 +174,23 @@ func rmItem(session *mgo.Session, project string, name string) error {
 	}
 	if num == 0 {
 		log.Println("삭제할 아이템이 없습니다.")
+		return errors.New("삭제할 아이템이 없습니다")
+	}
+	err = c.Remove(bson.M{"name": name, "type": typ})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func rmItemAndType(session *mgo.Session, project, name, typ string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	num, err := c.Find(bson.M{"name": name, "type": typ}).Count()
+	if err != nil {
+		return err
+	}
+	if num == 0 {
 		return errors.New("삭제할 아이템이 없습니다")
 	}
 	err = c.Remove(bson.M{"name": name, "type": typ})

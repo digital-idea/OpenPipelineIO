@@ -82,7 +82,12 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Platesize:  platesize,
 		Updatetime: now,
 	}
-	i.Comp.Status = ASSIGN // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다.
+	i.Tasks = make(map[string]Task)
+	t := Task{
+		Title:  "comp",
+		Status: ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다.
+	}
+	i.Tasks["comp"] = t
 
 	if scanframe != 0 {
 		i.ScanFrame = scanframe
