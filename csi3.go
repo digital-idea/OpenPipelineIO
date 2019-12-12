@@ -46,12 +46,12 @@ var (
 	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
 	flagDevmode        = flag.Bool("devmode", false, "dev mode")
-	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")             // 웹서버 포트
-	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")     // 회사이름
-	flagVersion        = flag.Bool("version", false, "Print Version")                    // 버전
-	flagCookieAge      = flag.Int64("cookieage", 168, "cookie age (hour)")               // 기본 일주일(168시간)로 설정한다. 참고: MPAA 기준 4시간이다.
-	flagThumbnailAge   = flag.Int("thumbnailage", 3600, "thumbnail image age (seconds)") // 썸네일 업데이트 시간. 3600 == 1시간
-	flagAuthmode       = flag.Bool("authmode", false, "restAPI authorization active")    // restAPI 이용시 authorization 활성화
+	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
+	flagCompany        = flag.String("company", COMPANY, "Web Service Port number.")  // 회사이름
+	flagVersion        = flag.Bool("version", false, "Print Version")                 // 버전
+	flagCookieAge      = flag.Int64("cookieage", 168, "cookie age (hour)")            // 기본 일주일(168시간)로 설정한다. 참고: MPAA 기준 4시간이다.
+	flagThumbnailAge   = flag.Int("thumbnailage", 1, "thumbnail image age (seconds)") // 썸네일 업데이트 시간. 3600초 == 1시간
+	flagAuthmode       = flag.Bool("authmode", false, "restAPI authorization active") // restAPI 이용시 authorization 활성화
 	flagCertFullchanin = flag.String("certfullchanin", fmt.Sprintf("/etc/letsencrypt/live/%s/fullchain.pem", DNS), "certification fullchain path")
 	flagCertPrivkey    = flag.String("certprivkey", fmt.Sprintf("/etc/letsencrypt/live/%s/privkey.pem", DNS), "certification privkey path")
 
