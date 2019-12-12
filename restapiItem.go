@@ -27,13 +27,13 @@ func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	_, accesslevel, err := TokenHandler(r, session)
+	_, level, err := TokenHandler(r, session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	if ArtistAccessLevel < accesslevel {
+	if PmAccessLevel > level {
 		http.Error(w, "권한이 낮아서 삭제할 수 없습니다.", http.StatusUnauthorized)
 		return
 	}
