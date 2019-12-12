@@ -33,12 +33,12 @@ var (
 	MAILDNS = "lazypic.org"
 	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	COMPANY = "lazypic"
-	// MAINVER 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	MAINVER = "v3.0"
-	// MINVER 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	MINVER = ""
 	// TEMPLATES 값은 웹서버 실행전 사용할 템플릿이다.
 	TEMPLATES = template.New("")
+	// SHA1VER  은 Git SHA1 값이다.
+	SHA1VER = "26b300a004abae553650c924514dc550e7385c9e" // 첫번째 커밋
+	// BUILDTIME 은 빌드타임 시간이다.
+	BUILDTIME = "2012-11-08T10:00:00" // 최초로 만든 시간
 
 	// 주요서비스 인수
 	flagDBIP           = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
@@ -101,7 +101,8 @@ func main() {
 	flag.Usage = usage
 	flag.Parse()
 	if *flagVersion {
-		fmt.Println(MAINVER + MINVER)
+		fmt.Println("buildTime:", BUILDTIME)
+		fmt.Println("git SHA1:", SHA1VER)
 		os.Exit(0)
 	}
 

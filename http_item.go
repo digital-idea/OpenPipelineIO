@@ -735,7 +735,7 @@ func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
 		tempFile.Close()
 		defer os.Remove(tempPath)
 		//fmt.Println(tempPath)
-		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.Slug)
+		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.ID)
 		thumbnailDir := filepath.Dir(thumbnailPath)
 		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
 		_, err = os.Stat(thumbnailDir)
@@ -1119,7 +1119,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			i.Type = "left"
 		}
 		i.Project = project
-		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
 		i.Seq = strings.Split(i.Name, "_")[0]
 		i.Cut = strings.Split(i.Name, "_")[1]
@@ -1140,6 +1139,12 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		success = append(success, s)
+		// slack log
+		err = slacklog(session, project, fmt.Sprintf("Add Shot: %s\nProject: %s, Author: %s", n, project, ssid.ID))
+		if err != nil {
+			log.Println(err)
+			continue
+		}
 	}
 
 	type recipe struct {
@@ -1276,7 +1281,6 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Name = n
 		i.Type = "asset"
 		i.Project = project
-		i.Slug = i.Name + "_" + i.Type
 		i.ID = i.Name + "_" + i.Type
 		i.Status = ASSIGN
 		i.Updatetime = time.Now().Format(time.RFC3339)

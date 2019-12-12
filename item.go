@@ -134,10 +134,6 @@ type Item struct {
 	ObjectidOut     int                    `json:"objectidout"`     // ObjectID 끝번호. Deep이미지의 DeepID를 만들기 위해서 파인라인상 필요하다.
 	OnsetCam        `json:"onsetcam"`      // 현장 카메라 정보
 	ProductionCam   `json:"productioncam"` // 포스트 프로덕션 카메라 정보
-
-	// 레거시 자료구조. 추후 삭제될 예정이다.
-	Slug      string   `json:"slug"`      // Name + Type이며 DB내부 컬렉션에서 고유ID로 활용한다.
-	Onsetnote []string `json:"onsetnote"` // 과거, 현장내용, 작업내용
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.

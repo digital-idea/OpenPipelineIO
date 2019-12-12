@@ -7,7 +7,8 @@ import (
 )
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "\nCSI %s%s Project Management Tool.\n", MAINVER, MINVER)
+	fmt.Fprintf(os.Stderr, "\nCSI Project Management Tool.\n")
+	fmt.Fprintf(os.Stderr, "\nBuildTime: %s\nGit SHA1: %s\n", BUILDTIME, SHA1VER)
 	fmt.Fprintf(os.Stderr, "usage:\n")
 	fmt.Fprintf(os.Stderr, "도움말 자세히보기:\n")
 	fmt.Fprintf(os.Stderr, "$ csi3 -help\n")

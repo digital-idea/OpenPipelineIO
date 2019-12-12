@@ -91,7 +91,6 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 	t, err := LoadTemplates()
 	if err != nil {
-		log.Println("loadTemplates:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -100,8 +99,13 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Sha1ver   string
+		BuildTime string
 	}
+
 	rcp := recipy{}
+	rcp.Sha1ver = SHA1VER
+	rcp.BuildTime = BUILDTIME
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

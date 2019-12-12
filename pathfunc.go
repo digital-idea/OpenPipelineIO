@@ -13,7 +13,7 @@ func userTemppath(id string) (string, error) {
 		return "", err
 	}
 	path := filepath.Dir(tempDir) + "/" + id
-	err = os.MkdirAll(path, 0777)
+	err = os.MkdirAll(path, 0766)
 	if err != nil {
 		return path, err
 	}
