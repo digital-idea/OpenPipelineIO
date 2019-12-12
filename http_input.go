@@ -205,7 +205,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 
 	err = TEMPLATES.ExecuteTemplate(w, rcp.SearchOption.Template, rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
