@@ -24,6 +24,17 @@ $('#deadline3d').on('shown.bs.modal', function () {
     $('#deadline3d-date').trigger('focus')
 })
 
+// Hotkey
+document.onkeyup = function(e) {
+    if (e.ctrlKey && e.shiftKey && e.which == 65) {
+        selectCheckboxAll()
+    } else if (e.ctrlKey && e.shiftKey && e.which == 68) {
+        selectCheckboxNone()
+    } else if (e.ctrlKey && e.shiftKey && e.which == 73) {
+        selectCheckboxInvert()
+    }
+};
+
 // setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
 function setModal(modalID, value) {
     document.getElementById(modalID).value=value;

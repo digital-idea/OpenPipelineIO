@@ -187,6 +187,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
 	u.Tags = Str2Tags(r.FormValue("Tags"))
+	u.Timezone = r.FormValue("Timezone")
 	if r.FormValue("AccessLevel") != "" {
 		level, err := strconv.Atoi(r.FormValue("AccessLevel"))
 		if err != nil {
@@ -208,8 +209,23 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
-	u.Timezone = r.FormValue("Timezone")
+	// 퇴사를하게 되면 레벨:0, 토큰레벨: 0 으로 수정한다.
+	if str2bool(r.FormValue("IsLeave")) {
+		u.AccessLevel = AccessLevel(0)
+		u.IsLeave = true
+		// 사용자 토큰을 업데이트한다.
+		t, err := getToken(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		t.AccessLevel = AccessLevel(0)
+		err = setToken(session, t)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
 	u.OrganizationsForm = r.FormValue("OrganizationsForm")

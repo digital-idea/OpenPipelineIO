@@ -172,7 +172,7 @@ func webserver(port string) {
 	http.HandleFunc("/updatepassword", handleUpdatePassword)
 	http.HandleFunc("/updatepassword_submit", handleUpdatePasswordSubmit)
 	http.HandleFunc("/edituser", handleEditUser)
-	http.HandleFunc("/edituser_submit", handleEditUserSubmit)
+	http.HandleFunc("/edituser-submit", handleEditUserSubmit)
 	http.HandleFunc("/replacetag", handleReplaceTag)
 	http.HandleFunc("/replacetag_submit", handleReplaceTagSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)

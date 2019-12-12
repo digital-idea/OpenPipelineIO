@@ -3,7 +3,7 @@
 <body>
 
 <div class="container p-5">
-    <form action="/edituser_submit"  method="POST" enctype="multipart/form-data">
+    <form action="/edituser-submit"  method="POST" enctype="multipart/form-data">
     <div class="pt-3 pb-5">
         <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
         <input type="hidden" name="ID" id="ID" value="{{.User.ID}}">
@@ -186,7 +186,14 @@
                     <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Developer</option>
                     <option value="11" {{if eq .User.AccessLevel 11}}selected{{end}}>11: Admin</option>
                 </select>
-                <small class="form-text text-warning">사용자 Accesslevel을 선택합니다.</small>
+                <small class="form-text text-danger">사용자 Accesslevel을 선택합니다.</small>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="IsLeave" name="IsLeave" class="form-check-input" value="true" {{if eq .User.IsLeave true}}checked{{end}}>
+                    <label class="form-check-label" for="IsLeave">퇴사자로 변경</label>
+                </div>
+                <small class="form-text text-danger">사용자 퇴사여부를 설정합니다.</small>
             </div>
             {{end}}
         </div>
