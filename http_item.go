@@ -938,7 +938,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		rcp.SearchOption.setStatusDefault()
 	}
 
-	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index2&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s",
+	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
 		rcp.SearchOption.Assign,
