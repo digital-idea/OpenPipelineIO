@@ -20,7 +20,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/rmitem | 아이템 삭제 | project, name, (type) | `$ curl -d "project=circle&name=SS_0010" http://127.0.0.1/api/rmitem` |
+| /api/rmitemid | 아이템 삭제 | project, id | `$ curl -d "project=circle&id=SS_0010_org" http://127.0.0.1/api/rmitemid` |
 | /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" http://127.0.0.1/api/setstatus` |
 | /api/setassigntask | Assign 설정,해제 | project, name, task, status | `$ curl -d "project=TEMP&name=SS_0030&task=mg&status=true" http://192.168.31.172/api/setassigntask` |
 | /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -d "project=TEMP&name=mamma&task=light&user=김한웅" http://192.168.219.104/api/settaskuser` |
