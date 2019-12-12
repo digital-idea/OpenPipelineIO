@@ -1205,13 +1205,6 @@
 			<div id="note-{{.Name}}">{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}</div>
 			
 		</div>
-		{{if ne $.Devmode true}}
-			<!--작업내용 legacy start-->
-			<div class="ml-1 text-light small">
-				{{range .Onsetnote | ReverseStringSlice -}}{{note2body .}}<br>{{- end}}
-			</div>
-			<!--작업내용 legacy end-->
-		{{end}}
 		
 		<!--ObjectID-->
 		{{if eq .Type "asset"}}
@@ -1367,14 +1360,6 @@
 					</small>
 					<hr class="my-1 p-0 m-0 divider">
 				</div>
-			{{end}}
-			{{if ne $.Devmode true}}
-				<!--수정내용 legacy start-->
-				{{range ReverseStringSlice .Pmnote | CutStringSlice -}}
-					<small class="text-white">{{pmnote2body .}}</small><br>
-					<hr class="my-1 p-0 m-0 divider">
-				{{- end}}
-				<!--수정내용 legacy end-->
 			{{end}}
 		</div>
 	</div>
