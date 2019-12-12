@@ -26,9 +26,11 @@ const (
 	IoAccessLevel
 	// PdAccessLevel PD레벨 8레벨(자금 이슈)
 	PdAccessLevel
-	// DeveloperAccessLevel 개발자 9레벨
+	// HqAccessLevel 경영지원(인사,재무)레벨 9레벨(전사적 자금 이슈)
+	HqAccessLevel
+	// DeveloperAccessLevel 개발자 10레벨
 	DeveloperAccessLevel
-	// AdminAccessLevel 관리자 10레벨(Root권한)
+	// AdminAccessLevel 관리자 11레벨(Root권한)
 	AdminAccessLevel
 )
 

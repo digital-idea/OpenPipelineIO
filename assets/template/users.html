@@ -26,7 +26,7 @@
 {{range .Tags}}
     <a href="/users?search=tag:{{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
 {{end}}
-{{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+{{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
     <a href="/replacetag" class="btn btn-danger btn-sm p-1 mt-1">태그이름변경</a>
 {{end}}
 </div>
@@ -55,7 +55,7 @@
                 {{range .Tags}}
                     <a href="/users?search=tag:{{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
                 {{end}}
-                {{if eq $.User.AccessLevel 10}}
+                {{if eq $.User.AccessLevel 11}}
                     <a href="/edituser?id={{.ID}}" class="btn btn-danger btn-sm p-1 mt-1">Edit</a>
                 {{end}}
                 </div>

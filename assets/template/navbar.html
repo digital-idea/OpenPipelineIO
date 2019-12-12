@@ -32,11 +32,11 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/projectinfo">Projects</a>
             <div class="dropdown-divider"></div>
-            {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
               <a class="dropdown-item" href="/users">Users</a>
               <div class="dropdown-divider"></div>
             {{end}}
-            {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
               <a class="dropdown-item" href="/tasksettings">Task</a>
               <div class="dropdown-divider"></div>
             {{end}}
@@ -47,7 +47,7 @@
             <a class="dropdown-item" href="/positions">Positions(직급)</a>
           </div>
         </li>
-        {{if eq .User.AccessLevel 4 5 6 7 8 9 10}}
+        {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                Add
@@ -71,22 +71,22 @@
             </div>
         </li>
         {{end}}
-        {{if eq .User.AccessLevel 5 8 10}}
+        {{if eq .User.AccessLevel 5 8 10 11}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Remove
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {{if eq .User.AccessLevel 10}}
+            {{if eq .User.AccessLevel 10 11}}
               <a class="dropdown-item text-danger" href="/rmproject">Project</a>
             {{end}}
             <a class="dropdown-item text-danger" href="/rmshot">Shot</a>
             <a class="dropdown-item text-danger" href="/rmasset">Asset</a>
-            {{if eq .User.AccessLevel 5 6 7 8 9 10}}
+            {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item text-danger" href="/rmtasksetting">Task</a>
             {{end}}
-            {{if eq .User.AccessLevel 10}}
+            {{if eq .User.AccessLevel 10 11}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item text-danger" href="/rmorganization">Organization</a>
             {{end}}
@@ -104,7 +104,7 @@
               <a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a>
               <a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a>
               <a class="dropdown-item text-danger" href="/updatepassword?id={{.User.ID}}">Update Password</a>
-              {{if eq .User.AccessLevel 10}}
+              {{if eq .User.AccessLevel 10 11}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/adminsetting">Admin Setting</a>
               {{end}}

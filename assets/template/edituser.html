@@ -169,7 +169,7 @@
                 </select>
                 <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
             </div>
-            {{if eq .SessionUser.AccessLevel 10}}
+            {{if eq .SessionUser.AccessLevel 11}}
             <div class="form-group">
                 <label>AccessLevel</label>
                 <select name="AccessLevel" class="form-control">
@@ -182,8 +182,9 @@
                     <option value="6" {{if eq .User.AccessLevel 6}}selected{{end}}>6: Supervisor</option>
                     <option value="7" {{if eq .User.AccessLevel 7}}selected{{end}}>7: IO</option>
                     <option value="8" {{if eq .User.AccessLevel 8}}selected{{end}}>8: PD</option>
-                    <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: Developer</option>
-                    <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Admin</option>
+                    <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: HQ(경영,인사,재무)</option>
+                    <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Developer</option>
+                    <option value="11" {{if eq .User.AccessLevel 11}}selected{{end}}>11: Admin</option>
                 </select>
                 <small class="form-text text-warning">사용자 Accesslevel을 선택합니다.</small>
             </div>

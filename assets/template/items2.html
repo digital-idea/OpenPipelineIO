@@ -847,18 +847,18 @@
 					{{if eq .Type "org" "left"}}
 						<div class="row" id="rnum-{{.Name}}">
 							{{if .Rnum}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
 							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-name', '{{.Name}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
 							{{end}}
 						</div>
 					{{end}}
 					{{if eq .Type "org" "left" "asset"}}
 						<div class="row" id="deadline3d-{{.Name}}">
 							{{if .Ddline3d}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-name', '{{.Name}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:{{ToShortTime .Ddline3d}}</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-name', '{{.Name}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:{{ToShortTime .Ddline3d}}</span>
 							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-name', '{{.Name}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-name', '{{.Name}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:</span>
 							{{end}}	
 						</div>
 					{{end}}
@@ -866,9 +866,9 @@
 					{{if eq .Type "org" "left" "asset"}}
 						<div class="row" id="deadline2d-{{.Name}}">
 							{{if .Ddline2d}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-name', '{{.Name}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:{{ToShortTime .Ddline2d}}</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-name', '{{.Name}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:{{ToShortTime .Ddline2d}}</span>
 							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-name', '{{.Name}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-name', '{{.Name}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:</span>
 							{{end}}
 						</div>
 					{{end}}
@@ -877,23 +877,23 @@
 				<div class="top-right">
 					<div class="row" id="platesize-{{.Name}}">
 						{{if .Platesize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '{{.Platesize}}');setModal('platesize-name', '{{.Name}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S: {{.Platesize}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '{{.Platesize}}');setModal('platesize-name', '{{.Name}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S: {{.Platesize}}</span>
 						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '');setModal('platesize-name', '{{.Name}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S:</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '');setModal('platesize-name', '{{.Name}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S:</span>
 						{{end}}
 					</div>
 					<div class="row" id="undistortionsize-{{.Name}}">
 						{{if .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '{{.Dsize}}');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U: {{.Dsize}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '{{.Dsize}}');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U: {{.Dsize}}</span>
 						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U:</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '');setModal('undistortionsize-name', '{{.Name}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U:</span>
 						{{end}}
 					</div>
 					<div class="row" id="rendersize-{{.Name}}">
 						{{if or .Rendersize .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R:</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '');setModal('rendersize-name', '{{.Name}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R:</span>
 						{{end}}
 					</div>
 				</div>
@@ -910,7 +910,7 @@
 				<div class="centered-bottom row">
 					{{if eq .Type "asset"}}
 						<div id="assettype-{{.Name}}">
-							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '{{.Name}}');setModal('assettype-userid', '{{$.User.ID}}')"{{end}}>{{.Assettype}}</span>
+							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '{{.Name}}');setModal('assettype-userid', '{{$.User.ID}}')"{{end}}>{{.Assettype}}</span>
 						</div>
 						{{if .CrowdAsset}}
 							<div id="crowdasset-{{.Name}}" class="ml-1">
@@ -937,9 +937,9 @@
 						{{end}}
 						<div id="shottype-{{.Name}}">
 							{{if .Shottype}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
 							{{else}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>none</span>
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '{{.Name}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>none</span>
 							{{end}}
 						</div>
 					{{end}}
@@ -967,30 +967,30 @@
 				</div>
 				<div class="bottom-left">
 					<div class="row">
-						<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleIn}}</span>
+						<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleIn}}</span>
 						<span class="text-white black-opbg">/</span>
-						<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleOut}}</span>						
+						<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.HandleOut}}</span>						
 					</div>
 					<div class="row" id="platein-{{.Name}}">
 						{{if .PlateIn}}
-							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.PlateIn}}</span>
+							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.PlateIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justin-{{.Name}}">
 						{{if .JustIn}}
-							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustIn}}</span>
+							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{.Name}}">
 						{{if .JustTimecodeIn}}
-							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeIn}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeIn}}</span>
 						{{end}}
 					</div>
 				</div>
 				<div class="bottom-right">
 					<div class="row" id="plateout-{{.Name}}">
 						{{if .PlateOut}}
-							<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
+							<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
 								{{.PlateOut}}
 								{{if and .PlateIn .PlateOut}}
 									({{Framecal .PlateIn .PlateOut}})
@@ -1000,7 +1000,7 @@
 					</div>
 					<div class="row" id="justout-{{.Name}}">
 						{{if .JustOut}}
-							<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
+							<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>
 								{{.JustOut}}
 								{{if and .JustIn .JustOut}}
 									({{Framecal .JustIn .JustOut}})
@@ -1010,7 +1010,7 @@
 					</div>
 					<div class="row" id="justtimecodeout-{{.Name}}" >
 						{{if .JustTimecodeOut}}
-							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeOut}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setModal('edittime-name', '{{.Name}}');setModal('edittime-userid', '{{$.User.ID}}');setModal('scanin', '{{.ScanIn}}');setModal('scanout', '{{.ScanOut}}');setModal('scanframe', '{{.ScanFrame}}');setModal('scantimecodein', '{{.ScanTimecodeIn}}');setModal('scantimecodeout', '{{.ScanTimecodeOut}}');setModal('platein', '{{.PlateIn}}');setModal('plateout', '{{.PlateOut}}');setModal('handlein', '{{.HandleIn}}');setModal('handleout', '{{.HandleOut}}');setModal('justin', '{{.JustIn}}');setModal('justout', '{{.JustOut}}');setModal('justtimecodein', '{{.JustTimecodeIn}}');setModal('justtimecodeout', '{{.JustTimecodeOut}}');"{{end}}>{{.JustTimecodeOut}}</span>
 						{{end}}
 					</div>
 				</div>
@@ -1031,13 +1031,13 @@
 						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov" class="play">▶</a>
 					{{end}}
 				</div>
-				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 					<div id="button-thumb-{{.Name}}">
 						<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.Slug}}" class="badge badge-darkmode ml-1">Thumb</a>
 					</div>
 				
 					<div id="button-edit-{{.Name}}">
-						<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10}} data-toggle="modal" data-target="#modal-iteminfo" 
+						<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-iteminfo" 
 						onclick="
 						setModal('iteminfo-thummov', '{{.Thummov}}');
 						setModal('iteminfo-beforemov', '{{.Beforemov}}');
@@ -1056,7 +1056,7 @@
 						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 					{{- end}}
 				</div>
-				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 					<div id="button-log-{{.Name}}">
 						<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
 					</div>
@@ -1070,7 +1070,7 @@
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		{{if eq .Type "org" "left" "asset"}}
 			<div class="" id="{{.Name}}-add-taskbutton}}">
-				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 					<span class="add" data-toggle="modal" data-target="#addtask" onclick="inputAddTasksetting('{{.Type}}');setModal('addtask-name', '{{.Name}}');">＋</span>
 					<span class="remove ml-0" data-toggle="modal" data-target="#rmtask" onclick="inputRmTasksetting('{{.Type}}');setModal('rmtask-name', '{{.Name}}');">－</span>
 				{{end}}
@@ -1113,7 +1113,7 @@
 								<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
 							{{end}}
 						</div>
-						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 							<div class="ml-1">
 								<span class="add" data-toggle="modal" data-target="#edittask" onclick="
 									setModal('edittask-startdate', '{{ToNormalTime .Startdate}}');
@@ -1189,7 +1189,7 @@
 			
 			<div class="ml-3" id="tag-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
-					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 						<span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '{{.Name}}');setModal('add-tag-userid', '{{$.User.ID}}')">＋</span>
 						{{if .Tag}}	
 							<span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '{{.Name}}');setModal('rm-tag-userid', '{{$.User.ID}}')">－</span>
@@ -1204,7 +1204,7 @@
 		</div>
 		<div class="ml-1 text-light small">
 			{{if eq .Type "org" "left" "asset"}}
-				{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
+				{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 					<div class="float-right" id="note-{{.Name}}-addbutton">
 						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-name', '{{.Name}}');setModal('set-note-userid', '{{$.User.ID}}')">＋</span>
 					</div>
@@ -1223,7 +1223,7 @@
 		
 		<!--ObjectID-->
 		{{if eq .Type "asset"}}
-			{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
+			{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 				<div class="row">
 					<div id="objectid-{{.Name}}">
 						<span class="finger no-decoration-text-button" data-toggle="modal" data-target="#modal-objectid" onclick="setModal('objectid-name', '{{.Name}}');setModal('objectidin', '{{.ObjectidIn}}');setModal('objectidout', '{{.ObjectidOut}}' );setModal('objectid-userid', '{{$.User.ID}}')">ObjectID:</span>
@@ -1239,7 +1239,7 @@
 		{{if eq .Type "org" "left"}}
 		<div class="row">
 			<div id="caminfo-{{.Name}}">
-				<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModalCheckbox('cameraoption-projection','{{.ProductionCam.Projection}}');setModal('cameraoption-userid', '{{$.User.ID}}')"{{end}}>
+				<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-name', '{{.Name}}' );setModalCheckbox('cameraoption-projection','{{.ProductionCam.Projection}}');setModal('cameraoption-userid', '{{$.User.ID}}')"{{end}}>
 					CamInfo:
 				</span>
 			</div>
@@ -1278,7 +1278,7 @@
 			</div>
 			<div class="ml-3" id="source-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
-					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 						<span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '{{.Name}}');setModal('add-source-userid', '{{$.User.ID}}')">＋</span>
 						{{if .Sources}}	
 							<span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '{{.Name}}');setModal('rm-source-userid', '{{$.User.ID}}')">－</span>
@@ -1352,7 +1352,7 @@
 	<!--수정사항-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		
-		{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
+		{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 			<div class="float-right">
 				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-name', '{{.Name}}');setModal('add-comment-userid', '{{$.User.ID}}')">＋</span>
 			</div>
@@ -1361,7 +1361,7 @@
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 				<div id="comment-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
-					{{if eq $.User.AccessLevel 5 6 7 8 9 10}}
+					{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 						<span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '{{$name}}');setModal('rm-comment-time', '{{.Date}}');setModal('rm-comment-text', '{{.Text}}');setModal('rm-comment-userid', '{{$.User.ID}}')">×</span>
 					{{end}}
 					<br>
