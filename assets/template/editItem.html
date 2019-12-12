@@ -8,17 +8,10 @@
 		<span class="text-dark">{{.Item.Name}}({{.Item.Type}})</span>
 		<span class="text-dark">{{.Item.Status|Status2capString}}</span>
 	</div>
-	<!--
-	<form action="/thumbnail-upload" class="dropzone">
-		<div class="fallback">
-		  <input name="file" type="file" />
-		</div>
-	</form>
-	-->
 			
 	<form action="/edititem-submit" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="project" value={{.Project.ID}}>
-		<input type="hidden" name="slug" value={{.Item.Slug}}>
+		<input type="hidden" name="id" value={{.Item.ID}}>
 		<div class="form-group pt-5">
 			<label>Thumbnail 이미지 변경</label>
 			<input type="file" name="Thumbnail" class="form-control">
@@ -36,7 +29,6 @@
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 <script src="/assets/js/input.js"></script>
-<script src="/assets/js/dropzone.js"></script>
 </html>
 
 {{end}}

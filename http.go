@@ -145,10 +145,6 @@ func webserver(port string) {
 	http.HandleFunc("/addshot_submit", handleAddShotSubmit)
 	http.HandleFunc("/addasset", handleAddAsset)
 	http.HandleFunc("/addasset_submit", handleAddAssetSubmit)
-	http.HandleFunc("/rmshot", handleRmShot)
-	http.HandleFunc("/rmshot_submit", handleRmShotSubmit)
-	http.HandleFunc("/rmasset", handleRmAsset)
-	http.HandleFunc("/rmasset_submit", handleRmAssetSubmit)
 
 	// Project
 	http.HandleFunc("/projectinfo", handleProjectinfo)
@@ -245,7 +241,7 @@ func webserver(port string) {
 
 	// restAPI Item
 	http.HandleFunc("/api/item", handleAPIItem)
-	http.HandleFunc("/api/rmitem", handleAPIRmItem)
+	http.HandleFunc("/api/rmitem", handleAPIRmItem) // legacy
 	http.HandleFunc("/api/rmitemid", handleAPIRmItemID)
 	http.HandleFunc("/api2/items", handleAPI2Items)
 	http.HandleFunc("/api/searchname", handleAPISearchname)
@@ -327,17 +323,11 @@ func webserver(port string) {
 	http.HandleFunc("/api/assettasksetting", handleAPIAssetTasksetting)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
-	http.HandleFunc("/search", handleSearch)                        // legacy
-	http.HandleFunc("/searchsubmit", handleSearchSubmit)            // legacy
-	http.HandleFunc("/edit", handleEdit)                            // legacy
-	http.HandleFunc("/edit_item_submit", handleEditItemSubmit)      // legacy
-	http.HandleFunc("/tag/", handleTags)                            // legacy
-	http.HandleFunc("/assettags/", handleAssettags)                 // legacy
-	http.HandleFunc("/ddline/", handleDdline)                       // legacy
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy
 	http.HandleFunc("/editeditem", handleEditedItem)                // legacy
 	http.HandleFunc("/api/setmov", handleAPISetTaskMov)             // legacy
 	http.HandleFunc("/api/setstartdate", handleAPISetTaskStartdate) // legacy
+	http.HandleFunc("/edititem-submit", handleEditItemSubmitv2)     // legacy
 
 	if port == ":443" || port == ":8443" { // https ports
 		err := http.ListenAndServeTLS(port, *flagCertFullchanin, *flagCertPrivkey, nil)

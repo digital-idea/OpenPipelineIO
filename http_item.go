@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
@@ -9,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -18,46 +16,6 @@ import (
 	"github.com/disintegration/imaging"
 	"gopkg.in/mgo.v2"
 )
-
-// handleSearchSubmit 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
-func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	Project := r.FormValue("Project")
-	Searchword := r.FormValue("Searchword")
-	Sortkey := r.FormValue("Sortkey")
-	Assign := str2bool(r.FormValue("Assign"))
-	Ready := str2bool(r.FormValue("Ready"))
-	Wip := str2bool(r.FormValue("Wip"))
-	Confirm := str2bool(r.FormValue("Confirm"))
-	Done := str2bool(r.FormValue("Done"))
-	Omit := str2bool(r.FormValue("Omit"))
-	Hold := str2bool(r.FormValue("Hold"))
-	Out := str2bool(r.FormValue("Out"))
-	None := str2bool(r.FormValue("None"))
-	redirectURL := fmt.Sprintf(`/search?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t`,
-		Project,
-		Searchword,
-		Sortkey,
-		Assign,
-		Ready,
-		Wip,
-		Confirm,
-		Done,
-		Omit,
-		Hold,
-		Out,
-		None,
-	)
-	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
-}
 
 // handleSearchSubmitv2 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
 func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
@@ -105,334 +63,6 @@ func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
 		Task,
 	)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
-}
-
-// handleSearch 함수는 검색결과를 반환하는 페이지다.
-func handleSearch(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		ID          string
-		Projectlist []string
-		Project     Project
-		SearchOption
-		Totalnum  Infobarnum
-		Searchnum Infobarnum
-		Items     []Item
-		Ddline3d  []string
-		Ddline2d  []string
-		Tags      []string
-		Assettags []string
-		Dilog     string
-		Wfs       string
-		MailDNS   string
-	}
-	rcp := recipe{}
-	// 쿠키값을 rcp로 보낸다.
-	rcp.ID = ssid.ID
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Projectlist, err = OnProjectlist(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if len(rcp.Projectlist) == 0 {
-		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
-		return
-	}
-	rcp.Dilog = *flagDILOG
-	rcp.Wfs = *flagWFS
-	rcp.MailDNS = *flagMailDNS
-	//옵션불러오기.
-	q := r.URL.Query()
-	rcp.SearchOption.Project = q.Get("project")
-	rcp.SearchOption.Searchword = q.Get("searchword")
-	rcp.SearchOption.Sortkey = q.Get("sortkey")
-	rcp.SearchOption.Assign = str2bool(q.Get("assign"))
-	rcp.SearchOption.Ready = str2bool(q.Get("ready"))
-	rcp.SearchOption.Wip = str2bool(q.Get("wip"))
-	rcp.SearchOption.Confirm = str2bool(q.Get("confirm"))
-	rcp.SearchOption.Done = str2bool(q.Get("done"))
-	rcp.SearchOption.Omit = str2bool(q.Get("omit"))
-	rcp.SearchOption.Hold = str2bool(q.Get("hold"))
-	rcp.SearchOption.Out = str2bool(q.Get("out"))
-	rcp.SearchOption.None = str2bool(q.Get("none"))
-
-	// 마지막으로 검색한 프로젝트를 쿠키에 저장한다.
-	// 이 정보는 index 페이지 접근시 프로젝트명으로 사용된다.
-	cookie := http.Cookie{
-		Name:   "Project",
-		Value:  rcp.SearchOption.Project,
-		MaxAge: 0,
-	}
-	http.SetCookie(w, &cookie)
-	cookie = http.Cookie{
-		Name:   "Task",
-		Value:  rcp.SearchOption.Task,
-		MaxAge: 0,
-	}
-	http.SetCookie(w, &cookie)
-	cookie = http.Cookie{
-		Name:   "Searchword",
-		Value:  base64.StdEncoding.EncodeToString([]byte(rcp.SearchOption.Searchword)), //  쿠키는 UTF-8을 저장할 때 에러가 발생한다.
-		MaxAge: 0,
-	}
-	http.SetCookie(w, &cookie)
-
-	// 프로젝트 이름이 빈 문자열이 아니고, 검색어가 있다면 검색을 한다.
-	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
-		rcp.Items, err = Searchv2(session, rcp.SearchOption)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-	rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Project, err = getProject(session, rcp.SearchOption.Project)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// 검색결과가 없다면 검색 결과가 없다는 메시지를 띄운다.
-	if len(rcp.Items) == 0 {
-		err = TEMPLATES.ExecuteTemplate(w, "searchno", rcp)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		return
-	}
-	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleAssettags는 에셋태그 페이지이다.
-func handleAssettags(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		ID          string
-		Projectlist []string
-		Project     Project
-		SearchOption
-		Totalnum  Infobarnum
-		Searchnum Infobarnum
-		Items     []Item
-		Ddline3d  []string
-		Ddline2d  []string
-		Tags      []string
-		Assettags []string
-		Dilog     string
-		Wfs       string
-		MailDNS   string
-	}
-	rcp := recipe{}
-	rcp.Dilog = *flagDILOG
-	rcp.Wfs = *flagWFS
-	rcp.MailDNS = *flagMailDNS
-	rcp.ID = ssid.ID
-	rcp.Projectlist, err = Projectlist(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// 옵션불러오기 및 초기화.
-	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[2])
-	mode := strings.Split(r.URL.Path, "/")[1] // assettags 또는 assettree 문자열이다.
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[2]
-	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[3]
-	rcp.SearchOption.setStatusDefault()
-	rcp.SearchOption.Sortkey = "slug"
-
-	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
-		rcp.SearchOption.setStatusAll() // 에셋태그 검색시 전체상태를 검색한다.
-		if mode == "assettree" {
-			rcp.Items, err = SearchAssetTree(session, rcp.SearchOption)
-		} else {
-			rcp.Items, err = SearchAssettags(session, rcp.SearchOption)
-		}
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-	rcp.SearchOption.Searchword = "tag:" + rcp.SearchOption.Searchword // 태그검색은 "tag:"로 시작한다.
-	rcp.SearchOption.setStatusDefault()                                // 검색이후 상태를 기본형으로 바꾸어 놓는다.
-	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleEdit 함수는 Item 편집페이지이다. - legacy
-func handleEdit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	q := r.URL.Query()
-	project := q.Get("project")
-	slug := q.Get("slug")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		ID      string
-		Project Project
-		Item    Item
-	}
-	rcp := recipe{}
-	rcp.Project, err = getProject(session, project)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Item, err = getItem(session, project, slug)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = TEMPLATES.ExecuteTemplate(w, "edit", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 }
 
 // handleEditItem 함수는 Item 편집페이지이다.
@@ -507,396 +137,6 @@ func handleEditedItem(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "editeditem", nil)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleTags 함수는 태그 클릭시 출력되는 페이지이다.
-func handleTags(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		ID          string
-		Projectlist []string
-		Project     Project
-		SearchOption
-		Totalnum  Infobarnum
-		Searchnum Infobarnum
-		Items     []Item
-		Ddline3d  []string
-		Ddline2d  []string
-		Tags      []string
-		Assettags []string
-		Dilog     string
-		Wfs       string
-		MailDNS   string
-	}
-	rcp := recipe{}
-	rcp.Dilog = *flagDILOG
-	rcp.Wfs = *flagWFS
-	rcp.MailDNS = *flagMailDNS
-	rcp.ID = ssid.ID
-	rcp.Projectlist, err = Projectlist(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// 옵션불러오기 및 초기화.
-	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[2])
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[2]
-	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[3]
-	rcp.SearchOption.setStatusDefault()
-	rcp.SearchOption.Sortkey = "slug"
-	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
-		rcp.SearchOption.setStatusAll() //태그검색은 전체상태를 검색한다.
-		rcp.Items, err = SearchTag(session, rcp.SearchOption)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-	// 태그는 전체 검색을 하고 "tag:"로 시작한다.
-	// Search 박스의 상태 옵션은 기본형이어야 한다
-	rcp.SearchOption.Searchword = "tag:" + rcp.SearchOption.Searchword
-	rcp.SearchOption.setStatusDefault()
-	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleEditItemSubmit 함수는 Item의 수정사항을 처리하는 페이지이다. legacy
-func handleEditItemSubmit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	//var logstring string
-	//기존 Item의 값을 가지고 온다.
-	project := r.FormValue("project")
-	slug := r.FormValue("slug")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	CurrentItem, err := getItem(session, project, slug)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	//과거의 값과 현재값을 비교하고 다르면 셋팅한다.
-	NewItem := CurrentItem //과거값을 먼저 복사한다.
-	NewItem.Rollmedia = r.FormValue("Rollmedia")
-	NewItem.Platesize = r.FormValue("Platesize")
-	NewItem.Dsize = r.FormValue("Dsize")
-	NewItem.Rendersize = r.FormValue("Rendersize")
-	NewItem.Thummov = r.FormValue("thummov")
-	NewItem.Beforemov = r.FormValue("Beforemov")
-	NewItem.Aftermov = r.FormValue("Aftermov")
-	NewItem.Retimeplate = r.FormValue("retimeplate")
-	if CurrentItem.Type == "org" || CurrentItem.Type == "left" { // 일반상황과 입체상황을 체크한다.
-		NewItem.Rnum = strings.ToUpper(r.FormValue("Rnum"))
-		NewItem.OCIOcc = r.FormValue("OCIOcc")
-		NewItem.PlateIn, err = strconv.Atoi(r.FormValue("PlateIn"))
-		if err != nil {
-			NewItem.PlateIn = CurrentItem.PlateIn // 에러가 나면 과거값으로 놔둔다.
-		}
-		NewItem.PlateOut, err = strconv.Atoi(r.FormValue("PlateOut"))
-		if err != nil {
-			NewItem.PlateOut = CurrentItem.PlateOut // 에러가 나면 과거값으로 놔둔다.
-		}
-		NewItem.JustIn, err = strconv.Atoi(r.FormValue("JustIn"))
-		if err != nil {
-			NewItem.JustIn = CurrentItem.JustIn // 에러가 나면 과거값으로 놔둔다.
-		}
-		NewItem.JustOut, err = strconv.Atoi(r.FormValue("JustOut"))
-		if err != nil {
-			NewItem.JustOut = CurrentItem.JustOut // 에러가 나면 과거값으로 놔둔다.
-		}
-	}
-	NewItem.ObjectidIn, err = strconv.Atoi(r.FormValue("ObjectidIn"))
-	if err != nil {
-		NewItem.ObjectidIn = CurrentItem.ObjectidIn // 에러가 나면 과거값으로 놔둔다.
-	}
-	NewItem.ObjectidOut, err = strconv.Atoi(r.FormValue("ObjectidOut"))
-	if err != nil {
-		NewItem.ObjectidOut = CurrentItem.ObjectidOut // 에러가 나면 과거값으로 놔둔다.
-	}
-	NewItem.Ddline2d = ToFullTime(r.FormValue("Ddline2d"))
-	NewItem.Ddline3d = ToFullTime(r.FormValue("Ddline3d"))
-	NewItem.Tag = Str2Tags(r.FormValue("Tag"))
-	NewItem.Assettags = Str2Tags(r.FormValue("Assettags"))
-	// 카메라 퍼블리쉬 관련 셋팅
-	NewItem.ProductionCam.PubTask = r.FormValue("ProductionCamPubTask")
-	NewItem.ProductionCam.PubPath = r.FormValue("ProductionCamPubPath")
-	NewItem.ProductionCam.Projection = str2bool(r.FormValue("ProductionCamProjection"))
-
-	file, fileHandler, fileErr := r.FormFile("Thumbnail")
-	if fileErr == nil {
-		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
-			http.Error(w, "업로드 파일이 jpeg 또는 png 파일이 아닙니다", http.StatusInternalServerError)
-			return
-		}
-		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
-		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
-		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if *flagDebug {
-			fmt.Println(mediatype)
-			fmt.Println(fileParams)
-			fmt.Println(fileHandler.Header.Get("Content-Type"))
-			fmt.Println()
-		}
-		tempPath := os.TempDir() + fileHandler.Filename
-		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		// 사용자가 업로드한 파일을 tempFile에 복사한다.
-		io.Copy(tempFile, io.LimitReader(file, MaxFileSize))
-		tempFile.Close()
-		defer os.Remove(tempPath)
-		//fmt.Println(tempPath)
-		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, NewItem.ID)
-		thumbnailDir := filepath.Dir(thumbnailPath)
-		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
-		_, err = os.Stat(thumbnailDir)
-		if os.IsNotExist(err) {
-			err := os.MkdirAll(thumbnailDir, 0775)
-			if err != nil {
-				log.Println(err)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 폴더에 생성하는 경우가 있다.
-			if *flagCompany == "digitalidea" {
-				err = dipath.Ideapath(thumbnailDir)
-				if err != nil {
-					log.Println(err)
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-			}
-		}
-		// 이미지변환
-		src, err := imaging.Open(tempPath)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		// Resize the cropped image to width = 200px preserving the aspect ratio.
-		dst := imaging.Fill(src, 410, 222, imaging.Center, imaging.Lanczos)
-		err = imaging.Save(dst, thumbnailPath)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 수정하는 경우도 있다.
-		if *flagCompany == "digitalidea" {
-			err = dipath.Ideapath(thumbnailPath)
-			if err != nil {
-				log.Println(err)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-	}
-	err = setItem(session, project, NewItem)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	http.Redirect(w, r, "/editeditem", http.StatusSeeOther)
-}
-
-// handleDdline 함수는 데드라인 클릭시 출력되는 페이지이다.
-func handleDdline(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-
-	type recipe struct {
-		ID          string
-		Projectlist []string
-		Project     Project
-		SearchOption
-		Totalnum  Infobarnum
-		Searchnum Infobarnum
-		Items     []Item
-		Ddline3d  []string
-		Ddline2d  []string
-		Tags      []string
-		Assettags []string
-		Dilog     string
-		Wfs       string
-		MailDNS   string
-	}
-	rcp := recipe{}
-	rcp.Dilog = *flagDILOG
-	rcp.Wfs = *flagWFS
-	rcp.MailDNS = *flagMailDNS
-	rcp.Projectlist, err = Projectlist(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	//옵션불러오기.
-	rcp.Project, err = getProject(session, strings.Split(r.URL.Path, "/")[3]) //project
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	part := strings.Split(r.URL.Path, "/")[2]                       //2d,3d,_
-	rcp.SearchOption.Project = strings.Split(r.URL.Path, "/")[3]    //project
-	rcp.SearchOption.Searchword = strings.Split(r.URL.Path, "/")[4] //date
-	rcp.SearchOption.setStatusDefault()
-	rcp.SearchOption.Sortkey = "slug"
-	if rcp.SearchOption.Project != "" && rcp.SearchOption.Searchword != "" {
-		rcp.SearchOption.setStatusAll() // 데드라인 클릭시 전체 상태를 검색한다.
-		rcp.Items, err = SearchDdline(session, rcp.SearchOption, part)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
-		if err != nil {
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-	rcp.SearchOption.setStatusDefault() // 페이지 렌더링시 상태는 기본형으로 바꾼다.
-	err = TEMPLATES.ExecuteTemplate(w, "csi3", rcp)
-	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1294,276 +534,99 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleRmShot 함수는 shot을 삭제하는 페이지이다.
-func handleRmShot(w http.ResponseWriter, r *http.Request) {
+// handleEditItemSubmitv2 함수는 Item의 수정사항을 처리하는 페이지이다. legacy
+func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel < 5 { // 메니저 이상
+	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
 	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		User        User
-		Projectlist []string
-		Devmode     bool
-		SearchOption
-	}
-	rcp := recipe{}
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Devmode = *flagDevmode
-	u, err := getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.User = u
-	rcp.Projectlist, err = Projectlist(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = TEMPLATES.ExecuteTemplate(w, "rmshot", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleRmShotSubmit 함수는 shot을 삭제한다.
-func handleRmShotSubmit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel < 5 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	project := r.FormValue("Project")
-	name := r.FormValue("Name")
-	typ := r.FormValue("Type")
-	f := func(c rune) bool {
-		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
-	}
-	names := strings.FieldsFunc(name, f)
-	type Shot struct {
-		Name  string
-		Error string
-	}
-	var success []Shot
-	var fails []Shot
-	for _, n := range names {
-		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
-			continue
+	//var logstring string
+	//기존 Item의 값을 가지고 온다.
+	project := r.FormValue("project")
+	id := r.FormValue("id")
+	file, fileHandler, fileErr := r.FormFile("Thumbnail")
+	if fileErr == nil {
+		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
+			http.Error(w, "업로드 파일이 jpeg 또는 png 파일이 아닙니다", http.StatusInternalServerError)
+			return
 		}
-		s := Shot{}
-		s.Name = n
-		if !regexpShotname.MatchString(n) {
-			s.Error = "SS_0010 형식의 이름이 아닙니다"
-			fails = append(fails, s)
-			continue
-		}
-		if typ == "" {
-			err = rmItem(session, project, n, "")
-			if err != nil {
-				s.Error = err.Error()
-				fails = append(fails, s)
-				continue
-			}
-			success = append(success, s)
-		} else {
-			err = rmItemAndType(session, project, n, typ)
-			if err != nil {
-				s.Error = err.Error()
-				fails = append(fails, s)
-				continue
-			}
-			success = append(success, s)
-		}
-	}
-
-	type recipe struct {
-		Success []Shot
-		Fails   []Shot
-		User    User
-		Devmode bool
-		SearchOption
-	}
-	rcp := recipe{}
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Devmode = *flagDevmode
-	rcp.Success = success
-	rcp.Fails = fails
-	u, err := getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.User = u
-
-	w.Header().Set("Content-Type", "text/html")
-	err = TEMPLATES.ExecuteTemplate(w, "rmshot_success", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleRmAsset 함수는 asset을 삭제하는 페이지이다.
-func handleRmAsset(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel < 5 { // 메니저 이상
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		User        User
-		Projectlist []string
-		Devmode     bool
-		SearchOption
-	}
-	rcp := recipe{}
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Devmode = *flagDevmode
-	u, err := getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.User = u
-	rcp.Projectlist, err = Projectlist(session)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = TEMPLATES.ExecuteTemplate(w, "rmasset", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleRmAssetSubmit 함수는 asset을 삭제한다.
-func handleRmAssetSubmit(w http.ResponseWriter, r *http.Request) {
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel < 5 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	project := r.FormValue("Project")
-	name := r.FormValue("Name")
-	f := func(c rune) bool {
-		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
-	}
-	names := strings.FieldsFunc(name, f)
-	type Asset struct {
-		Name  string
-		Error string
-	}
-	var success []Asset
-	var fails []Asset
-	for _, n := range names {
-		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
-			continue
-		}
-		s := Asset{}
-		s.Name = n
-		err = rmItem(session, project, n, "asset")
+		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
+		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
+		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
 		if err != nil {
-			s.Error = err.Error()
-			fails = append(fails, s)
-			continue
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		success = append(success, s)
+		if *flagDebug {
+			fmt.Println(mediatype)
+			fmt.Println(fileParams)
+			fmt.Println(fileHandler.Header.Get("Content-Type"))
+			fmt.Println()
+		}
+		tempPath := os.TempDir() + fileHandler.Filename
+		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 사용자가 업로드한 파일을 tempFile에 복사한다.
+		io.Copy(tempFile, io.LimitReader(file, MaxFileSize))
+		tempFile.Close()
+		defer os.Remove(tempPath)
+		//fmt.Println(tempPath)
+		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, id)
+		thumbnailDir := filepath.Dir(thumbnailPath)
+		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
+		_, err = os.Stat(thumbnailDir)
+		if os.IsNotExist(err) {
+			err := os.MkdirAll(thumbnailDir, 0775)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 폴더에 생성하는 경우가 있다.
+			if *flagCompany == "digitalidea" {
+				err = dipath.Ideapath(thumbnailDir)
+				if err != nil {
+					log.Println(err)
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			}
+		}
+		// 이미지변환
+		src, err := imaging.Open(tempPath)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// Resize the cropped image to width = 200px preserving the aspect ratio.
+		dst := imaging.Fill(src, 410, 222, imaging.Center, imaging.Lanczos)
+		err = imaging.Save(dst, thumbnailPath)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 디지털아이디어의 경우 스캔시스템에서 수동으로 이미지를 수정하는 경우도 있다.
+		if *flagCompany == "digitalidea" {
+			err = dipath.Ideapath(thumbnailPath)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
 	}
-
-	type recipe struct {
-		Success []Asset
-		Fails   []Asset
-		User    User
-		Devmode bool
-		SearchOption
-	}
-	rcp := recipe{}
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Devmode = *flagDevmode
-	rcp.Success = success
-	rcp.Fails = fails
-	u, err := getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.User = u
-
-	w.Header().Set("Content-Type", "text/html")
-	err = TEMPLATES.ExecuteTemplate(w, "rmasset_success", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	http.Redirect(w, r, "/editeditem", http.StatusSeeOther)
 }
