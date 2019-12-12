@@ -32,8 +32,18 @@ document.onkeyup = function(e) {
         selectCheckboxNone()
     } else if (e.ctrlKey && e.shiftKey && e.which == 73) {
         selectCheckboxInvert()
+    } else if (e.ctrlKey && e.shiftKey && e.which == 84) {
+        scroll(0,0)
+    } else if (e.ctrlKey && e.shiftKey && e.which == 77) {
+        selectmode()
     }
 };
+
+function id2name(id) {
+    l = id.split("_");
+    l.pop()
+    return l.join("_")
+}
 
 // setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
 function setModal(modalID, value) {
@@ -72,7 +82,7 @@ function sleep( millisecondsToWait ) {
 }
 
 
-function addTask(project, name, task) {
+function addTask(project, id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (multiInput) {
@@ -81,14 +91,14 @@ function addTask(project, name, task) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/setassigntask",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     status: 'true',
                     userid: userid,
@@ -135,7 +145,7 @@ function addTask(project, name, task) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 status: 'true',
                 userid: userid,
@@ -177,7 +187,7 @@ function addTask(project, name, task) {
     }
 }
 
-function rmTask(project, name, task) {
+function rmTask(project, id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (multiInput) {
@@ -186,14 +196,14 @@ function rmTask(project, name, task) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/setassigntask",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     status: 'false',
                     userid: userid,
@@ -216,7 +226,7 @@ function rmTask(project, name, task) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 status: 'false',
                 userid: userid,
@@ -235,14 +245,14 @@ function rmTask(project, name, task) {
     }
 }
 
-function setFrame(mode, project, name, frame, userid) {
+function setFrame(mode, project, id, frame, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/" + mode,
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             frame: frame,
             userid: userid,
         },
@@ -286,14 +296,14 @@ function setFrame(mode, project, name, frame, userid) {
 }
 
 
-function setScanTimecodeIn(project, name, timecode, userid) {
+function setScanTimecodeIn(project, id, timecode, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setscantimecodein",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             timecode: timecode,
             userid: userid,
         },
@@ -310,14 +320,14 @@ function setScanTimecodeIn(project, name, timecode, userid) {
     });
 }
 
-function setCameraPubTask(project, name, task, userid) {
+function setCameraPubTask(project, id, task, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setcamerapubtask",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             task: task,
             userid: userid,
         },
@@ -334,14 +344,14 @@ function setCameraPubTask(project, name, task, userid) {
     });
 }
 
-function setCameraPubPath(project, name, path, userid) {
+function setCameraPubPath(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setcamerapubpath",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -358,7 +368,7 @@ function setCameraPubPath(project, name, path, userid) {
     });
 }
 
-function setCameraProjection(project, name, userid) {
+function setCameraProjection(project, id, userid) {
     let token = document.getElementById("token").value;
     let projection = document.getElementById("cameraoption-projection").checked;
     $.ajax({
@@ -366,7 +376,7 @@ function setCameraProjection(project, name, userid) {
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             projection: projection,
             userid: userid,
         },
@@ -387,14 +397,14 @@ function setCameraProjection(project, name, userid) {
     });
 }
 
-function setScanTimecodeOut(project, name, timecode, userid) {
+function setScanTimecodeOut(project, id, timecode, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setscantimecodeout",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             timecode: timecode,
             userid: userid,
         },
@@ -411,14 +421,14 @@ function setScanTimecodeOut(project, name, timecode, userid) {
     });
 }
 
-function setJustTimecodeIn(project, name, timecode, userid) {
+function setJustTimecodeIn(project, id, timecode, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setjusttimecodein",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             timecode: timecode,
             userid: userid,
         },
@@ -435,14 +445,14 @@ function setJustTimecodeIn(project, name, timecode, userid) {
     });
 }
 
-function setJustTimecodeOut(project, name, timecode, userid) {
+function setJustTimecodeOut(project, id, timecode, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setjusttimecodeout",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             timecode: timecode,
             userid: userid,
         },
@@ -459,16 +469,15 @@ function setJustTimecodeOut(project, name, timecode, userid) {
     });
 }
 
-function setNote(project, name, text, userid) {
+function setNote(project, id, text, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
-            
             if(cboxes[i].checked === false) {
                 continue
             }
-            let currentName = cboxes[i].getAttribute("id");
+            let currentID = cboxes[i].getAttribute("id");
             let overwrite = document.getElementById("set-note-overwrite").checked;
             sleep(200);
             $.ajax({
@@ -476,7 +485,7 @@ function setNote(project, name, text, userid) {
                 type: "post",
                 data: {
                     project: project,
-                    name: currentName,
+                    name: id2name(currentID),
                     text: text,
                     userid: userid,
                     overwrite: overwrite,
@@ -506,7 +515,7 @@ function setNote(project, name, text, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 text: text,
                 userid: userid,
                 overwrite: overwrite,
@@ -531,7 +540,7 @@ function setNote(project, name, text, userid) {
     }
 }
 
-function addComment(project, name, text, media) {
+function addComment(project, id, text, media) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (multiInput) {
@@ -540,14 +549,14 @@ function addComment(project, name, text, media) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let currentName = cboxes[i].getAttribute("id");
+            let currentID = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/addcomment",
                 type: "post",
                 data: {
                     project: project,
-                    name: currentName,
+                    name: id2name(currentID),
                     text: text,
                     media: media,
                     userid: userid,
@@ -584,7 +593,7 @@ function addComment(project, name, text, media) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 text: text,
                 media: media,
                 userid: userid,
@@ -608,7 +617,7 @@ function addComment(project, name, text, media) {
                     }
                 }
                 newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
-                document.getElementById("comments-"+name).innerHTML = newComment + document.getElementById("comments-"+name).innerHTML;
+                document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -617,14 +626,14 @@ function addComment(project, name, text, media) {
     }
 }
 
-function rmComment(project, name, date, userid) {
+function rmComment(project, id, date, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/rmcomment",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             date: date,
             userid: userid
         },
@@ -642,7 +651,7 @@ function rmComment(project, name, date, userid) {
 }
 
 
-function addSource(project, name, title, path, userid) {
+function addSource(project, id, title, path, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -651,13 +660,13 @@ function addSource(project, name, title, path, userid) {
                 continue
             }
             sleep(200);
-            let currentName = cboxes[i].getAttribute("id")
+            let currentID = cboxes[i].getAttribute("id")
             $.ajax({
                 url: "/api/addsource",
                 type: "post",
                 data: {
                     project: project,
-                    name: currentName,
+                    name: id2name(currentID),
                     title: title,
                     path: path,
                     userid: userid,
@@ -699,7 +708,7 @@ function addSource(project, name, title, path, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 title: title,
                 path: path,
                 userid: userid,
@@ -737,7 +746,7 @@ function addSource(project, name, title, path, userid) {
 }
 
 
-function rmSource(project, name, title, userid) {
+function rmSource(project, id, title, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         var cboxes = document.getElementsByName('selectID');
@@ -746,13 +755,13 @@ function rmSource(project, name, title, userid) {
                 continue
             }
             sleep(200);
-            currentName = cboxes[i].getAttribute("id");
+            currentID = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/rmsource",
                 type: "post",
                 data: {
                     project: project,
-                    name: currentName,
+                    name: id2name(currentID),
                     title: title,
                     userid: userid,
                 },
@@ -785,7 +794,7 @@ function rmSource(project, name, title, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 title: title,
                 userid: userid,
             },
@@ -813,14 +822,14 @@ function rmSource(project, name, title, userid) {
     }
 }
 
-function setThummov(project, name, path, userid) {
+function setThummov(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setthummov",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -837,14 +846,14 @@ function setThummov(project, name, path, userid) {
     });
 }
 
-function setBeforemov(project, name, path, userid) {
+function setBeforemov(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setbeforemov",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -861,14 +870,14 @@ function setBeforemov(project, name, path, userid) {
     });
 }
 
-function setAftermov(project, name, path, userid) {
+function setAftermov(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setaftermov",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -886,14 +895,14 @@ function setAftermov(project, name, path, userid) {
 }
 
 
-function setRetimeplate(project, name, path, userid) {
+function setRetimeplate(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setretimeplate",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -914,14 +923,14 @@ function setRetimeplate(project, name, path, userid) {
     });
 }
 
-function setOCIOcc(project, name, path, userid) {
+function setOCIOcc(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setociocc",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             path: path,
             userid: userid,
         },
@@ -942,13 +951,13 @@ function setOCIOcc(project, name, path, userid) {
     });
 }
 
-function setRollmedia(project, name, rollmedia, userid, token) {
+function setRollmedia(project, id, rollmedia, userid, token) {
     $.ajax({
         url: "/api/setrollmedia",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             rollmedia: rollmedia,
             userid: userid,
         },
@@ -969,14 +978,14 @@ function setRollmedia(project, name, rollmedia, userid, token) {
     });
 }
 
-function setTaskMov(project, name, task, mov, userid) {
+function setTaskMov(project, id, task, mov, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/settaskmov",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             task: task,
             mov: mov,
             userid: userid,
@@ -998,7 +1007,7 @@ function setTaskMov(project, name, task, mov, userid) {
     });
 }
 
-function setTaskDue(project, name, task, due, userid) {
+function setTaskDue(project, id, task, due, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1006,13 +1015,13 @@ function setTaskDue(project, name, task, due, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/settaskdue",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     due: due,
                     userid: userid,
@@ -1035,7 +1044,7 @@ function setTaskDue(project, name, task, due, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 due: due,
                 userid: userid,
@@ -1054,7 +1063,7 @@ function setTaskDue(project, name, task, due, userid) {
     }
 }
 
-function setTaskUser(project, name, task, user, userid) {
+function setTaskUser(project, id, task, user, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1062,14 +1071,14 @@ function setTaskUser(project, name, task, user, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/settaskuser",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     user: user,
                     userid: userid,
@@ -1096,7 +1105,7 @@ function setTaskUser(project, name, task, user, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 user: user,
                 userid: userid,
@@ -1119,7 +1128,7 @@ function setTaskUser(project, name, task, user, userid) {
     }
 }
 
-function setTaskStatus(project, name, task, status, userid) {
+function setTaskStatus(project, id, task, status, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1127,14 +1136,14 @@ function setTaskStatus(project, name, task, status, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
                 url: "/api/settaskstatus",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     status: status,
                     userid: userid,
@@ -1157,7 +1166,7 @@ function setTaskStatus(project, name, task, status, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 status: status,
                 userid: userid,
@@ -1176,7 +1185,7 @@ function setTaskStatus(project, name, task, status, userid) {
     }
 }
 
-function setTaskDate(project, name, task, date, userid) {
+function setTaskDate(project, id, task, date, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1185,13 +1194,13 @@ function setTaskDate(project, name, task, date, userid) {
                 continue
             }
             sleep(200)
-            let name = cboxes[i].getAttribute("id")
+            let id = cboxes[i].getAttribute("id")
             $.ajax({
                 url: "/api/settaskdate",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     date: date,
                     userid: userid,
@@ -1218,7 +1227,7 @@ function setTaskDate(project, name, task, date, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 date: date,
                 userid: userid,
@@ -1241,7 +1250,7 @@ function setTaskDate(project, name, task, date, userid) {
     }
 }
 
-function setTaskStartdate(project, name, task, date, userid) {
+function setTaskStartdate(project, id, task, date, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1250,13 +1259,13 @@ function setTaskStartdate(project, name, task, date, userid) {
                 continue
             }
             sleep(200)
-            let name = cboxes[i].getAttribute("id")
+            let id = cboxes[i].getAttribute("id")
             $.ajax({
                 url: "/api/settaskstartdate",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     date: date,
                     userid: userid,
@@ -1279,7 +1288,7 @@ function setTaskStartdate(project, name, task, date, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 date: date,
                 userid: userid,
@@ -1298,7 +1307,7 @@ function setTaskStartdate(project, name, task, date, userid) {
     }
 }
 
-function setTaskUserNote(project, name, task, usernote, userid) {
+function setTaskUserNote(project, id, task, usernote, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1307,13 +1316,13 @@ function setTaskUserNote(project, name, task, usernote, userid) {
                 continue
             }
             sleep(200)
-            let name = cboxes[i].getAttribute("id")
+            let id = cboxes[i].getAttribute("id")
             $.ajax({
                 url: "/api/settaskusernote",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     usernote: usernote,
                     userid: userid,
@@ -1336,7 +1345,7 @@ function setTaskUserNote(project, name, task, usernote, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 usernote: usernote,
                 userid: userid,
@@ -1357,7 +1366,7 @@ function setTaskUserNote(project, name, task, usernote, userid) {
 
 
 
-function setTaskPredate(project, name, task, date, userid) {
+function setTaskPredate(project, id, task, date, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1365,14 +1374,14 @@ function setTaskPredate(project, name, task, date, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             sleep(200)
             $.ajax({
                 url: "/api/settaskpredate",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     date: date,
                     userid: userid,
@@ -1399,7 +1408,7 @@ function setTaskPredate(project, name, task, date, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 date: date,
                 userid: userid,
@@ -1423,7 +1432,7 @@ function setTaskPredate(project, name, task, date, userid) {
 }
 
 
-function setDeadline2D(project, name, date, userid) {
+function setDeadline2D(project, id, date, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1431,13 +1440,13 @@ function setDeadline2D(project, name, date, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setdeadline2d",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     date: date,
                     userid: userid,
                 },
@@ -1459,7 +1468,7 @@ function setDeadline2D(project, name, date, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 date: date,
                 userid: userid,
             },
@@ -1477,7 +1486,7 @@ function setDeadline2D(project, name, date, userid) {
     }
 }
 
-function setDeadline3D(project, name, date, userid) {
+function setDeadline3D(project, id, date, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1485,13 +1494,13 @@ function setDeadline3D(project, name, date, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setdeadline3d",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     date: date,
                     userid: userid,
                 },
@@ -1513,7 +1522,7 @@ function setDeadline3D(project, name, date, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 date: date,
                 userid: userid,
             },
@@ -1531,7 +1540,7 @@ function setDeadline3D(project, name, date, userid) {
     }
 }
 
-function setShottype(project, name, userid) {
+function setShottype(project, id, userid) {
     let token = document.getElementById("token").value;
     let shottypes = document.getElementsByName('shottype');
     let shottype = "";
@@ -1547,13 +1556,13 @@ function setShottype(project, name, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setshottype",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     shottype: shottype,
                     userid: userid,
                 },
@@ -1575,7 +1584,7 @@ function setShottype(project, name, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 shottype: shottype,
                 userid: userid,
             },
@@ -1593,7 +1602,7 @@ function setShottype(project, name, userid) {
     }
 }
 
-function setAssettype(project, name, userid) {
+function setAssettype(project, id, userid) {
     let token = document.getElementById("token").value;
     let types = document.getElementById("assettypes");
     let assettype = types.options[types.selectedIndex].value;
@@ -1603,13 +1612,13 @@ function setAssettype(project, name, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setassettype",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     assettype: assettype,
                     userid: userid,
                 },
@@ -1638,7 +1647,7 @@ function setAssettype(project, name, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 assettype: assettype,
                 userid: userid,
             },
@@ -1663,14 +1672,14 @@ function setAssettype(project, name, userid) {
     }
 }
 
-function setRnum(project, name, rnum, userid) {
+function setRnum(project, id, rnum, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setrnum",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             rnum: rnum,
             userid: userid,
         },
@@ -1691,7 +1700,7 @@ function setRnum(project, name, rnum, userid) {
     });
 }
 
-function addTag(project, name, tag, userid) {
+function addTag(project, id, tag, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1699,14 +1708,14 @@ function addTag(project, name, tag, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/addtag",
                 type: "post",
                 
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     tag: tag,
                     userid: userid,
                 },
@@ -1743,7 +1752,7 @@ function addTag(project, name, tag, userid) {
             
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 tag: tag,
                 userid: userid,
             },
@@ -1775,7 +1784,7 @@ function addTag(project, name, tag, userid) {
     }
 }
 
-function rmTag(project, name, tag, userid) {
+function rmTag(project, id, tag, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1790,7 +1799,7 @@ function rmTag(project, name, tag, userid) {
                 
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     tag: tag,
                     userid: userid,
                 },
@@ -1824,7 +1833,7 @@ function rmTag(project, name, tag, userid) {
             
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 tag: tag,
                 userid: userid,
             },
@@ -1892,7 +1901,7 @@ function selectCheckboxInvert() {
     }
 }
 
-function setTaskLevel(project, name, task, level, userid) {
+function setTaskLevel(project, id, task, level, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1900,13 +1909,13 @@ function setTaskLevel(project, name, task, level, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/settasklevel",
                 type: "post",
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     task: task,
                     level: level,
                     userid: userid,
@@ -1929,7 +1938,7 @@ function setTaskLevel(project, name, task, level, userid) {
             type: "post",
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 task: task,
                 level: level,
                 userid: userid,
@@ -1948,14 +1957,14 @@ function setTaskLevel(project, name, task, level, userid) {
     }
 }
 
-function setObjectID(project, name, innum, outnum, userid) {
+function setObjectID(project, id, innum, outnum, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setobjectid",
         type: "post",
         data: {
             project: project,
-            name: name,
+            name: id2name(id),
             in: innum,
             out: outnum,
             userid: userid,
@@ -1975,7 +1984,7 @@ function setObjectID(project, name, innum, outnum, userid) {
 
 
 
-function setPlatesize(project, name, size, userid) {
+function setPlatesize(project, id, size, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -1983,14 +1992,14 @@ function setPlatesize(project, name, size, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setplatesize",
                 type: "post",
                 
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     size: size,
                     userid: userid,
                 },
@@ -2013,7 +2022,7 @@ function setPlatesize(project, name, size, userid) {
             
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 size: size,
                 userid: userid,
             },
@@ -2031,7 +2040,7 @@ function setPlatesize(project, name, size, userid) {
     }
 }
 
-function setUndistortionsize(project, name, size, userid) {
+function setUndistortionsize(project, id, size, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -2039,14 +2048,14 @@ function setUndistortionsize(project, name, size, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setundistortionsize",
                 type: "post",
                 
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     size: size,
                     userid: userid,
                 },
@@ -2069,7 +2078,7 @@ function setUndistortionsize(project, name, size, userid) {
             
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 size: size,
                 userid: userid,
             },
@@ -2087,7 +2096,7 @@ function setUndistortionsize(project, name, size, userid) {
     }
 }
 
-function setRendersize(project, name, size, userid) {
+function setRendersize(project, id, size, userid) {
     let token = document.getElementById("token").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
@@ -2095,14 +2104,14 @@ function setRendersize(project, name, size, userid) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/setrendersize",
                 type: "post",
                 
                 data: {
                     project: project,
-                    name: name,
+                    name: id2name(id),
                     size: size,
                     userid: userid,
                 },
@@ -2125,7 +2134,7 @@ function setRendersize(project, name, size, userid) {
             
             data: {
                 project: project,
-                name: name,
+                name: id2name(id),
                 size: size,
                 userid: userid,
             },
@@ -2140,6 +2149,48 @@ function setRendersize(project, name, size, userid) {
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
+    }
+}
+
+function CurrentProject() {
+    let e = document.getElementById("Project");
+    return e.options[e.selectedIndex].value;
+}
+
+function rmItem() {
+    let project = CurrentProject()
+    let token = document.getElementById("token").value;
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/rmitemid",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                    document.getElementById(`item-${data.id}`).remove();
+                    
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        alert("삭제할 아이템을 선택해주세요.");
     }
 }
 

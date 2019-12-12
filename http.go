@@ -250,6 +250,7 @@ func webserver(port string) {
 	// restAPI Item
 	http.HandleFunc("/api/item", handleAPIItem)
 	http.HandleFunc("/api/rmitem", handleAPIRmItem)
+	http.HandleFunc("/api/rmitemid", handleAPIRmItemID)
 	http.HandleFunc("/api2/items", handleAPI2Items)
 	http.HandleFunc("/api/searchname", handleAPISearchname)
 	http.HandleFunc("/api/seqs", handleAPISeqs)

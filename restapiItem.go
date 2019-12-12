@@ -15,7 +15,71 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// 이 파일은 restAPI가 설정되는 페이지이다.
+// handleAPIRmItemID 함수는 아이템을 삭제한다.
+func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, accesslevel, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	if ArtistAccessLevel < accesslevel {
+		http.Error(w, "권한이 낮아서 삭제할 수 없습니다.", http.StatusUnauthorized)
+		return
+	}
+
+	var project string
+	var id string
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			project = v
+		case "id":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			id = v
+		default:
+			http.Error(w, key+"키는 사용할 수 없습니다.(project, id 키값만 사용가능합니다.)", http.StatusBadRequest)
+			return
+		}
+	}
+	err = rmItemID(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+	}
+	rcp := recipe{}
+	rcp.Project = project
+	rcp.ID = id
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
 
 // handleAPIItem 함수는 아이템 자료구조를 불러온다.
 func handleAPIItem(w http.ResponseWriter, r *http.Request) {

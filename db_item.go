@@ -57,14 +57,14 @@ func setItem(session *mgo.Session, project string, i Item) error {
 	return nil
 }
 
-func getItem(session *mgo.Session, project string, slug string) (Item, error) {
-	if project == "" || slug == "" {
+func getItem(session *mgo.Session, project, id string) (Item, error) {
+	if project == "" || id == "" {
 		return Item{}, nil
 	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)
 	var result Item
-	err := c.Find(bson.M{"slug": slug}).One(&result)
+	err := c.Find(bson.M{"id": id}).One(&result)
 	if err != nil {
 		log.Println(err)
 		return Item{}, err
@@ -178,6 +178,16 @@ func rmItem(session *mgo.Session, project, name, usertyp string) error {
 		return errors.New("삭제할 아이템이 없습니다")
 	}
 	err = c.Remove(bson.M{"name": name, "type": typ})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func rmItemID(session *mgo.Session, project, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Remove(bson.M{"id": id})
 	if err != nil {
 		return err
 	}
@@ -508,7 +518,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	case "scanframe", "scantime":
 		op.Sortkey = "-" + op.Sortkey
 	case "":
-		op.Sortkey = "slug"
+		op.Sortkey = "id"
 	}
 	err = c.Find(q).Sort(op.Sortkey).All(&results)
 	if err != nil {
@@ -1040,7 +1050,7 @@ func SetImageSize(session *mgo.Session, project, name, key, size string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1067,14 +1077,14 @@ func SetTimecode(session *mgo.Session, project, name, key, timecode string) erro
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
 	// 우리회사는 현재 timecode와 keycode를 혼용해서 사용중이다.
 	// 원래는 Timecode가 맞지만 현재 DB가 keycode로 되어있어 아직은 아래줄이 필요하다.
 	key = strings.Replace(key, "timecode", "keycode", -1)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{key: timecode, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1093,7 +1103,7 @@ func SetUseType(session *mgo.Session, project, name, usetype string) error {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"slug": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

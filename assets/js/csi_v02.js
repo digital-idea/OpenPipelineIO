@@ -52,7 +52,7 @@ function onload(){
 }
 
 //checkbox all
-function selectmode(){
+function selectmode() {
 	var onnum = 0
 	// 체크가 되어있는 갯수를 구한다.
 	for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {

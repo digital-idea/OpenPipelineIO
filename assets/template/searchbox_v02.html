@@ -4,7 +4,7 @@
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<select name="Project" class="custom-select">
+					<select name="Project" class="custom-select" id="Project">
 						{{range .Projectlist}}
 							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}
@@ -201,7 +201,7 @@
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
-				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmode()">
+				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmode()" title="Ctrl + Shift + M">
 					선택모드
 				</span>
 				<a class="btn btn-sm btn-outline-darkmode mb-2" href="/inputmode?
