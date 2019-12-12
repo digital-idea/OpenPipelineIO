@@ -162,11 +162,14 @@ func Shots(session *mgo.Session, project string, seq string) ([]string, error) {
 
 func rmItem(session *mgo.Session, project, name, usertyp string) error {
 	session.SetMode(mgo.Monotonic, true)
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	if usertyp != "" {
+	var typ string
+	if usertyp == "" {
+		t, err := Type(session, project, name)
+		if err != nil {
+			return err
+		}
+		typ = t
+	} else {
 		typ = usertyp
 	}
 	c := session.DB("project").C(project)

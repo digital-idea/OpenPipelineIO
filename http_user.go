@@ -169,7 +169,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	id := r.FormValue("ID")
 	if id != ssid.ID {
-		if ssid.AccessLevel != 10 {
+		if ssid.AccessLevel != AdminAccessLevel {
 			http.Error(w, "사용자를 수정하기 위해서는 Accesslevel 10이 필요합니다", http.StatusUnauthorized)
 			return
 		}
