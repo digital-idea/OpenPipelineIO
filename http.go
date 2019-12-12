@@ -136,11 +136,7 @@ func webserver(port string) {
 	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
-	if *flagDevmode {
-		http.HandleFunc("/", handleIndexV2)
-	} else {
-		http.HandleFunc("/", handleIndex) // legacy
-	}
+	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/setellite", handleSetellite)

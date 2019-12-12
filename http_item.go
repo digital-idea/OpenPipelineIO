@@ -918,66 +918,6 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	type recipe struct {
-		ID          string
-		Projectlist []string
-		Searchnum   Infobarnum
-		SearchOption
-	}
-	rcp := recipe{}
-	rcp.ID = ssid.ID
-	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Projectlist, err = OnProjectlist(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if len(rcp.Projectlist) == 0 {
-		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
-		return
-	}
-	//검색바 초기셋팅
-	rcp.SearchOption.Assign = true
-	rcp.SearchOption.Ready = true
-	rcp.SearchOption.Wip = true
-	rcp.SearchOption.Confirm = true
-	rcp.SearchOption.Sortkey = "slug"
-	err = TEMPLATES.ExecuteTemplate(w, "index", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
-// handleIndexV2 함수는 index 페이지이다.
-func handleIndexV2(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		// 등록되지 않은 URL을 처리한다.
-		errorHandler(w, r, http.StatusNotFound)
-		return
-	}
-	ssid, err := GetSessionID(r)
-	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
-		return
-	}
-	if ssid.AccessLevel == 0 {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
 	type recipe struct {
 		SearchOption
 	}
