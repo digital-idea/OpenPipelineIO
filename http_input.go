@@ -76,8 +76,10 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	excludeProjects := strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
+	var excludeProjects []string
+	if setting.ExcludeProject != "" {
+		excludeProjects = strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
+	}
 	rcp.Projectlist = difference(projectList, excludeProjects)
 	if len(rcp.Projectlist) == 0 {
 		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
