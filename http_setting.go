@@ -84,12 +84,11 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	runScriptAfterSingup := r.FormValue("RunScriptAfterSignup")
-	runScriptAfterEditUserProfile := r.FormValue("RunScriptAfterEditUserProfile")
 	s := Setting{}
 	s.ID = "admin"
-	s.RunScriptAfterSignup = runScriptAfterSingup
-	s.RunScriptAfterEditUserProfile = runScriptAfterEditUserProfile
+	s.RunScriptAfterSignup = r.FormValue("RunScriptAfterSignup")
+	s.RunScriptAfterEditUserProfile = r.FormValue("RunScriptAfterEditUserProfile")
+	s.ExcludeProject = r.FormValue("ExcludeProject")
 
 	err = SetAdminSetting(session, s)
 	if err != nil {
@@ -117,7 +116,6 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "setadminsetting", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

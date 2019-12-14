@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+	"strings"
 
 	"gopkg.in/mgo.v2"
 )
@@ -64,11 +65,20 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Projectlist, err = OnProjectlist(session)
+	projectList, err := OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// setting의 Exclude Project를 가지고 와서 제외시켜준다.
+	setting, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	excludeProjects := strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
+	rcp.Projectlist = difference(projectList, excludeProjects)
 	if len(rcp.Projectlist) == 0 {
 		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
 		return
