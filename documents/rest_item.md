@@ -15,6 +15,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" http://192.168.31.172/api/search` |
 | /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline2d` |
 | /api/deadline3d | 3D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline3d` |
+| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl -d "project=TEMP&name=SS_0010" http://csi.lazypic.org/api/shot` |
+| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl -d "project=TEMP&seq=SS" http://csi.lazypic.org/api/shots` |
 
 ## Post
 
