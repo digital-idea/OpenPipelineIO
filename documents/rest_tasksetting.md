@@ -4,8 +4,8 @@ Tasksetting Restapi 입니다.
 ## Get
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/shottasksetting | shot tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/teams` |
-| /api/assettasksetting | asset tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/teams` |
+| /api/shottasksetting | shot tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/shottasksetting` |
+| /api/assettasksetting | asset tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/assettasksetting` |
 
 ## POST
 | uri | description | attribute name | example |
