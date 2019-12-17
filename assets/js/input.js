@@ -28,13 +28,13 @@ $('#deadline3d').on('shown.bs.modal', function () {
 document.onkeyup = function(e) {
     if (e.ctrlKey && e.shiftKey && e.which == 65) {
         selectCheckboxAll()
-    } else if (e.ctrlKey && e.shiftKey && e.which == 68) {
+    } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 68) {
         selectCheckboxNone()
-    } else if (e.ctrlKey && e.shiftKey && e.which == 73) {
+    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 73) {
         selectCheckboxInvert()
-    } else if (e.ctrlKey && e.shiftKey && e.which == 84) {
+    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 84) {
         scroll(0,0)
-    } else if (e.ctrlKey && e.shiftKey && e.which == 77) {
+    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 77) {
         selectmode()
     }
 };
