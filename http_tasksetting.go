@@ -276,6 +276,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	windowPath := r.FormValue("windowpath")
 	linuxPath := r.FormValue("linuxpath")
 	macosPath := r.FormValue("macospath")
+	wfsPath := r.FormValue("wfspath")
 	t, err := getTaskSetting(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -284,6 +285,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	t.WindowPath = windowPath
 	t.LinuxPath = linuxPath
 	t.MacOSPath = macosPath
+	t.WFSPath = wfsPath
 	err = SetTaskSetting(session, t)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

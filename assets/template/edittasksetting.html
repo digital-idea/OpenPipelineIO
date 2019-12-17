@@ -26,6 +26,11 @@
             <small class="form-text text-muted">dilink 클릭시 열리는 경로.</small>
         </div>
         <div class="form-group">
+            <label>WFS Path</label>
+            <input type="text" name="wfspath" class="form-control" placeholder="//10.0.1.2/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Tasksetting.WFSPath}}>
+            <small class="form-text text-muted">wfs 클릭시 열리는 경로.</small>
+        </div>
+        <div class="form-group">
             <label>사용할 수 있는 인수</label>
             <small class="form-text text-muted">&#123;&#123;.Project&#125;&#125;: 프로젝트 코드</small>
             <small class="form-text text-muted">&#123;&#123;.Task&#125;&#125;: 태스크</small>

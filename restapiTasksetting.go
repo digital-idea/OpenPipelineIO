@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -82,12 +83,9 @@ func handleAPITasksetting(w http.ResponseWriter, r *http.Request) {
 				rcp.Cut = values[0]
 			}
 		case "os":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+			if len(values) == 1 {
+				rcp.OS = values[0]
 			}
-			rcp.OS = v
 		case "assettype":
 			if len(values) == 1 {
 				rcp.Assettype = values[0]
@@ -117,8 +115,8 @@ func handleAPITasksetting(w http.ResponseWriter, r *http.Request) {
 		rcp.Path = t.LinuxPath
 	case "windows":
 		rcp.Path = t.WindowPath
-	case "defalut":
-		rcp.Path = t.LinuxPath
+	default:
+		rcp.Path = t.WFSPath // 기본적으로 WFS 경로를 사용한다.
 	}
 	// OS 경로를 불러와서 경로를 대입한다.
 	tmpl, err := template.New("test").Parse(rcp.Path)
@@ -133,7 +131,7 @@ func handleAPITasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Path = tpl.String()
-
+	fmt.Println(tpl.String())
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

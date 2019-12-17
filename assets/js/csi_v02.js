@@ -196,13 +196,13 @@ function checkScreenx(event) {
 }
 
 
-function wfs(host, os, task, type, assettype, project, name, seq, cut, token) {
+function wfs(host, task, type, assettype, project, name, seq, cut, token) {
 	let WFSPATH = "";
 	$.ajax({
 		url: "/api/tasksetting",
 		type: "post",
 		data: {
-			os: os,
+			os: "", // os를 설정하지 않으면 WFSPath를 불러온다.
 			task: task,
 			type: type,
 			assettype: assettype,
