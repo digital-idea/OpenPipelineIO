@@ -89,6 +89,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.RunScriptAfterSignup = r.FormValue("RunScriptAfterSignup")
 	s.RunScriptAfterEditUserProfile = r.FormValue("RunScriptAfterEditUserProfile")
 	s.ExcludeProject = r.FormValue("ExcludeProject")
+	s.OCIOConfig = r.FormValue("OCIOConfig")
 
 	err = SetAdminSetting(session, s)
 	if err != nil {

@@ -27,6 +27,12 @@
             <small class="form-text text-muted">검색창에 제외될 프로젝트명을 ,문자를 이용해서 입력해주세요. 해당 프로젝트가 보이지 않습니다.</small>
             <small class="form-text text-muted">CSI를 마이그레이션할 때 사용합니다.</small>
         </div>
+
+        <div class="form-group">
+            <label for="OCIOConfig">OpenColorIO Configs Path</label>
+            <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
+            <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+        </div>
         
         <div class="text-center">
             <button type="submit" class="btn btn-danger mt-5">Update</button>
