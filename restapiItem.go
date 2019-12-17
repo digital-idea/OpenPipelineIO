@@ -2495,6 +2495,7 @@ func handleAPISetAssignTask(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Task    string `json:"task"`
 		Status  string `json:"status"`
 		UserID  string `json:"userid"`
@@ -2559,11 +2560,12 @@ func handleAPISetAssignTask(w http.ResponseWriter, r *http.Request) {
 			rcp.Status = v
 		}
 	}
-	err = SetAssignTask(session, rcp.Project, rcp.Name, rcp.Task, str2bool(rcp.Status))
+	id, err := SetAssignTask(session, rcp.Project, rcp.Name, rcp.Task, str2bool(rcp.Status))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Assign Task: %s(%s)", rcp.Task, rcp.Status), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

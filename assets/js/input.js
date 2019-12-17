@@ -126,9 +126,8 @@ function addTask(project, id, task) {
 							setModal('edittask-task', '${data.task}' );
 							setModal('edittask-path', '' );
 							setModal('edittask-usernote', '' );
-							setModal('edittask-name', '${data.name}');
-							setModal('edittask-user', '');
-							setModal('edittask-userid', '${data.userid}')">≡</span>
+							setModal('edittask-id', '${data.id}');
+							setModal('edittask-user', '')">≡</span>
 					</div>
                     </div>`;
                     document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
@@ -173,9 +172,8 @@ function addTask(project, id, task) {
 							setModal('edittask-task', '${data.task}' );
 							setModal('edittask-path', '' );
 							setModal('edittask-usernote', '' );
-							setModal('edittask-name', '${data.name}');
-							setModal('edittask-user', '');
-							setModal('edittask-userid', '${data.userid}')">≡</span>
+							setModal('edittask-id', '${data.id}');
+							setModal('edittask-user', '')">≡</span>
 					</div>
 				</div>`;
                 document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
@@ -1128,8 +1126,9 @@ function setTaskUser(project, id, task, user, userid) {
     }
 }
 
-function setTaskStatus(project, id, task, status, userid) {
+function setTaskStatus(project, id, task, status) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {

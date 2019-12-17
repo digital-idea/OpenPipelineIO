@@ -1345,20 +1345,20 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 }
 
 // SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
-func SetAssignTask(session *mgo.Session, project, name, taskname string, visable bool) error {
+func SetAssignTask(session *mgo.Session, project, name, taskname string, visable bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return "", err
 	}
 	task := strings.ToLower(taskname)
 	// 기존에 Task가 없다면 추가한다.
@@ -1384,9 +1384,9 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 	item.updateStatus()
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return id, nil
 }
 
 // SetTaskUser 함수는 item에 task의 user 값을 셋팅한다.
