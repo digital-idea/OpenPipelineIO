@@ -4370,7 +4370,7 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Tag = v
+			rcp.Tag = strings.Replace(v, " ", "", -1)
 		}
 	}
 	err = AddTag(session, rcp.Project, rcp.Name, rcp.Tag)

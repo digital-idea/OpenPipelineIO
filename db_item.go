@@ -1905,12 +1905,13 @@ func AddTag(session *mgo.Session, project, name, inputTag string) error {
 	if err != nil {
 		return err
 	}
+	rmspaceTag := strings.Replace(inputTag, " ", "", -1) // 태그는 공백을 제거한다.
 	for _, tag := range i.Tag {
-		if inputTag == tag {
+		if rmspaceTag == tag {
 			return errors.New("Tag already exists")
 		}
 	}
-	newTags := append(i.Tag, inputTag)
+	newTags := append(i.Tag, rmspaceTag)
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
