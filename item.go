@@ -50,7 +50,7 @@ type Comment struct {
 
 // Source 자료구조는 글을 작성할 때 사용하는 자료구조이다.
 type Source struct {
-	Date   string // 코맨트 등록시간 RFC3339
+	Date   string // 등록시간 RFC3339
 	Author string // 작성자
 	Title  string // 제목
 	Path   string // 소스 경로
@@ -111,6 +111,7 @@ type Item struct {
 	OCIOcc      string          `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
 	Note        Comment         `json:"note"`        // 작업내용
 	Sources     []Source        `json:"links"`       // 연결소스
+	References  []Source        `json:"references"`  // 레퍼런스
 	Comments    []Comment       `json:"comments"`    // 수정내용
 	Tasks       map[string]Task `json:"tasks"`       // Task 리스트
 

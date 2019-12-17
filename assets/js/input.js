@@ -820,6 +820,179 @@ function rmSource(project, id, title, userid) {
     }
 }
 
+function addReference(project, id, title, path) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("token").value;
+    if (multiInput) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200);
+            let currentID = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/addreference",
+                type: "post",
+                data: {
+                    project: project,
+                    name: id2name(currentID),
+                    title: title,
+                    path: path,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    // 기존 References 추가된다.
+                    let ref = "";
+                    if (path.startsWith("http")) {
+                        ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                    } else {
+                        ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                    }
+                    document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
+                    // 요소갯수에 따라 버튼을 설정한다.
+                    if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
+                        document.getElementById("reference-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                        `
+                    } else {
+                        document.getElementById("reference-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        `
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            
+        }
+    } else {
+        $.ajax({
+            url: "/api/addreference",
+            type: "post",
+            data: {
+                project: project,
+                name: id2name(id),
+                title: title,
+                path: path,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                // 기존 References 추가된다.
+                let ref = "";
+                if (path.startsWith("http")) {
+                    ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                } else {
+                    ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                }
+                document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
+                    document.getElementById("reference-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                    `
+                } else {
+                    document.getElementById("reference-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    `
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+
+function rmReference(project, id, title) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    if (multiInput) {
+        var cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200);
+            currentID = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/rmreference",
+                type: "post",
+                data: {
+                    project: project,
+                    name: id2name(currentID),
+                    title: title,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById(`reference-${data.name}-${data.title}`).remove();
+                    if (document.getElementById(`references-${data.ame}`).childElementCount > 0) {
+                        document.getElementById("reference-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                        `
+                    } else {
+                        document.getElementById("reference-button-"+data.name).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        `
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+            
+        }
+    } else {
+        $.ajax({
+            url: "/api/rmreference",
+            type: "post",
+            data: {
+                project: project,
+                name: id2name(id),
+                title: title,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById(`reference-${data.name}-${data.title}`).remove();
+                if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
+                    document.getElementById("reference-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                    `
+                } else {
+                    document.getElementById("reference-button-"+data.name).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    `
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
 function setThummov(project, id, path, userid) {
     let token = document.getElementById("token").value;
     $.ajax({
@@ -976,8 +1149,9 @@ function setRollmedia(project, id, rollmedia, userid, token) {
     });
 }
 
-function setTaskMov(project, id, task, mov, userid) {
+function setTaskMov(project, id, task, mov) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/settaskmov",
         type: "post",
@@ -1005,8 +1179,9 @@ function setTaskMov(project, id, task, mov, userid) {
     });
 }
 
-function setTaskDue(project, id, task, due, userid) {
+function setTaskDue(project, id, task, due) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1061,8 +1236,9 @@ function setTaskDue(project, id, task, due, userid) {
     }
 }
 
-function setTaskUser(project, id, task, user, userid) {
+function setTaskUser(project, id, task, user) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1184,8 +1360,9 @@ function setTaskStatus(project, id, task, status) {
     }
 }
 
-function setTaskDate(project, id, task, date, userid) {
+function setTaskDate(project, id, task, date) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1249,8 +1426,9 @@ function setTaskDate(project, id, task, date, userid) {
     }
 }
 
-function setTaskStartdate(project, id, task, date, userid) {
+function setTaskStartdate(project, id, task, date) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1306,8 +1484,9 @@ function setTaskStartdate(project, id, task, date, userid) {
     }
 }
 
-function setTaskUserNote(project, id, task, usernote, userid) {
+function setTaskUserNote(project, id, task, usernote) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1365,8 +1544,9 @@ function setTaskUserNote(project, id, task, usernote, userid) {
 
 
 
-function setTaskPredate(project, id, task, date, userid) {
+function setTaskPredate(project, id, task, date) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -1900,8 +2080,9 @@ function selectCheckboxInvert() {
     }
 }
 
-function setTaskLevel(project, id, task, level, userid) {
+function setTaskLevel(project, id, task, level) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
