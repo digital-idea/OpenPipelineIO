@@ -63,6 +63,18 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	seq := strings.Split(name, "_")[0]
 	cut := strings.Split(name, "_")[1]
 	now := time.Now().Format(time.RFC3339)
+	thumbnailPath := *flagThumbPath
+	if *flagThumbPath == "" {
+		thumbnailPath = fmt.Sprintf("/%s/%s_%s.jpg", project, name, typ)
+	}
+	platePath := *flagPlatePath
+	if *flagPlatePath == "" {
+		platePath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name)
+	}
+	thumbnailMovPath := *flagThumbnailMovPath
+	if *flagThumbnailMovPath == "" {
+		thumbnailMovPath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
@@ -71,10 +83,10 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN,
-		Thumpath:   fmt.Sprintf("/%s/%s_%s.jpg", project, name, typ),
-		Platepath:  fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name),
-		Thummov:    fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ),
-		Dataname:   scanname, // 일반적인 프로젝트는 스캔네임과 데이터네임이 같다. PM의 노가다를 줄이기 위해서 기본적으로 같은값이 들어가고 추후 수동처리해야하는 부분은 손으로 수정한다.
+		Thumpath:   thumbnailPath,
+		Platepath:  platePath,
+		Thummov:    thumbnailMovPath,
+		Dataname:   scanname, // 보통 스캔네임과 데이터네임은 같다. 데이터 입력자의 노동을 줄이기 위해 기본적으로 동일값을 넣고, 필요시 수정한다.
 		Scanname:   scanname,
 		Scantime:   now,
 		Platesize:  platesize,
@@ -187,14 +199,22 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	}
 	seq := strings.Split(name, "_")[0]
 	now := time.Now().Format(time.RFC3339)
+	platePath := *flagPlatePath
+	if *flagPlatePath == "" {
+		platePath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name)
+	}
+	thumbnailMovPath := *flagThumbnailMovPath
+	if *flagThumbnailMovPath == "" {
+		thumbnailMovPath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
 		Seq:        seq,
 		Type:       typ,
 		ID:         name + "_" + typ,
-		Platepath:  fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name),
-		Thummov:    fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ),
+		Platepath:  platePath,
+		Thummov:    thumbnailMovPath,
 		Status:     NONE,
 		Dataname:   scanname, // 일반적인 프로젝트는 스캔네임과 데이터네임이 같다. PM의 노가다를 줄이기 위해서 기본적으로 같은값이 들어가고 추후 수동처리해야하는 부분은 손으로 수정한다.
 		Scanname:   scanname,
@@ -250,6 +270,11 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	}
 
 	err = addItem(session, project, i)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// src 라면 기존 plate에 소스 등록을 진행한다.
+	err = AddSource(session, project, name, "scantool", name+"_"+typ, platePath)
 	if err != nil {
 		log.Fatal(err)
 	}

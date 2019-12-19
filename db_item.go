@@ -2087,6 +2087,11 @@ func AddSource(session *mgo.Session, project, name, userID, title, path string) 
 	if err != nil {
 		return err
 	}
+	for _, i := range i.Sources {
+		if i.Title == title {
+			return errors.New(title + "이 이미 존재합니다.")
+		}
+	}
 	s := Source{}
 	s.Date = time.Now().Format(time.RFC3339)
 	s.Author = userID

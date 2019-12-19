@@ -49,3 +49,10 @@ $ csi3 -rm item -project circle -name SS_0010
 ```bash
 $ csi3 -add item -type asset -project [projectname] -name [Assetname] -assettype prop -assettags prop,component
 ```
+
+#### 소스등록
+
+```bash
+csi3 -add item -name OPN_0010 -type src2 -project TEMP -platepath /source/path
+```
+등록이 되면 자동으로 OPN_0010 샷에도 소스가 등록됩니다.
