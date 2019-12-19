@@ -2462,6 +2462,12 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 			rcp.Status = v
 		}
 	}
+	// task가 존재하는지 체크한다.
+	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	err = SetTaskStatus(session, rcp.Project, rcp.Name, rcp.Task, rcp.Status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

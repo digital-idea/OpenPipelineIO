@@ -1342,6 +1342,28 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 	return nil
 }
 
+// HasTask 함수는 item에 task가 존재하는 체크한다.
+func HasTask(session *mgo.Session, project, name, task string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return err
+	}
+	id := name + "_" + typ
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	if _, found := item.Tasks[task]; !found {
+		return fmt.Errorf("%s 프로젝트 %s에 %s Task가 존재하지 않습니다", project, name, task)
+	}
+	return nil
+}
+
 // SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
 func SetAssignTask(session *mgo.Session, project, name, taskname string, visable bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
