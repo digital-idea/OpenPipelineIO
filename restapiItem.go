@@ -2758,6 +2758,11 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
+	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	err = SetTaskStartdate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -3134,6 +3139,11 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
+	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	err = SetTaskPredate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -3232,6 +3242,11 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 			}
 			rcp.Date = v
 		}
+	}
+	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 	err = SetTaskDate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
