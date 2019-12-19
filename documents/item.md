@@ -55,4 +55,5 @@ $ csi3 -add item -type asset -project [projectname] -name [Assetname] -assettype
 ```bash
 csi3 -add item -name OPN_0010 -type src2 -project TEMP -platepath /source/path
 ```
-등록이 되면 자동으로 OPN_0010 샷에도 소스가 등록됩니다.
+
+등록이 되면 자동으로 OPN_0010 샷에도 OPN_0010_org제목과 /source/path 경로로 소스가 등록됩니다.
