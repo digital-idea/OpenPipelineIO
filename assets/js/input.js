@@ -24,7 +24,7 @@ $('#deadline3d').on('shown.bs.modal', function () {
     $('#deadline3d-date').trigger('focus')
 })
 
-// Hotkey
+// Hotkey: http://gcctech.org/csc/javascript/javascript_keycodes.htm
 document.onkeyup = function(e) {
     if (e.ctrlKey && e.shiftKey && e.which == 65) {
         selectCheckboxAll()
@@ -36,8 +36,16 @@ document.onkeyup = function(e) {
         scroll(0,0)
     } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 77) {
         selectmode()
+    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 69) {
+        OpenEditfolder()
     }
 };
+
+function OpenEditfolder() {
+    let uri = document.getElementById("edit").href;
+    window.location = uri;
+}
+
 
 function id2name(id) {
     l = id.split("_");
