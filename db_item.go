@@ -1369,11 +1369,13 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 	} else {
 		// 이미 Task가 존재하면
 		t := item.Tasks[task]
+		t.Title = task
 		t.Status = ASSIGN
 		item.Tasks[task] = t
 	}
 	if !visable {
 		t := item.Tasks[task]
+		t.Title = task
 		t.Status = NONE
 		item.Tasks[task] = t
 	}
