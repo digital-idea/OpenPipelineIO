@@ -80,12 +80,10 @@ func Shot(session *mgo.Session, project string, name string) (Item, error) {
 	// org, left 갯수를 구한다.
 	orgnum, err := c.Find(bson.M{"id": name + "_org"}).Count()
 	if err != nil {
-		log.Println(err)
 		return Item{}, err
 	}
 	leftnum, err := c.Find(bson.M{"id": name + "_left"}).Count()
 	if err != nil {
-		log.Println(err)
 		return Item{}, err
 	}
 	q := bson.M{"id": name + "_org"}
