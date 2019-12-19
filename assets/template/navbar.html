@@ -66,7 +66,7 @@
             </div>
         </li>
         {{end}}
-        {{if eq .User.AccessLevel 5 8 10 11}}
+        {{if eq .User.AccessLevel 5 7 8 10 11}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Remove
@@ -80,6 +80,8 @@
             {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
               <div class="dropdown-divider"></div>
               <span class="dropdown-item finger text-danger" onclick="rmItem()">Item</span>
+            {{end}}
+            {{if eq .User.AccessLevel 5 6 8 9 10 11}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item text-danger" href="/rmtasksetting">Task</a>
             {{end}}
