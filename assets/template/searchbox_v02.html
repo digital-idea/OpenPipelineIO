@@ -4,7 +4,7 @@
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<select name="Project" class="custom-select" id="Project">
+					<select name="Project" class="custom-select" id="Project" onchange="changeTitle();">
 						{{range .Projectlist}}
 							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}

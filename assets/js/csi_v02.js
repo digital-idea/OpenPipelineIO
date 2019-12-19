@@ -4,52 +4,13 @@ if (navigator.appVersion.indexOf("Mac") != -1) OSName="Mac";
 if (navigator.appVersion.indexOf("X11") != -1) OSName="Linux";
 if (navigator.appVersion.indexOf("Linux") != -1) OSName="Linux";
 
-// onload 함수는 브라우저에서 테스트 할 때 에러가 많이 일어난다. 리뷰해본적이 없는 코드같다. 점검해보기.
-function onload(){
-	// projectId 변수 설정
-	let project = "";
-	if (document.getElementById("projectId")) {
-		project = document.getElementById("projectId").innerHTML; //프로젝트명
-	}
-
-	// 검색 결과가 없을때 <title>내용에 페이지 정보를 출력한다.
-	// items 페이지, 프로젝트명 출력.
-	if (project !== "") {
-		document.title = "CSI : " + projectId.innerHTML;
-	// editItem 페이지, 프로젝트명과 샷네임(slug)출력.
-	} else if (document.getElementById("projectTitle")) {
-		document.title = document.getElementById("slugTitle").innerHTML  + " | " + document.getElementById("projectTitle").innerHTML;
-	// editProject 페이지, 프로젝트명 출력.
-	} else if (document.getElementById("editProjectTitle")) {
-		document.title = "CSI : edit " + document.getElementById("editProjectTitle").innerHTML;
-	// CSI 하위 메뉴 출력 (help,ProjectInfo)
-	} else {
-		var url = document.location.href;
-		var path = new URL(url).pathname;
-		var pageTitle = path.replace("/","");
-		if (pageTitle != "") {
-			document.title = "CSI : " + pageTitle;
-		} else {
-			document.title = "CSI";
-		}
-	}
-
-	// 강조할 단어 리스트
-	var wordList = ["2d_","3d_","concept_","model_","mm_","matchmove_","layout_","ani_","animation_","fx_","mg_","motion_","previz_","fursim_","sim_","crowd_","light_","comp_","matte_","env_","rig_","just_","dir_","sup_"];
-	var wordListRe = new RegExp(wordList.join("|"), "gi");
-
-	// 현장내용/히스토리 영역
-	var onsets = document.getElementsByClassName('historyOnsetnote');
-
-	for (i = 0; i < onsets.length; i++) {
-		// 현장내용 Text에 \n문자가 있다면 줄바꿈을 한다.
-		onsets[i].innerHTML = onsets[i].innerHTML.replace(/^\n/,"").replace(/\n/g,"<br>");
-		// 현장내용의 Task와 팀정보를 강조한다.
-		onsets[i].innerHTML = onsets[i].innerHTML.replace(wordListRe, function(match) {
-			return "<highlight>" + match + "</highlight>";
-		});
-	}
+function changeTitle() {
+	let pretitle = "CSI: "
+	let e = document.getElementById("Project");
+	let project = e.options[e.selectedIndex].value;
+	document.title = pretitle + project;
 }
+
 
 //checkbox all
 function selectmode() {
@@ -92,24 +53,6 @@ function uncheck() {
 			checkboxes[i].checked = false;
 		}
 	}
-}
-
-function changeProject(objS)
-{
-	document.links["assign"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/assign";
-	document.links["ready"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/ready";
-	document.links["wip"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/wip";
-	document.links["confirm"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/confirm";
-	document.links["done"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/done";
-	document.links["omit"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/omit";
-	document.links["hold"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/hold";
-	document.links["out"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/out";
-	document.links["none"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/none";
-	document.links["2d"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/2d";
-	document.links["3d"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/3d";
-	document.links["asset"].href = "/tag/" + objS.options[objS.selectedIndex].value + "/asset";
-	var csititle = "CSI: "
-	document.title = csititle.concat(objS.options[objS.selectedIndex].value);
 }
 
 
