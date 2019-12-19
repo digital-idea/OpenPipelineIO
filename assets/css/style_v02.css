@@ -541,3 +541,23 @@ input[type=checkbox]:checked+div{
 	background-color: rgb(193, 168, 68) !important; 
 	color: #000000; 
   }
+
+  #topbtn {
+	display: none;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 99;
+	font-size: 14px;
+	border: none;
+	outline: none;
+	background-color: rgb(94, 88, 80);
+	color: white;
+	cursor: pointer;
+	padding: 15px;
+	border-radius: 10px;
+  }
+  
+  #topbtn:hover {
+	background-color: #555;
+  }
