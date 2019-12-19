@@ -952,10 +952,11 @@
 				<div class="centered">
 					{{if eq .Status "2"}}
 						{{if .Finver}}
-							v{{.Finver}}
+							Finver: {{.Finver}}
 						{{end}}
 						{{if .Findate}}
-							({{ToShortTime .Findate}})
+							<br>
+							Date: {{ToNormalTime .Findate}}
 						{{end}}
 					{{end}}
 				</div>
