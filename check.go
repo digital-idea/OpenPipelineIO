@@ -29,8 +29,8 @@ var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 // Timecode 정규식: 00:00:00:00 또는 00:00:00;00 형태 ref: https://en.wikipedia.org/wiki/SMPTE_timecode
 var regexpTimecode = regexp.MustCompile(`^\d{2}[:;.]\d{2}[:;.]\d{2}[:;.]\d{2}$`)
 
-// Rnum 정규식: A0001
-var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
+// Rnum 정규식: A0001~H9999
+var regexpRnum = regexp.MustCompile(`^[A-H]\d{4}$`)
 
 // Handle 정규식: 5, 10
 var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)

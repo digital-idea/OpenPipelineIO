@@ -457,10 +457,12 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if tags != "" {
-			err = SetTags(session, project, name, strings.Split(tags, ","))
-			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
-				continue
+			for _, tag := range strings.Split(tags, ",") {
+				err = AddTag(session, project, name, tag)
+				if err != nil {
+					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+					continue
+				}
 			}
 		}
 		// 링크자료(제목:경로)

@@ -1908,7 +1908,7 @@ func AddTag(session *mgo.Session, project, name, inputTag string) error {
 	rmspaceTag := strings.Replace(inputTag, " ", "", -1) // 태그는 공백을 제거한다.
 	for _, tag := range i.Tag {
 		if rmspaceTag == tag {
-			return errors.New("Tag already exists")
+			return errors.New(inputTag + "태그는 이미 존재하고 있습니다 추가할 수 없습니다")
 		}
 	}
 	newTags := append(i.Tag, rmspaceTag)
