@@ -502,32 +502,28 @@
 	</div>
 
 	<!-- Modal: Shottype -->
-	<div class="modal fade" id="shottype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-shottype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Shot Type</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true" class="text-darkmode">&times;</span>
-			</button>
+				<h5 class="modal-title" id="exampleModalLabel">Shot Type</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="text-darkmode">&times;</span>
+				</button>
 			</div>
 			<div class="modal-body">
 				<input type="hidden" class="form-control" id="shottype-id">
-				<input type="hidden" class="form-control" id="shottype-userid">
-			
-				<div class="radio">
-					<label><input type="radio" name="shottype" value="" checked> None</label>
-				</div>
-				<div class="radio">
-					<label><input type="radio" name="shottype" value="2d"> 2D</label>
-				</div>
-				<div class="radio">
-					<label><input type="radio" name="shottype" value="3d"> 3D</label>
+				<div class="form-group">
+					<select id="shottype" class="form-control">
+						<option value="">None</option>
+						<option value="2d">2D</option>
+						<option value="3d">3D</option>
+					</select>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setShottype('{{$.SearchOption.Project}}', document.getElementById('shottype-id').value, document.getElementById('shottype-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setShottype(document.getElementById('shottype-id').value);" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -992,9 +988,9 @@
 						{{end}}
 						<div id="shottype-{{.Name}}">
 							{{if .Shottype}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-id', '{{.ID}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>{{.Shottype}}</span>
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.ID}}')"{{end}}>{{.Shottype}}</span>
 							{{else}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-id', '{{.ID}}');setModal('shottype-userid', '{{$.User.ID}}')"{{end}}>none</span>
+								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.ID}}')"{{end}}>none</span>
 							{{end}}
 						</div>
 					{{end}}

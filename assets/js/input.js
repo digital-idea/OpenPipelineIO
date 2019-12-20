@@ -92,6 +92,30 @@ function setEditTaskModal(project, id, task) {
     });
 }
 
+// setShottypeModal 함수는 item id 정보를 이용해 Edit Shottype Modal에 값을 채운다.
+function setShottypeModal(id) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/shottype",
+        type: "post",
+        data: {
+            project: CurrentProject(),
+            name: id2name(id),
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('shottype-id').value=id;
+            document.getElementById("shottype").value=data.shottype;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setModalCheckbox(modalID, value) {
     if (value === "true") {
         document.getElementById(modalID).checked = true;
@@ -1761,16 +1785,12 @@ function setDeadline3D(project, id, date, userid) {
     }
 }
 
-function setShottype(project, id, userid) {
+function setShottype(id) {
     let token = document.getElementById("token").value;
-    let shottypes = document.getElementsByName('shottype');
-    let shottype = "";
-    for (var i = 0, length = shottypes.length; i < length; i++) {
-        if (shottypes[i].checked) {
-            shottype = shottypes[i].value
-            break;
-        }
-    }
+    let userid = document.getElementById("userid").value;
+    let e = document.getElementById("shottype");
+    let shottype = e.options[e.selectedIndex].value;
+    
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1782,7 +1802,7 @@ function setShottype(project, id, userid) {
                 url: "/api/setshottype",
                 type: "post",
                 data: {
-                    project: project,
+                    project: CurrentProject(),
                     name: id2name(id),
                     shottype: shottype,
                     userid: userid,
@@ -1804,7 +1824,7 @@ function setShottype(project, id, userid) {
             url: "/api/setshottype",
             type: "post",
             data: {
-                project: project,
+                project: CurrentProject(),
                 name: id2name(id),
                 shottype: shottype,
                 userid: userid,
