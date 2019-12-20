@@ -5524,3 +5524,59 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIShottype 함수는 Shottype 정보를 가지고온다.
+func handleAPIShottype(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		UserID   string `json:"userid"`
+		Shottype string `json:"shottype"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Name = v
+		}
+	}
+	typ, err := GetShottype(session, rcp.Project, rcp.Name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Shottype = typ
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

@@ -2237,3 +2237,18 @@ func GetTask(session *mgo.Session, project, name, task string) (Task, error) {
 	}
 	return i.Tasks[task], nil
 }
+
+// GetShottype 함수는 item의 Shottype 정보를 반환한다.
+func GetShottype(session *mgo.Session, project, name string) (string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return "", err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return "", err
+	}
+	return i.Shottype, nil
+}
