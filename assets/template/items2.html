@@ -1265,8 +1265,9 @@
 					</div>
 				{{end}}
 			{{end}}
-			<div id="note-{{.Name}}">{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}</div>
-			
+			<div id="note-{{.Name}}" onclick="selectCheckboxNone()">
+				{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}
+			</div>
 		</div>
 		
 		<!--ObjectID-->
@@ -1430,7 +1431,7 @@
 				<span class="add" data-toggle="modal" data-target="#addcomment" onclick="setModal('add-comment-id', '{{.ID}}');setModal('add-comment-userid', '{{$.User.ID}}')">＋</span>
 			</div>
 		{{end}}
-		<div id="comments-{{.Name}}">
+		<div id="comments-{{.Name}}" onclick="selectCheckboxNone()">
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 				<div id="comment-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
