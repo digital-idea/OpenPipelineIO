@@ -5455,11 +5455,11 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project  string `json:"project"`
-		Name     string `json:"name"`
-		UserID   string `json:"userid"`
-		Taskname string `json:"taskname"`
-		Task     `json:"task"`
+		Project     string `json:"project"`
+		Name        string `json:"name"`
+		UserID      string `json:"userid"`
+		RequestTask string `json:"requesttask"`
+		Task        `json:"task"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -5505,15 +5505,19 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Taskname = v
+			rcp.RequestTask = v
 		}
 	}
-	t, err := GetTask(session, rcp.Project, rcp.Name, rcp.Taskname)
+	t, err := GetTask(session, rcp.Project, rcp.Name, rcp.RequestTask)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Task = t
+	// 웹에 표시를 위해서 FullTime을 NormalTime으로 변경
+	rcp.Task.Startdate = ToNormalTime(rcp.Task.Startdate)
+	rcp.Task.Predate = ToNormalTime(rcp.Task.Predate)
+	rcp.Task.Date = ToNormalTime(rcp.Task.Date)
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
