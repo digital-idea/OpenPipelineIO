@@ -2655,3 +2655,15 @@ function inputRmTasksetting(type) {
         });
     }
 }
+
+function changeStatusURI(status) {
+    let tags = document.getElementsByClassName("tag");
+    for ( var i = 0; i < tags.length; i++) {
+        let c = document.getElementById("searchbox-checkbox-" + status);
+        if (tags[i].href.includes(status + "=true")) {
+            tags[i].href = tags[i].href.replace(status + "=true", status + "=" + c.checked)
+        } else {
+            tags[i].href = tags[i].href.replace(status + "=false", status + "=" + c.checked)
+        }
+    }
+}
