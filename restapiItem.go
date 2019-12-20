@@ -5447,3 +5447,76 @@ func handleAPISetTaskLevel(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPITask 함수는 Task정보를 가지고온다.
+func handleAPITask(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		UserID   string `json:"userid"`
+		Taskname string `json:"taskname"`
+		Task     `json:"task"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "userid":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if rcp.UserID == "unknown" && v != "" {
+				rcp.UserID = v
+			}
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "name":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Name = v
+		case "task":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Taskname = v
+		}
+	}
+	t, err := GetTask(session, rcp.Project, rcp.Name, rcp.Taskname)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Task = t
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

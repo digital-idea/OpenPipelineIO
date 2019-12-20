@@ -74,6 +74,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" http://10.0.90.251/api/setobjectid`|
 | /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/color.cc" http://10.0.90.251/api/setociocc`|
 | /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" http://10.0.90.251/api/setrollmedia`|
+| /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" http://csi.lazypic.org/api/task`|
 
 
 

@@ -2219,3 +2219,21 @@ func RmReference(session *mgo.Session, project, name, title string) error {
 	}
 	return nil
 }
+
+// GetTask 함수는 item의 Task 정보를 반환한다.
+func GetTask(session *mgo.Session, project, name, task string) (Task, error) {
+	session.SetMode(mgo.Monotonic, true)
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return Task{}, err
+	}
+	id := name + "_" + typ
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return Task{}, err
+	}
+	if _, found := i.Tasks[task]; !found {
+		return Task{}, errors.New("task가 존재하지 않습니다")
+	}
+	return i.Tasks[task], nil
+}
