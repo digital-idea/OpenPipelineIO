@@ -278,6 +278,8 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	if err != nil {
 		log.Println(err)
 	}
+	// org1, left1 형태의 아이템이 처리되면 org, left 아이템의 .UseType을 추가해준다.
+	// 이 값은 썸네일을 업데이트하고, 아티스트가 재스캔 되었을 때 사용할 타입의 알람으로 사용된다.
 	if strings.Contains(typ, "org") || strings.Contains(typ, "left") {
 		err = SetUseType(session, project, name, typ)
 		if err != nil {

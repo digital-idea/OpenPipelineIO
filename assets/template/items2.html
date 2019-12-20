@@ -891,7 +891,7 @@
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
 				<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox()">
-					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.ID}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
 				</label>
 				<div class="top-left">
 					{{if eq .Type "org" "left"}}
