@@ -2657,7 +2657,7 @@ function inputRmTasksetting(type) {
 }
 
 function changeStatusURI(status) {
-    let tags = document.getElementsByClassName("tag");
+    let tags = document.getElementsByClassName("statusuri");
     for ( var i = 0; i < tags.length; i++) {
         let c = document.getElementById("searchbox-checkbox-" + status);
         if (tags[i].href.includes(status + "=true")) {

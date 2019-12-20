@@ -17,7 +17,7 @@
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
 				template={{$.SearchOption.Template}}&
-				task={{$.SearchOption.Task}}" class="badge badge-darkmode assettag">{{.}}</a>
+				task={{$.SearchOption.Task}}" class="badge badge-darkmode statusuri">{{.}}</a>
 	{{end}}
 </div>
 
@@ -41,7 +41,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="btn btn-darkmode btn-sm m-1 tag">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="btn btn-darkmode btn-sm m-1 statusuri">{{.}}</a>
 			{{else}}
 				<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
@@ -56,7 +56,7 @@
 						out={{$.SearchOption.Out}}&
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
-						task={{$.SearchOption.Task}}" class="btn btn-outline-darkmode btn-sm m-1 tag">{{.}}</a>
+						task={{$.SearchOption.Task}}" class="btn btn-outline-darkmode btn-sm m-1 statusuri">{{.}}</a>
 			{{end}}
 		{{end}}
 	{{end}}

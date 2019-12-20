@@ -45,7 +45,7 @@
             <div class="col">
 				<span class="btn btn-sm mb-2 bg-assign">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-assign" onchange="changeStatusURI('assign');" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 											project={{.SearchOption.Project}}&
 											searchword=status:assign&
 											sortkey={{.SearchOption.Sortkey}}&
@@ -66,7 +66,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-ready">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-ready" onchange="changeStatusURI('ready');" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:ready&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -85,7 +85,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-wip">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-wip" onchange="changeStatusURI('wip');" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:wip&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -104,7 +104,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-confirm">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-confirm" onchange="changeStatusURI('confirm');" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:confirm&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -123,7 +123,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-done">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-done" onchange="changeStatusURI('done');" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:done&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -142,7 +142,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-omit">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-omit" onchange="changeStatusURI('omit');" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:omit&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -161,7 +161,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-hold">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-hold" onchange="changeStatusURI('hold');" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:hold&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -180,7 +180,7 @@
 				</span>
 				<span class="btn btn-sm mb-2 bg-none">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-none" onchange="changeStatusURI('none');" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>
-					<a class="text-dark" href="/inputmode?
+					<a class="text-dark statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
 										searchword=status:none&
 										sortkey={{.SearchOption.Sortkey}}&
@@ -204,7 +204,7 @@
 				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmode()" title="Ctrl + Alt + Shift + m">
 					선택모드
 				</span>
-				<a class="btn btn-sm btn-outline-darkmode mb-2" href="/inputmode?
+				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:2d&
 																	sortkey={{.SearchOption.Sortkey}}&
@@ -219,7 +219,7 @@
 																	none={{.SearchOption.None}}&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">2D <span class="badge badge-darkmode">{{.Searchnum.Shot2d}}</span></a>
-                <a class="btn btn-sm btn-outline-darkmode mb-2" href="/inputmode?
+                <a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:3d&
 																	sortkey={{.SearchOption.Sortkey}}&
@@ -234,7 +234,7 @@
 																	none={{.SearchOption.None}}&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">3D <span class="badge badge-darkmode">{{.Searchnum.Shot3d}}</span></a>
-				<a class="btn btn-sm btn-outline-darkmode mb-2" href="/inputmode?
+				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=type:shot&
 																	sortkey={{.SearchOption.Sortkey}}&
@@ -249,7 +249,7 @@
 																	none={{.SearchOption.None}}&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">Shot <span class="badge badge-darkmode">{{.Searchnum.Shot}}</span></a>
-				<a class="btn btn-sm btn-outline-darkmode mb-2" href="/inputmode?
+				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=type:asset&
 																	sortkey={{.SearchOption.Sortkey}}&
