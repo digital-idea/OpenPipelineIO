@@ -220,7 +220,7 @@ label {
 	background-color: #2e2d2d;
 }
 
-.bg-assign, .bg-assign:hover, .badge-assign {
+.bg-assign, .bg-assign:hover, .badge-assign, .badge-4 {
     background-color: #FFF76B;
 }
 
@@ -228,7 +228,7 @@ label {
 	border:4px solid #FFF76B;
 }
 
-.bg-ready, .bg-ready:hover, .badge-ready {
+.bg-ready, .bg-ready:hover, .badge-ready, .badge-5 {
     background-color: #BEEF37;
 }
 
@@ -236,7 +236,7 @@ label {
 	border:4px solid #BEEF37;
 }
 
-.bg-wip, .bg-wip:hover, .badge-wip {
+.bg-wip, .bg-wip:hover, .badge-wip, .badge-6 {
     background-color: #77BB40;
 }
 
@@ -245,7 +245,7 @@ label {
 }
 
 
-.bg-confirm, .bg-confirm:hover, .badge-confirm {
+.bg-confirm, .bg-confirm:hover, .badge-confirm, .badge-7 {
     background-color: #54D6FD;
 }
 
@@ -253,7 +253,7 @@ label {
 	border:4px solid #54D6FD;
 }
 
-.bg-none, .bg-none:hover, .badge-none {
+.bg-none, .bg-none:hover, .badge-none, .badge-0 {
     background-color: #F0F1F0;
 }
 
@@ -261,7 +261,7 @@ label {
 	border:4px solid #F0F1F0;
 }
 
-.bg-omit, .bg-omit:hover, .badge-omit {
+.bg-omit, .bg-omit:hover, .badge-omit, .badge-8 {
     background-color: #FC9F55;
 }
 
@@ -269,7 +269,7 @@ label {
 	border:4px solid #FC9F55;
 }
 
-.bg-hold, .bg-hold:hover, .badge-hold {
+.bg-hold, .bg-hold:hover, .badge-hold, .badge-1 {
     background-color: #989898;
 }
 
@@ -277,7 +277,7 @@ label {
 	border:4px solid #989898;
 }
 
-.bg-out, .bg-out:hover, .badge-out {
+.bg-out, .bg-out:hover, .badge-out, .badge-3 {
     background-color: #EEA4F1;
 }
 
@@ -285,7 +285,7 @@ label {
 	border:4px solid #EEA4F1;
 }
 
-.bg-done, .bg-done:hover, .badge-done {
+.bg-done, .bg-done:hover, .badge-done, .badge-2 {
     background-color: #CCCDCC;
 }
 

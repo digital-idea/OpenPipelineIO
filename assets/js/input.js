@@ -58,6 +58,40 @@ function setModal(modalID, value) {
     document.getElementById(modalID).value=value;
 }
 
+// setEditTaskModal 함수는 project, name, task 정보를 가지고 와서 Edit Task Modal에 값을 채운다.
+function setEditTaskModal(project, id, task) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/task",
+        type: "post",
+        data: {
+            project: project,
+            name: id2name(id),
+            task: task,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('edittask-startdate').value=data.task.startdate;
+            document.getElementById('edittask-predate').value=data.task.predate;
+            document.getElementById('edittask-date').value=data.task.date;
+            document.getElementById('edittask-due').value=data.task.due;
+            document.getElementById('edittask-level').value=data.task.tasklevel;
+            document.getElementById('edittask-task').value=data.task.title;
+            document.getElementById('edittask-path').value=data.task.mov;
+            document.getElementById('edittask-usernote').value=data.task.usernote;
+            document.getElementById('edittask-user').value=data.task.user;
+            document.getElementById('edittask-id').value=id;
+            document.getElementById("edittask-status").value=data.task.status;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setModalCheckbox(modalID, value) {
     if (value === "true") {
         document.getElementById(modalID).checked = true;

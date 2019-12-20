@@ -182,15 +182,14 @@
 						<div class="col-6 form-group">
 							<label class="col-form-label">Status</label>
 							<select class="form-control form-control-sm" id="edittask-status" onchange="setTaskStatus('{{$.SearchOption.Project}}', document.getElementById('edittask-id').value, document.getElementById('edittask-task').value, document.getElementById('edittask-status').value)">
-								<option value="">변경없음</option>
-								<option value="omit">Omit</option>
-								<option value="confirm">Confirm</option>
-								<option value="wip">Wip</option>
-								<option value="ready">Ready</option>
-								<option value="assign">Assign</option>
-								<option value="done">Done</option>
-								<option value="hold">Hold</option>
-								<option value="none">None</option>
+								<option value="8">Omit</option>
+								<option value="7">Confirm</option>
+								<option value="6">Wip</option>
+								<option value="5">Ready</option>
+								<option value="4">Assign</option>
+								<option value="2">Done</option>
+								<option value="1">Hold</option>
+								<option value="0">None</option>
 							</select>
 						</div>
 					</div>
@@ -1172,16 +1171,8 @@
 						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 							<div class="ml-1">
 								<span class="add" data-toggle="modal" data-target="#edittask" onclick="
-									setModal('edittask-startdate', '{{ToNormalTime .Startdate}}');
-									setModal('edittask-due', '{{.Due}}');
-									setModal('edittask-level', '{{.TaskLevel}}');
-									setModal('edittask-predate', '{{ToNormalTime .Predate}}');
-									setModal('edittask-date', '{{ToNormalTime .Date}}');
-									setModal('edittask-task', '{{.Title}}' );
-									setModal('edittask-path', '{{.Mov}}' );
-									setModal('edittask-usernote', '{{.UserNote}}' );
-									setModal('edittask-id', '{{$id}}');
-									setModal('edittask-user', '{{.User}}')">≡</span>
+									setEditTaskModal('{{$.SearchOption.Project}}', '{{$id}}', '{{.Title}}');
+								">≡</span>
 							</div>
 						{{end}}
 					</div>
