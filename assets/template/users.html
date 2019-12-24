@@ -47,7 +47,7 @@
                     <a href="mailto:{{.EmailExternal}}" class="text-darkmode"><small>{{.EmailExternal}}</small></a><br>
                     <a href="tel:{{.Hotline}}" class="text-darkmode">{{ShortPhoneNum .Hotline}}</a>{{if .Location}} / {{.Location}}{{end}}<br>
                     <a href="tel:{{.Phone}}" class="text-darkmode">{{.Phone}}</a><br>
-                    {{if eq $.User.AccessLevel 7 9 10}}
+                    {{if eq $.User.AccessLevel 7 9 10 11}}
                         <small class="text-muted">IP: {{.LastIP}}</small>
                     {{end}}
                 </p>

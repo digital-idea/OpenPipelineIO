@@ -130,9 +130,9 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleAPIItemV2 함수는 아이템 자료구조를 불러온다.
-func handleAPIItemV2(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+func handleAPITimeinfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	session, err := mgo.Dial(*flagDBIP)
@@ -146,24 +146,68 @@ func handleAPIItemV2(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	q := r.URL.Query()
-	project := q.Get("project")
-	if project == "" {
-		http.Error(w, "Project가 빈 문자열 입니다", http.StatusBadRequest)
-		return
-	}
-	id := q.Get("id")
-	if id == "" {
-		http.Error(w, "id가 빈 문자열 입니다", http.StatusBadRequest)
-		return
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	var project string
+	var id string
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			project = v
+		case "id":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			id = v
+		}
 	}
 	item, err := getItem(session, project, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	type recipe struct {
+		ScanIn          int    `json:"scanin"`
+		ScanOut         int    `json:"scanout"`
+		ScanFrame       int    `json:"scanframe"`
+		ScanTimecodeIn  string `json:"scantimecodein"`
+		ScanTimecodeOut string `json:"scantimecodeout"`
+		PlateIn         int    `json:"platein"`
+		PlateOut        int    `json:"plateout"`
+		HandleIn        int    `json:"handlein"`
+		HandleOut       int    `json:"handleout"`
+		JustIn          int    `json:"justin"`
+		JustOut         int    `json:"justout"`
+		JustTimecodeIn  string `json:"justtimecodein"`
+		JustTimecodeOut string `json:"justtimecodeout"`
+	}
+	rcp := recipe{}
+	rcp.ScanIn = item.ScanIn
+	rcp.ScanOut = item.ScanOut
+	rcp.ScanFrame = item.ScanFrame
+	rcp.ScanTimecodeIn = item.ScanTimecodeIn
+	rcp.ScanTimecodeOut = item.ScanTimecodeOut
+	rcp.PlateIn = item.PlateIn
+	rcp.PlateOut = item.PlateOut
+	rcp.HandleIn = item.HandleIn
+	rcp.HandleOut = item.HandleOut
+	rcp.JustIn = item.JustIn
+	rcp.JustOut = item.JustOut
+	rcp.JustTimecodeIn = item.JustTimecodeIn
+	rcp.JustTimecodeOut = item.JustTimecodeOut
+
 	// json 으로 결과 전송
-	data, _ := json.Marshal(item)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

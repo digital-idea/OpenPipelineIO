@@ -92,6 +92,43 @@ function setEditTaskModal(project, id, task) {
     });
 }
 
+// setTimeModal 함수는 id 정보를 가지고 와서 Edit Time Modal 값을 채운다.
+function setTimeModal(id) {
+    document.getElementById("edittime-id").value = id;
+    let token = document.getElementById("token").value;
+    let project = CurrentProject()
+    $.ajax({
+        url: "/api/timeinfo",
+        type: "post",
+        data: {
+            "project": project,
+            "id": id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('scanin').value = data.scanin;
+            document.getElementById('scanout').value = data.scanout;
+            document.getElementById('scanframe').value = data.scanframe;
+            document.getElementById('scantimecodein').value = data.scantimecodein;
+            document.getElementById('scantimecodeout').value = data.scantimecodeout;
+            document.getElementById('platein').value = data.platein;
+            document.getElementById('plateout').value = data.plateout;
+            document.getElementById('handlein').value = data.handlein;
+            document.getElementById('handleout').value = data.handleout;
+            document.getElementById('justin').value = data.justin;
+            document.getElementById('justout').value = data.justout;
+            document.getElementById('justtimecodein').value = data.justtimecodein;
+            document.getElementById('justtimecodeout').value = data.justtimecodeout;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 // setShottypeModal 함수는 item id 정보를 이용해 Edit Shottype Modal에 값을 채운다.
 function setShottypeModal(id) {
     let token = document.getElementById("token").value;
@@ -309,8 +346,9 @@ function rmTask(project, id, task) {
     }
 }
 
-function setFrame(mode, project, id, frame, userid) {
+function setFrame(mode, id, frame) {
     let token = document.getElementById("token").value;
+    let project = CurrentProject()
     $.ajax({
         url: "/api/" + mode,
         type: "post",
@@ -318,7 +356,6 @@ function setFrame(mode, project, id, frame, userid) {
             project: project,
             name: id2name(id),
             frame: frame,
-            userid: userid,
         },
         headers: {
             "Authorization": "Basic "+ token

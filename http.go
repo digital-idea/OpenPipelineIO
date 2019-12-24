@@ -240,7 +240,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setellitesearch", handleAPISetelliteSearch)
 
 	// restAPI Item
-	http.HandleFunc("/api/v2/item", handleAPIItemV2)
+	http.HandleFunc("/api/timeinfo", handleAPITimeinfo)
 	http.HandleFunc("/api/item", handleAPIItem)     // legacy
 	http.HandleFunc("/api/rmitem", handleAPIRmItem) // legacy
 	http.HandleFunc("/api/rmitemid", handleAPIRmItemID)
