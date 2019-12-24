@@ -11,7 +11,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "http://172.30.1.50/api/item?project=TEMP&id=SS_0020_org"` |
+| /api/v2/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "https://csi.lazypic.org/api/v2/item?project=TEMP&id=SS_0020_org"` |
 | /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" http://192.168.31.172/api/search` |
 | /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline2d` |
 | /api/deadline3d | 3D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline3d` |

@@ -129,6 +129,46 @@ func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// handleAPIItemV2 함수는 아이템 자료구조를 불러온다.
+func handleAPIItemV2(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "Project가 빈 문자열 입니다", http.StatusBadRequest)
+		return
+	}
+	id := q.Get("id")
+	if id == "" {
+		http.Error(w, "id가 빈 문자열 입니다", http.StatusBadRequest)
+		return
+	}
+	item, err := getItem(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(item)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPIRmItem 함수는 아이템을 삭제한다.
 func handleAPIRmItem(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
