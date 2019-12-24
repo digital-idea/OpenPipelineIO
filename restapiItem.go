@@ -81,7 +81,7 @@ func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPIItem 함수는 아이템 자료구조를 불러온다.
+// handleAPIItem 함수는 아이템 자료구조를 불러온다. // legacy
 func handleAPIItem(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)

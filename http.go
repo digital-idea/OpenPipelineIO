@@ -240,10 +240,12 @@ func webserver(port string) {
 	http.HandleFunc("/api/setellitesearch", handleAPISetelliteSearch)
 
 	// restAPI Item
-	http.HandleFunc("/api/item", handleAPIItem)
+	http.HandleFunc("/api/item", handleAPIItem)     // legacy
+	http.HandleFunc("/api/v2/item", handleAPIItem)  // legacy
 	http.HandleFunc("/api/rmitem", handleAPIRmItem) // legacy
 	http.HandleFunc("/api/rmitemid", handleAPIRmItemID)
-	http.HandleFunc("/api2/items", handleAPI2Items)
+	http.HandleFunc("/api2/items", handleAPI2Items) // legacy
+	http.HandleFunc("/api/items", handleAPI2Items)
 	http.HandleFunc("/api/searchname", handleAPISearchname)
 	http.HandleFunc("/api/seqs", handleAPISeqs)
 	http.HandleFunc("/api/shots", handleAPIShots)
@@ -294,7 +296,6 @@ func webserver(port string) {
 	http.HandleFunc("/api/search", handleAPISearch)
 	http.HandleFunc("/api/deadline2d", handleAPIDeadline2D)
 	http.HandleFunc("/api/deadline3d", handleAPIDeadline3D)
-	http.HandleFunc("/api/items", handleAPIItems)
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
 	http.HandleFunc("/api/settaskusernote", handleAPISetTaskUserNote)

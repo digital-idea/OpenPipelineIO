@@ -20,14 +20,17 @@ CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매�
 - [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 ### Roadmap
-- [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전) with USD
-- [ ] 샷 디테일 페이지 추가하기
 - [ ] 사용자별 샷 갯수, 리스트가 나오도록 처리하기. -> items 컬렉션을 통합하기
+- [ ] 3D 파이프라인에 추가적으로 필요한 자료구조 및 API 생성(샷트레킹, 버전, 퍼블리쉬) with USD
+- [ ] 샷 디테일 페이지 추가하기
 - [ ] Status를 유연하게 바꿀 수 있도록 기능변경
 - [ ] 통계툴을 내부에서 일괄 처리하도록 통합(기존 Statistics 서비스 통합)
 - [ ] 전문적인 리뷰툴 추가(현재 웹프로토콜 + RV)
 - [ ] 파트너 관리툴 추가
 - [ ] 프로젝트에 사용하는 소프트웨어 등록, 환경변수 관리 -> JWT토큰으로 dilink 연동
+- [ ] 웹 스캔 툴: ACES2065-1(또는 사용자 설정) > ACEScg 
+- [ ] 캘린더 연동: https://github.com/lazypic/kalena
+- [ ] 도토리 연동: https://github.com/rd101/dotori
 
 ### 데이터베이스(mongoDB) 설치, 실행
 
