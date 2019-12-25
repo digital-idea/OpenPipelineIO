@@ -386,7 +386,7 @@ func handleRmProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel != 10 { // Admin
+	if ssid.AccessLevel != AdminAccessLevel { // Admin
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
@@ -438,7 +438,7 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel != 10 {
+	if ssid.AccessLevel != AdminAccessLevel {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
