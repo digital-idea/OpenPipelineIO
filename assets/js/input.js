@@ -185,9 +185,10 @@ function sleep( millisecondsToWait ) {
 }
 
 
-function addTask(project, id, task) {
+function addTask(id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = CurrentProject();
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -221,16 +222,8 @@ function addTask(project, id, task) {
 					<div id="${data.name}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
-							setModal('edittask-startdate', '');
-							setModal('edittask-due', '');
-							setModal('edittask-level', '');
-							setModal('edittask-predate', '');
-							setModal('edittask-date', '');
-							setModal('edittask-task', '${data.task}' );
-							setModal('edittask-path', '' );
-							setModal('edittask-usernote', '' );
-							setModal('edittask-id', '${data.id}');
-							setModal('edittask-user', '')">≡</span>
+                        setEditTaskModal('${project}', '${data.id}', '${data.task}');
+                        ">≡</span>
 					</div>
                     </div>`;
                     document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
@@ -267,16 +260,8 @@ function addTask(project, id, task) {
 					<div id="${data.name}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
-							setModal('edittask-startdate', '');
-							setModal('edittask-due', '');
-							setModal('edittask-level', '');
-							setModal('edittask-predate', '');
-							setModal('edittask-date', '');
-							setModal('edittask-task', '${data.task}' );
-							setModal('edittask-path', '' );
-							setModal('edittask-usernote', '' );
-							setModal('edittask-id', '${data.id}');
-							setModal('edittask-user', '')">≡</span>
+                        setEditTaskModal('${project}', '${data.id}', '${data.task}');
+                        ">≡</span>
 					</div>
 				</div>`;
                 document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
