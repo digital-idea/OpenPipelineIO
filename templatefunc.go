@@ -49,7 +49,7 @@ func projectStatus2color(status ProjectStatus) string {
 	case LawsuitProjectStatus:
 		return "text-dark bg-waring" // 노랑
 	default:
-		return ""
+		return "text-white bg-darkmode"
 	}
 }
 
