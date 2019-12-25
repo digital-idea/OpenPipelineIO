@@ -9,12 +9,12 @@ type ProjectStatus int
 
 // 프로젝트 상태
 const (
-	UnknownProjectStatus = ProjectStatus(iota) // 0
-	PreProjectStatus                           // 1
-	PostProjectStatus                          // 2
+	TestProjectStatus    = ProjectStatus(iota) // 0 테스트
+	PreProjectStatus                           // 1 준비중
+	PostProjectStatus                          // 2 진행중
 	LayoverProjectStatus                       // 3 중단상태 예) 중간입금이 되지않아서 내부판단하 장기중단. ITEM자료구조에 HOLD 라는 값이 존재하여 LAYOVER 표현을 사용함.
-	BackupProjectStatus                        // 4
-	ArchiveProjectStatus                       // 5
+	BackupProjectStatus                        // 4 백업중
+	ArchiveProjectStatus                       // 5 백업완료
 	LawsuitProjectStatus                       // 6 소송상태
 )
 

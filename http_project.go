@@ -159,7 +159,7 @@ func ToProjectStatus(s string) ProjectStatus {
 	case "lawsuit", "소송":
 		return LawsuitProjectStatus
 	default:
-		return UnknownProjectStatus
+		return TestProjectStatus
 	}
 }
 

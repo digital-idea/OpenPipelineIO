@@ -47,7 +47,7 @@ func OnProjectlist(session *mgo.Session) ([]string, error) {
 		if err != nil {
 			log.Println(err)
 		}
-		if p.Status == PreProjectStatus || p.Status == PostProjectStatus || p.Status == BackupProjectStatus {
+		if p.Status == TestProjectStatus || p.Status == PreProjectStatus || p.Status == PostProjectStatus || p.Status == BackupProjectStatus {
 			results = append(results, project)
 		}
 	}

@@ -150,8 +150,8 @@ func handleAPIProjects(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, p := range projectList {
 		switch qStatus {
-		case "unknown":
-			if p.Status == UnknownProjectStatus {
+		case "test":
+			if p.Status == TestProjectStatus {
 				rcp.Data = append(rcp.Data, p.ID)
 			}
 		case "pre":
