@@ -698,6 +698,7 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Size    string `json:"size"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -758,11 +759,12 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 			rcp.Size = v
 		}
 	}
-	err = SetImageSize(session, rcp.Project, rcp.Name, "rendersize", rcp.Size)
+	id, err := SetImageSize(session, rcp.Project, rcp.Name, "rendersize", rcp.Size)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Rendersize: %s", rcp.Size), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -791,6 +793,7 @@ func handleAPISetUnDistortionSize(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Size    string `json:"size"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -851,11 +854,12 @@ func handleAPISetUnDistortionSize(w http.ResponseWriter, r *http.Request) {
 			rcp.Size = v
 		}
 	}
-	err = SetImageSize(session, rcp.Project, rcp.Name, "dsize", rcp.Size)
+	id, err := SetImageSize(session, rcp.Project, rcp.Name, "dsize", rcp.Size)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Undistortionsize: %s", rcp.Size), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -1730,6 +1734,7 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Size    string `json:"size"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -1790,11 +1795,12 @@ func handleAPISetPlateSize(w http.ResponseWriter, r *http.Request) {
 			rcp.Size = v
 		}
 	}
-	err = SetImageSize(session, rcp.Project, rcp.Name, "platesize", rcp.Size)
+	id, err := SetImageSize(session, rcp.Project, rcp.Name, "platesize", rcp.Size)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Platesize: %s", rcp.Size), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

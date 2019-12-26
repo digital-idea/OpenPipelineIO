@@ -568,78 +568,80 @@
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Size Setting</h5>
+			<h5 class="modal-title" id="modal-platesize-title">Size Setting</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="platesize-id">
-				<input type="hidden" class="form-control" id="platesize-userid">
+				<input type="hidden" class="form-control" id="modal-platesize-project">
+				<input type="hidden" class="form-control" id="modal-platesize-id">
 
 				<div class="form-group">
 					<label>플레이트사이즈</label>
-					<input type="text" id="platesize" size="10" maxlength="13" name="Platesize" value="" placeholder="0000x0000" class="form-control">
+					<input type="text" id="modal-platesize-size" size="10" maxlength="13" name="Platesize" value="" placeholder="0000x0000" class="form-control">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setPlatesize('{{$.SearchOption.Project}}', document.getElementById('platesize-id').value, document.getElementById('platesize').value, document.getElementById('platesize-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setPlatesize(document.getElementById('modal-platesize-project').value, document.getElementById('modal-platesize-id').value, document.getElementById('modal-platesize-size').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
 	</div>
 
 	<!-- Modal: UndistortionSize -->
-	<div class="modal fade" id="modal-undistortionsize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-undistortionsize" tabindex="-1" role="dialog" aria-labelledby="modal-undistortionsize-title" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Size Setting</h5>
+			<h5 class="modal-title" id="modal-undistortionsize-title">Size Setting</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="undistortionsize-id">
-				<input type="hidden" class="form-control" id="undistortionsize-userid">
+				<input type="hidden" class="form-control" id="modal-undistortionsize-project">
+				<input type="hidden" class="form-control" id="modal-undistortionsize-id">
+				
 				<div class="form-group">
 					<label>언디스토션</label>
-					<input type="text" id="undistortionsize" size="10" maxlength="13" value="" placeholder="0000x0000" class="form-control">
+					<input type="text" id="modal-undistortionsize-size" size="10" maxlength="13" value="" placeholder="0000x0000" class="form-control">
 					<small class="form-text text-mute">매치무브 작업자가 설정합니다.</small>
 				</div>
 				
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setUndistortionsize('{{$.SearchOption.Project}}', document.getElementById('undistortionsize-id').value, document.getElementById('undistortionsize').value, document.getElementById('undistortionsize-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setUndistortionsize(document.getElementById('modal-undistortionsize-project').value, document.getElementById('modal-undistortionsize-id').value, document.getElementById('modal-undistortionsize-size').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
 	</div>
 
 	<!-- Modal: RenderSize -->
-	<div class="modal fade" id="modal-rendersize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-rendersize" tabindex="-1" role="dialog" aria-labelledby="modal-rendersize-title" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Size Setting</h5>
+			<h5 class="modal-title" id="modal-rendersize-title">Size Setting</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="rendersize-id">
-				<input type="hidden" class="form-control" id="rendersize-userid">
+				<input type="hidden" class="form-control" id="modal-rendersize-project">
+				<input type="hidden" class="form-control" id="modal-rendersize-id">
+				
 				<div class="form-group">
 					<label>렌더사이즈</label>
-					<input type="text" id="rendersize" size="10" maxlength="13" name="Rendersize" value="" placeholder="0000x0000" class="form-control">
+					<input type="text" id="modal-rendersize-size" size="10" maxlength="13" name="Rendersize" value="" placeholder="0000x0000" class="form-control">
 					<small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setRendersize('{{$.SearchOption.Project}}', document.getElementById('rendersize-id').value, document.getElementById('rendersize').value, document.getElementById('rendersize-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setRendersize(document.getElementById('modal-rendersize-project').value, document.getElementById('modal-rendersize-id').value, document.getElementById('modal-rendersize-size').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -914,25 +916,13 @@
 				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{.Name}}" class="text-white black-opbg itemname">{{.Name}}</a></div>
 				<div class="top-right">
 					<div class="row" id="platesize-{{.Name}}">
-						{{if .Platesize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '{{.Platesize}}');setModal('platesize-id', '{{.ID}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S: {{.Platesize}}</span>
-						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '');setModal('platesize-id', '{{.ID}}');setModal('platesize-userid', '{{$.User.ID}}')"{{end}}>S:</span>
-						{{end}}
+						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Platesize}}S: {{.Platesize}}{{else}}S:{{end}}</span>
 					</div>
 					<div class="row" id="undistortionsize-{{.Name}}">
-						{{if .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '{{.Dsize}}');setModal('undistortionsize-id', '{{.ID}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U: {{.Dsize}}</span>
-						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '');setModal('undistortionsize-id', '{{.ID}}');setModal('undistortionsize-userid', '{{$.User.ID}}')"{{end}}>U:</span>
-						{{end}}
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Dsize}}U: {{.Dsize}}{{else}}U:{{end}}</span>
 					</div>
 					<div class="row" id="rendersize-{{.Name}}">
-						{{if or .Rendersize .Dsize}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}');setModal('rendersize-id', '{{.ID}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
-						{{else}}
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '');setModal('rendersize-id', '{{.ID}}');setModal('rendersize-userid', '{{$.User.ID}}')"{{end}}>R:</span>
-						{{end}}
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 					</div>
 				</div>
 				<div class="centered">

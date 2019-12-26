@@ -1037,25 +1037,26 @@ func Type(session *mgo.Session, project, name string) (string, error) {
 
 // SetImageSize 함수는 해당 샷의 이미지 사이즈를 설정한다.
 // key 설정값 : platesize, distortionsize, rendersize
-func SetImageSize(session *mgo.Session, project, name, key, size string) error {
+func SetImageSize(session *mgo.Session, project, name, key, size string) (string, error) {
 	if !(key == "platesize" || key == "dsize" || key == "rendersize") {
-		return errors.New("잘못된 key값입니다")
+		return "", errors.New("잘못된 key값입니다")
 	}
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
+	id := name + "_" + typ
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetTimecode 함수는 item에 Timecode를 설정한다.

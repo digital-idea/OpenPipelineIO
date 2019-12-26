@@ -200,7 +200,7 @@ function multiInputTitle(id) {
         return ": " + id2name(id)        
     } else {
         let name = id2name(id);
-        let num = cboxes.length-1;
+        let num = checknum - 1
         return `: ${name}외 ${num}건`
     }
 }
@@ -2371,10 +2371,30 @@ function setObjectID(project, id, innum, outnum, userid) {
     });
 }
 
-
-
-function setPlatesize(project, id, size, userid) {
+function setPlatesizeModal(project, id) {
     let token = document.getElementById("token").value;
+    document.getElementById("modal-platesize-project").value = project
+    document.getElementById("modal-platesize-title").innerHTML = "Platesize" + multiInputTitle(id);
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-platesize-id').value = id;
+            document.getElementById("modal-platesize-size").value = data.platesize;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+
+function setPlatesize(project, id, size) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2397,7 +2417,7 @@ function setPlatesize(project, id, size, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '${data.size}');setModal('platesize-name', '${data.name}');setModal('platesize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                    document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2420,7 +2440,7 @@ function setPlatesize(project, id, size, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setModal('platesize', '${data.size}');setModal('platesize-name', '${data.name}');setModal('platesize-userid', '${data.userid}')">S: ${data.size}</span>`;
+                document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2429,8 +2449,29 @@ function setPlatesize(project, id, size, userid) {
     }
 }
 
-function setUndistortionsize(project, id, size, userid) {
+function setUndistortionsizeModal(project, id) {
     let token = document.getElementById("token").value;
+    document.getElementById("modal-undistortionsize-project").value = project
+    document.getElementById("modal-undistortionsize-title").innerHTML = "Undistortionsize" + multiInputTitle(id);
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-undistortionsize-id').value = id;
+            document.getElementById("modal-undistortionsize-size").value = data.dsize;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setUndistortionsize(project, id, size) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2453,7 +2494,7 @@ function setUndistortionsize(project, id, size, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">U: ${data.size}</span>`;
+                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2476,7 +2517,7 @@ function setUndistortionsize(project, id, size, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setModal('undistortionsize', '${data.size}');setModal('undistortionsize-name', '${data.name}');setModal('undistortionsize-userid', '${data.userid}')">U: ${data.size}</span>`;
+                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2485,8 +2526,29 @@ function setUndistortionsize(project, id, size, userid) {
     }
 }
 
-function setRendersize(project, id, size, userid) {
+function setRendersizeModal(project, id) {
     let token = document.getElementById("token").value;
+    document.getElementById("modal-rendersize-project").value = project
+    document.getElementById("modal-rendersize-title").innerHTML = "Rendersize" + multiInputTitle(id);
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-rendersize-id').value = id;
+            document.getElementById("modal-rendersize-size").value = data.rendersize;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setRendersize(project, id, size) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2509,7 +2571,7 @@ function setRendersize(project, id, size, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">R: ${data.size}</span>`;
+                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2532,7 +2594,7 @@ function setRendersize(project, id, size, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setModal('rendersize', '${data.size}');setModal('rendersize-name', '${data.name}');setModal('rendersize-userid', '${data.userid}')">R: ${data.size}</span>`;
+                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

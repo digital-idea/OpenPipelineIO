@@ -300,7 +300,7 @@ func main() {
 						log.Fatal(err)
 					}
 					defer session.Close()
-					err = SetImageSize(session, *flagProject, *flagName, "platesize", *flagPlatesize)
+					_, err = SetImageSize(session, *flagProject, *flagName, "platesize", *flagPlatesize)
 					if err != nil {
 						log.Fatal(err)
 					}
