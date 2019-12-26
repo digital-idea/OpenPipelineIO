@@ -74,14 +74,14 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Set Roll Number</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="text-darkmode">&times;</span>
-				</button>
+					<h5 class="modal-title" id="modal-setrnum-title">Set Roll Number</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true" class="text-darkmode">&times;</span>
+					</button>
 				</div>
 				<div class="modal-body">				
+					<input type="hidden" class="form-control" id="set-rnum-project">
 					<input type="hidden" class="form-control" id="set-rnum-id">
-					<input type="hidden" class="form-control" id="set-rnum-userid">
 					<div class="form-group">
 						<label for="comment-text" class="col-form-label">Roll Number:</label>
 						<input type="text" class="form-control" id="set-rnum-text">
@@ -91,7 +91,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-warning" onclick="setRnum('{{$.SearchOption.Project}}', document.getElementById('set-rnum-id').value, document.getElementById('set-rnum-text').value, document.getElementById('set-rnum-userid').value)" data-dismiss="modal">Edit</button>
+					<button type="button" class="btn btn-outline-warning" onclick="setRnum(document.getElementById('set-rnum-project').value, document.getElementById('set-rnum-id').value, document.getElementById('set-rnum-text').value)" data-dismiss="modal">Edit</button>
 				</div>
 			</div>
 		</div>
@@ -890,16 +890,12 @@
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
 				<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox()">
-					<img src="/thumbnail/{{$.SearchOption.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
 				</label>
 				<div class="top-left">
 					{{if eq .Type "org" "left"}}
 						<div class="row" id="rnum-{{.Name}}">
-							{{if .Rnum}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '{{.Rnum}}' );setModal('set-rnum-id', '{{.ID}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>{{.Rnum}}</span>
-							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '' );setModal('set-rnum-id', '{{.ID}}');setModal('set-rnum-userid', '{{$.User.ID}}')"{{end}}>no rnum</span>
-							{{end}}
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}onclick="setRnumModal('{{.Project}}', '{{.ID}}')" data-toggle="modal" data-target="#setrnum"{{end}}>{{if .Rnum}}{{.Rnum}}{{else}}no rnum{{end}}</span>
 						</div>
 					{{end}}
 					{{if eq .Type "org" "left" "asset"}}

@@ -55,7 +55,7 @@ function id2name(id) {
 
 // setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
 function setModal(modalID, value) {
-    document.getElementById(modalID).value=value;
+    document.getElementById(modalID).value = value;
 }
 
 // setEditTaskModal 함수는 project, name, task 정보를 가지고 와서 Edit Task Modal에 값을 채운다.
@@ -181,6 +181,25 @@ function sleep( millisecondsToWait ) {
     while ( new Date().getTime() < now + millisecondsToWait ) {
         /* do nothing; this will exit once it reaches the time limit */
         /* if you want you could do something and exit */
+    }
+}
+
+function multiInputTitle(id) {
+    let checknum = 0;
+    let cboxes = document.getElementsByName('selectID');
+    for (let i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === true) {
+            checknum += 1
+        }
+    }
+    if (checknum === 0) {
+        return ": " + id2name(id)
+    } else if (checknum === 1) {
+        return ": " + id2name(id)        
+    } else {
+        let name = id2name(id);
+        let num = cboxes.length-1;
+        return `: ${name}외 ${num}건`
     }
 }
 
@@ -1935,8 +1954,32 @@ function setAssettype(project, id, userid) {
     }
 }
 
-function setRnum(project, id, rnum, userid) {
+// setRnumModal 함수는 project, id 정보를 이용해서 Edit Rnum Modal 값을 채운다.
+function setRnumModal(project, id) {
+    document.getElementById("set-rnum-project").value = project;
+    document.getElementById("set-rnum-id").value = id;
+    document.getElementById("modal-setrnum-title").innerHTML = "Set Rnum number" + multiInputTitle(id);
+    console.log("Set Rnum number" + multiInputTitle(id));
     let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('set-rnum-text').value = data.rnum;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+
+function setRnum(project, id, rnum) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setrnum",
         type: "post",
@@ -2125,13 +2168,19 @@ function rmTag(project, id, tag, userid) {
     }
 }
 
-
-
 function selectCheckbox() {
+    let checknum = 0;
     var cboxes = document.getElementsByName('selectID');
-    if (cboxes.length > 0) {
-        multiInput = true;
+    for (let i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === true) {
+            checknum += 1
+        }
     }
+    if (checknum === 0) {
+        multiInput = false;
+        return
+    }
+    multiInput = true;
 }
 
 function selectCheckboxAll() {
