@@ -454,22 +454,22 @@
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Deadline</h5>
+			<h5 class="modal-title" id="modal-deadline2d-title">Deadline</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="deadline2d-id">
-				<input type="hidden" class="form-control" id="deadline2d-userid">
+				<input type="hidden" class="form-control" id="modal-deadline2d-project">
+				<input type="hidden" class="form-control" id="modal-deadline2d-id">
 				<div class="form-group">
 					<label for="deadline2d-date" class="col-form-label">Deadline 2D:</label>
-					<input type=date class="form-control" id="deadline2d-date" placeholder="YYYY-MM-DD">
+					<input type=date class="form-control" id="modal-deadline2d-date" placeholder="YYYY-MM-DD">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setDeadline2D('{{$.SearchOption.Project}}', document.getElementById('deadline2d-id').value, document.getElementById('deadline2d-date').value, document.getElementById('deadline2d-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setDeadline2D(document.getElementById('modal-deadline2d-project').value, document.getElementById('modal-deadline2d-id').value, document.getElementById('modal-deadline2d-date').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -480,22 +480,22 @@
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Deadline</h5>
+			<h5 class="modal-title" id="modal-deadline3d-title">Deadline</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="deadline3d-id">
-				<input type="hidden" class="form-control" id="deadline3d-userid">
+				<input type="hidden" class="form-control" id="modal-deadline3d-project">
+				<input type="hidden" class="form-control" id="modal-deadline3d-id">
 				<div class="form-group">
 					<label for="deadline3d-date" class="col-form-label">Deadline 3D:</label>
-					<input type=date class="form-control" id="deadline3d-date" placeholder="YYYY-MM-DD">
+					<input type=date class="form-control" id="modal-deadline3d-date" placeholder="YYYY-MM-DD">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setDeadline3D('{{$.SearchOption.Project}}', document.getElementById('deadline3d-id').value, document.getElementById('deadline3d-date').value, document.getElementById('deadline3d-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setDeadline3D(document.getElementById('modal-deadline3d-project').value, document.getElementById('modal-deadline3d-id').value, document.getElementById('modal-deadline3d-date').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -900,21 +900,13 @@
 					{{end}}
 					{{if eq .Type "org" "left" "asset"}}
 						<div class="row" id="deadline3d-{{.Name}}">
-							{{if .Ddline3d}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-id', '{{.ID}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:{{ToShortTime .Ddline3d}}</span>
-							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '{{ToNormalTime .Ddline3d}}');setModal('deadline3d-id', '{{.ID}}');setModal('deadline3d-userid', '{{$.User.ID}}')"{{end}}>3D:</span>
-							{{end}}	
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('{{.Project}}', '{{.ID}}', '{{ToNormalTime .Ddline3d}}')"{{end}}>{{if .Ddline3d}}3D:{{ToShortTime .Ddline3d}}{{else}}3D:{{end}}</span>
 						</div>
 					{{end}}
 					
 					{{if eq .Type "org" "left" "asset"}}
 						<div class="row" id="deadline2d-{{.Name}}">
-							{{if .Ddline2d}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-id', '{{.ID}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:{{ToShortTime .Ddline2d}}</span>
-							{{else}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '{{ToNormalTime .Ddline2d}}');setModal('deadline2d-id', '{{.ID}}');setModal('deadline2d-userid', '{{$.User.ID}}')"{{end}}>2D:</span>
-							{{end}}
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('{{.Project}}', '{{.ID}}', '{{ToNormalTime .Ddline2d}}')"{{end}}>{{if .Ddline2d}}2D:{{ToShortTime .Ddline2d}}{{else}}2D:{{end}}</span>
 						</div>
 					{{end}}
 				</div>

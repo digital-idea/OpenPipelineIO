@@ -1717,9 +1717,38 @@ function setTaskPredate(project, id, task, date) {
     }
 }
 
+function rfc3339toNormaltime(t) {
+    if (t.includes("T")) {
+        return t.split("T")[0]
+    }
+    return t
+}
 
-function setDeadline2D(project, id, date, userid) {
+// setDeadline2dModal 함수는 project, id 정보를 이용해서 Deadline2d Modal 값을 채운다.
+function setDeadline2dModal(project, id) {
+    document.getElementById("modal-deadline2d-project").value = project;
+    document.getElementById("modal-deadline2d-id").value = id;
+    document.getElementById("modal-deadline2d-title").innerHTML = "Set Deadline 2D" + multiInputTitle(id);
     let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic " + token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-deadline2d-date').value = rfc3339toNormaltime(data.ddline2d);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+
+function setDeadline2D(project, id, date) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1741,7 +1770,7 @@ function setDeadline2D(project, id, date, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '${data.date}');setModal('deadline2d-name', '${data.name}');setModal('deadline2d-userid', '${data.userid}')">2D:${data.shortdate}</span>`;
+                    document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1763,7 +1792,7 @@ function setDeadline2D(project, id, date, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setModal('deadline2d-date', '${data.date}');setModal('deadline2d-name', '${data.name}');setModal('deadline2d-userid', '${data.userid}')">2D:${data.shortdate}</span>`;
+                document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1772,8 +1801,31 @@ function setDeadline2D(project, id, date, userid) {
     }
 }
 
-function setDeadline3D(project, id, date, userid) {
+// setDeadline3dModal 함수는 project, id 정보를 이용해서 Deadline3d Modal 값을 채운다.
+function setDeadline3dModal(project, id) {
+    document.getElementById("modal-deadline3d-project").value = project;
+    document.getElementById("modal-deadline3d-id").value = id;
+    document.getElementById("modal-deadline3d-title").innerHTML = "Set Deadline 3D" + multiInputTitle(id);
     let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic " + token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-deadline3d-date').value = rfc3339toNormaltime(data.ddline3d);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setDeadline3D(project, id, date) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    console.log(id);
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1795,7 +1847,7 @@ function setDeadline3D(project, id, date, userid) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '${data.date}');setModal('deadline3d-name', '${data.name}');setModal('deadline3d-userid', '${data.userid}')">3D:${data.shortdate}</span>`;
+                    document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('${data.project}','${data.id}')">3D:${data.shortdate}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1817,7 +1869,7 @@ function setDeadline3D(project, id, date, userid) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setModal('deadline3d-date', '${data.date}');setModal('deadline3d-name', '${data.name}');setModal('deadline3d-userid', '${data.userid}')">3D:${data.shortdate}</span>`;
+                document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('${data.project}','${data.id}')">3D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);

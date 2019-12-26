@@ -521,7 +521,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
-			err = SetDeadline2D(session, project, name, date)
+			_, err = SetDeadline2D(session, project, name, date)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -539,7 +539,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
-			err = SetDeadline3D(session, project, name, date)
+			_, err = SetDeadline3D(session, project, name, date)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue

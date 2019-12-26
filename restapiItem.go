@@ -2976,6 +2976,7 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		Name      string `json:"name"`
+		ID        string `json:"id"`
 		Date      string `json:"date"`
 		ShortDate string `json:"shortdate"`
 		UserID    string `json:"userid"`
@@ -3033,11 +3034,12 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
-	err = SetDeadline2D(session, rcp.Project, rcp.Name, rcp.Date)
+	id, err := SetDeadline2D(session, rcp.Project, rcp.Name, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline2D: %s", rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -3067,6 +3069,7 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		Name      string `json:"name"`
+		ID        string `json:"id"`
 		Date      string `json:"date"`
 		ShortDate string `json:"shortdate"`
 		UserID    string `json:"userid"`
@@ -3124,11 +3127,12 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
-	err = SetDeadline3D(session, rcp.Project, rcp.Name, rcp.Date)
+	id, err := SetDeadline3D(session, rcp.Project, rcp.Name, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline3D: %s", rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

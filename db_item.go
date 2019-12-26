@@ -1464,51 +1464,51 @@ func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 }
 
 // SetDeadline2D 함수는 item에 2D마감일을 셋팅한다.
-func SetDeadline2D(session *mgo.Session, project, name, date string) error {
+func SetDeadline2D(session *mgo.Session, project, name, date string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline2d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetDeadline3D 함수는 item에 3D마감일을 셋팅한다.
-func SetDeadline3D(session *mgo.Session, project, name, date string) error {
+func SetDeadline3D(session *mgo.Session, project, name, date string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline3d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetTaskStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
