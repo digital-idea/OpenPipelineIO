@@ -1938,10 +1938,32 @@ function setShottype(project, id) {
     }
 }
 
-function setAssettype(project, id, userid) {
+function setAssettypeModal(project, id) {
     let token = document.getElementById("token").value;
-    let types = document.getElementById("assettypes");
+    document.getElementById("modal-assettype-project").value = project
+    document.getElementById("modal-assettype-title").innerHTML = "Assettype Type" + multiInputTitle(id);
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-assettype-id').value=id;
+            document.getElementById("modal-assettype-type").value=data.assettype;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setAssettype(project, id) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    let types = document.getElementById("modal-assettype-type");
     let assettype = types.options[types.selectedIndex].value;
+    console.log(id)
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1964,7 +1986,7 @@ function setAssettype(project, id, userid) {
                 dataType: "json",
                 success: function(data) {
                     // assettype button update
-                    document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
+                    document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('${project}', '${data.id}')">${data.type}</span>`;
                     // remove old assettype tag
                     document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
                     // add new assettype tag
@@ -1993,7 +2015,7 @@ function setAssettype(project, id, userid) {
             dataType: "json",
             success: function(data) {
                 // assettype button update
-                document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-name', '${data.name}');setModal('assettype-userid', '${data.userid}')">${data.type}</span>`;
+                document.getElementById("assettype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('${project}', '${data.id}')">${data.type}</span>`;
                 // remove old assettype tag
                 document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
                 // add new assettype tag

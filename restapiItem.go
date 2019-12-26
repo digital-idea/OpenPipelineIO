@@ -3784,6 +3784,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Type    string `json:"type"`
 		OldType string `json:"oldtype"`
 		UserID  string `json:"userid"`
@@ -3841,11 +3842,12 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 			rcp.Type = v
 		}
 	}
-	old, _, err := SetAssetType(session, rcp.Project, rcp.Name, rcp.Type)
+	id, beforeType, _, err := SetAssetType(session, rcp.Project, rcp.Name, rcp.Type)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Assettype: %s", rcp.Type), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -3859,7 +3861,7 @@ func handleAPISetAssetType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	rcp.OldType = old // 브라우저에 기존에 드로잉된 에셋태그를 제거하기 위해서 사용한다.
+	rcp.OldType = beforeType // 브라우저에 기존에 드로잉된 에셋태그를 제거하기 위해서 사용한다.
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

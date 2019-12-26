@@ -531,21 +531,21 @@
 	</div>
 
 	<!-- Modal: Assettype -->
-	<div class="modal fade" id="assettype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-assettype" tabindex="-1" role="dialog" aria-labelledby="modal-assettype-title" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Asset Type</h5>
+			<h5 class="modal-title" id="modal-assettype-title">Asset Type</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="assettype-id">
-				<input type="hidden" class="form-control" id="assettype-userid">
+				<input type="hidden" class="form-control" id="modal-assettype-project">
+				<input type="hidden" class="form-control" id="modal-assettype-id">
 			
 				<div class="form-group">
-					<select id="assettypes" class="form-control">
+					<select id="modal-assettype-type" class="form-control">
 						<option value="prop">Prop (소품)</option>
 						<option value="char">Char (캐릭터, 크리쳐)</option>
 						<option value="env">Env (환경에셋)</option>
@@ -557,7 +557,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setAssettype('{{$.SearchOption.Project}}', document.getElementById('assettype-id').value, document.getElementById('assettype-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setAssettype(document.getElementById('modal-assettype-project').value, document.getElementById('modal-assettype-id').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -949,7 +949,7 @@
 				<div class="centered-bottom row">
 					{{if eq .Type "asset"}}
 						<div id="assettype-{{.Name}}">
-							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#assettype" onclick="setModal('assettype-id', '{{.ID}}');setModal('assettype-userid', '{{$.User.ID}}')"{{end}}>{{.Assettype}}</span>
+							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
 						</div>
 						{{if .CrowdAsset}}
 							<div id="crowdasset-{{.Name}}" class="ml-1">
