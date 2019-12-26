@@ -506,15 +506,16 @@
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Shot Type</h5>
+				<h5 class="modal-title" id="modal-shottype-title">Shot Type</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="shottype-id">
+				<input type="hidden" class="form-control" id="modal-shottype-project">
+				<input type="hidden" class="form-control" id="modal-shottype-id">
 				<div class="form-group">
-					<select id="shottype" class="form-control">
+					<select id="modal-shottype-type" class="form-control">
 						<option value="">None</option>
 						<option value="2d">2D</option>
 						<option value="3d">3D</option>
@@ -523,7 +524,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setShottype(document.getElementById('shottype-id').value);" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setShottype(document.getElementById('modal-shottype-project').value, document.getElementById('modal-shottype-id').value);" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -774,31 +775,31 @@
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Edit Time</h5>
+			<h5 class="modal-title" id="modal-edittime-title">Edit Time</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="edittime-id">
-
+				<input type="hidden" class="form-control" id="modal-edittime-project">
+				<input type="hidden" class="form-control" id="modal-edittime-id">
 				<div class="row">
 					<div class="col pl-1 pr-1 pt-0 pb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">ScanIn</small>
-							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pt-0 pb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">ScanOut</small>
-							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pt-0 pb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">ScanFrame</small>
-							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 				</div>
@@ -806,13 +807,13 @@
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">ScanTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">ScanTimecodeOut</small>
-							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 				</div>
@@ -820,19 +821,19 @@
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">PlateIn</small>
-							<input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">HandleIn</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">JustIn</small>
-							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 				</div>
@@ -840,19 +841,19 @@
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">PlateOut</small>
-							<input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">HandleOut</small>
-							<input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">JustOut</small>
-							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 				</div>
@@ -860,13 +861,13 @@
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">JustTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>
 					</div>
 					<div class="col pl-1 pr-1 pb-0 mb-0">
 						<div class="form-group p-0 m-0">
 							<small class="form-text text-muted">JustTimecodeIn</small>
-							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('edittime-id').value, this.value)">
+							<input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
 						</div>			
 					</div>
 				</div>
@@ -974,11 +975,7 @@
 							</div>
 						{{end}}
 						<div id="shottype-{{.Name}}">
-							{{if .Shottype}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.ID}}')"{{end}}>{{.Shottype}}</span>
-							{{else}}
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.ID}}')"{{end}}>none</span>
-							{{end}}
+							<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.Project}}','{{.ID}}')"{{end}}>{{if .Shottype}}{{.Shottype}}{{else}}none{{end}}</span>
 						</div>
 					{{end}}
 				</div>
@@ -1005,30 +1002,30 @@
 				</div>
 				<div class="bottom-left">
 					<div class="row">
-						<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.HandleIn}}</span>
+						<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.HandleIn}}</span>
 						<span class="text-white black-opbg">/</span>
-						<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.HandleOut}}</span>						
+						<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.HandleOut}}</span>						
 					</div>
 					<div class="row" id="platein-{{.Name}}">
 						{{if .PlateIn}}
-							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.PlateIn}}</span>
+							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.PlateIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justin-{{.Name}}">
 						{{if .JustIn}}
-							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.JustIn}}</span>
+							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{.Name}}">
 						{{if .JustTimecodeIn}}
-							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.JustTimecodeIn}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustTimecodeIn}}</span>
 						{{end}}
 					</div>
 				</div>
 				<div class="bottom-right">
 					<div class="row" id="plateout-{{.Name}}">
 						{{if .PlateOut}}
-							<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>
+							<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>
 								{{.PlateOut}}
 								{{if and .PlateIn .PlateOut}}
 									({{Framecal .PlateIn .PlateOut}})
@@ -1038,7 +1035,7 @@
 					</div>
 					<div class="row" id="justout-{{.Name}}">
 						{{if .JustOut}}
-							<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>
+							<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>
 								{{.JustOut}}
 								{{if and .JustIn .JustOut}}
 									({{Framecal .JustIn .JustOut}})
@@ -1048,7 +1045,7 @@
 					</div>
 					<div class="row" id="justtimecodeout-{{.Name}}" >
 						{{if .JustTimecodeOut}}
-							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.ID}}');"{{end}}>{{.JustTimecodeOut}}</span>
+							<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustTimecodeOut}}</span>
 						{{end}}
 					</div>
 				</div>

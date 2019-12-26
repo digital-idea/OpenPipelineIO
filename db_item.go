@@ -1584,30 +1584,30 @@ func SetTaskPredate(session *mgo.Session, project, name, task, date string) erro
 }
 
 // SetShotType 함수는 item에 shot type을 셋팅한다.
-func SetShotType(session *mgo.Session, project, name, shottype string) error {
+func SetShotType(session *mgo.Session, project, name, shottype string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if typ == "asset" {
-		return fmt.Errorf("%s 는 asset type 입니다. 변경할 수 없습니다", name)
+		return "", fmt.Errorf("%s 는 asset type 입니다. 변경할 수 없습니다", name)
 	}
 	id := name + "_" + typ
 	err = validShottype(shottype)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": shottype, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetOutputName 함수는 item에 Outputname 을 셋팅한다.

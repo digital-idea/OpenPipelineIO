@@ -3370,6 +3370,7 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Type    string `json:"type"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -3425,11 +3426,12 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	err = SetShotType(session, rcp.Project, rcp.Name, rcp.Type)
+	id, err := SetShotType(session, rcp.Project, rcp.Name, rcp.Type)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Shottype: %s", rcp.Type), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

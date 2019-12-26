@@ -93,10 +93,10 @@ function setEditTaskModal(project, id, task) {
 }
 
 // setTimeModal 함수는 id 정보를 가지고 와서 Edit Time Modal 값을 채운다.
-function setTimeModal(id) {
-    document.getElementById("edittime-id").value = id;
+function setTimeModal(project, id) {
     let token = document.getElementById("token").value;
-    let project = CurrentProject()
+    document.getElementById("modal-edittime-id").value = id;
+    document.getElementById("modal-edittime-title").innerHTML = "Edit Time" + multiInputTitle(id);
     $.ajax({
         url: "/api/timeinfo",
         type: "post",
@@ -130,13 +130,15 @@ function setTimeModal(id) {
 }
 
 // setShottypeModal 함수는 item id 정보를 이용해 Edit Shottype Modal에 값을 채운다.
-function setShottypeModal(id) {
+function setShottypeModal(project, id) {
     let token = document.getElementById("token").value;
+    document.getElementById("modal-shottype-project").value = project
+    document.getElementById("modal-shottype-title").innerHTML = "Shot Type" + multiInputTitle(id);
     $.ajax({
         url: "/api/shottype",
         type: "post",
         data: {
-            project: CurrentProject(),
+            project: project,
             name: id2name(id),
         },
         headers: {
@@ -144,8 +146,8 @@ function setShottypeModal(id) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById('shottype-id').value=id;
-            document.getElementById("shottype").value=data.shottype;
+            document.getElementById('modal-shottype-id').value=id;
+            document.getElementById("modal-shottype-type").value=data.shottype;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1878,10 +1880,10 @@ function setDeadline3D(project, id, date) {
     }
 }
 
-function setShottype(id) {
+function setShottype(project, id) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    let e = document.getElementById("shottype");
+    let e = document.getElementById("modal-shottype-type");
     let shottype = e.options[e.selectedIndex].value;
     
     if (multiInput) {
@@ -1895,7 +1897,7 @@ function setShottype(id) {
                 url: "/api/setshottype",
                 type: "post",
                 data: {
-                    project: CurrentProject(),
+                    project: project,
                     name: id2name(id),
                     shottype: shottype,
                     userid: userid,
@@ -1905,7 +1907,7 @@ function setShottype(id) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '${data.name}');setModal('shottype-userid', '${data.userid}')">${data.type}</span>`;
+                    document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -1917,7 +1919,7 @@ function setShottype(id) {
             url: "/api/setshottype",
             type: "post",
             data: {
-                project: CurrentProject(),
+                project: project,
                 name: id2name(id),
                 shottype: shottype,
                 userid: userid,
@@ -1927,7 +1929,7 @@ function setShottype(id) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#shottype" onclick="setModal('shottype-name', '${data.name}');setModal('shottype-userid', '${data.userid}')">${data.type}</span>`;
+                document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
