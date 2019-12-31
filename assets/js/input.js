@@ -660,6 +660,14 @@ function setNote(project, id, text) {
     }
 }
 
+function setAddCommentModal(project, id) {
+    document.getElementById("modal-addcomment-project").value = project;
+    document.getElementById("modal-addcomment-id").value = id;
+    document.getElementById("modal-addcomment-text").value = "";
+    document.getElementById("modal-addcomment-media").value = "";
+    document.getElementById("modal-addcomment-title").innerHTML = "Add Comment" + multiInputTitle(id);
+}
+
 function addComment(project, id, text, media) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
@@ -690,7 +698,7 @@ function addComment(project, id, text, media) {
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                    <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
+                    <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}')">×</span>
                     <br><small class="text-white">${body}</small>`
                     if (data.media != "") {
                         if (data.media.includes("http")) {
@@ -727,7 +735,7 @@ function addComment(project, id, text, media) {
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comment-${data.name}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}');setModal('rm-comment-userid', '${data.userid}')">×</span>
+                <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}')">×</span>
                 <br><small class="text-white">${body}</small>`
                 if (data.media != "") {
                     if (data.media.includes("http")) {
@@ -746,8 +754,9 @@ function addComment(project, id, text, media) {
     }
 }
 
-function rmComment(project, id, date, userid) {
+function rmComment(project, id, date) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/rmcomment",
         type: "post",
