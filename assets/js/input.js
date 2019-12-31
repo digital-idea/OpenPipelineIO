@@ -957,9 +957,17 @@ function rmSource(project, id, title) {
     }
 }
 
+function setAddReferenceModal(project, id) {
+    document.getElementById("modal-addreference-project").value = project;
+    document.getElementById("modal-addreference-id").value = id;
+    document.getElementById("modal-addreference-subject").value = "";
+    document.getElementById("modal-addreference-path").value = "";
+    document.getElementById("modal-addreference-title").innerHTML = "Rm Source" + multiInputTitle(id);
+}
+
 function addReference(project, id, title, path) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -994,12 +1002,12 @@ function addReference(project, id, title, path) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
                         document.getElementById("reference-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('${data.project}','${data.id}')">－</span>
                         `
                     } else {
                         document.getElementById("reference-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
                 },
@@ -1036,12 +1044,12 @@ function addReference(project, id, title, path) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
                     document.getElementById("reference-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference"  onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference"  onclick="setRmReferenceModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
                     document.getElementById("reference-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
             },
@@ -1052,6 +1060,12 @@ function addReference(project, id, title, path) {
     }
 }
 
+function setRmReferenceModal(project, id) {
+    document.getElementById("modal-rmreference-project").value = project;
+    document.getElementById("modal-rmreference-id").value = id;
+    document.getElementById("modal-rmreference-subject").value = "";
+    document.getElementById("modal-rmreference-title").innerHTML = "Rm Source" + multiInputTitle(id);
+}
 
 function rmReference(project, id, title) {
     let token = document.getElementById("token").value;
@@ -1079,14 +1093,14 @@ function rmReference(project, id, title) {
                 dataType: "json",
                 success: function(data) {
                     document.getElementById(`reference-${data.name}-${data.title}`).remove();
-                    if (document.getElementById(`references-${data.ame}`).childElementCount > 0) {
+                    if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
                         document.getElementById("reference-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('${data.project}','${data.id}')">－</span>
                         `
                     } else {
                         document.getElementById("reference-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
                 },
@@ -1114,12 +1128,12 @@ function rmReference(project, id, title) {
                 document.getElementById(`reference-${data.name}-${data.title}`).remove();
                 if (document.getElementById(`references-${data.name}`).childElementCount > 0) {
                     document.getElementById("reference-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-name', '${data.name}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
                     document.getElementById("reference-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-name', '${data.name}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
             },

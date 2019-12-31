@@ -304,53 +304,55 @@
 	</div>
 
 	<!-- Modal: Add Reference-->
-	<div class="modal fade" id="addreference" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-addreference" tabindex="-1" role="dialog" aria-labelledby="modal-addreference" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Add Reference</h5>
+				<h5 class="modal-title" id="modal-addreference-title">Add Reference</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 				</div>
-				<div class="modal-body">				
-					<input type="hidden" class="form-control" id="add-reference-id">
+				<div class="modal-body">
+					<input type="hidden" class="form-control" id="modal-addreference-project">
+					<input type="hidden" class="form-control" id="modal-addreference-id">
 					<div class="form-group">
 						<div class="form-group">
-							<label for="multi-input-title" class="col-form-label">Title:</label>
-							<input type="text" class="form-control" id="add-reference-title">
+							<label for="modal-addreference-subject" class="col-form-label">Title:</label>
+							<input type="text" class="form-control" id="modal-addreference-subject">
 						</div>
 						<div class="form-group">
-							<label for="multi-input-link" class="col-form-label">Path or URL:</label>
-							<input type="text" class="form-control" id="add-reference-path">
+							<label for="modal-addreference-path" class="col-form-label">Path or URL:</label>
+							<input type="text" class="form-control" id="modal-addreference-path">
 						</div>
 					</div>
 				</div>
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-warning" onclick="addReference('{{$.SearchOption.Project}}', document.getElementById('add-reference-id').value, document.getElementById('add-reference-title').value, document.getElementById('add-reference-path').value)" data-dismiss="modal">ADD</button>
+					<button type="button" class="btn btn-outline-warning" onclick="addReference(document.getElementById('modal-addreference-project').value, document.getElementById('modal-addreference-id').value, document.getElementById('modal-addreference-subject').value, document.getElementById('modal-addreference-path').value)" data-dismiss="modal">ADD</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Modal: Rm Reference-->
-	<div class="modal fade" id="rmreference" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-rmreference" tabindex="-1" role="dialog" aria-labelledby="modal-rmreference" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Rm Reference</h5>
+				<h5 class="modal-title" id="modal-rmreference-title">Rm Reference</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 				</div>
-				<div class="modal-body">				
-					<input type="hidden" class="form-control" id="rm-reference-id">
+				<div class="modal-body">
+					<input type="hidden" class="form-control" id="modal-rmreference-project">
+					<input type="hidden" class="form-control" id="modal-rmreference-id">
 					<div class="form-group">
 						<div class="form-group">
-							<label for="multi-input-title" class="col-form-label">Title:</label>
-							<input type="text" class="form-control" id="rm-reference-title">
+							<label for="modal-rmreference-subject" class="col-form-label">Title:</label>
+							<input type="text" class="form-control" id="modal-rmreference-subject">
 							<small class="text-danger">삭제할 레퍼런스 이름을 입력해주세요.</small>
 						</div>
 					</div>
@@ -358,7 +360,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-danger" onclick="rmReference('{{$.SearchOption.Project}}', document.getElementById('rm-reference-id').value, document.getElementById('rm-reference-title').value)" data-dismiss="modal">REMOVE</button>
+					<button type="button" class="btn btn-outline-danger" onclick="rmReference(document.getElementById('modal-rmreference-project').value, document.getElementById('modal-rmreference-id').value, document.getElementById('modal-rmreference-subject').value)" data-dismiss="modal">REMOVE</button>
 				</div>
 			</div>
 		</div>
@@ -1306,9 +1308,9 @@
 			<div class="ml-3" id="reference-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
-						<span class="add ml-1" data-toggle="modal" data-target="#addreference" onclick="setModal('add-reference-title', '' );setModal('add-reference-path', '' );setModal('add-reference-id', '{{.ID}}')">＋</span>
+						<span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('{{.Project}}','{{.ID}}')">＋</span>
 						{{if .References}}	
-							<span class="remove ml-0" data-toggle="modal" data-target="#rmreference" onclick="setModal('rm-reference-title', '' );setModal('rm-reference-id', '{{.ID}}')">－</span>
+							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('{{.Project}}','{{.ID}}')">－</span>
 						{{end}}
 					{{end}}
 				{{end}}

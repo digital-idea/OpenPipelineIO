@@ -2131,20 +2131,20 @@ func AddSource(session *mgo.Session, project, name, userID, title, path string) 
 }
 
 // AddReference 함수는 item에 소스링크를 추가한다.
-func AddReference(session *mgo.Session, project, name, userID, title, path string) error {
+func AddReference(session *mgo.Session, project, name, userID, title, path string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	r := Source{}
 	r.Date = time.Now().Format(time.RFC3339)
@@ -2154,9 +2154,9 @@ func AddReference(session *mgo.Session, project, name, userID, title, path strin
 	i.References = append(i.References, r)
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // RmSource 함수는 item에서 소스를 삭제합니다.
@@ -2191,20 +2191,20 @@ func RmSource(session *mgo.Session, project, name, title string) (string, error)
 }
 
 // RmReference 함수는 item에서 레퍼런스를 삭제합니다.
-func RmReference(session *mgo.Session, project, name, title string) error {
+func RmReference(session *mgo.Session, project, name, title string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	var newReferences []Source
 	for _, ref := range i.References {
@@ -2216,9 +2216,9 @@ func RmReference(session *mgo.Session, project, name, title string) error {
 	i.References = newReferences
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // GetTask 함수는 item의 Task 정보를 반환한다.
