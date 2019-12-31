@@ -206,10 +206,9 @@ function multiInputTitle(id) {
 }
 
 
-function addTask(id, task) {
+function addTask(project, id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    let project = CurrentProject();
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1102,8 +1101,9 @@ function rmReference(project, id, title) {
     }
 }
 
-function setThummov(project, id, path, userid) {
+function setThummov(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setthummov",
         type: "post",
@@ -1126,8 +1126,9 @@ function setThummov(project, id, path, userid) {
     });
 }
 
-function setBeforemov(project, id, path, userid) {
+function setBeforemov(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setbeforemov",
         type: "post",
@@ -1150,8 +1151,9 @@ function setBeforemov(project, id, path, userid) {
     });
 }
 
-function setAftermov(project, id, path, userid) {
+function setAftermov(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setaftermov",
         type: "post",
@@ -1175,8 +1177,9 @@ function setAftermov(project, id, path, userid) {
 }
 
 
-function setRetimeplate(project, id, path, userid) {
+function setRetimeplate(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setretimeplate",
         type: "post",
@@ -1203,8 +1206,9 @@ function setRetimeplate(project, id, path, userid) {
     });
 }
 
-function setOCIOcc(project, id, path, userid) {
+function setOCIOcc(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setociocc",
         type: "post",
@@ -1231,7 +1235,9 @@ function setOCIOcc(project, id, path, userid) {
     });
 }
 
-function setRollmedia(project, id, rollmedia, userid, token) {
+function setRollmedia(project, id, rollmedia) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setrollmedia",
         type: "post",
@@ -1251,6 +1257,31 @@ function setRollmedia(project, id, rollmedia, userid, token) {
             } else {
                 document.getElementById(data.name+"-onsetbutton").innerHTML = `<a href="/setellite?project=${project}&searchword=${data.rollmedia}" class="badge badge-done statusbox text-dark" target="_blink">onset</a>`;
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setIteminfoModal(project, id) {
+    document.getElementById("modal-iteminfo-project").value = project;
+    document.getElementById("modal-iteminfo-id").value = id;
+    document.getElementById("modal-iteminfo-title").innerHTML = "Iteminfo" + multiInputTitle(id);
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic " + token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-iteminfo-thummov').value = data.thummov;
+            document.getElementById('modal-iteminfo-beforemov').value = data.beforemov;
+            document.getElementById('modal-iteminfo-aftermov').value = data.aftermov;
+            document.getElementById('modal-iteminfo-retimeplate').value = data.retimeplate;
+            document.getElementById('modal-iteminfo-ociocc').value = data.ociocc;
+            document.getElementById('modal-iteminfo-rollmedia').value = data.rollmedia;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2166,15 +2197,16 @@ function addTag(project, id, tag, userid) {
     }
 }
 
-function rmTag(project, id, tag, userid) {
+function rmTag(project, id, tag) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
                 continue
             }
-            let name = cboxes[i].getAttribute("id");
+            let id = cboxes[i].getAttribute("id");
             $.ajax({
                 url: "/api/rmtag",
                 type: "post",
@@ -2761,7 +2793,10 @@ function autocomplete(inp) {
 
 autocomplete(document.getElementById("edittask-user"));
 
-function inputAddTasksetting(type) {
+function setAddTaskModal(project, id, type) {
+    document.getElementById("modal-addtask-project").value = project;
+    document.getElementById("modal-addtask-id").value = id;
+    document.getElementById("modal-addtask-title").innerHTML = "Add Task" + multiInputTitle(id);
     let token = document.getElementById("token").value;
     if (type === "org" || type === "left") {
         $.ajax({
@@ -2773,7 +2808,7 @@ function inputAddTasksetting(type) {
             dataType: "json",
             success: function(data) {
                 let tasks = data["Tasksettings"];
-                let addtasks = document.getElementById('addtask-taskname');
+                let addtasks = document.getElementById('modal-addtask-taskname');
                 addtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
                     let opt = document.createElement('option');
@@ -2797,7 +2832,7 @@ function inputAddTasksetting(type) {
             dataType: "json",
             success: function(data) {
                 let tasks = data["Tasksettings"]
-                let addtasks = document.getElementById('addtask-taskname');
+                let addtasks = document.getElementById('modal-addtask-taskname');
                 addtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
                     let opt = document.createElement('option');
