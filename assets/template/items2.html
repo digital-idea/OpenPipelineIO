@@ -651,21 +651,22 @@
 	</div>
 
 	<!-- Modal: Camera Option -->
-	<div class="modal fade" id="modal-cameraoption" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-cameraoption" tabindex="-1" role="dialog" aria-labelledby="modal-cameraoption" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Camera Option</h5>
+			<h5 class="modal-title" id="modal-cameraoption-title">Camera Option</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="cameraoption-id">
-				<input type="hidden" class="form-control" id="cameraoption-userid">
+				<input type="hidden" class="form-control" id="modal-cameraoption-project">
+				<input type="hidden" class="form-control" id="modal-cameraoption-id">
+				
 				<div class="form-group">
 					<label>Cam PubTask</label>
-					<select name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask('{{$.SearchOption.Project}}', document.getElementById('cameraoption-id').value, this.value, document.getElementById('cameraoption-userid').value)">
+					<select name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask(document.getElementById('modal-cameraoption-project').value, document.getElementById('modal-cameraoption-id').value, this.value)">
 						<option value="">none</option>
 						<option value="mm">mm</option>
 						<option value="layout">layout</option>
@@ -675,13 +676,13 @@
 				</div>
 				<div class="form-group">
 					<label>Camera Publish Path</label>
-					<input type="text" size="55" id="cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath('{{$.SearchOption.Project}}', document.getElementById('cameraoption-id').value, this.value, document.getElementById('cameraoption-userid').value)">
+					<input type="text" size="55" id="modal-cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath(document.getElementById('modal-cameraoption-project').value, document.getElementById('modal-cameraoption-id').value, this.value)">
 					<small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
 				</div>
 				<div class="form-group">
 					<div class="form-check">
-						<input type="checkbox" id="cameraoption-projection" class="form-check-input" onchange="setCameraProjection('{{$.SearchOption.Project}}', document.getElementById('cameraoption-id').value, document.getElementById('cameraoption-userid').value)">
-						<label class="form-check-label" for="cameraoption-projection">프로젝션 카메라를 이용하는 샷 입니까?</label>
+						<input type="checkbox" id="modal-cameraoption-projection" class="form-check-input" onchange="setCameraProjection(document.getElementById('modal-cameraoption-project').value, document.getElementById('modal-cameraoption-id').value)">
+						<label class="form-check-label" for="modal-cameraoption-projection">프로젝션 카메라를 이용하는 샷 입니까?</label>
 					</div>
 				</div>
 			</div>
@@ -693,30 +694,30 @@
 	</div>
 
 	<!-- Modal: ObjectID -->
-	<div class="modal fade" id="modal-objectid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-objectid" tabindex="-1" role="dialog" aria-labelledby="modal-objectid" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 		<div class="modal-content bg-darkmode">
 			<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Object ID</h5>
+			<h5 class="modal-title" id="modal-objectid-title">Object ID</h5>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true" class="text-darkmode">&times;</span>
 			</button>
 			</div>
 			<div class="modal-body">
-				<input type="hidden" class="form-control" id="objectid-id">
-				<input type="hidden" class="form-control" id="objectid-userid">
+				<input type="hidden" class="form-control" id="modal-objectid-project">
+				<input type="hidden" class="form-control" id="modal-objectid-id">
 				<div class="form-group">
-					<input type="text" maxlength="5" id="objectidin" value="" class="form-control">
+					<input type="text" maxlength="5" id="modal-objectid-in" value="" class="form-control">
 					<small class="form-text text-mute">ObjectID IN</small>
 				</div>
 				<div class="form-group">
-					<input type="text" maxlength="5" id="objectidout" value="" class="form-control">
+					<input type="text" maxlength="5" id="modal-objectid-out" value="" class="form-control">
 					<small class="form-text text-mute">ObjectID OUT</small>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-outline-warning" onclick="setObjectID('{{$.SearchOption.Project}}', document.getElementById('objectid-id').value, document.getElementById('objectidin').value, document.getElementById('objectidout').value, document.getElementById('objectid-userid').value)" data-dismiss="modal">EDIT</button>
+				<button type="button" class="btn btn-outline-warning" onclick="setObjectID(document.getElementById('modal-objectid-project').value, document.getElementById('modal-objectid-id').value, document.getElementById('modal-objectid-in').value, document.getElementById('modal-objectid-out').value)" data-dismiss="modal">EDIT</button>
 			</div>
 		</div>
 		</div>
@@ -1230,7 +1231,7 @@
 			{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 				<div class="row">
 					<div id="objectid-{{.Name}}">
-						<span class="finger no-decoration-text-button" data-toggle="modal" data-target="#modal-objectid" onclick="setModal('objectid-id', '{{.ID}}');setModal('objectidin', '{{.ObjectidIn}}');setModal('objectidout', '{{.ObjectidOut}}' );setModal('objectid-userid', '{{$.User.ID}}')">ObjectID:</span>
+						<span class="finger no-decoration-text-button" data-toggle="modal" data-target="#modal-objectid" onclick="setObjectIDModal('{{.Project}}', '{{.ID}}')">ObjectID:</span>
 					</div>
 					<div id="objectidnum-{{.Name}}">
 						<span class="text-badge ml-1">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
@@ -1243,7 +1244,7 @@
 		{{if eq .Type "org" "left"}}
 		<div class="row">
 			<div id="caminfo-{{.Name}}">
-				<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setModal('cameraoption-pubpath', '{{.ProductionCam.PubPath}}' );setModal('cameraoption-id', '{{.ID}}' );setModalCheckbox('cameraoption-projection','{{.ProductionCam.Projection}}');setModal('cameraoption-userid', '{{$.User.ID}}')"{{end}}>
+				<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setCameraOptionModal('{{$project}}', '{{$id}}')"{{end}}>
 					CamInfo:
 				</span>
 			</div>

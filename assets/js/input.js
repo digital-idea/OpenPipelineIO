@@ -432,8 +432,9 @@ function setScanTimecodeIn(project, id, timecode, userid) {
     });
 }
 
-function setCameraPubTask(project, id, task, userid) {
+function setCameraPubTask(project, id, task) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setcamerapubtask",
         type: "post",
@@ -456,8 +457,9 @@ function setCameraPubTask(project, id, task, userid) {
     });
 }
 
-function setCameraPubPath(project, id, path, userid) {
+function setCameraPubPath(project, id, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setcamerapubpath",
         type: "post",
@@ -480,9 +482,35 @@ function setCameraPubPath(project, id, path, userid) {
     });
 }
 
-function setCameraProjection(project, id, userid) {
+function setCameraOptionModal(project, id) {
+    document.getElementById("modal-cameraoption-project").value = project;
+    document.getElementById("modal-cameraoption-id").value = id;
+    document.getElementById("modal-cameraoption-title").innerHTML = "Camera Option" + multiInputTitle(id);
     let token = document.getElementById("token").value;
-    let projection = document.getElementById("cameraoption-projection").checked;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-cameraoption-pubpath').value = data.productioncam.pubpath;
+            if (data.productioncam.projection) {
+                document.getElementById("modal-cameraoption-projection").checked = true;
+            } else {
+                document.getElementById("modal-cameraoption-projection").checked = false;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setCameraProjection(project, id) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    let projection = document.getElementById("modal-cameraoption-projection").checked;
     $.ajax({
         url: "/api/setcameraprojection",
         type: "post",
@@ -2452,8 +2480,30 @@ function setTaskLevel(project, id, task, level) {
     }
 }
 
-function setObjectID(project, id, innum, outnum, userid) {
+function setObjectIDModal(project, id) {
+    document.getElementById("modal-objectid-project").value = project;
+    document.getElementById("modal-objectid-id").value = id;
+    document.getElementById("modal-objectid-title").innerHTML = "Object ID" + multiInputTitle(id);
     let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-objectid-in').value = data.objectidin;
+            document.getElementById('modal-objectid-out').value = data.objectidout;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setObjectID(project, id, innum, outnum) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/setobjectid",
         type: "post",
