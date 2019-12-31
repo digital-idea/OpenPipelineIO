@@ -241,55 +241,55 @@
 	</div>
 
 	<!-- Modal: Add Source-->
-	<div class="modal fade" id="addsource" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-addsource" tabindex="-1" role="dialog" aria-labelledby="modal-addsource" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Add Source</h5>
+				<h5 class="modal-title" id="modal-addsource-title">Add Source</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 				</div>
-				<div class="modal-body">				
-					<input type="hidden" class="form-control" id="add-source-id">
-					<input type="hidden" class="form-control" id="add-source-userid">
+				<div class="modal-body">
+					<input type="hidden" class="form-control" id="modal-addsource-project">
+					<input type="hidden" class="form-control" id="modal-addsource-id">
 					<div class="form-group">
 						<div class="form-group">
-							<label for="multi-input-title" class="col-form-label">Title:</label>
-							<input type="text" class="form-control" id="add-source-title">
+							<label for="modal-addsource-subject" class="col-form-label">Title:</label>
+							<input type="text" class="form-control" id="modal-addsource-subject">
 						</div>
 						<div class="form-group">
-							<label for="multi-input-link" class="col-form-label">Path or URL:</label>
-							<input type="text" class="form-control" id="add-source-path">
+							<label for="modal-addsource-path" class="col-form-label">Path or URL:</label>
+							<input type="text" class="form-control" id="modal-addsource-path">
 						</div>
 					</div>
 				</div>
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-warning" onclick="addSource('{{$.SearchOption.Project}}', document.getElementById('add-source-id').value, document.getElementById('add-source-title').value, document.getElementById('add-source-path').value, document.getElementById('add-source-userid').value)" data-dismiss="modal">ADD</button>
+					<button type="button" class="btn btn-outline-warning" onclick="addSource(document.getElementById('modal-addsource-project').value, document.getElementById('modal-addsource-id').value, document.getElementById('modal-addsource-subject').value, document.getElementById('modal-addsource-path').value)" data-dismiss="modal">ADD</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Modal: Rm Source-->
-	<div class="modal fade" id="rmsource" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-rmsource" tabindex="-1" role="dialog" aria-labelledby="modal-rmsource" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Rm Source</h5>
+				<h5 class="modal-title" id="modal-rmsource-title">Rm Source</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 				</div>
-				<div class="modal-body">				
-					<input type="hidden" class="form-control" id="rm-source-id">
-					<input type="hidden" class="form-control" id="rm-source-userid">
+				<div class="modal-body">
+					<input type="hidden" class="form-control" id="modal-rmsource-project">
+					<input type="hidden" class="form-control" id="modal-rmsource-id">
 					<div class="form-group">
 						<div class="form-group">
-							<label for="multi-input-title" class="col-form-label">Title:</label>
-							<input type="text" class="form-control" id="rm-source-title">
+							<label for="modal-rmsource-subject" class="col-form-label">Title:</label>
+							<input type="text" class="form-control" id="modal-rmsource-subject">
 							<small class="text-danger">삭제할 소스의 이름을 입력해주세요.</small>
 						</div>
 					</div>
@@ -297,7 +297,7 @@
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-danger" onclick="rmSource('{{$.SearchOption.Project}}', document.getElementById('rm-source-id').value, document.getElementById('rm-source-title').value, document.getElementById('rm-source-userid').value)" data-dismiss="modal">REMOVE</button>
+					<button type="button" class="btn btn-outline-danger" onclick="rmSource(document.getElementById('modal-rmsource-project').value, document.getElementById('modal-rmsource-id').value, document.getElementById('modal-rmsource-subject').value)" data-dismiss="modal">REMOVE</button>
 				</div>
 			</div>
 		</div>
@@ -1281,9 +1281,9 @@
 			<div class="ml-3" id="source-button-{{.Name}}">
 				{{if eq .Type "org" "left" "asset"}}
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
-						<span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-id', '{{.ID}}');setModal('add-source-userid', '{{$.User.ID}}')">＋</span>
+						<span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('{{.Project}}', '{{.ID}}')">＋</span>
 						{{if .Sources}}	
-							<span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-id', '{{.ID}}');setModal('rm-source-userid', '{{$.User.ID}}')">－</span>
+							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('{{.Project}}', '{{.ID}}')">－</span>
 						{{end}}
 					{{end}}
 				{{end}}

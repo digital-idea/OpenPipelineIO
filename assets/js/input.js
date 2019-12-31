@@ -6,7 +6,10 @@ $('#modal-setnote').on('shown.bs.modal', function () {
     $('#modal-setnote-text').trigger('focus')
 })
 $('#modal-addsource').on('shown.bs.modal', function () {
-    $('#modal-addsource-title').trigger('focus')
+    $('#modal-addsource-subject').trigger('focus')
+})
+$('#modal-rmsource').on('shown.bs.modal', function () {
+    $('#modal-rmsource-subject').trigger('focus')
 })
 $('#modal-setrnum').on('shown.bs.modal', function () {
     $('#modal-setrnum-text').trigger('focus')
@@ -767,9 +770,17 @@ function rmComment(project, id, date, userid) {
     });
 }
 
+function setAddSourceModal(project, id) {
+    document.getElementById("modal-addsource-project").value = project;
+    document.getElementById("modal-addsource-id").value = id;
+    document.getElementById("modal-addsource-subject").value = "";
+    document.getElementById("modal-addsource-path").value = "";
+    document.getElementById("modal-addsource-title").innerHTML = "Add Source" + multiInputTitle(id);
+}
 
-function addSource(project, id, title, path, userid) {
+function addSource(project, id, title, path) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -804,12 +815,12 @@ function addSource(project, id, title, path, userid) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`sources-${data.name}`).childElementCount > 0) {
                         document.getElementById("source-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '${data.name}');setModal('rm-source-userid', '${data.userid}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('${data.project}','${data.id}')">－</span>
                         `
                     } else {
                         document.getElementById("source-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
                 },
@@ -846,12 +857,12 @@ function addSource(project, id, title, path, userid) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`sources-${data.name}`).childElementCount > 0) {
                     document.getElementById("source-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '${data.name}');setModal('rm-source-userid', '${data.userid}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
                     document.getElementById("source-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
             },
@@ -862,9 +873,16 @@ function addSource(project, id, title, path, userid) {
     }
 }
 
+function setRmSourceModal(project, id) {
+    document.getElementById("modal-rmsource-project").value = project;
+    document.getElementById("modal-rmsource-id").value = id;
+    document.getElementById("modal-rmsource-subject").value = "";
+    document.getElementById("modal-rmsource-title").innerHTML = "Rm Source" + multiInputTitle(id);
+}
 
-function rmSource(project, id, title, userid) {
+function rmSource(project, id, title) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         var cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -888,14 +906,14 @@ function rmSource(project, id, title, userid) {
                 dataType: "json",
                 success: function(data) {
                     document.getElementById(`source-${data.name}-${data.title}`).remove();
-                    if (document.getElementById(`sources-${data.ame}`).childElementCount > 0) {
+                    if (document.getElementById(`sources-${data.name}`).childElementCount > 0) {
                         document.getElementById("source-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '${data.name}');setModal('rm-source-userid', '${data.userid}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('${data.project}','${data.id}')>－</span>
                         `
                     } else {
                         document.getElementById("source-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
                 },
@@ -923,12 +941,12 @@ function rmSource(project, id, title, userid) {
                 document.getElementById(`source-${data.name}-${data.title}`).remove();
                 if (document.getElementById(`sources-${data.name}`).childElementCount > 0) {
                     document.getElementById("source-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmsource" onclick="setModal('rm-source-title', '' );setModal('rm-source-name', '${data.name}');setModal('rm-source-userid', '${data.userid}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
                     document.getElementById("source-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addsource" onclick="setModal('add-source-title', '' );setModal('add-source-path', '' );setModal('add-source-name', '${data.name}');setModal('add-source-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
             },

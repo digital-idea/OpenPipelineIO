@@ -274,7 +274,7 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		log.Fatal(err)
 	}
 	// src 라면 기존 plate에 소스 등록을 진행한다.
-	err = AddSource(session, project, name, "scantool", name+"_"+typ, platePath)
+	_, err = AddSource(session, project, name, "scantool", name+"_"+typ, platePath)
 	if err != nil {
 		log.Println(err)
 	}

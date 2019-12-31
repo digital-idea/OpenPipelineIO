@@ -2097,24 +2097,24 @@ func RmComment(session *mgo.Session, project, name, userID, date string) (string
 }
 
 // AddSource 함수는 item에 소스링크를 추가한다.
-func AddSource(session *mgo.Session, project, name, userID, title, path string) error {
+func AddSource(session *mgo.Session, project, name, userID, title, path string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	for _, i := range i.Sources {
 		if i.Title == title {
-			return errors.New(title + "이 이미 존재합니다.")
+			return id, errors.New(title + "이 이미 존재합니다.")
 		}
 	}
 	s := Source{}
@@ -2125,9 +2125,9 @@ func AddSource(session *mgo.Session, project, name, userID, title, path string) 
 	i.Sources = append(i.Sources, s)
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // AddReference 함수는 item에 소스링크를 추가한다.
@@ -2160,20 +2160,20 @@ func AddReference(session *mgo.Session, project, name, userID, title, path strin
 }
 
 // RmSource 함수는 item에서 소스를 삭제합니다.
-func RmSource(session *mgo.Session, project, name, title string) error {
+func RmSource(session *mgo.Session, project, name, title string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	var newSources []Source
 	for _, source := range i.Sources {
@@ -2185,9 +2185,9 @@ func RmSource(session *mgo.Session, project, name, title string) error {
 	i.Sources = newSources
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // RmReference 함수는 item에서 레퍼런스를 삭제합니다.

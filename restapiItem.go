@@ -4903,6 +4903,7 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Title   string `json:"title"`
 		Path    string `json:"path"`
 		UserID  string `json:"userid"`
@@ -4967,11 +4968,12 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 			rcp.Path = v
 		}
 	}
-	err = AddSource(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Title, rcp.Path)
+	id, err := AddSource(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Title, rcp.Path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", rcp.Title, rcp.Path), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -5000,6 +5002,7 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Title   string `json:"title"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -5056,11 +5059,12 @@ func handleAPIRmSource(w http.ResponseWriter, r *http.Request) {
 			rcp.Title = v
 		}
 	}
-	err = RmSource(session, rcp.Project, rcp.Name, rcp.Title)
+	id, err := RmSource(session, rcp.Project, rcp.Name, rcp.Title)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Source: %s", rcp.Title), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
