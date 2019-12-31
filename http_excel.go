@@ -405,7 +405,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if rnum != "" {
-			err = SetRnum(session, project, name, rnum)
+			_, err := SetRnum(session, project, name, rnum)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -458,7 +458,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if tags != "" {
 			for _, tag := range strings.Split(tags, ",") {
-				err = AddTag(session, project, name, tag)
+				_, err = AddTag(session, project, name, tag)
 				if err != nil {
 					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 					continue

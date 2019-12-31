@@ -3883,6 +3883,7 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Rnum    string `json:"rnum"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -3942,11 +3943,12 @@ func handleAPISetRnum(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, rcp.Rnum+"값은 A0001 형식이 아닙니다.", http.StatusBadRequest)
 		return
 	}
-	err = SetRnum(session, rcp.Project, rcp.Name, rcp.Rnum)
+	id, err := SetRnum(session, rcp.Project, rcp.Name, rcp.Rnum)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rcp.Rnum, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -4438,6 +4440,7 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Tag     string `json:"tag"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -4494,11 +4497,12 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 			rcp.Tag = strings.Replace(v, " ", "", -1)
 		}
 	}
-	err = AddTag(session, rcp.Project, rcp.Name, rcp.Tag)
+	id, err := AddTag(session, rcp.Project, rcp.Name, rcp.Tag)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Tag: %s", rcp.Tag), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

@@ -1,27 +1,27 @@
 // modal이 뜨면 오토포커스가 되어야 한다.
-$('#addcomment').on('shown.bs.modal', function () {
-    $('#add-comment-text').trigger('focus')
+$('#modal-addcomment').on('shown.bs.modal', function () {
+    $('#modal-addcomment-text').trigger('focus')
 })
-$('#setnote').on('shown.bs.modal', function () {
-    $('#set-note-text').trigger('focus')
+$('#modal-setnote').on('shown.bs.modal', function () {
+    $('#modal-setnote-text').trigger('focus')
 })
-$('#addsource').on('shown.bs.modal', function () {
-    $('#add-source-title').trigger('focus')
+$('#modal-addsource').on('shown.bs.modal', function () {
+    $('#modal-addsource-title').trigger('focus')
 })
-$('#setrnum').on('shown.bs.modal', function () {
-    $('#set-rnum-text').trigger('focus')
+$('#modal-setrnum').on('shown.bs.modal', function () {
+    $('#modal-setrnum-text').trigger('focus')
 })
-$('#addtag').on('shown.bs.modal', function () {
-    $('#add-tag-text').trigger('focus')
+$('#modal-addtag').on('shown.bs.modal', function () {
+    $('#modal-addtag-text').trigger('focus')
 })
-$('#rmtag').on('shown.bs.modal', function () {
-    $('#rm-tag-text').trigger('focus')
+$('#modal-rmtag').on('shown.bs.modal', function () {
+    $('#modal-rmtag-text').trigger('focus')
 })
-$('#deadline2d').on('shown.bs.modal', function () {
-    $('#deadline2d-date').trigger('focus')
+$('#modal-deadline2d').on('shown.bs.modal', function () {
+    $('#modal-deadline2d-date').trigger('focus')
 })
-$('#deadline3d').on('shown.bs.modal', function () {
-    $('#deadline3d-date').trigger('focus')
+$('#modal-deadline3d').on('shown.bs.modal', function () {
+    $('#modal-deadline3d-date').trigger('focus')
 })
 
 // Hotkey: http://gcctech.org/csc/javascript/javascript_keycodes.htm
@@ -60,6 +60,9 @@ function setModal(modalID, value) {
 
 // setEditTaskModal 함수는 project, name, task 정보를 가지고 와서 Edit Task Modal에 값을 채운다.
 function setEditTaskModal(project, id, task) {
+    document.getElementById("modal-edittask-project").value = project;
+    document.getElementById("modal-edittask-id").value = id;
+    document.getElementById("modal-edittask-title").innerHTML = "Edit Task" + multiInputTitle(id);
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/task",
@@ -74,17 +77,17 @@ function setEditTaskModal(project, id, task) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById('edittask-startdate').value=data.task.startdate;
-            document.getElementById('edittask-predate').value=data.task.predate;
-            document.getElementById('edittask-date').value=data.task.date;
-            document.getElementById('edittask-due').value=data.task.due;
-            document.getElementById('edittask-level').value=data.task.tasklevel;
-            document.getElementById('edittask-task').value=data.task.title;
-            document.getElementById('edittask-path').value=data.task.mov;
-            document.getElementById('edittask-usernote').value=data.task.usernote;
-            document.getElementById('edittask-user').value=data.task.user;
-            document.getElementById('edittask-id').value=id;
-            document.getElementById("edittask-status").value=data.task.status;
+            document.getElementById('modal-edittask-startdate').value=data.task.startdate;
+            document.getElementById('modal-edittask-predate').value=data.task.predate;
+            document.getElementById('modal-edittask-date').value=data.task.date;
+            document.getElementById('modal-edittask-due').value=data.task.due;
+            document.getElementById('modal-edittask-level').value=data.task.tasklevel;
+            document.getElementById('modal-edittask-task').value=data.task.title;
+            document.getElementById('modal-edittask-path').value=data.task.mov;
+            document.getElementById('modal-edittask-usernote').value=data.task.usernote;
+            document.getElementById('modal-edittask-user').value=data.task.user;
+            document.getElementById('modal-edittask-id').value=id;
+            document.getElementById("modal-edittask-status").value=data.task.status;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -241,7 +244,7 @@ function addTask(project, id, task) {
 					<div id="${data.name}-task-${data.task}-user"></div>
 					<div id="${data.name}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+						<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
                         setEditTaskModal('${project}', '${data.id}', '${data.task}');
                         ">≡</span>
 					</div>
@@ -279,7 +282,7 @@ function addTask(project, id, task) {
 					<div id="${data.name}-task-${data.task}-user"></div>
 					<div id="${data.name}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
-						<span class="add" data-toggle="modal" data-target="#edittask" onclick="
+						<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
                         setEditTaskModal('${project}', '${data.id}', '${data.task}');
                         ">≡</span>
 					</div>
@@ -2063,10 +2066,9 @@ function setAssettype(project, id) {
 
 // setRnumModal 함수는 project, id 정보를 이용해서 Edit Rnum Modal 값을 채운다.
 function setRnumModal(project, id) {
-    document.getElementById("set-rnum-project").value = project;
-    document.getElementById("set-rnum-id").value = id;
+    document.getElementById("modal-setrnum-project").value = project;
+    document.getElementById("modal-setrnum-id").value = id;
     document.getElementById("modal-setrnum-title").innerHTML = "Set Rnum number" + multiInputTitle(id);
-    console.log("Set Rnum number" + multiInputTitle(id));
     let token = document.getElementById("token").value;
     $.ajax({
         url: `/api/item?project=${project}&id=${id}`,
@@ -2075,7 +2077,7 @@ function setRnumModal(project, id) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById('set-rnum-text').value = data.rnum;
+            document.getElementById('modal-setrnum-text').value = data.rnum;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
@@ -2102,9 +2104,9 @@ function setRnum(project, id, rnum) {
         dataType: "json",
         success: function(data) {
             if (data.rnum !== "") {
-                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '${data.rnum}' );setModal('set-rnum-name', '${data.name}');setModal('set-rnum-userid', '${data.userid}')"{{end}}>${data.rnum}</span>`;
+                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>${data.rnum}</span>`;
             } else {
-                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#setrnum" onclick="setModal('set-rnum-text', '${data.rnum}' );setModal('set-rnum-name', '${data.name}');setModal('set-rnum-userid', '${data.userid}')"{{end}}>no rnum</span>`;
+                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>no rnum</span>`;
             }
         },
         error: function(request,status,error){
@@ -2113,8 +2115,16 @@ function setRnum(project, id, rnum) {
     });
 }
 
-function addTag(project, id, tag, userid) {
+function setAddTagModal(project, id) {
+    document.getElementById("modal-addtag-project").value = project;
+    document.getElementById("modal-addtag-id").value = id;
+    document.getElementById("modal-addtag-text").value = "";
+    document.getElementById("modal-addtag-title").innerHTML = "Add Tag" + multiInputTitle(id);
+}
+
+function addTag(project, id, tag) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2144,12 +2154,12 @@ function addTag(project, id, tag, userid) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                         <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
                         `
                     } else {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                         `
                     }
                 },
@@ -2181,12 +2191,12 @@ function addTag(project, id, tag, userid) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                     <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
                     `
                 } else {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                     `
                 }
             },
@@ -2226,12 +2236,12 @@ function rmTag(project, id, tag) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                         <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
                         `;
                     } else {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                         `;
                     }
                 },
@@ -2260,12 +2270,12 @@ function rmTag(project, id, tag) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                     <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
                     `;
                 } else {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('add-tag-text', '' );setModal('add-tag-name', '${data.name}');setModal('add-tag-userid', '${data.userid}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
                     `;
                 }
             },
@@ -2791,7 +2801,7 @@ function autocomplete(inp) {
   });
 }
 
-autocomplete(document.getElementById("edittask-user"));
+autocomplete(document.getElementById("modal-edittask-user"));
 
 function setAddTaskModal(project, id, type) {
     document.getElementById("modal-addtask-project").value = project;
@@ -2848,7 +2858,10 @@ function setAddTaskModal(project, id, type) {
     }
 }
 
-function inputRmTasksetting(type) {
+function setRmTaskModal(project, id, type) {
+    document.getElementById("modal-rmtask-project").value = project;
+    document.getElementById("modal-rmtask-id").value = id;
+    document.getElementById("modal-rmtask-title").innerHTML = "Rm Task" + multiInputTitle(id);
     let token = document.getElementById("token").value;
     if (type === "org" || type === "left") {
         $.ajax({
@@ -2860,7 +2873,7 @@ function inputRmTasksetting(type) {
             dataType: "json",
             success: function(data) {
                 let tasks = data["Tasksettings"];
-                let rmtasks = document.getElementById('rmtask-taskname');
+                let rmtasks = document.getElementById('modal-rmtask-taskname');
                 rmtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
                     let opt = document.createElement('option');
@@ -2884,7 +2897,7 @@ function inputRmTasksetting(type) {
             dataType: "json",
             success: function(data) {
                 let tasks = data["Tasksettings"]
-                let rmtasks = document.getElementById('rmtask-taskname');
+                let rmtasks = document.getElementById('modal-rmtask-taskname');
                 rmtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
                     let opt = document.createElement('option');

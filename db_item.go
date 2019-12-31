@@ -1704,30 +1704,30 @@ func SetRollmedia(session *mgo.Session, project, name, rollmedia string) error {
 }
 
 // SetRnum 함수는 샷에 롤넘버를 설정한다.
-func SetRnum(session *mgo.Session, project, name, rnum string) error {
+func SetRnum(session *mgo.Session, project, name, rnum string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if typ == "asset" {
-		return fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
+		return "", fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
 	}
 	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	item.Rnum = rnum
 	err = setItem(session, project, item)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetAssetType 함수는 item에 assettype을 셋팅한다.
@@ -1913,34 +1913,34 @@ func SetFindate(session *mgo.Session, project, name, date string) error {
 }
 
 // AddTag 함수는 item에 tag를 셋팅한다.
-func AddTag(session *mgo.Session, project, name, inputTag string) error {
+func AddTag(session *mgo.Session, project, name, inputTag string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	rmspaceTag := strings.Replace(inputTag, " ", "", -1) // 태그는 공백을 제거한다.
 	for _, tag := range i.Tag {
 		if rmspaceTag == tag {
-			return errors.New(inputTag + "태그는 이미 존재하고 있습니다 추가할 수 없습니다")
+			return id, errors.New(inputTag + "태그는 이미 존재하고 있습니다 추가할 수 없습니다")
 		}
 	}
 	newTags := append(i.Tag, rmspaceTag)
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetTags 함수는 item에 tag를 교체한다.
