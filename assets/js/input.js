@@ -2154,12 +2154,12 @@ function addTag(project, id, tag) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                         `
                     } else {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
                 },
@@ -2191,12 +2191,12 @@ function addTag(project, id, tag) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
             },
@@ -2205,6 +2205,13 @@ function addTag(project, id, tag) {
             }
         });
     }
+}
+
+function setRmTagModal(project, id) {
+    document.getElementById("modal-rmtag-project").value = project;
+    document.getElementById("modal-rmtag-id").value = id;
+    document.getElementById("modal-rmtag-text").value = "";
+    document.getElementById("modal-rmtag-title").innerHTML = "Rm Tag" + multiInputTitle(id);
 }
 
 function rmTag(project, id, tag) {
@@ -2236,12 +2243,12 @@ function rmTag(project, id, tag) {
                     // 요소갯수에 따라 버튼을 설정한다.
                     if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                         `;
                     } else {
                         document.getElementById("tag-button-"+data.name).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         `;
                     }
                 },
@@ -2270,12 +2277,12 @@ function rmTag(project, id, tag) {
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#rmtag" onclick="setModal('rm-tag-text', '' );setModal('rm-tag-name', '${data.name}');setModal('rm-tag-userid', '${data.userid}')">－</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                     `;
                 } else {
                     document.getElementById("tag-button-"+data.name).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#addtag" onclick="setModal('modal-addtag-text', '' );setModal('modal-addtag-id', '${data.id}')">＋</span>
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `;
                 }
             },
