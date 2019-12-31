@@ -578,8 +578,16 @@ function setJustTimecodeOut(project, id, timecode, userid) {
     });
 }
 
-function setNote(project, id, text, userid) {
+function setNoteModal(project, id) {
+    document.getElementById("modal-setnote-project").value = project;
+    document.getElementById("modal-setnote-id").value = id;
+    document.getElementById("modal-setnote-text").value = "";
+    document.getElementById("modal-setnote-title").innerHTML = "Rm Tag" + multiInputTitle(id);
+}
+
+function setNote(project, id, text) {
     let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
     if (multiInput) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -587,7 +595,7 @@ function setNote(project, id, text, userid) {
                 continue
             }
             let currentID = cboxes[i].getAttribute("id");
-            let overwrite = document.getElementById("set-note-overwrite").checked;
+            let overwrite = document.getElementById("modal-setnote-overwrite").checked;
             sleep(200);
             $.ajax({
                 url: "/api/setnote",
@@ -618,7 +626,7 @@ function setNote(project, id, text, userid) {
             });
         }
     } else {
-        let overwrite = document.getElementById("set-note-overwrite").checked;
+        let overwrite = document.getElementById("modal-setnote-overwrite").checked;
         $.ajax({
             url: "/api/setnote",
             type: "post",

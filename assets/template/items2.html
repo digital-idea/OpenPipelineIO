@@ -39,31 +39,31 @@
 	</div>
 
 	<!-- Modal: Set Note-->
-	<div class="modal fade" id="setnote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="modal-setnote" tabindex="-1" role="dialog" aria-labelledby="modal-setnote" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content bg-darkmode">
 				<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Set Note</h5>
+				<h5 class="modal-title" id="modal-setnote-title">Set Note</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true" class="text-darkmode">&times;</span>
 				</button>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" class="form-control" id="set-note-id">
-					<input type="hidden" class="form-control" id="set-note-userid">
+					<input type="hidden" class="form-control" id="modal-setnote-project">
+					<input type="hidden" class="form-control" id="modal-setnote-id">
 					<div class="form-group">
 						<label for="comment-text" class="col-form-label">Note:</label>
-						<textarea class="form-control" id="set-note-text" rows="3"></textarea>
+						<textarea class="form-control" id="modal-setnote-text" rows="3"></textarea>
 					</div>
 					<div class="form-check">
-						<input type="checkbox" id="set-note-overwrite" name="overwrite-note" class="form-check-input">
-						<label class="form-check-label" for="set-note-overwrite">Overwrite</label>
+						<input type="checkbox" id="modal-setnote-overwrite" name="overwrite-note" class="form-check-input">
+						<label class="form-check-label" for="modal-setnote-overwrite">Overwrite</label>
 					</div>
 				</div>
 				
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-outline-warning" onclick="setNote('{{$.SearchOption.Project}}', document.getElementById('set-note-id').value, document.getElementById('set-note-text').value, document.getElementById('set-note-userid').value)" data-dismiss="modal">Edit</button>
+					<button type="button" class="btn btn-outline-warning" onclick="setNote(document.getElementById('modal-setnote-project').value, document.getElementById('modal-setnote-id').value, document.getElementById('modal-setnote-text').value)" data-dismiss="modal">Edit</button>
 				</div>
 			</div>
 		</div>
@@ -1214,7 +1214,7 @@
 			{{if eq .Type "org" "left" "asset"}}
 				{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 					<div class="float-right" id="note-{{.Name}}-addbutton">
-						<span class="add" data-toggle="modal" data-target="#setnote" onclick="setModal('set-note-text', '' );setModal('set-note-id', '{{.ID}}');setModal('set-note-userid', '{{$.User.ID}}')">＋</span>
+						<span class="add" data-toggle="modal" data-target="#modal-setnote" onclick="setNoteModal('{{.Project}}','{{.ID}}')">＋</span>
 					</div>
 				{{end}}
 			{{end}}
