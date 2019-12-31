@@ -4813,6 +4813,7 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Date    string `json:"date"`
 		Text    string `json:"text"`
 		UserID  string `json:"userid"`
@@ -4870,7 +4871,7 @@ func handleAPIRmComment(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	rcp.Text, err = RmComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date)
+	rcp.ID, rcp.Text, err = RmComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

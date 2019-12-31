@@ -698,7 +698,7 @@ function addComment(project, id, text, media) {
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                    <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}')">×</span>
+                    <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                     <br><small class="text-white">${body}</small>`
                     if (data.media != "") {
                         if (data.media.includes("http")) {
@@ -735,7 +735,7 @@ function addComment(project, id, text, media) {
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comment-${data.name}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                <span class="remove" data-toggle="modal" data-target="#rmcomment" onclick="setModal('rm-comment-name', '${data.name}');setModal('rm-comment-time', '${data.date}');setModal('rm-comment-text', '${data.text}')">×</span>
+                <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                 <br><small class="text-white">${body}</small>`
                 if (data.media != "") {
                     if (data.media.includes("http")) {
@@ -752,6 +752,14 @@ function addComment(project, id, text, media) {
             }
         });
     }
+}
+
+function setRmCommentModal(project, id, time, text) {
+    document.getElementById("modal-rmcomment-project").value = project;
+    document.getElementById("modal-rmcomment-id").value = id;
+    document.getElementById("modal-rmcomment-time").value = time;
+    document.getElementById("modal-rmcomment-text").value = text;
+    document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
 function rmComment(project, id, date) {
