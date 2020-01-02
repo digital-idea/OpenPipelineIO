@@ -78,7 +78,6 @@ type Project struct {
 	NukeGizmo                string        `json:"nukegizmo"`                // 슬레이트기즈모 경로
 	CropAspectRatio          float64       `json:"cropaspectratio"`          // CropMask의 AspectRatio를 입력.
 	PostProductionProxyCodec string        `json:"postproductionproxycodec"` // 이미지의 퀄리티가 상관없는 테스크에서 사용할 가벼운 코덱
-	FxElement                string        `json:"fxelement"`                // 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다.
 	MayaCropMaskSize         string        `json:"mayacropmasksize"`         // Maya CropMask에 사용되는 size 정보이다.
 	HoudiniImportScale       float64       `json:"houdiniimportscale"`       // Houdini에서 사용하는 Import Scale 값입니다. 기본값은 0.1입니다.
 	ScreenxOverlay           float64       `json:"screenxoverlay"`           // ScreenX에 사용되는 카메라 Overlay 값입니다. 기본값은 1.0입니다.
@@ -89,6 +88,7 @@ type Project struct {
 	AWSProfile               string        `json:"awsprofile"`               // AWS Profile 이름
 	AWSLocalpath             string        `json:"awslocalpath"`             // AWS S3와 동기화할 로컬경로
 	SlackWebhookURL          string        `json:"slackwebhookurl"`          // Slack Webhook URL
+	FxElement                string        `json:"fxelement"`                // 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다. // legacy
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.

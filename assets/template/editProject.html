@@ -105,6 +105,15 @@
 						<label>카메라정보</label>
 						<input type="text" name="Camera" class="form-control" placeholder="Camera" value={{.Project.Camera}}>
 					</div>
+					<div class="form-group pt-3">
+						<label>ScreenX 셋팅</label>
+						<div class="form-check">
+							<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
+							<label class="form-check-label" for="Screenx">ScreenX 여부</label>
+						</div>
+						<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
+						<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
+					</div>
 				</div>
 			</div>
 			<!--2번째열-->
@@ -207,49 +216,38 @@
 						<div class="col">
 							<small class="form-text text-muted">Plate IN Colorspace</small>
 							<select name="PlateInColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.PlateInColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.PlateInColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.PlateInColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.PlateInColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.PlateInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.PlateInColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.PlateInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.PlateInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.PlateInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="Output-Rec.709" {{if eq .Project.PlateInColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-								<option value="default" {{if eq .Project.PlateInColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Plate OUT Colorspace</small>
 							<select name="PlateOutColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.PlateOutColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.PlateOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.PlateOutColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.PlateOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.PlateOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.PlateOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.PlateOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.PlateOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.PlateOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="Output-Rec.709" {{if eq .Project.PlateOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-								<option value="default" {{if eq .Project.PlateOutColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>	
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Proxy OUT Colorspace</small>
 							<select name="ProxyOutColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.ProxyOutColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.ProxyOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.ProxyOutColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.ProxyOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.ProxyOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.ProxyOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.ProxyOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.ProxyOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.ProxyOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="Output-Rec.709" {{if eq .Project.ProxyOutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-								<option value="default" {{if eq .Project.ProxyOutColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.ProxyOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.ProxyOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
 					</div>
@@ -265,29 +263,25 @@
 						<div class="col">
 							<small class="form-text text-muted">LUT IN Colorspace</small>
 							<select name="LutInColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.LutInColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.LutInColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.LutInColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.LutInColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.LutInColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.LutInColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.LutInColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.LutInColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.LutInColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.LutInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">LUT OUT Colorspace</small>
 							<select name="LutOutColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.LutOutColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.LutOutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.LutOutColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.LutOutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.LutOutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.LutOutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.LutOutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.LutOutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.LutOutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
 					</div>
@@ -331,35 +325,30 @@
 								<option value="60" {{if eq .Project.OutputMov.Fps 60.0}}selected{{end}}>60</option>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">InColorspace</small>
 							<select name="OutputMov.InColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.OutputMov.InColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.OutputMov.InColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.OutputMov.InColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.OutputMov.InColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.OutputMov.InColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.OutputMov.InColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.OutputMov.InColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.OutputMov.InColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.OutputMov.InColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="default" {{if eq .Project.OutputMov.InColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">OutColorspace</small>
 							<select name="OutputMov.OutColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.OutputMov.OutColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.OutputMov.OutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.OutputMov.OutColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.OutputMov.OutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.OutputMov.OutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.OutputMov.OutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.OutputMov.OutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.OutputMov.OutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.OutputMov.OutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="Output-Rec.709" {{if eq .Project.OutputMov.OutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-								<option value="default" {{if eq .Project.OutputMov.OutColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
 					</div>
@@ -404,50 +393,34 @@
 								<option value="60" {{if eq .Project.EditMov.Fps 60.0}}selected{{end}}>60</option>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">InColorspace</small>
 							<select name="EditMov.InColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.EditMov.InColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.EditMov.InColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.EditMov.InColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.EditMov.InColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.EditMov.InColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.EditMov.InColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.EditMov.InColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.EditMov.InColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.EditMov.InColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="default" {{if eq .Project.EditMov.InColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
+					</div>
+					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">OutColorspace</small>
 							<select name="EditMov.OutColorspace" class="form-control">
-								<option value="linear" {{if eq .Project.EditMov.OutColorspace "linear"}}selected{{end}}>linear</option>
-								<option value="sRGB" {{if eq .Project.EditMov.OutColorspace "sRGB"}}selected{{end}}>sRGB</option>
-								<option value="rec709" {{if eq .Project.EditMov.OutColorspace "rec709"}}selected{{end}}>rec709</option>
-								<option value="Cineon" {{if eq .Project.EditMov.OutColorspace "Cineon"}}selected{{end}}>Cineon</option>
-								<option value="AlexaV3LogC" {{if eq .Project.EditMov.OutColorspace "AlexaV3LogC"}}selected{{end}}>AlexaV3LogC</option>
-								<option value="REDLog" {{if eq .Project.EditMov.OutColorspace "REDLog"}}selected{{end}}>REDLog</option>
-								<option value="Gamma2.2" {{if eq .Project.EditMov.OutColorspace "Gamma2.2"}}selected{{end}}>Gamma2.2</option>
-								<option value="ACEScg" {{if eq .Project.EditMov.OutColorspace "ACEScg"}}selected{{end}}>ACEScg</option>
-								<option value="ACES2065-1" {{if eq .Project.EditMov.OutColorspace "ACES2065-1"}}selected{{end}}>ACES2065-1</option>
-								<option value="Output-Rec.709" {{if eq .Project.EditMov.OutColorspace "Output-Rec.709"}}selected{{end}}>Output-Rec.709(ACES)</option>
-								<option value="default" {{if eq .Project.EditMov.OutColorspace "" "default"}}selected{{end}}>default</option>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="OCIO Colorspaces">
+									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
 							</select>
 						</div>
 					</div>
 				</div>
-				<div class="form-group pt-1">
-					<label>ScreenX 셋팅</label>
-					<div class="form-check">
-						<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
-						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
-					</div>
-					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
-					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
-				</div>
-				
-				
 				
 			</div>
 			<!--4번째열-->
@@ -465,6 +438,7 @@
 				<div class="form-group pt-1">
 					<label>FX 셋팅</label>
 					<small class="form-text text-muted">프로젝트에서 자주 사용하는 FX팀 후디니 테스크. ex) fire, water, splash ...</small>
+					<small class="form-text text-danger">이 옵션은 multitask가 추가되어 삭제될 예정입니다.</small>
 					<input type="text" name="FxElement" class="form-control" placeholder="maya cropmask size" value="{{.Project.FxElement}}">
 					<small class="form-text text-muted">Houdini Import Scale. 기본값 0.1</small>
 					<input type="text" name="HoudiniImportScale" class="form-control" placeholder="Houdini Import Scale" value="{{.Project.HoudiniImportScale}}">

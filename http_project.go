@@ -339,16 +339,17 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 	id := q.Get("id") // 프로젝트id에 사용할 것
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	type recipe struct {
-		Project Project
-		User    User
+		Project
+		User
 		Devmode bool
 		SearchOption
+		DefaultColorspaces []string
+		OCIOColorspaces    []string
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -369,9 +370,14 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	rcp.OCIOColorspaces, err = loadOCIOConfig(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.DefaultColorspaces = []string{"default", "linear", "sRGB", "rec709", "Cineon", "AlexaV3LogC", "REDLog", "Gamma2.2", "ACEScg", "ACES2065-1"}
 	err = TEMPLATES.ExecuteTemplate(w, "editProject", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
