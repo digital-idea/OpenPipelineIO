@@ -422,40 +422,45 @@ func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organiz
 	orgs := strings.Split(s, ":")
 	for _, org := range orgs {
 		parts := strings.Split(org, ",")
-		if len(parts) != 5 {
-			return results, errors.New("조직 정보가 5개가 아닙니다")
+		if len(parts) != 6 {
+			return results, errors.New("조직 정보가 충분하지 않습니다")
 		}
 		org := Organization{}
-		if parts[0] != "unknown" {
-			division, err := getDivision(session, parts[0])
+		if parts[0] == "true" {
+			org.Primary = true
+		} else {
+			org.Primary = false
+		}
+		if parts[1] != "unknown" {
+			division, err := getDivision(session, parts[1])
 			if err != nil {
 				return results, err
 			}
 			org.Division = division
 		}
-		if parts[1] != "unknown" {
-			department, err := getDepartment(session, parts[1])
+		if parts[2] != "unknown" {
+			department, err := getDepartment(session, parts[2])
 			if err != nil {
 				return results, err
 			}
 			org.Department = department
 		}
-		if parts[2] != "unknown" {
-			team, err := getTeam(session, parts[2])
+		if parts[3] != "unknown" {
+			team, err := getTeam(session, parts[3])
 			if err != nil {
 				return results, err
 			}
 			org.Team = team
 		}
-		if parts[3] != "unknown" {
-			role, err := getRole(session, parts[3])
+		if parts[4] != "unknown" {
+			role, err := getRole(session, parts[4])
 			if err != nil {
 				return results, err
 			}
 			org.Role = role
 		}
-		if parts[4] != "unknown" {
-			position, err := getPosition(session, parts[4])
+		if parts[5] != "unknown" {
+			position, err := getPosition(session, parts[5])
 			if err != nil {
 				return results, err
 			}

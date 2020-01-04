@@ -37,4 +37,5 @@ type Organization struct {
 	Team       `json:"team"`
 	Role       `json:"role"`
 	Position   `json:"position"`
+	Primary    bool `json:"primary"`
 }

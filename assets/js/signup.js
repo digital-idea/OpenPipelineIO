@@ -14,6 +14,7 @@ let organization = {
 	"RoleName":"",
 	"Position":"",
 	"PositionName":"",
+	"Primary":false,
 }
 
 // Restricts input for the given textbox to the given inputFilter.
@@ -48,6 +49,7 @@ function addOrganization() {
 	let currentDate = new Date();
 	orgnz = Object.create(organization)
 	orgnz.ID = currentDate.getTime();
+	orgnz.Primary = document.getElementById("Primary").checked;
 	orgnz.Division = document.getElementById("Division").value;
 	orgnz.Department = document.getElementById("Department").value;
 	orgnz.Team = document.getElementById("Team").value;
@@ -74,17 +76,22 @@ function renderOrganizations() {
 	for (let i = 0; i < userData.Organizations.length; i++) {
 		let div = document.createElement("div");
 		div.setAttribute("id", userData.Organizations[i].ID);
-		div.setAttribute("class", "alert alert-warning small");
+		if (userData.Organizations[i].Primary) {
+			div.setAttribute("class", "alert alert-success small");
+		} else {
+			div.setAttribute("class", "alert alert-warning small");
+		}
 		div.setAttribute("role", "alert");
 		div.innerHTML += `${userData.Organizations[i].DivisionName}, `;
 		div.innerHTML += `${userData.Organizations[i].DepartmentName}, `;
 		div.innerHTML += `${userData.Organizations[i].TeamName}, `;
 		div.innerHTML += `${userData.Organizations[i].RoleName}, `;
 		div.innerHTML += `${userData.Organizations[i].PositionName} `;
-		div.innerHTML += `<span class="alert-link">&bigotimes;</span>`;
+		div.innerHTML += `<span class="alert-link finger">&bigotimes;</span>`;
 		div.onclick = removeItem;
 		document.getElementById("Organizations").appendChild(div);
 		let orgtags = [];
+		orgtags.push(userData.Organizations[i].Primary);
 		orgtags.push(userData.Organizations[i].Division);
 		orgtags.push(userData.Organizations[i].Department);
 		orgtags.push(userData.Organizations[i].Team);
@@ -121,10 +128,6 @@ setInputFilter(document.getElementById("CaptchaID"), function(value) {
 	return /^\d*$/.test(value);
 });
 
-// SignUp 버튼을 누르면 가입이 된다.
-//document.getElementById("SignUp").onclick = function() {
-//	addUser()
-//};
 
 function addUser() {
 	// check Error

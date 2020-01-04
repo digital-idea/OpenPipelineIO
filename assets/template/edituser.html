@@ -107,7 +107,7 @@
             </div>
             
             <div class="row">
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <small class="form-text text-muted">Role / 직책</small>
                     <select class="form-control" name="Role" id="Role">
                         <option value="unknown">해당없음</option>
@@ -116,8 +116,7 @@
                         {{end}}
                     </select>
                 </div>
-    
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <small class="form-text text-muted">Position / 직급</small>
                     <select class="form-control" name="Position" id="Position">
                         <option value="unknown">해당없음</option>
@@ -125,6 +124,10 @@
                             <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
+                </div>
+                <div class="col-4 form-check mt-4">
+                    <input type="checkbox" id="Primary" name="Primary" class="form-check-input ml-0" value="true">
+                    <label class="form-check-label small ml-4" for="Primary">Primary<br>주 직책</label>
                 </div>
             </div>
 
@@ -138,9 +141,16 @@
                 <small id="Warning" class="form-text text-warning">기존에 등록된 조직정보가 아래 출력됩니다.</small>
                 <div id="Organizations">
                     {{range .Organizations}}
-                        <div class="alert alert-warning small" role="alert">
-                            {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
-                        </div>
+                        {{if .Primary}}
+                            <div class="alert alert-success small" role="alert">
+                                {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                            </div>
+                        {{else}}
+                            <div class="alert alert-warning small" role="alert">
+                                {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                            </div>
+                        {{end}}
+                        
                     {{end}}
                 </div>
             </div>

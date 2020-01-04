@@ -118,7 +118,7 @@
             </div>
             
             <div class="row">
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <small class="form-text text-muted">Role / 직책</small>
                     <select class="form-control" name="Role" id="Role">
                         <option value="unknown">해당없음</option>
@@ -128,7 +128,7 @@
                     </select>
                 </div>
     
-                <div class="col-6 form-group">
+                <div class="col-4 form-group">
                     <small class="form-text text-muted">Position / 직급</small>
                     <select class="form-control" name="Position" id="Position">
                         <option value="unknown">해당없음</option>
@@ -136,6 +136,10 @@
                             <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
                         {{end}}
                     </select>
+                </div>
+                <div class="col-4 form-check mt-4">
+                    <input type="checkbox" id="Primary" name="Primary" class="form-check-input ml-0" value="true">
+                    <label class="form-check-label small ml-4" for="Primary">Primary<br>주 직책</label>
                 </div>
             </div>
 
