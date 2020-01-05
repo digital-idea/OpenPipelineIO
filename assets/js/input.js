@@ -2767,8 +2767,14 @@ function CurrentProject() {
 function rmItem() {
     let project = CurrentProject()
     let token = document.getElementById("token").value;
-    if (multiInput) {
-        let cboxes = document.getElementsByName('selectID');
+    let cboxes = document.getElementsByName('selectID');
+    let selectNum = 0;
+    for (let i = 0; i < cboxes.length; ++i) {
+        if(cboxes[i].checked === true) {
+            selectNum += 1
+        }
+    }
+    if (selectNum > 0) {
         for (let i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
                 continue
