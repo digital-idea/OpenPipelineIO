@@ -597,3 +597,13 @@ func TaskPredate(i Item, task string) string {
 func GetTaskLevel(i Item, task string) TaskLevel {
 	return TaskLevel(reflect.ValueOf(i).FieldByName(strings.Title(task)).FieldByName("TaskLevel").Int())
 }
+
+// userInfo 템플릿 함수는 id(name,team) 문자열을 받아서 name,team만 반환한다.
+func userInfo(userInfo string) string {
+	if regexpUserInfo.MatchString(userInfo) {
+		re := regexp.MustCompile(`\(.+\)`)
+		f := re.FindString(userInfo)
+		return f[1 : len(f)-1]
+	}
+	return userInfo
+}

@@ -217,20 +217,35 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	type AutocompliteUser struct {
+		ID         string `json:"id"`
+		Name       string `json:"name"`
+		Team       string `json:"team"`
+		Searchword string `json:"searchword"`
+	}
 	type recipe struct {
-		Users []string `json:"users"`
+		Users []AutocompliteUser `json:"users"`
 	}
 	rcp := recipe{}
 	for _, user := range users {
-		displayName := user.LastNameKor + user.FirstNameKor
-		if displayName == "" { // 한글이름이 존재하지 않으면, 영문이름을 찾는다.
-			displayName = user.FirstNameEng
+		id := user.ID
+		name := user.LastNameKor + user.FirstNameKor
+		var team string
+		for _, o := range user.Organizations {
+			if o.Primary {
+				team = o.Team.Name
+				break
+			}
+			team = o.Team.Name
 		}
-		if displayName == "" { // 영문이름이 존재하지 않으면 ID만 넣는다.
-			rcp.Users = append(rcp.Users, user.ID)
-		} else {
-			rcp.Users = append(rcp.Users, fmt.Sprintf("%s(%s)", user.ID, displayName))
+		u := AutocompliteUser{
+			ID:         id,
+			Name:       name,
+			Team:       team,
+			Searchword: id + name + team,
 		}
+		rcp.Users = append(rcp.Users, u)
 	}
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)

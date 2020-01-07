@@ -2834,7 +2834,7 @@ function autocomplete(inp) {
         closeAllLists();
         if (!val) { return false;}
         currentFocus = -1;
-        /*DIV 하나를 생성한다.*/
+        // DIV 하나를 생성한다.
         a = document.createElement("DIV");
         a.setAttribute("id", this.id + "autocomplete-list");
         a.setAttribute("class", "autocomplete-items");
@@ -2843,16 +2843,17 @@ function autocomplete(inp) {
         /*각각의 아이템을 순환한다.*/
         for (i = 0; i < arr.length; i++) {
           /*검색어가 아이템에 포함되어 있다면, div를 생성한다.*/
-          if (arr[i].includes(val)) {
+          if (arr[i].searchword.includes(val)) {
             /*create a DIV element for each matching element:*/
             b = document.createElement("DIV");
+            let userInfo = arr[i].id + "(" + arr[i].name + "," + arr[i].team + ")";
             /*make the matching letters bold:*/
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i].substr(val.length);
+            let otherList = userInfo.split(val)
+            b.innerHTML = otherList[0] + "<span class='text-warning'>" + val + "</span>" + otherList[1];
             /*insert a input field that will hold the current array item's value:*/
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            b.innerHTML += `<input type='hidden' value='${userInfo}'>`;
             /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(e) {
+            b.addEventListener("click", function(e) {
                 /*insert the value for the autocomplete text field:*/
                 inp.value = this.getElementsByTagName("input")[0].value;
                 /*close the list of autocompleted values,

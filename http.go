@@ -63,6 +63,7 @@ var funcMap = template.FuncMap{
 	"Protocol":            Protocol,
 	"RmProtocol":          RmProtocol,
 	"ProtocolTarget":      ProtocolTarget,
+	"userInfo":            userInfo,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

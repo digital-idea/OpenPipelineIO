@@ -1127,7 +1127,7 @@
 							<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
 						</div>
 						<div id="{{$name}}-task-{{.Title}}-user">
-							<span class="mt-1 ml-1 badge badge-light">{{ .User }}</span>
+							<span class="mt-1 ml-1 badge badge-light">{{userInfo .User}}</span>
 						</div>
 						<div id="{{$name}}-task-{{.Title}}-playbutton">
 							{{if .Mov }}
