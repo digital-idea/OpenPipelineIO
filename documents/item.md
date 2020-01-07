@@ -38,8 +38,13 @@ justin값은 platein, justout값은 plateout, justtimecodein값은 scantimecodei
 #### 샷,에셋 삭제
 circle 프로젝트 SS_0010 샷 삭제
 
-```bash
-$ csi3 -rm item -project circle -name SS_0010
+```
+# sudo csi3 -rm item -project circle -name SS_0010 -type org
+```
+
+circle 프로젝트 stone01 에셋 삭제
+```
+# sudo csi3 -rm item -project circle -name stone01 -type asset
 ```
 
 #### 에셋등록
