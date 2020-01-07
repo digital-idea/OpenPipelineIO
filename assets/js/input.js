@@ -2207,6 +2207,12 @@ function setAddTagModal(project, id) {
     document.getElementById("modal-addtag-title").innerHTML = "Add Tag" + multiInputTitle(id);
 }
 
+function setRenameTagModal(project) {
+    document.getElementById("modal-renametag-project").value = project;
+    document.getElementById("modal-renametag-beforetag").value = "";
+    document.getElementById("modal-renametag-aftertag").value = "";
+}
+
 function addTag(project, id, tag) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
@@ -2290,6 +2296,30 @@ function addTag(project, id, tag) {
             }
         });
     }
+}
+
+function renameTag(project, before, after) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/renametag",
+        type: "post",
+        
+        data: {
+            project: project,
+            before: before,
+            after: after,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            alert(`${data.project}프로젝트의 ${data.before} Tag가 ${data.after} Tag로 변경되었습니다.\n새로고침 해주세요.`);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 function setRmTagModal(project, id) {

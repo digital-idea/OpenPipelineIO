@@ -395,6 +395,39 @@
 		</div>
 	</div>
 
+	<!-- Modal: Edit Tag-->
+	<div class="modal fade" id="modal-renametag" tabindex="-1" role="dialog" aria-labelledby="modal-renametag" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content bg-darkmode">
+				<div class="modal-header">
+				<h5 class="modal-title" id="modal-renametag-title">Rename Tag</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true" class="text-darkmode">&times;</span>
+				</button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" class="form-control" id="modal-renametag-project">
+					<div class="form-group">
+						<div class="form-group">
+							<label for="modal-renametag-beforetag" class="col-form-label">Before Tag:</label>
+							<input type="text" class="form-control" id="modal-renametag-beforetag">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-group">
+							<label for="modal-renametag-aftertag" class="col-form-label">After Tag:</label>
+							<input type="text" class="form-control" id="modal-renametag-aftertag">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-outline-danger" onclick="renameTag(document.getElementById('modal-renametag-project').value, document.getElementById('modal-renametag-beforetag').value, document.getElementById('modal-renametag-aftertag').value)" data-dismiss="modal">Change</button>
+				</div>
+			</div>
+		</div>
+</div>
+
 	<!-- Modal: Rm Source-->
 	<div class="modal fade" id="modal-rmtag" tabindex="-1" role="dialog" aria-labelledby="modal-rmtag" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -1127,7 +1160,7 @@
 							<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
 						</div>
 						<div id="{{$name}}-task-{{.Title}}-user">
-							<span class="mt-1 ml-1 badge badge-light">{{userInfo .User}}</span>
+							<span class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</span>
 						</div>
 						<div id="{{$name}}-task-{{.Title}}-playbutton">
 							{{if .Mov }}

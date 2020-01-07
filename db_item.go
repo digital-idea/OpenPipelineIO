@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -1941,6 +1942,35 @@ func AddTag(session *mgo.Session, project, name, inputTag string) (string, error
 		return id, err
 	}
 	return id, nil
+}
+
+// RenameTag 함수는 item의 Tag를 리네임한다.
+func RenameTag(session *mgo.Session, project, before, after string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var items []Item
+	err := c.Find(bson.M{}).All(&items)
+	if err != nil {
+		return err
+	}
+	for _, i := range items {
+		beforeTags := i.Tag
+		var newTags []string
+		for _, t := range i.Tag {
+			if t == before {
+				newTags = append(newTags, after)
+			} else {
+				newTags = append(newTags, t)
+			}
+		}
+		if !reflect.DeepEqual(beforeTags, newTags) {
+			err = c.Update(bson.M{"id": i.ID}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // SetTags 함수는 item에 tag를 교체한다.
