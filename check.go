@@ -15,7 +15,7 @@ var regexpImageSize = regexp.MustCompile(`\d{2,5}[xX]\d{2,5}$`)
 var regexpShotname = regexp.MustCompile(`^[a-zA-Z0-9]+_[a-zA-Z0-9]+$`)
 
 // 에셋 네임값 정규식: stone01 형태
-var regexpAssetname = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+var regexpAssetname = regexp.MustCompile(`^[a-zA-Z0-9_]+$`)
 
 // ID값 정규식: organization
 var regexpID = regexp.MustCompile(`^[a-z0-9]+$`)
