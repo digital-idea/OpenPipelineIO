@@ -710,6 +710,9 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	for _, i := range items {
+		fmt.Println(i.Name)
+	}
 
 	f := excelize.NewFile()
 	sheet := "Sheet1"
@@ -868,11 +871,11 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline3d))
 		f.SetCellStyle(sheet, pos, pos, style)
 		// Tasks
-		for n, t := range tasks {
+		for taskOrder, t := range tasks {
 			if _, found := i.Tasks[t]; !found {
 				continue
 			}
-			pos, err = excelize.CoordinatesToCellName(13+n, n+2)
+			pos, err = excelize.CoordinatesToCellName(13+taskOrder, n+2)
 			if err != nil {
 				log.Println(err)
 			}
