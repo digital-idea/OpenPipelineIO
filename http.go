@@ -64,6 +64,7 @@ var funcMap = template.FuncMap{
 	"RmProtocol":          RmProtocol,
 	"ProtocolTarget":      ProtocolTarget,
 	"userInfo":            userInfo,
+	"mapToSlice":          mapToSlice,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

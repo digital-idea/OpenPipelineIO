@@ -1145,7 +1145,7 @@
 			{{$cut := .Cut}}
 			{{$beforemov := .Beforemov}}
 			{{$aftermov := .Aftermov}}
-			{{range .Tasks}}
+			{{range mapToSlice .Tasks $.TasksettingOrderMap}}
 				{{if eq .Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
 					<div class="row" id="{{$name}}-task-{{.Title}}">
 						<div id="{{$name}}-task-{{.Title}}-status">

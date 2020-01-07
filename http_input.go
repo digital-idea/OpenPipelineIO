@@ -32,14 +32,15 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Tags        []string
 		Assettags   []string
 		SearchOption
-		Searchnum        Infobarnum
-		Totalnum         Infobarnum
-		Projectinfo      Project
-		MailDNS          string
-		Dilog            string
-		Wfs              string
-		OS               string
-		TasksettingNames []string
+		Searchnum           Infobarnum
+		Totalnum            Infobarnum
+		Projectinfo         Project
+		MailDNS             string
+		Dilog               string
+		Wfs                 string
+		OS                  string
+		TasksettingNames    []string
+		TasksettingOrderMap map[string]float64
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -54,6 +55,15 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingOrderMap = make(map[string]float64)
+	for _, t := range tasks {
+		rcp.TasksettingOrderMap[t.Name] = t.Order
+	}
 	rcp.TasksettingNames, err = TasksettingNames(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

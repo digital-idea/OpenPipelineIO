@@ -607,3 +607,29 @@ func userInfo(userInfo string) string {
 	}
 	return userInfo
 }
+
+func mapToSlice(tasks map[string]Task, ordermap map[string]float64) []Task {
+	var results []Task
+	for _, value := range tasks {
+		results = append(results, value)
+	}
+	// results를 BubbleSort 한다.
+	for i := len(results); i > 0; i-- {
+		for j := 1; j < i; j++ {
+			// ordermap 에 키가 없다면 정렬하지 않는다.
+			if _, found := ordermap[results[j-1].Title]; !found {
+				continue
+			}
+			if _, found := ordermap[results[j].Title]; !found {
+				continue
+			}
+			// float64 값을 비교하여 정렬
+			if ordermap[results[j-1].Title] > ordermap[results[j].Title] {
+				intermediate := results[j]
+				results[j] = results[j-1]
+				results[j-1] = intermediate
+			}
+		}
+	}
+	return results
+}

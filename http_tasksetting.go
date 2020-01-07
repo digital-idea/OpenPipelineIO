@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"gopkg.in/mgo.v2"
 )
@@ -277,6 +278,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	linuxPath := r.FormValue("linuxpath")
 	macosPath := r.FormValue("macospath")
 	wfsPath := r.FormValue("wfspath")
+	order := r.FormValue("order")
 	t, err := getTaskSetting(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -286,6 +288,12 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	t.LinuxPath = linuxPath
 	t.MacOSPath = macosPath
 	t.WFSPath = wfsPath
+	floatOrder, err := strconv.ParseFloat(order, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	t.Order = floatOrder
 	err = SetTaskSetting(session, t)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

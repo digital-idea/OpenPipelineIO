@@ -344,12 +344,12 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	type recipe struct {
-		Project
-		User
-		Devmode bool
-		SearchOption
-		DefaultColorspaces []string
-		OCIOColorspaces    []string
+		Project            `json:"project"`
+		User               `json:"user"`
+		Devmode            bool `json:"devmode"`
+		SearchOption       `json:"searchoption"`
+		DefaultColorspaces []string `json:"defaultcolorspace"`
+		OCIOColorspaces    []string `json:"ociocolorspaces"`
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
