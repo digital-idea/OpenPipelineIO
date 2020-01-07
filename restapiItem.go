@@ -2769,7 +2769,7 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	rcp.Username = userInfo(rcp.Username)
+	rcp.Username = userInfo(rcp.Username) // id(name,team) 문자열을 name,team으로 바꾼다. 웹에서 보기좋게 하기 위함.
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

@@ -1490,7 +1490,7 @@ function setTaskUser(project, id, task, user) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.mov === "") {
+                    if (data.username === "") {
                         document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
                     } else {
                         document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
@@ -1517,7 +1517,7 @@ function setTaskUser(project, id, task, user) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.mov === "") {
+                if (data.username === "") {
                     document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
                 } else {
                     document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
