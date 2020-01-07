@@ -140,6 +140,27 @@
 										task={{.SearchOption.Task}}">done</a>
 					<span class="badge badge-light">{{.Searchnum.Done}}</span>
 				</span>
+				<span class="btn btn-sm mb-2 bg-out">
+					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-out" onchange="changeStatusURI('out');" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>
+					<a class="text-dark statusuri" href="/inputmode?
+											project={{.SearchOption.Project}}&
+											searchword=status:assign&
+											sortkey={{.SearchOption.Sortkey}}&
+											assign={{.SearchOption.Assign}}&
+											ready={{.SearchOption.Ready}}&
+											wip={{.SearchOption.Wip}}&
+											confirm={{.SearchOption.Confirm}}&
+											done={{.SearchOption.Done}}&
+											omit={{.SearchOption.Omit}}&
+											hold={{.SearchOption.Hold}}&
+											out={{.SearchOption.Out}}&
+											none={{.SearchOption.None}}&
+											template={{.SearchOption.Template}}&
+											task={{.SearchOption.Task}}">
+											out</a>
+																
+					 <span class="badge badge-light">{{.Searchnum.Out}}</span>
+				</span>
 				<span class="btn btn-sm mb-2 bg-omit">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-omit" onchange="changeStatusURI('omit');" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>
 					<a class="text-dark statusuri" href="/inputmode?

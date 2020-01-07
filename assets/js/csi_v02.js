@@ -40,7 +40,7 @@ function selectmode() {
 		}
 	}
 
-	if (onnum == 8) {
+	if (onnum == 9) {
 		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
 			document.getElementsByClassName('StatusCheckBox')[i].checked=false
 		}
@@ -51,9 +51,10 @@ function selectmode() {
 		document.getElementsByClassName('StatusCheckBox')[2].checked=true // wip
 		document.getElementsByClassName('StatusCheckBox')[3].checked=true // confirm
 		document.getElementsByClassName('StatusCheckBox')[4].checked=false // done
-		document.getElementsByClassName('StatusCheckBox')[5].checked=false // omit
-		document.getElementsByClassName('StatusCheckBox')[6].checked=false // hold
-		document.getElementsByClassName('StatusCheckBox')[7].checked=false // none
+		document.getElementsByClassName('StatusCheckBox')[5].checked=false // out
+		document.getElementsByClassName('StatusCheckBox')[6].checked=false // omit
+		document.getElementsByClassName('StatusCheckBox')[7].checked=false // hold
+		document.getElementsByClassName('StatusCheckBox')[8].checked=false // none
 	} else {
 		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
 			document.getElementsByClassName('StatusCheckBox')[i].checked=true
