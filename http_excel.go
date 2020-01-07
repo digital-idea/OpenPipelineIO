@@ -710,10 +710,6 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	for _, i := range items {
-		fmt.Println(i.Name)
-	}
-
 	f := excelize.NewFile()
 	sheet := "Sheet1"
 	index := f.NewSheet(sheet)
