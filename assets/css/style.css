@@ -363,7 +363,7 @@ input[type=checkbox]:checked+div{
 	width: 100%;
 	object-fit: cover;
 }
-  
+
 /* Top left text */
 .top-left {
 	position: absolute;
