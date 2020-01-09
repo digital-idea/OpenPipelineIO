@@ -1,0 +1,135 @@
+{{define "help_thumbnail"}}
+<div class="p-5 text-center bg-darklight text-darkmode">
+    <h3 class="p-2">Thumbnail</h3>
+    <p>
+        <div class="row">
+            <input type="checkbox" class="form-check-input" id="EXP_0010_org" name="selectID" style="opacity:0; position:absolute;">
+            <div class="thumbnailbox ml-1">
+                <label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox()">
+                    <img src="/assets/img/help/EXP_0010.png" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-wip">
+                </label>
+                <div class="top-left">
+                    <div class="row" id="rnum-EXP_0010">
+                        <span class="black-opbg">A0001</span>
+                    </div>
+                    <div class="row" id="deadline3d-EXP_0010">
+                        <span class="black-opbg">3D:0109</span>
+                    </div>
+                    
+                    <div class="row" id="deadline2d-EXP_0010">
+                        <span class="black-opbg">2D:0120</span>
+                    </div>
+                </div>
+                <div class="centered-top"><a href="mailto:?subject=[ExampleProject] EXP_0010" class="text-white black-opbg itemname">EXP_0010</a></div>
+                <div class="top-right">
+                    <div class="row" id="platesize-EXP_0010">
+                        <span class="black-opbg">S: 2048x1152</span>
+                    </div>
+                    <div class="row" id="undistortionsize-EXP_0010">
+                        <span class="black-opbg">U: 2248x1352</span>
+                    </div>
+                    <div class="row" id="rendersize-EXP_0010">
+                        <span class="black-opbg">R: 2248x1352</span>
+                    </div>
+                </div>
+                <div class="centered">
+                    Finver: v002<br>
+                    Date: 2020-01-19
+                </div>
+                <div class="centered-bottom row">
+                    <div id="usetype-EXP_0010">
+                        <span class="badge badge-warning">org</span>
+                    </div>
+                    
+                    <div id="type-EXP_0010">
+                        <span class="badge badge-light">2d</span>
+                    </div>
+                </div>
+                <div class="centered-left"></div>
+                <div class="centered-right">
+                    <!--Retime-->
+                    <div class="row" id="button-retime-EXP_0010">
+                        <a href="dilink:///tmp/retime" class="badge badge-danger">R</a>
+                    </div>
+                    <!--Just Mark-->
+                    <div class="row" id="button-just-EXP_0010">
+                        <span class="badge badge-warning mt-1">J</span>
+                    </div>
+                    <!--OCIOcc-->
+                    <div class="row" id="button-ociocc-EXP_0010">
+                        <span class="badge badge-info mt-1">N</span>
+                    </div>
+                </div>
+                <div class="bottom-left">
+                    <div class="row">
+                        <span class="text-white black-opbg" id="handlein-EXP_0010">5</span>
+                        <span class="text-white black-opbg">/</span>
+                        <span class="text-white black-opbg" id="handleout-EXP_0010">5</span>
+                    </div>
+                    <div class="row" id="platein-EXP_0010">
+                        <span class="text-white black-opbg" title="platein">1001</span>
+                    </div>
+                    <div class="row" id="justin-EXP_0010">
+                        <span class="text-warning black-opbg" title="justin">1006</span>
+                    </div>
+                    <div class="row" id="justtimecodein-EXP_0010">
+                        <span class="text-warning black-opbg">10:00:00:06</span>
+                    </div>
+                </div>
+                <div class="bottom-right">
+                    <div class="row" id="plateout-EXP_0010">
+                        <span class="text-white black-opbg">1050(50)</span>
+                    </div>
+                    <div class="row" id="justout-EXP_0010">                        
+                        <span class="text-warning black-opbg" title="justout">
+                            1045(41)
+                        </span>
+                    </div>
+                    <div class="row" id="justtimecodeout-EXP_0010" >
+                        <span class="text-warning black-opbg">10:00:10:36</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="mx-auto pt-1 row">
+                <div id="update-EXP_0010">
+                    <span class="badge badge-warning ml-1 mr-1">UPDATE 2m10s</span>
+                </div>
+                <div id="button-thumbplay-EXP_0010">
+                    <span class="play finger">PLAY</span>
+                </div>
+                
+                <div id="button-thumb-EXP_0010">
+                    <span class="badge badge-darkmode ml-1 finger">Thumb</a>
+                </div>
+                <div id="button-edit-EXP_0010">
+                    <span class="badge badge-danger finger ml-1 finger">E</span>
+                </div>
+
+                <div id="button-dir-EXP_0010">
+                    <span class="badge badge-darkmode ml-1">F</a>
+                </div>
+                
+                <div id="button-log-EXP_0010">
+                    <span class="badge badge-darkmode ml-1 finger">L</a>				
+                </div>
+            </div>
+        </div>
+    </p>
+    <p class="h6 font-weight-light">
+        기본 정보입니다.
+        <span class="btn btn-dark btn-sm">롤넘버(BO270)</span>
+        <span class="btn btn-dark btn-sm">샷이름(S036_0010)</span>
+        <span class="btn btn-dark btn-sm">타입(org)</span>
+        <span class="btn btn-dark btn-sm">샷타입(2D)</span>
+        <span class="btn btn-dark btn-sm">렌즈디스토션사이즈(2112 x 1188)</span>
+        <span class="btn btn-dark btn-sm">2D,3D마감일</span>
+        <span class="btn btn-dark btn-sm">핸들IN/OUT</span> 정보로 구성되어 있습니다.
+    </p>
+    <p class="h6 font-weight-light">
+        CSI는 썸네일이 굉장히 많은 정보가 밀집되어 있습니다.<br>
+    </p>
+</div>
+{{end}}

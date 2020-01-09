@@ -4,113 +4,16 @@
 
 {{template "help_introduce"}}
 {{template "help_github"}}
+{{template "help_colorconcept"}}
 {{template "help_toolbar"}}
 {{template "help_search"}}
 {{template "help_tag"}}
-
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">기본정보</h3>
-	<p>
-		<img src="/assets/img/help/thumbnail.jpg">
-	</p>
-	<p class="h6 font-weight-light">
-		기본 정보입니다.
-		<span class="btn btn-dark btn-sm">롤넘버(BO270)</span>
-		<span class="btn btn-dark btn-sm">샷이름(S036_0010)</span>
-		<span class="btn btn-dark btn-sm">타입(org)</span>
-		<span class="btn btn-dark btn-sm">샷타입(2D)</span>
-		<span class="btn btn-dark btn-sm">렌즈디스토션사이즈(2112 x 1188)</span>
-		<span class="btn btn-dark btn-sm">2D,3D마감일</span>
-		<span class="btn btn-dark btn-sm">핸들IN/OUT</span> 정보로 구성되어 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		Item 선택, 수정, Plate 폴더열기, 로그를 볼 수 있는 아이콘이 하단에 배치되어 있습니다.
-		또한, 썸네일을 클릭하면 영상이 플레이됩니다.
-	</p>
-</div>
-
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">Send Mail</h3>
-	<p>
-		<img src="/assets/img/help/sendmail.png">
-	</p>
-	<p class="h6 font-weight-light">
-		여러분의 웹브라우저가 메일프로그램과 잘 연결되어 있다면, 샷 이름 클릭시 프로젝트명과 샷이름이 적힌 메일창이 열립니다.
-	</p>
-	<p class="h6 font-weight-light">
-		이 기능이 작동되기 위해서는 여러분의 웹 브라우저에 메일프로그램 등록이 필요합니다.
-	</p>
-	<p class="h6 font-weight-light">
-		Firefox : <span class="btn btn-dark btn-sm"> 편집 > 환경변수 > 프로그램 > mailto </span>
-	</p>
-	<p class="h6 font-weight-light">
-		에서 메일 클라이언트를 Thunderbird 메일로 바꾸어주세요.
-	</p>
-	<p class="h6 font-weight-light">
-		리눅스에서 Thunderbird의 위치는 <span class="btn btn-dark btn-sm">/usr/bin/thunderbird</span> 경로입니다.
-	</p>
-</div>
-	
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">Neutral Grade(digitalidea)</h3>
-	<p>
-		<img src="/assets/img/help/ocio.png">
-	</p>
-	<p class="h6 font-weight-light">
-		CSI는 뉴트럴그레이드 파이프라인을 처리할 수 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		뉴트럴그레이드는 원본 플레이트를 CG작업에 유리한 컬러로 바꿀 때 사용합니다.
-	</p>
-	<p class="h6 font-weight-light">
-		플레이트의 컬러를 바꾸게 되면 Color 작업과 관련된 모든 팀을 위해 눈에 띄어야 합니다.
-	</p>
-	<p class="h6 font-weight-light">
-		뉴트럴그레이드가 활성화되면 CSI는 썸네일이미지 주변에 뉴트럴그레이드 표시가 활성화 됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		또한 이 기능은 디지털아이디어 내에서 뉴크와 연동되며 뉴크상 단축키는 다음과 같습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		컬러 저장하기 : <span class="btn btn-dark btn-sm">Alt + [</span>, 컬러 불러오기 <span class="btn btn-dark btn-sm">Alt + ]</span>
-	</p>
-	<p class="h6 font-weight-light">
-		큰 개념은 OpenColorIO의 <span class="btn btn-dark btn-sm">.cc</span> 파일 또는 <span class="btn btn-dark btn-sm">.ccc</span> 파일을 DB에 저장하고 아티스트간 공유하는 개념입니다.
-	</p>
-</div>
-
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">Status</h3>
-	<p>
-		<img src="/assets/img/help/statusbox.jpg">
-	</p>
-	<p class="h6 font-weight-light">
-		작업내용이 각 Task별로 추적되는 상태박스 입니다.
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">팀명</span>
-		<span class="btn btn-dark btn-sm">▶ 표시</span>
-		<span class="btn btn-dark btn-sm">아티스트명</span>
-		<span class="btn btn-dark btn-sm">마감일</span> 이 적혀있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		▶ 표시를 클릭하면 최근 등록된 mov가 재생됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		아티스트명을 클릭하면 작업폴더로 바로 연결되는 <a href="{{.Wfs}}" class="blue">WFS(Web File System)</a>이 실행됩니다.
-	</p>
-</div>
-
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">Note</h3>
-	<p>
-		<img src="/assets/img/help/description.jpg">
-	</p>
-	<p class="h6 font-weight-light">
-		작업에 필요한 기본정보, 레퍼런스, 소스, 수정내용, 태그리스트 순으로 적혀있습니다.
-	</p>
-</div>
-
+{{template "help_deadline"}}
+{{template "help_thumbnail"}}
+{{template "help_mail"}}
+{{template "help_status"}}
+{{template "help_note"}}
+{{template "help_comment"}}
 {{template "help_edittask"}}
 
 
@@ -123,42 +26,42 @@
 		인터넷이 연결되어 있다면 아래 링크를 통해 RestAPI를 학습할 수 있습니다.
 	</p>
 	<p class="h6 font-weight-light">
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_project.md" class="btn btn-outline-warning">Project</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_item.md" class="btn btn-outline-warning">Item(Shot,Asset)</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_user.md" class="btn btn-outline-warning">User</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_organization.md" class="btn btn-outline-warning">Organization</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_tasksetting.md" class="btn btn-outline-warning">Task</a>
-		
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_project.md" class="btn btn-sm btn-outline-light">Project</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_item.md" class="btn btn-sm btn-outline-light">Item(Shot,Asset)</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_user.md" class="btn btn-sm btn-outline-light">User</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_organization.md" class="btn btn-sm btn-outline-light">Organization</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_tasksetting.md" class="btn btn-sm btn-outline-light">Task</a>	
 	</p>
 </div>
 
-
 <div class="p-5 text-center text-darkmode">
-	<h3 class="p-2">MPAA 프로젝트 보안사고 대응방법</h3>
+	<h3 class="p-2">Security</h3>
 	<p class="h6 font-weight-light">
+		MPAA 프로젝트 보안사고 대응방법 입니다.<br>
 		보안팀, IT팀 에게 사고내용 보고<br>
 		운영진(PD,PM,IT,관리직 및 임원,CEO) 보고<br>
 		보안문제 파급효과 및 우선대처상황 분석 회의소집<br>
 		처리가능한 문제부터 우선처리<br>
 		클라이언트에게 상황전달, 사업파트너 통지<br>
 		사법당국 통지 : 1007, 10th Fl, Monaco Bldg, 1316-5 Seocho-dong, Seocho-gu, Seoul 137-856, Korea<br>
-		온라인신고 : <a href="http://www.mpaa.org/contact-us/" class="text-warning">http://www.mpaa.org/contact-us/</a><br>
+		온라인신고 : <a href="http://www.mpaa.org/contact-us/" class="text-light">http://www.mpaa.org/contact-us/</a><br>
 		저작권침해 24시간 제보전화 : 싱가포르(아시아태평양지역) +65 6253-1033<br>
 		추후 발생하는 사고 세부사항을 관련부서에 보고<br>
 	</p>
 </div>
 
 <div class="p-5 bg-darklight text-darkmode text-center">
-	<h3 class="p-2">서버 재해시 복원에 필요한 파일</h3>
+	<h3 class="p-2">Recovery</h3>
 	<p class="h6 font-weight-light">
-		CSI 서버는 <a href="https://github.com/digital-idea/csi3" class="text-warning">Github</a>를 이용해서 즉각 복원할 수 있습니다.<br>
-		DB는 매일 백업해주세요.<br>
-		백업방법: <a href="https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md" class="text-warning">https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md</a>
+		CSI 서버는 <a href="https://github.com/digital-idea/csi3" class="text-light">Github</a>를 이용해서 복원할 수 있습니다.<br>
+		하지만, 프로젝트에 사용되는 데이터베이스는 매일 백업이 필요합니다.<br>
+		백업방법: <a href="https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md" class="text-light">https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md</a>
 	</p>
 </div>
 	
 
 {{template "footerBootstrap"}}
+
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>

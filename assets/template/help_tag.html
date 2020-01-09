@@ -1,49 +1,18 @@
 {{define "help_tag"}}
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">Deadline / Tag</h3>
+<div class="p-5 bg-darklight text-center text-darkmode">
+	<h3 class="p-2">Tag System</h3>
 	<p>
-		<img src="/assets/img/help/tag.jpg">
+		<span class="btn btn-outline-darkmode btn-sm m-1 statusuri">배경</span>
+		<span class="btn btn-outline-darkmode btn-sm m-1 statusuri">캐릭터</span>
+		<span class="btn btn-outline-darkmode btn-sm m-1 statusuri">시뮬레이션</span>
+		<span class="btn btn-outline-danger btn-sm m-1">태그변경</span>
 	</p>
 	<p class="h6 font-weight-light">
-		마감일, 프로젝트 태그모습입니다. 클릭하면 해당 마감샷만 검색됩니다.
-		빨강색이면 이번주를, 주황색이면 다음주를 의미합니다.
+		콘텐츠 제작전 업무를 분리하기 위해서 Tag 시스템을 사용할 수 있습니다.<br>
+		각 아이템의 Tag항목에서 + - 아이콘을 통해서 설정할 수 있습니다.<br>
+		태그변경 표시는 권한이 높을 때 볼 수 있는 버튼이며, 일괄적으로 태그를 변경할 때 사용합니다.
 	</p>
 </div>
 
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">Asset Tags</h3>
-	<p>
-		<img src="/assets/img/help/assemblytag.png">
-	</p>
-	<p class="h6 font-weight-light">
-		에셋의 타입은
-		<span class="btn btn-dark btn-sm">char(케릭터)</span>
-		<span class="btn btn-dark btn-sm">env(환경)</span>
-		<span class="btn btn-dark btn-sm">prop(소품)</span>
-		<span class="btn btn-dark btn-sm">comp(합성에셋)</span>
-		<span class="btn btn-dark btn-sm">plant(식물)</span>
-		<span class="btn btn-dark btn-sm">vehicle(탈것)</span> 이 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		에셋의 형태는 여러개의 에셋이 조합되어 하나의 에셋이 되는 <span class="btn btn-dark btn-sm">assembly</span>와
-		각 요소를 상징하는 <span class="btn btn-dark btn-sm">component</span>가 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">assembly</span>는 2개 이상의 에셋의 집합으로 이루어진 에셋입니다.
-		assembly는 assembly를 포함할 수 있습니다.
-		<span class="btn btn-dark btn-sm">component</span>는 더이상 나눌수 없는 최소단위의 에셋입니다.
-	</p>
-	<p class="h6 font-weight-light">
-		어셈블리 태그 앞에는 링크아이콘이 표시되어 있습니다. 링크 아이콘을 클릭하면 이 assembly와 연결된 모든 에셋이 출력됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		에셋태그를 수정할 때는 편집아이콘을 누르고 assettags 항목을 수정해주세요.
-	</p>
-	<p class="h6 font-weight-light">
-		규칙1 : 자식 에셋태그에 부모 에셋의 이름을 넣으면 에셋이 자동으로 연결됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		규칙2 : 자신이 assembly 라면 자신의 이름도 assettags에 들어가야 합니다.
-	</p>
-</div>
+
 {{end}}
