@@ -2,160 +2,11 @@
 {{template "headBootstrap"}}
 {{template "navbar" .}}
 
-<div class="p-5 text-center">
-	<h3 class="p-2 text-darkmode">CSI</h3>
-	<p class="h6 font-weight-light text-darkmode">
-		CSI: Creation Status Integrator의 약자입니다.<br>
-		검색엔진 방식을 사용하는 프로젝트 관리 툴입니다. 빠른속도, 교육의 최소화를 컨셉으로 개발중입니다.
-	<p>
-
-	<p class="mt-2">
-		<small class="text-darkmode">
-			Build Time: {{.BuildTime}}<br>
-			Git SHA1: <a href="https://github.com/digital-idea/csi3/commit/{{.Sha1ver}}" class="text-warning">{{.Sha1ver}}</a>
-		</small>
-	</p>
-</div>
-
-<div class="p-5 text-center bg-darklight">
-	<h4 class="p-2 text-darkmode">기능요청방법</h4>
-	<p class="h6 font-weight-light text-darkmode">
-		<a href="https://github.com/digital-idea/csi3" class="text-warning">Roadmap</a> 우선순위로 개발을 진행합니다.<br>
-		자신의 의견을 Github 이슈에 등록해주세요.
-	</p>	
-	<p class="h6 font-weight-light">
-		<a href="https://github.com/digital-idea/csi3/issues" class="btn btn-sm btn-outline-darkmode">Github Issue</a>
-	</p>
-	<p>
-		<img src="/assets/img/csi_issue.png">
-	</p>
-</div>
-
-<div class="p-3 bg-light text-center">
-	<h3 class="p-2">Search</h3>
-	<p>
-		<img src="/assets/img/help/searchbar.jpg">
-	</p>
-	<p class="h6 font-weight-light">
-		<p class="h6 font-weight-light">검색영역에서는 검색어, 상태, 정렬방식을 설정할 수 있습니다.</p>
-		<p class="h6 font-weight-light"><span class="btn btn-dark btn-sm">검색어1&nbsp;&nbsp;&nbsp;검색어2&nbsp;&nbsp;&nbsp;...</span> : 검색어를 연속을 입력하면, 각 검색어가 포함된 결과가 검색됩니다.</p>
-		<p class="h6 font-weight-light"><span class="btn btn-dark btn-sm">팀코드&nbsp;&nbsp;&nbsp;아티스트명</span> : 아티스트명으로 검색합니다.</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">model</span>
-			<span class="btn btn-dark btn-sm">mm</span>
-			<span class="btn btn-dark btn-sm">layout</span>
-			<span class="btn btn-dark btn-sm">ani</span>
-			<span class="btn btn-dark btn-sm">fx</span>
-			<span class="btn btn-dark btn-sm">mg</span>
-			<span class="btn btn-dark btn-sm">fursim</span>
-			<span class="btn btn-dark btn-sm">sim</span>
-			<span class="btn btn-dark btn-sm">crowd</span>
-			<span class="btn btn-dark btn-sm">light</span>
-			<span class="btn btn-dark btn-sm">comp</span>
-			<span class="btn btn-dark btn-sm">matte</span>
-			<span class="btn btn-dark btn-sm">env</span> : 각팀의 테스크를 검색합니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">All</span>
-			<span class="btn btn-dark btn-sm">all</span>
-			<span class="btn btn-dark btn-sm">올</span>
-			<span class="btn btn-dark btn-sm">미ㅣ</span>
-			<span class="btn btn-dark btn-sm">전체</span>
-			 : 전체 데이터가 출력됩니다.(샷+에셋)
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">shot</span>
-			<span class="btn btn-dark btn-sm">샷</span>
-			<span class="btn btn-dark btn-sm">전샷</span>
-			<span class="btn btn-dark btn-sm">전체샷</span>
-			 : 샷만 검색합니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">asset</span>
-			<span class="btn btn-dark btn-sm">assets</span>
-			<span class="btn btn-dark btn-sm">에셋</span>
-			<span class="btn btn-dark btn-sm">texture</span>
-			<span class="btn btn-dark btn-sm">텍스쳐</span>
-			 : 에셋리스트를 보여줍니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">1208</span> : 당일 마감되어야 하는 테스크를 검색합니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">2016-11-24</span> : 해당 날짜의 데일리 mov를 검색합니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">전권</span> : 영화는 보통 1~8권으로 이루어져 있습니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">전권</span> 이외에 <span class="btn btn-dark btn-sm">1권</span> .. <span class="btn btn-dark btn-sm">8권</span> 역시 검색됩니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">tag:태그명</span> : 태그명으로 태그검색이 가능합니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">2D</span> <span class="btn btn-dark btn-sm">3D</span> : 각각 2D, 3D샷이 검색됩니다.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">00:12:23:12</span> : 타임코드를 검색합니다.(스캔 타임코드, 작업 타임코드)
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">task:model&nbsp;&nbsp;&nbsp;1208</span> : model 테스크의 1208 마감일자 검색.
-		</p>
-		<p class="h6 font-weight-light">
-			<span class="btn btn-dark btn-sm">task:model&nbsp;&nbsp;&nbsp;2017-12-08</span> : 각팀의 테스크별 데일리를 검색합니다.
-		</p>
-	</p>
-</div>
-
-
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">Deadline / Tag</h3>
-	<p>
-		<img src="/assets/img/help/tag.jpg">
-	</p>
-	<p class="h6 font-weight-light">
-		마감일, 프로젝트 태그모습입니다. 클릭하면 해당 마감샷만 검색됩니다.
-		빨강색이면 이번주를, 주황색이면 다음주를 의미합니다.
-	</p>
-</div>
-
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">Asset Tags</h3>
-	<p>
-		<img src="/assets/img/help/assemblytag.png">
-	</p>
-	<p class="h6 font-weight-light">
-		에셋의 타입은
-		<span class="btn btn-dark btn-sm">char(케릭터)</span>
-		<span class="btn btn-dark btn-sm">env(환경)</span>
-		<span class="btn btn-dark btn-sm">prop(소품)</span>
-		<span class="btn btn-dark btn-sm">comp(합성에셋)</span>
-		<span class="btn btn-dark btn-sm">plant(식물)</span>
-		<span class="btn btn-dark btn-sm">vehicle(탈것)</span> 이 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		에셋의 형태는 여러개의 에셋이 조합되어 하나의 에셋이 되는 <span class="btn btn-dark btn-sm">assembly</span>와
-		각 요소를 상징하는 <span class="btn btn-dark btn-sm">component</span>가 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">assembly</span>는 2개 이상의 에셋의 집합으로 이루어진 에셋입니다.
-		assembly는 assembly를 포함할 수 있습니다.
-		<span class="btn btn-dark btn-sm">component</span>는 더이상 나눌수 없는 최소단위의 에셋입니다.
-	</p>
-	<p class="h6 font-weight-light">
-		어셈블리 태그 앞에는 링크아이콘이 표시되어 있습니다. 링크 아이콘을 클릭하면 이 assembly와 연결된 모든 에셋이 출력됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		에셋태그를 수정할 때는 편집아이콘을 누르고 assettags 항목을 수정해주세요.
-	</p>
-	<p class="h6 font-weight-light">
-		규칙1 : 자식 에셋태그에 부모 에셋의 이름을 넣으면 에셋이 자동으로 연결됩니다.
-	</p>
-	<p class="h6 font-weight-light">
-		규칙2 : 자신이 assembly 라면 자신의 이름도 assettags에 들어가야 합니다.
-	</p>
-</div>
+{{template "help_introduce"}}
+{{template "help_github"}}
+{{template "help_toolbar"}}
+{{template "help_search"}}
+{{template "help_tag"}}
 
 <div class="p-5 bg-white text-center">
 	<h3 class="p-2">기본정보</h3>
@@ -260,74 +111,49 @@
 	</p>
 </div>
 
+{{template "help_edittask"}}
 
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">일정기록</h3>
-	<p>
-		<img src="/assets/img/help/date.jpg">
+
+<div class="p-5 bg-darklight text-center text-darkmode">
+	<h3 class="p-2">RestAPI</h3>
+	<p class="h6 font-weight-light">
+		개발자라면 Python, Javascript, Ajax, node.JS, C#, C++, C, JAVA, Go 등을 이용해서 CSI의 정보를 가지고 오거나 바꿀 수 있습니다.
 	</p>
 	<p class="h6 font-weight-light">
-		편집아이콘을 누르면 각 Task에 일정설정부분이 보입니다.
+		인터넷이 연결되어 있다면 아래 링크를 통해 RestAPI를 학습할 수 있습니다.
 	</p>
 	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">사람아이콘</span> : 아티스트명을 적습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">S</span> : 작업시작일
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">?</span> : 작업예상일
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">1</span> : 1차마감일. 1차 렌더이미지, 테스트 데이터등 마감전 타팀간 교환할 데이터의 마감일
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">2</span> : 2차마감일. PM과 약속하는 최종 마감일
-	</p>
-	<p class="h6 font-weight-light">
-		<span class="btn btn-dark btn-sm">영상아이콘</span> : 작업 Mov파일 경로를 입력하는 곳입니다
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_project.md" class="btn btn-outline-warning">Project</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_item.md" class="btn btn-outline-warning">Item(Shot,Asset)</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_user.md" class="btn btn-outline-warning">User</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_organization.md" class="btn btn-outline-warning">Organization</a>
+		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_tasksetting.md" class="btn btn-outline-warning">Task</a>
+		
 	</p>
 </div>
 
 
-<div class="p-5 bg-white text-center">
-	<h3 class="p-2">For Developer</h3>
-	<p class="h6 font-weight-light">
-		개발자라면 Python, Ajax, node.JS등을 이용해서 CSI의 정보를 가지고 오거나 바꿀 수 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		인터넷이 연결되어 있다면 아래 링크를 통해 restAPI를 학습할 수 있습니다.
-	</p>
-	<p class="h6 font-weight-light">
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_project.md" class="btn btn-primary">Project API</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_item.md" class="btn btn-primary">Item API</a>
-		<a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_user.md" class="btn btn-primary">User API</a>
-	</p>
-</div>
-
-
-	
-
-<div class="p-5 bg-light text-center">
-	<h3 class="p-2">보안사고 대응방법</h3>
+<div class="p-5 text-center text-darkmode">
+	<h3 class="p-2">MPAA 프로젝트 보안사고 대응방법</h3>
 	<p class="h6 font-weight-light">
 		보안팀, IT팀 에게 사고내용 보고<br>
-		운영진(PD,PM,파이프라인팀,본부장,CEO) 보고<br>
+		운영진(PD,PM,IT,관리직 및 임원,CEO) 보고<br>
 		보안문제 파급효과 및 우선대처상황 분석 회의소집<br>
 		처리가능한 문제부터 우선처리<br>
 		클라이언트에게 상황전달, 사업파트너 통지<br>
 		사법당국 통지 : 1007, 10th Fl, Monaco Bldg, 1316-5 Seocho-dong, Seocho-gu, Seoul 137-856, Korea<br>
-		온라인신고 : <a href="http://www.mpaa.org/contact-us/">http://www.mpaa.org/contact-us/</a><br>
+		온라인신고 : <a href="http://www.mpaa.org/contact-us/" class="text-warning">http://www.mpaa.org/contact-us/</a><br>
 		저작권침해 24시간 제보전화 : 싱가포르(아시아태평양지역) +65 6253-1033<br>
 		추후 발생하는 사고 세부사항을 관련부서에 보고<br>
 	</p>
 </div>
 
-<div class="p-5 bg-white text-center">
+<div class="p-5 bg-darklight text-darkmode text-center">
 	<h3 class="p-2">서버 재해시 복원에 필요한 파일</h3>
 	<p class="h6 font-weight-light">
-		CSI 소스코드는 <a href="https://github.com/digital-idea/csi3">Github</a>를 이용해서 복원시킬 수 있습니다.<br>
-		DB는 매일 백업해주세요.
+		CSI 서버는 <a href="https://github.com/digital-idea/csi3" class="text-warning">Github</a>를 이용해서 즉각 복원할 수 있습니다.<br>
+		DB는 매일 백업해주세요.<br>
+		백업방법: <a href="https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md" class="text-warning">https://github.com/digital-idea/csi3/blob/master/documents/dbbackup.md</a>
 	</p>
 </div>
 	

@@ -1,0 +1,78 @@
+{{define "help_search"}}
+<div class="p-3 bg-light text-center">
+	<h3 class="p-2">Search</h3>
+	<p>
+		<img src="/assets/img/help/searchbar.jpg">
+	</p>
+	<p class="h6 font-weight-light">
+		<p class="h6 font-weight-light">검색영역에서는 검색어, 상태, 정렬방식을 설정할 수 있습니다.</p>
+		<p class="h6 font-weight-light"><span class="btn btn-dark btn-sm">검색어1&nbsp;&nbsp;&nbsp;검색어2&nbsp;&nbsp;&nbsp;...</span> : 검색어를 연속을 입력하면, 각 검색어가 포함된 결과가 검색됩니다.</p>
+		<p class="h6 font-weight-light"><span class="btn btn-dark btn-sm">팀코드&nbsp;&nbsp;&nbsp;아티스트명</span> : 아티스트명으로 검색합니다.</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">model</span>
+			<span class="btn btn-dark btn-sm">mm</span>
+			<span class="btn btn-dark btn-sm">layout</span>
+			<span class="btn btn-dark btn-sm">ani</span>
+			<span class="btn btn-dark btn-sm">fx</span>
+			<span class="btn btn-dark btn-sm">mg</span>
+			<span class="btn btn-dark btn-sm">fursim</span>
+			<span class="btn btn-dark btn-sm">sim</span>
+			<span class="btn btn-dark btn-sm">crowd</span>
+			<span class="btn btn-dark btn-sm">light</span>
+			<span class="btn btn-dark btn-sm">comp</span>
+			<span class="btn btn-dark btn-sm">matte</span>
+			<span class="btn btn-dark btn-sm">env</span> : 각팀의 테스크를 검색합니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">All</span>
+			<span class="btn btn-dark btn-sm">all</span>
+			<span class="btn btn-dark btn-sm">올</span>
+			<span class="btn btn-dark btn-sm">미ㅣ</span>
+			<span class="btn btn-dark btn-sm">전체</span>
+			 : 전체 데이터가 출력됩니다.(샷+에셋)
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">shot</span>
+			<span class="btn btn-dark btn-sm">샷</span>
+			<span class="btn btn-dark btn-sm">전샷</span>
+			<span class="btn btn-dark btn-sm">전체샷</span>
+			 : 샷만 검색합니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">asset</span>
+			<span class="btn btn-dark btn-sm">assets</span>
+			<span class="btn btn-dark btn-sm">에셋</span>
+			<span class="btn btn-dark btn-sm">texture</span>
+			<span class="btn btn-dark btn-sm">텍스쳐</span>
+			 : 에셋리스트를 보여줍니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">1208</span> : 당일 마감되어야 하는 테스크를 검색합니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">2016-11-24</span> : 해당 날짜의 데일리 mov를 검색합니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">전권</span> : 영화는 보통 1~8권으로 이루어져 있습니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">전권</span> 이외에 <span class="btn btn-dark btn-sm">1권</span> .. <span class="btn btn-dark btn-sm">8권</span> 역시 검색됩니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">tag:태그명</span> : 태그명으로 태그검색이 가능합니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">2D</span> <span class="btn btn-dark btn-sm">3D</span> : 각각 2D, 3D샷이 검색됩니다.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">00:12:23:12</span> : 타임코드를 검색합니다.(스캔 타임코드, 작업 타임코드)
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">task:model&nbsp;&nbsp;&nbsp;1208</span> : model 테스크의 1208 마감일자 검색.
+		</p>
+		<p class="h6 font-weight-light">
+			<span class="btn btn-dark btn-sm">task:model&nbsp;&nbsp;&nbsp;2017-12-08</span> : 각팀의 테스크별 데일리를 검색합니다.
+		</p>
+	</p>
+</div>
+{{end}}
