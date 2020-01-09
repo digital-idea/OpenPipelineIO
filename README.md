@@ -120,6 +120,9 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - Committer: Bailey / bailey@lazypic.org
 - Contributors:
 - 체험계정 ID/PW: guest
+    - guest 계정은 모든 메뉴가 보이지 않습니다.
+    - 여러 기능을 권한이슈로 테스트 할 수 없습니다.
+    - 만약 많은 기능을 테스트하고 싶다면 가입후 권한변경을 요청해주세요.
 
 ### Infomation
 - [CSI의 역사](documents/history.md)

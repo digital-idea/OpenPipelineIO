@@ -48,3 +48,90 @@ $ go run /usr/local/go/src/crypto/tls/generate_cert.go -host="csi.lazypic.org" -
 ## 배포
 항상 바이너리 파일 하나를 지향합니다.
 설치 서버 bin 폴더에 csi3, dilink, dilog, wfs 파일을 배포합니다.
+
+## 자동실행
+
+#### CentOS
+실행파일은 서버 /usr/local/bin/csi에 배포합니다.
+
+csi.service 파일을 작성하여 /etc/systemd/system 폴더에 넣어줍니다.
+
+아래 명령어로 실행해 줍니다.
+```bash
+$ sudo systemctl start csi.service
+```
+
+csi.service 파일 내용
+
+```
+[Service]
+User=linux_user
+Group=linux_user_group
+ExecStart=/usr/local/bin/csi
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=CSI
+
+Restart=always
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### macOS
+~/Library/LaunchAgents 경로가 존재하는지 체크합니다.
+
+서비스 관리 파일을 하나 생성합니다.
+```bash
+$ touch org.lazypic.csi.plist
+```
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>KeepAlive</key>
+    <true />
+    <key>RunAtLoad</key>
+    <true/>
+    <key>Label</key>
+    <string>org.lazypic.csi</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/local/bin</string>
+      <string>csi</string>
+      <string>-http=:443</string>
+      <string>-dilog=http://csi.lazypic.org:8080</string>
+      <string>-wfs=http://csi.lazypic.org:8081</string>
+      <string>-authmode</string>
+      <string>-signupaccesslevel=1</string>
+    </array>
+  </dict>
+</plist>
+```
+
+- KeepAlive: 실행상태 유지
+- RunAtLoad: Load시 실행되도록 하기
+
+서비스 등록
+
+```bash
+$ launchctl load ~/Library/LaunchAgents/org.lazypic.csi.plist
+```
+
+서비스 시작
+
+```bash
+$ launchctl start org.lazypic.csi
+```
+
+서비스 종료
+
+KeepAlive가 설정되어 있다면, 프로세스가 종료되더라도 완전히 자동으로 실행되도록 하고 싶지 않다면 unload후 plist 파일을 삭제합니다.
+
+```bash
+$ launchctl unload ~/Library/LaunchAgents/org.lazypic.csi.plist
+$ rm ~/Library/LaunchAgents/org.lazypic.csi.plist
+```
