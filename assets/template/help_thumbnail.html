@@ -4,87 +4,85 @@
     <div class="text-center">
         <div class="mx-auto" style="width:400px">
             <div class="thumbnailbox ml-1">
-                <label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox()">
-                    <img src="/assets/img/help/EXP_0010.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-wip">
+                <label class="p-0 m-0 thumbnail" for="EXP_0010_org">
+                    <img src="/assets/img/help/EXP_0010.jpg" class="thumbnail border-wip">
                 </label>
                 <div class="top-left">
                     <div class="row" id="rnum-EXP_0010">
-                        <span class="black-opbg">A0001</span>
+                        <span class="black-opbg" title="롤넘버입니다.">A0001</span>
                     </div>
                     <div class="row" id="deadline3d-EXP_0010">
-                        <span class="black-opbg">3D:0109</span>
+                        <span class="black-opbg" title="3D 예상 마감일 입니다.">3D:0109</span>
                     </div>
                     
                     <div class="row" id="deadline2d-EXP_0010">
-                        <span class="black-opbg">2D:0120</span>
+                        <span class="black-opbg" title="2D 예상 마감일 입니다.">2D:0120</span>
                     </div>
                 </div>
-                <div class="centered-top"><a href="mailto:?subject=[ExampleProject] EXP_0010" class="text-white black-opbg itemname">EXP_0010</a></div>
+                <div class="centered-top"><a href="mailto:?subject=[ExampleProject] EXP_0010" class="text-white black-opbg itemname" title="이름 입니다. 클릭하면 바로 메일을 보낼 수 있습니다.">EXP_0010</a></div>
                 <div class="top-right">
                     <div class="row" id="platesize-EXP_0010">
-                        <span class="black-opbg">S: 2048x1152</span>
+                        <span class="black-opbg" title="플레이트 사이즈">S: 2048x1152</span>
                     </div>
                     <div class="row" id="undistortionsize-EXP_0010">
-                        <span class="black-opbg">U: 2248x1352</span>
+                        <span class="black-opbg" title="렌즈 언디스토션 사이즈">U: 2248x1352</span>
                     </div>
                     <div class="row" id="rendersize-EXP_0010">
-                        <span class="black-opbg">R: 2248x1352</span>
+                        <span class="black-opbg" title="렌더사이즈">R: 2248x1352</span>
                     </div>
                 </div>
-                <div class="centered">
+                <div class="centered" title="최종버전 정보">
                     Finver: v002<br>
                     Date: 2020-01-19
                 </div>
                 <div class="centered-bottom row">
                     <div id="usetype-EXP_0010">
-                        <span class="badge badge-warning">org</span>
+                        <span class="badge badge-warning" title="샷타입">org</span>
                     </div>
                     
                     <div id="type-EXP_0010">
-                        <span class="badge badge-light">2d</span>
+                        <span class="badge badge-light" title="샷종류">2d</span>
                     </div>
                 </div>
                 <div class="centered-left"></div>
                 <div class="centered-right">
                     <!--Retime-->
                     <div class="row" id="button-retime-EXP_0010">
-                        <a href="dilink:///tmp/retime" class="badge badge-danger">R</a>
+                        <a href="dilink:///tmp/retime" class="badge badge-danger" title="작업 플레이트가 리타임 되었다는 뜻입니다.">R</a>
                     </div>
                     <!--Just Mark-->
                     <div class="row" id="button-just-EXP_0010">
-                        <span class="badge badge-warning mt-1">J</span>
+                        <span class="badge badge-warning mt-1" title="저스트 구간으로 작업해야한다는 뜻입니다.">J</span>
                     </div>
                     <!--OCIOcc-->
                     <div class="row" id="button-ociocc-EXP_0010">
-                        <span class="badge badge-info mt-1">N</span>
+                        <span class="badge badge-info mt-1" title="뉴트럴그레이드 값이 설정되어있다는 뜻입니다.">N</span>
                     </div>
                 </div>
                 <div class="bottom-left">
-                    <div class="row">
+                    <div class="row" title="핸들 IN/OUT 정보">
                         <span class="text-white black-opbg" id="handlein-EXP_0010">5</span>
                         <span class="text-white black-opbg">/</span>
                         <span class="text-white black-opbg" id="handleout-EXP_0010">5</span>
                     </div>
-                    <div class="row" id="platein-EXP_0010">
-                        <span class="text-white black-opbg" title="platein">1001</span>
+                    <div class="row" id="platein-EXP_0010" title="작업플레이트 IN 프레임">
+                        <span class="text-white black-opbg">1001</span>
                     </div>
-                    <div class="row" id="justin-EXP_0010">
-                        <span class="text-warning black-opbg" title="justin">1006</span>
+                    <div class="row" id="justin-EXP_0010" title="작업구간 Just IN 프레임">
+                        <span class="text-warning black-opbg">1006</span>
                     </div>
-                    <div class="row" id="justtimecodein-EXP_0010">
+                    <div class="row" id="justtimecodein-EXP_0010" title="작업구간 Just TimecodeIn 정보">
                         <span class="text-warning black-opbg">10:00:00:06</span>
                     </div>
                 </div>
                 <div class="bottom-right">
-                    <div class="row" id="plateout-EXP_0010">
+                    <div class="row" id="plateout-EXP_0010" title="작업플레이트 OUT 프레임(총프레임수)">
                         <span class="text-white black-opbg">1050(50)</span>
                     </div>
-                    <div class="row" id="justout-EXP_0010">                        
-                        <span class="text-warning black-opbg" title="justout">
-                            1045(41)
-                        </span>
+                    <div class="row" id="justout-EXP_0010" title="작업플레이트 Just OUT 프레임(총 Just 프레임수)">
+                        <span class="text-warning black-opbg">1045(41)</span>
                     </div>
-                    <div class="row" id="justtimecodeout-EXP_0010" >
+                    <div class="row" id="justtimecodeout-EXP_0010" title="작업구간 Just TimecodeOut 정보">
                         <span class="text-warning black-opbg">10:00:10:36</span>
                     </div>
                 </div>
@@ -94,41 +92,34 @@
         <div class="row">
             <div class="mx-auto pt-1 row">
                 <div id="update-EXP_0010">
-                    <span class="badge badge-warning ml-1 mr-1">UPDATE 2m10s</span>
+                    <span class="badge badge-warning ml-1 mr-1" title="최근 업데이트된 시간">UPDATE 2m10s</span>
                 </div>
                 <div id="button-thumbplay-EXP_0010">
-                    <span class="play finger">PLAY</span>
+                    <span class="play finger" title="썸네일 영상 재생, 웹프로토콜 설정이 필요합니다.">PLAY</span>
                 </div>
                 
                 <div id="button-thumb-EXP_0010">
-                    <span class="badge badge-darkmode ml-1 finger">Thumb</a>
+                    <span class="badge badge-darkmode ml-1 finger" title="썸네일 이미지를 변경합니다.(드레그앤드롭 형식으로 변경 예정입니다.)">Thumb</a>
                 </div>
                 <div id="button-edit-EXP_0010">
-                    <span class="badge badge-danger finger ml-1 finger">E</span>
+                    <span class="badge badge-danger finger ml-1 finger" title="기본 샷정보 수정">E</span>
                 </div>
 
                 <div id="button-dir-EXP_0010">
-                    <span class="badge badge-darkmode ml-1">F</a>
+                    <span class="badge badge-darkmode ml-1" title="샷,에셋 기본 폴더를 엽니다. 웹프로토콜 설정이 필요합니다.">F</a>
                 </div>
                 
                 <div id="button-log-EXP_0010">
-                    <span class="badge badge-darkmode ml-1 finger">L</a>				
+                    <span class="badge badge-darkmode ml-1 finger" title="로그를 확인합니다. dilog 서버 설정이 필요합니다.">L</a>				
                 </div>
             </div>
         </div>
     </div>
-    <p class="h6 font-weight-light">
-        기본 정보입니다.
-        <span class="btn btn-dark btn-sm">롤넘버(BO270)</span>
-        <span class="btn btn-dark btn-sm">샷이름(S036_0010)</span>
-        <span class="btn btn-dark btn-sm">타입(org)</span>
-        <span class="btn btn-dark btn-sm">샷타입(2D)</span>
-        <span class="btn btn-dark btn-sm">렌즈디스토션사이즈(2112 x 1188)</span>
-        <span class="btn btn-dark btn-sm">2D,3D마감일</span>
-        <span class="btn btn-dark btn-sm">핸들IN/OUT</span> 정보로 구성되어 있습니다.
-    </p>
-    <p class="h6 font-weight-light">
-        CSI는 썸네일이 굉장히 많은 정보가 밀집되어 있습니다.<br>
+    <p class="pt-3 h6 font-weight-light">
+        CSI는 공간을 효율적으로 사용하기 위해 썸네일에 굉장히 많은 정보를 밀집해두었습니다.<br>
+        궁금한 기능에 마우스를 올리면 기본적인 설명을 볼 수 있습니다.<br>
+        정보를 수정하기 위해서는 원하는 정보를 마우스 클릭하면 됩니다.<br>
+        썸네일을 클릭하면 빨간 테두리가 생기며, 해당 샷 또는 에셋을 선택하는 효과가 있습니다.
     </p>
 </div>
 {{end}}
