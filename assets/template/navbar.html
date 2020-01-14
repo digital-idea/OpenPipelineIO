@@ -28,8 +28,13 @@
             <a class="dropdown-item" href="/projectinfo">Projects</a>
             <div class="dropdown-divider"></div>
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <a class="dropdown-item" href="/users">Users</a>
-              <div class="dropdown-divider"></div>
+              {{if eq .User.ID "guest" "demo" }}
+                <span class="fade dropdown-item">Users</span>
+                <div class="dropdown-divider"></div>
+              {{else}}
+                <a class="dropdown-item" href="/users">Users</a>
+                <div class="dropdown-divider"></div>
+              {{end}}
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
               <a class="dropdown-item" href="/tasksettings">Task</a>

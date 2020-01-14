@@ -67,6 +67,10 @@ body {
 	border:1px solid rgb(92, 89, 81);
 }
 
+.fade {
+	opacity: 0.3;
+}
+
 .badge-fade, .badge-fade:link {
 	background-color:  #A7A59C!important;
 	color: rgb(30, 29, 27);
