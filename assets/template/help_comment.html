@@ -1,11 +1,41 @@
 {{define "help_comment"}}
 <div class="p-5 bg-darklight text-center text-darkmode">
-    <h3 class="p-2">Comment</h3>
-    <p>
-        <img src="/assets/img/help/description.jpg">
-    </p>
-    <p class="h6 font-weight-light">
-        작업에 필요한 기본정보, 레퍼런스, 소스, 수정내용, 태그리스트 순으로 적혀있습니다.
+    <h3 class="p-2">Comments</h3>
+    <div class="row pt-4 pb-4">
+        <div class="mx-auto col-sm-12 col-md-12 col-lg-4 text-left">
+            <div class="float-right">
+                <span class="add" title="수정사항 추가">＋</span>
+            </div>
+            
+            <div>
+                <div>
+                    <span class="text-badge">2020-01-14T16:02:58+09:00 / <span class="text-darkmode" title="작성자를 클릭하면 작성자의 프로필을 볼 수 있습니다.">작성자</span></span>
+                    <span class="remove" title="코멘트를 삭제합니다.">×</span>
+                    <br>
+                    <small class="text-white">
+                        수정사항을 입력합니다.<br>
+                        여러줄을 활용하여 입력이 가능합니다.<br>
+                        <span class="link" title="설명과 같이 참고해야할 자료가 있다면 표기되는 링크표시 아이콘 입니다.">∞</span>
+                    </small>
+                    <hr class="my-1 p-0 m-0 divider">
+                </div>
+                <div>
+                    <span class="text-badge">2020-01-14T16:02:58+09:00 / <span class="text-darkmode" title="작성자를 클릭하면 작성자의 프로필을 볼 수 있습니다.">작성자</span></span>
+                    <span class="remove" title="코멘트를 삭제합니다.">×</span>
+                    <br>
+                    <small class="text-white">
+                        수정사항을 입력합니다.<br>
+                        여러줄을 활용하여 입력이 가능합니다.<br>
+                        <span class="link" title="설명과 같이 참고해야할 자료가 있다면 표기되는 링크표시 아이콘 입니다.">∞</span>
+                    </small>
+                    <hr class="my-1 p-0 m-0 divider">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="h6 font-weight-light help-text">
+        기본 화면에서는 3개의 최신 수정사항만 볼 수 있습니다.<br>
+        더 자세한 수정사항을 보고 싶을 때는 디테일 페이지를 참고하세요.(개발중)
     </p>
 </div>
 {{end}}
