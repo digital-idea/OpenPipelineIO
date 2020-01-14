@@ -1343,7 +1343,7 @@
 				<div class="ml-3" id="reference-button-{{.Name}}">
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 						<span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('{{.Project}}','{{.ID}}')">＋</span>
-						{{if .References}}	
+						{{if .References}}
 							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('{{.Project}}','{{.ID}}')">－</span>
 						{{end}}
 					{{end}}
