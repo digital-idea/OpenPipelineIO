@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strconv"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/digital-idea/dilog"
 	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
@@ -332,6 +334,13 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 로그 기록을 위해서 host 값을 구한다.
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	// .xlsx 파일을 읽는다.
 	xlsxs, err := GetXLSX(tmppath)
 	if err != nil {
@@ -382,6 +391,9 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, rcp.Sheet+"값이 비어있습니다.", http.StatusBadRequest)
 		return
 	}
+	// 로그 처리시 로그서버에는 로그를 기록하지만, 대량이 들어갈 때 slack에는 전달하지 않습니다.
+	// slack에 대량의 로그가 쌓이는것을 원치않기 때문입니다.
+
 	for n, line := range excelRows {
 		if n == 0 { // 첫번째줄
 			if len(line) != 15 {
@@ -410,6 +422,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, "Set Rnum: "+rnum, project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// Shottype 2d,3d
 		shottype, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("C%d", n+1))
@@ -419,6 +436,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if shottype != "" {
 			_, err := SetShotType(session, project, name, shottype)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Shottype: %s", shottype), project, name, "csi3", ssid.ID, 180)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -436,6 +458,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, "Set Note: "+note, project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// 수정사항
 		comment, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("E%d", n+1))
@@ -445,6 +472,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if comment != "" {
 			err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment, "")
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Comment: %s, Media: %s", comment, ""), project, name, "csi3", ssid.ID, 180)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -464,8 +496,13 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Tag: %s", tags), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
-		// 링크자료(제목:경로)
+		// Source(제목:경로)
 		sources, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("G%d", n+1))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -481,7 +518,14 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 					continue
 				}
+				// log
+				err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Source: %s, %s", title, path), rcp.Project, name, "csi3", ssid.ID, 180)
+				if err != nil {
+					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+					continue
+				}
 			}
+
 		}
 		// JustTimecodeIn
 		justTimecodeIn, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("H%d", n+1))
@@ -495,6 +539,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("JustTimecodeIn: %s", justTimecodeIn), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// JustTimecoeOut
 		justTimecodeOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("I%d", n+1))
@@ -503,7 +552,12 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if justTimecodeOut != "" {
-			err = SetJustTimecodeIn(session, project, name, justTimecodeOut)
+			err = SetJustTimecodeOut(session, project, name, justTimecodeOut)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("JustTimecodeOut: %s", justTimecodeOut), project, name, "csi3", ssid.ID, 180)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -526,6 +580,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline2D: %s", date), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// 3D마감
 		ddline3d, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("K%d", n+1))
@@ -540,6 +599,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			_, err = SetDeadline3D(session, project, name, date)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Deadline3D: %s", date), project, name, "csi3", ssid.ID, 180)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -562,6 +626,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set FinDate: %s", date), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// FIN버전
 		finver, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("M%d", n+1))
@@ -571,6 +640,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if finver != "" {
 			err = SetFinver(session, project, name, finver)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set FinVersion: %s", finver), project, name, "csi3", ssid.ID, 180)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
@@ -593,6 +667,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Handle In: %d", num), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
 		// HandleOut
 		handleOut, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("O%d", n+1))
@@ -611,8 +690,12 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue
 			}
+			err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Handle Out: %d", num), project, name, "csi3", ssid.ID, 180)
+			if err != nil {
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				continue
+			}
 		}
-
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "resultexcel", rcp)
 	if err != nil {

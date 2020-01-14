@@ -2080,11 +2080,12 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media s
 	if err != nil {
 		return err
 	}
-	c := Comment{}
-	c.Date = date
-	c.Author = userID
-	c.Text = text
-	c.Media = media
+	c := Comment{
+		Date:   date,
+		Author: userID,
+		Text:   text,
+		Media:  media,
+	}
 	i.Comments = append(i.Comments, c)
 	err = setItem(session, project, i)
 	if err != nil {
