@@ -1,10 +1,10 @@
 {{define "help_note"}}
 <div class="p-5 text-center text-darkmode">
-    <h3 class="p-2">Note</h3>
+    <h3 class="p-2">Notes</h3>
     <div class="row pb-4">
         <div class="mx-auto col-sm-12 col-md-12 col-lg-4">
             <div class="">
-                <div class="row">
+                <div class="row" title="설정된 태그를 관리합니다.">
                     <div>
                         <span class="text-badge">Tags:</span>
                     </div>
@@ -15,26 +15,26 @@
                         </div>
                     </div>
                     <div class="ml-3">
-                        <span class="add ml-1">＋</span>
-                        <span class="remove ml-0">－</span>
+                        <span class="add ml-1" title="태그 추가">＋</span>
+                        <span class="remove ml-0" title="태그 삭제">－</span>
                     </div>
                 </div>
                 <!--작업내용-->
-                <div class="row">
+                <div class="row" title="작업내용">
                     <span class="text-badge">Note:</span>
                 </div>
                 <div class="ml-1 text-light small">
                     <div class="float-right">
-                        <span class="add">＋</span>
+                        <span class="add" title="작업내용 수정">＋</span>
                     </div>
                     <div class="text-left">
-                        작업내용과 관련된 내용을 작성하거나<br>
-                        필요한 정보를 작성한다.
+                        작업내용과 관련된 내용을 작성하거나,<br>
+                        프로젝트 진행을 위해 아티스트에게 필요한 정보를 작성합니다.
                     </div>
                 </div>
                 
                 <!--ObjectID-->
-                <div class="row">
+                <div class="row" title="3D에셋에서 사용하는 오프젝트ID의 범위를 설정합니다. 카타나에서 활용됩니다.">
                     <div>
                         <span class="finger no-decoration-text-button">ObjectID:</span>
                     </div>
@@ -44,7 +44,7 @@
                 </div>
                 
                 <!--ProductionCam-->
-                <div class="row">
+                <div class="row" title="카메라 퍼블리쉬 정보입니다.">
                     <div>
                         <span class="finger no-decoration-text-button">
                             CamInfo:
@@ -64,7 +64,7 @@
                 </div>
                 
                 <!--연결소스-->
-                <div class="row">
+                <div class="row" title="작업에 필요한 소스를 연결합니다.">
                     <span class="text-badge">Sources:</span>
                 </div>
                 <div class="ml-2 row">
@@ -75,13 +75,13 @@
                         </div>
                     </div>
                     <div class="ml-3">
-                        <span class="add ml-1">＋</span>
-                        <span class="remove ml-0">－</span>
+                        <span class="add ml-1" title="소스추가">＋</span>
+                        <span class="remove ml-0" title="소스삭제">－</span>
                     </div>
                 </div>
 
                 <!--Reference-->
-                <div class="row">
+                <div class="row" title="작업에 필요한 레퍼런스를 연결합니다.">
                     <span class="text-badge">References:</span>
                 </div>
                 <div class="ml-2 row">
@@ -92,14 +92,14 @@
                         </div>
                     </div>
                     <div class="ml-3">
-                        <span class="add ml-1">＋</span>
-                        <span class="remove ml-0">－</span>
+                        <span class="add ml-1" title="레퍼런스 추가">＋</span>
+                        <span class="remove ml-0" title="레퍼런스 삭제">－</span>
                     </div>
                 </div>
                 
                 
                 <!--Scaninfo-->
-                <div class="row">
+                <div class="row" title="스캔 데이터 정보가 기입되어 있습니다.">
                     <div>
                         <span class="text-badge">ScanInfo:</span>
                     </div>
@@ -139,9 +139,9 @@
             </div>
         </div>
     </div>
-    
-    <p class="h6 font-weight-light">
-        작업에 필요한 기본정보, 레퍼런스, 소스, 수정내용, 태그리스트 순으로 적혀있습니다.
+    <p class="h6 font-weight-light help-text">
+        작업에 필요한 태그, 노트사항, 소스, 레퍼런스, 카메라정보, 오브젝트정보, 스캔데이터 정보를 관리합니다.<br>
+        각 항목에 마우스를 올리면 간단한 설명을 볼 수 있습니다.
     </p>
 </div>
 {{end}}
