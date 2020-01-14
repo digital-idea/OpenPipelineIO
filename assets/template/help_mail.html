@@ -1,23 +1,18 @@
 {{define "help_mail"}}
 <div class="p-5 text-darkmode text-center">
     <h3 class="p-2">Mail</h3>
-    <p>
-        <img src="/assets/img/help/sendmail.png">
+    <div class="text-center">
+        <img src="/assets/img/help/mail.png">
+    </div>
+    <p class="h6 font-weight-light help-text pb-3">
+        CSI는 메일과 관련된 버튼이 여러곳에 설정되어있습니다.<br>
+        여러분이 사용하는 웹브라우저가 메일프로그램과 잘 연결되어 있다면, 이메일과 관련된 버튼 클릭시 자동으로 제목이 적힌 메일창이 열리게 됩니다.
     </p>
-    <p class="h6 font-weight-light">
-        여러분의 웹브라우저가 메일프로그램과 잘 연결되어 있다면, 샷 이름 클릭시 프로젝트명과 샷이름이 적힌 메일창이 열립니다.
-    </p>
-    <p class="h6 font-weight-light">
-        이 기능이 작동되기 위해서는 여러분의 웹 브라우저에 메일프로그램 등록이 필요합니다.
-    </p>
-    <p class="h6 font-weight-light">
-        Firefox : <span class="btn btn-dark btn-sm"> 편집 > 환경변수 > 프로그램 > mailto </span>
-    </p>
-    <p class="h6 font-weight-light">
-        에서 메일 클라이언트를 Thunderbird 메일로 바꾸어주세요.
-    </p>
-    <p class="h6 font-weight-light">
-        리눅스에서 Thunderbird의 위치는 <span class="btn btn-dark btn-sm">/usr/bin/thunderbird</span> 경로입니다.
+    <p class="h6 font-weight-light help-text">
+        여러분이 CentOS를 사용하고 있다면, 메일 기능을 편리하게 사용하기 위해 웹 브라우저에 Thunderbird 메일 프로그램 등록을 추천드립니다.<br>
+        Firefox 브라우저에서 <span class="btn btn-dark btn-sm"> 환경설정 > 응용 프로그램 > mailto </span> 항목으로 이동해주세요.<br>
+        메일 클라이언트를 Thunderbird 메일로 바꾸어주세요.<br>
+        CentOS 에서 Thunderbird 경로는 일반적으로 <span class="btn btn-dark btn-sm">/usr/bin/thunderbird</span> 입니다.
     </p>
 </div>
 {{end}}

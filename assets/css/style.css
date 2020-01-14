@@ -566,4 +566,7 @@ input[type=checkbox]:checked+div{
 	background-color: #555;
   }
 
-
+.help-text {
+	line-height: 150%;
+}
+  

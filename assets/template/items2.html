@@ -1303,54 +1303,53 @@
 		{{end}}
 		
 		<!--연결소스-->
-		<div class="row">
-			<span class="text-badge">Sources:</span>
-		</div>
-
-		<div class="ml-2 row">
-			<div id="sources-{{.Name}}" class="row">
-				{{range .Sources -}}
-					<div id="source-{{$name}}-{{.Title}}">
-						<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
-					</div>
-				{{- end}}
+		{{if eq .Type "org" "left" "asset" }}
+			<div class="row">
+				<span class="text-badge">Sources:</span>
 			</div>
-			<div class="ml-3" id="source-button-{{.Name}}">
-				{{if eq .Type "org" "left" "asset"}}
+			
+			<div class="ml-2 row">
+				<div id="sources-{{.Name}}" class="row">
+					{{range .Sources -}}
+						<div id="source-{{$name}}-{{.Title}}">
+							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+						</div>
+					{{- end}}
+				</div>
+				<div class="ml-3" id="source-button-{{.Name}}">
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 						<span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('{{.Project}}', '{{.ID}}')">＋</span>
 						{{if .Sources}}	
 							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('{{.Project}}', '{{.ID}}')">－</span>
 						{{end}}
 					{{end}}
-				{{end}}
+				</div>
 			</div>
-		</div>
+		{{end}}
 
 		<!--Reference-->
-		<div class="row">
-			<span class="text-badge">References:</span>
-		</div>
-
-		<div class="ml-2 row">
-			<div id="references-{{.Name}}" class="row">
-				{{range .References -}}
-					<div id="reference-{{$name}}-{{.Title}}">
-						<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
-					</div>
-				{{- end}}
+		{{if eq .Type "org" "left" "asset" }}
+			<div class="row">
+				<span class="text-badge">References:</span>
 			</div>
-			<div class="ml-3" id="reference-button-{{.Name}}">
-				{{if eq .Type "org" "left" "asset"}}
+			<div class="ml-2 row">
+				<div id="references-{{.Name}}" class="row">
+					{{range .References -}}
+						<div id="reference-{{$name}}-{{.Title}}">
+							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+						</div>
+					{{- end}}
+				</div>
+				<div class="ml-3" id="reference-button-{{.Name}}">
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 						<span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('{{.Project}}','{{.ID}}')">＋</span>
 						{{if .References}}	
 							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('{{.Project}}','{{.ID}}')">－</span>
 						{{end}}
 					{{end}}
-				{{end}}
+				</div>
 			</div>
-		</div>
+		{{end}}
 		
 		
 		<!--Scaninfo-->

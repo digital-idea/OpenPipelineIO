@@ -9,8 +9,12 @@
 
     <p class="mt-2">
         <small class="text-darkmode">
-            Build Time: {{.BuildTime}}<br>
-            Git SHA1: <a href="https://github.com/digital-idea/csi3/commit/{{.Sha1ver}}" class="text-warning">{{.Sha1ver}}</a>
+            {{if .BuildTime}}
+                Build Time: {{.BuildTime}}<br>
+            {{end}}
+            {{if .Sha1ver}}
+                Git SHA1: <a href="https://github.com/digital-idea/csi3/commit/{{.Sha1ver}}" class="text-warning">{{.Sha1ver}}</a>
+            {{end}}
         </small>
     </p>
 </div>
