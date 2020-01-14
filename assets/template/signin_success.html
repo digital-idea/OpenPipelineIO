@@ -12,9 +12,13 @@
         </div>
     </div>     
     <div class="text-center">
-        <a href="/" class="btn btn-darkmode mt-5">CSI 홈으로 이동하기</a>
+        <a href="/" class="btn btn-darkmode mt-5">Home</a>
         {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10}}
-            <a href="/users" class="btn btn-darkmode mt-5">Users 이동하기</a>
+            {{if eq .User.ID "guest" "demo" }}
+                <span class="btn btn-darkmode mt-5">Users(Not Support)</span>
+            {{else}}
+                <a href="/users" class="btn btn-darkmode mt-5">Users</a>
+            {{end}}
         {{end}}
     </div>
 </div>
