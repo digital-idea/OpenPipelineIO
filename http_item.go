@@ -65,6 +65,27 @@ func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
 
+// handleItemDetail 함수는 아이템 디테일 페이지를 출력한다.
+func handleItemDetail(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	id := q.Get("id")
+	fmt.Println(project, id)
+}
+
 // handleEditItem 함수는 Item 편집페이지이다.
 func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
