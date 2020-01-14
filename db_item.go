@@ -1397,10 +1397,15 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 		t.Status = ASSIGN
 		item.Tasks[task] = t
 	}
+
 	if !visable {
 		t := item.Tasks[task]
 		t.Title = task
 		t.Status = NONE
+		t.User = "" // 제거를 하지 않으면 아티스트 이름 검색시 걸린다. Task를 숨긴다면 아티스트명을 제거한다.
+		t.Predate = "" // 1차 마감일을 리셋한다.
+		t.Date = "" // 2차 마감일을 리셋한다.
+		t.Mdate = "" // mov 업데이트 날짜를 리셋한다.
 		item.Tasks[task] = t
 	}
 	c := session.DB("project").C(project)
