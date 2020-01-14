@@ -613,7 +613,7 @@ function setNoteModal(project, id) {
     document.getElementById("modal-setnote-project").value = project;
     document.getElementById("modal-setnote-id").value = id;
     document.getElementById("modal-setnote-text").value = "";
-    document.getElementById("modal-setnote-title").innerHTML = "Rm Tag" + multiInputTitle(id);
+    document.getElementById("modal-setnote-title").innerHTML = "Set Note" + multiInputTitle(id);
 }
 
 function setNote(project, id, text) {
@@ -1007,7 +1007,7 @@ function setAddReferenceModal(project, id) {
     document.getElementById("modal-addreference-id").value = id;
     document.getElementById("modal-addreference-subject").value = "";
     document.getElementById("modal-addreference-path").value = "";
-    document.getElementById("modal-addreference-title").innerHTML = "Rm Source" + multiInputTitle(id);
+    document.getElementById("modal-addreference-title").innerHTML = "Add Reference" + multiInputTitle(id);
 }
 
 function addReference(project, id, title, path) {
