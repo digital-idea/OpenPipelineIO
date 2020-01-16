@@ -83,7 +83,71 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	project := q.Get("project")
 	id := q.Get("id")
-	fmt.Println(project, id)
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User        User
+		Projectlist []string
+		Devmode     bool
+		Projectinfo Project
+		SearchOption
+		Dilog string
+		Wfs   string
+		Item
+		TasksettingOrderMap map[string]float64
+	}
+	rcp := recipe{}
+	rcp.Wfs = *flagWFS
+	rcp.Dilog = *flagDILOG
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if rcp.SearchOption.Project != "" {
+		rcp.Projectinfo, err = getProject(session, rcp.SearchOption.Project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingOrderMap = make(map[string]float64)
+	for _, t := range tasks {
+		rcp.TasksettingOrderMap[t.Name] = t.Order
+	}
+	rcp.Item, err = getItem(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "detail", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleEditItem 함수는 Item 편집페이지이다.
