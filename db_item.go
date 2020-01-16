@@ -400,8 +400,8 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			} else {
 				query = append(query, bson.M{"tasks." + op.Task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
 			}
-		} else if regexpRnum.MatchString(word) { // 롤넘버 형태일 때
-			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: "i"}})
+		} else if strings.HasPrefix(word, "rnum:") { // 롤넘버 형태일 때
+			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: strings.TrimPrefix(word, "rnum:"), Options: "i"}})
 		} else {
 			switch word {
 			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":
@@ -447,9 +447,6 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"tag": "8권"})
 			default:
 				query = append(query, bson.M{"id": &bson.RegEx{Pattern: word, Options: "i"}})
-				query = append(query, bson.M{"onsetnote": &bson.RegEx{Pattern: word, Options: "i"}}) // legacy
-				query = append(query, bson.M{"pmnote": &bson.RegEx{Pattern: word, Options: "i"}})    // legacy
-				query = append(query, bson.M{"link": &bson.RegEx{Pattern: word, Options: "i"}})      // legacy
 				query = append(query, bson.M{"comments.text": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"sources.title": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"sources.path": &bson.RegEx{Pattern: word, Options: "i"}})
@@ -457,6 +454,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
+				query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: ""}})
 				// 느슨한 유저체크
 				if op.Task == "" {
 					for _, task := range tasks {
@@ -1402,10 +1400,10 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 		t := item.Tasks[task]
 		t.Title = task
 		t.Status = NONE
-		t.User = "" // 제거를 하지 않으면 아티스트 이름 검색시 걸린다. Task를 숨긴다면 아티스트명을 제거한다.
+		t.User = ""    // 제거를 하지 않으면 아티스트 이름 검색시 걸린다. Task를 숨긴다면 아티스트명을 제거한다.
 		t.Predate = "" // 1차 마감일을 리셋한다.
-		t.Date = "" // 2차 마감일을 리셋한다.
-		t.Mdate = "" // mov 업데이트 날짜를 리셋한다.
+		t.Date = ""    // 2차 마감일을 리셋한다.
+		t.Mdate = ""   // mov 업데이트 날짜를 리셋한다.
 		item.Tasks[task] = t
 	}
 	c := session.DB("project").C(project)
