@@ -279,16 +279,17 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	if op.Searchword == "" {
 		return results, nil
 	}
+	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
+	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
+		return results, nil
+	}
+	// 프로젝트 문자열이 빈 값이라면 전체 리스트중에서 첫번째 프로젝트를 선언한다.
 	if op.Project == "" {
 		plist, err := Projectlist(session)
 		if err != nil {
 			return results, err
 		}
 		op.Project = plist[0]
-	}
-	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
-	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
-		return results, nil
 	}
 
 	session.SetMode(mgo.Monotonic, true)
@@ -405,37 +406,12 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		} else {
 			switch word {
 			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":
-				if op.Task != "" {
-					if op.Assign {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": ASSIGN})
-					}
-					if op.Ready {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": READY})
-					}
-					if op.Wip {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": WIP})
-					}
-					if op.Confirm {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": CONFIRM})
-					}
-					if op.Done {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": DONE})
-					}
-					if op.Omit {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": OMIT})
-					}
-					if op.Hold {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": HOLD})
-					}
-					if op.Out {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": OUT})
-					}
-					if op.None {
-						query = append(query, bson.M{"tasks." + op.Task + ".status": NONE})
-					}
-				} else {
-					query = append(query, bson.M{})
-				}
+				query = append(query, bson.M{})
+			case "shot", "샷", "전샷", "전체샷":
+				query = append(query, bson.M{"type": "org"})
+				query = append(query, bson.M{"type": "left"})
+			case "asset", "assets", "에셋":
+				query = append(query, bson.M{"type": "asset"})
 			case "전권":
 				query = append(query, bson.M{"tag": "1권"})
 				query = append(query, bson.M{"tag": "2권"})
@@ -455,7 +431,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"scanname": &bson.RegEx{Pattern: word, Options: ""}})
 				query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: word, Options: ""}})
-				// 느슨한 유저체크
+				// Task가 선언 되어있을 때
 				if op.Task == "" {
 					for _, task := range tasks {
 						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
@@ -497,6 +473,34 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		if op.None {
 			statusQueries = append(statusQueries, bson.M{"status": NONE})
 		}
+	} else {
+		if op.Assign {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": ASSIGN})
+		}
+		if op.Ready {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": READY})
+		}
+		if op.Wip {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": WIP})
+		}
+		if op.Confirm {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": CONFIRM})
+		}
+		if op.Done {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": DONE})
+		}
+		if op.Omit {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": OMIT})
+		}
+		if op.Hold {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": HOLD})
+		}
+		if op.Out {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": OUT})
+		}
+		if op.None {
+			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": NONE})
+		}
 	}
 
 	queries := []bson.M{
@@ -511,13 +515,14 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		fmt.Println(q)
 		fmt.Println()
 	}
+	// 정렬설정
 	switch op.Sortkey {
 	// 스캔길이, 스캔날짜는 역순으로 정렬한다.
 	// 스캔길이는 보통 난이도를 결정하기 때문에 역순(긴 길이순)을 매니저인 팀장,실장은 우선적으로 봐야한다.
 	// 스캔날짜는 IO팀에서 최근 등록한 데이터를 많이 검토하기 때문에 역순(최근등록순)으로 봐야한다.
 	case "scanframe", "scantime":
 		op.Sortkey = "-" + op.Sortkey
-	case "":
+	case "": // 빈 문자열이라면 기본적으로 id로 정렬한다.
 		op.Sortkey = "id"
 	}
 	err = c.Find(q).Sort(op.Sortkey).All(&results)
@@ -1397,14 +1402,7 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 	}
 
 	if !visable {
-		t := item.Tasks[task]
-		t.Title = task
-		t.Status = NONE
-		t.User = ""    // 제거를 하지 않으면 아티스트 이름 검색시 걸린다. Task를 숨긴다면 아티스트명을 제거한다.
-		t.Predate = "" // 1차 마감일을 리셋한다.
-		t.Date = ""    // 2차 마감일을 리셋한다.
-		t.Mdate = ""   // mov 업데이트 날짜를 리셋한다.
-		item.Tasks[task] = t
+		delete(item.Tasks, task)
 	}
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
