@@ -350,9 +350,21 @@ func main() {
 						if err != nil {
 							log.Fatal(err)
 						}
+					} else {
+						// JustIn 값이 없다면, org,left 값을 초기화 한다.
+						err = SetFrame(session, *flagProject, *flagName, "justin", 0)
+						if err != nil {
+							log.Fatal(err)
+						}
 					}
 					if *flagJustout > 0 {
 						err = SetFrame(session, *flagProject, *flagName, "justout", *flagJustout)
+						if err != nil {
+							log.Fatal(err)
+						}
+					} else {
+						// JustOut 값이 없다면, org,left 값을 초기화 한다.
+						err = SetFrame(session, *flagProject, *flagName, "justout", 0)
 						if err != nil {
 							log.Fatal(err)
 						}
@@ -362,14 +374,14 @@ func main() {
 						log.Fatal(err)
 					}
 					if strings.Contains(*flagType, "org") { // 일반샷이 재스캔 되었을 때 로그처리
-						dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 업데이트 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName+"_"+"org", "csi3", user.Username, 180)
-						dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 업데이트 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName+"_"+"org", "csi3", user.Username, 180)
-						dilog.Add(*flagDBIP, ip, "플레이트 사이즈 업데이트 : "+*flagPlatesize, *flagProject, *flagName+"_"+"org", "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 업데이트 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName, "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 업데이트 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName, "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, "플레이트 사이즈 업데이트 : "+*flagPlatesize, *flagProject, *flagName, "csi3", user.Username, 180)
 					}
 					if strings.Contains(*flagType, "left") { // 입체샷이 재스캔 되었을 때 로그처리
-						dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 업데이트 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName+"_"+"left", "csi3", user.Username, 180)
-						dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 업데이트 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName+"_"+"left", "csi3", user.Username, 180)
-						dilog.Add(*flagDBIP, ip, "플레이트 사이즈 업데이트 : "+*flagPlatesize, *flagProject, *flagName+"_"+"left", "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 업데이트 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName, "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 업데이트 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName, "csi3", user.Username, 180)
+						dilog.Add(*flagDBIP, ip, "플레이트 사이즈 업데이트 : "+*flagPlatesize, *flagProject, *flagName, "csi3", user.Username, 180)
 					}
 				}
 			}

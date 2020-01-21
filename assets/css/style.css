@@ -393,15 +393,15 @@ input[type=checkbox]:checked+div{
 	position: absolute;
 	bottom: 4px;
 	left: 20px;
-	font-size: 13px;
+	font-size: 12px;
 }
   
 /* Bottom right text */
 .bottom-right {
 	position: absolute;
 	bottom: 4px;
-	right: 20px;
-	font-size: 13px;
+	right: 22px;
+	font-size: 12px;
 }
 
 .centered {
