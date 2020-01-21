@@ -93,7 +93,7 @@ function setEditTaskModal(project, id, task) {
             document.getElementById("modal-edittask-status").value=data.task.status;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -130,7 +130,7 @@ function setTimeModal(project, id) {
             document.getElementById('justtimecodeout').value = data.justtimecodeout;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -156,7 +156,7 @@ function setShottypeModal(project, id) {
             document.getElementById("modal-shottype-type").value=data.shottype;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -255,7 +255,7 @@ function addTask(project, id, task) {
                     document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -293,7 +293,7 @@ function addTask(project, id, task) {
                 document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -328,7 +328,7 @@ function rmTask(project, id, task) {
                     document.getElementById(`${data.name}-task-${data.task}`).remove();
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -351,7 +351,7 @@ function rmTask(project, id, task) {
                 document.getElementById(`${data.name}-task-${data.task}`).remove();
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -402,7 +402,7 @@ function setFrame(mode, id, frame) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -427,7 +427,7 @@ function setScanTimecodeIn(project, id, timecode, userid) {
             document.getElementById("scantimecodein-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.timecode}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -452,7 +452,7 @@ function setCameraPubTask(project, id, task) {
             document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub-${data.task}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -477,7 +477,7 @@ function setCameraPubPath(project, id, path) {
             document.getElementById("campubpath-"+data.name).innerHTML = `, <a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -502,7 +502,7 @@ function setCameraOptionModal(project, id) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -532,7 +532,7 @@ function setCameraProjection(project, id) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -556,7 +556,7 @@ function setScanTimecodeOut(project, id, timecode, userid) {
             document.getElementById("scantimecodeout-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.timecode}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -580,7 +580,7 @@ function setJustTimecodeIn(project, id, timecode, userid) {
             document.getElementById("justtimecodein-"+data.name).innerHTML = `<span class="text-warning black-opbg">${data.timecode}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -604,7 +604,7 @@ function setJustTimecodeOut(project, id, timecode, userid) {
             document.getElementById("justtimecodeout-"+data.name).innerHTML = `<span class="text-warning black-opbg">${data.timecode}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -612,8 +612,28 @@ function setJustTimecodeOut(project, id, timecode, userid) {
 function setNoteModal(project, id) {
     document.getElementById("modal-setnote-project").value = project;
     document.getElementById("modal-setnote-id").value = id;
-    document.getElementById("modal-setnote-text").value = "";
     document.getElementById("modal-setnote-title").innerHTML = "Set Note" + multiInputTitle(id);
+    document.getElementById("modal-setnote-text").value = "";
+}
+
+function editNoteModal(project, id) {
+    let token = document.getElementById("token").value;
+    document.getElementById("modal-editnote-project").value = project;
+    document.getElementById("modal-editnote-id").value = id;
+    document.getElementById("modal-editnote-title").innerHTML = "Set Note" + multiInputTitle(id);
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-editnote-text").value = data.note.text;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 function setNote(project, id, text) {
@@ -652,7 +672,7 @@ function setNote(project, id, text) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -682,10 +702,36 @@ function setNote(project, id, text) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
+}
+
+function editNote(project, id, text) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    $.ajax({
+        url: "/api/setnote",
+        type: "post",
+        data: {
+            project: project,
+            name: id2name(id),
+            text: text,
+            userid: userid,
+            overwrite: true,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 function setAddCommentModal(project, id) {
@@ -739,7 +785,7 @@ function addComment(project, id, text, media) {
                     document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -776,7 +822,7 @@ function addComment(project, id, text, media) {
                 document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -810,7 +856,7 @@ function rmComment(project, id, date) {
             document.getElementById(`comment-${data.name}-${data.date}`).remove();
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -870,7 +916,7 @@ function addSource(project, id, title, path) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -912,7 +958,7 @@ function addSource(project, id, title, path) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -963,7 +1009,7 @@ function rmSource(project, id, title) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -996,7 +1042,7 @@ function rmSource(project, id, title) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1057,7 +1103,7 @@ function addReference(project, id, title, path) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -1099,7 +1145,7 @@ function addReference(project, id, title, path) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1150,7 +1196,7 @@ function rmReference(project, id, title) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
             
@@ -1183,7 +1229,7 @@ function rmReference(project, id, title) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1209,7 +1255,7 @@ function setThummov(project, id, path) {
             document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="play">▶</a>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1234,7 +1280,7 @@ function setBeforemov(project, id, path) {
             console.info(data);
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1259,7 +1305,7 @@ function setAftermov(project, id, path) {
             console.info(data);
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1289,7 +1335,7 @@ function setRetimeplate(project, id, path) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1318,7 +1364,7 @@ function setOCIOcc(project, id, path) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1347,7 +1393,7 @@ function setRollmedia(project, id, rollmedia) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1372,7 +1418,7 @@ function setIteminfoModal(project, id) {
             document.getElementById('modal-iteminfo-rollmedia').value = data.rollmedia;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1402,7 +1448,7 @@ function setTaskMov(project, id, task, mov) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1435,7 +1481,7 @@ function setTaskDue(project, id, task, due) {
                     console.info(data);
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1458,7 +1504,7 @@ function setTaskDue(project, id, task, due) {
                 console.info(data);
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1497,7 +1543,7 @@ function setTaskUser(project, id, task, user) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1524,7 +1570,7 @@ function setTaskUser(project, id, task, user) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1559,7 +1605,7 @@ function setTaskStatus(project, id, task, status) {
                     document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1582,7 +1628,7 @@ function setTaskStatus(project, id, task, status) {
                 document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1621,7 +1667,7 @@ function setTaskDate(project, id, task, date) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1648,7 +1694,7 @@ function setTaskDate(project, id, task, date) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1683,7 +1729,7 @@ function setTaskStartdate(project, id, task, date) {
                     console.log(data.date);
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1706,7 +1752,7 @@ function setTaskStartdate(project, id, task, date) {
                 console.log(data.date);
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1741,7 +1787,7 @@ function setTaskUserNote(project, id, task, usernote) {
                     console.info(data)
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1764,7 +1810,7 @@ function setTaskUserNote(project, id, task, usernote) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1805,7 +1851,7 @@ function setTaskPredate(project, id, task, date) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1832,7 +1878,7 @@ function setTaskPredate(project, id, task, date) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1861,7 +1907,7 @@ function setDeadline2dModal(project, id) {
             document.getElementById('modal-deadline2d-date').value = rfc3339toNormaltime(data.ddline2d);
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1894,7 +1940,7 @@ function setDeadline2D(project, id, date) {
                     document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1916,7 +1962,7 @@ function setDeadline2D(project, id, date) {
                 document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -1938,7 +1984,7 @@ function setDeadline3dModal(project, id) {
             document.getElementById('modal-deadline3d-date').value = rfc3339toNormaltime(data.ddline3d);
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -1971,7 +2017,7 @@ function setDeadline3D(project, id, date) {
                     document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('${data.project}','${data.id}')">3D:${data.shortdate}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -1993,7 +2039,7 @@ function setDeadline3D(project, id, date) {
                 document.getElementById("deadline3d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('${data.project}','${data.id}')">3D:${data.shortdate}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2029,7 +2075,7 @@ function setShottype(project, id) {
                     document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2051,7 +2097,7 @@ function setShottype(project, id) {
                 document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2072,7 +2118,7 @@ function setAssettypeModal(project, id) {
             document.getElementById("modal-assettype-type").value=data.assettype;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2114,7 +2160,7 @@ function setAssettype(project, id) {
                     document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2143,7 +2189,7 @@ function setAssettype(project, id) {
                 document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2165,7 +2211,7 @@ function setRnumModal(project, id) {
             document.getElementById('modal-setrnum-text').value = data.rnum;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2195,7 +2241,7 @@ function setRnum(project, id, rnum) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2255,7 +2301,7 @@ function addTag(project, id, tag) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2292,7 +2338,7 @@ function addTag(project, id, tag) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2317,7 +2363,7 @@ function renameTag(project, before, after) {
             alert(`${data.project}프로젝트의 ${data.before} Tag가 ${data.after} Tag로 변경되었습니다.\n새로고침 해주세요.`);
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2368,7 +2414,7 @@ function rmTag(project, id, tag) {
                     }
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2402,7 +2448,7 @@ function rmTag(project, id, tag) {
                 }
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2481,7 +2527,7 @@ function setTaskLevel(project, id, task, level) {
                     console.info(data)
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2504,7 +2550,7 @@ function setTaskLevel(project, id, task, level) {
                 console.info(data)
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2526,7 +2572,7 @@ function setObjectIDModal(project, id) {
             document.getElementById('modal-objectid-out').value = data.objectidout;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2552,7 +2598,7 @@ function setObjectID(project, id, innum, outnum) {
             document.getElementById("objectidnum-"+data.name).innerHTML = `<span class="text-badge ml-1">${data.in}-${data.out}</span>`;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2578,7 +2624,7 @@ function setCrowdAsset(project, id) {
             }
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2598,7 +2644,7 @@ function setPlatesizeModal(project, id) {
             document.getElementById("modal-platesize-size").value = data.platesize;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2632,7 +2678,7 @@ function setPlatesize(project, id, size) {
                     document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2655,7 +2701,7 @@ function setPlatesize(project, id, size) {
                 document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2676,7 +2722,7 @@ function setUndistortionsizeModal(project, id) {
             document.getElementById("modal-undistortionsize-size").value = data.dsize;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2709,7 +2755,7 @@ function setUndistortionsize(project, id, size) {
                     document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2732,7 +2778,7 @@ function setUndistortionsize(project, id, size) {
                 document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2753,7 +2799,7 @@ function setRendersizeModal(project, id) {
             document.getElementById("modal-rendersize-size").value = data.rendersize;
         },
         error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 }
@@ -2786,7 +2832,7 @@ function setRendersize(project, id, size) {
                     document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2809,7 +2855,7 @@ function setRendersize(project, id, size) {
                 document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
             },
             error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -2854,7 +2900,7 @@ function rmItem() {
                     
                 },
                 error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
                 }
             });
         }
@@ -2877,7 +2923,7 @@ function autocomplete(inp) {
             arr = data.users;
         },
         error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
     /*the autocomplete function takes two arguments,
@@ -3005,7 +3051,7 @@ function setAddTaskModal(project, id, type) {
                 }
             },
             error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -3029,7 +3075,7 @@ function setAddTaskModal(project, id, type) {
                 }
             },
             error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -3060,7 +3106,7 @@ function setRmTaskModal(project, id, type) {
                 }
             },
             error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }
@@ -3084,7 +3130,7 @@ function setRmTaskModal(project, id, type) {
                 }
             },
             error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
             }
         });
     }

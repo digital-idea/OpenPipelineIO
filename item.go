@@ -42,10 +42,10 @@ const (
 
 // Comment 자료구조는 글을 작성할 때 사용하는 자료구조이다.
 type Comment struct {
-	Date   string // 코맨트 등록시간 RFC3339
-	Author string // 작성자
-	Text   string // 내용
-	Media  string // media 경로
+	Date   string `json:"date"`   // 코맨트 등록시간 RFC3339
+	Author string `json:"author"` // 작성자
+	Text   string `json:"text"`   // 내용
+	Media  string `json:"media"`  // media 경로
 }
 
 // Source 자료구조는 글을 작성할 때 사용하는 자료구조이다.

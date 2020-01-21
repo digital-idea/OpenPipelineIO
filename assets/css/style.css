@@ -446,7 +446,7 @@ input[type=checkbox]:checked+div{
 }
 
 
-.play, .select, .add, .link {
+.play, .select, .add, .link, .edit {
 	color: #A7A59C;
 	background-color: rgb(55, 54, 52);
 	border:1px solid #A7A59C;
@@ -456,6 +456,7 @@ input[type=checkbox]:checked+div{
 	font-size: 12px;
 	cursor: pointer;
 }
+
 .play:hover {
 	color: rgb(216, 213, 196);
 	background-color: rgb(55, 54, 52);
@@ -468,7 +469,7 @@ input[type=checkbox]:checked+div{
 	text-decoration: none;
 }
 
-.add:hover, .link:hover {
+.add:hover, .edit:hover, .link:hover {
 	color: #000000;
 	background-color: #FFB90B;
 	border:1px solid #FFB90B;
