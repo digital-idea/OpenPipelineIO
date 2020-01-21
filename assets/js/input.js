@@ -737,7 +737,7 @@ function editNote(project, id, text) {
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
     document.getElementById("modal-addcomment-id").value = id;
-    document.getElementById("modal-addcomment-text").value = "";
+    // document.getElementById("modal-addcomment-text").value = ""; // 이전에 작성된 내용이 있는것이 편하다고 함.
     document.getElementById("modal-addcomment-media").value = "";
     document.getElementById("modal-addcomment-title").innerHTML = "Add Comment" + multiInputTitle(id);
 }
