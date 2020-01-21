@@ -63,13 +63,13 @@
 				<div class="centered-bottom row">
 					{{if eq .Type "asset"}}
 						<div id="assettype-{{.Name}}">
-							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
+							<span class="badge badge-light finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
 						</div>
-						<div id="crowdasset-{{.Name}}" class="ml-1">
+						<div id="crowdasset-{{.ID}}" class="ml-1">
 							{{if .CrowdAsset}}
-								<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdType('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+								<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
 							{{else}}
-								<span class="badge badge-light finger fade"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdType('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+								<span class="badge badge-light finger fade"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
 							{{end}}
 						</div>
 					{{else}}

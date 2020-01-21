@@ -2557,6 +2557,32 @@ function setObjectID(project, id, innum, outnum) {
     });
 }
 
+function setCrowdAsset(project, id) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/setcrowdasset",
+        type: "post",
+        data: {
+            project: project,
+            name: id2name(id),
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            if (data.crowdasset) {
+                document.getElementById("crowdasset-"+data.id).innerHTML = `<span class="badge badge-warning finger" onclick="setCrowdAsset('${data.project}', '${data.id}')">Crowd</span>`;
+            } else {
+                document.getElementById("crowdasset-"+data.id).innerHTML = `<span class="badge badge-light fade finger" onclick="setCrowdAsset('${data.project}', '${data.id}')">Crowd</span>`;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"Msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setPlatesizeModal(project, id) {
     let token = document.getElementById("token").value;
     document.getElementById("modal-platesize-project").value = project

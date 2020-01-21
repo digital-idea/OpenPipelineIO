@@ -1914,6 +1914,31 @@ func SetFindate(session *mgo.Session, project, name, date string) error {
 	return nil
 }
 
+// SetCrowdAsset 함수는 item에 crowdtype을 설정한다.
+func SetCrowdAsset(session *mgo.Session, project, name string) (string, bool, error) {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return "", false, err
+	}
+	typ, err := Type(session, project, name)
+	if err != nil {
+		return "", false, err
+	}
+	id := name + "_" + typ
+	c := session.DB("project").C(project)
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return id, item.CrowdAsset, err
+	}
+	invertBool := !item.CrowdAsset
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"crowdasset": invertBool, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return id, invertBool, err
+	}
+	return id, invertBool, nil
+}
+
 // AddTag 함수는 item에 tag를 셋팅한다.
 func AddTag(session *mgo.Session, project, name, inputTag string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
