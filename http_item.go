@@ -552,32 +552,6 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
 		i.CrowdAsset = crowdAsset
-		// 기본적인 Task를 추가한다.
-		i.Tasks = make(map[string]Task)
-		if assettype == "comp" {
-			t := Task{
-				Status: ASSIGN,
-				Title:  "comp",
-			}
-			i.Tasks["comp"] = t
-		} else if assettype == "env" {
-			t := Task{
-				Status: ASSIGN,
-				Title:  "env",
-			}
-			i.Tasks["env"] = t
-			t = Task{
-				Status: ASSIGN,
-				Title:  "matte",
-			}
-			i.Tasks["matte"] = t
-		} else {
-			t := Task{
-				Status: ASSIGN,
-				Title:  "model",
-			}
-			i.Tasks["model"] = t
-		}
 		err = addItem(session, project, i)
 		if err != nil {
 			a.Error = err.Error()
