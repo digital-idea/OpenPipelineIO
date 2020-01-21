@@ -11,4 +11,5 @@ type Tasksetting struct {
 	WFSPath    string            `json:"wfspath"`    // Task 클릭시 wfs에서 열리는 경로
 	Attributes map[string]string `json:"attributes"` // Task에 필요한 속성추가. 예) 특정 Task는 멀티 퍼브리쉬 경로가 발생할 수 있다.
 	Order      float64           `json:"order"`      // Task 순서. 드로잉시 정렬되는 순서이다.
+	Category   string            `json:"category"`   // Fx Task중 water, fire, smoke 같은 테스크가 존재할 때 각 Task가 하나의 카테고리로 묶어야 하는 상황이 생긴다. 예) FX 관련 Task를 구할 때
 }

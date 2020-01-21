@@ -134,6 +134,18 @@ func getAssetTaskSetting(session *mgo.Session) ([]Tasksetting, error) {
 	return results, nil
 }
 
+// getCategoryTaskSettings 함수는 type이 asset인 tasksetting값을 가지고 온다.
+func getCategoryTaskSettings(session *mgo.Session, category string) ([]Tasksetting, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	results := []Tasksetting{}
+	err := c.Find(bson.M{"category": category}).Sort("name").All(&results)
+	if err != nil {
+		return results, err
+	}
+	return results, nil
+}
+
 // TasksettingNames 함수는 Tasksetting 이름을 수집하여 반환한다.
 func TasksettingNames(session *mgo.Session) ([]string, error) {
 	var results []string

@@ -204,3 +204,52 @@ func handleAPIAssetTasksetting(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPICategoryTasksettings 함수는 Category 문자를 입력받아 해당 Category Task항목을 반환하는 restAPI 이다.
+func handleAPICategoryTasksettings(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Category     string        `json:"category"`
+		Tasksettings []Tasksetting `json:"tasksettings"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "category":
+			if len(values) != 1 {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Category = values[0]
+		}
+	}
+	rcp.Tasksettings, err = getCategoryTaskSettings(session, rcp.Category)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
