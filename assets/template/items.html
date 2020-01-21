@@ -65,11 +65,13 @@
 						<div id="assettype-{{.Name}}">
 							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
 						</div>
-						{{if .CrowdAsset}}
-							<div id="crowdasset-{{.Name}}" class="ml-1">
-								<span class="badge badge-warning">Crowd</span>
-							</div>
-						{{end}}
+						<div id="crowdasset-{{.Name}}" class="ml-1">
+							{{if .CrowdAsset}}
+								<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdType('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+							{{else}}
+								<span class="badge badge-light finger fade"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdType('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+							{{end}}
+						</div>
 					{{else}}
 						<!--재스캔 사용 플레이트 표기-->
 						{{if eq .Type "org" "left"}}
