@@ -534,7 +534,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 }
 
 // SearchAllShot 함수는 모든 Shot 데이터를 반환한다. Excel을 뽑을 때 사용한다.
-func SearchAllShot(session *mgo.Session, project string) ([]Item, error) {
+func SearchAllShot(session *mgo.Session, project, sortkey string) ([]Item, error) {
 	results := []Item{}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)
@@ -542,7 +542,7 @@ func SearchAllShot(session *mgo.Session, project string) ([]Item, error) {
 	queries = append(queries, bson.M{"type": "org"})
 	queries = append(queries, bson.M{"type": "left"})
 	q := bson.M{"$or": queries}
-	err := c.Find(q).Sort("name").All(&results)
+	err := c.Find(q).Sort(sortkey).All(&results)
 	if err != nil {
 		return nil, err
 	}
@@ -550,11 +550,11 @@ func SearchAllShot(session *mgo.Session, project string) ([]Item, error) {
 }
 
 // SearchAllAsset 함수는 모든 Asset 데이터를 반환한다. Excel을 뽑을 때 사용한다.
-func SearchAllAsset(session *mgo.Session, project string) ([]Item, error) {
+func SearchAllAsset(session *mgo.Session, project, sortkey string) ([]Item, error) {
 	results := []Item{}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)
-	err := c.Find(bson.M{"type": "asset"}).Sort("name").All(&results)
+	err := c.Find(bson.M{"type": "asset"}).Sort(sortkey).All(&results)
 	if err != nil {
 		return nil, err
 	}
@@ -562,7 +562,7 @@ func SearchAllAsset(session *mgo.Session, project string) ([]Item, error) {
 }
 
 // SearchAll 함수는 모든 Shot, Asset 데이터를 반환한다. Excel을 뽑을 때 사용한다.
-func SearchAll(session *mgo.Session, project string) ([]Item, error) {
+func SearchAll(session *mgo.Session, project, sortkey string) ([]Item, error) {
 	results := []Item{}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)
@@ -571,7 +571,7 @@ func SearchAll(session *mgo.Session, project string) ([]Item, error) {
 	queries = append(queries, bson.M{"type": "left"})
 	queries = append(queries, bson.M{"type": "asset"})
 	q := bson.M{"$or": queries}
-	err := c.Find(q).Sort("name").All(&results)
+	err := c.Find(q).Sort(sortkey).All(&results)
 	if err != nil {
 		return nil, err
 	}

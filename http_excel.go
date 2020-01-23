@@ -773,21 +773,22 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("project")
 	format := r.FormValue("format")
+	sortkey := r.FormValue("sortkey")
 	var items []Item
 	if format == "cglist-shot" {
-		items, err = SearchAllShot(session, project)
+		items, err = SearchAllShot(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else if format == "cglist-asset" {
-		items, err = SearchAllAsset(session, project)
+		items, err = SearchAllAsset(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else {
-		items, err = SearchAll(session, project)
+		items, err = SearchAll(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
