@@ -297,6 +297,11 @@
 	<div class="text-darkmode">
 		{{$totalExceptNone := Minus .Totalnum.Total .Totalnum.None }}
 		{{.Totalnum.Percent}}% ({{Add .Totalnum.Done .Totalnum.Hold}} / {{Minus $totalExceptNone .Totalnum.Omit}})
+		{{if .Dday}}
+			/ <span class="text-warning">{{.Dday}}</span>
+		{{else}}
+			/ <span class="text-danger">마감일 설정필요</span>
+		{{end}}
 	</div>
 		
 	<div class="progress" style="height: 1px;">

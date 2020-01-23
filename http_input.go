@@ -41,6 +41,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		OS                  string
 		TasksettingNames    []string
 		TasksettingOrderMap map[string]float64
+		Dday                string
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -146,6 +147,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		dday, err := ToDday(rcp.Projectinfo.Deadline)
+		if err != nil {
+			log.Println(err)
+		}
+		rcp.Dday = dday
 	}
 	rcp.Items, err = Searchv2(session, rcp.SearchOption)
 	if err != nil {
