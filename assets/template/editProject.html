@@ -55,6 +55,12 @@
 					</div>
 					<div class="row">
 						<div class="col">
+							<small class="form-text text-muted">마감일</small>
+							<input type="date" name="Deadline" class="form-control" placeholder="YYYY-MM-DD" value="{{ToNormalTime .Project.Deadline }}">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
 							<small class="form-text text-muted">프로젝트 주요 기술이슈를 작성합니다.</small>
 							<input type="text" name="Issue" class="form-control" placeholder="이슈" value={{.Project.Issue}}>
 						</div>		

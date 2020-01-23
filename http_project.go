@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/digital-idea/ditime"
 	"gopkg.in/mgo.v2"
 )
 
@@ -203,6 +204,13 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	if current.Screenx != str2bool(r.FormValue("Screenx")) {
 		renewal.Screenx = str2bool(r.FormValue("Screenx"))
+	}
+	t, err := ditime.ToFullTime(19, r.FormValue("Deadline"))
+	if err != nil {
+		log.Println(err)
+	}
+	if current.Deadline != t {
+		renewal.Deadline = t
 	}
 	if current.Netapp != str2bool(r.FormValue("Netapp")) {
 		renewal.Netapp = str2bool(r.FormValue("Netapp"))

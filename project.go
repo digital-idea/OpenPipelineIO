@@ -89,6 +89,7 @@ type Project struct {
 	AWSLocalpath             string        `json:"awslocalpath"`             // AWS S3와 동기화할 로컬경로
 	SlackWebhookURL          string        `json:"slackwebhookurl"`          // Slack Webhook URL
 	FxElement                string        `json:"fxelement"`                // 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다. // legacy
+	Deadline                 string        `json:"deadline"`                 // 마감일
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.
