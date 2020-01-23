@@ -33,14 +33,32 @@ document.onkeyup = function(e) {
         selectCheckboxAll()
     } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 68) {
         selectCheckboxNone()
-    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 73) {
+    } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 73) {
         selectCheckboxInvert()
-    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 84) {
+    } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 84) {
         scroll(0,0)
-    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 77) {
+    } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 77) {
         selectmode()
-    } else if (e.ctrlKey && e.altKey &&  e.shiftKey && e.which == 69) {
+    } else if (e.ctrlKey && e.altKey && e.shiftKey && e.which == 69) {
         OpenEditfolder()
+    } else if (e.which == 119) { // F8
+        if ($('#modal-addcomment').hasClass('show')) {
+            // Ctrl + Alt + Shift + Enter를 누르면 실제로 Enter가 입력되어버린다.
+            // 맨 마지막에 입력된 엔터는 제거되어야 한다.
+            let t = document.getElementById("modal-addcomment-text").value;
+            document.getElementById("modal-addcomment-text").value = t.substring(0, t.length - 1);
+            document.getElementById("modal-addcomment-addbutton").click();
+        }
+        if ($('#modal-setnote').hasClass('show')) {
+            let t = document.getElementById("modal-setnote-text").value;
+            document.getElementById("modal-setnote-text").value = t.substring(0, t.length - 1);
+            document.getElementById("modal-setnote-editbutton").click();
+        }
+        if ($('#modal-editnote').hasClass('show')) {
+            let t = document.getElementById("modal-editnote-text").value;
+            document.getElementById("modal-editnote-text").value = t.substring(0, t.length - 1);
+            document.getElementById("modal-editnote-editbutton").click();
+        }
     }
 };
 
@@ -737,7 +755,6 @@ function editNote(project, id, text) {
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
     document.getElementById("modal-addcomment-id").value = id;
-    // document.getElementById("modal-addcomment-text").value = ""; // 이전에 작성된 내용이 있는것이 편하다고 함.
     document.getElementById("modal-addcomment-media").value = "";
     document.getElementById("modal-addcomment-title").innerHTML = "Add Comment" + multiInputTitle(id);
 }

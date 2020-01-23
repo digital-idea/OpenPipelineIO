@@ -28,7 +28,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="addComment(document.getElementById('modal-addcomment-project').value, document.getElementById('modal-addcomment-id').value, document.getElementById('modal-addcomment-text').value, document.getElementById('modal-addcomment-media').value)" data-dismiss="modal">ADD</button>
+                    <button type="button" id="modal-addcomment-addbutton" title="F8" class="btn btn-outline-warning" onclick="addComment(document.getElementById('modal-addcomment-project').value, document.getElementById('modal-addcomment-id').value, document.getElementById('modal-addcomment-text').value, document.getElementById('modal-addcomment-media').value)" data-dismiss="modal">ADD</button>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="setNote(document.getElementById('modal-setnote-project').value, document.getElementById('modal-setnote-id').value, document.getElementById('modal-setnote-text').value)" data-dismiss="modal">Edit</button>
+                    <button type="button" id="modal-setnote-editbutton" title="F8" class="btn btn-outline-warning" onclick="setNote(document.getElementById('modal-setnote-project').value, document.getElementById('modal-setnote-id').value, document.getElementById('modal-setnote-text').value)" data-dismiss="modal">Edit</button>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="editNote(document.getElementById('modal-editnote-project').value, document.getElementById('modal-editnote-id').value, document.getElementById('modal-editnote-text').value)" data-dismiss="modal">Edit</button>
+                    <button type="button" id="modal-editnote-editbutton" title="F8" class="btn btn-outline-warning" onclick="editNote(document.getElementById('modal-editnote-project').value, document.getElementById('modal-editnote-id').value, document.getElementById('modal-editnote-text').value)" data-dismiss="modal">Edit</button>
                 </div>
             </div>
         </div>
