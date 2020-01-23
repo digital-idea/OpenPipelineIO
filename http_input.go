@@ -80,6 +80,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Projectlist = projectList
 	// setting의 Exclude Project를 가지고 와서 제외시켜준다.
 	setting, err := GetAdminSetting(session)
 	if err != nil {
@@ -89,8 +90,21 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	var excludeProjects []string
 	if setting.ExcludeProject != "" {
 		excludeProjects = strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
+		var accessProjects []string
+		for _, p := range projectList {
+			has := false
+			for _, ep := range excludeProjects {
+				if p == ep {
+					has = true
+				}
+			}
+			if !has { // 제외할 프로젝트가 아니면 프로젝트 리스트에 포함한다.
+				accessProjects = append(accessProjects, p)
+			}
+		}
+		rcp.Projectlist = accessProjects
 	}
-	rcp.Projectlist = difference(projectList, excludeProjects)
+
 	if len(rcp.Projectlist) == 0 {
 		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
 		return
