@@ -2091,20 +2091,20 @@ func SetNote(session *mgo.Session, project, name, userID, text string, overwrite
 }
 
 // AddComment 함수는 item에 수정사항을 추가한다.
-func AddComment(session *mgo.Session, project, name, userID, date, text, media string) error {
+func AddComment(session *mgo.Session, project, name, userID, date, text, media string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := Comment{
 		Date:   date,
@@ -2115,9 +2115,9 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media s
 	i.Comments = append(i.Comments, c)
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // RmComment 함수는 item에 수정사항을 삭제합니다. 로그처리를 위해서 삭제 내용을 반환합니다.

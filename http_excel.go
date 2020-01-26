@@ -471,7 +471,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if comment != "" {
-			err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment, "")
+			_, err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment, "")
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue

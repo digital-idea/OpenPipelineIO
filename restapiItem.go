@@ -4953,6 +4953,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Date    string `json:"date"`
 		Text    string `json:"text"`
 		Media   string `json:"media"`
@@ -5016,11 +5017,12 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Date = time.Now().Format(time.RFC3339)
-	err = AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media)
+	id, err := AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Comment: %s, Media: %s", rcp.Text, rcp.Media), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

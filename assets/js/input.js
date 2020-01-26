@@ -43,20 +43,12 @@ document.onkeyup = function(e) {
         OpenEditfolder()
     } else if (e.which == 119) { // F8
         if ($('#modal-addcomment').hasClass('show')) {
-            // Ctrl + Alt + Shift + Enter를 누르면 실제로 Enter가 입력되어버린다.
-            // 맨 마지막에 입력된 엔터는 제거되어야 한다.
-            let t = document.getElementById("modal-addcomment-text").value;
-            document.getElementById("modal-addcomment-text").value = t.substring(0, t.length - 1);
             document.getElementById("modal-addcomment-addbutton").click();
         }
         if ($('#modal-setnote').hasClass('show')) {
-            let t = document.getElementById("modal-setnote-text").value;
-            document.getElementById("modal-setnote-text").value = t.substring(0, t.length - 1);
             document.getElementById("modal-setnote-editbutton").click();
         }
         if ($('#modal-editnote').hasClass('show')) {
-            let t = document.getElementById("modal-editnote-text").value;
-            document.getElementById("modal-editnote-text").value = t.substring(0, t.length - 1);
             document.getElementById("modal-editnote-editbutton").click();
         }
     }
