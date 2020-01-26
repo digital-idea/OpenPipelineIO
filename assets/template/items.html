@@ -65,6 +65,7 @@
 						<div id="assettype-{{.Name}}">
 							<span class="badge badge-light finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
 						</div>
+						
 						<div id="crowdasset-{{.ID}}" class="ml-1">
 							{{if .CrowdAsset}}
 								<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
