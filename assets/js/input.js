@@ -3156,3 +3156,34 @@ function changeStatusURI(status) {
         }
     }
 }
+
+function mailInfo(project, id) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/mailinfo",
+        type: "post",
+        data: {
+            "project": project,
+            "id": id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            let mailString = "mailto:"
+            if (data.mails) {
+                mailString += data.mails.join(",")
+            }
+            mailString += `?subject=[${data.header}] ${data.title}&`;
+            // 메일을 참조할 사람을 추가한다.
+            if (data.cc) {
+                mailString += `cc=${data.cc.join(",")}`
+            }
+            window.location.href = mailString;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });   
+}

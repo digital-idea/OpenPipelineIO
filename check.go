@@ -23,6 +23,9 @@ var regexpID = regexp.MustCompile(`^[a-z0-9]+$`)
 // userInfo 정규칙: id(name,team) 형태
 var regexpUserInfo = regexp.MustCompile(`^[a-zA-Z0-9]+\(.+\)$`)
 
+// Email 정규칙: hello@lazypi.org 형태
+var regexpEmail = regexp.MustCompile(`^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$`)
+
 // Task값 정규식: task
 var regexpTask = regexp.MustCompile(`^[a-z0-9]+$`)
 

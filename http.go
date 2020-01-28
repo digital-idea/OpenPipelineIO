@@ -315,6 +315,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/task", handleAPITask)
 	http.HandleFunc("/api/shottype", handleAPIShottype)
 	http.HandleFunc("/api/setcrowdasset", handleAPISetCrowdAsset)
+	http.HandleFunc("/api/mailinfo", handleAPIMailInfo)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

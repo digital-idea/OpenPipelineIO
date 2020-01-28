@@ -5929,3 +5929,109 @@ func handleAPIShottype(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIMailInfo 함수는 Email을 전송할 때 필요한 정보를 가지고온다.
+func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string   `json:"project"`
+		ID      string   `json:"id"`
+		Title   string   `json:"title"`
+		Header  string   `json:"header"`
+		Mails   []string `json:"mails"`
+		Cc      []string `json:"cc"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "id":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.ID = v
+		}
+	}
+	p, err := getProject(session, rcp.Project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 메일헤더가 빈 문자열이면 프로젝트 id를 메일해더로 사용한다.
+	if p.MailHead == "" {
+		rcp.Header = rcp.Project
+	} else {
+		rcp.Header = p.MailHead
+	}
+	i, err := getItem(session, rcp.Project, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Title = i.Name
+	for key := range i.Tasks {
+		if regexpUserInfo.MatchString(i.Tasks[key].User) { // "khw7096(김한웅,2D1)" 패턴이면... 앞 문자열이 ID이다.
+			id := strings.Split(i.Tasks[key].User, "(")[0]
+			u, err := getUser(session, id)
+			if err != nil {
+				continue
+			}
+			if !regexpEmail.MatchString(u.Email) {
+				continue
+			}
+			rcp.Mails = append(rcp.Mails, u.Email)
+			// id의 팀을 구한다.
+			var teamName string
+			for _, o := range u.Organizations {
+				if o.Primary {
+					teamName = o.Team.ID
+				}
+
+			}
+			// id의 팀장을 구한다.
+			leaders, err := searchUsers(session, []string{teamName, "팀장"})
+			if err != nil {
+				continue
+			}
+			// 팀장의 이메일도 추가한다. 중복되면 제거한다.
+			for _, leader := range leaders {
+				has := false
+				for _, email := range rcp.Mails {
+					if email == leader.Email {
+						has = true
+					}
+				}
+				if !has {
+					rcp.Cc = append(rcp.Cc, leader.Email)
+				}
+			}
+		}
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
