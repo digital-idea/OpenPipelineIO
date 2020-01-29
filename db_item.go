@@ -426,6 +426,8 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"comments.text": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"sources.title": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"sources.path": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"references.title": &bson.RegEx{Pattern: word, Options: "i"}})
+				query = append(query, bson.M{"references.path": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"note.text": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"tag": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"assettags": &bson.RegEx{Pattern: word, Options: "i"}})
