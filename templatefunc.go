@@ -105,6 +105,32 @@ func Status2string(status string) string {
 	}
 }
 
+// StatusString2string 템플릿함수는 status 문자를 받아서 Status 값을 반환한다.
+func StatusString2string(status string) string {
+	switch status {
+	case "omit":
+		return OMIT
+	case "confirm":
+		return CONFIRM
+	case "wip":
+		return WIP
+	case "ready":
+		return READY
+	case "assign":
+		return ASSIGN
+	case "out":
+		return OUT
+	case "done":
+		return DONE
+	case "hold":
+		return HOLD
+	case "none":
+		return NONE
+	default:
+		return NONE
+	}
+}
+
 func name2seq(name string) string {
 	if strings.Contains(name, "_") {
 		return strings.Split(name, "_")[0]

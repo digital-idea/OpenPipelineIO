@@ -427,6 +427,11 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			}
 		} else if strings.HasPrefix(word, "rnum:") { // 롤넘버 형태일 때
 			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: strings.TrimPrefix(word, "rnum:"), Options: "i"}})
+		} else if regexTaskStatusQuery.MatchString(word) {
+			// 위 패턴이면 : 문자로 스플릿하고 상태를 숫자로 바꾼다.
+			queryString := strings.Split(word, ":")[0]
+			status := StatusString2string(strings.Split(word, ":")[1])
+			query = append(query, bson.M{queryString: status})
 		} else {
 			switch word {
 			case "all", "All", "ALL", "올", "미ㅣ", "dhf", "전체":

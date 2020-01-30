@@ -29,6 +29,9 @@ var regexpEmail = regexp.MustCompile(`^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$`)
 // Task값 정규식: task
 var regexpTask = regexp.MustCompile(`^[a-z0-9]+$`)
 
+// 검색쿼리형식: tasks.ani.status:done
+var regexTaskStatusQuery = regexp.MustCompile(`^[tasks]+\.[a-z0-9]+\.[stau]+\:[a-z]+$`)
+
 // 롤미디어 정규식: 00_A03C001_180113_A001 형태
 var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 
