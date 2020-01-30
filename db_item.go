@@ -324,6 +324,8 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".date": &bson.RegEx{Pattern: regFullTime}})
 					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".predate": &bson.RegEx{Pattern: regFullTime}})
 				}
+				query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: regFullTime}})
+				query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: regFullTime}})
 			} else {
 				query = append(query, bson.M{"tasks." + op.Task + ".date": &bson.RegEx{Pattern: regFullTime}})
 				query = append(query, bson.M{"tasks." + op.Task + ".predate": &bson.RegEx{Pattern: regFullTime}})
@@ -350,10 +352,10 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"tag": strings.TrimPrefix(word, "tag:")})
 		} else if strings.HasPrefix(word, "assettags:") {
 			query = append(query, bson.M{"assettags": strings.TrimPrefix(word, "assettags:")})
-		} else if strings.HasPrefix(word, "ddline2d:") {
-			query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline2d:"), Options: "i"}})
-		} else if strings.HasPrefix(word, "ddline3d:") {
-			query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "ddline3d:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "deadline2d:") {
+			query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline2d:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "deadline3d:") {
+			query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline3d:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "shottype:") {
 			query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: strings.TrimPrefix(word, "shottype:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "type:shot") {
