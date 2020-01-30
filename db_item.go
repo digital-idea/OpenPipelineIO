@@ -555,7 +555,15 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	// 스캔날짜는 IO팀에서 최근 등록한 데이터를 많이 검토하기 때문에 역순(최근등록순)으로 봐야한다.
 	case "scanframe", "scantime":
 		op.Sortkey = "-" + op.Sortkey
-	case "": // 빈 문자열이라면 기본적으로 id로 정렬한다.
+	case "taskdate":
+		if op.Task != "" {
+			op.Sortkey = "tasks." + op.Task + ".date"
+		}
+	case "taskpredate":
+		if op.Task != "" {
+			op.Sortkey = "tasks." + op.Task + ".predate"
+		}
+	default: // 기본적으로 id로 정렬한다.
 		op.Sortkey = "id"
 	}
 	err = c.Find(q).Sort(op.Sortkey).All(&results)
