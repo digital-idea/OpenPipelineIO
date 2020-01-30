@@ -563,7 +563,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		if op.Task != "" {
 			op.Sortkey = "tasks." + op.Task + ".predate"
 		}
-	default: // 기본적으로 id로 정렬한다.
+	case "": // 기본적으로 id로 정렬한다.
 		op.Sortkey = "id"
 	}
 	err = c.Find(q).Sort(op.Sortkey).All(&results)
