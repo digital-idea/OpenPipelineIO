@@ -324,6 +324,7 @@
 							<small class="form-text text-muted">Fps</small>
 							<select name="OutputMov.Fps" class="form-control">
 								<option value="0" {{if eq .Project.OutputMov.Fps 0.0}}selected{{end}}>unknown</option>
+								<option value="23.976" {{if eq .Project.OutputMov.Fps 23.976}}selected{{end}}>23.976</option>
 								<option value="23.98" {{if eq .Project.OutputMov.Fps 23.98}}selected{{end}}>23.98</option>
 								<option value="24" {{if eq .Project.OutputMov.Fps 24.0}}selected{{end}}>24</option>
 								<option value="25" {{if eq .Project.OutputMov.Fps 25.0}}selected{{end}}>25</option>
@@ -392,6 +393,7 @@
 							<small class="form-text text-muted">Fps</small>
 							<select name="EditMov.Fps" class="form-control">
 								<option value="0" {{if eq .Project.EditMov.Fps 0.0}}selected{{end}}>unknown</option>
+								<option value="23.976" {{if eq .Project.EditMov.Fps 23.976}}selected{{end}}>23.976</option>
 								<option value="23.98" {{if eq .Project.EditMov.Fps 23.98}}selected{{end}}>23.98</option>
 								<option value="24" {{if eq .Project.EditMov.Fps 24.0}}selected{{end}}>24</option>
 								<option value="25" {{if eq .Project.EditMov.Fps 25.0}}selected{{end}}>25</option>
