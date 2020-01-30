@@ -3177,9 +3177,9 @@ function mailInfo(project, id) {
             }
             mailString += `?subject=[${data.header}] ${data.title}&`;
             // 메일을 참조할 사람을 추가한다.
-            if (data.cc) {
-                mailString += `cc=${data.cc.join(",")}`
-            }
+            // if (data.cc) {
+            //     mailString += `cc=${data.cc.join(",")}`
+            // }
             window.location.href = mailString;
         },
         error: function(request,status,error){
