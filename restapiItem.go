@@ -6006,6 +6006,10 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 				}
 
 			}
+			// Team 이름이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
+			if teamName == "" {
+				continue
+			}
 			// id의 팀장을 구한다.
 			leaders, err := searchUsers(session, []string{teamName, "팀장"})
 			if err != nil {
