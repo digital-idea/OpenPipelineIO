@@ -395,11 +395,21 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			}
 		} else if strings.HasPrefix(word, "user:") {
 			if op.Task == "" {
-				for _, task := range tasks {
-					query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
+				if strings.TrimPrefix(word, "user:") == "notassign" {
+					for _, task := range tasks {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": ""})
+					}
+				} else {
+					for _, task := range tasks {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
+					}
 				}
 			} else {
-				query = append(query, bson.M{"tasks." + op.Task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
+				if strings.TrimPrefix(word, "user:") == "notassign" {
+					query = append(query, bson.M{"tasks." + op.Task + ".user": ""})
+				} else {
+					query = append(query, bson.M{"tasks." + op.Task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
+				}
 			}
 		} else if strings.HasPrefix(word, "rnum:") { // 롤넘버 형태일 때
 			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: strings.TrimPrefix(word, "rnum:"), Options: "i"}})
