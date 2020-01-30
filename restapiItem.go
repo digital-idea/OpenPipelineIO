@@ -6006,17 +6006,21 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 				}
 
 			}
-			// Team 이름이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
+			// 팀원의 Team 이름이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
 			if teamName == "" {
 				continue
 			}
-			// id의 팀장을 구한다.
-			leaders, err := searchUsers(session, []string{teamName, "팀장"})
+			// 팀원의 팀장을 구한다.
+			leaderlist1, err := searchUsers(session, []string{teamName, "팀장"})
 			if err != nil {
 				continue
 			}
-			// 팀장의 이메일도 추가한다. 중복되면 제거한다.
-			for _, leader := range leaders {
+			leaderlist2, err := searchUsers(session, []string{teamName, "Lead"})
+			if err != nil {
+				continue
+			}
+			// 팀장의 이메일도 추가한다. 만약 기존 메일리스트에 메일값이 중복되어 있다면, 제거한다.
+			for _, leader := range append(leaderlist1, leaderlist2...) {
 				has := false
 				for _, email := range rcp.Mails {
 					if email == leader.Email {
