@@ -5997,8 +5997,8 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			if !regexpEmail.MatchString(u.Email) {
 				continue
 			}
-			rcp.Mails = append(rcp.Mails, u.Email)
-			// id의 팀을 구한다.
+			rcp.Mails = append(rcp.Mails, fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email))
+			// 팀을 구한다.
 			var teamName string
 			for _, o := range u.Organizations {
 				if o.Primary {
@@ -6028,7 +6028,7 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				if !has {
-					rcp.Cc = append(rcp.Cc, leader.Email)
+					rcp.Cc = append(rcp.Cc, fmt.Sprintf("%s%s<%s>", leader.LastNameKor, leader.FirstNameKor, leader.Email))
 				}
 			}
 		}

@@ -29,7 +29,7 @@
 						</div>
 					{{end}}
 				</div>
-				<div class="centered-top"><a href="mailto:?subject=[{{$.Projectinfo.MailHead}}] {{$.Item.Name}}" class="text-white black-opbg itemname">{{$.Item.Name}}</a></div>
+				<div class="centered-top"><span class="text-white black-opbg itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span></div>
 				<div class="top-right">
 					<div class="row" id="platesize-{{$.Item.Name}}">
 						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if .Platesize}}S: {{.Platesize}}{{else}}S:{{end}}</span>
