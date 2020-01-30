@@ -283,6 +283,21 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
 		return results, nil
 	}
+	// 검색어중 연산에 필요한 검색어는 제거한다.
+	var words []string
+	for _, word := range strings.Split(op.Searchword, " ") {
+		switch word {
+		case "":
+		case "or", "||":
+		case "and", "&&":
+		default:
+			words = append(words, word)
+		}
+	}
+	// 검색어가 존재하지 않으면 빈 결과를 반환한다.
+	if len(words) == 0 {
+		return results, nil
+	}
 	// 프로젝트 문자열이 빈 값이라면 전체 리스트중에서 첫번째 프로젝트를 선언한다.
 	if op.Project == "" {
 		plist, err := Projectlist(session)
@@ -300,10 +315,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	}
 	wordQueries := []bson.M{}
 
-	for _, word := range strings.Split(op.Searchword, " ") {
-		if word == "" {
-			continue
-		}
+	for _, word := range words {
 		query := []bson.M{}
 		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
 			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
@@ -514,10 +526,17 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			statusQueries = append(statusQueries, bson.M{"tasks." + op.Task + ".status": NONE})
 		}
 	}
-
-	queries := []bson.M{
-		bson.M{"$and": wordQueries},
+	// 각 단어에 대한 쿼리를 and 로 검색할지 or 로 검색할지 결정한다.
+	expression := "$and"
+	for _, word := range strings.Split(op.Searchword, " ") {
+		if word == "or" || word == "||" {
+			expression = "$or"
+		}
 	}
+	queries := []bson.M{
+		bson.M{expression: wordQueries},
+	}
+	// 상태 쿼리가 존재하면 상태에 대해서 or 처리한다.
 	if len(statusQueries) != 0 {
 		queries = append(queries, bson.M{"$or": statusQueries})
 	}
