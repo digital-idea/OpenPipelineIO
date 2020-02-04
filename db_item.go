@@ -1298,31 +1298,31 @@ func SetTaskUserNote(session *mgo.Session, project, name, task, usernote string)
 }
 
 // SetTaskPredate 함수는 item에 task의 predate 값을 셋팅한다.
-func SetTaskPredate(session *mgo.Session, project, name, task, date string) error {
+func SetTaskPredate(session *mgo.Session, project, name, task, date string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := session.DB("project").C(project)
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
-		return err
+		return id, err
 	}
 	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetShotType 함수는 item에 shot type을 셋팅한다.
@@ -2018,21 +2018,21 @@ func RmReference(session *mgo.Session, project, name, title string) (string, err
 }
 
 // GetTask 함수는 item의 Task 정보를 반환한다.
-func GetTask(session *mgo.Session, project, name, task string) (Task, error) {
+func GetTask(session *mgo.Session, project, name, task string) (string, Task, error) {
 	session.SetMode(mgo.Monotonic, true)
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return Task{}, err
+		return "", Task{}, err
 	}
 	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return Task{}, err
+		return id, Task{}, err
 	}
 	if _, found := i.Tasks[task]; !found {
-		return Task{}, errors.New("task가 존재하지 않습니다")
+		return id, Task{}, errors.New("task가 존재하지 않습니다")
 	}
-	return i.Tasks[task], nil
+	return id, i.Tasks[task], nil
 }
 
 // GetShottype 함수는 item의 Shottype 정보를 반환한다.

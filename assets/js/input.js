@@ -99,7 +99,7 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-path').value=data.task.mov;
             document.getElementById('modal-edittask-usernote').value=data.task.usernote;
             document.getElementById('modal-edittask-user').value=data.task.user;
-            document.getElementById('modal-edittask-id').value=id;
+            document.getElementById('modal-edittask-id').value=data.id;
             document.getElementById("modal-edittask-status").value=data.task.status;
         },
         error: function(request,status,error){
@@ -179,9 +179,6 @@ function setModalCheckbox(modalID, value) {
     }
 }
 
-
-var multiInput = false;
-
 // *문자를 x문자로 바꾼다.
 // X를 x문자로 바꾼다.
 // 공백을 제거한다.
@@ -225,7 +222,7 @@ function multiInputTitle(id) {
 function addTask(project, id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -312,7 +309,7 @@ function addTask(project, id, task) {
 function rmTask(project, id, task) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -649,7 +646,7 @@ function editNoteModal(project, id) {
 function setNote(project, id, text) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -754,7 +751,7 @@ function setAddCommentModal(project, id) {
 function addComment(project, id, text, media) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -881,7 +878,7 @@ function setAddSourceModal(project, id) {
 function addSource(project, id, title, path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -983,7 +980,7 @@ function setRmSourceModal(project, id) {
 function rmSource(project, id, title) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         var cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1068,7 +1065,7 @@ function setAddReferenceModal(project, id) {
 function addReference(project, id, title, path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1170,7 +1167,7 @@ function setRmReferenceModal(project, id) {
 function rmReference(project, id, title) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         var cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1465,7 +1462,7 @@ function setTaskMov(project, id, task, mov) {
 function setTaskDue(project, id, task, due) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1522,7 +1519,7 @@ function setTaskDue(project, id, task, due) {
 function setTaskUser(project, id, task, user) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1588,7 +1585,7 @@ function setTaskUser(project, id, task, user) {
 function setTaskStatus(project, id, task, status) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1646,7 +1643,7 @@ function setTaskStatus(project, id, task, status) {
 function setTaskDate(project, id, task, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1712,7 +1709,7 @@ function setTaskDate(project, id, task, date) {
 function setTaskStartdate(project, id, task, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1770,7 +1767,7 @@ function setTaskStartdate(project, id, task, date) {
 function setTaskUserNote(project, id, task, usernote) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1830,7 +1827,7 @@ function setTaskUserNote(project, id, task, usernote) {
 function setTaskPredate(project, id, task, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -1853,10 +1850,10 @@ function setTaskPredate(project, id, task, date) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.mov === "") {
-                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
+                    if (data.shortdate === "") {
+                        document.getElementById(`${data.id}-task-${data.task}-predate`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
+                        document.getElementById(`${data.id}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -1880,10 +1877,10 @@ function setTaskPredate(project, id, task, date) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.mov === "") {
-                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = "";
+                if (data.shortdate === "") {
+                    document.getElementById(`${data.id}-task-${data.task}-predate`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.name}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
+                    document.getElementById(`${data.id}-task-${data.task}-predate`).innerHTML = `<span class="mt-1 ml-1 badge badge-outline-darkmode">${data.shortdate}</span>`;
                 }
             },
             error: function(request,status,error){
@@ -1925,7 +1922,7 @@ function setDeadline2dModal(project, id) {
 function setDeadline2D(project, id, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2001,8 +1998,7 @@ function setDeadline3dModal(project, id) {
 function setDeadline3D(project, id, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    console.log(id);
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2060,7 +2056,7 @@ function setShottype(project, id) {
     let e = document.getElementById("modal-shottype-type");
     let shottype = e.options[e.selectedIndex].value;
     
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2137,8 +2133,7 @@ function setAssettype(project, id) {
     let userid = document.getElementById("userid").value;
     let types = document.getElementById("modal-assettype-type");
     let assettype = types.options[types.selectedIndex].value;
-    console.log(id)
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2271,7 +2266,7 @@ function setRenameTagModal(project) {
 function addTag(project, id, tag) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2387,7 +2382,7 @@ function setRmTagModal(project, id) {
 function rmTag(project, id, tag) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2463,55 +2458,70 @@ function rmTag(project, id, tag) {
     }
 }
 
-function selectCheckbox() {
-    let checknum = 0;
+function isMultiInput() {
     var cboxes = document.getElementsByName('selectID');
     for (let i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === true) {
-            checknum += 1
+            return true;
         }
     }
-    if (checknum === 0) {
-        multiInput = false;
-        return
+    return false;
+}
+
+
+function selectCheckbox(id) {
+    let beforeNum = document.querySelectorAll('input[name=selectID]:checked').length;
+    if (document.getElementById(id).checked) {
+        if ((beforeNum - 1) === 0) {
+            document.getElementById("topbtn").innerHTML = "Top"
+        } else {
+            document.getElementById("topbtn").innerHTML = "Top<br>" + (beforeNum - 1)
+        }
+    } else {
+        if ((beforeNum + 1) === 0) {
+            document.getElementById("topbtn").innerHTML = "Top"
+        } else {
+            document.getElementById("topbtn").innerHTML = "Top<br>" + (beforeNum + 1)
+        }
+        
     }
-    multiInput = true;
+    // 선택된 아이템의 숫자를 갱신한다.
 }
 
 function selectCheckboxAll() {
-    multiInput = true;
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
+    let cboxes = document.getElementsByName('selectID');
+    for (let i = 0; i < cboxes.length; ++i) {
         cboxes[i].checked = true;
     }
+    document.getElementById("topbtn").innerHTML = "Top<br>" + (document.querySelectorAll('input[name=selectID]:checked').length)
 }
 
 function selectCheckboxNone() {
-    multiInput = false;
-    var cboxes = document.getElementsByName('selectID');
-    for (var i = 0; i < cboxes.length; ++i) {
+    let cboxes = document.getElementsByName('selectID');
+    for (let i = 0; i < cboxes.length; ++i) {
         cboxes[i].checked = false;
     }
+    document.getElementById("topbtn").innerHTML = "Top"
 }
 
 function selectCheckboxInvert() {
-    var cboxes = document.getElementsByName('selectID');
-    if (cboxes.length > 0) {
-        multiInput = true;
-    }
-    for (var i = 0; i < cboxes.length; ++i) {
+    let cboxes = document.getElementsByName('selectID');
+    let invertNum = 0
+    for (let i = 0; i < cboxes.length; ++i) {
         if(cboxes[i].checked === false) {
             cboxes[i].checked = true;
+            invertNum += 1
         } else {
             cboxes[i].checked = false;
         }
     }
+    document.getElementById("topbtn").innerHTML = "Top<br>" + (invertNum)
 }
 
 function setTaskLevel(project, id, task, level) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2662,7 +2672,7 @@ function setPlatesizeModal(project, id) {
 function setPlatesize(project, id, size) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2739,7 +2749,7 @@ function setUndistortionsizeModal(project, id) {
 function setUndistortionsize(project, id, size) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {
@@ -2816,7 +2826,7 @@ function setRendersizeModal(project, id) {
 function setRendersize(project, id, size) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
-    if (multiInput) {
+    if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
             if(cboxes[i].checked === false) {

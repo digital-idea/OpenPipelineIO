@@ -3169,6 +3169,7 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		Name      string `json:"name"`
+		ID        string `json:"id"`
 		Date      string `json:"date"`
 		ShortDate string `json:"shortdate"`
 		Task      string `json:"task"`
@@ -3239,7 +3240,7 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = SetTaskPredate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
+	rcp.ID, err = SetTaskPredate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -5806,6 +5807,7 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project     string `json:"project"`
 		Name        string `json:"name"`
+		ID          string `json:"id"`
 		UserID      string `json:"userid"`
 		RequestTask string `json:"requesttask"`
 		Task        `json:"task"`
@@ -5857,12 +5859,13 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 			rcp.RequestTask = v
 		}
 	}
-	t, err := GetTask(session, rcp.Project, rcp.Name, rcp.RequestTask)
+	id, t, err := GetTask(session, rcp.Project, rcp.Name, rcp.RequestTask)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Task = t
+	rcp.ID = id
 	// 웹에 표시를 위해서 FullTime을 NormalTime으로 변경
 	rcp.Task.Startdate = ToNormalTime(rcp.Task.Startdate)
 	rcp.Task.Predate = ToNormalTime(rcp.Task.Predate)

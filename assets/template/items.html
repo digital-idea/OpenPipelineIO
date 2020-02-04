@@ -16,7 +16,7 @@
 			<input type="checkbox" class="form-check-input" id="{{.ID}}" name="selectID" style="opacity:0; position:absolute;">
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
-				<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox()">
+				<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox('{{.ID}}')">
 					<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
 				</label>
 				<div class="top-left">
@@ -244,7 +244,7 @@
 							onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
 							>{{.Title}}</span>
 						</div>
-						<div id="{{$name}}-task-{{.Title}}-predate">
+						<div id="{{$id}}-task-{{.Title}}-predate">
 							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
 						</div>
 						<div id="{{$name}}-task-{{.Title}}-date">
