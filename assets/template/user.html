@@ -6,18 +6,18 @@
 <div class="p-3">
     <div class="row">
         <div class="card w-10 mx-auto m-3 bg-darkmode">
-            <img class="card-img-top" src="{{if .User.Thumbnail}}/thumbnail/user/{{.User.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.User.ID}}">
+            <img class="card-img-top" src="{{if .QueryUser.Thumbnail}}/thumbnail/user/{{.QueryUser.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.QueryUser.ID}}">
             <div class="card-body text-center">
-                <h4 class="card-title">{{.User.LastNameKor}}{{.User.FirstNameKor}}{{if .User.FirstNameChn}}({{.User.LastNameChn}}{{.User.FirstNameChn}}){{end}}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">{{.User.FirstNameEng}} {{.User.LastNameEng}}<br>{{.User.ID}}</h6>
+                <h4 class="card-title">{{.QueryUser.LastNameKor}}{{.QueryUser.FirstNameKor}}{{if .QueryUser.FirstNameChn}}({{.QueryUser.LastNameChn}}{{.QueryUser.FirstNameChn}}){{end}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{.QueryUser.FirstNameEng}} {{.QueryUser.LastNameEng}}<br>{{.QueryUser.ID}}</h6>
                 <p class="card-text">
-                    <a href="mailto:{{.User.Email}}" class="text-darkmode">{{.User.Email}}</a><br>
-                    <a href="mailto:{{.User.EmailExternal}}" class="text-darkmode">{{.User.EmailExternal}}</a><br>
-                    <a href="tel:{{.User.Hotline}}" class="text-darkmode">{{ShortPhoneNum .User.Hotline}}</a>{{if .User.Location}} / {{.User.Location}}{{end}}<br>
-                    <a href="tel:{{.User.Phone}}" class="text-darkmode">{{.User.Phone}}</a><br>
+                    <a href="mailto:{{.QueryUser.Email}}" class="text-darkmode">{{.QueryUser.Email}}</a><br>
+                    <a href="mailto:{{.QueryUser.EmailExternal}}" class="text-darkmode">{{.QueryUser.EmailExternal}}</a><br>
+                    <a href="tel:{{.QueryUser.Hotline}}" class="text-darkmode">{{ShortPhoneNum .QueryUser.Hotline}}</a>{{if .QueryUser.Location}} / {{.QueryUser.Location}}{{end}}<br>
+                    <a href="tel:{{.QueryUser.Phone}}" class="text-darkmode">{{.QueryUser.Phone}}</a><br>
                 </p>
                 <div class="col parts p-1">
-                    {{range .User.Tags}}
+                    {{range .QueryUser.Tags}}
                         <a href="/users?search={{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
                     {{end}}
                 </div>
@@ -26,7 +26,7 @@
     </div>
 </div>
 
-{{if eq .User.ID .SessionID}}
+{{if eq .QueryUser.ID .SessionID}}
 <div class="p-5">
     <div class="row">
         <div class="col-lg-4 col-sm-8 w-10 mx-auto text-center">

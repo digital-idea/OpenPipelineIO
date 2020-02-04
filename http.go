@@ -64,6 +64,7 @@ var funcMap = template.FuncMap{
 	"RmProtocol":          RmProtocol,
 	"ProtocolTarget":      ProtocolTarget,
 	"userInfo":            userInfo,
+	"onlyID":              onlyID,
 	"mapToSlice":          mapToSlice,
 }
 

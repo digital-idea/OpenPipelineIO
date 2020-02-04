@@ -634,6 +634,13 @@ func userInfo(userInfo string) string {
 	return userInfo
 }
 
+func onlyID(userInfo string) string {
+	if regexpUserInfo.MatchString(userInfo) {
+		return strings.Split(userInfo, "(")[0]
+	}
+	return userInfo
+}
+
 func mapToSlice(tasks map[string]Task, ordermap map[string]float64) []Task {
 	var results []Task
 	for _, value := range tasks {
