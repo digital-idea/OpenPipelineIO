@@ -6002,8 +6002,10 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			var teamName string
 			for _, o := range u.Organizations {
 				if o.Primary {
-					teamName = o.Team.ID
+					teamName = o.Team.Name
+					break
 				}
+				teamName = o.Team.Name
 
 			}
 			// 팀원의 Team 이름이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
