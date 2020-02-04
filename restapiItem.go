@@ -5975,6 +5975,10 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// PM 이메일이 프로젝트 정보에 기입되어있다면 PM에 이메일을 보낼 때 참조한다.
+	if regexpEmail.MatchString(p.PmEmail) {
+		rcp.Cc = append(rcp.Cc, fmt.Sprintf("%s<%s>", p.Pm, p.PmEmail))
+	}
 	// 메일헤더가 빈 문자열이면 프로젝트 id를 메일해더로 사용한다.
 	if p.MailHead == "" {
 		rcp.Header = rcp.Project
@@ -5997,8 +6001,9 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			if !regexpEmail.MatchString(u.Email) {
 				continue
 			}
+			// Task 아티스트의 메일을 메일리스트에 넣는다.
 			rcp.Mails = append(rcp.Mails, fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email))
-			// 팀을 구한다.
+			// Task 아티스트의 팀명을 찾는다.
 			var teamName string
 			for _, o := range u.Organizations {
 				if o.Primary {
@@ -6008,11 +6013,11 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 				teamName = o.Team.Name
 
 			}
-			// 팀원의 Team 이름이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
+			// 만약 팀명이 선언되어있지 않다면, 팀장리스트를 구하지 않는다.
 			if teamName == "" {
 				continue
 			}
-			// 팀원의 팀장을 구한다.
+			// Task 아티스트의 팀장을 구한다.
 			leaderlist1, err := searchUsers(session, []string{teamName, "팀장"})
 			if err != nil {
 				continue
@@ -6021,10 +6026,10 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				continue
 			}
-			// 팀장의 이메일도 추가한다. 만약 기존 메일리스트에 메일값이 중복되어 있다면, 제거한다.
+			// 팀장의 이메일을 참조에 추가한다. 만약 기존 메일리스트에 메일값이 중복되어 있다면, 제거한다.
 			for _, leader := range append(leaderlist1, leaderlist2...) {
 				has := false
-				for _, email := range rcp.Mails {
+				for _, email := range append(rcp.Mails, rcp.Cc...) {
 					if email == leader.Email {
 						has = true
 					}
