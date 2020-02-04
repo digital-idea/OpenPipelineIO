@@ -91,18 +91,28 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<small class="form-text text-muted">CG 슈퍼바이져</small>
-							<input type="text" name="CgSuper" class="form-control" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
+							<small class="form-text text-muted">Onset 슈퍼바이져</small>
+							<input type="text" name="OnsetSuper" class="form-control" placeholder="Onset 슈퍼바이져" value={{.Project.OnsetSuper}}>
 						</div>
 						<div class="col">
-							<small class="form-text text-muted">PD</small>
-							<input type="text" name="Pd" class="form-control" placeholder="PD" value={{.Project.Pd}}>
+							<small class="form-text text-muted">CG 슈퍼바이져</small>
+							<input type="text" name="CgSuper" class="form-control" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">PM</small>
 							<input type="text" name="Pm" class="form-control" placeholder="PM" value={{.Project.Pm}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">PM Email(CC에 사용)</small>
+							<input type="text" name="PmEmail" class="form-control" placeholder="PM Email" value={{.Project.PmEmail}}>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">PD</small>
+							<input type="text" name="Pd" class="form-control" placeholder="PD" value={{.Project.Pd}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">PA</small>
@@ -113,14 +123,36 @@
 						<label>카메라정보</label>
 						<input type="text" name="Camera" class="form-control" placeholder="Camera" value={{.Project.Camera}}>
 					</div>
-					<div class="form-group pt-3">
-						<label>ScreenX 셋팅</label>
-						<div class="form-check">
-							<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
-							<label class="form-check-label" for="Screenx">ScreenX 여부</label>
+					<label>협력사 정보</label>
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">DI회사/담당자</small>
+							<input type="text" name="Di" class="form-control" placeholder="DI회사, 담당자" value={{.Project.Di}}>
 						</div>
-						<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
-						<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
+						<div class="col">
+							<small class="form-text text-muted">DI실 연락처</small>
+							<input type="text" name="DiContact" class="form-control" placeholder="연락처" value={{.Project.DiContact}}>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">편집실/담당자</small>
+							<input type="text" name="Edit" class="form-control" placeholder="Edit회사, 담당자" value={{.Project.Edit}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">편집실 연락처</small>
+							<input type="text" name="EditContact" class="form-control" placeholder="연락처" value={{.Project.EditContact}}>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">사운드실/담당자</small>
+							<input type="text" name="Sound" class="form-control" placeholder="Sound회사, 담당자" value={{.Project.Sound}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">사운드실 연락처</small>
+							<input type="text" name="SoundContact" class="form-control" placeholder="연락처" value={{.Project.SoundContact}}>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -137,7 +169,7 @@
 					<small class="form-text text-muted">데일리 경로</small>
 					<input type="text" name="Daily" class="form-control" placeholder="데일리경로" value={{.Project.Daily}}>
 					<small class="form-text text-muted">편집본 영상 경로</small>
-					<input type="text" name="Edit" class="form-control" placeholder="편집본경로" value={{.Project.Edit}}>
+					<input type="text" name="EditDir" class="form-control" placeholder="편집본경로" value={{.Project.EditDir}}>
 					<small class="form-text text-muted">수정사항 노트 강조 단어를 설정합니다.</small>
 					<input type="text" name="NoteHighlight" class="form-control" placeholder="강조단어" value={{.Project.NoteHighlight}}>
 				</div>
@@ -436,6 +468,15 @@
 			<!--4번째열-->
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="form-group">
+					<label>ScreenX 셋팅</label>
+					<div class="form-check">
+						<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
+						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
+					</div>
+					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
+					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
+				</div>
+				<div class="form-group pt-1">
 					<label>Nuke 셋팅</label>
 					<small class="form-text text-muted">프로젝트에 사용하는 슬레이트 기즈모 ex) slate_default</small>
 					<input type="text" name="NukeGizmo" class="form-control" placeholder="gizmo name" value={{.Project.NukeGizmo}}>

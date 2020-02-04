@@ -19,7 +19,7 @@
         {{end}}
         
         {{if .Projectinfo.Edit}}
-            <a href="dilink://{{.Projectinfo.Edit}}" id="edit" title="Ctrl + Alt + Shift + e" class="badge badge-darkmode">edit</a>
+            <a href="dilink://{{.Projectinfo.EditDir}}" id="edit" title="Ctrl + Alt + Shift + e" class="badge badge-darkmode">edit</a>
         {{else}}
             <a href="dilink:///show/{{.Projectinfo.ID}}/product/edit" id="edit" class="badge badge-darkmode">edit</a>
         {{end}}

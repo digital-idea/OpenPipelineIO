@@ -44,13 +44,15 @@ type Project struct {
 	Screenx                  bool          `json:"screenx"`                  // 스크린X 프로젝트
 	Director                 string        `json:"director"`                 // 감독
 	Super                    string        `json:"super"`                    // 슈퍼바이져
+	OnsetSuper               string        `json:"onsetsuper"`               // Onset 슈퍼바이져
 	CgSuper                  string        `json:"cgsuper"`                  // CG 슈퍼바이져
 	Pd                       string        `json:"pd"`                       // PD
 	Pm                       string        `json:"pm"`                       // PM
+	PmEmail                  string        `json:"pmemail"`                  // PM 이메일. Item 제목을 클릭해서 메일을 보낼 때 참조 메일로 활용된다.
 	Pa                       string        `json:"pa"`                       // PA
 	Message                  string        `json:"message"`                  // CSI 상단에 표시되는 공지사항
 	Wiki                     string        `json:"wiki"`                     // 위키 URL
-	Edit                     string        `json:"edit"`                     // 편집본 경로
+	EditDir                  string        `json:"editdir"`                  // 편집본 경로
 	Daily                    string        `json:"daily"`                    // 데일리 경로
 	AspectRatio              float64       `json:"aspectratio"`              // 픽셀 AspectRatio. 아나모픽 렌즈를 사용한 프로젝트는 AspectRatio가 다르다.
 	Issue                    string        `json:"issue"`                    // 주요 CG내용. Preproduction 단계시 PostProject단계인 사람들에게 중요하게 표시되도록. - 부분장님 요청사항
@@ -90,6 +92,12 @@ type Project struct {
 	SlackWebhookURL          string        `json:"slackwebhookurl"`          // Slack Webhook URL
 	FxElement                string        `json:"fxelement"`                // 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다. // legacy
 	Deadline                 string        `json:"deadline"`                 // 마감일
+	Edit                     string        `json:"edit"`                     // 편집실이름, 담당자
+	EditContact              string        `json:"editcontact"`              // 편집실 연락처
+	Di                       string        `json:"di"`                       // DI실이름, 담당자
+	DiContact                string        `json:"dicontact"`                // DI실 연락처
+	Sound                    string        `json:"sound"`                    // Sound실이름, 담당자
+	SoundContact             string        `json:"soundcontact"`             // Sound실 연락처
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.

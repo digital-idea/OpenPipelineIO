@@ -221,14 +221,22 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if current.Super != r.FormValue("Super") {
 		renewal.Super = r.FormValue("Super")
 	}
+	renewal.OnsetSuper = r.FormValue("OnsetSuper")
 	renewal.CgSuper = r.FormValue("CgSuper")
 	renewal.Pd = r.FormValue("Pd")
 	renewal.Pm = r.FormValue("Pm")
+	renewal.PmEmail = r.FormValue("PmEmail")
 	renewal.Pa = r.FormValue("Pa")
+	renewal.Edit = r.FormValue("Edit")
+	renewal.EditContact = r.FormValue("EditContact")
+	renewal.Di = r.FormValue("Di")
+	renewal.DiContact = r.FormValue("DiContact")
+	renewal.Sound = r.FormValue("Sound")
+	renewal.SoundContact = r.FormValue("SoundContact")
 	renewal.Message = r.FormValue("Message")
 	renewal.Wiki = r.FormValue("Wiki")
 	renewal.Daily = r.FormValue("Daily")
-	renewal.Edit = r.FormValue("Edit")
+	renewal.EditDir = r.FormValue("EditDir")
 	renewal.NoteHighlight = r.FormValue("NoteHighlight")
 	aspectratio, err := strconv.ParseFloat(r.FormValue("AspectRatio"), 64)
 	if err == nil {
