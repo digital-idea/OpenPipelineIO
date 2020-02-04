@@ -3,42 +3,98 @@
 {{template "navbar" .}}
 <body>
 
-<div class="container p-5">
-    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-        <div class="pt-3 pb-5">
-            <h2 class="section-heading">Admin Setting</h2>
-        </div>
-        <form action="/adminsetting_submit" method="POST">
-        <div class="form-group">
-            <label for="RunScriptAfterSignup">Run script after sign-up</label>
-            <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterSignup}}</textarea>
-            <small class="form-text text-muted">사용자가 가입되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
-        </div>
+ 
 
-        <div class="form-group">
-            <label for="RunScriptAfterEditUserProfile">Run script after edit user profile</label>
-            <textarea class="form-control" id="RunScriptAfterEditUserProfile" name="RunScriptAfterEditUserProfile" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterEditUserProfile}}</textarea>
-            <small class="form-text text-muted">사용자의 정보가 수정되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
+<div class="p-3">
+    <form action="/adminsetting_submit" method="POST">
+        <div class="pt-2 pb-3">
+            <h2 class="section-heading text-center">Admin Setting</h2>
         </div>
-
-        <div class="form-group">
-            <label for="ExcludeProject">Exclude Project</label>
-            <input type="text" class="form-control" id="ExcludeProject" name="ExcludeProject" placeholder="project,project" value={{.Setting.ExcludeProject}}>
-            <small class="form-text text-muted">검색창에 제외될 프로젝트명을 ,문자를 이용해서 입력해주세요. 해당 프로젝트가 보이지 않습니다.</small>
-            <small class="form-text text-muted">CSI를 마이그레이션할 때 사용합니다.</small>
+        <div class="row mx-auto">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="LinuxRootPath">Linux Root Path</label>
+                    <input type="text" class="form-control" id="LinuxRootPath" name="LinuxRootPath" placeholder="/show" value={{.Setting.LinuxRootPath}}>
+                    <small class="form-text text-muted">서버 Root 프로젝트 경로</small>
+                </div>
+                <div class="form-group">
+                    <label for="LinuxProjectPath">Linux Project Path</label>
+                    <input type="text" class="form-control" id="LinuxProjectPath" name="LinuxProjectPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;" value={{.Setting.LinuxProjectPath}}>
+                    <small class="form-text text-muted">프로젝트가 생성되는 경로</small>
+                </div>
+                <div class="form-group">
+                    <label for="LinuxShotPath">Linux Shot Path</label>
+                    <input type="text" class="form-control" id="LinuxShotPath" name="LinuxShotPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Setting.LinuxShotPath}}>
+                    <small class="form-text text-muted">Shot이 생성되는 경로</small>
+                </div>
+                <div class="form-group">
+                    <label for="LinuxAssetPath">Linux Asset Path</label>
+                    <input type="text" class="form-control" id="LinuxAssetPath" name="LinuxAssetPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/assets/&#123;&#123;.Assettype&#125;&#125;/&#123;&#123;.Name&#125;&#125;" value={{.Setting.LinuxAssetPath}}>
+                    <small class="form-text text-muted">Asset이 생성되는 경로</small>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="UID">UID</label>
+                            <input type="text" class="form-control" id="UID" name="UID" placeholder="500" value={{.Setting.UID}}>
+                            <small class="form-text text-muted">소유자 ID, /etc/passwd 에 선언되어 있다. "$ id -u" 명령어로 확인이 가능하다.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="GID">GID</label>
+                            <input type="text" class="form-control" id="GID" name="GID" placeholder="500" value={{.Setting.GID}}>
+                            <small class="form-text text-muted">그룹 ID, /etc/group 에 선언되어 있다. "$ id -g" 명령어로 확인이 가능하다.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="Permission">Permission / 권한</label>
+                            <input type="text" class="form-control" id="Permission" name="Permission" placeholder="0775" value={{.Setting.Permission}}>
+                            <small class="form-text text-muted">경로 생성시 권한</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="Umask">Umask</label>
+                            <input type="text" class="form-control" id="Umask" name="Umask" placeholder="0002" value={{.Setting.Umask}}>
+                            <small class="form-text text-muted">경로 생성에 적용할 Umask 값</small>
+                            <small class="form-text text-muted">개발자와 서버 관리자간 약속 오류를 줄이기 위해 설정한다.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="RunScriptAfterSignup">Run script after sign-up</label>
+                    <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="4" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterSignup}}</textarea>
+                    <small class="form-text text-muted">사용자가 가입되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="RunScriptAfterEditUserProfile">Run script after edit user profile</label>
+                    <textarea class="form-control" id="RunScriptAfterEditUserProfile" name="RunScriptAfterEditUserProfile" rows="4" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterEditUserProfile}}</textarea>
+                    <small class="form-text text-muted">사용자의 정보가 수정되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="ExcludeProject">Exclude Project</label>
+                    <input type="text" class="form-control" id="ExcludeProject" name="ExcludeProject" placeholder="project,project" value={{.Setting.ExcludeProject}}>
+                    <small class="form-text text-muted">검색창에 제외될 프로젝트명을 ,문자를 이용해서 입력해주세요. 해당 프로젝트가 보이지 않습니다.</small>
+                    <small class="form-text text-muted">CSI를 마이그레이션할 때 사용합니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="OCIOConfig">OpenColorIO Configs Path</label>
+                    <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
+                    <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+                </div>
+            </div>        
+            
         </div>
-
-        <div class="form-group">
-            <label for="OCIOConfig">OpenColorIO Configs Path</label>
-            <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
-            <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+        <div class="text-center p-3">
+            <button type="submit" class="btn btn-danger">Update</button>
         </div>
-        
-        <div class="text-center">
-            <button type="submit" class="btn btn-danger mt-5">Update</button>
-        </div>
-        </form>
-    </div>
+    </form>
 </div>
 
 {{template "footerBootstrap"}}
