@@ -12,59 +12,205 @@
         </div>
         <div class="row mx-auto">
             <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="LinuxRootPath">Linux Root Path</label>
-                    <input type="text" class="form-control" id="LinuxRootPath" name="LinuxRootPath" placeholder="/show" value={{.Setting.LinuxRootPath}}>
-                    <small class="form-text text-muted">서버 Root 프로젝트 경로</small>
-                </div>
-                <div class="form-group">
-                    <label for="LinuxProjectPath">Linux Project Path</label>
-                    <input type="text" class="form-control" id="LinuxProjectPath" name="LinuxProjectPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;" value={{.Setting.LinuxProjectPath}}>
-                    <small class="form-text text-muted">프로젝트가 생성되는 경로</small>
-                </div>
-                <div class="form-group">
-                    <label for="LinuxShotPath">Linux Shot Path</label>
-                    <input type="text" class="form-control" id="LinuxShotPath" name="LinuxShotPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Setting.LinuxShotPath}}>
-                    <small class="form-text text-muted">Shot이 생성되는 경로</small>
-                </div>
-                <div class="form-group">
-                    <label for="LinuxAssetPath">Linux Asset Path</label>
-                    <input type="text" class="form-control" id="LinuxAssetPath" name="LinuxAssetPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/assets/&#123;&#123;.Assettype&#125;&#125;/&#123;&#123;.Name&#125;&#125;" value={{.Setting.LinuxAssetPath}}>
-                    <small class="form-text text-muted">Asset이 생성되는 경로</small>
-                </div>
                 <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="UID">UID</label>
-                            <input type="text" class="form-control" id="UID" name="UID" placeholder="500" value={{.Setting.UID}}>
-                            <small class="form-text text-muted">소유자 ID, /etc/passwd 에 선언되어 있다. "$ id -u" 명령어로 확인이 가능하다.</small>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="GID">GID</label>
-                            <input type="text" class="form-control" id="GID" name="GID" placeholder="500" value={{.Setting.GID}}>
-                            <small class="form-text text-muted">그룹 ID, /etc/group 에 선언되어 있다. "$ id -g" 명령어로 확인이 가능하다.</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="Permission">Permission / 권한</label>
-                            <input type="text" class="form-control" id="Permission" name="Permission" placeholder="0775" value={{.Setting.Permission}}>
-                            <small class="form-text text-muted">경로 생성시 권한</small>
-                        </div>
-                    </div>
                     <div class="col">
                         <div class="form-group">
                             <label for="Umask">Umask</label>
                             <input type="text" class="form-control" id="Umask" name="Umask" placeholder="0002" value={{.Setting.Umask}}>
-                            <small class="form-text text-muted">경로 생성에 적용할 Umask 값</small>
-                            <small class="form-text text-muted">개발자와 서버 관리자간 약속 오류를 줄이기 위해 설정한다.</small>
+                            <small class="form-text text-muted">경로 생성시 사용되는 Umask 값. 서버 관리자와 약속을 위해 설정</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="RootPath">Root Path</label>
+                            <input type="text" class="form-control" id="RootPath" name="RootPath" placeholder="/show" value={{.Setting.RootPath}}>
+                            <small class="form-text text-warning">서버 Root 프로젝트 경로</small>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ProjectPath">Project Path</label>
+                            <input type="text" class="form-control" id="ProjectPath" name="ProjectPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;" value={{.Setting.ProjectPath}}>
+                            <small class="form-text text-muted">프로젝트가 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="Permission">Permission</label>
+                            <input type="text" class="form-control" id="ProjectPathPermission" name="ProjectPathPermission" placeholder="0775" value={{.Setting.ProjectPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="UID">UID</label>
+                            <input type="text" class="form-control" id="ProjectPathUID" name="ProjectPathUID" placeholder="500" value={{.Setting.ProjectPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="GID">GID</label>
+                            <input type="text" class="form-control" id="ProjectPathGID" name="ProjectPathGID" placeholder="500" value={{.Setting.ProjectPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ShotPath">Shot Root Path</label>
+                            <input type="text" class="form-control" id="ShotRootPath" name="ShotRootPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/" value={{.Setting.ShotRootPath}}>
+                            <small class="form-text text-muted">Shot이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="Permission">Permission</label>
+                            <input type="text" class="form-control" id="ShotRootPermission" name="ShotRootPathPermission" placeholder="0775" value={{.Setting.ShotRootPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="UID">UID</label>
+                            <input type="text" class="form-control" id="ShotRootPathUID" name="ShotRootPathUID" placeholder="500" value={{.Setting.ShotRootPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="GID">GID</label>
+                            <input type="text" class="form-control" id="ShotRootPathGID" name="ShotRootPathGID" placeholder="500" value={{.Setting.ShotRootPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="SeqPath">Seq Path</label>
+                            <input type="text" class="form-control" id="SeqPath" name="SeqPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;" value={{.Setting.SeqPath}}>
+                            <small class="form-text text-muted">Seq가 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="SeqPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="SeqPathPermission" name="SeqPathPermission" placeholder="0775" value={{.Setting.SeqPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="SeqPathUID">UID</label>
+                            <input type="text" class="form-control" id="SeqPathUID" name="SeqPathUID" placeholder="500" value={{.Setting.SeqPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="SeqPathGID">GID</label>
+                            <input type="text" class="form-control" id="SeqPathGID" name="SeqPathGID" placeholder="500" value={{.Setting.SeqPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ShotPath">Shot Path</label>
+                            <input type="text" class="form-control" id="ShotPath" name="ShotPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Setting.ShotPath}}>
+                            <small class="form-text text-muted">개별 Shot이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ShotPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="ShotPathPermission" name="ShotPathPermission" placeholder="0775" value={{.Setting.ShotPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ShotPathUID">UID</label>
+                            <input type="text" class="form-control" id="ShotPathUID" name="ShotPathUID" placeholder="500" value={{.Setting.ShotPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ShotPathGID">GID</label>
+                            <input type="text" class="form-control" id="ShotPathGID" name="ShotPathGID" placeholder="500" value={{.Setting.ShotPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="AssetRootPath">Asset Root Path</label>
+                            <input type="text" class="form-control" id="AssetRootPath" name="AssetRootPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/assets/" value={{.Setting.AssetRootPath}}>
+                            <small class="form-text text-muted">Asset이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetRootPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="AssetRootPathPermission" name="AssetRootPathPermission" placeholder="0775" value={{.Setting.AssetRootPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetRootPathUID">UID</label>
+                            <input type="text" class="form-control" id="AssetRootPathUID" name="AssetRootPathUID" placeholder="500" value={{.Setting.AssetRootPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetRootPathGID">GID</label>
+                            <input type="text" class="form-control" id="AssetRootPathGID" name="AssetRootPathGID" placeholder="500" value={{.Setting.AssetRootPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="AssetPath">Asset Path</label>
+                            <input type="text" class="form-control" id="AssetPath" name="AssetPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/assets/&#123;&#123;.Assettype&#125;&#125;/&#123;&#123;.Name&#125;&#125;" value={{.Setting.AssetPath}}>
+                            <small class="form-text text-muted">개별 Asset이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="AssetPathPermission" name="AssetPathPermission" placeholder="0775" value={{.Setting.AssetPathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetPathUID">UID</label>
+                            <input type="text" class="form-control" id="AssetPathUID" name="AssetPathUID" placeholder="500" value={{.Setting.AssetPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetPathGID">GID</label>
+                            <input type="text" class="form-control" id="AssetPathGID" name="AssetPathGID" placeholder="500" value={{.Setting.AssetPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="form-group">

@@ -1,19 +1,23 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
 
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
+	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 )
 
@@ -354,6 +358,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
 	stereo := r.FormValue("Stereo")
+	mkdir := str2bool(r.FormValue("Mkdir"))
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -402,6 +407,174 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			s.Error = err.Error()
 			fails = append(fails, s)
 			continue
+		}
+		// 폴더 생성 옵션을 체크하면 폴더를 생성한다.
+		if mkdir {
+			adminSetting, err := GetAdminSetting(session)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			var shotRootPath bytes.Buffer
+			var seqPath bytes.Buffer
+			var shotPath bytes.Buffer
+			shotRootPathTmpl, err := template.New("shotRootPath").Parse(adminSetting.ShotRootPath)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			err = shotRootPathTmpl.Execute(&shotRootPath, i)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			seqPathTmpl, err := template.New("seqPath").Parse(adminSetting.SeqPath)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			err = seqPathTmpl.Execute(&seqPath, i)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			shotPathTmpl, err := template.New("shotPath").Parse(adminSetting.ShotPath)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			err = shotPathTmpl.Execute(&shotPath, i)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			// Umask를 셋팅한다.
+			if adminSetting.Umask == "" {
+				unix.Umask(0)
+			} else {
+				umask, err := strconv.Atoi(adminSetting.Umask)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				unix.Umask(umask)
+			}
+			// ShotRootPath를 점검하고 없다면 경로를 생성한다.
+			if _, err := os.Stat(shotRootPath.String()); os.IsNotExist(err) {
+				per, err := strconv.ParseInt(adminSetting.ShotRootPathPermission, 8, 64)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				err = os.MkdirAll(shotRootPath.String(), os.FileMode(per))
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
+				if adminSetting.ShotRootPathUID != "" && adminSetting.ShotRootPathGID != "" {
+					uid, err := strconv.Atoi(adminSetting.ShotRootPathUID)
+					if err != nil {
+						s.Error = err.Error()
+						fails = append(fails, s)
+						continue
+					}
+					gid, err := strconv.Atoi(adminSetting.ShotRootPathGID)
+					if err != nil {
+						s.Error = err.Error()
+						fails = append(fails, s)
+						continue
+					}
+					err = os.Chown(shotPath.String(), uid, gid)
+					if err != nil {
+						s.Error = err.Error()
+						fails = append(fails, s)
+						continue
+					}
+				}
+			}
+
+			// 개별 샷 경로를 생성한다.
+			per, err := strconv.ParseInt(adminSetting.ShotPathPermission, 8, 64)
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			err = os.MkdirAll(shotPath.String(), os.FileMode(per))
+			if err != nil {
+				s.Error = err.Error()
+				fails = append(fails, s)
+				continue
+			}
+			// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
+			if adminSetting.ShotPathUID != "" && adminSetting.ShotPathGID != "" {
+				uid, err := strconv.Atoi(adminSetting.ShotPathUID)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				gid, err := strconv.Atoi(adminSetting.ShotPathGID)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				err = os.Chown(shotPath.String(), uid, gid)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+			}
+			// Seq 경로의 Permission을 설정한다.
+			if adminSetting.SeqPathPermission != "" {
+				per, err := strconv.ParseInt(adminSetting.SeqPathPermission, 8, 64)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				err = os.Chmod(seqPath.String(), os.FileMode(per))
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+			}
+			// Seq 경로의 UID, GID를 설정한다.
+			if adminSetting.SeqPathUID != "" && adminSetting.SeqPathGID != "" {
+				uid, err := strconv.Atoi(adminSetting.SeqPathUID)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				gid, err := strconv.Atoi(adminSetting.SeqPathGID)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+				fmt.Println(seqPath.String())
+				err = os.Chown(seqPath.String(), uid, gid)
+				if err != nil {
+					s.Error = err.Error()
+					fails = append(fails, s)
+					continue
+				}
+			}
 		}
 		success = append(success, s)
 		// slack log
