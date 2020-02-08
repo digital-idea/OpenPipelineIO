@@ -513,6 +513,7 @@
 			</div>
 		{{end}}
 		<div id="comments-{{.Name}}" onclick="selectCheckboxNone()">
+			{{$first := true}}
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 				<div id="comment-{{$name}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
@@ -520,7 +521,7 @@
 						<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$project}}', '{{$id}}', '{{.Date}}','{{.Text}}')">×</span>
 					{{end}}
 					<br>
-					<small class="text-white">
+					<small class="text-{{if $first}}warning{{else}}white{{end}}">
 						{{range Split .Text "\n"}}
 							{{.}}<br>
 						{{end}}
@@ -530,6 +531,7 @@
 					</small>
 					<hr class="my-1 p-0 m-0 divider">
 				</div>
+				{{$first = false}}
 			{{end}}
 		</div>
 	</div>
