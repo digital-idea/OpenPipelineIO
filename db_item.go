@@ -1109,7 +1109,7 @@ func HasTask(session *mgo.Session, project, name, task string) error {
 }
 
 // SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
-func SetAssignTask(session *mgo.Session, project, name, taskname string, visable bool) (string, error) {
+func SetAssignTask(session *mgo.Session, project, name, taskname string, remove bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -1133,14 +1133,10 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, visable
 		}
 		item.Tasks[task] = t
 	} else {
-		// 이미 Task가 존재하면
-		t := item.Tasks[task]
-		t.Title = task
-		t.Status = ASSIGN
-		item.Tasks[task] = t
+		return id, fmt.Errorf("이미 %s 에 %s Task가 존재합니다", name, taskname)
 	}
 
-	if !visable {
+	if !remove {
 		delete(item.Tasks, task)
 	}
 	c := session.DB("project").C(project)
