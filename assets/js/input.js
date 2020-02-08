@@ -779,7 +779,7 @@ function addComment(project, id, text, media) {
                     let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
-                    <br><small class="text-white">${body}</small>`
+                    <br><small class="text-warning">${body}</small>`
                     if (data.media != "") {
                         if (data.media.includes("http")) {
                             newComment += `<br><a href="${data.media}" class="link">∞</a>`
@@ -816,7 +816,7 @@ function addComment(project, id, text, media) {
                 let newComment = `<div id="comment-${data.name}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                 <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
-                <br><small class="text-white">${body}</small>`
+                <br><small class="text-warning">${body}</small>`
                 if (data.media != "") {
                     if (data.media.includes("http")) {
                         newComment += `<br><a href="${data.media}" class="link">∞</a>`
