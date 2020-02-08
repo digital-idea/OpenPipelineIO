@@ -13,11 +13,9 @@ CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매�
 
 ### 다운로드
 - [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_linux_x86-64.tgz)
-- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 - [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_darwin_x86-64.tgz)
-- [macOS 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_darwin_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-- [Windows 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_windows_x86-64.tgz)
-- [Windows 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_windows_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.2/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+
 
 ### Roadmap
 - [ ] 2월: 기존 버그 및 기능 안정화
