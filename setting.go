@@ -29,6 +29,10 @@ type Setting struct {
 	AssetRootPathPermission       string `json:"assetrootpathpermission"`       // Asset Root 경로의 권한
 	AssetRootPathUID              string `json:"assetrootpathuid"`              // Asset Root 경로의 User ID
 	AssetRootPathGID              string `json:"assetrootpathgid"`              // Asset Root 경로의 Group ID
+	AssetTypePath                 string `json:"assettypepath"`                 // Asset Type 경로 예) /show/{{.Project}}/assets/{{.Assettype}}
+	AssetTypePathPermission       string `json:"assettypepathpermission"`       // Asset Type 경로의 권한
+	AssetTypePathUID              string `json:"assettypepathuid"`              // Asset Type 경로의 User ID
+	AssetTypePathGID              string `json:"assettypepathgid"`              // Asset Type 경로의 Group ID
 	AssetPath                     string `json:"assetpath"`                     // 개별 Asset 예) /show/{{.Project}}/assets/{{.Assettype}}/{{.Name}}
 	AssetPathPermission           string `json:"assetpathpermission"`           // 개별 Asset 경로의 권한
 	AssetPathUID                  string `json:"assetpathuid"`                  // 개별 Asset 경로의 User ID

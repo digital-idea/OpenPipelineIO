@@ -179,7 +179,36 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="AssetTypePath">Asset Type Path</label>
+                            <input type="text" class="form-control" id="AssetTypePath" name="AssetTypePath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/assets/&#123;&#123;.Assettype&#125;&#125;" value={{.Setting.AssetTypePath}}>
+                            <small class="form-text text-muted">Asset Type이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetTypePathPermission">Permission</label>
+                            <input type="text" class="form-control" id="AssetTypePathPermission" name="AssetTypePathPermission" placeholder="0775" value={{.Setting.AssetTypePathPermission}}>
+                            <small class="form-text text-muted">경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetTypePathUID">UID</label>
+                            <input type="text" class="form-control" id="AssetTypePathUID" name="AssetTypePathUID" placeholder="500" value={{.Setting.AssetTypePathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="AssetTypePathGID">GID</label>
+                            <input type="text" class="form-control" id="AssetTypePathGID" name="AssetTypePathGID" placeholder="500" value={{.Setting.AssetTypePathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">

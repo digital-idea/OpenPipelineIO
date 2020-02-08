@@ -495,7 +495,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 						fails = append(fails, s)
 						continue
 					}
-					err = os.Chown(shotPath.String(), uid, gid)
+					err = os.Chown(shotRootPath.String(), uid, gid)
 					if err != nil {
 						s.Error = err.Error()
 						fails = append(fails, s)
@@ -503,7 +503,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 			}
-
 			// 개별 샷 경로를 생성한다.
 			per, err := strconv.ParseInt(adminSetting.ShotPathPermission, 8, 64)
 			if err != nil {
@@ -567,7 +566,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 					fails = append(fails, s)
 					continue
 				}
-				fmt.Println(seqPath.String())
 				err = os.Chown(seqPath.String(), uid, gid)
 				if err != nil {
 					s.Error = err.Error()
