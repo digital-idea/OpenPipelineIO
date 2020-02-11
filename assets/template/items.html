@@ -339,15 +339,13 @@
 			<span class="text-badge">Note:</span>
 		</div>
 		<div class="ml-1 text-light small">
-			{{if eq .Type "org" "left" "asset"}}
-				{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-					<div class="float-right" id="note-{{.Name}}-addbutton">
-						<span class="add" data-toggle="modal" data-target="#modal-setnote" onclick="setNoteModal('{{.Project}}','{{.ID}}')">＋</span>
-						<span class="edit" data-toggle="modal" data-target="#modal-editnote" onclick="editNoteModal('{{.Project}}','{{.ID}}')">≡</span>
-					</div>
-				{{end}}
+			{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+				<div class="float-right" id="note-{{.Name}}-addbutton">
+					<span class="add" data-toggle="modal" data-target="#modal-setnote" onclick="setNoteModal('{{.Project}}','{{.ID}}')">＋</span>
+					<span class="edit" data-toggle="modal" data-target="#modal-editnote" onclick="editNoteModal('{{.Project}}','{{.ID}}')">≡</span>
+				</div>
 			{{end}}
-			<div id="note-{{.Name}}" onclick="selectCheckboxNone()">
+			<div id="note-{{.ID}}" onclick="selectCheckboxNone()">
 				{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}
 			</div>
 		</div>

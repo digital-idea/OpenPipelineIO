@@ -660,7 +660,7 @@ function setNote(project, id, text) {
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(currentID),
+                    id: currentID,
                     text: text,
                     userid: userid,
                     overwrite: overwrite,
@@ -672,10 +672,10 @@ function setNote(project, id, text) {
                 success: function(data) {
                     if (overwrite) {
                         // note-{{.Name}} 내부 내용을 교체한다.
-                        document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                        document.getElementById("note-"+data.id).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     } else {
                         // note-{{.Name}} 내부 내용에 추가한다.
-                        document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.name).innerHTML;
+                        document.getElementById("note-"+data.id).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.id).innerHTML;
                     }
                 },
                 error: function(request,status,error){
@@ -690,7 +690,7 @@ function setNote(project, id, text) {
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 text: text,
                 userid: userid,
                 overwrite: overwrite,
@@ -702,10 +702,10 @@ function setNote(project, id, text) {
             success: function(data) {
                 if (overwrite) {
                     // note-{{.Name}} 내부 내용을 교체한다.
-                    document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                    document.getElementById("note-"+data.id).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 } else {
                     // note-{{.Name}} 내부 내용에 추가한다.
-                    document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.name).innerHTML;
+                    document.getElementById("note-"+data.id).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>') + "<br>" + document.getElementById("note-"+data.id).innerHTML;
                 }
             },
             error: function(request,status,error){
@@ -723,7 +723,7 @@ function editNote(project, id, text) {
         type: "post",
         data: {
             project: project,
-            name: id2name(id),
+            id: id,
             text: text,
             userid: userid,
             overwrite: true,
@@ -733,7 +733,7 @@ function editNote(project, id, text) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("note-"+data.name).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            document.getElementById("note-"+data.id).innerHTML = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

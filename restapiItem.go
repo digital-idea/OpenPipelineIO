@@ -4856,7 +4856,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	type Recipe struct {
 		Project   string `json:"project"`
-		Name      string `json:"name"`
+		ID        string `json:"id"`
 		Text      string `json:"text"`
 		Overwrite bool   `json:"overwrite"`
 		UserID    string `json:"userid"`
@@ -4889,13 +4889,13 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Project = v
-		case "name":
+		case "id":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Name = v
+			rcp.ID = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -4920,21 +4920,21 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	note, err := SetNote(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Text, rcp.Overwrite)
+	note, err := SetNote(session, rcp.Project, rcp.ID, rcp.UserID, rcp.Text, rcp.Overwrite)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// log
-	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
