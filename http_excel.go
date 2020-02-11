@@ -819,6 +819,8 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		"Tags",
 		"JustTimecodeIn",
 		"JustTimecodeOut",
+		"ScanTimecodeIn",
+		"ScanTimecodeOut",
 		"2D마감",
 		"3D마감",
 	}
@@ -936,15 +938,29 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		f.SetCellValue(sheet, pos, i.JustTimecodeOut)
 		f.SetCellStyle(sheet, pos, pos, style)
-		// Deadline2D
+		// ScanTimecodeIn
 		pos, err = excelize.CoordinatesToCellName(11, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, i.ScanTimecodeIn)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// ScanTimecodeOut
+		pos, err = excelize.CoordinatesToCellName(12, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, i.ScanTimecodeOut)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// Deadline2D
+		pos, err = excelize.CoordinatesToCellName(13, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline2d))
 		f.SetCellStyle(sheet, pos, pos, style)
 		// Deadline3D
-		pos, err = excelize.CoordinatesToCellName(12, n+2)
+		pos, err = excelize.CoordinatesToCellName(14, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -955,7 +971,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			if _, found := i.Tasks[t]; !found {
 				continue
 			}
-			pos, err = excelize.CoordinatesToCellName(13+taskOrder, n+2)
+			pos, err = excelize.CoordinatesToCellName(15+taskOrder, n+2)
 			if err != nil {
 				log.Println(err)
 			}
