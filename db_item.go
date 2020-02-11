@@ -1850,6 +1850,35 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media s
 	return id, nil
 }
 
+// EditComment 함수는 item에 수정사항을 수정한다.
+func EditComment(session *mgo.Session, project, id, date, text, media string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	var comments []Comment
+	for _, c := range i.Comments {
+		if c.Date == date {
+			c.Text = text
+			c.Media = media
+			comments = append(comments, c)
+			continue
+		}
+		comments = append(comments, c)
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"comments": comments, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RmComment 함수는 item에 수정사항을 삭제합니다. 로그처리를 위해서 삭제 내용을 반환합니다.
 func RmComment(session *mgo.Session, project, name, userID, date string) (string, string, error) {
 	session.SetMode(mgo.Monotonic, true)

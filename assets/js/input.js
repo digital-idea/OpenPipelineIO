@@ -45,6 +45,9 @@ document.onkeyup = function(e) {
         if ($('#modal-addcomment').hasClass('show')) {
             document.getElementById("modal-addcomment-addbutton").click();
         }
+        if ($('#modal-editcomment').hasClass('show')) {
+            document.getElementById("modal-editcomment-editbutton").click();
+        }
         if ($('#modal-setnote').hasClass('show')) {
             document.getElementById("modal-setnote-editbutton").click();
         }
@@ -741,6 +744,8 @@ function editNote(project, id, text) {
     });
 }
 
+
+
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
     document.getElementById("modal-addcomment-id").value = id;
@@ -778,6 +783,7 @@ function addComment(project, id, text, media) {
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.name}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                    <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.media}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                     <br><small class="text-warning">${body}</small>`
                     if (data.media != "") {
@@ -811,10 +817,11 @@ function addComment(project, id, text, media) {
             },
             dataType: "json",
             success: function(data) {
-                // comments-{{.Name}} 내부 내용에 추가한다.
+                // comments-{{$id}} 내부 내용에 추가한다.
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                let newComment = `<div id="comment-${data.name}-${data.date}">
+                let newComment = `<div id="comment-${data.id}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.media}')">≡</span>
                 <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                 <br><small class="text-warning">${body}</small>`
                 if (data.media != "") {
@@ -825,7 +832,7 @@ function addComment(project, id, text, media) {
                     }
                 }
                 newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
-                document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
+                document.getElementById("comments-"+data.id).innerHTML = newComment + document.getElementById("comments-"+data.id).innerHTML;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -834,12 +841,59 @@ function addComment(project, id, text, media) {
     }
 }
 
+function editComment(project, id, time, text, media) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/editcomment",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
+            time: time,
+            text: text,
+            media: media,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            // comments-${data.id}}-${data.time} 내부 내용을 업데이트 한다.
+            let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            let newComment = `<span class="text-badge">${data.time} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+            <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}', '${data.media}')">≡</span>
+            <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}')">×</span>
+            <br><small class="text-warning">${body}</small>`
+            if (data.media != "") {
+                if (data.media.includes("http")) {
+                    newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                } else {
+                    newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                }
+            }
+            document.getElementById(`comment-${data.id}-${data.time}`).innerHTML = newComment
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-project").value = project;
     document.getElementById("modal-rmcomment-id").value = id;
     document.getElementById("modal-rmcomment-time").value = time;
     document.getElementById("modal-rmcomment-text").value = text;
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
+}
+
+function setEditCommentModal(project, id, time, text, media) {
+    document.getElementById("modal-editcomment-project").value = project;
+    document.getElementById("modal-editcomment-id").value = id;
+    document.getElementById("modal-editcomment-time").value = time;
+    document.getElementById("modal-editcomment-text").value = text;
+    document.getElementById("modal-editcomment-media").value = media;
+    document.getElementById("modal-editcomment-title").innerHTML = "Edit Comment" + multiInputTitle(id);
 }
 
 function rmComment(project, id, date) {
@@ -859,7 +913,7 @@ function rmComment(project, id, date) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById(`comment-${data.name}-${data.date}`).remove();
+            document.getElementById(`comment-${data.id}-${data.date}`).remove();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

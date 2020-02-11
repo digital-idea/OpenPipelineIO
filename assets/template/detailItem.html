@@ -495,18 +495,18 @@
 	</div>
 
 	<!--수정사항-->
-	<div class="col-sm-12 col-md-12 col-lg-4">
-		
+	<div class="col-sm-12 col-md-12 col-lg-4">		
 		{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 			<div class="float-right">
 				<span class="add" data-toggle="modal" data-target="#modal-addcomment" onclick="setAddCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}')">＋</span>
 			</div>
 		{{end}}
-		<div id="comments-{{$.Item.Name}}" onclick="selectCheckboxNone()">
+		<div id="comments-{{$.Item.ID}}" onclick="selectCheckboxNone()">
 			{{range ReverseCommentSlice .Comments}}
-				<div id="comment-{{$.Item.Name}}-{{.Date}}">
+				<div id="comment-{{$.Item.ID}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+						<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$.Item.Project}}','{{$.Item.ID}}','{{.Date}}','{{.Text}}','{{.Media}}')">≡</span>
 						<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{.Date}}','{{.Text}}')">×</span>
 					{{end}}
 					<br>
