@@ -40,7 +40,7 @@ var funcMap = template.FuncMap{
 	"CutCommentSlice":     CutCommentSlice,
 	"ToShortTime":         ToShortTime,
 	"ToNormalTime":        ToNormalTime,
-	"Tags2str":            Tags2str,
+	"List2str":            List2str,
 	"CheckDate":           CheckDate,
 	"CheckUpdate":         CheckUpdate,
 	"CheckDdline":         CheckDdline,

@@ -285,15 +285,15 @@ func ToFullTime(t string) string {
 	return t
 }
 
-// Tags2str 템플릿함수는 태그리스트를 ,로 붙힌 문자열로 만든다.
-func Tags2str(tags []string) string {
-	var newtags []string
-	for _, tag := range tags {
-		if tag != "" {
-			newtags = append(newtags, tag)
+// List2str 템플릿함수는 리스트를 ,로 붙힌 문자열로 만든다.
+func List2str(items []string) string {
+	var lists []string
+	for _, i := range items {
+		if i != "" {
+			lists = append(lists, i)
 		}
 	}
-	return strings.Join(newtags, ",")
+	return strings.Join(lists, ",")
 }
 
 // Str2Tags 템플릿함수는 태그 문자열을 리스트로 만든다.

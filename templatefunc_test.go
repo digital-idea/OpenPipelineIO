@@ -146,7 +146,7 @@ func TestStr2Tags(t *testing.T) {
 	}
 }
 
-func TestTags2str(t *testing.T) {
+func TestList2str(t *testing.T) {
 	cases := []struct {
 		in   []string
 		want string
@@ -158,8 +158,8 @@ func TestTags2str(t *testing.T) {
 		want: "1,2,3",
 	}}
 	for _, c := range cases {
-		got := Tags2str(c.in)
-		if !reflect.DeepEqual(Tags2str(c.in), c.want) {
+		got := List2str(c.in)
+		if !reflect.DeepEqual(List2str(c.in), c.want) {
 			t.Fatalf("Str2Tags(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
 		}
 	}
