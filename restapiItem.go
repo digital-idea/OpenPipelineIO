@@ -4857,6 +4857,7 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		ID        string `json:"id"`
+		Name      string `json:"name"`
 		Text      string `json:"text"`
 		Overwrite bool   `json:"overwrite"`
 		UserID    string `json:"userid"`
@@ -4920,21 +4921,21 @@ func handleAPISetNote(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	note, err := SetNote(session, rcp.Project, rcp.ID, rcp.UserID, rcp.Text, rcp.Overwrite)
+	itemName, note, err := SetNote(session, rcp.Project, rcp.ID, rcp.UserID, rcp.Text, rcp.Overwrite)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// log
-	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, "Set Note: "+note, rcp.Project, itemName, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, rcp.ID, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Note: %s\nProject: %s, Name: %s, Author: %s", note, rcp.Project, itemName, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -5052,6 +5053,7 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
+		Name    string `json:"name"`
 		Time    string `json:"time"`
 		Text    string `json:"text"`
 		Media   string `json:"media"`
@@ -5111,19 +5113,19 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.Text, rcp.Media)
+	rcp.Name, err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.Text, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Edit Comment: %s, Media: %s", rcp.Text, rcp.Media), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Edit Comment: %s, Media: %s", rcp.Text, rcp.Media), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Edit Comment: %s\nMeida: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Media, rcp.Project, rcp.ID, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Edit Comment: %s\nMeida: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Media, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

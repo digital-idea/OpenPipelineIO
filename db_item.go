@@ -1791,22 +1791,22 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	return nil
 }
 
-// SetNote 함수는 item에 작업내용을 추가한다. 노트내용과 에러를 반환한다.
-func SetNote(session *mgo.Session, project, id, userID, text string, overwrite bool) (string, error) {
+// SetNote 함수는 item에 작업내용을 추가한다. Name,노트내용,에러를 반환한다.
+func SetNote(session *mgo.Session, project, id, userID, text string, overwrite bool) (string, string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 	c := session.DB("project").C(project)
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return "", "", err
+	}
 	var note string
 	if overwrite {
 		note = text
 	} else {
-		i, err := getItem(session, project, id)
-		if err != nil {
-			return "", err
-		}
 		if strings.HasSuffix(i.Note.Text, "\n") {
 			note = text + i.Note.Text
 		} else {
@@ -1815,9 +1815,9 @@ func SetNote(session *mgo.Session, project, id, userID, text string, overwrite b
 	}
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"note.text": note, "note.author": userID, "note.date": time.Now().Format(time.RFC3339), "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return "", err
+		return i.Name, "", err
 	}
-	return note, nil
+	return i.Name, note, nil
 }
 
 // AddComment 함수는 item에 수정사항을 추가한다.
@@ -1851,15 +1851,15 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media s
 }
 
 // EditComment 함수는 item에 수정사항을 수정한다.
-func EditComment(session *mgo.Session, project, id, date, text, media string) error {
+func EditComment(session *mgo.Session, project, id, date, text, media string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return i.Name, err
 	}
 	var comments []Comment
 	for _, c := range i.Comments {
@@ -1874,9 +1874,9 @@ func EditComment(session *mgo.Session, project, id, date, text, media string) er
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"comments": comments, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return i.Name, err
 	}
-	return nil
+	return i.Name, nil
 }
 
 // RmComment 함수는 item에 수정사항을 삭제합니다. 로그처리를 위해서 삭제 내용을 반환합니다.

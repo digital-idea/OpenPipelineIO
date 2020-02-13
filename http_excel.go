@@ -453,9 +453,9 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if note != "" {
-			_, err = SetNote(session, project, name, ssid.ID, note, overwrite)
+			itemName, _, err := SetNote(session, project, name, ssid.ID, note, overwrite)
 			if err != nil {
-				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
+				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: itemName, Error: err.Error()})
 				continue
 			}
 			err = dilog.Add(*flagDBIP, host, "Set Note: "+note, project, name, "csi3", ssid.ID, 180)
