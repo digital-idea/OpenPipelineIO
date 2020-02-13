@@ -139,8 +139,8 @@ func TestStr2Tags(t *testing.T) {
 		want: []string{"1", "2", "3"},
 	}}
 	for _, c := range cases {
-		got := Str2Tags(c.in)
-		if !reflect.DeepEqual(Str2Tags(c.in), c.want) {
+		got := Str2List(c.in)
+		if !reflect.DeepEqual(Str2List(c.in), c.want) {
 			t.Fatalf("Str2Tags(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
 		}
 	}

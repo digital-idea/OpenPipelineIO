@@ -187,6 +187,28 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.SessionID = ssid.ID
+	rcp.Devmode = *flagDevmode
+	rcp.SearchOption = handleRequestToSearchOption(r)
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당리스트를 사용한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, j)
+			}
+		}
+		rcp.Projectlist = accessProjects
+	}
+
 	var rows []Excelrow
 	excelRows, err := f.GetRows(rcp.Sheet)
 	if err != nil {
@@ -290,14 +312,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
 	}
-	rcp.SessionID = ssid.ID
-	rcp.Devmode = *flagDevmode
-	rcp.SearchOption = handleRequestToSearchOption(r)
-	rcp.User, err = getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+
 	rcp.Rows = rows
 	err = TEMPLATES.ExecuteTemplate(w, "reportexcel", rcp)
 	if err != nil {
@@ -732,15 +747,29 @@ func handleExportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.User, err = getUser(session, ssid.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당프로젝트만 보여야한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, i)
+			}
+		}
+		rcp.Projectlist = accessProjects
 	}
 
 	err = TEMPLATES.ExecuteTemplate(w, "exportexcel", rcp)

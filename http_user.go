@@ -192,7 +192,8 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Phone = r.FormValue("Phone")
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
-	u.Tags = Str2Tags(r.FormValue("Tags"))
+	u.Tags = Str2List(r.FormValue("Tags"))
+	u.AccessProjects = Str2List(r.FormValue("AccessProjects"))
 	u.Timezone = r.FormValue("Timezone")
 	if r.FormValue("AccessLevel") != "" {
 		level, err := strconv.Atoi(r.FormValue("AccessLevel"))
@@ -312,15 +313,18 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// 사용자 수정이후 처리할 스크립트가 admin setting에 선언되어 있다면, 실행합니다.
 	setting, err := GetAdminSetting(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	if setting.RunScriptAfterEditUserProfile != "" {
 		for _, line := range strings.Split(setting.RunScriptAfterEditUserProfile, "\r\n") {
 			cmds := strings.Split(line, " ")
+			// 해당 코드가 연산이 오래걸리면 페이지로 리다이렉션시 오래걸린다.
 			if len(cmds) < 2 {
 				err := exec.Command(line).Run()
 				if err != nil {
@@ -516,7 +520,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	u.Phone = r.FormValue("Phone")
 	u.Hotline = r.FormValue("Hotline")
 	u.Location = r.FormValue("Location")
-	u.Tags = Str2Tags(r.FormValue("Tags"))
+	u.Tags = Str2List(r.FormValue("Tags"))
 	u.Timezone = r.FormValue("Timezone")
 	host, port, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {

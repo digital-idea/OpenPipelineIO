@@ -76,13 +76,26 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	projectList, err := OnProjectlist(session)
+	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Projectlist = projectList
-	// setting의 Exclude Project를 가지고 와서 제외시켜준다.
+
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당리스트를 사용한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, j)
+			}
+		}
+		rcp.Projectlist = accessProjects
+	}
+	// 마이크레이션중인 프로젝트는 제거한다.
 	setting, err := GetAdminSetting(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -92,7 +105,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	if setting.ExcludeProject != "" {
 		excludeProjects = strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
 		var accessProjects []string
-		for _, p := range projectList {
+		for _, p := range rcp.Projectlist {
 			has := false
 			for _, ep := range excludeProjects {
 				if p == ep {
@@ -105,7 +118,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Projectlist = accessProjects
 	}
-
 	if len(rcp.Projectlist) == 0 {
 		http.Redirect(w, r, "/noonproject", http.StatusSeeOther)
 		return

@@ -57,7 +57,7 @@ func handleAPISetTags(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	err = SetTags(session, project, name, Str2Tags(tags))
+	err = SetTags(session, project, name, Str2List(tags))
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

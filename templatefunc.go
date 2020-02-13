@@ -296,19 +296,19 @@ func List2str(items []string) string {
 	return strings.Join(lists, ",")
 }
 
-// Str2Tags 템플릿함수는 태그 문자열을 리스트로 만든다.
-func Str2Tags(tags string) []string {
-	if tags == "" {
+// Str2List 템플릿함수는 태그 문자열을 리스트로 만든다.
+func Str2List(str string) []string {
+	if str == "" {
 		return []string{}
 	}
-	var newtags []string
-	cleanup := strings.Replace(tags, " ", "", -1)
+	var lists []string
+	cleanup := strings.Replace(str, " ", "", -1)
 	for _, tag := range strings.Split(cleanup, ",") {
 		if tag != "" {
-			newtags = append(newtags, tag)
+			lists = append(lists, tag)
 		}
 	}
-	return newtags
+	return lists
 }
 
 // CheckDate 함수는 1차마감, 2차마감, mov업데이이트날짜와 검색어를 비교하여 statusbox의 색깔을 반영

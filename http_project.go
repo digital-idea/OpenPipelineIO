@@ -103,8 +103,8 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
 		Projects []Project
 		MailDNS  string
-		User     User
-		Devmode  bool
+		User
+		Devmode bool
 		SearchOption
 	}
 	rcp := recipe{}
@@ -136,6 +136,20 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당프로젝트만 보여야한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []Project
+		for _, i := range rcp.Projects {
+			for _, j := range rcp.User.AccessProjects {
+				if i.ID != j {
+					continue
+				}
+				accessProjects = append(accessProjects, i)
+			}
+		}
+		rcp.Projects = accessProjects
+	}
+
 	err = TEMPLATES.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
 		log.Println(err)

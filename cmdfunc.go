@@ -180,7 +180,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 	if assettags == "" {
 		log.Fatal("에셋 생성시 assettags가 필요합니다.")
 	}
-	for _, tag := range Str2Tags(assettags) {
+	for _, tag := range Str2List(assettags) {
 		if tag == "assembly" {
 			i.Assettags = append(i.Assettags, name) //에셈블리 추가시 자기 자신도 태그로 포함되어야 한다.
 		}
