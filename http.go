@@ -265,6 +265,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setaftermov", handleAPISetAftermov)
 	http.HandleFunc("/api/settaskstatus", handleAPISetTaskStatus)
 	http.HandleFunc("/api/setassigntask", handleAPISetAssignTask)
+	http.HandleFunc("/api/rmtask", handleAPIRmTask)
 	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)
 	http.HandleFunc("/api/setplatein", handleAPISetPlateIn)
 	http.HandleFunc("/api/setplateout", handleAPISetPlateOut)

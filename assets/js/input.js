@@ -321,14 +321,12 @@ function rmTask(project, id, task) {
             let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
-                url: "/api/setassigntask",
+                url: "/api/rmtask",
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
-                    status: 'false',
-                    userid: userid,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -344,14 +342,12 @@ function rmTask(project, id, task) {
         }
     } else {
         $.ajax({
-            url: "/api/setassigntask",
+            url: "/api/rmtask",
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
-                status: 'false',
-                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token

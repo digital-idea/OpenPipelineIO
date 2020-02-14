@@ -2582,6 +2582,90 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIRmTask 함수는 아이템의 task를 제거한다.
+func handleAPIRmTask(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		ID      string `json:"id"`
+		Task    string `json:"task"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	for key, values := range r.PostForm {
+		switch key {
+		case "project":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Project = v
+		case "id":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.ID = v
+		case "task":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Task = v
+		}
+	}
+	rcp.Name, err = RmTask(session, rcp.Project, rcp.ID, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Task: %s", rcp.Task), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Task: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetAssignTask 함수는 아이템의 task에 대한 Assign 상태를 설정한다.
 func handleAPISetAssignTask(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

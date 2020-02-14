@@ -237,36 +237,34 @@
 			{{$beforemov := .Beforemov}}
 			{{$aftermov := .Aftermov}}
 			{{range mapToSlice .Tasks $.TasksettingOrderMap}}
-				{{if eq .Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-					<div class="row" id="{{$name}}-task-{{.Title}}">
-						<div id="{{$name}}-task-{{.Title}}-status">
-							<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
-							onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
-							>{{.Title}}</span>
-						</div>
-						<div id="{{$id}}-task-{{.Title}}-predate">
-							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
-						</div>
-						<div id="{{$name}}-task-{{.Title}}-date">
-							<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
-						</div>
-						<div id="{{$name}}-task-{{.Title}}-user">
-							<a href="/user?id={{onlyID .User}}" class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</a>
-						</div>
-						<div id="{{$name}}-task-{{.Title}}-playbutton">
-							{{if .Mov }}
-								<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
-							{{end}}
-						</div>
-						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
-							<div class="ml-1">
-								<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
-									setEditTaskModal('{{$project}}', '{{$id}}', '{{.Title}}');
-								">≡</span>
-							</div>
+				<div class="row" id="{{$name}}-task-{{.Title}}">
+					<div id="{{$name}}-task-{{.Title}}-status">
+						<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
+						>{{.Title}}</span>
+					</div>
+					<div id="{{$id}}-task-{{.Title}}-predate">
+						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
+					</div>
+					<div id="{{$name}}-task-{{.Title}}-date">
+						<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
+					</div>
+					<div id="{{$name}}-task-{{.Title}}-user">
+						<a href="/user?id={{onlyID .User}}" class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</a>
+					</div>
+					<div id="{{$name}}-task-{{.Title}}-playbutton">
+						{{if .Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
-				{{end}}
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+						<div class="ml-1">
+							<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
+								setEditTaskModal('{{$project}}', '{{$id}}', '{{.Title}}');
+							">≡</span>
+						</div>
+					{{end}}
+				</div>
 			{{end}}
 		</div>
 	</div>

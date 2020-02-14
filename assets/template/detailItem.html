@@ -229,36 +229,34 @@
 			{{$beforemov := .Item.Beforemov}}
 			{{$aftermov := .Item.Aftermov}}
 			{{range mapToSlice .Tasks $.TasksettingOrderMap}}
-				{{if eq .Status "1" "2" "3" "4" "5" "6" "7" "8" "9" }}
-					<div class="row" id="{{$.Item.Name}}-task-{{.Title}}">
-						<div id="{{$.Item.Name}}-task-{{.Title}}-status">
-							<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
-							onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
-							>{{.Title}}</span>
-						</div>
-						<div id="{{$.Item.Name}}-task-{{.Title}}-predate">
-							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
-						</div>
-						<div id="{{$.Item.Name}}-task-{{.Title}}-date">
-							<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
-						</div>
-						<div id="{{$.Item.Name}}-task-{{.Title}}-user">
-							<span class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</span>
-						</div>
-						<div id="{{$.Item.Name}}-task-{{.Title}}-playbutton">
-							{{if .Mov }}
-								<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
-							{{end}}
-						</div>
-						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
-							<div class="ml-1">
-								<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
-									setEditTaskModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{.Title}}');
-								">≡</span>
-							</div>
+				<div class="row" id="{{$.Item.Name}}-task-{{.Title}}">
+					<div id="{{$.Item.Name}}-task-{{.Title}}-status">
+						<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
+						onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
+						>{{.Title}}</span>
+					</div>
+					<div id="{{$.Item.Name}}-task-{{.Title}}-predate">
+						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
+					</div>
+					<div id="{{$.Item.Name}}-task-{{.Title}}-date">
+						<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
+					</div>
+					<div id="{{$.Item.Name}}-task-{{.Title}}-user">
+						<span class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</span>
+					</div>
+					<div id="{{$.Item.Name}}-task-{{.Title}}-playbutton">
+						{{if .Mov }}
+							<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
 						{{end}}
 					</div>
-				{{end}}
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+						<div class="ml-1">
+							<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
+								setEditTaskModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{.Title}}');
+							">≡</span>
+						</div>
+					{{end}}
+				</div>
 			{{end}}
 		</div>
 	</div>

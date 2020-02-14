@@ -1149,6 +1149,24 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, remove 
 	return id, nil
 }
 
+// RmTask 함수는 item에 task를 제거한다.
+func RmTask(session *mgo.Session, project, id, taskname string) (string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return "", err
+	}
+	delete(item.Tasks, taskname)
+	c := session.DB("project").C(project)
+	item.Updatetime = time.Now().Format(time.RFC3339)
+	item.updateStatus()
+	err = c.Update(bson.M{"id": item.ID}, item)
+	if err != nil {
+		return "", err
+	}
+	return item.Name, nil
+}
+
 // SetTaskUser 함수는 item에 task의 user 값을 셋팅한다.
 func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
 	session.SetMode(mgo.Monotonic, true)
