@@ -777,7 +777,7 @@ function addComment(project, id, text, media) {
                 success: function(data) {
                     // comments-{{.Name}} 내부 내용에 추가한다.
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                    let newComment = `<div id="comment-${data.name}-${data.date}">
+                    let newComment = `<div id="comment-${data.id}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
                     <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.media}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
@@ -790,7 +790,7 @@ function addComment(project, id, text, media) {
                         }
                     }
                     newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
-                    document.getElementById("comments-"+data.name).innerHTML = newComment + document.getElementById("comments-"+data.name).innerHTML;
+                    document.getElementById("comments-"+data.id).innerHTML = newComment + document.getElementById("comments-"+data.id).innerHTML;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
