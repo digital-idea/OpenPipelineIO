@@ -3247,3 +3247,21 @@ function mailInfo(project, id) {
         }
     });   
 }
+
+function foldingmenu() {
+    if(searchbox.style.display=="none") {
+        // 펼치기
+        searchbox.style.display='';
+        // item 위에 빈영역을 만들어 주어야 한다.
+        document.getElementById("blinkspace").style.height = "500px";
+        // 메뉴글씨 바꾸기
+        document.getElementById("foldoption").innerText = "Collapse Searchbox"
+    } else {
+        // 접기
+        searchbox.style.display='none';
+        // item 위에 빈영역을 만들어 주어야 한다.
+        document.getElementById("blinkspace").style.height = "100px";
+        // 메뉴글씨 바꾸기
+        document.getElementById("foldoption").innerText = "Expand Searchbox"
+    }
+}
