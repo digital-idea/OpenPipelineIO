@@ -2329,7 +2329,7 @@ function addTag(project, id, tag) {
                 
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     tag: tag,
                     userid: userid,
                 },
@@ -2340,16 +2340,16 @@ function addTag(project, id, tag) {
                 success: function(data) {
                     // 기존 Tags에 추가된다.
                     let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
-                    source = `<div id="tag-${data.name}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
-                    document.getElementById("tags-"+data.name).innerHTML = document.getElementById("tags-"+data.name).innerHTML + source;
+                    source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                    document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
                     // 요소갯수에 따라 버튼을 설정한다.
-                    if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
-                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                    if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                        document.getElementById("tag-button-"+data.id).innerHTML = `
                         <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                         `
                     } else {
-                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        document.getElementById("tag-button-"+data.id).innerHTML = `
                         <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         `
                     }
@@ -2366,7 +2366,7 @@ function addTag(project, id, tag) {
             
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 tag: tag,
                 userid: userid,
             },
@@ -2377,16 +2377,16 @@ function addTag(project, id, tag) {
             success: function(data) {
                 // 기존 Tags에 추가된다.
                 let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
-                let source = `<div id="tag-${data.name}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
-                document.getElementById("tags-"+data.name).innerHTML = document.getElementById("tags-"+data.name).innerHTML + source;
+                let source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
                 // 요소갯수에 따라 버튼을 설정한다.
-                if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
-                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                    document.getElementById("tag-button-"+data.id).innerHTML = `
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                     `
                 } else {
-                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    document.getElementById("tag-button-"+data.id).innerHTML = `
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
@@ -2445,7 +2445,7 @@ function rmTag(project, id, tag) {
                 
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     tag: tag,
                     userid: userid,
                 },
@@ -2454,15 +2454,15 @@ function rmTag(project, id, tag) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById(`tag-${data.name}-${data.tag}`).remove();
+                    document.getElementById(`tag-${data.id}-${data.tag}`).remove();
                     // 요소갯수에 따라 버튼을 설정한다.
-                    if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
-                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                    if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                        document.getElementById("tag-button-"+data.id).innerHTML = `
                         <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                         `;
                     } else {
-                        document.getElementById("tag-button-"+data.name).innerHTML = `
+                        document.getElementById("tag-button-"+data.id).innerHTML = `
                         <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                         `;
                     }
@@ -2479,7 +2479,7 @@ function rmTag(project, id, tag) {
             
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 tag: tag,
                 userid: userid,
             },
@@ -2488,15 +2488,15 @@ function rmTag(project, id, tag) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById(`tag-${data.name}-${data.tag}`).remove();
+                document.getElementById(`tag-${data.id}-${data.tag}`).remove();
                 // 요소갯수에 따라 버튼을 설정한다.
-                if (document.getElementById(`tags-${data.name}`).childElementCount > 0) {
-                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                    document.getElementById("tag-button-"+data.id).innerHTML = `
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
                     `;
                 } else {
-                    document.getElementById("tag-button-"+data.name).innerHTML = `
+                    document.getElementById("tag-button-"+data.id).innerHTML = `
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `;
                 }

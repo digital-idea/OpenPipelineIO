@@ -277,9 +277,9 @@
 			</div>
 			
 			{{if eq .Type "asset"}}
-				<div id="assettags-{{.Name}}" class="row ml-1">
+				<div id="assettags-{{.ID}}" class="row ml-1">
 					{{range .Assettags}}
-						<div id="assettag-{{$name}}-{{.}}" class="ml-1">
+						<div id="assettag-{{$id}}-{{.}}" class="ml-1">
 							<a href="/inputmode?project={{$.SearchOption.Project}}&
 							searchword=assettags:{{.}}&
 							sortkey={{$.SearchOption.Sortkey}}&
@@ -299,9 +299,9 @@
 					{{- end}}
 				</div>
 			{{end}}			
-			<div id="tags-{{.Name}}" class="row ml-3">
+			<div id="tags-{{.ID}}" class="row ml-3">
 				{{range .Tag}}
-					<div id="tag-{{$name}}-{{.}}" class="ml-1">
+					<div id="tag-{{$id}}-{{.}}" class="ml-1">
 						<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
 						sortkey={{$.SearchOption.Sortkey}}&
@@ -321,13 +321,11 @@
 				{{end}}
 			</div>
 			
-			<div class="ml-3" id="tag-button-{{.Name}}">
-				{{if eq .Type "org" "left" "asset"}}
-					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
-						<span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('{{.Project}}', '{{.ID}}')">＋</span>
-						{{if .Tag}}	
-							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('{{.Project}}', '{{.ID}}')">－</span>
-						{{end}}
+			<div class="ml-3" id="tag-button-{{.ID}}">
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+					<span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('{{.Project}}', '{{.ID}}')">＋</span>
+					{{if .Tag}}	
+						<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('{{.Project}}', '{{.ID}}')">－</span>
 					{{end}}
 				{{end}}
 			</div>

@@ -56,8 +56,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/setjustout` |
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/sethandlein` |
 | /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/sethandleout` |
-| /api/addtag | tag 추가 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0010&tag=테스트" http://192.168.219.104/api/addtag` |
-| /api/rmtag | tags 삭제 | project, name, tag | `$ curl -d "project=TEMP&name=SS_0020&tag=태그3" http://192.168.219.114/api/rmtag` |
+| /api/addtag | tag 추가 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0010_org&tag=테스트" http://192.168.219.104/api/addtag` |
+| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0020_org&tag=태그3" http://192.168.219.114/api/rmtag` |
 | /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/setnote` |
 | /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |

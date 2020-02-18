@@ -1705,17 +1705,12 @@ func SetCrowdAsset(session *mgo.Session, project, name string) (string, bool, er
 }
 
 // AddTag 함수는 item에 tag를 셋팅한다.
-func AddTag(session *mgo.Session, project, name, inputTag string) (string, error) {
+func AddTag(session *mgo.Session, project, id, inputTag string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return "", err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
 		return id, err
@@ -1730,9 +1725,9 @@ func AddTag(session *mgo.Session, project, name, inputTag string) (string, error
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tag": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return id, err
+		return i.Name, err
 	}
-	return id, nil
+	return i.Name, nil
 }
 
 // RenameTag 함수는 item의 Tag를 리네임한다.
@@ -1790,20 +1785,15 @@ func SetTags(session *mgo.Session, project, name string, tags []string) error {
 }
 
 // RmTag 함수는 item에 tag를 삭제한다.
-func RmTag(session *mgo.Session, project, name string, inputTag string) error {
+func RmTag(session *mgo.Session, project, id, inputTag string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
 	i, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return "", err
 	}
 	var newTags []string
 	for _, tag := range i.Tag {
@@ -1816,9 +1806,9 @@ func RmTag(session *mgo.Session, project, name string, inputTag string) error {
 	// 만약 태그에 권정보가 없더라도 권관련 태그는 날아가면 안된다. setItem을 이용한다.
 	err = setItem(session, project, i)
 	if err != nil {
-		return err
+		return i.Name, err
 	}
-	return nil
+	return i.Name, nil
 }
 
 // SetNote 함수는 item에 작업내용을 추가한다. Name,노트내용,에러를 반환한다.
