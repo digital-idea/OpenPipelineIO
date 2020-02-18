@@ -63,7 +63,7 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.QueryUser, err = getUser(session, id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/nouser?id="+id, http.StatusSeeOther)
 		return
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "user", rcp)
@@ -421,6 +421,23 @@ func handleInvalidPass(w http.ResponseWriter, r *http.Request) {
 	err := TEMPLATES.ExecuteTemplate(w, "invalidpass", nil)
 	if err != nil {
 		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleNoUser 함수는 등록되지 않은 사용자를 볼 때 출력되는 페이지이다.
+func handleNoUser(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	id := q.Get("id")
+	type recipe struct {
+		ID string `json:"id"`
+	}
+	rcp := recipe{}
+	rcp.ID = id
+	w.Header().Set("Content-Type", "text/html")
+	err := TEMPLATES.ExecuteTemplate(w, "nouser", rcp)
+	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

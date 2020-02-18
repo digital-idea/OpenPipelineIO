@@ -1,0 +1,19 @@
+{{define "nouser" }}
+{{template "headBootstrap"}}
+<body>
+
+<div class="container p-5">
+    <div class="pt-3 pb-5">
+        <h2 class="section-heading text-center">No User</h2>
+    </div>
+    <div class="row">
+        <div class="col-sm text-center">
+            <label>{{.ID}} 사용자는<br>CSI에 등록된 계정이 아닙니다.</label>
+        </div>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+</html>
+{{end}}

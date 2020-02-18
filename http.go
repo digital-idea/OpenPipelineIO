@@ -177,6 +177,7 @@ func webserver(port string) {
 	http.HandleFunc("/replacetag_submit", handleReplaceTagSubmit)
 	http.HandleFunc("/invalidaccess", handleInvalidAccess)
 	http.HandleFunc("/invalidpass", handleInvalidPass)
+	http.HandleFunc("/nouser", handleNoUser)
 
 	// Admin Setting
 	http.HandleFunc("/adminsetting", handleAdminSetting)
