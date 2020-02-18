@@ -298,11 +298,11 @@ label {
 }
 
 .bg-done, .bg-done:hover, .badge-done, .badge-2 {
-    background-color: #CCCDCC;
+    background-color: #E4D2B7;
 }
 
 .border-done {
-	border:4px solid #CCCDCC;
+	border:4px solid #E4D2B7;
 }
 
 .bg-retake, .bg-retake:hover, .badge-retake {
