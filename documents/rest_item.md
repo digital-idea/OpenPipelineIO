@@ -1,27 +1,29 @@
 # RestAPI Item
 restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크만 연결되어있으면 OS, 디바이스 제약없이 사용할 수 있습니다.
-또한 python같은 언어를 이용해서 api를 제작하더라도 OS별로 코드가 달라지는 일이 없습니다.
+또한 Python 같은 언어를 이용해서 사내 API를 작성하더라도 OS별 코드가 서로 달라지는 상황이 없습니다.
 
-이 문서는 기본 restAPI옵션, 파이썬을 이용해서 RestAPI를 사용하는 방법을 다룹니다.
-파이프라인에 사용될 확률이 높은 코드라서, 에러처리까지 코드로 다루었습니다.
+이 문서는 기본 restAPI옵션을 설명하고 파이썬을 이용해서 RestAPI를 사용하는 방법을 다룹니다.
+파이프라인에 사용될 확률이 높은 코드라서, 일부 에러처리까지 코드로 다루었습니다.
 
 # RestAPI for Item
 
 ## Get
 
-| uri | description | attribute name | example |
+| URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/item | 아이템 가지고 오기 | project, id | `$ curl -X GET "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
-| /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" http://192.168.31.172/api/search` |
-| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline2d` |
-| /api/deadline3d | 3D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline3d` |
-| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl -d "project=TEMP&name=SS_0010" http://csi.lazypic.org/api/shot` |
-| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl -d "project=TEMP&seq=SS" http://csi.lazypic.org/api/shots` |
+| /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
+| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
+| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "http://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
+| /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
+| /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "http://csi.lazypic.org/api/assets?project=TEMP"` |
 
 ## Post
 
-| uri | description | attribute name | example |
+| URI | description | Attributes | Curl Example |
 | --- | --- | --- | --- |
+| /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" http://192.168.31.172/api/search` |
+| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline2d` |
+| /api/deadline3d | 3D마감일 리스트 | project | `$ curl "http://192.168.31.172/api/deadline3d?project=TEMP"` |
 | /api/rmitemid | 아이템 삭제 | project, id | `$ curl -d "project=circle&id=SS_0010_org" http://127.0.0.1/api/rmitemid` |
 | /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" http://127.0.0.1/api/setstatus` |
 | /api/setassigntask | Assign 설정,해제 | project, name, task, status | `$ curl -d "project=TEMP&name=SS_0030&task=mg&status=true" http://192.168.31.172/api/setassigntask` |

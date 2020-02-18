@@ -406,6 +406,49 @@ func handleAPIShot(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPIAsset 함수는 project, name을 받아서 asset을 반환한다.
+func handleAPIAsset(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "project 가 빈 문자열 입니다", http.StatusBadRequest)
+		return
+	}
+	name := q.Get("name")
+	if name == "" {
+		http.Error(w, "name 이 빈 문자열 입니다", http.StatusBadRequest)
+		return
+	}
+	item, err := Asset(session, project, name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(item)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISeqs 함수는 프로젝트의 시퀀스를 가져온다.
 func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
@@ -445,6 +488,44 @@ func handleAPISeqs(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+}
+
+// handleAPIAssets 함수는 project 정보를 입력받아서 모든 에셋 정보를 출력한다.
+func handleAPIAssets(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "project 가 빈 문자열입니다", http.StatusBadRequest)
+		return
+	}
+	assets, err := SearchAllAsset(session, project, "name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(assets)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIShots 함수는 project, seq를 입력받아서 샷정보를 출력한다.

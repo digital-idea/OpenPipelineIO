@@ -99,6 +99,18 @@ func Shot(session *mgo.Session, project string, name string) (Item, error) {
 	return result, nil
 }
 
+// Asset 함수는 프로젝트명, 에셋 이름을 입력받아 에셋정보를 반환한다.
+func Asset(session *mgo.Session, project string, name string) (Item, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	var result Item
+	err := c.Find(bson.M{"id": name + "_asset"}).One(&result)
+	if err != nil {
+		return Item{}, err
+	}
+	return result, nil
+}
+
 // SearchName 함수는 입력된 문자열이 'name'키 값에 포함되어 있다면 해당 아이템을 반환한다.
 func SearchName(session *mgo.Session, project string, name string) ([]Item, error) {
 	session.SetMode(mgo.Monotonic, true)
