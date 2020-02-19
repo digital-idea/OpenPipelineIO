@@ -425,6 +425,11 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if name == "" { // 샷이름이 없다면 넘긴다.
 			continue
 		}
+		typ, err := Type(session, project, name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 		// 롤넘버
 		rnum, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1))
 		if err != nil {
@@ -468,7 +473,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if note != "" {
-			itemName, _, err := SetNote(session, project, name, ssid.ID, note, overwrite)
+			itemName, _, err := SetNote(session, project, name+"_"+typ, ssid.ID, note, overwrite)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: itemName, Error: err.Error()})
 				continue
