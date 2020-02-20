@@ -84,7 +84,6 @@ type Project struct {
 	HoudiniImportScale       float64       `json:"houdiniimportscale"`       // Houdini에서 사용하는 Import Scale 값입니다. 기본값은 0.1입니다.
 	ScreenxOverlay           float64       `json:"screenxoverlay"`           // ScreenX에 사용되는 카메라 Overlay 값입니다. 기본값은 1.0입니다.
 	Netapp                   bool          `json:"netapp"`                   // Netapp을 사용하는지 체크
-	NoteHighlight            string        `json:"notehighlight"`            // onsetnote, pmnote에 입력되는 특정 단어를 강조하기 위해 사용된다.
 	ExrCompression           string        `json:"exrcompression"`           // EXR Compression 옵션
 	AWSS3                    string        `json:"awss3"`                    // AWS S3 버킷주소
 	AWSProfile               string        `json:"awsprofile"`               // AWS Profile 이름

@@ -251,7 +251,6 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal.Wiki = r.FormValue("Wiki")
 	renewal.Daily = r.FormValue("Daily")
 	renewal.EditDir = r.FormValue("EditDir")
-	renewal.NoteHighlight = r.FormValue("NoteHighlight")
 	aspectratio, err := strconv.ParseFloat(r.FormValue("AspectRatio"), 64)
 	if err == nil {
 		renewal.AspectRatio = aspectratio
