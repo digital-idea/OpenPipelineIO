@@ -344,7 +344,7 @@ func main() {
 					if err != nil {
 						log.Fatal(err)
 					}
-					// Just In/Out 등록
+					// Just In 등록
 					if *flagJustin > 0 {
 						err = SetFrame(session, *flagProject, *flagName, "justin", *flagJustin)
 						if err != nil {
@@ -357,6 +357,7 @@ func main() {
 							log.Fatal(err)
 						}
 					}
+					// Just Out 등록
 					if *flagJustout > 0 {
 						err = SetFrame(session, *flagProject, *flagName, "justout", *flagJustout)
 						if err != nil {

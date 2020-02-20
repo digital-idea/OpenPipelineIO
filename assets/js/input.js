@@ -3249,11 +3249,12 @@ function mailInfo(project, id) {
 }
 
 function foldingmenu() {
+    let searchbox = document.getElementById("searchbox")
     if(searchbox.style.display=="none") {
         // 펼치기
-        searchbox.style.display='';
+        searchbox.style.display='block';
         // item 위에 빈영역을 만들어 주어야 한다.
-        document.getElementById("blinkspace").style.height = "500px";
+        document.getElementById("blinkspace").style.height = "550px";
         // 메뉴글씨 바꾸기
         document.getElementById("foldoption").innerText = "Collapse Searchbox ▴"
     } else {
@@ -3264,4 +3265,27 @@ function foldingmenu() {
         // 메뉴글씨 바꾸기
         document.getElementById("foldoption").innerText = "Expand Searchbox ▾"
     }
+}
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    let topbtn = document.getElementById("topbtn");
+    
+	if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        topbtn.style.display = "block";
+	} else {
+        topbtn.style.display = "none";
+	}
+}
+
+// TopClick 함수는 스크롤시 보여지는 Top 버튼을 누를 때 발생하는 이벤트이다.
+function TopClick() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    let searchbox = document.getElementById("searchbox")
+    searchbox.style.display = "block";
+    document.getElementById("blinkspace").style.height = "550px";
+    document.getElementById("foldoption").innerText = "Collapse Searchbox ▴"
 }

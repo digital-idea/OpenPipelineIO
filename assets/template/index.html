@@ -1,19 +1,19 @@
 {{define "index" }}
 {{template "headBootstrap" .}}
-<div id="floatingmenu">
-    {{template "navbar" .}}
-    <div id="searchbox">
-        {{template "searchbox_v02" .}}
-        {{template "deadlinelist" .}}
-        {{template "taglist" .}}
-        {{template "info2" .}}
+<body>
+    <div id="floatingmenu">
+        {{template "navbar" .}}
+        <div id="searchbox">
+            {{template "searchbox_v02" .}}
+            {{template "deadlinelist" .}}
+            {{template "taglist" .}}
+            {{template "info2" .}}
+        </div>
     </div>
-</div>
-{{template "modal" .}}
-<div id="blinkspace" style="height:500px"></div><!--기본 500px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
-{{template "items" .}}
-
-{{template "footerBootstrap"}}
+    {{template "modal" .}}
+    <div id="blinkspace" style="height:550px"></div><!--기본 550px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
+    {{template "items" .}}
+    {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>

@@ -11,6 +11,11 @@ body {
 	width: 100%;
 }
 
+#searchbox {
+	margin: 0 auto;
+	display: block;
+}
+
 .bg-darklight {
 	background-color: #353333;
 }
