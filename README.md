@@ -123,3 +123,18 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 ### Infomation
 - [CSI의 역사](documents/history.md)
 - License: BSD 3-Clause License
+
+### License
+- CSI: BSD 3-Clause License
+- [JScolor](http://jscolor.com/download/): GNU GPL license v3
+- [Dropzone](https://www.dropzonejs.com): MIT License
+- [JQuery](https://jquery.org/license/): MIT license
+- [VFS](https://github.com/blang/vfs): MIT license
+- [HttpFS](https://github.com/shurcooL/httpfs): MIT license
+- [VFSgen](https://github.com/shurcooL/vfsgen): MIT license
+- [Excelize](https://github.com/360EntSecGroup-Skylar/excelize): BSD 3-Clause License
+- [Slack go webhook](https://github.com/ashwanthkumar/slack-go-webhook)
+- [Captcha](https://github.com/dchest/captcha): Apache License, Version 2.0
+- [Mgo](https://github.com/go-mgo/mgo): https://github.com/go-mgo/mgo/blob/v2-unstable/LICENSE
+- [JWT go](https://github.com/dgrijalva/jwt-go): MIT license
+- [OpenColorIO](https://github.com/AcademySoftwareFoundation/OpenColorIO): BSD 3-Clause License
