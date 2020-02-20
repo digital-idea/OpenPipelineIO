@@ -286,11 +286,11 @@ func main() {
 			return
 		default: //소스, 재스캔 추가
 			addOtherItemCmd(*flagProject, *flagName, *flagType, *flagPlatesize, *flagScanname, *flagScantimecodein, *flagScantimecodeout, *flagJusttimecodein, *flagJusttimecodeout, *flagScanframe, *flagScanin, *flagScanout, *flagPlatein, *flagPlateout, *flagJustin, *flagJustout)
-			dilog.Add(*flagDBIP, ip, "아이템이 생성되었습니다.", *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
-			dilog.Add(*flagDBIP, ip, "스캔이름 : "+*flagScanname, *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
-			dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
-			dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
-			dilog.Add(*flagDBIP, ip, "플레이트 사이즈 : "+*flagPlatesize, *flagProject, *flagName+"_"+*flagType, "csi3", user.Username, 180)
+			dilog.Add(*flagDBIP, ip, fmt.Sprintf("%s_%s 아이템이 생성되었습니다.", *flagName, *flagType), *flagProject, *flagName, "csi3", user.Username, 180)
+			dilog.Add(*flagDBIP, ip, "스캔이름 : "+*flagScanname, *flagProject, *flagName, "csi3", user.Username, 180)
+			dilog.Add(*flagDBIP, ip, fmt.Sprintf("스캔타임코드 : %s(%d) / %s(%d) (총%df)", *flagScantimecodein, *flagScanin, *flagScantimecodeout, *flagScanout, *flagScanframe), *flagProject, *flagName, "csi3", user.Username, 180)
+			dilog.Add(*flagDBIP, ip, fmt.Sprintf("플레이트 구간 : %d - %d", *flagPlatein, *flagPlateout), *flagProject, *flagName, "csi3", user.Username, 180)
+			dilog.Add(*flagDBIP, ip, "플레이트 사이즈 : "+*flagPlatesize, *flagProject, *flagName, "csi3", user.Username, 180)
 			if *flagUpdateParent {
 				// updateParent 옵션이 활성화되어있고, org, left가 재스캔이라면..
 				// 원본플레이트의 정보를 업데이트한다.
@@ -300,6 +300,8 @@ func main() {
 						log.Fatal(err)
 					}
 					defer session.Close()
+					// 아래에서 바꾸어야 하는 것을 한방에 바꾸는 것은 어떠한가?
+					// 아래 절차는 너무 많은 트렌젝션을 유발한다.
 					_, err = SetImageSize(session, *flagProject, *flagName, "platesize", *flagPlatesize)
 					if err != nil {
 						log.Fatal(err)
