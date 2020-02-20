@@ -510,7 +510,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if tags != "" {
 			for _, tag := range strings.Split(tags, ",") {
-				_, err = AddTag(session, project, name, tag)
+				_, err = AddTag(session, project, name+"_"+typ, tag)
 				if err != nil {
 					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 					continue
