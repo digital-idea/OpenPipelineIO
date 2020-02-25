@@ -39,6 +39,8 @@
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
               <a class="dropdown-item" href="/tasksettings">Task</a>
               <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/status">Status</a>
+              <div class="dropdown-divider"></div>
             {{end}}
             <a class="dropdown-item" href="/divisions">Divisions(본부)</a>
             <a class="dropdown-item" href="/departments">Departments(부서)</a>
@@ -62,6 +64,8 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/addtasksetting">Task</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/addstatus">Status</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/adddivision">Division(본부)</a>
                 <a class="dropdown-item" href="/adddepartment">Department(부서)</a>
                 <a class="dropdown-item" href="/addteam">Team(팀)</a>
@@ -84,6 +88,8 @@
               <div class="dropdown-divider"></div>
               <span class="dropdown-item text-danger fade">Task</span>
               <div class="dropdown-divider"></div>
+              <span class="dropdown-item text-danger fade">Status</span>
+              <div class="dropdown-divider"></div>
               <span class="dropdown-item text-danger fade">Organization</span>
             </div>
           </li>
@@ -96,8 +102,6 @@
               {{if eq .User.AccessLevel 11}}
                 <a class="dropdown-item text-danger" href="/rmproject">Project</a>
               {{end}}
-
-              
               {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
                 <div class="dropdown-divider"></div>
                 <span class="dropdown-item finger text-danger" onclick="rmItem()">Item</span>
@@ -105,6 +109,8 @@
               {{if eq .User.AccessLevel 5 6 8 9 10 11}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item text-danger" href="/rmtasksetting">Task</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item text-danger" href="/rmstatus">Status</a>
               {{end}}
               {{if eq .User.AccessLevel 10 11}}
                 <div class="dropdown-divider"></div>
