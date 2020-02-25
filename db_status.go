@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -39,7 +41,14 @@ func GetStatus(session *mgo.Session, id string) (Status, error) {
 func AddStatus(session *mgo.Session, s Status) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("status")
-	err := c.Insert(s)
+	n, err := c.Find(bson.M{"id": s.ID}).Count()
+	if err != nil {
+		return err
+	}
+	if n > 0 {
+		return errors.New(s.ID + " Status가 이미 존재합니다")
+	}
+	err = c.Insert(s)
 	if err != nil {
 		return err
 	}

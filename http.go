@@ -233,6 +233,7 @@ func webserver(port string) {
 
 	// Status
 	http.HandleFunc("/addstatus", handleAddStatus)
+	http.HandleFunc("/addstatus-submit", handleAddStatusSubmit)
 
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
