@@ -26,6 +26,9 @@ var regexpUserInfo = regexp.MustCompile(`^[a-zA-Z0-9]+\(.+\)$`)
 // Email 정규칙: hello@lazypi.org 형태
 var regexpEmail = regexp.MustCompile(`^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$`)
 
+// 웹컬러 정규식 #FFFFFF
+var regexWebColor = regexp.MustCompile(`^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$`)
+
 // Task값 정규식: task
 var regexpTask = regexp.MustCompile(`^[a-z0-9]+$`)
 
