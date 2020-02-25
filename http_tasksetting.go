@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -89,7 +88,6 @@ func handleTasksettings(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	err = TEMPLATES.ExecuteTemplate(w, "tasksettings", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

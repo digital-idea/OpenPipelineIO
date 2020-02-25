@@ -91,3 +91,46 @@ func handleAddStatusSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/status", http.StatusSeeOther)
 }
+
+// handleStatus 함수는 Status 를 보는 페이지이다.
+func handleStatus(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 4 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User    User
+		Devmode bool
+		Status  []Status
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.Status, err = AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = TEMPLATES.ExecuteTemplate(w, "status", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}

@@ -232,6 +232,7 @@ func webserver(port string) {
 	http.HandleFunc("/edittasksetting-submit", handleEditTasksettingSubmit)
 
 	// Status
+	http.HandleFunc("/status", handleStatus)
 	http.HandleFunc("/addstatus", handleAddStatus)
 	http.HandleFunc("/addstatus-submit", handleAddStatusSubmit)
 

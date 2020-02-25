@@ -1,0 +1,48 @@
+{{define "status" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+		
+<div class="p-2">
+	{{if .Status}}
+		{{range .Status}}
+		<div class="text-darkmode p-3">
+			<div class="row">
+				<div class="col-2 text-right">
+					<span class="align-middle">{{.Order}}</span>
+				</div>
+				<div class="col-3">
+					<span class="btn border border-mute w-100" style="background-color: {{.Color}};">{{.ID}}</span>
+				</div>
+				<div class="col-6">
+					<span class="align-middle">{{.Description}}</span>
+				</div>
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+					<div class="col-1">
+						<a href="/editstatus?id={{.ID}}" class="ml-2 btn btn-outline-danger btn-sm">Edit</a>		
+					</div>
+				{{end}}
+			</div>
+		</div>
+		{{end}}
+	{{else}}
+		<div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+			<div class="text-center mt-5">
+				<span class="text-darkmode">Status가 존재하지 않습니다. Status를 생성해주세요.</span>
+			</div>
+			<div class="text-center">
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					<a href="/addstatus" class="mt-5 mb-5 btn btn-outline-warning">Add Status</a>
+				{{end}}
+			</div>
+		</div>
+	{{end}}
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}
