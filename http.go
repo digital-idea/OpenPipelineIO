@@ -231,6 +231,9 @@ func webserver(port string) {
 	http.HandleFunc("/rmtasksetting-submit", handleRmTasksettingSubmit)
 	http.HandleFunc("/edittasksetting-submit", handleEditTasksettingSubmit)
 
+	// Status
+	http.HandleFunc("/addstatus", handleAddStatus)
+
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
 
