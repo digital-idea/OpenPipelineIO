@@ -303,8 +303,6 @@ func main() {
 						log.Fatal(err)
 					}
 					defer session.Close()
-					// 아래에서 바꾸어야 하는 것을 한방에 바꾸는 것은 어떠한가?
-					// 아래 절차는 너무 많은 트렌젝션을 유발한다.
 					typ := "org"
 					if strings.Contains(*flagType, "left") {
 						typ = "left"
