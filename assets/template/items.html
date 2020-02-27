@@ -279,7 +279,7 @@
 			{{if eq .Type "asset"}}
 				<div id="assettags-{{.ID}}" class="row ml-1">
 					{{range .Assettags}}
-						<div id="assettag-{{$id}}-{{.}}" class="ml-1">
+						<div id="assettag-{{$id}}-{{.}}" class="tag ml-1">
 							<a href="/inputmode?project={{$.SearchOption.Project}}&
 							searchword=assettags:{{.}}&
 							sortkey={{$.SearchOption.Sortkey}}&

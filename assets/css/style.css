@@ -16,6 +16,11 @@ body {
 	display: block;
 }
 
+.tag {
+	font-family: 'NanumSquare';
+	font-weight: 300;
+}
+
 .bg-darklight {
 	background-color: #353333;
 }
