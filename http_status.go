@@ -135,3 +135,76 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleRmStatus 함수는 Status를 삭제하는 페이지이다.
+func handleRmStatus(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 5 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	type recipe struct {
+		User    User
+		Devmode bool
+		SearchOption
+	}
+	rcp := recipe{}
+	err = rcp.SearchOption.LoadCookie(session, r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Devmode = *flagDevmode
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User = u
+	err = TEMPLATES.ExecuteTemplate(w, "rmstatus", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleRmStatusSubmit 함수는 Status를 삭제합니다.
+func handleRmStatusSubmit(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 5 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	id := r.FormValue("id")
+	if !regexpTask.MatchString(id) {
+		http.Error(w, "Status 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
+		return
+	}
+	err = RmStatus(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/status", http.StatusSeeOther)
+}
