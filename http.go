@@ -346,6 +346,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/assettasksetting", handleAPIAssetTasksetting)
 	http.HandleFunc("/api/categorytasksettings", handleAPICategoryTasksettings)
 
+	// restAPI Status
+	http.HandleFunc("/api/status", handleAPIStatus)
+
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy
 	http.HandleFunc("/editeditem", handleEditedItem)                // legacy
