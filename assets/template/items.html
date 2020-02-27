@@ -529,10 +529,9 @@
 				{{$first = false}}
 			{{end}}
 			{{$length := len .Comments }} {{ if gt $length 3 }}
-			<div class="text-right">
-				<a href="/detail?project={{.Project}}&id={{.ID}}" class="small text-darkmode">더보기</a>
-			</div>
-
+				<div class="text-right">
+					<a href="/detail?project={{.Project}}&id={{.ID}}" class="small text-darkmode">더보기</a>
+				</div>
 			{{end}}
 		</div>
 	</div>
