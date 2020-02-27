@@ -76,7 +76,8 @@ func handleAddStatusSubmit(w http.ResponseWriter, r *http.Request) {
 	s := Status{
 		ID:          r.FormValue("id"),
 		Description: r.FormValue("description"),
-		Color:       "#" + r.FormValue("color"),
+		TextColor:   "#" + r.FormValue("textcolor"),
+		BGColor:     "#" + r.FormValue("bgcolor"),
 		Order:       order,
 	}
 	err = s.CheckError()
