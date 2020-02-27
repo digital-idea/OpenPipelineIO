@@ -350,6 +350,7 @@ func webserver(port string) {
 
 	// restAPI Status
 	http.HandleFunc("/api/status", handleAPIStatus)
+	http.HandleFunc("/api/addstatus", handleAPIAddStatus)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy
