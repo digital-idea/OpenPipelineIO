@@ -235,6 +235,8 @@ func webserver(port string) {
 	http.HandleFunc("/status", handleStatus)
 	http.HandleFunc("/addstatus", handleAddStatus)
 	http.HandleFunc("/addstatus-submit", handleAddStatusSubmit)
+	http.HandleFunc("/editstatus", handleEditStatus)
+	http.HandleFunc("/editstatus-submit", handleEditStatusSubmit)
 	http.HandleFunc("/rmstatus", handleRmStatus)
 	http.HandleFunc("/rmstatus-submit", handleRmStatusSubmit)
 
