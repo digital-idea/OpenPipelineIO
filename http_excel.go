@@ -427,8 +427,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		typ, err := Type(session, project, name)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+			continue // 샷 타입을 가지고 올 수 없다면 넘긴다.
 		}
 		// 롤넘버
 		rnum, err := f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1))
