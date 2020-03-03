@@ -31,8 +31,9 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		User
-		SessionID string
-		Devmode   bool
+		SessionID   string
+		Devmode     bool
+		Projectlist []string
 	}
 	rcp := recipe{}
 	rcp.Devmode = *flagDevmode
@@ -47,6 +48,24 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당리스트를 사용한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, j)
+			}
+		}
+		rcp.Projectlist = accessProjects
 	}
 	// 기존 Temp 경로 내부 .xlsx 데이터를 삭제한다.
 	tmp, err := userTemppath(ssid.ID)
@@ -140,6 +159,8 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
+	q := r.URL.Query()
+	project := q.Get("project")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -182,15 +203,16 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Sheet = "Sheet1"
-	rcp.Projectlist, err = OnProjectlist(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Projectlist, err = OnProjectlist(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -236,6 +258,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		if row.Name == "" { // Name이 비어있다면 넘긴다.
 			continue
 		}
+
 		row.Rnum, err = f.GetCellValue(rcp.Sheet, fmt.Sprintf("B%d", n+1)) // Rollnumber
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -308,7 +331,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		row.checkerror() // 각 값을 에러체크한다.
+		row.checkerror(session, project)
 		rcp.Errornum += row.Errornum
 		rows = append(rows, row)
 	}

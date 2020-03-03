@@ -20,10 +20,19 @@
                 <small class="form-text text-mute">
                     <a href="/download-excel-template" class="text-warning" download>.xlsx Template 다운로드</a>
                 </small>
+                <div class="form-group pt-5">
+                    <label>Project</label>
+                    <select id="Project" name="Project" class="form-control" onchange="changeReportExcelURI()">
+                        {{range .Projectlist}}
+                            <option value="{{.}}">{{.}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">import 대상 프로젝트를 선택해주세요.</small>
+                </div>
             </div>
         </div>
         <div class="text-center pt-5">
-            <a href="/reportexcel" class="btn btn-outline-warning">NEXT</a>
+            <a href="/reportexcel?project={{index .Projectlist 0}}" id="reportexcelURI" class="btn btn-outline-warning">NEXT</a>
         </div>
     </div>
 
@@ -34,6 +43,7 @@
 <script src="/assets/js/input.js"></script>
 <script src="/assets/js/csi_v02.js"></script>
 <script src="/assets/js/dropzone.js"></script>
+<script src="/assets/js/importexcel.js"></script>
 </html>
 
 {{end}}

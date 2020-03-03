@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/digital-idea/ditime"
+	"gopkg.in/mgo.v2"
 )
 
 // Excelrow 자료구조는 .xlsx 형식의 자료구조이다.
@@ -39,7 +40,12 @@ type Excelrow struct {
 	Errornum             int
 }
 
-func (r *Excelrow) checkerror() {
+func (r *Excelrow) checkerror(session *mgo.Session, project string) {
+	_, err := Type(session, project, r.Name)
+	if err != nil {
+		r.NameError = "등록된 Shot, Asset 이름이 아닙니다"
+		r.Errornum++
+	}
 	if !(regexpShotname.MatchString(r.Name) || regexpAssetname.MatchString(r.Name)) { // 필수값
 		r.NameError = "Shot, Asset 이름 형태가 아닙니다"
 		r.Errornum++
