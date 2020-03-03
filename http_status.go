@@ -79,6 +79,7 @@ func handleAddStatusSubmit(w http.ResponseWriter, r *http.Request) {
 		TextColor:   "#" + r.FormValue("textcolor"),
 		BGColor:     "#" + r.FormValue("bgcolor"),
 		Order:       order,
+		DefaultOn:   str2bool(r.FormValue("defaulton")),
 	}
 	err = s.CheckError()
 	if err != nil {
@@ -289,6 +290,7 @@ func handleEditStatusSubmit(w http.ResponseWriter, r *http.Request) {
 		TextColor:   "#" + r.FormValue("textcolor"),
 		BGColor:     "#" + r.FormValue("bgcolor"),
 		Order:       order,
+		DefaultOn:   str2bool(r.FormValue("defaulton")),
 	}
 	err = s.CheckError()
 	if err != nil {

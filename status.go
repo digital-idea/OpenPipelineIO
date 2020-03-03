@@ -9,6 +9,7 @@ type Status struct {
 	BGColor     string  `json:"bgcolor"`     // BG 상태 색상
 	Description string  `json:"description"` // 설명
 	Order       float64 `json:"order"`       // Status 우선순위
+	DefaultOn   bool    `json:"defaulton"`   // 기본선택 여부
 }
 
 // CheckError 메소드는 Status 자료구조의 에러를 체크한다.
