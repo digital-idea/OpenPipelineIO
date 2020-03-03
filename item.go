@@ -169,7 +169,7 @@ func (item *Item) updateStatus() {
 	item.Status = maxstatus
 }
 
-// updateStatusV2 함수는 글로벌 Status 리스트를 입력받아서 샷 상태를 업데이트하는 함수이다.
+// updateStatusV2 메소드는 글로벌 Status 리스트를 입력받아서 샷 상태를 업데이트하는 함수이다.
 func (item *Item) updateStatusV2(globalStatus []Status) {
 	// 연산을 빠르게 하기 위해서 필요한 map을 생성한다.
 	so := make(map[string]float64) // Status:Order map
