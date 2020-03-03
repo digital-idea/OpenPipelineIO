@@ -47,10 +47,15 @@ func addItem(session *mgo.Session, project string, i Item) error {
 func setItem(session *mgo.Session, project string, i Item) error {
 	session.SetMode(mgo.Monotonic, true)
 	i.Updatetime = time.Now().Format(time.RFC3339)
-	i.updateStatus() // Task상태 업데이트
-	i.setRnumTag()   // 롤넘버에 따른 테그 셋팅
+	i.updateStatus() // legacy
+	status, err := AllStatus(session)
+	if err != nil {
+		return err
+	}
+	i.updateStatusV2(status)
+	i.setRnumTag() // 롤넘버에 따른 테그 셋팅
 	c := session.DB("project").C(project)
-	err := c.Update(bson.M{"id": i.ID}, i)
+	err = c.Update(bson.M{"id": i.ID}, i)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -1090,7 +1095,12 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
-	item.updateStatus()
+	item.updateStatus() // legacy
+	globalStatus, err := AllStatus(session)
+	if err != nil {
+		return err
+	}
+	item.updateStatusV2(globalStatus)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
 		return err
@@ -1153,7 +1163,12 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, remove 
 	}
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
-	item.updateStatus()
+	item.updateStatus() // legacy
+	globalStatus, err := AllStatus(session)
+	if err != nil {
+		return id, err
+	}
+	item.updateStatusV2(globalStatus)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
 		return "", err
@@ -1171,7 +1186,12 @@ func RmTask(session *mgo.Session, project, id, taskname string) (string, error) 
 	delete(item.Tasks, taskname)
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
-	item.updateStatus()
+	item.updateStatus() // legacy
+	status, err := AllStatus(session)
+	if err != nil {
+		return "", err
+	}
+	item.updateStatusV2(status)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
 		return "", err

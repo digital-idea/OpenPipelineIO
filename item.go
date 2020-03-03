@@ -158,7 +158,7 @@ type Task struct {
 	Version      `json:"version"`   // Pubfile 버전정보
 }
 
-// updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다.
+// updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다. // legacy
 func (item *Item) updateStatus() {
 	maxstatus := "0"
 	for _, value := range item.Tasks {
@@ -167,6 +167,27 @@ func (item *Item) updateStatus() {
 		}
 	}
 	item.Status = maxstatus
+}
+
+// updateStatusV2 함수는 글로벌 Status 리스트를 입력받아서 샷 상태를 업데이트하는 함수이다.
+func (item *Item) updateStatusV2(globalStatus []Status) {
+	// 연산을 빠르게 하기 위해서 필요한 map을 생성한다.
+	so := make(map[string]float64) // Status:Order map
+	os := make(map[float64]string) // Order:Status map
+	for _, s := range globalStatus {
+		so[s.ID] = s.Order
+		os[s.Order] = s.ID
+	}
+	var maxstatus float64
+	for _, task := range item.Tasks {
+		// Task Status 문자열을 이용해서 숫자를 뽑느다.
+		order := so[task.StatusV2]
+		if order > maxstatus {
+			maxstatus = order
+		}
+	}
+	// order값을 이용해서 샷 상태를 설정한다.
+	item.StatusV2 = os[maxstatus]
 }
 
 // setRumTag 는 특정 항목이 입력이 되었을때 알맞은 태그를 자동으로 넣거나 삭제할 때 사용한다.
