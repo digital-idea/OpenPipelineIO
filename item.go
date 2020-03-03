@@ -4,7 +4,7 @@ import (
 	"sort"
 )
 
-const (
+const ( // legacy
 	// CLIENT 클라이언트 컨펌상태
 	CLIENT = "9"
 	// OMIT 작업취소 상태
@@ -102,7 +102,8 @@ type Item struct {
 	Clientver   string          `json:"clientver"`   // 클라이언트에게 보낸 버전
 	Dsize       string          `json:"dsize"`       // 디스토션 사이즈
 	Rendersize  string          `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
-	Status      string          `json:"status"`      // 샷 상태.
+	Status      string          `json:"status"`      // 샷 상태. legacy
+	StatusV2    string          `json:"statusv2"`    // 샷 상태.
 	Updatetime  string          `json:"updatetime"`  // 업데이트 시간 RFC3339
 	Focal       string          `json:"focal"`       // 렌즈 미리수
 	Stereotype  string          `json:"stereotype"`  // parallel(default), conversions
@@ -141,7 +142,8 @@ type Item struct {
 type Task struct {
 	Title        string             `json:"title"`        // 테스크 네임
 	User         string             `json:"user"`         // 아티스트명
-	Status       string             `json:"status"`       // 상태
+	Status       string             `json:"status"`       // 상태 legacy
+	StatusV2     string             `json:"statusv2"`     // 샷 상태.
 	BeforeStatus string             `json:"beforestatus"` // 이전상태
 	Startdate    string             `json:"startdate"`    // 작업시작일 RFC3339
 	Predate      string             `json:"predate"`      // 1차 마감일 RFC3339
