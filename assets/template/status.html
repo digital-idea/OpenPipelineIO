@@ -16,7 +16,7 @@
 			<div class="text-darkmode p-2">
 				<div class="row">
 					<div class="col-12">
-						<a href="/editstatus?id={{.ID}}" class="btn border border-mute w-100" style="color: {{.TextColor}};background-color: {{.BGColor}};" title="{{.Description}}">
+					<a href="/editstatus?id={{.ID}}" class="btn w-100" style="color: {{.TextColor}};background-color: {{.BGColor}};border: 1px solid {{.BorderColor}};" title="{{.Description}}">
 							{{if .DefaultOn}}
 								<span class="badge badge-primary text-light">✓</span>
 							{{end}}

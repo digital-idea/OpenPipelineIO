@@ -42,6 +42,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		TasksettingNames    []string
 		TasksettingOrderMap map[string]float64
 		Dday                string
+		Status              []Status
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -66,6 +67,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		rcp.TasksettingOrderMap[t.Name] = t.Order
 	}
 	rcp.TasksettingNames, err = TasksettingNames(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status, err = AllStatus(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

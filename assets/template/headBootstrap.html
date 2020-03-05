@@ -11,5 +11,20 @@
 <link rel="stylesheet" href="/assets/css/dropzone.css">
 <link rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" href="/assets/font/NanumSquare/nanumsquare.css">
+<style>
+    {{range .Status}}
+        .bg-{{.ID}}, .bg-{{.ID}}:hover, .badge-{{.ID}}, .badge-6 {
+            background-color: {{.BGColor}};
+            color: {{.TextColor}};
+            border: 1px solid {{.BorderColor}};
+        }
+        .text-{{.ID}}, .text-{{.ID}}:hover {
+            color: {{.TextColor}};
+        }
+        .border-{{.ID}} {
+            border: 4px solid {{.BorderColor}};
+        }
+    {{end}}
+</style>
 </head>
 {{end}}

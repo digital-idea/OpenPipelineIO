@@ -110,6 +110,17 @@ func handleAPIAddStatus(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.BGColor = v
+		case "bordercolor":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			if !regexWebColor.MatchString(v) {
+				http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
+				return
+			}
+			rcp.BorderColor = v
 		}
 	}
 	err = AddStatus(session, rcp)

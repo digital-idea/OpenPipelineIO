@@ -19,23 +19,57 @@
             <div class="col">
                 <div class="form-group">
                     <div>
-                        <label>Text Color</label>
+                        <label>Text</label>
                     </div>
                     <div>
-                        <input name="textcolor" class="jscolor btn border border-light w-100" value="{{.Status.TextColor}}">
+                        <input class="jscolor{valueElement:'textcolor'} btn border border-light w-100">
                     </div>
-                    <small class="form-text text-muted">Status Text 색</small>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <div>
-                        <label>BG Color</label>
+                        <label>BG</label>
                     </div>
                     <div>
-                        <input name="bgcolor" class="jscolor btn border border-light w-100" value="{{.Status.BGColor}}">
+                        <input class="jscolor{valueElement:'bgcolor'} btn border border-light w-100">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div>
+                        <label>Border</label>
+                    </div>
+                    <div>
+                        <input class="jscolor{valueElement:'bordercolor'} btn border border-light w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <div>
+                        <input id="textcolor" name="textcolor" type="text" class="form-control" value="{{.Status.TextColor}}">
+                    </div>
+                    <small class="form-text text-muted">Status 글자색</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div>
+                        <input id="bgcolor" name="bgcolor" type="text" class="form-control" value="{{.Status.BGColor}}">
                     </div>
                     <small class="form-text text-muted">Status 배경색</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div>
+                        <input id="bordercolor" name="bordercolor" type="text" class="form-control" value="{{.Status.BorderColor}}">
+                    </div>
+                    <small class="form-text text-muted">Status 테두리색</small>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ type Status struct {
 	ID          string  `json:"id"`          // ID, 상태코드
 	TextColor   string  `json:"textcolor"`   // TEXT 색상
 	BGColor     string  `json:"bgcolor"`     // BG 상태 색상
+	BorderColor string  `json:"bordercolor"` // Border 색상
 	Description string  `json:"description"` // 설명
 	Order       float64 `json:"order"`       // Status 우선순위
 	DefaultOn   bool    `json:"defaulton"`   // 기본선택 여부
@@ -21,6 +22,9 @@ func (s *Status) CheckError() error {
 		return errors.New("웹컬러 문자열이 아닙니다")
 	}
 	if !regexWebColor.MatchString(s.BGColor) {
+		return errors.New("웹컬러 문자열이 아닙니다")
+	}
+	if !regexWebColor.MatchString(s.BorderColor) {
 		return errors.New("웹컬러 문자열이 아닙니다")
 	}
 	return nil
