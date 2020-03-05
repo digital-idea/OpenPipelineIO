@@ -192,9 +192,9 @@
 				</div>
 				<div id="button-dir-{{.Name}}">
 					{{if eq .Type "asset" -}}	
-						<a href="dilink:///show/{{$.SearchOption.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+						<a href="dilink:///show/{{.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 					{{- else -}}
-						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+						<a href="dilink:///show/{{.Project}}/seq/{{.Seq}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 					{{- end}}
 				</div>
 				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
