@@ -131,6 +131,7 @@ func StatusString2string(status string) string {
 	}
 }
 
+// name2seq 함수는 "SS_0010"을 받아서 "SS" 이름을 반환한다.
 func name2seq(name string) string {
 	if strings.Contains(name, "_") {
 		return strings.Split(name, "_")[0]

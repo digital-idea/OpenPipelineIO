@@ -1308,7 +1308,7 @@ function setThummov(project, id, path) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="play">▶</a>`;
+            document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="play">PLAY</a>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

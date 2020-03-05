@@ -177,11 +177,7 @@
 					{{end}}
 				</div>
 				<div id="button-thumbplay-{{.Name}}">
-					{{if .Thummov}}
-						<a href="dilink://{{.Thummov}}" class="play">PLAY</a>
-					{{else}}
-						<a href="dilink:///show/{{$.SearchOption.Project}}/seq/{{name2seq .Name}}/{{.Name}}/plate/{{.ID}}.mov" class="play">PLAY</a>
-					{{end}}
+					<a href="dilink://{{.Thummov}}" class="play">PLAY</a>
 				</div>
 				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 					<div id="button-thumb-{{.Name}}">

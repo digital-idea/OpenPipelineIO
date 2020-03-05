@@ -286,7 +286,6 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 			log.Println(err)
 		}
 	}
-
 }
 
 func rmItemCmd(project, name, typ string) {
