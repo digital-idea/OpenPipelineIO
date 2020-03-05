@@ -104,6 +104,7 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-user').value=data.task.user;
             document.getElementById('modal-edittask-id').value=data.id;
             document.getElementById("modal-edittask-status").value=data.task.status;
+            document.getElementById("modal-edittask-statusv2").value=data.task.statusv2;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1632,7 +1633,7 @@ function setTaskUser(project, id, task, user) {
     }
 }
 
-function setTaskStatus(project, id, task, status) {
+function setTaskStatus(project, id, task, status) { // legacy
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
@@ -1675,6 +1676,61 @@ function setTaskStatus(project, id, task, status) {
                 task: task,
                 status: status,
                 userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskStatusV2(project, id, task, status) {
+    let token = document.getElementById("token").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api2/settaskstatus",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    task: task,
+                    status: status,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api2/settaskstatus",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                task: task,
+                status: status,
             },
             headers: {
                 "Authorization": "Basic "+ token
