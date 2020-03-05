@@ -1045,7 +1045,7 @@ func SetAftermov(session *mgo.Session, project, name, path string) error {
 	return nil
 }
 
-// SetTaskStatus 함수는 item에 task의 status 값을 셋팅한다.
+// SetTaskStatus 함수는 item에 task의 status 값을 셋팅한다. // legacy
 func SetTaskStatus(session *mgo.Session, project, name, task, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
@@ -1106,6 +1106,38 @@ func SetTaskStatus(session *mgo.Session, project, name, task, status string) err
 		return err
 	}
 	return nil
+}
+
+// SetTaskStatusV2 함수는 item에 task의 status 값을 셋팅한다.
+func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return "", err
+	}
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return "", err
+	}
+	if _, found := item.Tasks[strings.ToLower(task)]; !found {
+		return item.Name, errors.New("task가 존재하지 않습니다")
+	}
+	t := item.Tasks[task]
+	t.StatusV2 = status
+	item.Tasks[task] = t
+
+	c := session.DB("project").C(project)
+	item.Updatetime = time.Now().Format(time.RFC3339)
+	globalStatus, err := AllStatus(session)
+	if err != nil {
+		return item.Name, err
+	}
+	item.updateStatusV2(globalStatus)
+	err = c.Update(bson.M{"id": item.ID}, item)
+	if err != nil {
+		return item.Name, err
+	}
+	return item.Name, nil
 }
 
 // HasTask 함수는 item에 task가 존재하는 체크한다.
