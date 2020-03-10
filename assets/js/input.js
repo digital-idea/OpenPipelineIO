@@ -1649,7 +1649,7 @@ function setTaskStatus(project, id, task, status) { // legacy
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
                     status: status,
                     userid: userid,
@@ -1672,7 +1672,7 @@ function setTaskStatus(project, id, task, status) { // legacy
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
                 status: status,
                 userid: userid,
@@ -1762,7 +1762,7 @@ function setTaskDate(project, id, task, date) {
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
                     date: date,
                     userid: userid,
@@ -1773,9 +1773,9 @@ function setTaskDate(project, id, task, date) {
                 dataType: "json",
                 success: function(data) {
                     if (data.mov === "") {
-                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
+                        document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
+                        document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -1789,7 +1789,7 @@ function setTaskDate(project, id, task, date) {
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
                 date: date,
                 userid: userid,
@@ -1800,9 +1800,9 @@ function setTaskDate(project, id, task, date) {
             dataType: "json",
             success: function(data) {
                 if (data.mov === "") {
-                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = "";
+                    document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.name}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
+                    document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
                 }
             },
             error: function(request,status,error){
@@ -1828,7 +1828,7 @@ function setTaskStartdate(project, id, task, date) {
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
                     date: date,
                     userid: userid,
@@ -1851,7 +1851,7 @@ function setTaskStartdate(project, id, task, date) {
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
                 date: date,
                 userid: userid,
@@ -1946,7 +1946,7 @@ function setTaskPredate(project, id, task, date) {
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
                     date: date,
                     userid: userid,
@@ -1973,7 +1973,7 @@ function setTaskPredate(project, id, task, date) {
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
                 date: date,
                 userid: userid,

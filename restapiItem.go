@@ -2568,7 +2568,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string `json:"project"`
-		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Task    string `json:"task"`
 		Status  string `json:"status"`
 		UserID  string `json:"userid"`
@@ -2616,7 +2616,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Name = v
+			rcp.ID = v
 		case "task":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -2634,24 +2634,24 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// task가 존재하는지 체크한다.
-	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = SetTaskStatus(session, rcp.Project, rcp.Name, rcp.Task, rcp.Status)
+	err = SetTaskStatus(session, rcp.Project, rcp.ID, rcp.Task, rcp.Status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task Status: %s %s", rcp.Task, rcp.Status), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task Status: %s %s", rcp.Task, rcp.Status), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task Status: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Status, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task Status: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Status, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -3050,7 +3050,7 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string `json:"project"`
-		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Date    string `json:"date"`
 		Task    string `json:"task"`
 		UserID  string `json:"userid"`
@@ -3083,13 +3083,13 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Project = v
-		case "name":
+		case "id":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Name = v
+			rcp.ID = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -3115,24 +3115,24 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
-	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = SetTaskStartdate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
+	err = SetTaskStartdate(session, rcp.Project, rcp.ID, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task StartDate: %s", rcp.Task, rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task StartDate: %s", rcp.Task, rcp.Date), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task StartDate: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task StartDate: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -3434,7 +3434,6 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project   string `json:"project"`
-		Name      string `json:"name"`
 		ID        string `json:"id"`
 		Date      string `json:"date"`
 		ShortDate string `json:"shortdate"`
@@ -3469,13 +3468,13 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Project = v
-		case "name":
+		case "id":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Name = v
+			rcp.ID = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -3501,24 +3500,24 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
-	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	rcp.ID, err = SetTaskPredate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
+	rcp.ID, err = SetTaskPredate(session, rcp.Project, rcp.ID, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Pre Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Pre Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Pre Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Pre Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -3539,7 +3538,7 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project   string `json:"project"`
-		Name      string `json:"name"`
+		ID        string `json:"id"`
 		Date      string `json:"date"`
 		ShortDate string `json:"shortdate"`
 		Task      string `json:"task"`
@@ -3573,13 +3572,13 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Project = v
-		case "name":
+		case "id":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
-			rcp.Name = v
+			rcp.ID = v
 		case "userid":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
@@ -3605,31 +3604,35 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 			rcp.Date = v
 		}
 	}
-	err = HasTask(session, rcp.Project, rcp.Name, rcp.Task)
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = SetTaskDate(session, rcp.Project, rcp.Name, rcp.Task, rcp.Date)
+	err = SetTaskDate(session, rcp.Project, rcp.ID, rcp.Task, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task Deadline: %s", rcp.Task, rcp.Date), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task Deadline: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
 	rcp.ShortDate = ToShortTime(rcp.Date)
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

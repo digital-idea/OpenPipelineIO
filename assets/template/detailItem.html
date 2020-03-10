@@ -231,10 +231,10 @@
 						onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
 						>{{.Title}}</span>
 					</div>
-					<div id="{{$.Item.Name}}-task-{{.Title}}-predate">
+					<div id="{{$.Item.ID}}-task-{{.Title}}-predate">
 						<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
 					</div>
-					<div id="{{$.Item.Name}}-task-{{.Title}}-date">
+					<div id="{{$.Item.ID}}-task-{{.Title}}-date">
 						<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
 					</div>
 					<div id="{{$.Item.Name}}-task-{{.Title}}-user">

@@ -1046,17 +1046,12 @@ func SetAftermov(session *mgo.Session, project, name, path string) error {
 }
 
 // SetTaskStatus 함수는 item에 task의 status 값을 셋팅한다. // legacy
-func SetTaskStatus(session *mgo.Session, project, name, task, status string) error {
+func SetTaskStatus(session *mgo.Session, project, id, task, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
@@ -1120,7 +1115,7 @@ func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (st
 		return "", err
 	}
 	if _, found := item.Tasks[strings.ToLower(task)]; !found {
-		return item.Name, errors.New("task가 존재하지 않습니다")
+		return item.Name, fmt.Errorf("%s 에 %s task가 존재하지 않습니다", id, task)
 	}
 	t := item.Tasks[task]
 	t.StatusV2 = status
@@ -1132,6 +1127,16 @@ func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (st
 	if err != nil {
 		return item.Name, err
 	}
+	hasStatus := false
+	for _, s := range globalStatus {
+		if s.ID == status {
+			hasStatus = true
+			break
+		}
+	}
+	if !hasStatus {
+		return item.Name, fmt.Errorf("%s status가 존재하지 않습니다", status)
+	}
 	item.updateStatusV2(globalStatus)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
@@ -1141,23 +1146,18 @@ func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (st
 }
 
 // HasTask 함수는 item에 task가 존재하는 체크한다.
-func HasTask(session *mgo.Session, project, name, task string) error {
+func HasTask(session *mgo.Session, project, id, task string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
 	if _, found := item.Tasks[task]; !found {
-		return fmt.Errorf("%s 프로젝트 %s에 %s Task가 존재하지 않습니다", project, name, task)
+		return fmt.Errorf("%s 프로젝트 %s 에 %s Task가 존재하지 않습니다", project, id, task)
 	}
 	return nil
 }
@@ -1256,18 +1256,9 @@ func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
 }
 
 // SetTaskDate 함수는 item에 task에 마감일을 셋팅한다.
-func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
+func SetTaskDate(session *mgo.Session, project, id, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
-	if err != nil {
-		return err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
-	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
@@ -1276,7 +1267,7 @@ func SetTaskDate(session *mgo.Session, project, name, task, date string) error {
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".date": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".date": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1332,17 +1323,12 @@ func SetDeadline3D(session *mgo.Session, project, name, date string) (string, er
 }
 
 // SetTaskStartdate 함수는 item에 task의 startdate 값을 셋팅한다.
-func SetTaskStartdate(session *mgo.Session, project, name, task, date string) error {
+func SetTaskStartdate(session *mgo.Session, project, id, task, date string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
 	c := session.DB("project").C(project)
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
@@ -1376,27 +1362,18 @@ func SetTaskUserNote(session *mgo.Session, project, name, task, usernote string)
 }
 
 // SetTaskPredate 함수는 item에 task의 predate 값을 셋팅한다.
-func SetTaskPredate(session *mgo.Session, project, name, task, date string) (string, error) {
+func SetTaskPredate(session *mgo.Session, project, id, task, date string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return "", err
-	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	id := name + "_" + typ
-	item, err := getItem(session, project, id)
-	if err != nil {
-		return id, err
 	}
 	c := session.DB("project").C(project)
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return id, err
 	}
-	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".predate": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return id, err
 	}
