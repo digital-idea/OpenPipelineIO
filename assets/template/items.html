@@ -78,11 +78,11 @@
 						{{if eq .Type "org" "left"}}
 							{{if .UseType}}
 								<div id="usetype-{{.Name}}">
-									<span class="badge badge-warning">{{.UseType}}</span>
+									<span class="finger badge badge-warning" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{.Project}}','{{.Name}}','{{.UseType}}')"{{end}}>{{.UseType}}</span>
 								</div>
 							{{else}}
 								<div id="type-{{.Name}}">
-									<span class="badge badge-light">{{.Type}}</span>
+									<span class="finger badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{.Project}}','{{.Name}}','{{.Type}}')"{{end}}>{{.Type}}</span>
 								</div>
 							{{end}}
 						{{else}}
