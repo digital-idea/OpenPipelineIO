@@ -175,6 +175,38 @@ function setShottypeModal(project, id) {
     });
 }
 
+// setUsetypeModal 함수는 project, name을 받아서 Usetype Modal을 설정한다.
+function setUsetypeModal(project, name, selectedType) {
+    let token = document.getElementById("token").value;
+    document.getElementById("modal-usetype-project").value = project
+    document.getElementById("modal-usetype-title").innerHTML = "Use Type: " + name;
+    $.ajax({
+        url: `/api/usetypes?project=${project}&name=${name}`,
+        type: "get",
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            let types = data.types;
+            // selectbox를 채운다.
+            let sel = document.getElementById('modal-usetype-type');
+            sel.innerHTML = "";
+            for (let i = 0; i < types.length; i++) {
+                let opt = document.createElement('option');
+                opt.appendChild( document.createTextNode(types[i]) );
+                opt.value = types[i]; 
+                sel.appendChild(opt); 
+            }
+            // 이미 선택된 옵션을 selectbox에서 선택한다.
+            document.getElementById("modal-usetype-type").value=selectedType;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setModalCheckbox(modalID, value) {
     if (value === "true") {
         document.getElementById(modalID).checked = true;
