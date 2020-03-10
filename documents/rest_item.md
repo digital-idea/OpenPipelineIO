@@ -46,7 +46,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setscanin | scan in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654231" http://127.0.0.1/api/setscanin` |
 | /api/setscanout | scan out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654331" http://127.0.0.1/api/setscanout` |
 | /api/setscanframe | scan frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=100" http://127.0.0.1/api/setscanframe` |
-| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodein` |
+| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodein`|
 | /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodeout` |
 | /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" http://192.168.31.172/api/setfinver` |
 | /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" http://192.168.31.172/api/setfindate` |
@@ -76,6 +76,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" http://10.0.90.251/api/setobjectid`|
 | /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/color.cc" http://10.0.90.251/api/setociocc`|
 | /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" http://10.0.90.251/api/setrollmedia`|
+| /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" http://10.0.90.251/api/scanname`|
 | /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" http://csi.lazypic.org/api/task`|
 | /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" http://csi.lazypic.org/api/shottype`|
 
