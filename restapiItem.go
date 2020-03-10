@@ -2610,7 +2610,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			rcp.Project = v
-		case "name":
+		case "id":
 			v, err := PostFormValueInList(key, values)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusBadRequest)
