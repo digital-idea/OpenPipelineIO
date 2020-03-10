@@ -123,8 +123,23 @@ func SearchName(session *mgo.Session, project string, name string) ([]Item, erro
 	results := []Item{}
 	err := c.Find(bson.M{"name": &bson.RegEx{Pattern: name, Options: "i"}}).Sort("name").All(&results)
 	if err != nil {
-		log.Println(err)
 		return nil, err
+	}
+	return results, nil
+}
+
+// UseTypes 함수는 project, name을 받아서 사용되는 모든 타입을 반환한다.
+func UseTypes(session *mgo.Session, project string, name string) ([]string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	items := []Item{}
+	err := c.Find(bson.M{"name": name}).Sort("type").All(&items)
+	if err != nil {
+		return nil, err
+	}
+	var results []string
+	for _, i := range items {
+		results = append(results, i.Type)
 	}
 	return results, nil
 }

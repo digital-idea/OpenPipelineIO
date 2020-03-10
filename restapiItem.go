@@ -612,6 +612,54 @@ func handleAPIAllShots(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIUseTypes 함수는 project를 받아서 모든 샷을 출력한다.
+func handleAPIUseTypes(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "project 정보가 없습니다.", http.StatusUnauthorized)
+		return
+	}
+	name := q.Get("name")
+	if name == "" {
+		http.Error(w, "name 정보가 없습니다.", http.StatusUnauthorized)
+		return
+	}
+	types, err := UseTypes(session, project, name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type Recipe struct {
+		Types []string `json:"types"`
+	}
+	rcp := Recipe{}
+	rcp.Types = types
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetTaskMov 함수는 Task에 mov를 설정한다.
 func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
