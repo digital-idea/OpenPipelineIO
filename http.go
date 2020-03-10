@@ -291,6 +291,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/sethandlein", handleAPISetHandleIn)
 	http.HandleFunc("/api/sethandleout", handleAPISetHandleOut)
 	http.HandleFunc("/api/setshottype", handleAPISetShotType)
+	http.HandleFunc("/api/setusetype", handleAPISetUseType)
 	http.HandleFunc("/api/setassettype", handleAPISetAssetType)
 	http.HandleFunc("/api/setoutputname", handleAPISetOutputName)
 	http.HandleFunc("/api/setrnum", handleAPISetRnum)

@@ -178,12 +178,13 @@ function setShottypeModal(project, id) {
 
 
 // setUsetypeModal 함수는 project, name을 받아서 Usetype Modal을 설정한다.
-function setUsetypeModal(project, name, selectedType) {
+function setUsetypeModal(project, id, selectedType) {
     let token = document.getElementById("token").value;
     document.getElementById("modal-usetype-project").value = project
-    document.getElementById("modal-usetype-title").innerHTML = "Use Type: " + name;
+    document.getElementById("modal-usetype-id").value = id
+    document.getElementById("modal-usetype-title").innerHTML = "Use Type: " + id2name(id);
     $.ajax({
-        url: `/api/usetypes?project=${project}&name=${name}`,
+        url: `/api/usetypes?project=${project}&name=${id2name(id)}`,
         type: "get",
         headers: {
             "Authorization": "Basic "+ token

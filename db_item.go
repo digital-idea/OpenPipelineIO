@@ -869,18 +869,14 @@ func SetTimecode(session *mgo.Session, project, name, key, timecode string) erro
 }
 
 // SetUseType 함수는 item에 UseType string을 설정한다.
-func SetUseType(session *mgo.Session, project, name, usetype string) error {
+func SetUseType(session *mgo.Session, project, id, usetype string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"usetype": usetype, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

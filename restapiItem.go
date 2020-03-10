@@ -3817,6 +3817,80 @@ func handleAPISetShotType(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetUseType 함수는 아이템의 Usetype을 설정한다.
+func handleAPISetUseType(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Type    string `json:"type"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	ssid, _, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	typ := r.FormValue("type")
+	if typ == "" {
+		http.Error(w, "type을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Type = typ
+	err = SetUseType(session, rcp.Project, rcp.ID, rcp.Type)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Usetype: %s", rcp.Type), rcp.Project, rcp.ID, "csi3", ssid, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Usetype: %s\nProject: %s, ID: %s, Author: %s", rcp.Type, rcp.Project, rcp.ID, ssid))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetOutputName 함수는 아이템의 shot의 아웃풋 이름을 설정합니다.
 func handleAPISetOutputName(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
