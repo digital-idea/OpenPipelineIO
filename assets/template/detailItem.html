@@ -226,7 +226,7 @@
 			{{$aftermov := .Item.Aftermov}}
 			{{range mapToSlice .Tasks $.TasksettingOrderMap}}
 				<div class="row" id="{{$.Item.Name}}-task-{{.Title}}">
-					<div id="{{$.Item.Name}}-task-{{.Title}}-status">
+					<div id="{{$.Item.ID}}-task-{{.Title}}-status">
 						<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
 						onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
 						>{{.Title}}</span>

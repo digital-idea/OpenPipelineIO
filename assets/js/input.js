@@ -1659,7 +1659,7 @@ function setTaskStatus(project, id, task, status) { // legacy
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                    document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1682,7 +1682,7 @@ function setTaskStatus(project, id, task, status) { // legacy
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1715,7 +1715,7 @@ function setTaskStatusV2(project, id, task, status) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                    document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1737,7 +1737,7 @@ function setTaskStatusV2(project, id, task, status) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById(`${data.name}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
