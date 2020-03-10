@@ -1499,6 +1499,17 @@ func SetRollmedia(session *mgo.Session, project, name, rollmedia string) error {
 	return nil
 }
 
+// SetScanname 함수는 item에 Scanname을 셋팅한다.
+func SetScanname(session *mgo.Session, project, id, scanname string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"scanname": scanname, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetRnum 함수는 샷에 롤넘버를 설정한다.
 func SetRnum(session *mgo.Session, project, name, rnum string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)

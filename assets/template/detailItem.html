@@ -438,9 +438,9 @@
 					<span class="text-badge ml-1">{{ToShortTime .Scantime}} /</span>
 				{{end}}
 			</div>
-			<div id="scanname-{{$.Item.Name}}">
+			<div>
 				{{if .Scanname}}
-					<span class="text-badge ml-1" title="scanname">{{.Scanname}}</span>
+					<span id="{{.Project}}-{{.ID}}-scanname" class="text-badge ml-1" title="scanname">{{.Scanname}}</span>
 				{{end}}
 			</div>
 			<div id="scanin-{{$.Item.Name}}">

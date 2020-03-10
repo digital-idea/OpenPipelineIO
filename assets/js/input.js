@@ -1455,6 +1455,30 @@ function setRollmedia(project, id, rollmedia) {
     });
 }
 
+function setScanname(project, id, scanname) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/setscanname",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
+            scanname: scanname,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.log(data);
+            document.getElementById(`${data.project}-${data.id}-scanname`).innerHTML = data.scanname;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setIteminfoModal(project, id) {
     document.getElementById("modal-iteminfo-project").value = project;
     document.getElementById("modal-iteminfo-id").value = id;
@@ -1473,6 +1497,7 @@ function setIteminfoModal(project, id) {
             document.getElementById('modal-iteminfo-retimeplate').value = data.retimeplate;
             document.getElementById('modal-iteminfo-ociocc').value = data.ociocc;
             document.getElementById('modal-iteminfo-rollmedia').value = data.rollmedia;
+            document.getElementById('modal-iteminfo-scanname').value = data.scanname;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

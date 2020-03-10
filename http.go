@@ -324,6 +324,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setobjectid", handleAPISetObjectID)
 	http.HandleFunc("/api/setociocc", handleAPISetOCIOcc)
 	http.HandleFunc("/api/setrollmedia", handleAPISetRollmedia)
+	http.HandleFunc("/api/setscanname", handleAPISetScanname)
 	http.HandleFunc("/api/settaskdate", handleAPISetTaskDate)
 	http.HandleFunc("/api/settaskdue", handleAPISetTaskDue)
 	http.HandleFunc("/api/settaskpredate", handleAPISetTaskPredate)

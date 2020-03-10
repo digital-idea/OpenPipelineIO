@@ -861,8 +861,13 @@
                 </div>
                 <div class="form-group">
                     <label>현장툴 Rollmedia</label>
-                    <input type="text" maxlength="25" id="modal-iteminfo-rollmedia" value="" class="form-control form-control-sm" onchange="setRollmedia(document.getElementById('modal-iteminfo-project').value, document.getElementById('iteminfo-id').value, this.value)">
+                    <input type="text" maxlength="25" id="modal-iteminfo-rollmedia" value="" class="form-control form-control-sm" onchange="setRollmedia(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
                     <small class="form-text text-muted">Setellite에서 사용한 Rollmedia 값을 입력해주세요.</small>
+                </div>
+                <div class="form-group">
+                    <label>Scanname</label>
+                    <input type="text" maxlength="25" id="modal-iteminfo-scanname" value="" class="form-control form-control-sm" onchange="setScanname(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <small class="form-text text-muted">Scanname 값을 수정 또는 설정합니다.</small>
                 </div>
             </div>
             <div class="modal-footer">
