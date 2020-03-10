@@ -2299,7 +2299,7 @@ function setUsetype(project, id) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
+                    document.getElementById(`${data.project}-${data.id}-usetype`).innerHTML = `<span class="badge badge-warning ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('${project}','${data.id}','${data.type}')">${data.type}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -2320,7 +2320,7 @@ function setUsetype(project, id) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
+                document.getElementById(`${data.project}-${data.id}-usetype`).innerHTML = `<span class="badge badge-warning ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('${project}','${data.id}','${data.type}')">${data.type}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
