@@ -175,6 +175,8 @@ function setShottypeModal(project, id) {
     });
 }
 
+
+
 // setUsetypeModal 함수는 project, name을 받아서 Usetype Modal을 설정한다.
 function setUsetypeModal(project, name, selectedType) {
     let token = document.getElementById("token").value;
@@ -2263,6 +2265,61 @@ function setShottype(project, id) {
             dataType: "json",
             success: function(data) {
                 document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setUsetype(project, id) {
+    let token = document.getElementById("token").value;
+    let e = document.getElementById("modal-usetype-type");
+    let type = e.options[e.selectedIndex].value;
+    
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setusetype",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    type: type,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setusetype",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                type: type,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("shottype-"+data.name).innerHTML = `<span class="badge badge-light ml-1" data-toggle="modal" data-target="#modal-usetype" onclick="setShottypeModal('${project}','${data.id}')">${data.type}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
