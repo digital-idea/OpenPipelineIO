@@ -574,6 +574,44 @@ func handleAPIShots(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleAPIAllShots 함수는 project를 받아서 모든 샷을 출력한다.
+func handleAPIAllShots(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "project 정보가 없습니다.", http.StatusUnauthorized)
+		return
+	}
+	items, err := SearchAllShot(session, project, "name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(items)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetTaskMov 함수는 Task에 mov를 설정한다.
 func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

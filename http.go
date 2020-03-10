@@ -262,6 +262,7 @@ func webserver(port string) {
 	http.HandleFunc("/api2/items", handleAPI2Items) // legacy
 	http.HandleFunc("/api/searchname", handleAPISearchname)
 	http.HandleFunc("/api/seqs", handleAPISeqs)
+	http.HandleFunc("/api/allshots", handleAPIAllShots)
 	http.HandleFunc("/api/shots", handleAPIShots)
 	http.HandleFunc("/api/shot", handleAPIShot)
 	http.HandleFunc("/api/asset", handleAPIAsset)

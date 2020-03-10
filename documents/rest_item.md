@@ -14,6 +14,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
 | /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
 | /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "http://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
+| /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl "http://csi.lazypic.org/api/allshots?project=TEMP"` |
 | /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
 | /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "http://csi.lazypic.org/api/assets?project=TEMP"` |
 
