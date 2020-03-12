@@ -9,7 +9,7 @@
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
 				<label class="p-0 m-0 thumbnail" for="{{$.Item.ID}}" onclick="selectCheckbox()">
-					<img src="/thumbnail/{{$.Item.Project}}/{{$.Item.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{$.Item.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					<img src="/thumbnail/{{$.Item.Project}}/{{$.Item.Name}}_{{if $.Item.UseType}}{{$.Item.UseType}}{{else}}{{$.Item.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string $.Item.Status}}">
 				</label>
 				<div class="top-left">
 					{{if eq .Type "org" "left"}}
@@ -42,24 +42,24 @@
 					</div>
 				</div>
 				<div class="centered">
-					{{if eq .Status "2"}}
-						{{if .Finver}}
-							Finver: {{.Finver}}
+					{{if eq $.Item.Status "2"}}
+						{{if $.Item.Finver}}
+							Finver: {{$.Item.Finver}}
 						{{end}}
-						{{if .Findate}}
+						{{if $.Item.Findate}}
 							<br>
-							Date: {{ToNormalTime .Findate}}
+							Date: {{ToNormalTime $.Item.Findate}}
 						{{end}}
 					{{end}}
 				</div>
 				<div class="centered-bottom row">
-					{{if eq .Type "asset"}}
+					{{if eq $.Item.Type "asset"}}
 						<div id="assettype-{{$.Item.Name}}">
-							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{.Assettype}}</span>
+							<span class="badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{$.Item.Assettype}}</span>
 						</div>
 						
 						<div id="crowdasset-{{$.Item.ID}}" class="ml-1">
-							{{if .CrowdAsset}}
+							{{if $.Item.CrowdAsset}}
 								<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>Crowd</span>
 							{{else}}
 								<span class="badge badge-light finger fade"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>Crowd</span>
@@ -67,16 +67,14 @@
 						</div>
 					{{else}}
 						<!--재스캔 사용 플레이트 표기-->
-						{{if eq .Type "org" "left"}}
-							{{if .UseType}}
-								<div id="usetype-{{$.Item.Name}}">
-									<span class="badge badge-warning">{{.UseType}}</span>
-								</div>
-							{{else}}
-								<div id="type-{{$.Item.Name}}">
-									<span class="badge badge-light">{{$.Item.Type}}</span>
-								</div>
-							{{end}}
+						{{if eq $.Item.Type "org" "left"}}
+							<div id="{{$.Item.Project}}-{{$.Item.ID}}-usetype">
+								{{if $.Item.UseType}}
+									<span class="finger badge badge-warning" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$.Item.UseType}}')"{{end}}>{{$.Item.UseType}}</span>
+								{{else}}
+									<span class="finger badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$.Item.Type}}')"{{end}}>{{$.Item.Type}}</span>
+								{{end}}
+							</div>
 						{{else}}
 							<!--기타 소스, 레퍼런스등-->
 							<div id="type-{{$.Item.Name}}">

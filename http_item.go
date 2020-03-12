@@ -104,6 +104,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		Wfs   string
 		Item
 		TasksettingOrderMap map[string]float64
+		Status              []Status
 	}
 	rcp := recipe{}
 	rcp.Wfs = *flagWFS
@@ -141,6 +142,11 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	rcp.TasksettingOrderMap = make(map[string]float64)
 	for _, t := range tasks {
 		rcp.TasksettingOrderMap[t.Name] = t.Order
+	}
+	rcp.Status, err = AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	rcp.Item, err = getItem(session, project, id)
 	if err != nil {
