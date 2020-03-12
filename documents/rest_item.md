@@ -12,74 +12,76 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
-| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
-| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "http://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
-| /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl "http://csi.lazypic.org/api/allshots?project=TEMP"` |
-| /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "http://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
-| /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "http://csi.lazypic.org/api/assets?project=TEMP"` |
+| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
+| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
+| /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/allshots?project=TEMP"` |
+| /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
+| /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/assets?project=TEMP"` |
+| /api/usetypes | 샷의 usetype 리스트 가지고오기 | project, name | `$ curl "https://csi.lazypic.org/api/usetypes?project=TEMP&name=SS_0010"` |
 
 ## Post
 
 | URI | description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" http://192.168.31.172/api/search` |
-| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" http://192.168.31.172/api/deadline2d` |
-| /api/deadline3d | 3D마감일 리스트 | project | `$ curl "http://192.168.31.172/api/deadline3d?project=TEMP"` |
-| /api/rmitemid | 아이템 삭제 | project, id | `$ curl -d "project=circle&id=SS_0010_org" http://127.0.0.1/api/rmitemid` |
-| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" http://127.0.0.1/api/setstatus` |
-| /api/setassigntask | Assign 설정,해제 | project, name, task, status | `$ curl -d "project=TEMP&name=SS_0030&task=mg&status=true" http://192.168.31.172/api/setassigntask` |
-| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -d "project=TEMP&name=mamma&task=light&user=김한웅" http://192.168.219.104/api/settaskuser` |
-| /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" http://192.168.31.172/api/settaskstartdate` |
-| /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" http://192.168.31.172/api/settaskpredate` |
-| /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" http://192.168.31.172/api/settaskdate` |
-| /api/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" http://192.168.31.172/api/settaskmov` |
-| /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&shottype=3d" http://192.168.0.11/api/setshottype` |
-| /api/setthummov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" http://192.168.0.11/api/setthummov` |
-| /api/setbeforemov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/before.mov" http://192.168.0.11/api/setbeforemov` |
-| /api/setaftermov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/after.mov" http://192.168.0.11/api/setaftermov` |
-| /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" http://192.168.0.11/api/setassettype` |
-| /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -d "project=TEMP&name=SS_0010&outputname=S101_010_010" http://192.168.31.172/api/setoutputname` |
-| /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -d "project=TEMP&name=SS_0010&rnum=A0001" http://192.168.31.172/api/setrnum` |
-| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" http://192.168.31.172/api/setdeadline2d` |
-| /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" http://192.168.31.172/api/setdeadline3d` |
-| /api/setscantimecodein | 스캔 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setscantimecodein` |
-| /api/setscantimecodeout | 스캔 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setscantimecodeout` |
-| /api/setscanin | scan in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654231" http://127.0.0.1/api/setscanin` |
-| /api/setscanout | scan out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654331" http://127.0.0.1/api/setscanout` |
-| /api/setscanframe | scan frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=100" http://127.0.0.1/api/setscanframe` |
-| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodein`|
-| /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" http://192.168.31.172/api/setjusttimecodeout` |
-| /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" http://192.168.31.172/api/setfinver` |
-| /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" http://192.168.31.172/api/setfindate` |
-| /api/setplatein | plate in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1001" http://192.168.31.172/api/setplatein` |
-| /api/setplateout | plate out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/setplateout` |
-| /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/setjustin` |
-| /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/setjustout` |
-| /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" http://192.168.31.172/api/sethandlein` |
-| /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" http://192.168.31.172/api/sethandleout` |
-| /api/addtag | tag 추가 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0010_org&tag=테스트" http://192.168.219.104/api/addtag` |
-| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0020_org&tag=태그3" http://192.168.219.114/api/rmtag` |
-| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" http://192.168.219.104/api/setnote` |
-| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/addcomment` |
-| /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" http://192.168.219.104/api/rmcomment` |
-| /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" http://192.168.31.172/api/addsource` |
-| /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" http://192.168.31.172/api/rmsource` |
-| /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection, (userid) | `$ curl -d "project=TEMP&name=SS_0020&projection=true" http://10.0.90.251/api/setcameraprojection` |
-| /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task, (userid) | `$ curl -d "project=TEMP&name=SS_0020&task=mm" http://10.0.90.251/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
-| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" http://10.0.90.251/api/setcamerapubpath`|
-| /api/setdeadline2d | 2D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" http://10.0.90.251/api/setdeadline2d`|
-| /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" http://10.0.90.251/api/setdeadline3d`|
-| /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" http://10.0.90.251/api/setretimeplate`|
-| /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -d "project=TEMP&name=SS_0020&task=comp&level=1" http://10.0.90.251/api/settasklevel`|
-| /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setplatesize`|
-| /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setundistortionsize`|
-| /api/rendersize | Reder Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" http://10.0.90.251/api/setrendersize`|
-| /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" http://10.0.90.251/api/setobjectid`|
-| /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/color.cc" http://10.0.90.251/api/setociocc`|
-| /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" http://10.0.90.251/api/setrollmedia`|
-| /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" http://10.0.90.251/api/scanname`|
-| /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" http://csi.lazypic.org/api/task`|
-| /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" http://csi.lazypic.org/api/shottype`|
+| /api/search | 검색 | project, searchword, sortkey | `$ curl -d "project=TEMP&searchword=SS_0020&sortkey=id" https://csi.lazypic.org/api/search` |
+| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" https://csi.lazypic.org/api/deadline2d` |
+| /api/deadline3d | 3D마감일 리스트 | project | `$ curl "https://csi.lazypic.org/api/deadline3d?project=TEMP"` |
+| /api/rmitemid | 아이템 삭제 | project, id | `$ curl -d "project=circle&id=SS_0010_org" https://csi.lazypic.org/api/rmitemid` |
+| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/setstatus` |
+| /api/setassigntask | Assign 설정,해제 | project, name, task, status | `$ curl -d "project=TEMP&name=SS_0030&task=mg&status=true" https://csi.lazypic.org/api/setassigntask` |
+| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -d "project=TEMP&name=mamma&task=light&user=김한웅" https://192.168.219.104/api/settaskuser` |
+| /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |
+| /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskpredate` |
+| /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskdate` |
+| /api/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api/settaskmov` |
+| /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&shottype=3d" https://csi.lazypic.org/api/setshottype` |
+| /api/setusetype | usetype 변경 | project, id, type | `$ curl -d "project=TEMP&id=SS_0030_org&type=org1" https://csi.lazypic.org/api/setusetype` |
+| /api/setthummov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" https://csi.lazypic.org/api/setthummov` |
+| /api/setbeforemov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/before.mov" https://csi.lazypic.org/api/setbeforemov` |
+| /api/setaftermov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/after.mov" https://csi.lazypic.org/api/setaftermov` |
+| /api/setassettype | assettype 변경 | project, name, type | `$ curl -d "project=TEMP&name=mamma&type=prop" https://csi.lazypic.org/api/setassettype` |
+| /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -d "project=TEMP&name=SS_0010&outputname=S101_010_010" https://csi.lazypic.org/api/setoutputname` |
+| /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -d "project=TEMP&name=SS_0010&rnum=A0001" https://csi.lazypic.org/api/setrnum` |
+| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline2d` |
+| /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline3d` |
+| /api/setscantimecodein | 스캔 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodein` |
+| /api/setscantimecodeout | 스캔 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodeout` |
+| /api/setscanin | scan in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654231" https://csi.lazypic.org/api/setscanin` |
+| /api/setscanout | scan out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=654331" https://csi.lazypic.org/api/setscanout` |
+| /api/setscanframe | scan frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=100" https://csi.lazypic.org/api/setscanframe` |
+| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodein`|
+| /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodeout` |
+| /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -d "project=TEMP&name=SS_0010&version=1" https://csi.lazypic.org/api/setfinver` |
+| /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -d "project=TEMP&name=SS_0010&date=0711" https://csi.lazypic.org/api/setfindate` |
+| /api/setplatein | plate in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1001" https://csi.lazypic.org/api/setplatein` |
+| /api/setplateout | plate out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setplateout` |
+| /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/setjustin` |
+| /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
+| /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
+| /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
+| /api/addtag | tag 추가 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0010_org&tag=테스트" https://192.168.219.104/api/addtag` |
+| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -d "project=TEMP&id=SS_0020_org&tag=태그3" https://192.168.219.114/api/rmtag` |
+| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://192.168.219.104/api/setnote` |
+| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://192.168.219.104/api/addcomment` |
+| /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://192.168.219.104/api/rmcomment` |
+| /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" https://csi.lazypic.org/api/addsource` |
+| /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -d "project=TEMP&name=SS_0020&title=sourcename" https://csi.lazypic.org/api/rmsource` |
+| /api/setcameraprojection | 카메라 프로젝션여부 | project, name, projection, (userid) | `$ curl -d "project=TEMP&name=SS_0020&projection=true" https://csi.lazypic.org/api/setcameraprojection` |
+| /api/setcamerapubtask | 카메라 Pub Task설정 | project, name, task, (userid) | `$ curl -d "project=TEMP&name=SS_0020&task=mm" https://csi.lazypic.org/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
+| /api/setcamerapubpath | 카메라 Pub Path설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/test/cam/pubpath" https://csi.lazypic.org/api/setcamerapubpath`|
+| /api/setdeadline2d | 2D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline2d`|
+| /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline3d`|
+| /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -d "project=TEMP&name=SS_0020&path=/show/retime" https://csi.lazypic.org/api/setretimeplate`|
+| /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -d "project=TEMP&name=SS_0020&task=comp&level=1" https://csi.lazypic.org/api/settasklevel`|
+| /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setplatesize`|
+| /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setundistortionsize`|
+| /api/rendersize | Reder Size 설정 | project, name, size, (userid) | `$ curl -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setrendersize`|
+| /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" https://csi.lazypic.org/api/setobjectid`|
+| /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0020&path=/show/color.cc" https://csi.lazypic.org/api/setociocc`|
+| /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" https://csi.lazypic.org/api/setrollmedia`|
+| /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" https://csi.lazypic.org/api/scanname`|
+| /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
+| /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
 
 
 
@@ -140,7 +142,7 @@ print(r.json())
 import json
 import urllib2
 
-restURL = "http://10.0.90.251/api2/items?project=gunhamdo&searchword=SS&wip=true"
+restURL = "https://csi.lazypic.org/api2/items?project=gunhamdo&searchword=SS&wip=true"
 try:
 	data = json.load(urllib2.urlopen(restURL))
 except:
@@ -165,7 +167,7 @@ values["project"] = "yeomryeok"
 values["searchword"] = "shot"
 values["wip"] = "true"
 
-url = "http://10.0.90.251/api2/items"
+url = "https://csi.lazypic.org/api2/items"
 query = urllib.urlencode(values)
 restURL = url + "?" + query
 try:
@@ -181,7 +183,7 @@ print(data["data"])
 - 서치키워드에 다중 문자열 검색시 공백이 들어가면 공백을 + 사용
 
 ```
-restURL = "http://10.0.90.251/api2/items?project=TEMP&searchword=comp+박지섭&wip=true"
+restURL = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+박지섭&wip=true"
 ```
 
 - url endcode 방법
@@ -192,7 +194,7 @@ values["project"] = "TEMP"
 values["searchword"] = "comp+김한웅"
 values["wip"] = "true"
 
-url = "http://10.0.90.251/api2/items"
+url = "https://csi.lazypic.org/api2/items"
 query = urllib.urlencode(values)
 restURL = url + "?" + query
 ```
@@ -202,15 +204,15 @@ restURL = url + "?" + query
 - adventure 프로젝트의 "R0VFX" 이름을 가진 샷, 에셋 정보를  검색하는 예제이다.
 
 ```
-- http://10.0.90.251/api/searchname?project=adventure&name=R0VFX
-- http://10.0.90.251/api/searchname?project=adventure&name=R0VFX_sh001
+- https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX
+- https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001
 ```
 ```
 #coding:utf-8
 import json
 import urllib2
 
-restURL = "http://10.0.90.251/api/searchname?project=adventure&name=R0VFX_sh001"
+restURL = "https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001"
 try:
 	data = json.load(urllib2.urlopen(restURL))
 except:
@@ -227,14 +229,14 @@ print(data["data"])
 - 'mkk3' 프로젝트의 시퀀스 리스트를 검색하는 예제이다.
 
 ```
-- http://10.0.90.251/api/seqs?project=mkk3
+- https://csi.lazypic.org/api/seqs?project=mkk3
 ```
 ```
 #coding:utf-8
 import json
 import urllib2
 
-restURL = "http://10.0.90.251/api/seqs?project=mkk3"
+restURL = "https://csi.lazypic.org/api/seqs?project=mkk3"
 try:
 	data = json.load(urllib2.urlopen(restURL))
 except:
@@ -251,15 +253,15 @@ print(data["data"])
 - 'mkk3'프로젝트의 "BNS"시퀀스에 대한 샷 리스트를 검색하는 예제이다.
 
 ```
-- http://10.0.90.251/api/shots?project=mkk3&seq=BNS
-- http://10.0.90.251/api/shots?project=mkk3&seq=BNS_00
+- https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS
+- https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS_00
 ```
 ```
 #coding:utf-8
 import json
 import urllib2
 
-restURL = "http://10.0.90.251/api/shots?project=mkk3&seq=BNS"
+restURL = "https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS"
 try:
 	data = json.load(urllib2.urlopen(restURL))
 except:
@@ -277,13 +279,13 @@ print(data["data"])
 circle 프로젝트 SS_0010 샷에 light 테스크에 /show/test.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" http://127.0.0.1/api/settaskmov
+$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" https://csi.lazypic.org/api/settaskmov
 ```
 
 circle 프로젝트 mamma 에셋 fur 테스크에 /show/fur.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" http://127.0.0.1/api/settaskmov
+$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" https://csi.lazypic.org/api/settaskmov
 ```
 
 #### python에서 샷 mov등록하기
@@ -298,7 +300,7 @@ def SetTaskmov(project, shot, task, mov):
 	"""
 	data = "project=%s&shot=&s&task=%s&mov=%s" % (project, shot, task, mov)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/settaskmov", data)
+		request = urllib2.Request("https://csi.lazypic.org/api/settaskmov", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -317,17 +319,17 @@ csi3.SetTaskmov("TEMP", "SS_0010", "mm", "SS_0010.mov")
 
 - Task에 대한 시작일 설정
 ```
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=0502" http://10.0.90.251/api/setstartdate
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02" http://10.0.90.251/api/setstartdate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=0502" https://csi.lazypic.org/api/setstartdate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02" https://csi.lazypic.org/api/setstartdate
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02T14:45:34%2B09:00" http://10.0.90.251/api/setstartdate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02T14:45:34%2B09:00" https://csi.lazypic.org/api/setstartdate
 ```
 
 - Task에 대한 1차 마감일 설정
 ```
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=0605" http://10.0.90.251/api/setpredate
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" http://10.0.90.251/api/setpredate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=0605" https://csi.lazypic.org/api/setpredate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" https://csi.lazypic.org/api/setpredate
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" http://10.0.90.251/api/setpredate
+curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" https://csi.lazypic.org/api/setpredate
 ```
 
