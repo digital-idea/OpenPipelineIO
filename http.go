@@ -104,6 +104,7 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Sha1ver   string
 		BuildTime string
+		Status    []Status
 	}
 
 	rcp := recipy{}
@@ -117,6 +118,11 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	rcp.Devmode = *flagDevmode
 	rcp.User = u
 	rcp.Wfs = *flagWFS
+	rcp.Status, err = AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	err = t.ExecuteTemplate(w, "help", rcp)
 	if err != nil {
 		log.Println(err)
