@@ -830,26 +830,36 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("project")
 	format := r.FormValue("format")
 	sortkey := r.FormValue("sortkey")
-	var items []Item
-	if format == "cglist-shot" {
-		items, err = SearchAllShot(session, project, sortkey)
+	task := r.FormValue("task")
+	var searchItems []Item
+	switch format {
+	case "shot":
+		searchItems, err = SearchAllShot(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else if format == "cglist-asset" {
-		items, err = SearchAllAsset(session, project, sortkey)
+	case "asset":
+		searchItems, err = SearchAllAsset(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else {
-		items, err = SearchAll(session, project, sortkey)
+	case "", "all":
+		searchItems, err = SearchAll(session, project, sortkey)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
+	// task가 선택되어 있다면 item을 돌면서 item을 거른다.
+	var items []Item
+	if task == "all" {
+		items = searchItems
+	} else {
+
+	}
+
 	f := excelize.NewFile()
 	sheet := "Sheet1"
 	index := f.NewSheet(sheet)
@@ -1063,7 +1073,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
-	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s.xlsx", project, format))
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s-%s.xlsx", project, format, task))
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 

@@ -157,7 +157,7 @@ func handleAPIShotTasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Tasksettings []Tasksetting
+		Tasksettings []Tasksetting `json:"tasksettings"`
 	}
 	rcp := Recipe{}
 	rcp.Tasksettings, err = getShotTaskSetting(session)
@@ -166,7 +166,11 @@ func handleAPIShotTasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
@@ -190,7 +194,7 @@ func handleAPIAssetTasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Tasksettings []Tasksetting
+		Tasksettings []Tasksetting `json:"tasksettings"`
 	}
 	rcp := Recipe{}
 	rcp.Tasksettings, err = getAssetTaskSetting(session)
@@ -199,7 +203,11 @@ func handleAPIAssetTasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
