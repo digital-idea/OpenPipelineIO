@@ -438,47 +438,47 @@
 			</div>
 			<div>
 				{{if .Scanname}}
-					<span id="{{.Project}}-{{.ID}}-scanname" class="text-badge ml-1" title="scanname">{{.Scanname}}</span>
+					<span id="{{$.Item.Project}}-{{$.Item.ID}}-scanname" class="text-badge ml-1" title="scanname">{{$.Item.Scanname}}</span>
 				{{end}}
 			</div>
 			<div id="scanin-{{$.Item.Name}}">
-				{{if .ScanIn}}
-					<span class="text-badge ml-1">{{.ScanIn}}</span>
+				{{if $.Item.ScanIn}}
+					<span class="text-badge ml-1">{{$.Item.ScanIn}}</span>
 				{{end}}
 			</div>
-			{{if and .ScanIn .ScanOut}}
+			{{if and $.Item.ScanIn $.Item.ScanOut}}
 				<div>
 					<span class="text-badge ml-1">-</span>
 				</div>
 			{{end}}
 			<div id="scanout-{{$.Item.Name}}">
-				{{if .ScanOut}}
-					<span class="text-badge ml-1">{{.ScanOut}}</span>
+				{{if $.Item.ScanOut}}
+					<span class="text-badge ml-1">{{$.Item.ScanOut}}</span>
 				{{end}}
 			</div>
 			<div id="scanframe-{{$.Item.Name}}">
-				{{if .ScanFrame}}
-					<span class="text-badge ml-1">({{.ScanFrame}})</span>
+				{{if $.Item.ScanFrame}}
+					<span class="text-badge ml-1">({{$.Item.ScanFrame}})</span>
 				{{end}}
 			</div>
-			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+			{{if and $.Item.ScanTimecodeIn $.Item.ScanTimecodeOut}}
 				<div>
 					<span class="text-badge ml-1">/</span>
 				</div>
 			{{end}}
 			<div id="scantimecodein-{{$.Item.Name}}">
-				{{if .ScanTimecodeIn}}
-					<span class="text-badge ml-1">{{.ScanTimecodeIn}}</span>
+				{{if $.Item.ScanTimecodeIn}}
+					<span class="text-badge ml-1">{{$.Item.ScanTimecodeIn}}</span>
 				{{end}}
 			</div>
-			{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+			{{if and $.Item.ScanTimecodeIn $.Item.ScanTimecodeOut}}
 				<div>
 					<span class="text-badge ml-1">-</span>
 				</div>
 			{{end}}
 			<div id="scantimecodeout-{{$.Item.Name}}">
-				{{if .ScanTimecodeOut}}
-					<span class="text-badge ml-1">{{.ScanTimecodeOut}}</span>
+				{{if $.Item.ScanTimecodeOut}}
+					<span class="text-badge ml-1">{{$.Item.ScanTimecodeOut}}</span>
 				{{end}}
 			</div>
 			
@@ -494,7 +494,7 @@
 			</div>
 		{{end}}
 		<div id="comments-{{$.Item.ID}}" onclick="selectCheckboxNone()">
-			{{range ReverseCommentSlice .Comments}}
+			{{range ReverseCommentSlice $.Item.Comments}}
 				<div id="comment-{{$.Item.ID}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
