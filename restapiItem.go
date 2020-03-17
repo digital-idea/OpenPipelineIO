@@ -660,8 +660,8 @@ func handleAPIUseTypes(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetTaskMov 함수는 Task에 mov를 설정한다.
-func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
+// handleAPI2SetTaskMov 함수는 Task에 mov를 설정한다.
+func handleAPI2SetTaskMov(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return

@@ -33,7 +33,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |
 | /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskpredate` |
 | /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskdate` |
-| /api/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api/settaskmov` |
+| /api2/settaskmov | mov등록 | project, name, task, mov | `$ curl -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api2/settaskmov` |
 | /api/setshottype | shottype 변경 | project, name, type | `$ curl -d "project=TEMP&name=SS_0030&shottype=3d" https://csi.lazypic.org/api/setshottype` |
 | /api/setusetype | usetype 변경 | project, id, type | `$ curl -d "project=TEMP&id=SS_0030_org&type=org1" https://csi.lazypic.org/api/setusetype` |
 | /api/setthummov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" https://csi.lazypic.org/api/setthummov` |
@@ -279,13 +279,13 @@ print(data["data"])
 circle 프로젝트 SS_0010 샷에 light 테스크에 /show/test.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" https://csi.lazypic.org/api/settaskmov
+$ curl -d "project=circle&name=SS_0010&task=light&mov=/show/test.mov" https://csi.lazypic.org/api2/settaskmov
 ```
 
 circle 프로젝트 mamma 에셋 fur 테스크에 /show/fur.mov 등록하기.
 
 ```bash
-$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" https://csi.lazypic.org/api/settaskmov
+$ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" https://csi.lazypic.org/api2/settaskmov
 ```
 
 #### python에서 샷 mov등록하기
@@ -300,18 +300,11 @@ def SetTaskmov(project, shot, task, mov):
 	"""
 	data = "project=%s&shot=&s&task=%s&mov=%s" % (project, shot, task, mov)
 	try:
-		request = urllib2.Request("https://csi.lazypic.org/api/settaskmov", data)
+		request = urllib2.Request("https://csi.lazypic.org/api2/settaskmov", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
 	return err
-```
-
-- csi3.py에 API로 활용할 수 있도록 구현이 되어있다.
-
-```
-import csi3
-csi3.SetTaskmov("TEMP", "SS_0010", "mm", "SS_0010.mov")
 ```
 
 #### curl을 사용한 restAPI 셋팅

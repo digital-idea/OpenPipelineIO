@@ -325,7 +325,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/deadline2d", handleAPIDeadline2D)
 	http.HandleFunc("/api/deadline3d", handleAPIDeadline3D)
 	http.HandleFunc("/api/setstatus", handleAPISetTaskStatus)
-	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov)
+	http.HandleFunc("/api/settaskmov", handleAPISetTaskMov) // legacy
+	http.HandleFunc("/api2/settaskmov", handleAPI2SetTaskMov)
 	http.HandleFunc("/api/settaskusernote", handleAPISetTaskUserNote)
 	http.HandleFunc("/api/setretimeplate", handleAPISetRetimePlate)
 	http.HandleFunc("/api/settasklevel", handleAPISetTaskLevel)
