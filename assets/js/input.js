@@ -3335,7 +3335,7 @@ function setRmTaskModal(project, id, type) {
             },
             dataType: "json",
             success: function(data) {
-                let tasks = data["Tasksettings"];
+                let tasks = data["tasksettings"];
                 let rmtasks = document.getElementById('modal-rmtask-taskname');
                 rmtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
@@ -3359,7 +3359,7 @@ function setRmTaskModal(project, id, type) {
             },
             dataType: "json",
             success: function(data) {
-                let tasks = data["Tasksettings"]
+                let tasks = data["tasksettings"]
                 let rmtasks = document.getElementById('modal-rmtask-taskname');
                 rmtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){

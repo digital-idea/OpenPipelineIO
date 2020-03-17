@@ -669,6 +669,7 @@ func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Task    string `json:"task"`
 		Mov     string `json:"mov"`
 		UserID  string `json:"userid"`
@@ -732,11 +733,12 @@ func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	rcp.Mov = dipath.Win2lin(rcp.Mov) // 내부적으로 모든 경로는 unix 경로를 사용한다.
-	err = setTaskMov(session, rcp.Project, rcp.Name, rcp.Task, rcp.Mov)
+	id, err := setTaskMov(session, rcp.Project, rcp.Name, rcp.Task, rcp.Mov)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Setmov: %s %s", rcp.Task, rcp.Mov), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -750,7 +752,11 @@ func handleAPISetTaskMov(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

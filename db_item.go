@@ -726,23 +726,27 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 }
 
 // setTaskMov함수는 해당 샷에 mov를 설정하는 함수이다.
-func setTaskMov(session *mgo.Session, project, name, task, mov string) error {
+func setTaskMov(session *mgo.Session, project, name, task, mov string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	c := session.DB("project").C(project)
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return id, err
+	}
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".mov": mov, task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // setTaskDue함수는 해당 샷에 mov를 설정하는 함수이다.
@@ -758,6 +762,10 @@ func setTaskDue(session *mgo.Session, project, name, task string, due int) error
 		return err
 	}
 	id := name + "_" + typ
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".due": due, task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
@@ -779,6 +787,10 @@ func setTaskLevel(session *mgo.Session, project, name, task, level string) error
 		return err
 	}
 	id := name + "_" + typ
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
 	l, err := strconv.Atoi(level)
 	if err != nil {
 		return err
@@ -1254,6 +1266,10 @@ func SetTaskUser(session *mgo.Session, project, name, task, user string) (string
 		return "", err
 	}
 	id := name + "_" + typ
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return id, err
+	}
 	item, err := getItem(session, project, id)
 	if err != nil {
 		return id, err
@@ -1341,6 +1357,10 @@ func SetTaskStartdate(session *mgo.Session, project, id, task, date string) erro
 		return err
 	}
 	c := session.DB("project").C(project)
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return err
@@ -1364,6 +1384,10 @@ func SetTaskUserNote(session *mgo.Session, project, name, task, usernote string)
 		return err
 	}
 	id := name + "_" + typ
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".usernote": usernote, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
@@ -1380,6 +1404,10 @@ func SetTaskPredate(session *mgo.Session, project, id, task, date string) (strin
 		return "", err
 	}
 	c := session.DB("project").C(project)
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return id, err
+	}
 	fullTime, err := ditime.ToFullTime(19, date)
 	if err != nil {
 		return id, err
