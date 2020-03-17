@@ -1544,7 +1544,7 @@ function setTaskMov(project, id, task, mov) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     $.ajax({
-        url: "/api/settaskmov",
+        url: "/api2/settaskmov",
         type: "post",
         data: {
             project: project,
