@@ -857,7 +857,12 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	if task == "all" {
 		items = searchItems
 	} else {
-
+		for _, i := range searchItems {
+			if _, found := i.Tasks[task]; !found {
+				continue
+			}
+			items = append(items, i)
+		}
 	}
 
 	f := excelize.NewFile()
