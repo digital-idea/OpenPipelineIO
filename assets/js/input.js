@@ -284,21 +284,21 @@ function addTask(project, id, task) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    let newItem = `<div class="row" id="${data.name}-task-${data.task}">
-					<div id="${data.name}-task-${data.task}-status">
-						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
+                    let newItem = `<div class="row" id="${data.id}-task-${data.task}">
+					<div id="${data.id}-task-${data.task}-status">
+						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
 					</div>
-					<div id="${data.name}-task-${data.task}-predate"></div>
-					<div id="${data.name}-task-${data.task}-date"></div>
-					<div id="${data.name}-task-${data.task}-user"></div>
-					<div id="${data.name}-task-${data.task}-playbutton"></div>
+					<div id="${data.id}-task-${data.task}-predate"></div>
+					<div id="${data.id}-task-${data.task}-date"></div>
+					<div id="${data.id}-task-${data.task}-user"></div>
+					<div id="${data.id}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
                         setEditTaskModal('${project}', '${data.id}', '${data.task}');
                         ">≡</span>
 					</div>
                     </div>`;
-                    document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
+                    document.getElementById(`${data.id}-tasks`).innerHTML = newItem + document.getElementById(`${data.id}-tasks`).innerHTML;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -322,21 +322,21 @@ function addTask(project, id, task) {
             },
             dataType: "json",
             success: function(data) {
-                let newItem = `<div class="row" id="${data.name}-task-${data.task}">
-					<div id="${data.name}-task-${data.task}-status">
-						<a class="mt-1 badge badge-assign statusbox">${data.task}</a>
+                let newItem = `<div class="row" id="${data.id}-task-${data.task}">
+					<div id="${data.id}-task-${data.task}-status">
+						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
 					</div>
-					<div id="${data.name}-task-${data.task}-predate"></div>
-					<div id="${data.name}-task-${data.task}-date"></div>
-					<div id="${data.name}-task-${data.task}-user"></div>
-					<div id="${data.name}-task-${data.task}-playbutton"></div>
+					<div id="${data.id}-task-${data.task}-predate"></div>
+					<div id="${data.id}-task-${data.task}-date"></div>
+					<div id="${data.id}-task-${data.task}-user"></div>
+					<div id="${data.id}-task-${data.task}-playbutton"></div>
 					<div class="ml-1">
 						<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
                         setEditTaskModal('${project}', '${data.id}', '${data.task}');
                         ">≡</span>
 					</div>
 				</div>`;
-                document.getElementById(`${data.name}-tasks`).innerHTML = newItem + document.getElementById(`${data.name}-tasks`).innerHTML;
+                document.getElementById(`${data.id}-tasks`).innerHTML = newItem + document.getElementById(`${data.id}-tasks`).innerHTML;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1559,9 +1559,9 @@ function setTaskMov(project, id, task, mov) {
         dataType: "json",
         success: function(data) {
             if (data.mov === "") {
-                document.getElementById(`${data.name}-task-${data.task}-playbutton`).innerHTML = "";
+                document.getElementById(`${data.id}-task-${data.task}-playbutton`).innerHTML = "";
             } else {
-                document.getElementById(`${data.name}-task-${data.task}-playbutton`).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
+                document.getElementById(`${data.id}-task-${data.task}-playbutton`).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
             }
         },
         error: function(request,status,error){
@@ -1654,9 +1654,9 @@ function setTaskUser(project, id, task, user) {
                 dataType: "json",
                 success: function(data) {
                     if (data.username === "") {
-                        document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
+                        document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+                        document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -1681,9 +1681,9 @@ function setTaskUser(project, id, task, user) {
             dataType: "json",
             success: function(data) {
                 if (data.username === "") {
-                    document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = "";
+                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.name}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
                 }
             },
             error: function(request,status,error){
@@ -1719,7 +1719,7 @@ function setTaskStatus(project, id, task, status) { // legacy
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                    document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<span class="finger mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1742,7 +1742,7 @@ function setTaskStatus(project, id, task, status) { // legacy
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<a class="mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</a>`;
+                document.getElementById(`${data.id}-task-${data.task}-status`).innerHTML = `<span class="finger mt-1 badge badge-${data.status} statusbox" title="${data.status}">${data.task}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3280,7 +3280,7 @@ function setAddTaskModal(project, id, type) {
             },
             dataType: "json",
             success: function(data) {
-                let tasks = data["Tasksettings"];
+                let tasks = data["tasksettings"];
                 let addtasks = document.getElementById('modal-addtask-taskname');
                 addtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){
@@ -3304,7 +3304,7 @@ function setAddTaskModal(project, id, type) {
             },
             dataType: "json",
             success: function(data) {
-                let tasks = data["Tasksettings"]
+                let tasks = data["tasksettings"]
                 let addtasks = document.getElementById('modal-addtask-taskname');
                 addtasks.innerHTML = "";
                 for (let i = 0; i < tasks.length; i++){

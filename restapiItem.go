@@ -3041,6 +3041,7 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project  string `json:"project"`
+		ID       string `json:"id"`
 		Name     string `json:"name"`
 		Task     string `json:"task"`
 		Username string `json:"username"`
@@ -3103,11 +3104,12 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	err = SetTaskUser(session, rcp.Project, rcp.Name, rcp.Task, rcp.Username)
+	id, err := SetTaskUser(session, rcp.Project, rcp.Name, rcp.Task, rcp.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.ID = id
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task User: %s %s", rcp.Task, rcp.Username), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {

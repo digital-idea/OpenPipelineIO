@@ -1243,27 +1243,27 @@ func RmTask(session *mgo.Session, project, id, taskname string) (string, error) 
 }
 
 // SetTaskUser 함수는 item에 task의 user 값을 셋팅한다.
-func SetTaskUser(session *mgo.Session, project, name, task, user string) error {
+func SetTaskUser(session *mgo.Session, project, name, task, user string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return err
+		return "", err
 	}
 	typ, err := Type(session, project, name)
 	if err != nil {
-		return err
+		return "", err
 	}
 	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return err
+		return id, err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".user": user, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 // SetTaskDate 함수는 item에 task에 마감일을 셋팅한다.
