@@ -289,22 +289,18 @@ $ curl -d "project=circle&name=mamma&task=fur&mov=/show/fur.mov" https://csi.laz
 ```
 
 #### python에서 샷 mov등록하기
-- 파이썬은 curl 대신 urllib2.request를 이용해서 post 할 수 있다.
 - 아래는 파이썬에서 urllib2.request를 이용하여 mov를 등록하는 예제이다.
 
-```
-def SetTaskmov(project, shot, task, mov):
-    """
-	CSI에 mov를 등록한다.
-	에러문자열을 반환한다. 에러가 없다면 ""문자를 반환한다.
-	"""
-	data = "project=%s&shot=&s&task=%s&mov=%s" % (project, shot, task, mov)
-	try:
-		request = urllib2.Request("https://csi.lazypic.org/api2/settaskmov", data)
-		err = urllib2.urlopen(request).read()
-	except:
-		err = "restAPI에 접근할 수 없습니다."
-	return err
+```python
+#coding:utf8
+import json
+import urllib2
+data = "project=TEMP&name=AS_0010&task=comp&mov=test.mov"
+request = urllib2.Request("https://csi.lazypic.org/api/settaskmov", data)
+key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
+request.add_header("Authorization", "Basic %s" % key)
+data = json.load(urllib2.urlopen(request))
+print(data)
 ```
 
 #### curl을 사용한 restAPI 셋팅
