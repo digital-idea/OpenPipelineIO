@@ -91,26 +91,24 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 
 ```python
 #!/usr/bin/python
-#coding:utf-8
+#coding:utf8
 import urllib2
 import json
-try:
-    request = urllib2.Request("https://csi.lazypic.org/api/shot?project=TEMP&name=OPN_0010")
-    key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
-    request.add_header("Authorization", "Basic %s" % key)
-    result = urllib2.urlopen(request)
-    data = json.load(result)
-except:
-    print("RestAPI에 연결할 수 없습니다.")
-    # 이후 에러처리 할 것
-if "error" in data:
-    print(data["error"])
-print(data["data"])
+
+request = urllib2.Request("https://csi.lazypic.org/api/shot?project=TEMP&name=OPN_0010")
+key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
+request.add_header("Authorization", "Basic %s" % key)
+result = urllib2.urlopen(request)
+data = json.load(result)
+print(data)
 ```
 
 #### 샷,에셋정보(Item) 가지고오기. Python3.7.x(블랜더)
 토큰키를 이용한 GET
 ```python
+#!/usr/bin/python
+#coding:utf8
+
 import requests
 endpoint = "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"
 auth = {'Authorization': 'Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH'}
@@ -120,6 +118,9 @@ print(r.json())
 
 사용자 토큰기를 `~/.csi/token` 파일에 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
 ```python
+#!/usr/bin/python
+#coding:utf8
+
 import os
 import requests
 from pathlib import Path
@@ -134,30 +135,23 @@ print(r.json())
 ```
 
 #### 샷,에셋(Item) 검색하기
-- 군함도에서 "SS"문자열이 들어간 아이템을 검색하는 예제이다.
+- gunhamdo 프로젝트에서 "SS"문자열이 들어간 아이템을 검색하는 예제이다.
 - 상태는 작업중인 아이템을 대상으로 한다.
 
-```
-#coding:utf-8
+```python
+#coding:utf8
 import json
 import urllib2
 
 restURL = "https://csi.lazypic.org/api2/items?project=gunhamdo&searchword=SS&wip=true"
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
+data = json.load(urllib2.urlopen(restURL))
+print(data)
 ```
 
 - url encoding 방법
 
-```
-#coding:utf-8
+```python
+#coding:utf8
 import json
 import urllib
 import urllib2
@@ -170,28 +164,22 @@ values["wip"] = "true"
 url = "https://csi.lazypic.org/api2/items"
 query = urllib.urlencode(values)
 restURL = url + "?" + query
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
+data = json.load(urllib2.urlopen(restURL))
+print(data)
 ```
+
 - 서치키워드에 다중 문자열 검색시 공백이 들어가면 공백을 + 사용
 
 ```
-restURL = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+박지섭&wip=true"
+restURL = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+배서영&wip=true"
 ```
 
 - url endcode 방법
 
-```
+```python
 values = {}
 values["project"] = "TEMP"
-values["searchword"] = "comp+김한웅"
+values["searchword"] = "comp+배서영"
 values["wip"] = "true"
 
 url = "https://csi.lazypic.org/api2/items"
@@ -207,74 +195,46 @@ restURL = url + "?" + query
 - https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX
 - https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001
 ```
-```
-#coding:utf-8
+
+```python
+#coding:utf8
 import json
 import urllib2
 
 restURL = "https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001"
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
+data = json.load(urllib2.urlopen(restURL))
+print(data)
 ```
 
 #### 시퀀스 리스트 검색하기
 - 프로젝트에 대한 시퀀스 리스트를 검색할 수 있다.
 - 'mkk3' 프로젝트의 시퀀스 리스트를 검색하는 예제이다.
 
-```
-- https://csi.lazypic.org/api/seqs?project=mkk3
-```
-```
-#coding:utf-8
+```python
+#coding:utf8
 import json
 import urllib2
 
 restURL = "https://csi.lazypic.org/api/seqs?project=mkk3"
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
+data = json.load(urllib2.urlopen(restURL))
+print(data)
 ```
 
 #### 샷 리스트 검색하기
 - 해당 프로젝트의 시퀀스 문자열이 포함된 샷 리스트를 검색할 수 있다.
 - 'mkk3'프로젝트의 "BNS"시퀀스에 대한 샷 리스트를 검색하는 예제이다.
 
-```
-- https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS
-- https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS_00
-```
-```
-#coding:utf-8
+```python
+#coding:utf8
 import json
 import urllib2
 
 restURL = "https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS"
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["data"])
+data = json.load(urllib2.urlopen(restURL))
+print(data)
 ```
 
-#### curl을 이용해서 샷 mov등록하기
-터미널에서 Curl명령을 이용하여 mov를 등록할 수 있습니다.
+#### curl 명령을 이용하여 mov등록하기
 
 circle 프로젝트 SS_0010 샷에 light 테스크에 /show/test.mov 등록하기.
 
@@ -297,28 +257,25 @@ import json
 import urllib2
 data = "project=TEMP&name=AS_0010&task=comp&mov=test.mov"
 request = urllib2.Request("https://csi.lazypic.org/api/settaskmov", data)
-key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
-request.add_header("Authorization", "Basic %s" % key)
+request.add_header("Authorization", "Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH")
 data = json.load(urllib2.urlopen(request))
 print(data)
 ```
 
-#### curl을 사용한 restAPI 셋팅
-- 아래 예제부터는 따로 코드를 작성하지 않고 curl 예제만 다룬다.
+#### curl을 사용한 날짜 지정
 
-- Task에 대한 시작일 설정
-```
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=0502" https://csi.lazypic.org/api/setstartdate
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02" https://csi.lazypic.org/api/setstartdate
+- Task 작업 시작일 설정
+```bash
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=0502" https://csi.lazypic.org/api/setstartdate
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02" https://csi.lazypic.org/api/setstartdate
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02T14:45:34%2B09:00" https://csi.lazypic.org/api/setstartdate
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&startdate=2018-05-02T14:45:34%2B09:00" https://csi.lazypic.org/api/setstartdate
 ```
 
-- Task에 대한 1차 마감일 설정
-```
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=0605" https://csi.lazypic.org/api/setpredate
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" https://csi.lazypic.org/api/setpredate
+- Task 1차 마감일 설정
+```bash
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=0605" https://csi.lazypic.org/api/setpredate
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" https://csi.lazypic.org/api/setpredate
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
-curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" https://csi.lazypic.org/api/setpredate
+$ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" https://csi.lazypic.org/api/setpredate
 ```
-
