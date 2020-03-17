@@ -8,31 +8,6 @@ import (
 	"time"
 )
 
-func itemStatus2color(num string) string {
-	switch num {
-	case OMIT:
-		return "#FC8F55"
-	case CONFIRM:
-		return "#54D6FD"
-	case WIP:
-		return "#77BB40"
-	case READY:
-		return "#BEEF37"
-	case ASSIGN:
-		return "#FFF76B"
-	case OUT:
-		return "#EEA4F1"
-	case DONE:
-		return "#F0F1F0"
-	case HOLD:
-		return "#989898"
-	case NONE:
-		return "#CCCDCC"
-	default:
-		return "#CCCDCC"
-	}
-}
-
 // projectStatus2color 템플릿 함수는 프로젝트 상태를 받아서 Bootstrap4 컬러로 변환합니다.
 func projectStatus2color(status ProjectStatus) string {
 	switch status {

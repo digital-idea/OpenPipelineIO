@@ -864,6 +864,27 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			items = append(items, i)
 		}
 	}
+	// status에 필요한 컬러를 불러온다.
+	bgcolor := make(map[string]string)
+	status, err := AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, s := range status {
+		bgcolor[s.ID] = s.BGColor
+	}
+	bgcolor[""] = "#FFFFFF"
+	bgcolor["0"] = "#3D3B3B" // None, legacy
+	bgcolor["1"] = "#606161" // Hold, legacy
+	bgcolor["2"] = "#E4D2B7" // Done, legacy
+	bgcolor["3"] = "#EEA4F1" // Out, legacy
+	bgcolor["4"] = "#FFF76B" // Assign, legacy
+	bgcolor["5"] = "#BEEF37" // Ready, legacy
+	bgcolor["6"] = "#77BB40" // Wip, legacy
+	bgcolor["7"] = "#54D6FD" // Confirm, legacy
+	bgcolor["8"] = "#FC9F55" // Omit, legacy
+	bgcolor["9"] = "#FFFFFF" // Client, legacy
 
 	f := excelize.NewFile()
 	sheet := "Sheet1"
@@ -954,18 +975,35 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
+		// 기존에 Static한 상태의 컬러를 사용한다. legacy
 		statusStyle, err := f.NewStyle(
-			fmt.Sprintf(`
-			{"alignment":{"horizontal":"center","vertical":"center"},
-			"fill":{"type":"pattern","color":["%s"],"pattern":1},
-			"border":[
-				{"type":"left","color":"888888","style":1},
-				{"type":"top","color":"888888","style":1},
-				{"type":"bottom","color":"888888","style":1},
-				{"type":"right","color":"888888","style":1}]
-				}`, itemStatus2color(i.Status)))
+			fmt.Sprintf(`{
+				"alignment":{"horizontal":"center","vertical":"center"},
+				"fill":{"type":"pattern","color":["%s"],"pattern":1},
+				"border":[
+					{"type":"left","color":"888888","style":1},
+					{"type":"top","color":"888888","style":1},
+					{"type":"bottom","color":"888888","style":1},
+					{"type":"right","color":"888888","style":1}]
+				}`, bgcolor[i.Status]))
 		if err != nil {
 			log.Println(err)
+		}
+		// 다이나나믹 Status가 설정되어 있다면 해당 컬러를 사용한다.
+		if i.StatusV2 != "" {
+			statusStyle, err = f.NewStyle(
+				fmt.Sprintf(`{
+					"alignment":{"horizontal":"center","vertical":"center"},
+					"fill":{"type":"pattern","color":["%s"],"pattern":1},
+					"border":[
+						{"type":"left","color":"888888","style":1},
+						{"type":"top","color":"888888","style":1},
+						{"type":"bottom","color":"888888","style":1},
+						{"type":"right","color":"888888","style":1}]
+					}`, bgcolor[i.StatusV2]))
+			if err != nil {
+				log.Println(err)
+			}
 		}
 		f.SetCellValue(sheet, pos, Status2capString(i.Status))
 		f.SetCellStyle(sheet, pos, pos, statusStyle)
@@ -1046,18 +1084,35 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
+			// 기존 Static Status 일 때 legacy
 			statusStyle, err = f.NewStyle(
-				fmt.Sprintf(`
-				{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
-				"fill":{"type":"pattern","color":["%s"],"pattern":1},
-				"border":[
-					{"type":"left","color":"888888","style":1},
-					{"type":"top","color":"888888","style":1},
-					{"type":"bottom","color":"888888","style":1},
-					{"type":"right","color":"888888","style":1}]
-					}`, itemStatus2color(i.Tasks[t].Status)))
+				fmt.Sprintf(`{
+					"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+					"fill":{"type":"pattern","color":["%s"],"pattern":1},
+					"border":[
+						{"type":"left","color":"888888","style":1},
+						{"type":"top","color":"888888","style":1},
+						{"type":"bottom","color":"888888","style":1},
+						{"type":"right","color":"888888","style":1}]
+					}`, bgcolor[i.Tasks[t].Status]))
 			if err != nil {
 				log.Println(err)
+			}
+			// 만약 다이나믹 Status 일 때는 해당 컬러를 사용한다.
+			if i.Tasks[t].StatusV2 != "" {
+				statusStyle, err = f.NewStyle(
+					fmt.Sprintf(`{
+						"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+						"fill":{"type":"pattern","color":["%s"],"pattern":1},
+						"border":[
+							{"type":"left","color":"888888","style":1},
+							{"type":"top","color":"888888","style":1},
+							{"type":"bottom","color":"888888","style":1},
+							{"type":"right","color":"888888","style":1}]
+						}`, bgcolor[i.Tasks[t].StatusV2]))
+				if err != nil {
+					log.Println(err)
+				}
 			}
 			text := Status2capString(i.Tasks[t].Status)
 			text += "\n" + i.Tasks[t].User
