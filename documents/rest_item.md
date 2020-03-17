@@ -96,8 +96,7 @@ import urllib2
 import json
 
 request = urllib2.Request("https://csi.lazypic.org/api/shot?project=TEMP&name=OPN_0010")
-key = "JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH"
-request.add_header("Authorization", "Basic %s" % key)
+request.add_header("Authorization", "Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH")
 result = urllib2.urlopen(request)
 data = json.load(result)
 print(data)
@@ -142,9 +141,8 @@ print(r.json())
 #coding:utf8
 import json
 import urllib2
-
-restURL = "https://csi.lazypic.org/api2/items?project=gunhamdo&searchword=SS&wip=true"
-data = json.load(urllib2.urlopen(restURL))
+endpoint = "https://csi.lazypic.org/api2/items?project=gunhamdo&searchword=SS&wip=true"
+data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
 
@@ -161,48 +159,31 @@ values["project"] = "yeomryeok"
 values["searchword"] = "shot"
 values["wip"] = "true"
 
-url = "https://csi.lazypic.org/api2/items"
+endpoint = "https://csi.lazypic.org/api2/items"
 query = urllib.urlencode(values)
-restURL = url + "?" + query
-data = json.load(urllib2.urlopen(restURL))
+endpoint = endpoint + "?" + query
+data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
 
 - 서치키워드에 다중 문자열 검색시 공백이 들어가면 공백을 + 사용
 
 ```
-restURL = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+배서영&wip=true"
+endpoint = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+배서영&wip=true"
 ```
 
-- url endcode 방법
-
-```python
-values = {}
-values["project"] = "TEMP"
-values["searchword"] = "comp+배서영"
-values["wip"] = "true"
-
-url = "https://csi.lazypic.org/api2/items"
-query = urllib.urlencode(values)
-restURL = url + "?" + query
-```
 
 #### 샷,에셋에 대한 이름(Name) 검색하기
 - 샷, 에셋에 대하여 문자열이 포함된 이름(Name)으로 검색할 수 있다.
 - adventure 프로젝트의 "R0VFX" 이름을 가진 샷, 에셋 정보를  검색하는 예제이다.
-
-```
-- https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX
-- https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001
-```
 
 ```python
 #coding:utf8
 import json
 import urllib2
 
-restURL = "https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX_sh001"
-data = json.load(urllib2.urlopen(restURL))
+endpoint = "https://csi.lazypic.org/api/searchname?project=adventure&name=R0VFX"
+data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
 
@@ -215,8 +196,8 @@ print(data)
 import json
 import urllib2
 
-restURL = "https://csi.lazypic.org/api/seqs?project=mkk3"
-data = json.load(urllib2.urlopen(restURL))
+endpoint = "https://csi.lazypic.org/api/seqs?project=mkk3"
+data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
 
@@ -229,8 +210,8 @@ print(data)
 import json
 import urllib2
 
-restURL = "https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS"
-data = json.load(urllib2.urlopen(restURL))
+endpoint = "https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS"
+data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
 
