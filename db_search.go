@@ -123,7 +123,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			if len(selectTasks) != 0 {
 				// 유연한 status
 				for _, task := range selectTasks {
-					query = append(query, bson.M{"tasks." + task + ".status": status})
+					query = append(query, bson.M{"tasks." + task + ".statusv2": status})
 				}
 
 				// legacy
@@ -158,7 +158,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 					return nil, err
 				}
 				for _, task := range tasksettings {
-					query = append(query, bson.M{"tasks." + task.ID + ".status": status})
+					query = append(query, bson.M{"tasks." + task.ID + ".statusv2": status})
 				}
 				// legacy
 				switch status {
@@ -258,7 +258,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	if len(selectTasks) == 0 {
 		// 검색바가 All 이면 검색바 옵션 True status 리스트만 쿼리에 추가한다.
 		for _, status := range op.TrueStatus {
-			statusQueries = append(statusQueries, bson.M{"status": status})
+			statusQueries = append(statusQueries, bson.M{"statusv2": status})
 		}
 		// legacy
 		if op.Assign {
@@ -294,7 +294,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 		// for문을 돌면서 해당 쿼리를 추가한다.
 		for _, status := range op.TrueStatus {
 			for _, task := range selectTasks {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": status})
+				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".statusv2": status})
 			}
 		}
 		// legacy
