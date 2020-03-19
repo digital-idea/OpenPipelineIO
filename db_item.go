@@ -742,7 +742,7 @@ func setTaskMov(session *mgo.Session, project, name, task, mov string) (string, 
 	if err != nil {
 		return id, err
 	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".mov": mov, task + ".mdate": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".mov": mov, "tasks." + task + ".mdate": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return id, err
 	}

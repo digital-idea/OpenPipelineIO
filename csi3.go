@@ -389,7 +389,7 @@ func main() {
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.
-		// 예: $ csi3 -date 2016-12-05 -play
+		// 예: $ csi3 -date 2020-03-19 -play
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
 			log.Fatal(err)
@@ -397,8 +397,7 @@ func main() {
 		defer session.Close()
 		dbProjectlist, err := Projectlist(session)
 		if err != nil {
-			log.Println(err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 		// 해당프로젝트만 데일리를 위한 옵션
 		// 만약 담당 프로젝트 감독님이 오면 해당 프로젝트 영상만 띄운다.
@@ -409,7 +408,6 @@ func main() {
 				log.Fatalln(err)
 			}
 		}
-
 		var playlist []string
 		for _, project := range reviewProjectlist {
 			op := SearchOption{
@@ -421,14 +419,12 @@ func main() {
 				Confirm:    true,
 				Done:       true,
 				Out:        true,
-				Sortkey:    "slug",
+				Sortkey:    "name",
 			}
 			items, err := Searchv2(session, op)
 			if err != nil {
-				log.Println(err)
-				os.Exit(1)
+				log.Fatalln(err)
 			}
-
 			// 만약 태스크명을 입력받았다면, 태스크명이 유효한지 체크하는 부분.
 			if *flagTask != "" {
 				hastask := false
@@ -450,6 +446,7 @@ func main() {
 				tasks, err := TasksettingNames(session)
 				if err != nil {
 					log.Println(err)
+					continue
 				}
 				for _, t := range tasks {
 					if _, found := item.Tasks[t]; !found {
