@@ -145,7 +145,7 @@ func webserver(port string) {
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
 	http.HandleFunc("/", handleIndex)
-	http.HandleFunc("/searchsubmitv2", handleSearchSubmitv2)
+	http.HandleFunc("/searchsubmitv2", handleSearchSubmit)
 	http.HandleFunc("/help", handleHelp)
 	http.HandleFunc("/setellite", handleSetellite)
 	http.HandleFunc("/uploadsetellite", handleUploadSetellite)

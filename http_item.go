@@ -22,7 +22,7 @@ import (
 )
 
 // handleSearchSubmitv2 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
-func handleSearchSubmitv2(w http.ResponseWriter, r *http.Request) {
+func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return

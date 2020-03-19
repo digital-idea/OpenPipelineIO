@@ -15,7 +15,7 @@ type SearchOption struct {
 	Sortkey    string // 정렬방식
 	Template   string // 템플릿 이름
 	Task       string // Task명
-	// 상태
+	// 상태 legacy
 	Assign  bool
 	Ready   bool
 	Wip     bool
@@ -25,6 +25,8 @@ type SearchOption struct {
 	Hold    bool
 	Out     bool
 	None    bool
+	// 상태
+	TrueStatus []string // true 상태리스트
 	// 요소
 	Shot   bool
 	Assets bool

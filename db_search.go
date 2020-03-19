@@ -119,7 +119,14 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"type": "asset"})
 		} else if strings.HasPrefix(word, "status:") {
 			status := strings.ToLower(strings.TrimPrefix(word, "status:"))
+			// 검색바에서 task를 선택하지 않았다면,
 			if len(selectTasks) != 0 {
+				// 유연한 status
+				for _, task := range selectTasks {
+					query = append(query, bson.M{"tasks." + task + ".status": status})
+				}
+
+				// legacy
 				for _, task := range selectTasks {
 					switch status {
 					case "assign":
@@ -142,7 +149,18 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 						query = append(query, bson.M{"tasks." + task + ".status": NONE})
 					}
 				}
+
 			} else {
+				// 검색바에서 Task가 All 이면
+				// 유연한 status
+				tasksettings, err := AllTaskSettings(session)
+				if err != nil {
+					return nil, err
+				}
+				for _, task := range tasksettings {
+					query = append(query, bson.M{"tasks." + task.ID + ".status": status})
+				}
+				// legacy
 				switch status {
 				case "assign":
 					query = append(query, bson.M{"status": ASSIGN})
@@ -238,6 +256,11 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 
 	statusQueries := []bson.M{}
 	if len(selectTasks) == 0 {
+		// 검색바가 All 이면 검색바 옵션 True status 리스트만 쿼리에 추가한다.
+		for _, status := range op.TrueStatus {
+			statusQueries = append(statusQueries, bson.M{"status": status})
+		}
+		// legacy
 		if op.Assign {
 			statusQueries = append(statusQueries, bson.M{"status": ASSIGN})
 		}
@@ -266,6 +289,15 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			statusQueries = append(statusQueries, bson.M{"status": NONE})
 		}
 	} else {
+		// 만약 검색바에서 Task가 선택되어 있다면..
+		// op(SearchOption)에서 true 상태 리스트만 가지고 온다.
+		// for문을 돌면서 해당 쿼리를 추가한다.
+		for _, status := range op.TrueStatus {
+			for _, task := range selectTasks {
+				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": status})
+			}
+		}
+		// legacy
 		for _, task := range selectTasks {
 			if op.Assign {
 				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": ASSIGN})
