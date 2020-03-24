@@ -267,25 +267,40 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// 아무 상태도 선택되어있지 않다면 기본 상태설정으로 변경한다.
+	// 아무 상태도 선택되어있지 않다면 기본 상태설정으로 변경한다. // legacy
 	if rcp.SearchOption.isStatusOff() {
-		rcp.SearchOption.setStatusDefault()
+		err := rcp.SearchOption.setStatusDefaultV1()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
-	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s",
+	// 아무 상태도 선택되어있지 않다면 기본 상태설정으로 변경한다. // V2
+	if len(rcp.SearchOption.TrueStatus) == 0 {
+		err := rcp.SearchOption.setStatusDefaultV2()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
-		rcp.SearchOption.Assign,
-		rcp.SearchOption.Ready,
-		rcp.SearchOption.Wip,
-		rcp.SearchOption.Confirm,
-		rcp.SearchOption.Done,
-		rcp.SearchOption.Omit,
-		rcp.SearchOption.Hold,
-		rcp.SearchOption.Out,
-		rcp.SearchOption.None,
+		rcp.SearchOption.SearchbarTemplate,
+		rcp.SearchOption.Assign, // legacy
+		rcp.SearchOption.Ready, // legacy
+		rcp.SearchOption.Wip, // legacy
+		rcp.SearchOption.Confirm, // legacy
+		rcp.SearchOption.Done, // legacy
+		rcp.SearchOption.Omit, // legacy
+		rcp.SearchOption.Hold, // legacy
+		rcp.SearchOption.Out, // legacy
+		rcp.SearchOption.None, // legacy
 		rcp.SearchOption.Task,
 		rcp.SearchOption.Searchword,
+		strings.Join(rcp.SearchOption.TrueStatus, ","),
 	)
 	http.Redirect(w, r, url, http.StatusSeeOther)
 }

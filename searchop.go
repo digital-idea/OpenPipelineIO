@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+	"strings"
 
 	"gopkg.in/mgo.v2"
 )
@@ -36,40 +37,89 @@ type SearchOption struct {
 
 // SearchOption과 관련된 메소드
 
-func (op *SearchOption) setStatusAll() {
-	op.Assign = true
-	op.Ready = true
-	op.Wip = true
-	op.Confirm = true
-	op.Done = true
-	op.Omit = true
-	op.Hold = true
-	op.Out = true
-	op.None = true
+func (op *SearchOption) setStatusAll() error {
+	op.Assign = true  // legacy
+	op.Ready = true   // legacy
+	op.Wip = true     // legacy
+	op.Confirm = true // legacy
+	op.Done = true    // legacy
+	op.Omit = true    // legacy
+	op.Hold = true    // legacy
+	op.Out = true     // legacy
+	op.None = true    // legacy
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	status, err := AllStatus(session)
+	if err != nil {
+		return err
+	}
+	for _, s := range status {
+		op.TrueStatus = append(op.TrueStatus, s.ID)
+	}
+	return nil
 }
 
-func (op *SearchOption) setStatusDefault() {
-	op.Assign = true
-	op.Ready = true
-	op.Wip = true
-	op.Confirm = true
-	op.Done = false
-	op.Omit = false
-	op.Hold = false
-	op.Out = false
-	op.None = false
+func (op *SearchOption) setStatusDefaultV1() error {
+	op.Assign = true  // legacy
+	op.Ready = true   // legacy
+	op.Wip = true     // legacy
+	op.Confirm = true // legacy
+	op.Done = false   // legacy
+	op.Omit = false   // legacy
+	op.Hold = false   // legacy
+	op.Out = false    // legacy
+	op.None = false   // legacy
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	status, err := AllStatus(session)
+	if err != nil {
+		return err
+	}
+	for _, s := range status {
+		if !s.DefaultOn {
+			continue
+		}
+		op.TrueStatus = append(op.TrueStatus, s.ID)
+	}
+	return nil
+}
+
+func (op *SearchOption) setStatusDefaultV2() error {
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+	status, err := AllStatus(session)
+	if err != nil {
+		return err
+	}
+	for _, s := range status {
+		if !s.DefaultOn {
+			continue
+		}
+		op.TrueStatus = append(op.TrueStatus, s.ID)
+	}
+	return nil
 }
 
 func (op *SearchOption) setStatusNone() {
-	op.Assign = false
-	op.Ready = false
-	op.Wip = false
-	op.Confirm = false
-	op.Done = false
-	op.Omit = false
-	op.Hold = false
-	op.Out = false
-	op.None = false
+	op.Assign = false  // legacy
+	op.Ready = false   // legacy
+	op.Wip = false     // legacy
+	op.Confirm = false // legacy
+	op.Done = false    // legacy
+	op.Omit = false    // legacy
+	op.Hold = false    // legacy
+	op.Out = false     // legacy
+	op.None = false    // legacy
+	op.TrueStatus = []string{}
 }
 
 // isStatusOff 메소드는 모든 상태가 꺼저 있는지 체크한다.
@@ -82,21 +132,27 @@ func (op *SearchOption) isStatusOff() bool {
 
 func handleRequestToSearchOption(r *http.Request) SearchOption {
 	q := r.URL.Query()
-	op := SearchOption{
-		Project:    q.Get("project"),
-		Searchword: q.Get("searchword"),
-		Sortkey:    q.Get("sortkey"),
-		Template:   q.Get("template"),
-		Task:       q.Get("task"),
-		Assign:     str2bool(q.Get("assign")),
-		Ready:      str2bool(q.Get("ready")),
-		Wip:        str2bool(q.Get("wip")),
-		Confirm:    str2bool(q.Get("confirm")),
-		Done:       str2bool(q.Get("done")),
-		Omit:       str2bool(q.Get("omit")),
-		Hold:       str2bool(q.Get("hold")),
-		Out:        str2bool(q.Get("out")),
-		None:       str2bool(q.Get("none")),
+	op := SearchOption{}
+	op.Project = q.Get("project")
+	op.Searchword = q.Get("searchword")
+	op.Sortkey = q.Get("sortkey")
+	op.Template = q.Get("template")
+	op.SearchbarTemplate = q.Get("searchbartemplate")
+	op.Task = q.Get("task")
+	op.Assign = str2bool(q.Get("assign"))   // legacy
+	op.Ready = str2bool(q.Get("ready"))     // legacy
+	op.Wip = str2bool(q.Get("wip"))         // legacy
+	op.Confirm = str2bool(q.Get("confirm")) // legacy
+	op.Done = str2bool(q.Get("done"))       // legacy
+	op.Omit = str2bool(q.Get("omit"))       // legacy
+	op.Hold = str2bool(q.Get("hold"))       // legacy
+	op.Out = str2bool(q.Get("out"))         // legacy
+	op.None = str2bool(q.Get("none"))       // legacy
+	for _, s := range strings.Split(q.Get("truestatus"), ",") {
+		if s == "" {
+			continue
+		}
+		op.TrueStatus = append(op.TrueStatus, s)
 	}
 	return op
 }
