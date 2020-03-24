@@ -4,7 +4,11 @@
     <div id="floatingmenu">
         {{template "navbar" .}}
         <div id="searchbox">
-            {{template "searchbarV1" .}}
+            {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}
+                {{template "searchbarV1" .}}
+            {{else}}
+                {{template "searchbarV2" .}}
+            {{end}}
             {{template "deadlinelist" .}}
             {{template "taglist" .}}
             {{template "info2" .}}

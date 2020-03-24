@@ -285,19 +285,27 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// 만약 SearchbarTempate 값이 설정되어 있다면 해당 SearchbarTemplate으로 변경한다.
+	rcp.SearchOption.SearchbarTemplate = "searchbarV1"
+	q := r.URL.Query()
+	searchbarTemplate := q.Get("searchbartemplate")
+	if searchbarTemplate != "" {
+		rcp.SearchOption.SearchbarTemplate = searchbarTemplate
+	}
+
 	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
 		rcp.SearchOption.SearchbarTemplate,
-		rcp.SearchOption.Assign, // legacy
-		rcp.SearchOption.Ready, // legacy
-		rcp.SearchOption.Wip, // legacy
+		rcp.SearchOption.Assign,  // legacy
+		rcp.SearchOption.Ready,   // legacy
+		rcp.SearchOption.Wip,     // legacy
 		rcp.SearchOption.Confirm, // legacy
-		rcp.SearchOption.Done, // legacy
-		rcp.SearchOption.Omit, // legacy
-		rcp.SearchOption.Hold, // legacy
-		rcp.SearchOption.Out, // legacy
-		rcp.SearchOption.None, // legacy
+		rcp.SearchOption.Done,    // legacy
+		rcp.SearchOption.Omit,    // legacy
+		rcp.SearchOption.Hold,    // legacy
+		rcp.SearchOption.Out,     // legacy
+		rcp.SearchOption.None,    // legacy
 		rcp.SearchOption.Task,
 		rcp.SearchOption.Searchword,
 		strings.Join(rcp.SearchOption.TrueStatus, ","),
