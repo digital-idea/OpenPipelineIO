@@ -10,21 +10,21 @@ import (
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
-	Project    string // 선택한 프로젝트
-	Searchword string // 검색어
-	Sortkey    string // 정렬방식
-	Template   string // 템플릿 이름
-	Task       string // Task명
-	// 상태 legacy
-	Assign  bool
-	Ready   bool
-	Wip     bool
-	Confirm bool
-	Done    bool
-	Omit    bool
-	Hold    bool
-	Out     bool
-	None    bool
+	Project           string // 선택한 프로젝트
+	Searchword        string // 검색어
+	Sortkey           string // 정렬방식
+	Template          string // 템플릿 이름
+	SearchbarTemplate string // 검색바 탬플릿 이름
+	Task              string // Task명
+	Assign            bool   // legacy
+	Ready             bool   // legacy
+	Wip               bool   // legacy
+	Confirm           bool   // legacy
+	Done              bool   // legacy
+	Omit              bool   // legacy
+	Hold              bool   // legacy
+	Out               bool   // legacy
+	None              bool   // legacy
 	// 상태
 	TrueStatus []string // true 상태리스트
 	// 요소
