@@ -2661,6 +2661,7 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
+		Name    string `json:"name"`
 		Task    string `json:"task"`
 		Status  string `json:"status"`
 		UserID  string `json:"userid"`
@@ -2684,47 +2685,44 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		case "status":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Status = v
+	rcp.Project = r.FormValue("project")
+	if rcp.Project == "" {
+		if err != nil {
+			http.Error(w, "프로젝트가 빈 문자열 입니다", http.StatusBadRequest)
+			return
 		}
 	}
+	rcp.Name = r.FormValue("name")
+	if rcp.Name == "" {
+		if err != nil {
+			http.Error(w, "name이 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Task = r.FormValue("task")
+	if rcp.Task == "" {
+		if err != nil {
+			http.Error(w, "task가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Status = r.FormValue("status")
+	if rcp.Status == "" {
+		if err != nil {
+			http.Error(w, "status가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.ID = r.FormValue("id")
+	if rcp.ID == "" {
+		typ, err := Type(session, rcp.Project, rcp.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rcp.ID = rcp.Name + "_" + typ
+	}
+
 	// task가 존재하는지 체크한다.
 	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
@@ -2769,6 +2767,7 @@ func handleAPI2SetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
+		Name    string `json:"name"`
 		Task    string `json:"task"`
 		Status  string `json:"status"`
 	}
@@ -2790,37 +2789,42 @@ func handleAPI2SetTaskStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		case "status":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Status = v
+	rcp.Project = r.FormValue("project")
+	if rcp.Project == "" {
+		if err != nil {
+			http.Error(w, "프로젝트가 빈 문자열 입니다", http.StatusBadRequest)
+			return
 		}
+	}
+	rcp.Name = r.FormValue("name")
+	if rcp.Name == "" {
+		if err != nil {
+			http.Error(w, "name이 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Task = r.FormValue("task")
+	if rcp.Task == "" {
+		if err != nil {
+			http.Error(w, "task가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Status = r.FormValue("status")
+	if rcp.Status == "" {
+		if err != nil {
+			http.Error(w, "status가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.ID = r.FormValue("id")
+	if rcp.ID == "" {
+		typ, err := Type(session, rcp.Project, rcp.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rcp.ID = rcp.Name + "_" + typ
 	}
 	// task가 존재하는지 체크한다.
 	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)

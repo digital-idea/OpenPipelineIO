@@ -27,7 +27,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/deadline2d | 2D마감일 리스트 | project | `$ curl -d "project=TEMP" https://csi.lazypic.org/api/deadline2d` |
 | /api/deadline3d | 3D마감일 리스트 | project | `$ curl "https://csi.lazypic.org/api/deadline3d?project=TEMP"` |
 | /api/rmitemid | 아이템 삭제 | project, id | `$ curl -d "project=circle&id=SS_0010_org" https://csi.lazypic.org/api/rmitemid` |
-| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/setstatus` |
+| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/settaskstatus` |
+| /api2/settaskstatus | 상태수정 | project, name, task, status | `$ curl -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api2/settaskstatus` |
 | /api/setassigntask | Assign 설정,해제 | project, name, task, status | `$ curl -d "project=TEMP&name=SS_0030&task=mg&status=true" https://csi.lazypic.org/api/setassigntask` |
 | /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -d "project=TEMP&name=mamma&task=light&user=김한웅" https://192.168.219.104/api/settaskuser` |
 | /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |

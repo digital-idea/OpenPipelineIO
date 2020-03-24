@@ -1144,8 +1144,11 @@ func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (st
 	t.StatusV2 = status
 	item.Tasks[task] = t
 
+	// 앞으로 바뀔 상태
 	c := session.DB("project").C(project)
+	// 아이템 업데이트 시간을 변경한다.
 	item.Updatetime = time.Now().Format(time.RFC3339)
+	// 입력받은 상태가 글로벌 status에 존재하는지 체크한다.
 	globalStatus, err := AllStatus(session)
 	if err != nil {
 		return item.Name, err
@@ -1160,6 +1163,7 @@ func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (st
 	if !hasStatus {
 		return item.Name, fmt.Errorf("%s status가 존재하지 않습니다", status)
 	}
+	// 아이템의 statusV2를 업데이트한다.
 	item.updateStatusV2(globalStatus)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
