@@ -57,23 +57,23 @@ func Status2capString(num string) string {
 // Status2string 템플릿함수는 status 값을 받아서 소문자를 반환한다.
 func Status2string(status string) string {
 	switch status {
-	case OMIT:
+	case OMIT, "omit":
 		return "omit"
-	case CONFIRM:
+	case CONFIRM, "confirm":
 		return "confirm"
-	case WIP:
+	case WIP, "wip":
 		return "wip"
-	case READY:
+	case READY, "ready":
 		return "ready"
-	case ASSIGN:
+	case ASSIGN, "assign":
 		return "assign"
-	case OUT:
+	case OUT, "out":
 		return "out"
-	case DONE:
+	case DONE, "done":
 		return "done"
-	case HOLD:
+	case HOLD, "hold":
 		return "hold"
-	case NONE:
+	case NONE, "none":
 		return "none"
 	default:
 		return "none"
