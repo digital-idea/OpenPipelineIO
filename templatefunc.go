@@ -642,3 +642,13 @@ func mapToSlice(tasks map[string]Task, ordermap map[string]float64) []Task {
 	}
 	return results
 }
+
+// hasStatus는 statuslist에 status가 존재하는지 체크한다. 존재하면 true를 반환한다.
+func hasStatus(statuslist []string, status string) bool {
+	for _, s := range statuslist {
+		if s == status {
+			return true
+		}
+	}
+	return false
+}

@@ -65,6 +65,7 @@ var funcMap = template.FuncMap{
 	"userInfo":            userInfo,
 	"onlyID":              onlyID,
 	"mapToSlice":          mapToSlice,
+	"hasStatus":           hasStatus,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

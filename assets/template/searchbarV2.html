@@ -48,6 +48,31 @@
     <div class="row justify-content-center align-items-center ml-3 mr-3">
         <div class="row pl-3 pr-3">
             <div class="col">
+				{{range .Status}}
+					<span class="btn btn-sm mb-2 bg-{{.ID}}">
+						<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
+						<a class="text-{{.ID}} statusuri" href="/inputmode?
+												project={{$.SearchOption.Project}}&
+												searchword=status:{{.ID}}&
+												sortkey={{$.SearchOption.Sortkey}}&
+												truestatus={{.ID}}&
+												ready={{$.SearchOption.Ready}}&
+												wip={{$.SearchOption.Wip}}&
+												confirm={{$.SearchOption.Confirm}}&
+												done={{$.SearchOption.Done}}&
+												omit={{$.SearchOption.Omit}}&
+												hold={{$.SearchOption.Hold}}&
+												out={{$.SearchOption.Out}}&
+												none={{$.SearchOption.None}}&
+												template={{$.SearchOption.Template}}&
+												searchbartemplate=searchvarV2&
+												truestatus={{.ID}}&
+												task={{$.SearchOption.Task}}">
+												{{.ID}}</a>
+						<span class="badge badge-light">{{$.Searchnum.Assign}}</span>
+					</span>
+				{{end}}
+				<!--
 				<span class="btn btn-sm mb-2 bg-assign">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-assign" onchange="changeStatusURI('assign');" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>
 					<a class="text-assign statusuri" href="/inputmode?
@@ -223,6 +248,7 @@
 										task={{.SearchOption.Task}}">none</a>
 					<span class="badge badge-light">{{.Searchnum.None}}</span>
 				</span>
+				-->
             </div>
         </div>
         <div class="row pl-3 pr-3">
