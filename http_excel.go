@@ -907,9 +907,10 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	// 제목생성
 	titles := []string{
 		"Name",
+		"Type",
 		"Rollnumber",
 		"Thumbnail",
-		"Type(2d/3d)",
+		"ShotType(2d/3d)",
 		"상태",
 		"작업내용",
 		"수정사항",
@@ -950,22 +951,29 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		f.SetCellValue(sheet, pos, i.Name)
 		f.SetCellStyle(sheet, pos, pos, style)
-		// 롤넘버
+		// Type
 		pos, err = excelize.CoordinatesToCellName(2, n+2)
+		if err != nil {
+			log.Println(err)
+		}
+		f.SetCellValue(sheet, pos, i.Type)
+		f.SetCellStyle(sheet, pos, pos, style)
+		// 롤넘버
+		pos, err = excelize.CoordinatesToCellName(3, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.Rnum)
 		f.SetCellStyle(sheet, pos, pos, style)
 		// 썸네일
-		pos, err = excelize.CoordinatesToCellName(3, n+2)
+		pos, err = excelize.CoordinatesToCellName(4, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
 		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// Type
-		pos, err = excelize.CoordinatesToCellName(4, n+2)
+		pos, err = excelize.CoordinatesToCellName(5, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -976,7 +984,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		f.SetCellStyle(sheet, pos, pos, style)
 		// 상태
-		pos, err = excelize.CoordinatesToCellName(5, n+2)
+		pos, err = excelize.CoordinatesToCellName(6, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -1019,14 +1027,14 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 
 		f.SetCellStyle(sheet, pos, pos, statusStyle)
 		// 작업내용
-		pos, err = excelize.CoordinatesToCellName(6, n+2)
+		pos, err = excelize.CoordinatesToCellName(7, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.Note.Text)
 		f.SetCellStyle(sheet, pos, pos, textStyle)
 		// 수정사항
-		pos, err = excelize.CoordinatesToCellName(7, n+2)
+		pos, err = excelize.CoordinatesToCellName(8, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -1037,7 +1045,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		f.SetCellValue(sheet, pos, strings.Join(comments, "\n"))
 		f.SetCellStyle(sheet, pos, pos, textStyle)
 		// Tags
-		pos, err = excelize.CoordinatesToCellName(8, n+2)
+		pos, err = excelize.CoordinatesToCellName(9, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -1045,42 +1053,42 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 
 		f.SetCellStyle(sheet, pos, pos, style)
 		// JustTimecodeIn
-		pos, err = excelize.CoordinatesToCellName(9, n+2)
+		pos, err = excelize.CoordinatesToCellName(10, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.JustTimecodeIn)
 		f.SetCellStyle(sheet, pos, pos, style)
 		// JustTimecodeOut
-		pos, err = excelize.CoordinatesToCellName(10, n+2)
+		pos, err = excelize.CoordinatesToCellName(11, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.JustTimecodeOut)
 		f.SetCellStyle(sheet, pos, pos, style)
 		// ScanTimecodeIn
-		pos, err = excelize.CoordinatesToCellName(11, n+2)
+		pos, err = excelize.CoordinatesToCellName(12, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.ScanTimecodeIn)
 		f.SetCellStyle(sheet, pos, pos, style)
 		// ScanTimecodeOut
-		pos, err = excelize.CoordinatesToCellName(12, n+2)
+		pos, err = excelize.CoordinatesToCellName(13, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, i.ScanTimecodeOut)
 		f.SetCellStyle(sheet, pos, pos, style)
 		// Deadline2D
-		pos, err = excelize.CoordinatesToCellName(13, n+2)
+		pos, err = excelize.CoordinatesToCellName(14, n+2)
 		if err != nil {
 			log.Println(err)
 		}
 		f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline2d))
 		f.SetCellStyle(sheet, pos, pos, style)
 		// Deadline3D
-		pos, err = excelize.CoordinatesToCellName(14, n+2)
+		pos, err = excelize.CoordinatesToCellName(15, n+2)
 		if err != nil {
 			log.Println(err)
 		}
@@ -1091,7 +1099,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			if _, found := i.Tasks[t]; !found {
 				continue
 			}
-			pos, err = excelize.CoordinatesToCellName(15+taskOrder, n+2)
+			pos, err = excelize.CoordinatesToCellName(16+taskOrder, n+2)
 			if err != nil {
 				log.Println(err)
 			}
