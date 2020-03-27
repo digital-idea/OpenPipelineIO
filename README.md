@@ -12,9 +12,9 @@ CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매�
 - 사용자별 토큰키, 암호화키, 직급별 접근권한 사용이 가능합니다.
 
 ### 다운로드
-- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.5/csi3_linux_x86-64.tgz)
-- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.5/csi3_darwin_x86-64.tgz)
-- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.5/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
+- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_linux_x86-64.tgz)
+- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_darwin_x86-64.tgz)
+- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
 
 
 ### Roadmap
