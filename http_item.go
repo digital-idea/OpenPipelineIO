@@ -36,36 +36,70 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	Project := r.FormValue("Project")
-	Searchword := r.FormValue("Searchword")
-	Sortkey := r.FormValue("Sortkey")
-	Assign := str2bool(r.FormValue("Assign"))
-	Ready := str2bool(r.FormValue("Ready"))
-	Wip := str2bool(r.FormValue("Wip"))
-	Confirm := str2bool(r.FormValue("Confirm"))
-	Done := str2bool(r.FormValue("Done"))
-	Omit := str2bool(r.FormValue("Omit"))
-	Hold := str2bool(r.FormValue("Hold"))
-	Out := str2bool(r.FormValue("Out"))
-	None := str2bool(r.FormValue("None"))
-	Template := r.FormValue("Template")
-	Task := r.FormValue("Task")
-	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s&task=%s&searchbartemplate=%s`,
-		Project,
-		Searchword,
-		Sortkey,
-		Assign,
-		Ready,
-		Wip,
-		Confirm,
-		Done,
-		Omit,
-		Hold,
-		Out,
-		None,
-		Template,
-		Task,
+	project := r.FormValue("Project")
+	searchword := r.FormValue("Searchword")
+	sortkey := r.FormValue("Sortkey")
+	assign := str2bool(r.FormValue("Assign"))   // legacy
+	ready := str2bool(r.FormValue("Ready"))     // legacy
+	wip := str2bool(r.FormValue("Wip"))         // legacy
+	confirm := str2bool(r.FormValue("Confirm")) // legacy
+	done := str2bool(r.FormValue("Done"))       // legacy
+	omit := str2bool(r.FormValue("Omit"))       // legacy
+	hold := str2bool(r.FormValue("Hold"))       // legacy
+	out := str2bool(r.FormValue("Out"))         // legacy
+	none := str2bool(r.FormValue("None"))       // legacy
+	template := r.FormValue("Template")
+	task := r.FormValue("Task")
+	truestatus := r.FormValue("truestatus")
+	// 아래 코드는 임시로 사용한다.
+	if truestatus == "" {
+		var statuslist []string
+		if assign {
+			statuslist = append(statuslist, "assign")
+		}
+		if ready {
+			statuslist = append(statuslist, "ready")
+		}
+		if wip {
+			statuslist = append(statuslist, "wip")
+		}
+		if confirm {
+			statuslist = append(statuslist, "confirm")
+		}
+		if done {
+			statuslist = append(statuslist, "done")
+		}
+		if omit {
+			statuslist = append(statuslist, "omit")
+		}
+		if out {
+			statuslist = append(statuslist, "out")
+		}
+		if hold {
+			statuslist = append(statuslist, "hold")
+		}
+		if none {
+			statuslist = append(statuslist, "none")
+		}
+		truestatus = strings.Join(statuslist, ",")
+	}
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+		project,
+		searchword,
+		sortkey,
+		assign,
+		ready,
+		wip,
+		confirm,
+		done,
+		omit,
+		hold,
+		out,
+		none,
+		template,
+		task,
 		"searchbarV1",
+		truestatus,
 	)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
