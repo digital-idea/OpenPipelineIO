@@ -72,7 +72,9 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	}
 
 	wordQueries := []bson.M{}
-
+	if *flagDebug {
+		fmt.Println(words)
+	}
 	for _, word := range words {
 		query := []bson.M{}
 		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
