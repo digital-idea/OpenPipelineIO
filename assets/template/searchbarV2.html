@@ -35,6 +35,12 @@
 					</select>
 				</div>
 				<div class="input-group-append">
+					<select name="SearchbarTemplate" class="custom-select">
+						<option value="searchbarV1" {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}selected{{end}}>ver1</option>
+						<option value="searchbarV2" {{if eq $.SearchOption.SearchbarTemplate "searchbarV2" }}selected{{end}}>ver2</option>
+					</select>
+				</div>
+				<div class="input-group-append">
 					<button class="btn btn-darkmode" id="button">
 						Search
 						{{if .Searchnum.Search}}
@@ -55,14 +61,6 @@
 												project={{$.SearchOption.Project}}&
 												searchword=status:{{.ID}}&
 												sortkey={{$.SearchOption.Sortkey}}&
-												ready={{$.SearchOption.Ready}}&
-												wip={{$.SearchOption.Wip}}&
-												confirm={{$.SearchOption.Confirm}}&
-												done={{$.SearchOption.Done}}&
-												omit={{$.SearchOption.Omit}}&
-												hold={{$.SearchOption.Hold}}&
-												out={{$.SearchOption.Out}}&
-												none={{$.SearchOption.None}}&
 												template={{$.SearchOption.Template}}&
 												searchbartemplate=searchvarV2&
 												truestatus={{.ID}}&
@@ -71,183 +69,6 @@
 						<span class="badge badge-light">{{index $.Searchnum.StatusNum .ID}}</span>
 					</span>
 				{{end}}
-				<!--
-				<span class="btn btn-sm mb-2 bg-assign">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-assign" onchange="changeStatusURI('assign');" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>
-					<a class="text-assign statusuri" href="/inputmode?
-											project={{.SearchOption.Project}}&
-											searchword=status:assign&
-											sortkey={{.SearchOption.Sortkey}}&
-											assign={{.SearchOption.Assign}}&
-											ready={{.SearchOption.Ready}}&
-											wip={{.SearchOption.Wip}}&
-											confirm={{.SearchOption.Confirm}}&
-											done={{.SearchOption.Done}}&
-											omit={{.SearchOption.Omit}}&
-											hold={{.SearchOption.Hold}}&
-											out={{.SearchOption.Out}}&
-											none={{.SearchOption.None}}&
-											template={{.SearchOption.Template}}&
-											task={{.SearchOption.Task}}">
-											assign</a>
-																
-					 <span class="badge badge-light">{{.Searchnum.Assign}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-ready">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-ready" onchange="changeStatusURI('ready');" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>
-					<a class="text-ready statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:ready&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">ready</a>
-					<span class="badge badge-light">{{.Searchnum.Ready}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-wip">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-wip" onchange="changeStatusURI('wip');" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>
-					<a class="text-wip statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:wip&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">wip</a>
-					<span class="badge badge-light">{{.Searchnum.Wip}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-confirm">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-confirm" onchange="changeStatusURI('confirm');" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>
-					<a class="text-confirm statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:confirm&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">confirm</a>
-					<span class="badge badge-light">{{.Searchnum.Confirm}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-done">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-done" onchange="changeStatusURI('done');" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>
-					<a class="text-done statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:done&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">done</a>
-					<span class="badge badge-light">{{.Searchnum.Done}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-out">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-out" onchange="changeStatusURI('out');" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>
-					<a class="text-out statusuri" href="/inputmode?
-											project={{.SearchOption.Project}}&
-											searchword=status:out&
-											sortkey={{.SearchOption.Sortkey}}&
-											assign={{.SearchOption.Assign}}&
-											ready={{.SearchOption.Ready}}&
-											wip={{.SearchOption.Wip}}&
-											confirm={{.SearchOption.Confirm}}&
-											done={{.SearchOption.Done}}&
-											omit={{.SearchOption.Omit}}&
-											hold={{.SearchOption.Hold}}&
-											out={{.SearchOption.Out}}&
-											none={{.SearchOption.None}}&
-											template={{.SearchOption.Template}}&
-											task={{.SearchOption.Task}}">
-											out</a>
-																
-					 <span class="badge badge-light">{{.Searchnum.Out}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-omit">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-omit" onchange="changeStatusURI('omit');" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>
-					<a class="text-omit statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:omit&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">omit</a>
-					<span class="badge badge-light">{{.Searchnum.Omit}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-hold">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-hold" onchange="changeStatusURI('hold');" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>
-					<a class="text-hold statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:hold&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">hold</a>
-					<span class="badge badge-light">{{.Searchnum.Hold}}</span>
-				</span>
-				<span class="btn btn-sm mb-2 bg-none">
-					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-none" onchange="changeStatusURI('none');" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>
-					<a class="text-none statusuri" href="/inputmode?
-										project={{.SearchOption.Project}}&
-										searchword=status:none&
-										sortkey={{.SearchOption.Sortkey}}&
-										assign={{.SearchOption.Assign}}&
-										ready={{.SearchOption.Ready}}&
-										wip={{.SearchOption.Wip}}&
-										confirm={{.SearchOption.Confirm}}&
-										done={{.SearchOption.Done}}&
-										omit={{.SearchOption.Omit}}&
-										hold={{.SearchOption.Hold}}&
-										out={{.SearchOption.Out}}&
-										none={{.SearchOption.None}}&
-										template={{.SearchOption.Template}}&
-										task={{.SearchOption.Task}}">none</a>
-					<span class="badge badge-light">{{.Searchnum.None}}</span>
-				</span>
-				-->
             </div>
         </div>
         <div class="row pl-3 pr-3">
@@ -259,60 +80,24 @@
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:2d&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	assign={{.SearchOption.Assign}}&
-																	ready={{.SearchOption.Ready}}&
-																	wip={{.SearchOption.Wip}}&
-																	confirm={{.SearchOption.Confirm}}&
-																	done={{.SearchOption.Done}}&
-																	omit={{.SearchOption.Omit}}&
-																	hold={{.SearchOption.Hold}}&
-																	out={{.SearchOption.Out}}&
-																	none={{.SearchOption.None}}&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">2D <span class="badge badge-darkmode">{{.Searchnum.Shot2d}}</span></a>
                 <a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:3d&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	assign={{.SearchOption.Assign}}&
-																	ready={{.SearchOption.Ready}}&
-																	wip={{.SearchOption.Wip}}&
-																	confirm={{.SearchOption.Confirm}}&
-																	done={{.SearchOption.Done}}&
-																	omit={{.SearchOption.Omit}}&
-																	hold={{.SearchOption.Hold}}&
-																	out={{.SearchOption.Out}}&
-																	none={{.SearchOption.None}}&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">3D <span class="badge badge-darkmode">{{.Searchnum.Shot3d}}</span></a>
 				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=type:shot&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	assign=true&
-																	ready=true&
-																	wip=true&
-																	confirm=true&
-																	done=true&
-																	omit=true&
-																	hold=true&
-																	out=true&
-																	none=true&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">Shot <span class="badge badge-darkmode">{{.Searchnum.Shot}}</span></a>
 				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=type:asset&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	assign=true&
-																	ready=true&
-																	wip=true&
-																	confirm=true&
-																	done=true&
-																	omit=true&
-																	hold=true&
-																	out=true&
-																	none=true&
 																	template={{.SearchOption.Template}}&
 																	task={{.SearchOption.Task}}">Asset <span class="badge badge-darkmode">{{.Searchnum.Assets}}</span></a>
             </div>
@@ -320,8 +105,6 @@
 		<input type="hidden" name="Template" value="{{.SearchOption.Template}}">
     </div>
 </form>
-
-
 
 <div class="p-0">
 	<div class="text-darkmode">

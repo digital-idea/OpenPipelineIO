@@ -17,10 +17,17 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	if op.Searchword == "" {
 		return results, nil
 	}
-	// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
-	if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
+	if op.SearchbarTemplate == "searchbarV1" { // legacy
+		// 체크박스가 아무것도 켜있지 않다면 바로 빈 값을 리턴한다.
+		if !op.Assign && !op.Ready && !op.Wip && !op.Confirm && !op.Done && !op.Omit && !op.Hold && !op.Out && !op.None {
+			return results, nil
+		}
+	}
+	if op.SearchbarTemplate == "searchbarV2" && len(op.TrueStatus) == 0 {
+		// 선택된 상태가 없다면 바로 리턴한다.
 		return results, nil
 	}
+
 	// 검색어중 연산에 필요한 검색어는 제거한다.
 	var words []string
 	var selectTasks []string
@@ -122,64 +129,64 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			// 검색바에서 task를 선택했다면,
 			if len(selectTasks) != 0 {
 				// 유연한 status
-				for _, task := range selectTasks {
-					query = append(query, bson.M{"tasks." + task + ".statusv2": status})
-				}
-
-				// legacy
-				for _, task := range selectTasks {
-					switch status {
-					case "assign":
-						query = append(query, bson.M{"tasks." + task + ".status": ASSIGN})
-					case "ready":
-						query = append(query, bson.M{"tasks." + task + ".status": READY})
-					case "wip":
-						query = append(query, bson.M{"tasks." + task + ".status": WIP})
-					case "confirm":
-						query = append(query, bson.M{"tasks." + task + ".status": CONFIRM})
-					case "done":
-						query = append(query, bson.M{"tasks." + task + ".status": DONE})
-					case "omit":
-						query = append(query, bson.M{"tasks." + task + ".status": OMIT})
-					case "hold":
-						query = append(query, bson.M{"tasks." + task + ".status": HOLD})
-					case "out":
-						query = append(query, bson.M{"tasks." + task + ".status": OUT})
-					case "none":
-						query = append(query, bson.M{"tasks." + task + ".status": NONE})
+				if op.SearchbarTemplate == "searchbarV2" {
+					for _, task := range selectTasks {
+						query = append(query, bson.M{"tasks." + task + ".statusv2": status})
 					}
 				}
-
+				// legacy
+				if op.SearchbarTemplate == "searchbarV1" {
+					for _, task := range selectTasks {
+						switch status {
+						case "assign":
+							query = append(query, bson.M{"tasks." + task + ".status": ASSIGN})
+						case "ready":
+							query = append(query, bson.M{"tasks." + task + ".status": READY})
+						case "wip":
+							query = append(query, bson.M{"tasks." + task + ".status": WIP})
+						case "confirm":
+							query = append(query, bson.M{"tasks." + task + ".status": CONFIRM})
+						case "done":
+							query = append(query, bson.M{"tasks." + task + ".status": DONE})
+						case "omit":
+							query = append(query, bson.M{"tasks." + task + ".status": OMIT})
+						case "hold":
+							query = append(query, bson.M{"tasks." + task + ".status": HOLD})
+						case "out":
+							query = append(query, bson.M{"tasks." + task + ".status": OUT})
+						case "none":
+							query = append(query, bson.M{"tasks." + task + ".status": NONE})
+						}
+					}
+				}
 			} else {
 				// 검색바에서 Task가 All 이면
-				// 유연한 status
-				tasksettings, err := AllTaskSettings(session)
-				if err != nil {
-					return nil, err
+				if op.SearchbarTemplate == "searchbarV2" {
+					// 유연한 status
+					query = append(query, bson.M{"statusv2": status})
 				}
-				for _, task := range tasksettings {
-					query = append(query, bson.M{"tasks." + task.Name + ".statusv2": status})
-				}
-				// legacy
-				switch status {
-				case "assign":
-					query = append(query, bson.M{"status": ASSIGN})
-				case "ready":
-					query = append(query, bson.M{"status": READY})
-				case "wip":
-					query = append(query, bson.M{"status": WIP})
-				case "confirm":
-					query = append(query, bson.M{"status": CONFIRM})
-				case "done":
-					query = append(query, bson.M{"status": DONE})
-				case "omit":
-					query = append(query, bson.M{"status": OMIT})
-				case "hold":
-					query = append(query, bson.M{"status": HOLD})
-				case "out":
-					query = append(query, bson.M{"status": OUT})
-				case "none":
-					query = append(query, bson.M{"status": NONE})
+				if op.SearchbarTemplate == "searchbarV1" {
+					// legacy
+					switch status {
+					case "assign":
+						query = append(query, bson.M{"status": ASSIGN})
+					case "ready":
+						query = append(query, bson.M{"status": READY})
+					case "wip":
+						query = append(query, bson.M{"status": WIP})
+					case "confirm":
+						query = append(query, bson.M{"status": CONFIRM})
+					case "done":
+						query = append(query, bson.M{"status": DONE})
+					case "omit":
+						query = append(query, bson.M{"status": OMIT})
+					case "hold":
+						query = append(query, bson.M{"status": HOLD})
+					case "out":
+						query = append(query, bson.M{"status": OUT})
+					case "none":
+						query = append(query, bson.M{"status": NONE})
+					}
 				}
 			}
 		} else if strings.HasPrefix(word, "user:") {
@@ -257,76 +264,85 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	statusQueries := []bson.M{}
 	if len(selectTasks) == 0 {
 		// 검색바가 All 이면 검색바 옵션 True status 리스트만 쿼리에 추가한다.
-		for _, status := range op.TrueStatus {
-			statusQueries = append(statusQueries, bson.M{"statusv2": status})
-		}
-		// legacy
-		if op.Assign {
-			statusQueries = append(statusQueries, bson.M{"status": ASSIGN})
-		}
-		if op.Ready {
-			statusQueries = append(statusQueries, bson.M{"status": READY})
-		}
-		if op.Wip {
-			statusQueries = append(statusQueries, bson.M{"status": WIP})
-		}
-		if op.Confirm {
-			statusQueries = append(statusQueries, bson.M{"status": CONFIRM})
-		}
-		if op.Done {
-			statusQueries = append(statusQueries, bson.M{"status": DONE})
-		}
-		if op.Omit {
-			statusQueries = append(statusQueries, bson.M{"status": OMIT})
-		}
-		if op.Hold {
-			statusQueries = append(statusQueries, bson.M{"status": HOLD})
-		}
-		if op.Out {
-			statusQueries = append(statusQueries, bson.M{"status": OUT})
-		}
-		if op.None {
-			statusQueries = append(statusQueries, bson.M{"status": NONE})
-		}
-	} else {
-		// 만약 검색바에서 Task가 선택되어 있다면..
-		// op(SearchOption)에서 true 상태 리스트만 가지고 온다.
-		// for문을 돌면서 해당 쿼리를 추가한다.
-		for _, status := range op.TrueStatus {
-			for _, task := range selectTasks {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".statusv2": status})
+		if op.SearchbarTemplate == "searchbarV2" {
+			for _, status := range op.TrueStatus {
+				statusQueries = append(statusQueries, bson.M{"statusv2": status})
 			}
 		}
-		// legacy
-		for _, task := range selectTasks {
+		if op.SearchbarTemplate == "searchbarV1" {
+			// legacy
 			if op.Assign {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": ASSIGN})
+				statusQueries = append(statusQueries, bson.M{"status": ASSIGN})
 			}
 			if op.Ready {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": READY})
+				statusQueries = append(statusQueries, bson.M{"status": READY})
 			}
 			if op.Wip {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": WIP})
+				statusQueries = append(statusQueries, bson.M{"status": WIP})
 			}
 			if op.Confirm {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": CONFIRM})
+				statusQueries = append(statusQueries, bson.M{"status": CONFIRM})
 			}
 			if op.Done {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": DONE})
+				statusQueries = append(statusQueries, bson.M{"status": DONE})
 			}
 			if op.Omit {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": OMIT})
+				statusQueries = append(statusQueries, bson.M{"status": OMIT})
 			}
 			if op.Hold {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": HOLD})
+				statusQueries = append(statusQueries, bson.M{"status": HOLD})
 			}
 			if op.Out {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": OUT})
+				statusQueries = append(statusQueries, bson.M{"status": OUT})
 			}
 			if op.None {
-				statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": NONE})
+				statusQueries = append(statusQueries, bson.M{"status": NONE})
 			}
 		}
+	} else {
+		if op.SearchbarTemplate == "searchbarV2" {
+			// 만약 검색바에서 Task가 선택되어 있다면..
+			// op(SearchOption)에서 true 상태 리스트만 가지고 온다.
+			// for문을 돌면서 해당 쿼리를 추가한다.
+			for _, status := range op.TrueStatus {
+				for _, task := range selectTasks {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".statusv2": status})
+				}
+			}
+		}
+		if op.SearchbarTemplate == "searchbarV1" {
+			// legacy
+			for _, task := range selectTasks {
+				if op.Assign {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": ASSIGN})
+				}
+				if op.Ready {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": READY})
+				}
+				if op.Wip {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": WIP})
+				}
+				if op.Confirm {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": CONFIRM})
+				}
+				if op.Done {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": DONE})
+				}
+				if op.Omit {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": OMIT})
+				}
+				if op.Hold {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": HOLD})
+				}
+				if op.Out {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": OUT})
+				}
+				if op.None {
+					statusQueries = append(statusQueries, bson.M{"tasks." + task + ".status": NONE})
+				}
+			}
+		}
+
 	}
 	// 각 단어에 대한 쿼리를 and 로 검색할지 or 로 검색할지 결정한다.
 	expression := "$and"
@@ -344,7 +360,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	}
 	q := bson.M{"$and": queries}
 	if *flagDebug {
-		fmt.Println("검색에 사용한 쿼리리스트")
+		fmt.Println("검색에 사용된 쿼리")
 		fmt.Println(q)
 		fmt.Println()
 	}

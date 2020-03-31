@@ -1,7 +1,7 @@
 {{define "searchbarV1"}}
 
 
-<form action="/searchsubmitv2" method="POST">
+<form action="/searchsubmit" method="POST">
 	<div class="row justify-content-center align-items-center m-3">
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
@@ -31,6 +31,12 @@
 						<option value="scantime" {{if eq $.SearchOption.Sortkey "scantime" }}selected{{end}}>정렬: 스캔날짜</option>
 						<option value="taskpredate" {{if eq $.SearchOption.Sortkey "taskpredate" }}selected{{end}}>정렬: Task 1차마감</option>
 						<option value="taskdate" {{if eq $.SearchOption.Sortkey "taskdate" }}selected{{end}}>정렬: Task 2차마감</option>
+					</select>
+				</div>
+				<div class="input-group-append">
+					<select name="SearchbarTemplate" class="custom-select">
+						<option value="searchbarV1" {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}selected{{end}}>ver1</option>
+						<option value="searchbarV2" {{if eq $.SearchOption.SearchbarTemplate "searchbarV2" }}selected{{end}}>ver2</option>
 					</select>
 				</div>
 				<div class="input-group-append">

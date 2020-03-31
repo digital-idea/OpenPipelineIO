@@ -203,16 +203,19 @@ func (op *SearchOption) LoadCookie(session *mgo.Session, r *http.Request) error 
 		if cookie.Name == "Template" {
 			op.Template = cookie.Value
 		}
+		if cookie.Name == "SearchbarTemplate" {
+			op.SearchbarTemplate = cookie.Value
+		}
 	}
 	if op.Project == "" {
 		plist, err := Projectlist(session)
 		if err != nil {
 			return err
 		}
-		op.Project = plist[0]
+		op.Project = plist[0] // 프로젝트가 빈 문자열이면 첫번째 프로젝트를 설정합니다.
 	}
 	if op.Template == "" {
-		op.Template = "index2"
+		op.Template = "index"
 	}
 	return nil
 }

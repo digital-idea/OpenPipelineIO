@@ -21,7 +21,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleSearchSubmit 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
+// handleSearchSubmit 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다. // legacy
 func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
@@ -49,6 +49,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	out := str2bool(r.FormValue("Out"))         // legacy
 	none := str2bool(r.FormValue("None"))       // legacy
 	template := r.FormValue("Template")
+	searchbarTemplate := r.FormValue("SearchbarTemplate")
 	task := r.FormValue("Task")
 	truestatus := r.FormValue("truestatus")
 	// 아래 코드는 임시로 사용한다.
@@ -98,8 +99,59 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		none,
 		template,
 		task,
-		"searchbarV1",
+		searchbarTemplate,
 		truestatus,
+	)
+	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+}
+
+// handleSearchSubmitV2 함수는 검색창의 옵션을 파싱하고 검색 URI로 리다이렉션 한다.
+func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	project := r.FormValue("Project")
+	searchword := r.FormValue("Searchword")
+	sortkey := r.FormValue("Sortkey")
+	template := r.FormValue("Template")
+	searchbarTemplate := r.FormValue("SearchbarTemplate")
+	task := r.FormValue("Task")
+	// status를 체크할 때 마다 truestatus form에 값이 추가되어야 한다.
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	statuslist, err := AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var truestatus []string
+	for _, status := range statuslist {
+		if "true" == r.FormValue(status.ID) {
+			truestatus = append(truestatus, status.ID)
+		}
+	}
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+		project,
+		searchword,
+		sortkey,
+		template,
+		task,
+		searchbarTemplate,
+		strings.Join(truestatus, ","),
 	)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
