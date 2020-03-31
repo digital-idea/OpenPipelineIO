@@ -91,7 +91,7 @@ func AllTaskSettings(session *mgo.Session) ([]Tasksetting, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("tasksetting")
 	results := []Tasksetting{}
-	err := c.Find(bson.M{}).Sort("id").All(&results)
+	err := c.Find(bson.M{}).Sort("order").All(&results)
 	if err != nil {
 		return nil, err
 	}
