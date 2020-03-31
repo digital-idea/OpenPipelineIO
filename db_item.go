@@ -555,6 +555,7 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 func Searchnum(project string, items []Item) (Infobarnum, error) {
 	var results Infobarnum
 	results.Search = len(items)
+	results.StatusNum = make(map[string]int) // statusV2의 갯수를 처리하기 위해 StatusNum 맵을 초기화한다.
 	for _, item := range items {
 		if item.Shottype == "2D" || item.Shottype == "2d" {
 			results.Shot2d++
@@ -568,6 +569,7 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 		if item.Type == "org" || item.Type == "left" {
 			results.Shot++
 		}
+		// legacy statusV1
 		switch item.Status {
 		case ASSIGN:
 			results.Assign++
@@ -588,6 +590,8 @@ func Searchnum(project string, items []Item) (Infobarnum, error) {
 		case NONE:
 			results.None++
 		}
+		// statusV2
+		results.StatusNum[item.StatusV2]++
 	}
 	return results, nil
 }

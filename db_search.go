@@ -119,7 +119,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 			query = append(query, bson.M{"type": "asset"})
 		} else if strings.HasPrefix(word, "status:") {
 			status := strings.ToLower(strings.TrimPrefix(word, "status:"))
-			// 검색바에서 task를 선택하지 않았다면,
+			// 검색바에서 task를 선택했다면,
 			if len(selectTasks) != 0 {
 				// 유연한 status
 				for _, task := range selectTasks {
@@ -158,7 +158,7 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 					return nil, err
 				}
 				for _, task := range tasksettings {
-					query = append(query, bson.M{"tasks." + task.ID + ".statusv2": status})
+					query = append(query, bson.M{"tasks." + task.Name + ".statusv2": status})
 				}
 				// legacy
 				switch status {

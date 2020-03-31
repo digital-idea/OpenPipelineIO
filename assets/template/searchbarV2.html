@@ -55,7 +55,6 @@
 												project={{$.SearchOption.Project}}&
 												searchword=status:{{.ID}}&
 												sortkey={{$.SearchOption.Sortkey}}&
-												truestatus={{.ID}}&
 												ready={{$.SearchOption.Ready}}&
 												wip={{$.SearchOption.Wip}}&
 												confirm={{$.SearchOption.Confirm}}&
@@ -69,7 +68,7 @@
 												truestatus={{.ID}}&
 												task={{$.SearchOption.Task}}">
 												{{.ID}}</a>
-						<span class="badge badge-light">{{$.Searchnum.Assign}}</span>
+						<span class="badge badge-light">{{index $.Searchnum.StatusNum .ID}}</span>
 					</span>
 				{{end}}
 				<!--
