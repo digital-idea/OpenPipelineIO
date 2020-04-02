@@ -6173,23 +6173,25 @@ func handleAPISearch(w http.ResponseWriter, r *http.Request) {
 			sortkey = v
 		}
 	}
+
 	type recipe struct {
 		Data []Item `json:"data"`
 	}
 	rcp := recipe{}
 	searchOp := SearchOption{
-		Project:    project,
-		Searchword: searchword,
-		Sortkey:    sortkey,
-		Assign:     true,
-		Ready:      true,
-		Wip:        true,
-		Confirm:    true,
-		Done:       true,
-		Omit:       true,
-		Hold:       true,
-		Out:        true,
-		None:       true,
+		Project:           project,
+		Searchword:        searchword,
+		Sortkey:           sortkey,
+		Assign:            true,
+		Ready:             true,
+		Wip:               true,
+		Confirm:           true,
+		Done:              true,
+		Omit:              true,
+		Hold:              true,
+		Out:               true,
+		None:              true,
+		SearchbarTemplate: "searchbarV1",
 	}
 	items, err := Searchv2(session, searchOp)
 	if err != nil {
