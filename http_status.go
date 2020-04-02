@@ -199,10 +199,6 @@ func handleRmStatusSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	id := r.FormValue("id")
-	if !regexpTask.MatchString(id) {
-		http.Error(w, "Status 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
-		return
-	}
 	err = RmStatus(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
