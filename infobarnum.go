@@ -6,23 +6,23 @@ import (
 
 // Infobarnum 검색결과에 대한 상태별 갯수를 담기위한 자료구조이다.
 type Infobarnum struct {
-	Assign    int // legacy
-	Ready     int // legacy
-	Wip       int // legacy
-	Confirm   int // legacy
-	Done      int // legacy
-	Omit      int // legacy
-	Hold      int // legacy
-	Out       int // legacy
-	None      int // legacy
-	StatusNum map[string]int
-	Total     int
-	Search    int
-	Shot      int
-	Shot2d    int
-	Shot3d    int
-	Assets    int
-	Percent   float64
+	Assign    int            `json:"assign"`  // legacy
+	Ready     int            `json:"ready"`   // legacy
+	Wip       int            `json:"wip"`     // legacy
+	Confirm   int            `json:"confirm"` // legacy
+	Done      int            `json:"done"`    // legacy
+	Omit      int            `json:"omit"`    // legacy
+	Hold      int            `json:"hold"`    // legacy
+	Out       int            `json:"out"`     // legacy
+	None      int            `json:"none"`    // legacy
+	StatusNum map[string]int `json:"statusnum"`
+	Total     int            `json:"total"`
+	Search    int            `json:"search"`
+	Shot      int            `json:"shot"`
+	Shot2d    int            `json:"shot2d"`
+	Shot3d    int            `json:"shot3d"`
+	Assets    int            `json:"assets"`
+	Percent   float64        `json:"percent"`
 }
 
 // Percent 메소드는 Infobarnum 자료구조를 분석해서 진행률을 계산한다.

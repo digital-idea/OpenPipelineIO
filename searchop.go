@@ -11,28 +11,28 @@ import (
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
-	Project           string // 선택한 프로젝트
-	Searchword        string // 검색어
-	Sortkey           string // 정렬방식
-	Template          string // 템플릿 이름
-	SearchbarTemplate string // 검색바 탬플릿 이름
-	Task              string // Task명
-	Assign            bool   // legacy
-	Ready             bool   // legacy
-	Wip               bool   // legacy
-	Confirm           bool   // legacy
-	Done              bool   // legacy
-	Omit              bool   // legacy
-	Hold              bool   // legacy
-	Out               bool   // legacy
-	None              bool   // legacy
+	Project           string `json:"project"`           // 선택한 프로젝트
+	Searchword        string `json:"searchword"`        // 검색어
+	Sortkey           string `json:"sortkey"`           // 정렬방식
+	Template          string `json:"template"`          // 템플릿 이름
+	SearchbarTemplate string `json:"searchbartemplate"` // 검색바 탬플릿 이름
+	Task              string `json:"task"`              // Task명
+	Assign            bool   `json:"assign"`            // legacy
+	Ready             bool   `json:"ready"`             // legacy
+	Wip               bool   `json:"wip"`               // legacy
+	Confirm           bool   `json:"confirm"`           // legacy
+	Done              bool   `json:"done"`              // legacy
+	Omit              bool   `json:"omit"`              // legacy
+	Hold              bool   `json:"hold"`              // legacy
+	Out               bool   `json:"out"`               // legacy
+	None              bool   `json:"none"`              // legacy
 	// 상태
-	TrueStatus []string // true 상태리스트
+	TrueStatus []string `json:"truestatus"` // true 상태리스트
 	// 요소
-	Shot   bool
-	Assets bool
-	Type3d bool
-	Type2d bool
+	Shot   bool `json:"shot"`
+	Assets bool `json:"assets"`
+	Type3d bool `json:"type3d"`
+	Type2d bool `json:"type2d"`
 }
 
 // SearchOption과 관련된 메소드

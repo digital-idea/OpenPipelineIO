@@ -187,9 +187,9 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		Projectinfo Project
 		SearchOption
-		Dilog string
-		Wfs   string
-		Item
+		Dilog               string
+		Wfs                 string
+		Item                Item
 		TasksettingOrderMap map[string]float64
 		Status              []Status
 	}
