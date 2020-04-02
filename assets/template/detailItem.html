@@ -9,46 +9,62 @@
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
 				<label class="p-0 m-0 thumbnail" for="{{$.Item.ID}}" onclick="selectCheckbox()">
-					<img src="/thumbnail/{{$.Item.Project}}/{{$.Item.Name}}_{{if $.Item.UseType}}{{$.Item.UseType}}{{else}}{{$.Item.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string $.Item.Status}}">
+					{{if eq $.SearchbarTemplate "searchbarV1"}}
+						<img src="/thumbnail/{{$.Item.Project}}/{{$.Item.Name}}_{{if $.Item.UseType}}{{$.Item.UseType}}{{else}}{{$.Item.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string $.Item.Status}}">
+					{{else}}
+						<img src="/thumbnail/{{$.Item.Project}}/{{$.Item.Name}}_{{if $.Item.UseType}}{{$.Item.UseType}}{{else}}{{$.Item.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{$.Item.StatusV2}}">
+					{{end}}
 				</label>
 				<div class="top-left">
-					{{if eq .Type "org" "left"}}
+					{{if eq $.Item.Type "org" "left"}}
 						<div class="row" id="rnum-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}onclick="setRnumModal('{{$.Item.Project}}', '{{$.Item.ID}}')" data-toggle="modal" data-target="#modal-setrnum"{{end}}>{{if .Rnum}}{{.Rnum}}{{else}}no rnum{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}onclick="setRnumModal('{{$.Item.Project}}', '{{$.Item.ID}}')" data-toggle="modal" data-target="#modal-setrnum"{{end}}>{{if $.Item.Rnum}}{{$.Item.Rnum}}{{else}}no rnum{{end}}</span>
 						</div>
 					{{end}}
-					{{if eq .Type "org" "left" "asset"}}
+					{{if eq $.Item.Type "org" "left" "asset"}}
 						<div class="row" id="deadline3d-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{ToNormalTime .Ddline3d}}')"{{end}}>{{if .Ddline3d}}3D:{{ToShortTime .Ddline3d}}{{else}}3D:{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{ToNormalTime $.Item.Ddline3d}}')"{{end}}>{{if $.Item.Ddline3d}}3D:{{ToShortTime $.Item.Ddline3d}}{{else}}3D:{{end}}</span>
 						</div>
 					{{end}}
 					
-					{{if eq .Type "org" "left" "asset"}}
+					{{if eq $.Item.Type "org" "left" "asset"}}
 						<div class="row" id="deadline2d-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{ToNormalTime .Ddline2d}}')"{{end}}>{{if .Ddline2d}}2D:{{ToShortTime .Ddline2d}}{{else}}2D:{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{ToNormalTime $.Item.Ddline2d}}')"{{end}}>{{if $.Item.Ddline2d}}2D:{{ToShortTime $.Item.Ddline2d}}{{else}}2D:{{end}}</span>
 						</div>
 					{{end}}
 				</div>
 				<div class="centered-top"><span class="text-white black-opbg itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span></div>
 				<div class="top-right">
 					<div class="row" id="platesize-{{$.Item.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if .Platesize}}S: {{.Platesize}}{{else}}S:{{end}}</span>
+						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Platesize}}S: {{$.Item.Platesize}}{{else}}S:{{end}}</span>
 					</div>
 					<div class="row" id="undistortionsize-{{$.Item.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if .Dsize}}U: {{.Dsize}}{{else}}U:{{end}}</span>
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Dsize}}U: {{$.Item.Dsize}}{{else}}U:{{end}}</span>
 					</div>
 					<div class="row" id="rendersize-{{$.Item.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>R: {{if $.Item.Rendersize}}{{$.Item.Rendersize}}{{else}}{{$.Item.Dsize}}{{end}}</span>
 					</div>
 				</div>
 				<div class="centered">
-					{{if eq $.Item.Status "2"}}
-						{{if $.Item.Finver}}
-							Finver: {{$.Item.Finver}}
+					{{if eq $.SearchbarTemplate "searchbarV1"}}
+						{{if eq $.Item.Status "2"}}
+							{{if $.Item.Finver}}
+								Finver: {{$.Item.Finver}}
+							{{end}}
+							{{if $.Item.Findate}}
+								<br>
+								Date: {{ToNormalTime $.Item.Findate}}
+							{{end}}
 						{{end}}
-						{{if $.Item.Findate}}
-							<br>
-							Date: {{ToNormalTime $.Item.Findate}}
+					{{else}}
+						{{if eq $.Item.StatusV2 "done"}}
+							{{if $.Item.Finver}}
+								Finver: {{$.Item.Finver}}
+							{{end}}
+							{{if $.Item.Findate}}
+								<br>
+								Date: {{ToNormalTime $.Item.Findate}}
+							{{end}}
 						{{end}}
 					{{end}}
 				</div>
@@ -82,7 +98,7 @@
 							</div>
 						{{end}}
 						<div id="shottype-{{$.Item.Name}}">
-							<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{$.Item.Project}}','{{$.Item.ID}}')"{{end}}>{{if .Shottype}}{{.Shottype}}{{else}}none{{end}}</span>
+							<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{$.Item.Project}}','{{$.Item.ID}}')"{{end}}>{{if $.Item.Shottype}}{{$.Item.Shottype}}{{else}}none{{end}}</span>
 						</div>
 					{{end}}
 				</div>
@@ -91,36 +107,36 @@
 					<!--Retime-->
 					<div class="row" id="button-retime-{{$.Item.Name}}">
 						{{if .Retimeplate}}
-							<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
+							<a href="dilink://{{$.Item.Retimeplate}}" class="badge badge-danger">R</a>
 						{{end}}
 					</div>
 					<!--Just Mark-->
 					<div class="row" id="button-just-{{$.Item.Name}}">
-						{{if and .JustIn .JustOut}}
+						{{if and $.Item.JustIn $.Item.JustOut}}
 							<span class="badge badge-warning mt-1">J</span>
 						{{end}}
 					</div>
 					<!--OCIOcc-->
 					<div class="row" id="button-ociocc-{{$.Item.Name}}">
-						{{if .OCIOcc}}
+						{{if $.Item.OCIOcc}}
 							<span class="badge badge-info mt-1">N</span>
 						{{end}}
 					</div>
 				</div>
 				<div class="bottom-left">
 					<div class="row">
-						<span class="text-white black-opbg" id="handlein-{{$.Item.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{.HandleIn}}</span>
+						<span class="text-white black-opbg" id="handlein-{{$.Item.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{$.Item.HandleIn}}</span>
 						<span class="text-white black-opbg">/</span>
-						<span class="text-white black-opbg" id="handleout-{{$.Item.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{.HandleOut}}</span>						
+						<span class="text-white black-opbg" id="handleout-{{$.Item.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{$.Item.HandleOut}}</span>						
 					</div>
 					<div class="row" id="platein-{{$.Item.Name}}">
-						{{if .PlateIn}}
-							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{.PlateIn}}</span>
+						{{if $.Item.PlateIn}}
+							<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{$.Item.PlateIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justin-{{$.Item.Name}}">
-						{{if .JustIn}}
-							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{.JustIn}}</span>
+						{{if $.Item.JustIn}}
+							<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{$.Item.Project}}', '{{$.Item.ID}}');"{{end}}>{{$.Item.JustIn}}</span>
 						{{end}}
 					</div>
 					<div class="row" id="justtimecodein-{{$.Item.Name}}">
@@ -226,9 +242,15 @@
 				{{range mapToSlice .Tasks $.TasksettingOrderMap}}
 					<div class="row" id="{{$.Item.ID}}-task-{{.Title}}">
 						<div id="{{$.Item.ID}}-task-{{.Title}}-status">
-							<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
-							onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
-							>{{.Title}}</span>
+							{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+								<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
+								onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
+								>{{.Title}}</span>
+							{{else}}
+								<span class="finger mt-1 badge badge-{{.StatusV2}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{.StatusV2}}"
+								onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$.Item.Name}}', '{{$.Item.Seq}}', '{{$.Item.Cut}}', '{{$.User.Token}}');"
+								>{{.Title}}</span>
+							{{end}}
 						</div>
 						<div id="{{$.Item.ID}}-task-{{.Title}}-predate">
 							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
