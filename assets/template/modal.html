@@ -200,32 +200,35 @@
                     <input type="hidden" class="form-control" id="modal-edittask-project">
                     <input type="hidden" class="form-control" id="modal-edittask-id">
                     <div class="row">
-                        <div class="col-4 form-group">
+                        <div class="col-6 form-group">
                             <label class="col-form-label">Task:</label>
                             <input type="text" class="form-control form-control-sm" id="modal-edittask-task" disabled>
                         </div>
-                        <div class="col-4 form-group">
-                            <label class="col-form-label">Status</label>
-                            <select class="form-control form-control-sm" id="modal-edittask-status" onchange="setTaskStatus(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-status').value)">
-                                <option value="8">omit</option>
-                                <option value="7">confirm</option>
-                                <option value="6">wip</option>
-                                <option value="5">ready</option>
-                                <option value="4">assign</option>
-                                <option value="3">out</option>
-                                <option value="2">done</option>
-                                <option value="1">hold</option>
-                                <option value="0">none</option>
-                            </select>
-                        </div>
-                        <div class="col-4 form-group">
-                            <label class="col-form-label text-muted">StatusV2(BETA)</label>
-                            <select class="text-muted form-control form-control-sm" id="modal-edittask-statusv2" onchange="setTaskStatusV2(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-statusv2').value)">
-                                {{range .Status}}
-                                    <option value="{{.ID}}">{{.ID}}</option>
-                                {{end}}
-                            </select>
-                        </div>
+                        {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+                            <div class="col-6 form-group">
+                                <label class="col-form-label">Status</label>
+                                <select class="form-control form-control-sm" id="modal-edittask-status" onchange="setTaskStatus(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-status').value)">
+                                    <option value="8">omit</option>
+                                    <option value="7">confirm</option>
+                                    <option value="6">wip</option>
+                                    <option value="5">ready</option>
+                                    <option value="4">assign</option>
+                                    <option value="3">out</option>
+                                    <option value="2">done</option>
+                                    <option value="1">hold</option>
+                                    <option value="0">none</option>
+                                </select>
+                            </div>
+                        {{else}}
+                            <div class="col-6 form-group">
+                                <label class="col-form-label text-muted">StatusV2(BETA)</label>
+                                <select class="text-muted form-control form-control-sm" id="modal-edittask-statusv2" onchange="setTaskStatusV2(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-statusv2').value)">
+                                    {{range .Status}}
+                                        <option value="{{.ID}}">{{.ID}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        {{end}}
                     </div>
                     
                     <div class="form-group">

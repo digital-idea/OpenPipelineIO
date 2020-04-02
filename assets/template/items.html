@@ -17,7 +17,11 @@
 			<div class="thumbnailbox ml-1">
 				<!--org,left,asset 만 선택할 수 있어야 한다.-->
 				<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox('{{.ID}}')">
-					<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+						<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+					{{else}}
+						<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{.StatusV2}}">
+					{{end}}
 				</label>
 				<div class="top-left">
 					{{if eq .Type "org" "left"}}
@@ -50,13 +54,25 @@
 					</div>
 				</div>
 				<div class="centered">
-					{{if eq .Status "2"}}
-						{{if .Finver}}
-							Finver: {{.Finver}}
+					{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+						{{if eq .Status "2"}}
+							{{if .Finver}}
+								Finver: {{.Finver}}
+							{{end}}
+							{{if .Findate}}
+								<br>
+								Date: {{ToNormalTime .Findate}}
+							{{end}}
 						{{end}}
-						{{if .Findate}}
-							<br>
-							Date: {{ToNormalTime .Findate}}
+					{{else}}
+						{{if eq .StatusV2 "done"}}
+							{{if .Finver}}
+								Finver: {{.Finver}}
+							{{end}}
+							{{if .Findate}}
+								<br>
+								Date: {{ToNormalTime .Findate}}
+							{{end}}
 						{{end}}
 					{{end}}
 				</div>
@@ -234,9 +250,15 @@
 				{{range mapToSlice .Tasks $.TasksettingOrderMap}}
 					<div class="row" id="{{$id}}-task-{{.Title}}">
 						<div id="{{$id}}-task-{{.Title}}-status">
-							<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
-							onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
-							>{{.Title}}</span>
+							{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+								<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{Status2string .Status}}"
+								onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
+								>{{.Title}}</span>
+							{{else}}
+								<span class="finger mt-1 badge badge-{{.StatusV2}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" title="{{.StatusV2}}"
+								onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
+								>{{.Title}}</span>
+							{{end}}
 						</div>
 						<div id="{{$id}}-task-{{.Title}}-predate">
 							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
