@@ -16,6 +16,8 @@
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
 				template={{$.SearchOption.Template}}&
+				searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+				truestatus={{Join $.SearchOption.TrueStatus "," }}&
 				task={{$.SearchOption.Task}}" class="statusuri badge badge-{{CheckDdlinev2 .}}">{{ToShortTime .}}</a>
 	{{end}}
 </div>
@@ -36,6 +38,8 @@
 				out={{$.SearchOption.Out}}&
 				none={{$.SearchOption.None}}&
 				template={{$.SearchOption.Template}}&
+				searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+				truestatus={{ Join $.SearchOption.TrueStatus "," }}&
 				task={{$.SearchOption.Task}}" class="statusuri badge badge-{{CheckDdlinev2 .}}">{{ToShortTime .}}</a>
 	{{end}}
 </div>
