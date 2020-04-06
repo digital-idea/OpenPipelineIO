@@ -60,69 +60,44 @@ func handleAPIAddStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "description":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Description = v
-		case "order":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			order, err := strconv.ParseFloat(v, 64)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Order = order
-		case "textcolor":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if !regexWebColor.MatchString(v) {
-				http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-				return
-			}
-			rcp.TextColor = v
-		case "bgcolor":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if !regexWebColor.MatchString(v) {
-				http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-				return
-			}
-			rcp.BGColor = v
-		case "bordercolor":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if !regexWebColor.MatchString(v) {
-				http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-				return
-			}
-			rcp.BorderColor = v
-		}
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "itemtype을 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.ID = id
+	rcp.Description = r.FormValue("description")
+	orderString := r.FormValue("order")
+	if orderString == "" {
+		http.Error(w, "order를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	order, err := strconv.ParseFloat(orderString, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.Order = order
+	textcolor := r.FormValue("textcolor")
+	if !regexWebColor.MatchString(textcolor) {
+		http.Error(w, "textcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.TextColor = textcolor
+	bgcolor := r.FormValue("bgcolor")
+	if !regexWebColor.MatchString(bgcolor) {
+		http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.BGColor = bgcolor
+	bordercolor := r.FormValue("bordercolor")
+	if !regexWebColor.MatchString(bordercolor) {
+		http.Error(w, "bordercolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.BorderColor = bordercolor
+	rcp.DefaultOn = str2bool(r.FormValue("defaulton"))
+
 	err = AddStatus(session, rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
