@@ -103,8 +103,15 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-usernote').value=data.task.usernote;
             document.getElementById('modal-edittask-user').value=data.task.user;
             document.getElementById('modal-edittask-id').value=data.id;
-            document.getElementById("modal-edittask-status").value=data.task.status;
-            document.getElementById("modal-edittask-statusv2").value=data.task.statusv2;
+            // ver2로 검색하면 modal-edittask-status 가 존재하지 않을 수 있다.
+            try {
+                document.getElementById("modal-edittask-status").value=data.task.status;
+            }
+            catch(err) {
+                console.log(err);
+                document.getElementById("modal-edittask-statusv2").value=data.task.statusv2;
+            }
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
