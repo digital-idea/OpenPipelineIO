@@ -384,13 +384,13 @@
 			</div>
 			<div id="campubtask-{{$.Item.Name}}">
 				{{if $.Item.ProductionCam.PubTask}}
-					<span class="text-badge ml-1" id="campubtask-{{$.Item.Name}}">Pub-{{.ProductionCam.PubTask}}</span>
+					<span class="text-badge ml-1" id="campubtask-{{$.Item.Name}}">Pub-{{$.Item.ProductionCam.PubTask}}</span>
 				{{end}}
 			</div>
 			<div id="campubpath-{{$.Item.Name}}">
 				{{if $.Item.ProductionCam.PubPath}}
 					<span class="text-badge">,</span>
-					<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
+					<a href="dilink://{{$.Item.ProductionCam.PubPath}}" class="text-badge ml-1">{{$.Item.ProductionCam.PubPath}}</a>
 				{{end}}
 			</div>
 			<div id="camprojection-{{$.Item.Name}}">

@@ -202,7 +202,7 @@
 					</div>
 				{{end}}
 				<div id="button-detail-{{.Name}}">
-					<a href="/detail?project={{.Project}}&id={{.ID}}" class="badge badge-darkmode ml-1">D</a>
+					<a href="/detail?project={{.Project}}&id={{.ID}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="badge badge-darkmode ml-1">D</a>
 				</div>
 				<div id="button-dir-{{.Name}}">
 					{{if eq .Type "asset" -}}	
@@ -549,7 +549,7 @@
 			{{end}}
 			{{$length := len .Comments }} {{ if gt $length 3 }}
 				<div class="text-right">
-					<a href="/detail?project={{.Project}}&id={{.ID}}" class="small text-darkmode">더보기</a>
+					<a href="/detail?project={{.Project}}&id={{.ID}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="small text-darkmode">더보기</a>
 				</div>
 			{{end}}
 		</div>

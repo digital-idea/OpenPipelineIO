@@ -174,6 +174,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	project := q.Get("project")
 	id := q.Get("id")
+	searchbarTemplate := q.Get("searchbartemplate")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -221,6 +222,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	rcp.SearchOption.SearchbarTemplate = searchbarTemplate
 	tasks, err := AllTaskSettings(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
