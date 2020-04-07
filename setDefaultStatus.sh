@@ -1,4 +1,11 @@
+#!/bin/bash
 Token="JDJhJDEwJEdDWm1lVXEzZm9vNWVIQXhBV21iZnU2OFl6OHlBVTRRY1lEL0JwekdHWFlCNFBTNDQvTkVD"
+# 토큰키가 첫번째 인수로 오면 덮어쓰기한다.
+if [ $1 != '' ]
+then
+	Token=$1
+fi
+echo "Token:" $Token
 curl -X POST -H "Authorization: Basic $Token" -d "id=none&description=none&textcolor=#FFFFFF&bgcolor=#3D3B3B&bordercolor=#787474&order=0&defaulton=false" "http://localhost/api/addstatus"
 curl -X POST -H "Authorization: Basic $Token" -d "id=hold&description=hold&textcolor=#FFFFFF&bgcolor=#606161&bordercolor=#606161&order=1&defaulton=false" "http://localhost/api/addstatus"
 curl -X POST -H "Authorization: Basic $Token" -d "id=done&description=done&textcolor=#000000&bgcolor=#E4D2B7&bordercolor=#E4D2B7&order=2&defaulton=false" "http://localhost/api/addstatus"

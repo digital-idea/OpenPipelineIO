@@ -1279,7 +1279,8 @@ func SetTaskStatus(session *mgo.Session, project, id, task, status string) error
 	}
 	t := item.Tasks[task]
 	t.BeforeStatus = t.Status
-	t.Status = statusNum
+	t.Status = statusNum // legacy
+	t.StatusV2 = status
 	item.Tasks[task] = t
 
 	c := session.DB("project").C(project)
@@ -1379,10 +1380,19 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, remove 
 	task := strings.ToLower(taskname)
 	// 기존에 Task가 없다면 추가한다.
 	if _, found := item.Tasks[task]; !found {
-		t := Task{
-			Title:  task,
-			Status: ASSIGN,
+		t := Task{}
+		t.Title = task
+		t.Status = ASSIGN
+		statuslist, err := AllStatus(session)
+		if err != nil {
+			return "", err
 		}
+		for _, s := range statuslist {
+			if s.ID == "assign" {
+				t.StatusV2 = "assign"
+			}
+		}
+
 		item.Tasks[task] = t
 	} else {
 		return id, fmt.Errorf("이미 %s 에 %s Task가 존재합니다", name, taskname)
