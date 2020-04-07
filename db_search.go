@@ -158,7 +158,10 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 							query = append(query, bson.M{"tasks." + task + ".status": OUT})
 						case "none":
 							query = append(query, bson.M{"tasks." + task + ".status": NONE})
+						default:
+							query = append(query, bson.M{"tasks." + task + ".status": ""})
 						}
+
 					}
 				}
 			} else {
@@ -188,6 +191,8 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 						query = append(query, bson.M{"status": OUT})
 					case "none":
 						query = append(query, bson.M{"status": NONE})
+					default:
+						query = append(query, bson.M{"status": ""})
 					}
 				}
 			}
