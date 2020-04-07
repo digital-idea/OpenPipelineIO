@@ -56,7 +56,7 @@
             <div class="col">
 				{{range .Status}}
 					<span class="btn btn-sm mb-2 bg-{{.ID}}">
-						<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
+						<input type="checkbox" class="mr-1 StatusCheckBox{{if .DefaultOn}} DefaultStatusCheckBox{{end}}" id="searchbox-checkbox-{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
 						<a class="text-{{.ID}} statusuri" href="/inputmode?
 												project={{$.SearchOption.Project}}&
 												searchword=status:{{.ID}}&
@@ -73,7 +73,7 @@
         </div>
         <div class="row pl-3 pr-3">
             <div class="col">
-				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmode()" title="Ctrl + Alt + Shift + m">
+				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmodeV2()" title="Ctrl + Alt + Shift + m">
 					선택모드
 				</span>
 				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?

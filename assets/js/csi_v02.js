@@ -44,6 +44,36 @@ function selectmode() {
 	}
 }
 
+//checkbox all
+function selectmodeV2() {
+	var checknum = 0
+	// 체크된 Status 수를 구한다.
+	for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
+		if (document.getElementsByClassName('StatusCheckBox')[i].checked == true) {
+			checknum += 1
+		}
+	}
+	// 다 켜져있을 때는 다 끈다.
+	if (checknum == document.getElementsByClassName('StatusCheckBox').length) {
+		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
+			document.getElementsByClassName('StatusCheckBox')[i].checked=false
+		}
+	} else if (checknum == 0) {
+		// 다 꺼져 있을 때는 몇개만 켠다.
+		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
+			document.getElementsByClassName('StatusCheckBox')[i].checked=false
+		}
+		for(var i=0; i<document.getElementsByClassName('DefaultStatusCheckBox').length;i++) {
+			document.getElementsByClassName('DefaultStatusCheckBox')[i].checked=true
+		}
+	} else {
+		// 일부만 켜있다면 다 켠다.
+		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
+			document.getElementsByClassName('StatusCheckBox')[i].checked=true
+		}
+	}
+}
+
 
 //샷 체크박스 F5 눌렀을때 없애는 기능.
 function uncheck() {
