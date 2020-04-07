@@ -12,7 +12,7 @@ function changeTitle() {
 }
 
 
-//checkbox all
+// selectmode 함수는 SearchbarV2 검색바에 "선택모드" 버튼을 눌렀을 때 실행되는 함수이다. // legacy
 function selectmode() {
 	var onnum = 0
 	// 체크가 되어있는 갯수를 구한다.
@@ -21,7 +21,6 @@ function selectmode() {
 			onnum = onnum + 1
 		}
 	}
-
 	if (onnum == 9) {
 		for(var i=0; i<document.getElementsByClassName('StatusCheckBox').length;i++) {
 			document.getElementsByClassName('StatusCheckBox')[i].checked=false
@@ -44,7 +43,7 @@ function selectmode() {
 	}
 }
 
-//checkbox all
+// selectmodeV2 함수는 SearchbarV2 검색바에 "선택모드" 버튼을 눌렀을 때 실행되는 함수이다.
 function selectmodeV2() {
 	var checknum = 0
 	// 체크된 Status 수를 구한다.
