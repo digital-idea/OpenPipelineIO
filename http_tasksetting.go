@@ -278,6 +278,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	wfsPath := r.FormValue("wfspath")
 	order := r.FormValue("order")
 	category := r.FormValue("category")
+	initGenerate := str2bool(r.FormValue("initgenerate"))
 	t, err := getTaskSetting(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -294,6 +295,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	t.Order = floatOrder
 	t.Category = category
+	t.InitGenerate = initGenerate
 	err = SetTaskSetting(session, t)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

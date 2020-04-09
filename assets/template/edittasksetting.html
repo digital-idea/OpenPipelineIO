@@ -40,7 +40,12 @@
             <input type="text" name="category" class="form-control" placeholder="fx" value={{.Tasksetting.Category}}>
             <small class="form-text text-muted">Task 카테고리를 지정합니다. 예) smoke, fire, water는 FX 카테고리</small>
         </div>
-        <div class="form-group">
+        <div class="form-check">
+            <input type="checkbox" id="initgenerate" name="initgenerate" class="form-check-input" value="true"{{if .Tasksetting.InitGenerate}} checked{{end}}>
+            <label class="form-check-label" for="initgenerate">Item 생성시 이 Task를 자동생성 합니다.</label>
+        </div>
+
+        <div class="form-group pt-5">
             <label>경로 설정에 사용할 수 있는 변수</label>
             <small class="form-text text-muted">&#123;&#123;.Project&#125;&#125;: 프로젝트 코드</small>
             <small class="form-text text-muted">&#123;&#123;.Task&#125;&#125;: 태스크</small>
@@ -53,7 +58,7 @@
         </div>
         
         <div class="text-center">
-            <button type="submit" class="btn btn-outline-warning mt-5">Edit Task</button>
+            <button type="submit" class="btn btn-outline-warning mt-5">Update Task</button>
         </div>
         </form>
     </div>
