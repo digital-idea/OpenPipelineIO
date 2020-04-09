@@ -12,6 +12,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
+| /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태문자열 | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&status=wip"` |
+| /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assing,wip"` |
 | /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
 | /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
 | /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/allshots?project=TEMP"` |
@@ -143,7 +145,7 @@ print(r.json())
 #coding:utf8
 import json
 import urllib2
-endpoint = "https://csi.lazypic.org/api2/items?project=gunhamdo&searchword=SS&wip=true"
+endpoint = "https://csi.lazypic.org/api3/items?project=circle&searchword=SS&wip=true"
 data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
@@ -157,11 +159,11 @@ import urllib
 import urllib2
 
 values = {}
-values["project"] = "yeomryeok"
-values["searchword"] = "shot"
+values["project"] = "TEMP"
+values["searchword"] = "SS"
 values["wip"] = "true"
 
-endpoint = "https://csi.lazypic.org/api2/items"
+endpoint = "https://csi.lazypic.org/api3/items"
 query = urllib.urlencode(values)
 endpoint = endpoint + "?" + query
 data = json.load(urllib2.urlopen(endpoint))
@@ -171,7 +173,7 @@ print(data)
 - 서치키워드에 다중 문자열 검색시 공백이 들어가면 공백을 + 사용
 
 ```
-endpoint = "https://csi.lazypic.org/api2/items?project=TEMP&searchword=comp+배서영&wip=true"
+endpoint = "https://csi.lazypic.org/api3/items?project=TEMP&searchword=comp+배서영&wip=true"
 ```
 
 

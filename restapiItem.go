@@ -310,7 +310,7 @@ func handleAPISearchname(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleAPI2Items 함수는 아이템을 검색한다.
+// handleAPI2Items 함수는 아이템을 검색한다. // legacy
 func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
@@ -366,6 +366,74 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
 	}
+}
+
+// handleAPI3Items 함수는 아이템을 검색한다.
+func handleAPI3Items(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q, err := URLUnescape(r.URL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if q.Get("project") == "" {
+		http.Error(w, "project 문자가 비어있습니다", http.StatusInternalServerError)
+		return
+	}
+	op := SearchOption{
+		Project:           q.Get("project"),
+		Searchword:        q.Get("searchword"),
+		Sortkey:           "id",
+		Assign:            str2bool(q.Get("assign")),
+		Ready:             str2bool(q.Get("ready")),
+		Wip:               str2bool(q.Get("wip")),
+		Confirm:           str2bool(q.Get("confirm")),
+		Done:              str2bool(q.Get("done")),
+		Omit:              str2bool(q.Get("omit")),
+		Hold:              str2bool(q.Get("hold")),
+		Out:               str2bool(q.Get("out")),
+		None:              str2bool(q.Get("none")),
+		Shot:              str2bool(q.Get("shot")),
+		Assets:            str2bool(q.Get("asset")),
+		Type3d:            str2bool(q.Get("type3d")),
+		Type2d:            str2bool(q.Get("type2d")),
+		TrueStatus:        strings.Split(q.Get("truestatus"), ","),
+		SearchbarTemplate: "searchbarV1",
+	}
+	if q.Get("sortkey") != "" {
+		op.Sortkey = "id"
+	}
+	if q.Get("searchbartemplate") == "searchbarV2" {
+		op.SearchbarTemplate = "searchbarV2"
+	}
+	items, err := Searchv2(session, op)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(items)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIShot 함수는 project, name을 받아서 shot을 반환한다.
