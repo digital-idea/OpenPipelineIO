@@ -71,7 +71,7 @@ func AllStatus(session *mgo.Session) ([]Status, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("status")
 	results := []Status{}
-	err := c.Find(bson.M{}).Sort("order").All(&results)
+	err := c.Find(bson.M{}).Sort("-order").All(&results)
 	if err != nil {
 		return nil, err
 	}
