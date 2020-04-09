@@ -21,20 +21,6 @@ func addProjectCmd(name string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// 최초 프로젝트가 생성될 때 temp_asset 더미 아이템이 생성된다.
-	// 이 자료구조로 비상시 DB에 접근, 구조를 디버깅할 때 사용한다.
-	i := Item{
-		Project:    name,
-		Name:       "temp",
-		Type:       "asset",
-		ID:         "temp_asset",
-		Updatetime: time.Now().Format(time.RFC3339),
-		Status:     NONE,
-	}
-	err = addItem(session, name, i)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func rmProjectCmd(name string) {
@@ -82,7 +68,8 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Cut:        cut,
 		Type:       typ,
 		ID:         name + "_" + typ,
-		Status:     ASSIGN,
+		Status:     ASSIGN, // legacy
+		StatusV2:   "assign",
 		Thumpath:   thumbnailPath,
 		Platepath:  platePath,
 		Thummov:    thumbnailMovPath,
@@ -94,8 +81,9 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	}
 	i.Tasks = make(map[string]Task)
 	t := Task{
-		Title:  "comp",
-		Status: ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다.
+		Title:    "comp",
+		Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+		StatusV2: "assign",
 	}
 	i.Tasks["comp"] = t
 
@@ -168,6 +156,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     NONE,
+		StatusV2:   "none",
 		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
 		Assettags:  []string{},
@@ -216,6 +205,7 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		Platepath:  platePath,
 		Thummov:    thumbnailMovPath,
 		Status:     NONE,
+		StatusV2:   "none",
 		Dataname:   scanname, // 일반적인 프로젝트는 스캔네임과 데이터네임이 같다. PM의 노가다를 줄이기 위해서 기본적으로 같은값이 들어가고 추후 수동처리해야하는 부분은 손으로 수정한다.
 		Scanname:   scanname,
 		Scantime:   now,

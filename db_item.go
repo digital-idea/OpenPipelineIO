@@ -25,7 +25,6 @@ func addItem(session *mgo.Session, project string, i Item) error {
 		return err
 	}
 	if num != 1 {
-		log.Println("프로젝트가 존제하지 않습니다.")
 		return errors.New("프로젝트가 존재하지 않습니다")
 	}
 	//문서의 중복이 있는지 체크합니다.

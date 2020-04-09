@@ -516,9 +516,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Scantime = time.Now().Format(time.RFC3339)
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Status = ASSIGN
+		i.StatusV2 = "assign"
 		// 기본적으로 comp Task를 추가한다.
 		i.Tasks = make(map[string]Task)
-		i.Tasks["comp"] = Task{Status: ASSIGN, Title: "comp"}
+		i.Tasks["comp"] = Task{Status: ASSIGN, StatusV2: "assign", Title: "comp"}
 		err = addItem(session, project, i)
 		if err != nil {
 			s.Error = err.Error()
@@ -837,6 +838,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Status = ASSIGN
+		i.StatusV2 = "assign"
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
