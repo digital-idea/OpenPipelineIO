@@ -166,8 +166,8 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		Name:       name,
 		Type:       typ,
 		ID:         name + "_" + typ,
-		Status:     NONE,
-		StatusV2:   "none",
+		Status:     ASSIGN,
+		StatusV2:   "assign",
 		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
 		Assettags:  []string{},
@@ -181,6 +181,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	i.Tasks = make(map[string]Task)
 	for _, task := range tasks {
 		if !task.InitGenerate {
 			continue

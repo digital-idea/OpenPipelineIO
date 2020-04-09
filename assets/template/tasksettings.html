@@ -20,6 +20,7 @@
 						</h6>
 						<div class="card-body">
 							<p class="card-text m-0 p-0 small">
+								{{if .InitGenerate}}<span class="badge badge-darkmode">기본생성</span><br>{{end}}
 								Order: <span class="badge badge-darkmode">{{.Order}}</span><br>
 								LinuxPath: {{.LinuxPath}}<br>
 								WindowPath: {{.WindowPath}}<br>
