@@ -80,13 +80,29 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Updatetime: now,
 	}
 	i.Tasks = make(map[string]Task)
-	t := Task{
-		Title:    "comp",
-		Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
-		StatusV2: "assign",
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Fatal(err)
 	}
-	i.Tasks["comp"] = t
-
+	defer session.Close()
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, task := range tasks {
+		if !task.InitGenerate {
+			continue
+		}
+		if task.Type != "shot" {
+			continue
+		}
+		t := Task{
+			Title:    task.Name,
+			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			StatusV2: "assign",
+		}
+		i.Tasks[task.Name] = t
+	}
 	if scanframe != 0 {
 		i.ScanFrame = scanframe
 	}
@@ -123,11 +139,6 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		i.JustOut = justout
 	}
 	i.Project = project
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
 
 	// 현장데이터가 존재하는지 체크한다.
 	rollmedia := Scanname2RollMedia(scanname)
@@ -166,6 +177,24 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		log.Fatal(err)
 	}
 	defer session.Close()
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, task := range tasks {
+		if !task.InitGenerate {
+			continue
+		}
+		if task.Type != "asset" {
+			continue
+		}
+		t := Task{
+			Title:    task.Name,
+			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			StatusV2: "assign",
+		}
+		i.Tasks[task.Name] = t
+	}
 	if assettags == "" {
 		log.Fatal("에셋 생성시 assettags가 필요합니다.")
 	}

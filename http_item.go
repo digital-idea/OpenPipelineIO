@@ -487,6 +487,11 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	var success []Shot
 	var fails []Shot
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	for _, n := range names {
 		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
 			continue
@@ -517,9 +522,22 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Status = ASSIGN
 		i.StatusV2 = "assign"
-		// 기본적으로 comp Task를 추가한다.
+		// 기본적으로 생성해야할 Task를 추가한다.
 		i.Tasks = make(map[string]Task)
-		i.Tasks["comp"] = Task{Status: ASSIGN, StatusV2: "assign", Title: "comp"}
+		for _, task := range tasks {
+			if !task.InitGenerate {
+				continue
+			}
+			if task.Type != "shot" {
+				continue
+			}
+			t := Task{
+				Title:    task.Name,
+				Status:   ASSIGN, // legacy
+				StatusV2: "assign",
+			}
+			i.Tasks[task.Name] = t
+		}
 		err = addItem(session, project, i)
 		if err != nil {
 			s.Error = err.Error()
@@ -820,6 +838,11 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	var success []Asset
 	var fails []Asset
+	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	for _, n := range names {
 		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
 			continue
@@ -843,6 +866,22 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
 		i.CrowdAsset = crowdAsset
+		// 기본적으로 생성해야할 Task를 추가한다.
+		i.Tasks = make(map[string]Task)
+		for _, task := range tasks {
+			if !task.InitGenerate {
+				continue
+			}
+			if task.Type != "asset" {
+				continue
+			}
+			t := Task{
+				Title:    task.Name,
+				Status:   ASSIGN, // legacy
+				StatusV2: "assign",
+			}
+			i.Tasks[task.Name] = t
+		}
 		err = addItem(session, project, i)
 		if err != nil {
 			a.Error = err.Error()
