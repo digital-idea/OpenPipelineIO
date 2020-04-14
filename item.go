@@ -138,6 +138,12 @@ type Item struct {
 	ProductionCam   `json:"productioncam"` // 포스트 프로덕션 카메라 정보
 }
 
+// Publish 자료구조는 Task의 Publish 자료구조입니다.
+type Publish struct {
+	Path    string `json:"path"`    // 퍼블리시 경로
+	Version int    `json:"version"` // 버전
+}
+
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
 type Task struct {
 	Title        string             `json:"title"`        // 테스크 네임
@@ -150,12 +156,11 @@ type Task struct {
 	Date         string             `json:"date"`         // 2차 마감일 RFC3339
 	Mov          string             `json:"mov"`          // mov 경로
 	Mdate        string             `json:"mdate"`        // mov 업데이트 날짜 RFC3339
-	Pubfile      string             `json:"pubfile"`      // Pubfile
 	Due          int                `json:"due"`          // 예측 멘데이
 	Promday      int                `json:"promday"`      // 실제 멘데이
 	UserNote     string             `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
 	TaskLevel    `json:"tasklevel"` // 샷 레벨
-	Version      `json:"version"`   // Pubfile 버전정보
+	Publishes    map[string]Publish // 퍼블리쉬 정보
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다. // legacy
