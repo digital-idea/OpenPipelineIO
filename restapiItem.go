@@ -6786,3 +6786,89 @@ func handleAPITaskStatusNum(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIPublish 함수는 task의 publish 정보를 기록하는 핸들러이다.
+func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project     string `json:"project"`
+		Name        string `json:"name"`
+		Task        string `json:"task"`
+		Key         string `json:"key"`
+		Path        string `json:"path"`
+		MainVersion string `json:"mainversion"`
+		SubVersion  string `json:"subversion"`
+		Subject     string `json:"subject"`
+		Updatetime  string `json:"updatetime"`
+		UserID      string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	key := r.FormValue("key")
+	if key == "" {
+		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Key = key
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Path = path
+	rcp.MainVersion = r.FormValue("mainversion")
+	rcp.SubVersion = r.FormValue("subversion")
+	rcp.Subject = r.FormValue("subject")
+	rcp.Updatetime = time.Now().Format(time.RFC3339)
+	p := Publish{
+		MainVersion: rcp.MainVersion,
+		SubVersion:  rcp.SubVersion,
+		Path:        rcp.Path,
+		Subject:     rcp.Subject,
+		Updatetime:  rcp.Updatetime,
+	}
+	err = setTaskPublish(session, project, name, task, key, p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

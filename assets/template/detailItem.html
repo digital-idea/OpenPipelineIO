@@ -547,7 +547,7 @@
 		{{range mapToSlice $.Item.Tasks $.TasksettingOrderMap}}
 			<div class="text-darkmode">{{.Title}}</div>
 			{{range $key, $publish := .Publishes}}
-				{{$key}}: {{$publish.Path}} {{$publish.Updatetime}} {{$publish.Version}}
+				{{$key}}: {{$publish.Path}} {{$publish.Updatetime}} {{$publish.MainVersion}} {{$publish.SubVersion}} {{$publish.Subject}}
 			{{end}}
 		{{end}}
 	</div>
