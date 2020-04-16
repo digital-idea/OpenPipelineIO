@@ -86,7 +86,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
 | /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
 | /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
-
+| /api/publish | Publish를 셋팅한다. | project, task, key, path, version | `$ curl -d "project=TEMP&task=comp&key=pub&path=/path/file.nk&version=1" https://csi.lazypic.org/api/publish`|
 
 
 #### 샷정보 가지고오기. Python2.7x
