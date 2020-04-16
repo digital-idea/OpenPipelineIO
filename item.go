@@ -140,8 +140,9 @@ type Item struct {
 
 // Publish 자료구조는 Task의 Publish 자료구조입니다.
 type Publish struct {
-	Path    string `json:"path"`    // 퍼블리시 경로
-	Version int    `json:"version"` // 버전
+	Path       string `json:"path"`       // 퍼블리시 경로
+	Version    int    `json:"version"`    // 버전
+	Updatetime string `json:"updatetime"` // 업데이트 타임 RFC3339
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
