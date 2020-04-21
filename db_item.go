@@ -895,6 +895,197 @@ func TotalTaskStatusnum(session *mgo.Session, project, task string) (Infobarnum,
 	return results, nil
 }
 
+// TotalTaskAndUserStatusnum 함수는 프로젝트,테스크,유저의 샷에 대한 상태 갯수를 검색한다.
+func TotalTaskAndUserStatusnum(session *mgo.Session, project, task, user string) (Infobarnum, error) {
+	if project == "" {
+		return Infobarnum{}, nil
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+
+	var results Infobarnum
+	results.StatusNum = make(map[string]int)
+	// legacy
+	//진행률 출력.
+	assign := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": ASSIGN},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	assignnum, err := c.Find(assign).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	ready := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": READY},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	readynum, err := c.Find(ready).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	wip := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": WIP},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	wipnum, err := c.Find(wip).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	confirm := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": CONFIRM},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	confirmnum, err := c.Find(confirm).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	done := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": DONE},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	donenum, err := c.Find(done).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	omit := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": OMIT},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+
+	omitnum, err := c.Find(omit).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	hold := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": HOLD},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+	holdnum, err := c.Find(hold).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	out := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": OUT},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+	outnum, err := c.Find(out).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+
+	none := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".status": NONE},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+	nonenum, err := c.Find(none).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Assign = assignnum
+	results.Ready = readynum
+	results.Wip = wipnum
+	results.Confirm = confirmnum
+	results.Done = donenum
+	results.Omit = omitnum
+	results.Hold = holdnum
+	results.Out = outnum
+	results.None = nonenum
+
+	// statusv2
+	statuslist, err := AllStatus(session)
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	for _, s := range statuslist {
+		query := bson.M{"$and": []bson.M{
+			bson.M{"tasks." + task + ".statusv2": s.ID},
+			bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+			bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+		}}
+		num, err := c.Find(query).Count()
+		if err != nil {
+			continue
+		}
+		results.StatusNum[s.ID] = num
+	}
+	// 전체 아이템 갯수를 구한다.
+	queryTotal := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}, bson.M{"type": "asset"}}},
+	}}
+	totalnum, err := c.Find(queryTotal).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Total = totalnum
+	// 샷 갯수를 구한다.
+	queryShot := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	shotnum, err := c.Find(queryShot).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Shot = shotnum
+	// 샷2D 갯수를 구한다.
+	queryShot2D := bson.M{"$and": []bson.M{
+		bson.M{"shottype": "2d"},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	shot2dNum, err := c.Find(queryShot2D).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Shot2d = shot2dNum
+	// 샷3D 갯수를 구한다.
+	queryShot3D := bson.M{"$and": []bson.M{
+		bson.M{"shottype": "3d"},
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}},
+	}}
+	shot3dNum, err := c.Find(queryShot3D).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Shot3d = shot3dNum
+	// 에셋 갯수를 구한다.
+	queryAsset := bson.M{"$and": []bson.M{
+		bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: user, Options: "i"}},
+		bson.M{"$or": []bson.M{bson.M{"type": "asset"}}},
+	}}
+	assetnum, err := c.Find(queryAsset).Count()
+	if err != nil {
+		return Infobarnum{}, err
+	}
+	results.Assets = assetnum
+	// 진행률을 구한다
+	results.calculatePercent()
+	return results, nil
+}
+
 // TotalStatusnum 함수는 프로젝트의 전체샷에 대한 상태 갯수를 검색한다.
 func TotalStatusnum(session *mgo.Session, project string) (Infobarnum, error) {
 	if project == "" {

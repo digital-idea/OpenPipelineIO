@@ -288,6 +288,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/settaskstatus", handleAPISetTaskStatus) // legacy
 	http.HandleFunc("/api2/settaskstatus", handleAPI2SetTaskStatus)
 	http.HandleFunc("/api/taskstatusnum", handleAPITaskStatusNum)
+	http.HandleFunc("/api/taskanduserstatusnum", handleAPITaskAndUserStatusNum)
 	http.HandleFunc("/api/statusnum", handleAPIStatusNum)
 	http.HandleFunc("/api/setassigntask", handleAPISetAssignTask)
 	http.HandleFunc("/api/rmtask", handleAPIRmTask)

@@ -85,8 +85,10 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" https://csi.lazypic.org/api/scanname`|
 | /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
 | /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
-| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
+
 | /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/publish | Publish를 셋팅한다. | project, name, task, key, path, (mainversion), (subversion), (subject) | `$ curl -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto" https://csi.lazypic.org/api/publish`|
 
 
