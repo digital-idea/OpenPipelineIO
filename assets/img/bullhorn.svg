@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20">
+    <desc iVinci="yes" version="4.6" gridStep="20" showGrid="no" snapToGrid="no" codePlatform="0"/>
+    <g id="Layer1" name="Layer 1" opacity="1">
+        <g id="Shape1">
+            <desc shapeID="1" type="0" basicInfo-basicType="0" basicInfo-roundedRectRadius="12" basicInfo-polygonSides="6" basicInfo-starPoints="5" bounding="rect(-288,-256,576,511.999)" text="" font-familyName="" font-pixelSize="20" font-bold="0" font-underline="0" font-alignment="1" strokeStyle="0" markerStart="0" markerEnd="0" shadowEnabled="0" shadowOffsetX="0" shadowOffsetY="2" shadowBlur="4" shadowOpacity="160" blurEnabled="0" blurRadius="4" transform="matrix(0.027685,0,0,0.0288957,11.4272,10)" pers-center="0,0" pers-size="0,0" pers-start="0,0" pers-end="0,0" locked="0" mesh="" flag=""/>
+            <path id="shapePath1" d="M19.4004,9.53769 C19.4004,8.85488 19.0419,8.26511 18.5145,7.94495 L18.5145,3.52763 C18.5145,3.27483 18.3213,2.60272 17.6286,2.60272 C17.4315,2.60272 17.2358,2.67148 17.0755,2.80556 L14.7214,4.77132 C13.539,5.75783 12.0545,6.30137 10.5413,6.30137 L5.22572,6.30137 C4.24709,6.30137 3.4539,7.1292 3.4539,8.15067 L3.4539,10.9247 C3.4539,11.9461 4.24709,12.774 5.22572,12.774 L6.1587,12.774 C6.12023,13.0768 6.09837,13.3848 6.09837,13.6986 C6.09837,14.8478 6.35472,15.9337 6.80599,16.9043 C6.94967,17.2132 7.26336,17.3973 7.59227,17.3973 L9.64869,17.3973 C10.3699,17.3973 10.8029,16.5351 10.3657,15.9363 C9.91172,15.3145 9.64178,14.5389 9.64178,13.6986 C9.64178,13.3776 9.68662,13.069 9.76388,12.774 L10.5413,12.774 C12.0545,12.774 13.539,13.3175 14.7211,14.304 L17.0752,16.2698 C17.2322,16.4009 17.4272,16.4725 17.6283,16.4727 C18.3182,16.4727 18.5143,15.8144 18.5143,15.548 L18.5143,11.1307 C19.0419,10.8102 19.4004,10.2205 19.4004,9.53769 M16.7427,13.6241 L15.8277,12.8601 C14.3327,11.6118 12.4548,10.9247 10.5413,10.9247 L10.5413,8.15067 C12.4548,8.15067 14.3327,7.46353 15.8277,6.21522 L16.7427,5.45126 L16.7427,13.6241 Z" style="stroke:none;fill-rule:evenodd;fill:#b5ae9e;fill-opacity:1;"/>
+        </g>
+    </g>
+</svg>
