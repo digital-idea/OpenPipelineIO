@@ -86,7 +86,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
 | /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
 | /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task, user | `$ curl -d "project=TEMP&task=comp&user=jason" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/publish | Publish를 셋팅한다. | project, name, task, key, path, (mainversion), (subversion), (subject) | `$ curl -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto" https://csi.lazypic.org/api/publish`|
 
