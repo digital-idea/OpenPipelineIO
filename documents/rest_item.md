@@ -12,7 +12,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
-| /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태문자열 | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&status=wip"` |
+| /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태 | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&wip=true"` |
 | /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assing,wip"` |
 | /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
 | /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
