@@ -558,7 +558,7 @@
 						<a href="dilink://{{$publish.Path}}" class="text-warning small">{{$publish.Path}}</a>
 					</div>
 					<small class="font-italic">
-						{{$publish.Updatetime}}에 마지막으로 바뀌었습니다. MainVersion:{{$publish.MainVersion}} SubVersion:{{$publish.SubVersion}} Subject:{{$publish.Subject}}
+						{{$publish.Updatetime}}에 마지막으로 바뀌었습니다. MainVersion:{{$publish.MainVersion}} SubVersion:{{$publish.SubVersion}} Subject:{{$publish.Subject}} {{if $publish.KindOfUSD}}Kind Type of USD: {{$publish.KindOfUSD}}{{end}}
 					</small>
 				</div>
 			{{end}}

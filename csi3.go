@@ -69,7 +69,7 @@ var (
 	flagProject          = flag.String("project", "", "project name")
 	flagName             = flag.String("name", "", "name")
 	flagType             = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
-	flagAssettags        = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,assembly 형태로 입력")
+	flagAssettags        = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,group,assembly 형태로 입력")
 	flagAssettype        = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
 	flagHelp             = flag.Bool("help", false, "자세한 도움말을 봅니다.")
 	flagDate             = flag.String("date", "", "Date. ex) 2016-12-06")
