@@ -273,6 +273,11 @@
 									">≡</span>
 								</div>
 							{{end}}
+							<div id="{{$.Item.ID}}-task-{{.Title}}-usernote">
+								{{if .UserNote }}
+									<img src="/assets/img/bullhorn.svg" title="{{.UserNote}}" class="finger" onclick='alert("{{.UserNote}}");'>
+								{{end}}
+							</div>
 						</div>
 					{{end}}
 				</div>
