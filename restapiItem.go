@@ -6908,6 +6908,7 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 		MainVersion string `json:"mainversion"`
 		SubVersion  string `json:"subversion"`
 		Subject     string `json:"subject"`
+		KindOfUSD   string `json:"kindofusd"`
 		Updatetime  string `json:"updatetime"`
 		UserID      string `json:"userid"`
 	}
@@ -6963,12 +6964,14 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.MainVersion = r.FormValue("mainversion")
 	rcp.SubVersion = r.FormValue("subversion")
 	rcp.Subject = r.FormValue("subject")
+	rcp.KindOfUSD = r.FormValue("kindofusd")
 	rcp.Updatetime = time.Now().Format(time.RFC3339)
 	p := Publish{
 		MainVersion: rcp.MainVersion,
 		SubVersion:  rcp.SubVersion,
 		Path:        rcp.Path,
 		Subject:     rcp.Subject,
+		KindOfUSD:   rcp.KindOfUSD,
 		Updatetime:  rcp.Updatetime,
 	}
 	err = setTaskPublish(session, project, name, task, key, p)
