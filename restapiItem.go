@@ -6923,6 +6923,7 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -6934,6 +6935,7 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
 		return
 	}
+	rcp.Project = project
 	name := r.FormValue("name")
 	if name == "" {
 		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
@@ -6974,18 +6976,21 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Publish: %s:%s mainver:%s subver:%s subject:%s", rcp.Key, rcp.Path, rcp.MainVersion, rcp.SubVersion, rcp.Subject), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Publish: %s:%s\nmainver:%s subver:%s subject:%s\nProject: %s, Name: %s, Author: %s", rcp.Key, rcp.Path, rcp.MainVersion, rcp.SubVersion, rcp.Subject, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
