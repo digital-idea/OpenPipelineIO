@@ -20,7 +20,9 @@ func slacklog(session *mgo.Session, project, logString string) error {
 		err := slack.Send(p.SlackWebhookURL, "", payload)
 		if len(err) > 0 {
 			for _, e := range err {
-				log.Println(e) // Slack에 로깅하는 것은 중요한 기능이 아니기 때문에 에러 발생시 로그만 출력한다.
+				if *flagDebug {
+					log.Println(e) // Slack에 로깅하는 것은 중요한 기능이 아니기 때문에 에러 발생시 로그만 출력한다.
+				}
 			}
 		}
 	}
