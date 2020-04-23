@@ -551,46 +551,90 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 }
 
 // Searchnum 함수는 검색된 결과에 대한 상태별 갯수를 검색한다.
-func Searchnum(project string, items []Item) (Infobarnum, error) {
+func Searchnum(op SearchOption, items []Item) (Infobarnum, error) {
 	var results Infobarnum
 	results.Search = len(items)
 	results.StatusNum = make(map[string]int) // statusV2의 갯수를 처리하기 위해 StatusNum 맵을 초기화한다.
 	for _, item := range items {
-		if item.Shottype == "2D" || item.Shottype == "2d" {
-			results.Shot2d++
+		if op.Task == "" {
+			// Task가 "All"로 선택되어 있을 때
+			if item.Shottype == "2D" || item.Shottype == "2d" {
+				results.Shot2d++
+			}
+			if item.Shottype == "3D" || item.Shottype == "3d" {
+				results.Shot3d++
+			}
+			if item.Type == "asset" {
+				results.Assets++
+			}
+			if item.Type == "org" || item.Type == "left" {
+				results.Shot++
+			}
+			// legacy statusV1
+			switch item.Status {
+			case ASSIGN:
+				results.Assign++
+			case READY:
+				results.Ready++
+			case WIP:
+				results.Wip++
+			case CONFIRM:
+				results.Confirm++
+			case DONE:
+				results.Done++
+			case OMIT:
+				results.Omit++
+			case HOLD:
+				results.Hold++
+			case OUT:
+				results.Out++
+			case NONE:
+				results.None++
+			}
+			// statusV2
+			results.StatusNum[item.StatusV2]++
+		} else {
+			// task가 존재할 때
+			if _, ok := item.Tasks[op.Task]; !ok {
+				continue
+			}
+			if item.Shottype == "2D" || item.Shottype == "2d" {
+				results.Shot2d++
+			}
+			if item.Shottype == "3D" || item.Shottype == "3d" {
+				results.Shot3d++
+			}
+			if item.Type == "asset" {
+				results.Assets++
+			}
+			if item.Type == "org" || item.Type == "left" {
+				results.Shot++
+			}
+			// legacy statusV1
+			switch item.Tasks[op.Task].Status {
+			case ASSIGN:
+				results.Assign++
+			case READY:
+				results.Ready++
+			case WIP:
+				results.Wip++
+			case CONFIRM:
+				results.Confirm++
+			case DONE:
+				results.Done++
+			case OMIT:
+				results.Omit++
+			case HOLD:
+				results.Hold++
+			case OUT:
+				results.Out++
+			case NONE:
+				results.None++
+			}
+			// statusV2
+			results.StatusNum[item.Tasks[op.Task].StatusV2]++
 		}
-		if item.Shottype == "3D" || item.Shottype == "3d" {
-			results.Shot3d++
-		}
-		if item.Type == "asset" {
-			results.Assets++
-		}
-		if item.Type == "org" || item.Type == "left" {
-			results.Shot++
-		}
-		// legacy statusV1
-		switch item.Status {
-		case ASSIGN:
-			results.Assign++
-		case READY:
-			results.Ready++
-		case WIP:
-			results.Wip++
-		case CONFIRM:
-			results.Confirm++
-		case DONE:
-			results.Done++
-		case OMIT:
-			results.Omit++
-		case HOLD:
-			results.Hold++
-		case OUT:
-			results.Out++
-		case NONE:
-			results.None++
-		}
-		// statusV2
-		results.StatusNum[item.StatusV2]++
+
 	}
 	return results, nil
 }

@@ -176,7 +176,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Searchnum, err = Searchnum(rcp.SearchOption.Project, rcp.Items)
+	rcp.Searchnum, err = Searchnum(rcp.SearchOption, rcp.Items)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
