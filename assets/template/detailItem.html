@@ -179,7 +179,7 @@
 				<div class="mx-auto pt-1 row">
 					<div id="update-{{$.Item.Name}}">
 						{{if $.Item.Updatetime|CheckUpdate}}
-							<span class="badge badge-warning ml-1 mr-1">UPDATE {{ToHumantime $.Item.Updatetime}}</span>
+							<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
 						{{end}}
 					</div>
 					<div id="button-thumbplay-{{$.Item.Name}}">
@@ -561,6 +561,7 @@
 							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
 							<small class="font-italic pl-3">
 								{{.Updatetime}} 에 마지막으로 바뀌었습니다. MainVersion:{{.MainVersion}} SubVersion:{{.SubVersion}} Subject:{{.Subject}} {{if .KindOfUSD}}Kind Type of USD: {{.KindOfUSD}}{{end}}
+								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
 							</small>
 						</div>
 					{{end}}
