@@ -36,6 +36,7 @@ var funcMap = template.FuncMap{
 	"GetPath":             GetPath,
 	"ReverseStringSlice":  ReverseStringSlice,
 	"ReverseCommentSlice": ReverseCommentSlice,
+	"ReversePublishSlice": ReversePublishSlice,
 	"CutStringSlice":      CutStringSlice,
 	"CutCommentSlice":     CutCommentSlice,
 	"ToShortTime":         ToShortTime,

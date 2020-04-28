@@ -150,21 +150,21 @@ type Publish struct {
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
 type Task struct {
-	Title        string             `json:"title"`        // 테스크 네임
-	User         string             `json:"user"`         // 아티스트명
-	Status       string             `json:"status"`       // 상태 legacy
-	StatusV2     string             `json:"statusv2"`     // 샷 상태.
-	BeforeStatus string             `json:"beforestatus"` // 이전상태
-	Startdate    string             `json:"startdate"`    // 작업시작일 RFC3339
-	Predate      string             `json:"predate"`      // 1차 마감일 RFC3339
-	Date         string             `json:"date"`         // 2차 마감일 RFC3339
-	Mov          string             `json:"mov"`          // mov 경로
-	Mdate        string             `json:"mdate"`        // mov 업데이트 날짜 RFC3339
-	Due          int                `json:"due"`          // 예측 멘데이
-	Promday      int                `json:"promday"`      // 실제 멘데이
-	UserNote     string             `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
-	TaskLevel    `json:"tasklevel"` // 샷 레벨
-	Publishes    map[string]Publish // 퍼블리쉬 정보
+	Title        string               `json:"title"`        // 테스크 네임
+	User         string               `json:"user"`         // 아티스트명
+	Status       string               `json:"status"`       // 상태 legacy
+	StatusV2     string               `json:"statusv2"`     // 샷 상태.
+	BeforeStatus string               `json:"beforestatus"` // 이전상태
+	Startdate    string               `json:"startdate"`    // 작업시작일 RFC3339
+	Predate      string               `json:"predate"`      // 1차 마감일 RFC3339
+	Date         string               `json:"date"`         // 2차 마감일 RFC3339
+	Mov          string               `json:"mov"`          // mov 경로
+	Mdate        string               `json:"mdate"`        // mov 업데이트 날짜 RFC3339
+	Due          int                  `json:"due"`          // 예측 멘데이
+	Promday      int                  `json:"promday"`      // 실제 멘데이
+	UserNote     string               `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
+	TaskLevel    `json:"tasklevel"`   // 샷 레벨
+	Publishes    map[string][]Publish // 퍼블리쉬 정보
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다. // legacy

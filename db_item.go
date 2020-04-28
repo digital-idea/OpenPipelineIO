@@ -2772,7 +2772,9 @@ func setTaskPublish(session *mgo.Session, project, name, task, key string, p Pub
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{fmt.Sprintf("tasks.%s.publishes.%s", task, key): p}})
+	err = c.Update(
+		bson.M{"id": id},
+		bson.M{"$push": bson.M{fmt.Sprintf("tasks.%s.publishes.%s", task, key): p}})
 	if err != nil {
 		return err
 	}

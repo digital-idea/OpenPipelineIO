@@ -175,6 +175,18 @@ func ReverseStringSlice(lists []string) []string {
 	return result
 }
 
+// ReversePublishSlice 함수는 Publish 슬라이스의 아이템 순서를 역순으로 변경한다.
+func ReversePublishSlice(lists []Publish) []Publish {
+	if lists == nil {
+		return []Publish{}
+	}
+	var result []Publish
+	for i := len(lists); i > 0; i-- {
+		result = append(result, lists[i-1])
+	}
+	return result
+}
+
 // ReverseCommentSlice 함수는 받아들인 string 슬라이스의 아이템 순서를 역순으로 변경한다.
 // 받아들인 값이 nil이라면 빈 string 슬라이스를 반환하는데,
 // 그 이유는 template 파싱중 패닉이 일어나지 않게 하기 위해서다.

@@ -179,7 +179,7 @@
 				<div class="mx-auto pt-1 row">
 					<div id="update-{{$.Item.Name}}">
 						{{if $.Item.Updatetime|CheckUpdate}}
-							<span class="badge badge-warning ml-1 mr-1">UPDATE {{ToHumantime $.Item.Updatetime}}</span>
+							<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
 						{{end}}
 					</div>
 					<div id="button-thumbplay-{{$.Item.Name}}">
@@ -550,16 +550,21 @@
 	<div class="ml-1 mr-1 pt-5 pl-3 pr-3">
 		<div class="row pl-3 text-darkmode h5">Publish</div>
 		{{range mapToSlice $.Item.Tasks $.TasksettingOrderMap}}
-			<div class="text-darkmode pl-3">{{.Title}}</div>
-			{{range $key, $publish := .Publishes}}
+			<div class="text-darkmode pl-3 ">{{.Title}}</div>
+			{{range $key, $publishes := .Publishes}}
 				<div class="text-darkmode pl-5 pb-2">
-					<div>
-						<span class="badge badge-outline-darkmode">{{$key}}</span>
-						<a href="dilink://{{$publish.Path}}" class="text-warning small">{{$publish.Path}}</a>
+					<div class="">
+						<span class="badge badge-outline-darkmode">Key: {{$key}}</span>
 					</div>
-					<small class="font-italic">
-						{{$publish.Updatetime}}에 마지막으로 바뀌었습니다. MainVersion:{{$publish.MainVersion}} SubVersion:{{$publish.SubVersion}} Subject:{{$publish.Subject}} {{if $publish.KindOfUSD}}Kind Type of USD: {{$publish.KindOfUSD}}{{end}}
-					</small>
+					{{range ReversePublishSlice $publishes}}
+						<div class="row ml-0 mt-1">
+							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
+							<small class="font-italic pl-3">
+								{{.Updatetime}} 에 마지막으로 바뀌었습니다. MainVersion:{{.MainVersion}} SubVersion:{{.SubVersion}} Subject:{{.Subject}} {{if .KindOfUSD}}Kind Type of USD: {{.KindOfUSD}}{{end}}
+								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
+							</small>
+						</div>
+					{{end}}
 				</div>
 			{{end}}
 		{{end}}
