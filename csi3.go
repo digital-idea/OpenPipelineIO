@@ -320,6 +320,7 @@ func main() {
 					item.ScanIn = *flagScanin
 					item.ScanOut = *flagScanout
 					item.ScanFrame = *flagScanframe
+					item.Scanname = *flagScanname
 					item.PlateIn = *flagPlatein
 					item.PlateOut = *flagPlateout
 					item.JustIn = *flagJustin
@@ -331,7 +332,8 @@ func main() {
 						log.Fatal(err)
 					}
 					// log
-					logString := fmt.Sprintf("ScanTimecode: %s(%d) / %s(%d) Total: %df\nPlate Range: %d - %d\nPlatesize: %s",
+					logString := fmt.Sprintf("Scanname: %s, ScanTimecode: %s(%d) / %s(%d) Total: %df\nPlate Range: %d - %d\nPlatesize: %s",
+						*flagScanname,
 						*flagScantimecodein,
 						*flagScanin,
 						*flagScantimecodeout,
