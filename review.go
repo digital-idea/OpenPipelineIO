@@ -17,5 +17,6 @@ type Review struct {
 // Sketch 는 스케치 자료구조이다.
 type Sketch struct {
 	Frame      int    `json:"frame"`      // 프레임수
+	Author     string `json:"author"`     // 스케치를 그린사람
 	SketchPath string `json:"sketchpath"` // 스케치 경로
 }
