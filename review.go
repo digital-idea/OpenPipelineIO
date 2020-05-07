@@ -5,6 +5,7 @@ type Review struct {
 	Project     string    `json:"project"`     // 프로젝트
 	Task        string    `json:"task"`        // 태스크
 	Createtime  string    `json:"createtime"`  // 생성시간
+	Updatetime  string    `json:"updatetime"`  // 업데이트 시간
 	Author      string    `json:"author"`      // 작성자
 	Path        string    `json:"path"`        // 리뷰경로
 	PathMp4     string    `json:"pathmp4"`     // Mp4 패스경로, 웹 재생을 위해 필요함.
@@ -21,4 +22,6 @@ type Sketch struct {
 	Frame      int    `json:"frame"`      // 프레임수
 	Author     string `json:"author"`     // 스케치를 그린사람
 	SketchPath string `json:"sketchpath"` // 스케치 경로
+	Createtime string `json:"createtime"` // 생성시간
+	Updatetime string `json:"updatetime"` // 업데이트 시간
 }
