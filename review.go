@@ -7,8 +7,8 @@ type Review struct {
 	Createtime  string    `json:"createtime"`  // 생성시간
 	Author      string    `json:"author"`      // 작성자
 	Path        string    `json:"path"`        // 리뷰경로
-	PathMp4     string    `json:"pathmp4"`     // Mp4 패스경로
-	PathOgg     string    `json:"pathogg"`     // Ogg 패스경로
+	PathMp4     string    `json:"pathmp4"`     // Mp4 패스경로, 웹 재생을 위해 필요함.
+	PathOgg     string    `json:"pathogg"`     // Ogg 패스경로, 웹 재생을 위해 필요함.
 	Status      string    `json:"status"`      // 상태 approve, comment, waiting
 	Sketches    []Sketch  `json:"sketches"`    // 스케치 프레임
 	Playlist    []string  `json:"playlist"`    // 플레이리스트 목록
