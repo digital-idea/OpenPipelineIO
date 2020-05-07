@@ -509,4 +509,8 @@ input[type=checkbox]:checked+div{
 
 .border-darkmode {
 	border:1px solid rgb(60, 60, 57);
-} 
+}
+
+.bg-black {
+	background-color: #000000;
+}

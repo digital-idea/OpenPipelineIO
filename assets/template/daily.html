@@ -11,13 +11,21 @@
             <div class="p-1 m-1 bg-dark">Review Item 2</div>
             <div class="p-1 m-1 bg-dark">Review Item 3</div>
         </div>
-        <div class="col-8 border-darkmode">
+        <div class="col-8 border-darkmode bg-black">
             <div class="text-center">
                 <span class="text-darkmode">player(재생창)</span>
             </div>
         </div>
         <div class="col-2 border-darkmode overflow-auto text-darkmode">
-            Review text(리뷰내용)
+            <div style="height: 80%">
+                Review text(리뷰내용)
+            </div>
+            <div class="height: 20%">
+                <textarea class="form-control" id="ReviewComment" name="ReviewComment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
+                <div class="pt-1">
+                    <span class="btn btn-sm btn-outline-warning w-100">Send</span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row m-3">
