@@ -514,3 +514,7 @@ input[type=checkbox]:checked+div{
 .bg-black {
 	background-color: #000000;
 }
+
+.no-resize {
+	resize: none;
+}
