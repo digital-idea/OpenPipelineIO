@@ -1,0 +1,64 @@
+{{define "daily" }}
+{{template "headBootstrap" .}}
+<body>
+    <div id="floatingmenu">
+        {{template "navbar" .}}
+    </div>
+    <div id="blinkspace" style="height:60px"></div><!--기본 100px 여유를 두고 navbar와의 간격을 조정한다.-->
+    <div class="row m-3">
+        <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
+            <div class="w-100">
+                <div class="input-group p-1">
+                    
+                    <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어">
+                    
+                    <div class="input-group-btn input-group-append">
+                        <button class="btn btn-sm btn-darkmode" id="button">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">Waiting</span></div>
+            <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">Approve</span></div>
+            <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-danger">Retake</span></div>
+        </div>
+        <div class="col-8 border-darkmode bg-black">
+            <div class="text-center">
+                <span class="text-darkmode">Player(재생창)</span>
+            </div>
+        </div>
+        <div class="col-2 p-1 border-darkmode overflow-auto text-darkmode">
+            <div style="height: 80%">
+                Review text(리뷰내용)
+            </div>
+            <div style="height: 20%">
+                <textarea class="form-control no-resize" id="ReviewComment" name="ReviewComment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
+                <div class="pt-1 row">
+                    <div class="col">
+                        <span class="btn btn-sm btn-outline-warning w-100">Comment</span>
+                    </div>
+                    <div class="col">
+                        <span class="btn btn-sm btn-outline-success w-100">Approve</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row m-3">
+        <div class="col-12 border-darkmode text-darkmode" style="height: 10vh;">
+            Timeline, 관련 아이템 선택 리스트<br>
+            편집상의 앞뒤 컷, 이전 또는 이후 버전의 선택
+        </div>
+    </div>
+    
+    {{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+</html>
+{{end}}

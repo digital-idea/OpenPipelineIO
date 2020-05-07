@@ -506,4 +506,15 @@ input[type=checkbox]:checked+div{
 .help-text {
 	line-height: 150%;
 }
-  
+
+.border-darkmode {
+	border:1px solid rgb(60, 60, 57);
+}
+
+.bg-black {
+	background-color: #000000;
+}
+
+.no-resize {
+	resize: none;
+}
