@@ -470,21 +470,6 @@ func Minus(a, b int) int {
 	return a - b
 }
 
-// Review 템플릿 함수는 리뷰툴 URL을 리턴한다. ily는 현재 사용하지 않는다.
-func Review(project, name, typ, task string) string {
-	reviewURL := fmt.Sprintf("http://10.0.90.252:8000/filter?project=%s&name=%s", project, name)
-	switch typ {
-	case "shot", "org", "left":
-		reviewURL += "&type=shot"
-	case "asset":
-		reviewURL += "&type=asset"
-	}
-	if task != "" {
-		reviewURL += "&task=" + task
-	}
-	return reviewURL
-}
-
 // Protocol 템플릿 함수는 프로토콜 문자열을 반환한다.
 func Protocol(s string) string {
 	if strings.HasPrefix(s, "http://") {

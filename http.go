@@ -50,7 +50,6 @@ var funcMap = template.FuncMap{
 	"Framecal":            Framecal,
 	"Add":                 Add,
 	"Minus":               Minus,
-	"Review":              Review,
 	"Scanname2RollMedia":  Scanname2RollMedia,
 	"AddTagColon":         AddTagColon, //Hashtag2tag,
 	"Username2Elements":   Username2Elements,
