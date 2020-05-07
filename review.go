@@ -16,6 +16,7 @@ type Review struct {
 	Playlist    []string  `json:"playlist"`    // 플레이리스트 목록
 	Comments    []Comment `json:"comments"`    // 댓글
 	Description string    `json:"description"` // 설명
+	Progress    int       `json:"progress"`    // 진행률
 }
 
 // Sketch 는 스케치 자료구조이다.
