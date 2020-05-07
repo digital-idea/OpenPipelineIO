@@ -154,6 +154,7 @@ type Task struct {
 	User         string               `json:"user"`         // 아티스트명
 	Status       string               `json:"status"`       // 상태 legacy
 	StatusV2     string               `json:"statusv2"`     // 샷 상태.
+	ReviewStatus string               `json:"reviewstatus"` // 리뷰상태
 	BeforeStatus string               `json:"beforestatus"` // 이전상태
 	Startdate    string               `json:"startdate"`    // 작업시작일 RFC3339
 	Predate      string               `json:"predate"`      // 1차 마감일 RFC3339
