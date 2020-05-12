@@ -551,10 +551,14 @@
 		<div class="row pl-3 text-darkmode h5">Publish</div>
 		{{range mapToSlice $.Item.Tasks $.TasksettingOrderMap}}
 			<div class="text-darkmode pl-3 ">{{.Title}}</div>
+			{{$task := .Title}}
 			{{range $key, $publishes := .Publishes}}
-				<div class="text-darkmode pl-5 pb-2">
+				<div class="text-darkmode pl-5 pb-2" id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}">
 					<div class="">
 						<span class="badge badge-outline-darkmode">Key: {{$key}}</span>
+						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+							<span class="remove" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}')">×</span>
+						{{end}}
 					</div>
 					{{range ReversePublishSlice $publishes}}
 						<div class="row ml-0 mt-1">

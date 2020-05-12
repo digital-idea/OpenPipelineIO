@@ -926,6 +926,14 @@ function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
+function setRmPublishModal(project, id, task, key) {
+    document.getElementById("modal-rmpublish-project").value = project;
+    document.getElementById("modal-rmpublish-id").value = id;
+    document.getElementById("modal-rmpublish-task").value = task;
+    document.getElementById("modal-rmpublish-key").value = key;
+    document.getElementById("modal-rmpublish-title").innerHTML = "Rm Publish" + multiInputTitle(id);
+}
+
 function setEditCommentModal(project, id, time, text, media) {
     document.getElementById("modal-editcomment-project").value = project;
     document.getElementById("modal-editcomment-id").value = id;
@@ -953,6 +961,30 @@ function rmComment(project, id, date) {
         dataType: "json",
         success: function(data) {
             document.getElementById(`comment-${data.id}-${data.date}`).remove();
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function rmPublish(project, id, task, key) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/rmpublish",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
+            task: task,
+            key: key
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`publish-${data.project}-${data.id}-${data.task}-${data.key}`).remove();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
