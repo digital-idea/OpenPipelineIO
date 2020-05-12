@@ -10,6 +10,7 @@ import (
 
 	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // handleAPIAddReview 함수는 review를 추가하는 핸들러이다.
@@ -64,8 +65,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 
 	author := r.FormValue("author")
 	if author == "" {
-		http.Error(w, "author 를 설정해주세요", http.StatusBadRequest)
-		return
+		rcp.Review.Author = rcp.UserID
 	}
 	rcp.Review.Author = author
 
@@ -94,6 +94,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Createtime = time.Now().Format("2006-01-02 15:04:05")
 	rcp.Review.Updatetime = rcp.Review.Createtime
+	rcp.ID = bson.NewObjectId()
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
