@@ -6893,8 +6893,8 @@ func handleAPIStatusNum(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPIPublish 함수는 task의 publish 정보를 기록하는 핸들러이다.
-func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
+// handleAPITaskPublish 함수는 task의 publish 정보를 기록하는 핸들러이다.
+func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
@@ -6994,6 +6994,88 @@ func handleAPIPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIRmTaskPublish 함수는 task의 publish 정보를 삭제하는 핸들러이다.
+func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Task    string `json:"task"`
+		Key     string `json:"key"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	key := r.FormValue("key")
+	if key == "" {
+		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Key = key
+	err = rmTaskPublish(session, project, id, task, key)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("RmPublish: %s > %s", rcp.Task, rcp.Key), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("RmPublish: %s > %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Key, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

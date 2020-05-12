@@ -2780,3 +2780,20 @@ func setTaskPublish(session *mgo.Session, project, name, task, key string, p Pub
 	}
 	return nil
 }
+
+// rmTaskPublish 함수는 item > tasks > publishes 를 제거한다.
+func rmTaskPublish(session *mgo.Session, project, id, taskname, key string) error {
+	session.SetMode(mgo.Monotonic, true)
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	delete(item.Tasks[taskname].Publishes, key)
+	c := session.DB("project").C(project)
+	item.Updatetime = time.Now().Format(time.RFC3339)
+	err = c.Update(bson.M{"id": item.ID}, item)
+	if err != nil {
+		return err
+	}
+	return nil
+}
