@@ -261,10 +261,10 @@
 							{{end}}
 						</div>
 						<div id="{{$id}}-task-{{.Title}}-predate">
-							<span class="mt-1 ml-1 badge badge-outline-darkmode">{{ToShortTime .Predate}}</span>
+							<span class="mt-1 ml-1 badge badge-{{CheckDdlinev2 .Predate}}" title="1차마감">{{ToShortTime .Predate}}</span>
 						</div>
 						<div id="{{$id}}-task-{{.Title}}-date">
-							<span class="mt-1 ml-1 badge badge-darkmode">{{ToShortTime .Date}}</span>
+							<span class="mt-1 ml-1 badge badge-{{CheckDdlinev2 .Date}}" title="2차마감">{{ToShortTime .Date}}</span>
 						</div>
 						<div id="{{$id}}-task-{{.Title}}-user">
 							<a href="/user?id={{onlyID .User}}" class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</a>
