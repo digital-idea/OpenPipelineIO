@@ -7,6 +7,7 @@ type Setting struct {
 	RunScriptAfterEditUserProfile string `json:"runscriptafteredituserprofile"` // 사용자 정보 수정후 실행될 쉘스크립트
 	ExcludeProject                string `json:"excludeproject"`                // Search옵션에 제외할 프로젝트명, 마이그레이션 시 사용한다.
 	OCIOConfig                    string `json:"ocioconfig"`                    // OpenColorIO Config Path 설정
+	FFmpeg                        string `json:"ffmpeg"`                        // FFmpeg 경로 셋팅
 	Umask                         string `json:"umask"`                         // Umask 값. 예) 0002
 	RootPath                      string `json:"rootpath"`                      // Root경로 예) /show
 	ProjectPath                   string `json:"projectpath"`                   // Project경로 예) /show/{{.Project}}
