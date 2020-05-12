@@ -94,6 +94,7 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - [Organization](documents/rest_organization.md)
 - [Tasksetting](documents/rest_tasksetting.md)
 - [Status](documents/rest_status.md)
+- [Review](documents/rest_review.md)
 
 ### 썸네일 경로
 위에서 생성된 thumbnail 폴더는 아래 구조를 띄고 있습니다.
