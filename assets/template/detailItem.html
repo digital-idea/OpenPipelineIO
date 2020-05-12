@@ -565,7 +565,9 @@
 							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
 							<small class="font-italic pl-3">
 								{{.Updatetime}} 에 마지막으로 바뀌었습니다. MainVersion:{{.MainVersion}} SubVersion:{{.SubVersion}} Subject:{{.Subject}} {{if .KindOfUSD}}Kind Type of USD: {{.KindOfUSD}}{{end}}
-								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
+								{{if .Updatetime | CheckUpdate}}
+									<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
+								{{end}}
 							</small>
 						</div>
 					{{end}}
