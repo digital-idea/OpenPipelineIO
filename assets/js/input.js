@@ -956,25 +956,42 @@ function setDetailCommentsModal(project, id) {
             let comments = data.comments
             comments.reverse();
             for (var i = 0; i < comments.length; ++i) {
-                let comment;
-                comment = `<div id="comment-${data.id}-${comments[i].date}">
-                            <span class="text-badge">${comments[i].date} / <a href="/user?id=${data.comments[i].author}" class="text-darkmode">${comments[i].author}</a></span>
-                            <br>
-                            <small class="text-white">
-                                ${comments[i].text.replace(/\n/g, "<br />")}
-                                <br>
-                                <a href="dilink://${comments[i].media}" class="link">∞</a>
-                            </small>
-                            <hr class="my-1 p-0 m-0 divider">
-                        </div>`
-                document.getElementById('modal-detailcomments-body').innerHTML += comment;
-                let e = document.createElement("div")
-                e.innerHTML="asdf"
+                let br = document.createElement("br")
+                // elements way
+                let cmt = document.createElement("div")
+                cmt.setAttribute("id", "comment-"+data.id+"-"+comments[i].date)
+                let info = document.createElement("span")
+                info.setAttribute("class","text-badge")
+                info.innerHTML = comments[i].date + " / "
+                let userinfo = document.createElement("a")
+                userinfo.setAttribute("href", "/user?id="+data.comments[i].author)
+                userinfo.setAttribute("class","text-darkmode")
+                userinfo.innerHTML = comments[i].author
+                info.append(userinfo)
+                cmt.append(info)
+                cmt.append(br)
+                let text = document.createElement("small")
+                text.setAttribute("class","text-white")
+                text.innerHTML = "<br />" + comments[i].text.replace(/\n/g, "<br />")
+                cmt.append(text)
+                cmt.append(br)
+                if (comments[i].media !== "") {
+                    let link = document.createElement("a")
+                    let protocol = "dilink://"
+                    if (comments[i].media.startsWith("http")) {
+                        protocol = ""
+                    }
+                    link.setAttribute("href", protocol + comments[i].media)
+                    link.setAttribute("class","link")
+                    link.innerHTML = "∞"
+                    cmt.append(link)
+                }
+                let line = document.createElement("hr")
+                line.setAttribute("class","my-1 p-0 m-0 divider")
+                cmt.append(line)
                 let parents= document.getElementById('modal-detailcomments-body')
-                parents.append(e)
+                parents.append(cmt)
             }
-            
-
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
