@@ -222,7 +222,7 @@
 
 
 	<!--Task-->
-	<div class="col-sm-12 col-md-6 col-lg-2">
+	<div class="col-sm-12 col-md-6 col-lg-3">
 		{{if eq .Type "org" "left" "asset"}}
 			<div class="" id="{{.Name}}-add-taskbutton}}">
 				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -272,6 +272,11 @@
 						<div id="{{$id}}-task-{{.Title}}-playbutton">
 							{{if .Mov }}
 								<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
+							{{end}}
+						</div>
+						<div id="{{$id}}-task-{{.Title}}-publish">
+							{{if .Publishes }}
+								<a href="/detail?project={{$project}}&id={{$id}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="ml-1 publish">Pub</a>
 							{{end}}
 						</div>
 						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
@@ -523,7 +528,7 @@
 	</div>
 
 	<!--Comments-->
-	<div class="col-sm-12 col-md-12 col-lg-4">
+	<div class="col-sm-12 col-md-12 col-lg-3">
 		
 		{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 			<div class="float-right">
