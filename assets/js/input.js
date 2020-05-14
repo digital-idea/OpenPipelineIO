@@ -968,7 +968,13 @@ function setDetailCommentsModal(project, id) {
                             <hr class="my-1 p-0 m-0 divider">
                         </div>`
                 document.getElementById('modal-detailcomments-body').innerHTML += comment;
+                let e = document.createElement("div")
+                e.innerHTML="asdf"
+                let parents= document.getElementById('modal-detailcomments-body')
+                parents.append(e)
             }
+            
+
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
