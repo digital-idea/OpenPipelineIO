@@ -943,6 +943,39 @@ function setEditCommentModal(project, id, time, text, media) {
     document.getElementById("modal-editcomment-title").innerHTML = "Edit Comment" + multiInputTitle(id);
 }
 
+function setDetailCommentsModal(project, id) {
+    document.getElementById("modal-detailcomments-title").innerHTML = "Detail Comments" + multiInputTitle(id);
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api/item?project=${project}&id=${id}`,
+        headers: {
+            "Authorization": "Basic " + token
+        },
+        dataType: "json",
+        success: function(data) {
+            let comments = data.comments
+            comments.reverse();
+            for (var i = 0; i < comments.length; ++i) {
+                let comment;
+                comment = `<div id="comment-${data.id}-${comments[i].date}">
+                            <span class="text-badge">${comments[i].date} / <a href="/user?id=${data.comments[i].author}" class="text-darkmode">${comments[i].author}</a></span>
+                            <br>
+                            <small class="text-white">
+                                ${comments[i].text.replace(/\n/g, "<br />")}
+                                <br>
+                                <a href="dilink://${comments[i].media}" class="link">∞</a>
+                            </small>
+                            <hr class="my-1 p-0 m-0 divider">
+                        </div>`
+                document.getElementById('modal-detailcomments-body').innerHTML += comment;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function rmComment(project, id, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;

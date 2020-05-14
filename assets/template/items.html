@@ -522,7 +522,7 @@
 
 	</div>
 
-	<!--수정사항-->
+	<!--Comments-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		
 		{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
@@ -554,7 +554,7 @@
 			{{end}}
 			{{$length := len .Comments }} {{ if gt $length 3 }}
 				<div class="text-right">
-					<a href="/detail?project={{.Project}}&id={{.ID}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="small text-darkmode">더보기</a>
+					<span class="finger small text-darkmode" data-toggle="modal" data-target="#modal-detailcomments" onclick="setDetailCommentsModal('{{$project}}','{{$id}}')">더보기</span>
 				</div>
 			{{end}}
 		</div>
