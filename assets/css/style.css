@@ -376,13 +376,7 @@ input[type=checkbox]:checked+div{
 	transform: translate(0, -50%);
 }
 
-.comments-box {
-	height: 250px;
-	overflow: auto;
-}
-
-
-.play, .select, .add, .link, .edit {
+.play, .select, .add, .link, .edit, .publish {
 	color: #A7A59C;
 	background-color: rgb(55, 54, 52);
 	border:1px solid #A7A59C;
@@ -393,7 +387,7 @@ input[type=checkbox]:checked+div{
 	cursor: pointer;
 }
 
-.play:hover {
+.play:hover, .publish:hover {
 	color: rgb(216, 213, 196);
 	background-color: rgb(55, 54, 52);
 	border:1px solid #A7A59C;
