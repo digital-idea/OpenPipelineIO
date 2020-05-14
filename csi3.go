@@ -177,6 +177,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		err = dilog.Add(*flagDBIP, ip, fmt.Sprintf("initpass - ID: %s 사용자의 패스워드가 초기화 되었습니다", *flagID), "", "", "csi", "root", 180)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return
 	} else if *flagRm == "division" && *flagID != "" { // division 삭제
 		if user.Username != "root" {
