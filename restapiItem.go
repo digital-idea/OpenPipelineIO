@@ -6909,6 +6909,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 		SubVersion  string `json:"subversion"`
 		Subject     string `json:"subject"`
 		KindOfUSD   string `json:"kindofusd"`
+		UseThis     bool   `json:"usethis"`
 		Updatetime  string `json:"updatetime"`
 		UserID      string `json:"userid"`
 	}
@@ -6965,6 +6966,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.SubVersion = r.FormValue("subversion")
 	rcp.Subject = r.FormValue("subject")
 	rcp.KindOfUSD = r.FormValue("kindofusd")
+	rcp.UseThis = str2bool(r.FormValue("usethis"))
 	rcp.Updatetime = time.Now().Format(time.RFC3339)
 	p := Publish{
 		MainVersion: rcp.MainVersion,
@@ -6972,6 +6974,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 		Path:        rcp.Path,
 		Subject:     rcp.Subject,
 		KindOfUSD:   rcp.KindOfUSD,
+		UseThis:     rcp.UseThis,
 		Updatetime:  rcp.Updatetime,
 	}
 	err = setTaskPublish(session, project, name, task, key, p)
