@@ -88,9 +88,27 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task, user | `$ curl -d "project=TEMP&task=comp&user=jason" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/publish | Publish를 셋팅한다. | project, name, task, key, path, (usethis), (mainversion), (subversion), (subject), (kindofusd) | `$ curl -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto&kindofusd=component&usethis=true" https://csi.lazypic.org/api/publish`|
+| /api/publish | Publish를 셋팅한다. | project, name, task, key, path, (usethis), (mainversion), (subversion), (subject), (kindofusd) | `$ curl -X POST -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto&kindofusd=component&usethis=true" https://csi.lazypic.org/api/publish`|
 | /api/rmpublish | Publish를 삭제한다. | project, id, task, key | `$ curl -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublish`|
 
+#### URL Encode
+`/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야한다.
+`%` 문자는 `%25` 값에 해당한다. 일일이 변환할 수 없기 때문에 curl에서는 --data-urlencode 명령어를 사용하면 된다.
+
+```bash
+$ curl -X POST \
+--data-urlencode "project=TEMP" \
+--data-urlencode "name=SS_0010" \
+--data-urlencode "task=comp" \
+--data-urlencode "key=pub" \
+--data-urlencode "path=/path/file.%04d.exr" \
+--data-urlencode "mainversion=1" \
+--data-urlencode "subversion=1" \
+--data-urlencode "subject=roto" \
+--data-urlencode "kindofusd=component" \
+--data-urlencode "usethis=true" \
+https://csi.lazypic.org/api/publish
+```
 
 #### 샷정보 가지고오기. Python2.7x
 - TEMP 프로젝트 OPN_0010 샷 정보를 가지고 오기(암호화 토큰키 사용)
