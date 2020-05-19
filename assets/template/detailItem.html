@@ -563,9 +563,13 @@
 					{{range ReversePublishSlice $publishes}}
 						<div class="row ml-3 mt-1">
 							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
-							{{if .UseThis}}
-								<small class="font-italic pl-3">
+							{{if eq .Status "usethis" }}
+								<small class="pl-3">
 									<span class="badge badge-info ml-1 mr-1"> ◀ Use This</span>
+								</small>
+							{{else if eq .Status "working"}}
+								<small class="font-italic pl-3">
+									<span class="badge badge-success ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Updatetime}}')"> Working</span>
 								</small>
 							{{else}}
 								<small class="font-italic pl-3">

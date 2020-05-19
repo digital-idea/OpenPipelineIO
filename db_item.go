@@ -2772,14 +2772,14 @@ func setTaskPublish(session *mgo.Session, project, name, task, key string, p Pub
 	if err != nil {
 		return err
 	}
-	if p.UseThis {
+	if p.Status == "usethis" {
 		// UseThis값이 True 라면, 기존에 등록된 UseThis 값을 false로 바꾸어야 한다.
 		i, err := getItem(session, project, id)
 		if err != nil {
 			return err
 		}
 		for n := range i.Tasks[task].Publishes[key] {
-			i.Tasks[task].Publishes[key][n].UseThis = false
+			i.Tasks[task].Publishes[key][n].Status = "notuse"
 		}
 		err = setItem(session, project, i)
 		if err != nil {
