@@ -569,11 +569,20 @@
 								</small>
 							{{else}}
 								<small class="font-italic pl-3">
-									<span class="badge badge-outline-darkmode ml-1 mr-1 finger"> Not Use</span>
+									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Updatetime}}')"> Not Use</span>
 								</small>
 							{{end}}
 							<small class="font-italic pl-3">
-								{{.Updatetime}} 에 마지막으로 바뀌었습니다. MainVersion:{{.MainVersion}} SubVersion:{{.SubVersion}} Subject:{{.Subject}}
+								{{.Updatetime}} 에 마지막으로 바뀌었습니다.
+								{{if .MainVersion}}
+									MainVersion:{{.MainVersion}}
+								{{end}}
+								{{if .SubVersion}}
+									SubVersion:{{.SubVersion}}
+								{{end}}
+								{{if .Subject}}
+									Subject:{{.Subject}}
+								{{end}}
 								{{if .KindOfUSD}}
 									Kind Type of USD: {{.KindOfUSD}}
 								{{end}}
