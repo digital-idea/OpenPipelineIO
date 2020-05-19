@@ -943,7 +943,7 @@ function setPublishModal(project, id, task, key, time) {
     document.getElementById("modal-setpublish-message").innerHTML = `
         ${project} > ${id} > ${task} > ${key}<br>
         ${time} 에 Publish 된 데이터를<br>
-        타팀에서 사용해야할 버전으로 설정하시겠습니까?
+        타팀의 아티스트가 사용해야 할 버전으로 설정하시겠습니까?
     `
 }
 
@@ -3567,4 +3567,40 @@ function TopClick() {
     searchbox.style.display = "block";
     document.getElementById("blinkspace").style.height = "550px";
     document.getElementById("foldoption").innerText = "Collapse Searchbox ▲"
+}
+
+function setPublish(project, id, task, key, createtime) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/setpublishstatus",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
+            task: task,
+            key: key,
+            createtime: createtime,
+            status: "usethis",
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            // 과거 아이디로 시작하는 요소를 찾고 내부를 notuse 로 바꾼다.
+            let publishes = document.querySelectorAll(`*[id^="publish-${data.project}-${data.id}-${data.task}-${data.key}-"]`);
+            for (let i = 0; i < publishes.length; i++) {
+                document.getElementById(publishes[i].id).innerHTML = `
+                <span class="badge badge-outline-darkmode ml-1 mr-1"> Not Use</span>
+                `
+            }
+            // 클릭한 요소는 벳지를 업데이트 한다.
+            document.getElementById(`publish-${data.project}-${data.id}-${data.task}-${data.key}-${data.createtime}`).innerHTML = `
+                <span class="badge badge-info ml-1 mr-1"> ◀ Use This</span>
+            `
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }

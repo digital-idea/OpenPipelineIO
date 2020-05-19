@@ -6910,7 +6910,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 		Subject     string `json:"subject"`
 		KindOfUSD   string `json:"kindofusd"`
 		Status      string `json:"status"`
-		Updatetime  string `json:"updatetime"`
+		Createtime  string `json:"createtime"`
 		UserID      string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -6972,7 +6972,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Status = status
-	rcp.Updatetime = time.Now().Format(time.RFC3339)
+	rcp.Createtime = time.Now().Format(time.RFC3339)
 	p := Publish{
 		MainVersion: rcp.MainVersion,
 		SubVersion:  rcp.SubVersion,
@@ -6980,7 +6980,7 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 		Subject:     rcp.Subject,
 		KindOfUSD:   rcp.KindOfUSD,
 		Status:      rcp.Status,
-		Updatetime:  rcp.Updatetime,
+		Createtime:  rcp.Createtime,
 	}
 	err = setTaskPublish(session, project, name, task, key, p)
 	if err != nil {
@@ -7080,6 +7080,117 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("RmPublish: %s > %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Key, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPITaskPublishStatus 함수는 task > publish > status 정보를 변경한다.
+func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project    string `json:"project"`
+		ID         string `json:"id"`
+		Task       string `json:"task"`
+		Key        string `json:"key"`
+		Status     string `json:"status"`
+		Createtime string `json:"createtime"`
+		UserID     string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	key := r.FormValue("key")
+	if key == "" {
+		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Key = key
+	createtime := r.FormValue("createtime")
+	if createtime == "" {
+		http.Error(w, "createtime을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Createtime = createtime
+	status := r.FormValue("status")
+	if !(status == "usethis" || status == "notuse" || status == "working") {
+		http.Error(w, "status는 usethis, notuse, working 문자열만 사용할 수 있습니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Status = status
+	i, err := getItem(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for n, p := range i.Tasks[task].Publishes[key] {
+		// 대상시간과 틀린 아이템은 notuse 상태로 변경한다.
+		if p.Createtime != rcp.Createtime {
+			i.Tasks[task].Publishes[key][n].Status = "notuse"
+			continue
+		}
+		i.Tasks[task].Publishes[key][n].Status = rcp.Status
+	}
+	err = setItem(session, project, i)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Publish Status: key: %s, updatetime: %s, status: %s", rcp.Key, rcp.Createtime, rcp.Status), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Publish Status: key: %s, updatetime: %s, status: %s\nProject: %s, ID: %s, Author: %s", rcp.Key, rcp.Createtime, rcp.Status, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
