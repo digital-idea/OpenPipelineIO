@@ -555,7 +555,7 @@
 			{{range $key, $publishes := .Publishes}}
 				<div class="text-darkmode pl-5 pb-2" id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}">
 					<div class="">
-						<span class="">publish key: {{$key}}</span>
+						<span class="">key: {{$key}}</span>
 						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 							<span class="remove" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}')">×</span>
 						{{end}}
@@ -563,21 +563,17 @@
 					{{range ReversePublishSlice $publishes}}
 						<div class="row ml-3 mt-1">
 							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
-							{{if eq .Status "usethis" }}
-								<small class="pl-3">
+							<small id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}-{{.Createtime}}" value="{{.Createtime}}" class="font-italic pl-3">
+								{{if eq .Status "usethis" }}
 									<span class="badge badge-info ml-1 mr-1"> ◀ Use This</span>
-								</small>
-							{{else if eq .Status "working"}}
-								<small class="font-italic pl-3">
-									<span class="badge badge-success ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Updatetime}}')"> Working</span>
-								</small>
-							{{else}}
-								<small class="font-italic pl-3">
-									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Updatetime}}')"> Not Use</span>
-								</small>
-							{{end}}
+								{{else if eq .Status "working"}}								
+									<span class="badge badge-success ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')"> Working</span>
+								{{else}}
+									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')"> Not Use</span>
+								{{end}}
+							</small>
 							<small class="font-italic pl-3">
-								{{.Updatetime}} 에 마지막으로 바뀌었습니다.
+								{{.Createtime}} 에 생성되었습니다.
 								{{if .MainVersion}}
 									MainVersion:{{.MainVersion}}
 								{{end}}
@@ -590,8 +586,8 @@
 								{{if .KindOfUSD}}
 									Kind Type of USD: {{.KindOfUSD}}
 								{{end}}
-								{{if .Updatetime | CheckUpdate}}
-									<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
+								{{if .Createtime | CheckUpdate}}
+									<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
 								{{end}}
 							</small>
 						</div>

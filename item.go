@@ -144,7 +144,7 @@ type Publish struct {
 	MainVersion string `json:"mainversion"` // 메인버전
 	SubVersion  string `json:"subversion"`  // 서브버전
 	Subject     string `json:"subject"`     // Publish 주제
-	Updatetime  string `json:"updatetime"`  // 업데이트 타임 RFC3339
+	Createtime  string `json:"createtime"`  // 생성시간 RFC3339
 	KindOfUSD   string `json:"kindofusd"`   // .usd 포멧 kind: component, group, assembly
 	Status      string `json:"status"`      // UseThis, NotUse, Working
 }
