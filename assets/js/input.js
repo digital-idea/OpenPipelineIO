@@ -934,6 +934,19 @@ function setRmPublishModal(project, id, task, key) {
     document.getElementById("modal-rmpublish-title").innerHTML = "Rm Publish" + multiInputTitle(id);
 }
 
+function setPublishModal(project, id, task, key, time) {
+    document.getElementById("modal-setpublish-project").value = project;
+    document.getElementById("modal-setpublish-id").value = id;
+    document.getElementById("modal-setpublish-task").value = task;
+    document.getElementById("modal-setpublish-key").value = key;
+    document.getElementById("modal-setpublish-time").value = time;
+    document.getElementById("modal-setpublish-message").innerHTML = `
+        ${project} > ${id} > ${task} > ${key}<br>
+        ${time} 에 Publish 된 데이터를<br>
+        타팀에서 사용해야할 버전으로 설정하시겠습니까?
+    `
+}
+
 function setEditCommentModal(project, id, time, text, media) {
     document.getElementById("modal-editcomment-project").value = project;
     document.getElementById("modal-editcomment-id").value = id;

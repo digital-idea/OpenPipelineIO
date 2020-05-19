@@ -146,7 +146,7 @@ type Publish struct {
 	Subject     string `json:"subject"`     // Publish 주제
 	Updatetime  string `json:"updatetime"`  // 업데이트 타임 RFC3339
 	KindOfUSD   string `json:"kindofusd"`   // .usd 포멧 kind: component, group, assembly
-	UseThis     bool   `json:"usethis"`     // 버전 사용여부
+	Status      string `json:"status"`      // UseThis, NotUse, Working
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
