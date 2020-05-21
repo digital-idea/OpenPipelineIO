@@ -2,12 +2,28 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"gopkg.in/mgo.v2"
 )
 
-// handleDaily 함수는 shot을 추가하는 페이지이다.
 func handleDaily(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	today := time.Now().Format("2006-01-02")
+	// 오늘날짜를 구하고 리다이렉트한다.
+	http.Redirect(w, r, "/review?searchword=daily:"+today, http.StatusSeeOther)
+}
+
+// handleReview 함수는 리뷰 페이지이다.
+func handleReview(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
@@ -24,14 +40,17 @@ func handleDaily(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	q := r.URL.Query()
 	type recipe struct {
 		User        User
 		Projectlist []string
 		Devmode     bool
 		SearchOption
-		Status []Status
+		Searchword string
+		Status     []Status
 	}
 	rcp := recipe{}
+	rcp.Searchword = q.Get("searchword")
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -54,7 +73,7 @@ func handleDaily(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = TEMPLATES.ExecuteTemplate(w, "daily", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "review", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
