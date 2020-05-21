@@ -966,6 +966,9 @@ function setDetailCommentsModal(project, id) {
         },
         dataType: "json",
         success: function(data) {
+            // 기존 디테일을 지운다.
+            document.getElementById('modal-detailcomments-body').innerHTML = "";
+            // 코멘트를 추가한다.
             let comments = data.comments
             comments.reverse();
             for (var i = 0; i < comments.length; ++i) {
