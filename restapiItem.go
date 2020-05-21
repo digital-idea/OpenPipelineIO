@@ -2936,7 +2936,6 @@ func handleAPIRmTask(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string `json:"project"`
-		Name    string `json:"name"`
 		ID      string `json:"id"`
 		Task    string `json:"task"`
 		UserID  string `json:"userid"`
@@ -2984,19 +2983,19 @@ func handleAPIRmTask(w http.ResponseWriter, r *http.Request) {
 			rcp.Task = v
 		}
 	}
-	rcp.Name, err = RmTask(session, rcp.Project, rcp.ID, rcp.Task)
+	err = RmTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Task: %s", rcp.Task), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Task: %s", rcp.Task), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Task: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Task: %s\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
