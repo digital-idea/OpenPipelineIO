@@ -541,12 +541,83 @@
         </div>
     </div>
 
+    <!-- Modal: AddPublish-->
+    <div class="modal fade" id="modal-addpublish" tabindex="-1" role="dialog" aria-labelledby="modal-addpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addpublish-title">Add Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-setpublish-project">
+                    <input type="hidden" class="form-control" id="modal-setpublish-id">
+                    <input type="hidden" class="form-control" id="modal-setpublish-task">
+                    
+                    <div class="form-group">
+                        <label for="modal-addpublish-key" class="col-form-label">Key</label>
+                        <input type="text" class="form-control" id="modal-addpublish-key">
+                        <small class="form-text text-muted">Publish 데이터 key 이름을 입력해주세요.</small>
+                        <small class="form-text text-muted">예) precomp, publish, cache 등등.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addpublish-key" class="col-form-label">Path</label>
+                        <input type="text" class="form-control" id="modal-addpublish-path">
+                        <small class="form-text text-muted">Publish 파일 경로를 입력해주세요.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="modal-addpublish-status" class="form-control">
+                            <option value="usethis">Use This(사용할 버전으로 등록)</option>                        
+                            <option value="working">Woring(작업중인 상태로 등록)</option>
+                            <option value="notuse">Not Use(사용하지 않는 버전으로 등록)</option>
+                        </select>
+                        <small class="form-text text-muted">Publish 상태를 선택해주세요.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addpublish-subject" class="col-form-label">Subject</label>
+                        <input type="text" class="form-control" id="modal-addpublish-subject">
+                        <small class="form-text text-muted">Publish된 사유, 주제를 입력해주세요. 예) "테스트 퍼블리쉬"</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Main Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control form-control-sm" id="modal-addpublish-mainversion">
+                            <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Sub Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control form-control-sm" id="modal-addpublish-subversion">
+                            <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Pixar USD kind setting</label>
+                        <select name="modal-addpublish-kindofuse" class="form-control">
+                            <option value="">Pixar USD 아님</option>
+                            <option value="component">Component</option>
+                            <option value="group">Group</option>
+                            <option value="assembly">Assembly</option>
+                        </select>
+                        <small class="form-text text-muted">.usd 에셋 구성 형태를 선택해주세요.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addPublish(document.getElementById('modal-setpublish-project').value, document.getElementById('modal-setpublish-id').value, document.getElementById('modal-setpublish-task').value, document.getElementById('modal-setpublish-key').value, document.getElementById('modal-setpublish-time').value)" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: SetPublish-->
     <div class="modal fade" id="modal-setpublish" tabindex="-1" role="dialog" aria-labelledby="modal-setpublish" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
-                <h5 class="modal-title" id="modal-rmcomment-title">Set Publish</h5>
+                <h5 class="modal-title" id="modal-rmpublish-title">Set Publish</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="text-darkmode">&times;</span>
                 </button>
