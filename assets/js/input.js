@@ -783,7 +783,11 @@ function editNote(project, id, text) {
     });
 }
 
-
+function setAddPublishModal(project, name, task) {
+    document.getElementById("modal-addpublish-project").value = project
+    document.getElementById("modal-addpublish-name").value = name
+    document.getElementById("modal-addpublish-task").value = task
+}
 
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
@@ -926,12 +930,12 @@ function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
-function setRmPublishModal(project, id, task, key) {
-    document.getElementById("modal-rmpublish-project").value = project;
-    document.getElementById("modal-rmpublish-id").value = id;
-    document.getElementById("modal-rmpublish-task").value = task;
-    document.getElementById("modal-rmpublish-key").value = key;
-    document.getElementById("modal-rmpublish-title").innerHTML = "Rm Publish" + multiInputTitle(id);
+function setRmPublishKeyModal(project, id, task, key) {
+    document.getElementById("modal-rmpublishkey-project").value = project;
+    document.getElementById("modal-rmpublishkey-id").value = id;
+    document.getElementById("modal-rmpublishkey-task").value = task;
+    document.getElementById("modal-rmpublishkey-key").value = key;
+    document.getElementById("modal-rmpublishkey-title").innerHTML = "Rm Publish Key" + multiInputTitle(id);
 }
 
 function setPublishModal(project, id, task, key, time) {
@@ -1040,19 +1044,18 @@ function rmComment(project, id, date) {
     });
 }
 
-function rmPublish(project, id, task, key) {
-    let token = document.getElementById("token").value;
+function rmPublishKey() {
     $.ajax({
-        url: "/api/rmpublish",
+        url: "/api/rmpublishkey",
         type: "post",
         data: {
-            project: project,
-            id: id,
-            task: task,
-            key: key
+            project: document.getElementById('modal-rmpublishkey-project').value,
+            id: document.getElementById('modal-rmpublishkey-id').value,
+            task: document.getElementById('modal-rmpublishkey-task').value,
+            key: document.getElementById('modal-rmpublishkey-key').value
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function(data) {
@@ -3589,18 +3592,48 @@ function setPublish(project, id, task, key, createtime) {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
-        success: function(data) {
-            // 과거 아이디로 시작하는 요소를 찾고 내부를 notuse 로 바꾼다.
-            let publishes = document.querySelectorAll(`*[id^="publish-${data.project}-${data.id}-${data.task}-${data.key}-"]`);
-            for (let i = 0; i < publishes.length; i++) {
-                document.getElementById(publishes[i].id).innerHTML = `
-                <span class="badge badge-outline-darkmode ml-1 mr-1"> Not Use</span>
-                `
-            }
-            // 클릭한 요소는 벳지를 업데이트 한다.
-            document.getElementById(`publish-${data.project}-${data.id}-${data.task}-${data.key}-${data.createtime}`).innerHTML = `
-                <span class="badge badge-info ml-1 mr-1"> ◀ Use This</span>
-            `
+        success: function() {
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function addPublish() {
+    let token = document.getElementById("token").value
+    let project = document.getElementById('modal-addpublish-project').value
+    let name = document.getElementById('modal-addpublish-name').value
+    let task = document.getElementById('modal-addpublish-task').value
+    let key = document.getElementById('modal-addpublish-key').value
+    let path = document.getElementById('modal-addpublish-path').value
+    let status = document.getElementById('modal-addpublish-status').value
+    let subject = document.getElementById('modal-addpublish-subject').value
+    let mainversion = document.getElementById('modal-addpublish-mainversion').value
+    let subversion = document.getElementById('modal-addpublish-subversion').value
+    let kindofusd = document.getElementById('modal-addpublish-kindofusd').value
+    $.ajax({
+        url: "/api/addpublish",
+        type: "post",
+        data: {
+            project: project,
+            name: name,
+            task: task,
+            key: key,
+            path: path,
+            status: status,
+            subject: subject,
+            mainversion: mainversion,
+            subversion: subversion,
+            kindofusd: kindofusd,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function() {
+            location.reload()
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

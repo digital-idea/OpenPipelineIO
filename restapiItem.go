@@ -6892,8 +6892,8 @@ func handleAPIStatusNum(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPITaskPublish 함수는 task의 publish 정보를 기록하는 핸들러이다.
-func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
+// handleAPIAddTaskPublish 함수는 task의 publish 정보를 기록하는 핸들러이다.
+func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
@@ -7011,8 +7011,8 @@ func handleAPITaskPublish(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPIRmTaskPublish 함수는 task의 publish 정보를 삭제하는 핸들러이다.
-func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
+// handleAPIRmTaskPublishKey 함수는 task의 publish key정보를 삭제하는 핸들러이다.
+func handleAPIRmTaskPublishKey(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
