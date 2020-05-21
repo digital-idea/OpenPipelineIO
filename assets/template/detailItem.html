@@ -560,7 +560,10 @@
 			{{range $key, $publishes := .Publishes}}
 				<div class="text-darkmode pl-5 pb-2" id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}">
 					<div class="">
-						<span class="">key: {{$key}}</span>
+						<span class="">
+							<span class="font-italic font-weight-light">key: </span>
+							{{$key}}
+						</span>
 						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 							<span class="remove" data-toggle="modal" data-target="#modal-rmpublishkey" onclick="setRmPublishKeyModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}')">×</span>
 						{{end}}
