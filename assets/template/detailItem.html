@@ -577,8 +577,7 @@
 									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')"> Not Use</span>
 								{{end}}
 							</small>
-							<small class="font-italic pl-3">
-								{{.Createtime}} 에 생성되었습니다.
+							<small class="font-italic font-weight-bold pl-3">
 								{{if .MainVersion}}
 									MainVersion:{{.MainVersion}}
 								{{end}}
@@ -591,10 +590,13 @@
 								{{if .KindOfUSD}}
 									Kind Type of USD: {{.KindOfUSD}}
 								{{end}}
-								{{if .Createtime | CheckUpdate}}
-									<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
-								{{end}}								
 							</small>
+							<small class="font-italic pl-3">
+								{{.Createtime}} 에 생성되었습니다.
+							</small>
+							{{if .Createtime | CheckUpdate}}
+								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
+							{{end}}								
 							{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 								<span class="remove" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')">×</span>
 							{{end}}
