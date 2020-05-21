@@ -3602,9 +3602,11 @@ function TopClick() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     let searchbox = document.getElementById("searchbox")
-    searchbox.style.display = "block";
-    document.getElementById("blinkspace").style.height = "550px";
-    document.getElementById("foldoption").innerText = "Collapse Searchbox ▲"
+    if (searchbox !== null) {
+        searchbox.style.display = "block";
+        document.getElementById("blinkspace").style.height = "550px";
+        document.getElementById("foldoption").innerText = "Collapse Searchbox ▲"
+    }
 }
 
 function setPublish(project, id, task, key, createtime) {
