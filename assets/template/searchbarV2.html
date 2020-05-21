@@ -7,23 +7,23 @@
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<select name="Project" class="custom-select" id="Project" onchange="changeTitle();">
+					<select name="Project" class="custom-select" id="searchbox-project" onchange="changeTitle();">
 						{{range .Projectlist}}
 							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}
 					</select>
 				</div>
 				<div class="input-group-append">
-					<select name="Task" class="custom-select">
+					<select name="Task" class="custom-select" id="searchbox-task">
 						<option value="" {{if eq $.SearchOption.Task "" }}selected{{end}}>All</option>
 						{{range .TasksettingNames}}
 							<option value="{{.}}" {{if eq $.SearchOption.Task . }}selected{{end}}>{{.}}</option>
 						{{end}}
 					</select>
 				</div>
-				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
+				<input class="form-control" id="searchbox-searchword" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
-					<select name="Sortkey" class="custom-select">
+					<select id="searchbox-sort" name="Sortkey" class="custom-select">
 						<option value="id" {{if eq $.SearchOption.Sortkey "id" }}selected{{end}}>정렬: 샷네임</option>
 						<option value="rnum" {{if eq $.SearchOption.Sortkey "rnum" }}selected{{end}}>정렬: 롤넘버</option>
 						<option value="ddline3d" {{if eq $.SearchOption.Sortkey "ddline3d" }}selected{{end}}>정렬: 3D마감</option>
@@ -35,7 +35,7 @@
 					</select>
 				</div>
 				<div class="input-group-append">
-					<select name="SearchbarTemplate" class="custom-select">
+					<select name="SearchbarTemplate" id="searchbox-searchbar-template" class="custom-select">
 						<option value="searchbarV1" {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}selected{{end}}>ver1</option>
 						<option value="searchbarV2" {{if eq $.SearchOption.SearchbarTemplate "searchbarV2" }}selected{{end}}>ver2</option>
 					</select>
@@ -56,7 +56,7 @@
             <div class="col">
 				{{range .Status}}
 					<span class="btn btn-sm mb-2 bg-{{.ID}}">
-						<input type="checkbox" class="mr-1 StatusCheckBox{{if .DefaultOn}} DefaultStatusCheckBox{{end}}" id="searchbox-checkbox-{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
+						<input type="checkbox" class="mr-1 StatusCheckBox{{if .DefaultOn}} DefaultStatusCheckBox{{end}}" id="searchbox-checkbox-{{.ID}}" status="{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
 						<a class="text-{{.ID}} statusuri" href="/inputmode?
 												project={{$.SearchOption.Project}}&
 												searchword=status:{{.ID}}&

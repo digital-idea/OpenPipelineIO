@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -1162,7 +1163,366 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 
-// handleDownloadExcelTemplate 함수는 export template을 다운로드 한다.
+// handleAPIDownloadExcelFile 함수는 전송된 값을 이용해서 export excel을 처리한다.
+func handleAPIDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	r.ParseForm()
+	op := SearchOption{}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	op.Project = project
+	fmt.Println(project)
+	op.Task = r.FormValue("task")
+	op.Searchword = r.FormValue("searchword")
+	op.Sortkey = r.FormValue("sort")
+	op.SearchbarTemplate = r.FormValue("searchbartemplate") // legacy
+	op.Assign = str2bool(r.FormValue("assign"))             // legacy
+	op.Ready = str2bool(r.FormValue("ready"))               // legacy
+	op.Wip = str2bool(r.FormValue("wip"))                   // legacy
+	op.Confirm = str2bool(r.FormValue("confirm"))           // legacy
+	op.Done = str2bool(r.FormValue("done"))                 // legacy
+	op.Omit = str2bool(r.FormValue("omit"))                 // legacy
+	op.Hold = str2bool(r.FormValue("hold"))                 // legacy
+	op.Out = str2bool(r.FormValue("out"))                   // legacy
+	op.None = str2bool(r.FormValue("none"))                 // legacy
+	op.TrueStatus = strings.Split(r.FormValue("truestatus"), ",")
+	fmt.Println(op)
+	items, err := Searchv2(session, op)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	fmt.Println(items)
+	data, err := json.Marshal(items)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+	/*
+		for _, status := range
+
+		// status에 필요한 컬러를 불러온다.
+		bgcolor := make(map[string]string)
+		textcolor := make(map[string]string)
+		status, err := AllStatus(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		for _, s := range status {
+			bgcolor[s.ID] = s.BGColor
+			textcolor[s.ID] = s.TextColor
+		}
+		bgcolor[""] = "#FFFFFF"   // Default BG color
+		textcolor[""] = "#000000" // Default Text color
+		bgcolor["0"] = "#3D3B3B"  // None, legacy
+		bgcolor["1"] = "#606161"  // Hold, legacy
+		bgcolor["2"] = "#E4D2B7"  // Done, legacy
+		bgcolor["3"] = "#EEA4F1"  // Out, legacy
+		bgcolor["4"] = "#FFF76B"  // Assign, legacy
+		bgcolor["5"] = "#BEEF37"  // Ready, legacy
+		bgcolor["6"] = "#77BB40"  // Wip, legacy
+		bgcolor["7"] = "#54D6FD"  // Confirm, legacy
+		bgcolor["8"] = "#FC9F55"  // Omit, legacy
+		bgcolor["9"] = "#FFFFFF"  // Client, legacy
+
+		f := excelize.NewFile()
+		sheet := "Sheet1"
+		index := f.NewSheet(sheet)
+		f.SetActiveSheet(index)
+		// 스타일
+		style, err := f.NewStyle(`{"alignment":{"horizontal":"center","vertical":"center","wrap_text":true}}`)
+		if err != nil {
+			log.Println(err)
+		}
+		textStyle, err := f.NewStyle(`{"alignment":{"horizontal":"left","vertical":"top", "wrap_text":true}}`)
+		if err != nil {
+			log.Println(err)
+		}
+		// 제목생성
+		titles := []string{
+			"Name",
+			"Type",
+			"Rollnumber",
+			"Thumbnail",
+			"ShotType(2d/3d)",
+			"상태",
+			"작업내용",
+			"수정사항",
+			"Tags",
+			"JustTimecodeIn",
+			"JustTimecodeOut",
+			"ScanTimecodeIn",
+			"ScanTimecodeOut",
+			"2D마감",
+			"3D마감",
+		}
+		tasks, err := TasksettingNames(session)
+		if err != nil {
+			log.Println(err)
+		}
+		titles = append(titles, tasks...)
+		for n, i := range titles {
+			pos, err := excelize.CoordinatesToCellName(1+n, 1)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i)
+			colName, err := excelize.ColumnNumberToName(n + 1)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetColWidth(sheet, colName, colName, 20)
+			f.SetCellStyle(sheet, pos, pos, style)
+		}
+
+		// 엑셀파일 생성
+		for n, i := range items {
+			f.SetRowHeight(sheet, n+2, 60)
+			// 이름
+			pos, err := excelize.CoordinatesToCellName(1, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.Name)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// Type
+			pos, err = excelize.CoordinatesToCellName(2, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.Type)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// 롤넘버
+			pos, err = excelize.CoordinatesToCellName(3, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.Rnum)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// 썸네일
+			pos, err = excelize.CoordinatesToCellName(4, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, i.ID)
+			f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
+			// Type
+			pos, err = excelize.CoordinatesToCellName(5, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			if i.Type == "asset" {
+				f.SetCellValue(sheet, pos, strings.ToUpper(i.Assettype))
+			} else {
+				f.SetCellValue(sheet, pos, strings.ToUpper(i.Shottype))
+			}
+			f.SetCellStyle(sheet, pos, pos, style)
+			// 상태
+			pos, err = excelize.CoordinatesToCellName(6, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			// 기존에 Static한 상태의 컬러를 사용한다. // legacy
+			statusStyle, err := f.NewStyle(
+				fmt.Sprintf(`{
+					"alignment":{"horizontal":"center","vertical":"center"},
+					"fill":{"type":"pattern","color":["%s"],"pattern":1},
+					"border":[
+						{"type":"left","color":"888888","style":1},
+						{"type":"top","color":"888888","style":1},
+						{"type":"bottom","color":"888888","style":1},
+						{"type":"right","color":"888888","style":1}]
+					}`, bgcolor[i.Status]))
+			if err != nil {
+				log.Println(err)
+			}
+			// 다이나나믹 Status가 설정되어 있다면 해당 컬러를 사용한다.
+			if statusv2 {
+				statusStyle, err = f.NewStyle(
+					fmt.Sprintf(`{
+						"alignment":{"horizontal":"center","vertical":"center"},
+						"font":{"color":"%s"},
+						"fill":{"type":"pattern","color":["%s"],"pattern":1},
+						"border":[
+							{"type":"left","color":"888888","style":1},
+							{"type":"top","color":"888888","style":1},
+							{"type":"bottom","color":"888888","style":1},
+							{"type":"right","color":"888888","style":1}]
+						}`, textcolor[i.StatusV2], bgcolor[i.StatusV2]))
+				if err != nil {
+					log.Println(err)
+				}
+			}
+			if statusv2 {
+				f.SetCellValue(sheet, pos, i.StatusV2)
+			} else {
+				f.SetCellValue(sheet, pos, Status2capString(i.Status)) // legacy
+			}
+
+			f.SetCellStyle(sheet, pos, pos, statusStyle)
+			// 작업내용
+			pos, err = excelize.CoordinatesToCellName(7, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.Note.Text)
+			f.SetCellStyle(sheet, pos, pos, textStyle)
+			// 수정사항
+			pos, err = excelize.CoordinatesToCellName(8, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			comments := []string{}
+			for _, c := range ReverseCommentSlice(i.Comments) {
+				comments = append(comments, c.Text)
+			}
+			f.SetCellValue(sheet, pos, strings.Join(comments, "\n"))
+			f.SetCellStyle(sheet, pos, pos, textStyle)
+			// Tags
+			pos, err = excelize.CoordinatesToCellName(9, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, strings.Join(i.Tag, ","))
+
+			f.SetCellStyle(sheet, pos, pos, style)
+			// JustTimecodeIn
+			pos, err = excelize.CoordinatesToCellName(10, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.JustTimecodeIn)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// JustTimecodeOut
+			pos, err = excelize.CoordinatesToCellName(11, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.JustTimecodeOut)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// ScanTimecodeIn
+			pos, err = excelize.CoordinatesToCellName(12, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.ScanTimecodeIn)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// ScanTimecodeOut
+			pos, err = excelize.CoordinatesToCellName(13, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, i.ScanTimecodeOut)
+			f.SetCellStyle(sheet, pos, pos, style)
+			// Deadline2D
+			pos, err = excelize.CoordinatesToCellName(14, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline2d))
+			f.SetCellStyle(sheet, pos, pos, style)
+			// Deadline3D
+			pos, err = excelize.CoordinatesToCellName(15, n+2)
+			if err != nil {
+				log.Println(err)
+			}
+			f.SetCellValue(sheet, pos, ToNormalTime(i.Ddline3d))
+			f.SetCellStyle(sheet, pos, pos, style)
+			// Tasks
+			for taskOrder, t := range tasks {
+				if _, found := i.Tasks[t]; !found {
+					continue
+				}
+				pos, err = excelize.CoordinatesToCellName(16+taskOrder, n+2)
+				if err != nil {
+					log.Println(err)
+				}
+				// 기존 Static Status 일 때. // legacy
+				statusStyle, err = f.NewStyle(
+					fmt.Sprintf(`{
+						"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+						"fill":{"type":"pattern","color":["%s"],"pattern":1},
+						"border":[
+							{"type":"left","color":"888888","style":1},
+							{"type":"top","color":"888888","style":1},
+							{"type":"bottom","color":"888888","style":1},
+							{"type":"right","color":"888888","style":1}]
+						}`, bgcolor[i.Tasks[t].Status]))
+				if err != nil {
+					log.Println(err)
+				}
+				// 만약 다이나믹 Status 일 때는 해당 컬러를 사용한다.
+				if statusv2 {
+					statusStyle, err = f.NewStyle(
+						fmt.Sprintf(`{
+							"alignment":{"horizontal":"center","vertical":"center","wrap_text":true},
+							"font":{"color":"%s"},
+							"fill":{"type":"pattern","color":["%s"],"pattern":1},
+							"border":[
+								{"type":"left","color":"888888","style":1},
+								{"type":"top","color":"888888","style":1},
+								{"type":"bottom","color":"888888","style":1},
+								{"type":"right","color":"888888","style":1}]
+							}`, textcolor[i.Tasks[t].StatusV2], bgcolor[i.Tasks[t].StatusV2]))
+					if err != nil {
+						log.Println(err)
+					}
+				}
+				var text string
+				if statusv2 {
+					text = i.Tasks[t].StatusV2
+				} else {
+					text = Status2capString(i.Tasks[t].Status) // legacy
+				}
+				text += "\n" + i.Tasks[t].User
+				text += "\n" + ToNormalTime(i.Tasks[t].Predate)
+				text += "\n" + ToNormalTime(i.Tasks[t].Date)
+				f.SetCellValue(sheet, pos, text)
+				f.SetCellStyle(sheet, pos, pos, statusStyle)
+			}
+		}
+		tempDir, err := ioutil.TempDir("", "excel")
+		if err != nil {
+			log.Println(err)
+		}
+		defer os.RemoveAll(tempDir)
+		filename := format + ".xlsx"
+		err = f.SaveAs(tempDir + "/" + filename)
+		if err != nil {
+			log.Println(err)
+		}
+		// 저장된 Excel 파일을 다운로드 시킨다.
+		w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s-%s.xlsx", project, format, task))
+		http.ServeFile(w, r, tempDir+"/"+filename)
+	*/
+}
+
+// handleDownloadExcelTemplate 함수는 빈 export template을 다운로드 한다.
 func handleDownloadExcelTemplate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
