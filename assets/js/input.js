@@ -376,7 +376,7 @@ function rmTask(project, id, task) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById(`${data.name}-task-${data.task}`).remove();
+                    document.getElementById(`${data.id}-task-${data.task}`).remove();
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -397,7 +397,7 @@ function rmTask(project, id, task) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById(`${data.name}-task-${data.task}`).remove();
+                document.getElementById(`${data.id}-task-${data.task}`).remove();
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
