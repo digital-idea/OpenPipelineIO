@@ -88,9 +88,10 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -X POST -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
 | /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task, user | `$ curl -X POST -d "project=TEMP&task=comp&user=jason" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/publish | Publish를 셋팅한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, name, task, key, path, status, (mainversion), (subversion), (subject), (kindofusd) | `$ curl -X POST -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto&kindofusd=component&status=usethis" https://csi.lazypic.org/api/publish`|
+| /api/addpublish | Publish를 추가한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, name, task, key, path, status, (mainversion), (subversion), (subject), (kindofusd) | `$ curl -X POST -d "project=TEMP&name=SS_0010&task=comp&key=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto&kindofusd=component&status=usethis" https://csi.lazypic.org/api/publish`|
 | /api/setpublishstatus | Publish status를 변경한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, id, task, key, status | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&status=usethis" https://csi.lazypic.org/api/setstatuspublish`|
-| /api/rmpublish | Publish를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublish`|
+| /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
+| /api/rmpublish | Publish 를 삭제한다. | project, id, task, key, time | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&time=2020-05-21T09:00:00%2B09:00" https://csi.lazypic.org/api/rmpublish`|
 
 #### URL Encode
 `/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야한다.

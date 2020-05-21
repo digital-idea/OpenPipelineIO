@@ -352,9 +352,11 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcrowdasset", handleAPISetCrowdAsset)
 	http.HandleFunc("/api/mailinfo", handleAPIMailInfo)
 	http.HandleFunc("/api/usetypes", handleAPIUseTypes)
-	http.HandleFunc("/api/publish", handleAPITaskPublish)
-	http.HandleFunc("/api/rmpublish", handleAPIRmTaskPublish)
+	http.HandleFunc("/api/publish", handleAPIAddTaskPublish) // legacy
+	http.HandleFunc("/api/addpublish", handleAPIAddTaskPublish)
 	http.HandleFunc("/api/setpublishstatus", handleAPISetTaskPublishStatus)
+	http.HandleFunc("/api/rmpublish", handleAPIRmTaskPublish)
+	http.HandleFunc("/api/rmpublishkey", handleAPIRmTaskPublishKey)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)
