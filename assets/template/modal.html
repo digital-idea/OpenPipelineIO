@@ -638,12 +638,12 @@
         </div>
     </div>
 
-    <!-- Modal: Rm Publish-->
+    <!-- Modal: Rm Publish Key-->
     <div class="modal fade" id="modal-rmpublishkey" tabindex="-1" role="dialog" aria-labelledby="modal-rmpublishkey" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
-                <h5 class="modal-title" id="modal-rmpublishkey-title">Rm Publish</h5>
+                <h5 class="modal-title" id="modal-rmpublishkey-title">Rm Publish Key</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="text-darkmode">&times;</span>
                 </button>
@@ -658,6 +658,32 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-danger" onclick="rmPublishKey()" data-dismiss="modal">DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Publish-->
+    <div class="modal fade" id="modal-rmpublish" tabindex="-1" role="dialog" aria-labelledby="modal-rmpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmpublish-title">Rm Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-project">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-id">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-task">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-key">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-time">
+                    <label id="modal-rmpublish-text" class="col-form-label">해당 Publish 아이템을 삭제하겠습니까?</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmPublish()" data-dismiss="modal">DELETE</button>
                 </div>
             </div>
         </div>

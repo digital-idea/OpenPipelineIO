@@ -2795,14 +2795,39 @@ func setTaskPublish(session *mgo.Session, project, name, task, key string, p Pub
 	return nil
 }
 
-// rmTaskPublish 함수는 item > tasks > publishes 를 제거한다.
-func rmTaskPublish(session *mgo.Session, project, id, taskname, key string) error {
+// rmTaskPublishKey 함수는 item > tasks > publishes 를 제거한다.
+func rmTaskPublishKey(session *mgo.Session, project, id, taskname, key string) error {
 	session.SetMode(mgo.Monotonic, true)
 	item, err := getItem(session, project, id)
 	if err != nil {
 		return err
 	}
 	delete(item.Tasks[taskname].Publishes, key)
+	c := session.DB("project").C(project)
+	item.Updatetime = time.Now().Format(time.RFC3339)
+	err = c.Update(bson.M{"id": item.ID}, item)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// rmTaskPublish 함수는 item > tasks > publishes > 하나의 아이템을 제거한다.
+func rmTaskPublish(session *mgo.Session, project, id, taskname, key, timestring string) error {
+	session.SetMode(mgo.Monotonic, true)
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	var newList []Publish
+	pubList := item.Tasks[taskname].Publishes[key]
+	for _, p := range pubList {
+		if p.Createtime == timestring {
+			continue
+		}
+		newList = append(newList, p)
+	}
+	item.Tasks[taskname].Publishes[key] = newList
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": item.ID}, item)

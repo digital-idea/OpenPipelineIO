@@ -7066,7 +7066,96 @@ func handleAPIRmTaskPublishKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
-	err = rmTaskPublish(session, project, id, task, key)
+	err = rmTaskPublishKey(session, project, id, task, key)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("RmPublish: %s > %s", rcp.Task, rcp.Key), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("RmPublish: %s > %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Key, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIRmTaskPublish 함수는 task의 publish 정보중 하나를 삭제한다.
+func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Task    string `json:"task"`
+		Key     string `json:"key"`
+		Time    string `json:"time"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	key := r.FormValue("key")
+	if key == "" {
+		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Key = key
+	time := r.FormValue("time")
+	if key == "" {
+		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Time = time
+	err = rmTaskPublish(session, project, id, task, key, time)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

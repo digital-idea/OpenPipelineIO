@@ -938,6 +938,14 @@ function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-title").innerHTML = "Rm Publish Key" + multiInputTitle(id);
 }
 
+function setRmPublishModal(project, id, task, key, time) {
+    document.getElementById("modal-rmpublish-project").value = project
+    document.getElementById("modal-rmpublish-id").value = id
+    document.getElementById("modal-rmpublish-task").value = task
+    document.getElementById("modal-rmpublish-key").value = key
+    document.getElementById("modal-rmpublish-time").value = time
+}
+
 function setPublishModal(project, id, task, key, time) {
     document.getElementById("modal-setpublish-project").value = project;
     document.getElementById("modal-setpublish-id").value = id;
@@ -1059,7 +1067,31 @@ function rmPublishKey() {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById(`publish-${data.project}-${data.id}-${data.task}-${data.key}`).remove();
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function rmPublish() {
+    $.ajax({
+        url: "/api/rmpublish",
+        type: "post",
+        data: {
+            project: document.getElementById('modal-rmpublish-project').value,
+            id: document.getElementById('modal-rmpublish-id').value,
+            task: document.getElementById('modal-rmpublish-task').value,
+            key: document.getElementById('modal-rmpublish-key').value,
+            time: document.getElementById('modal-rmpublish-time').value
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function() {
+            location.reload()
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
