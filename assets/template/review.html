@@ -1,4 +1,4 @@
-{{define "daily" }}
+{{define "review" }}
 {{template "headBootstrap" .}}
 <body>
     <div id="floatingmenu">
@@ -9,7 +9,7 @@
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
             <div class="w-100">
                 <div class="input-group p-1">
-                    <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어">
+                    <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
                     <div class="input-group-btn input-group-append">
                         <button class="btn btn-sm btn-darkmode" id="button">
                             Search

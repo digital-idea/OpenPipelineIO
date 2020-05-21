@@ -160,6 +160,7 @@ func webserver(port string) {
 
 	// Review
 	http.HandleFunc("/daily", handleDaily)
+	http.HandleFunc("/review", handleReview)
 
 	// Project
 	http.HandleFunc("/projectinfo", handleProjectinfo)
