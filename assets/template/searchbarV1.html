@@ -22,7 +22,7 @@
 				</div>
 				<input class="form-control" id="searchbox-searchword" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
-					<select name="Sortkey" id="searchbox-sort" class="custom-select">
+					<select name="Sortkey" id="searchbox-sortkey" class="custom-select">
 						<option value="id" {{if eq $.SearchOption.Sortkey "id" }}selected{{end}}>정렬: 샷네임</option>
 						<option value="rnum" {{if eq $.SearchOption.Sortkey "rnum" }}selected{{end}}>정렬: 롤넘버</option>
 						<option value="ddline3d" {{if eq $.SearchOption.Sortkey "ddline3d" }}selected{{end}}>정렬: 3D마감</option>
