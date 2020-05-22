@@ -79,3 +79,33 @@ function changeExportFormatType() {
         });
     }
 }
+
+
+// exportExcelCurrentPage는 현재 페이지를 엑셀로 뽑는다.
+function exportExcelCurrentPage() {
+    let project = document.getElementById("searchbox-project").value
+    let task = document.getElementById("searchbox-task").value
+    let searchword = document.getElementById("searchbox-searchword").value
+    let sortkey = document.getElementById("searchbox-sortkey").value
+    let searchbartemplate = document.getElementById("searchbox-searchbar-template").value
+    let assign = document.getElementById("searchbox-checkbox-assign").checked
+    let ready = document.getElementById("searchbox-checkbox-ready").checked
+    let wip = document.getElementById("searchbox-checkbox-wip").checked
+    let confirm = document.getElementById("searchbox-checkbox-confirm").checked
+    let done = document.getElementById("searchbox-checkbox-done").checked
+    let omit = document.getElementById("searchbox-checkbox-omit").checked
+    let hold = document.getElementById("searchbox-checkbox-hold").checked
+    let out = document.getElementById("searchbox-checkbox-out").checked
+    let none = document.getElementById("searchbox-checkbox-none").checked
+    let truestatusList = []
+    let checkStatus = document.querySelectorAll('*[id^="searchbox-checkbox-"]');
+    for (i=0;i<checkStatus.length;i++) {
+        if (checkStatus[i].checked) {
+            truestatusList.push(checkStatus[i].getAttribute("status"))
+        }
+    }
+    truestatus = truestatusList.join(",")
+    // 요청
+    let url = `/download-excel-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}`
+    location.href = url
+}
