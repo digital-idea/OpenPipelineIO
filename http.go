@@ -88,6 +88,7 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer session.Close()
 	u, err := getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -126,7 +127,6 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.ExecuteTemplate(w, "help", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
