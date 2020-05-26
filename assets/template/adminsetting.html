@@ -273,6 +273,15 @@
                     <input type="text" class="form-control" id="DefaultScaleRatioOfUndistortionPlate" name="DefaultScaleRatioOfUndistortionPlate" placeholder="1.1" value={{.Setting.DefaultScaleRatioOfUndistortionPlate}}>
                     <small class="form-text text-muted">언디스토션 플레이트의 기본 스케일 비율을 입력합니다.</small>
                 </div>
+                <div class="form-group">
+                    <label>페이지당 아이템갯수</label>
+                    <select name="ItemNumberOfPage" class="form-control">
+                        <option value="20" {{if eq .Setting.ItemNumberOfPage 0 20}}selected{{end}}>20</option>
+                        <option value="50" {{if eq .Setting.ItemNumberOfPage 50}}selected{{end}}>50</option>
+                        <option value="100" {{if eq .Setting.ItemNumberOfPage 100}}selected{{end}}>100</option>
+                    </select>
+                    <small class="form-text text-muted">한 페이지당 보이는 아이템 갯수를 설정합니다.</small>
+                </div>
             </div>        
             
         </div>

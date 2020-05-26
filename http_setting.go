@@ -129,6 +129,12 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.DefaultScaleRatioOfUndistortionPlate = ratio
+	itemNumberOfPage, err := strconv.Atoi(r.FormValue("ItemNumberOfPage"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	s.ItemNumberOfPage = itemNumberOfPage
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
