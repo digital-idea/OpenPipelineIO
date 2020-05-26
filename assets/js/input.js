@@ -3248,7 +3248,7 @@ function setRendersize(project, id, size) {
 }
 
 function CurrentProject() {
-    let e = document.getElementById("Project");
+    let e = document.getElementById("searchbox-project");
     return e.options[e.selectedIndex].value;
 }
 

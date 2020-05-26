@@ -476,6 +476,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("Name")
 	stereo := r.FormValue("Stereo")
 	mkdir := str2bool(r.FormValue("Mkdir"))
+	setRendersize := str2bool(r.FormValue("SetRendersize"))
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -488,6 +489,16 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	var success []Shot
 	var fails []Shot
 	tasks, err := AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	admin, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	pinfo, err := getProject(session, project)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -522,6 +533,13 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Status = ASSIGN
 		i.StatusV2 = "assign"
+		if setRendersize {
+			width := int(float64(pinfo.PlateWidth) * admin.DefaultScaleRatioOfUndistortionPlate)
+			height := int(float64(pinfo.PlateHeight) * admin.DefaultScaleRatioOfUndistortionPlate)
+			i.Platesize = fmt.Sprintf("%dx%d", pinfo.PlateWidth, pinfo.PlateHeight)
+			i.Dsize = fmt.Sprintf("%dx%d", width, height)
+			i.Rendersize = fmt.Sprintf("%dx%d", width, height)
+		}
 		// 기본적으로 생성해야할 Task를 추가한다.
 		i.Tasks = make(map[string]Task)
 		for _, task := range tasks {
