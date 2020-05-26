@@ -1214,7 +1214,9 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 	op.Assets = true
 	op.Type2d = true
 	op.Type3d = true
-	items, err := Searchv2(session, op)
+	op.Page = 0          // 엑셀파일은 페이징 기능이 작동되지 않아야 한다.
+	op.ItemNumOfPage = 0 // 엑셀파일은 페이징 기능이 작동되지 않아야 한다.
+	items, err := Search(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

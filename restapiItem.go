@@ -338,24 +338,26 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	op := SearchOption{
-		Project:    q.Get("project"),
-		Searchword: q.Get("searchword"),
-		Sortkey:    q.Get("sortkey"),
-		Assign:     str2bool(q.Get("assign")),
-		Ready:      str2bool(q.Get("ready")),
-		Wip:        str2bool(q.Get("wip")),
-		Confirm:    str2bool(q.Get("confirm")),
-		Done:       str2bool(q.Get("done")),
-		Omit:       str2bool(q.Get("omit")),
-		Hold:       str2bool(q.Get("hold")),
-		Out:        str2bool(q.Get("out")),
-		None:       str2bool(q.Get("none")),
-		Shot:       str2bool(q.Get("shot")),
-		Assets:     str2bool(q.Get("asset")),
-		Type3d:     str2bool(q.Get("type3d")),
-		Type2d:     str2bool(q.Get("type2d")),
+		Project:       q.Get("project"),
+		Searchword:    q.Get("searchword"),
+		Sortkey:       q.Get("sortkey"),
+		Assign:        str2bool(q.Get("assign")),
+		Ready:         str2bool(q.Get("ready")),
+		Wip:           str2bool(q.Get("wip")),
+		Confirm:       str2bool(q.Get("confirm")),
+		Done:          str2bool(q.Get("done")),
+		Omit:          str2bool(q.Get("omit")),
+		Hold:          str2bool(q.Get("hold")),
+		Out:           str2bool(q.Get("out")),
+		None:          str2bool(q.Get("none")),
+		Shot:          str2bool(q.Get("shot")),
+		Assets:        str2bool(q.Get("asset")),
+		Type3d:        str2bool(q.Get("type3d")),
+		Type2d:        str2bool(q.Get("type2d")),
+		Page:          0,
+		ItemNumOfPage: 0,
 	}
-	result, err := Searchv2(session, op)
+	result, err := Search(session, op)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -414,6 +416,8 @@ func handleAPI3Items(w http.ResponseWriter, r *http.Request) {
 		Type2d:            str2bool(q.Get("type2d")),
 		TrueStatus:        strings.Split(q.Get("truestatus"), ","),
 		SearchbarTemplate: "searchbarV1",
+		Page:              0,
+		ItemNumOfPage:     0,
 	}
 	if q.Get("sortkey") != "" {
 		op.Sortkey = "id"
@@ -421,7 +425,7 @@ func handleAPI3Items(w http.ResponseWriter, r *http.Request) {
 	if q.Get("searchbartemplate") == "searchbarV2" {
 		op.SearchbarTemplate = "searchbarV2"
 	}
-	items, err := Searchv2(session, op)
+	items, err := Search(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -6259,8 +6263,10 @@ func handleAPISearch(w http.ResponseWriter, r *http.Request) {
 		Out:               true,
 		None:              true,
 		SearchbarTemplate: "searchbarV1",
+		Page:              0,
+		ItemNumOfPage:     0,
 	}
-	items, err := Searchv2(session, searchOp)
+	items, err := Search(session, searchOp)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

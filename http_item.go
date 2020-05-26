@@ -52,6 +52,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	searchbarTemplate := r.FormValue("SearchbarTemplate")
 	task := r.FormValue("Task")
 	truestatus := r.FormValue("truestatus")
+	page := r.FormValue("Page")
 	// 아래 코드는 임시로 사용한다.
 	if truestatus == "" {
 		var statuslist []string
@@ -84,7 +85,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		truestatus = strings.Join(statuslist, ",")
 	}
-	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s&task=%s&searchbartemplate=%s&truestatus=%s&page=%s`,
 		project,
 		searchword,
 		sortkey,
@@ -101,6 +102,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		task,
 		searchbarTemplate,
 		truestatus,
+		page,
 	)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
@@ -126,6 +128,7 @@ func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
 	template := r.FormValue("Template")
 	searchbarTemplate := r.FormValue("SearchbarTemplate")
 	task := r.FormValue("Task")
+	page := r.FormValue("Page")
 	// status를 체크할 때 마다 truestatus form에 값이 추가되어야 한다.
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -144,7 +147,7 @@ func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
 			truestatus = append(truestatus, status.ID)
 		}
 	}
-	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&template=%s&task=%s&searchbartemplate=%s&truestatus=%s&page=%s`,
 		project,
 		searchword,
 		sortkey,
@@ -152,6 +155,7 @@ func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
 		task,
 		searchbarTemplate,
 		strings.Join(truestatus, ","),
+		page,
 	)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
@@ -356,6 +360,10 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Page값이 0이면 1로 설정한다.
+	if rcp.SearchOption.Page == 0 {
+		rcp.SearchOption.Page = 1
+	}
 	// 아무 상태도 선택되어있지 않다면 기본 상태설정으로 변경한다. // legacy
 	if rcp.SearchOption.isStatusOff() {
 		err := rcp.SearchOption.setStatusDefaultV1()
@@ -382,7 +390,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		rcp.SearchOption.SearchbarTemplate = searchbarTemplate
 	}
 
-	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s",
+	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s&page=%d",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
 		rcp.SearchOption.SearchbarTemplate,
@@ -398,6 +406,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		rcp.SearchOption.Task,
 		rcp.SearchOption.Searchword,
 		strings.Join(rcp.SearchOption.TrueStatus, ","),
+		rcp.SearchOption.Page,
 	)
 	http.Redirect(w, r, url, http.StatusSeeOther)
 }

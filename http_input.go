@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"gopkg.in/mgo.v2"
@@ -77,6 +78,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
+
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -101,12 +103,16 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Projectlist = accessProjects
 	}
-	// 마이크레이션중인 프로젝트는 제거한다.
+
+	// admin설정을 불러온다.
 	setting, err := GetAdminSetting(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 검색시 한 페이지에 담기는 총아이템 수를 설정한다.
+	rcp.SearchOption.ItemNumOfPage = setting.ItemNumberOfPage
+	// 마이크레이션중인 프로젝트는 제거한다.
 	var excludeProjects []string
 	if setting.ExcludeProject != "" {
 		excludeProjects = strings.Split(strings.Replace(setting.ExcludeProject, " ", "", -1), ",")
@@ -171,7 +177,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Dday = dday
 	}
-	rcp.Items, err = Searchv2(session, rcp.SearchOption)
+	rcp.Items, err = Search(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -259,6 +265,12 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	cookie = http.Cookie{
 		Name:   "Template",
 		Value:  rcp.SearchOption.Template,
+		MaxAge: 0,
+	}
+	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{
+		Name:   "Page",
+		Value:  strconv.Itoa(rcp.SearchOption.Page),
 		MaxAge: 0,
 	}
 	http.SetCookie(w, &cookie)

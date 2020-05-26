@@ -9,9 +9,18 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// Searchv2 함수는 다음 검색함수이다.
+// TotalPage 함수는 아이템의 갯수를 이용해서 총 페이지수를 반환한다.
+func totalPage(itemNum, pageMaxItemNum int) int {
+	page := itemNum / pageMaxItemNum
+	if itemNum%pageMaxItemNum != 0 {
+		page++
+	}
+	return page
+}
+
+// Search 함수는 다음 검색함수이다.
 // 검색알고리즘은 복잡하기 때문에 한 파일에서 다룬다.
-func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
+func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
 	results := []Item{}
 	// 검색어가 없다면 바로 빈 값을 리턴한다.
 	if op.Searchword == "" {
@@ -389,10 +398,17 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	case "": // 기본적으로 id로 정렬한다.
 		op.Sortkey = "id"
 	}
-	err = c.Find(q).Sort(op.Sortkey).All(&results)
-	if err != nil {
-		log.Println("DB Find Err : ", err)
-		return nil, err
+	if op.Page != 0 && op.ItemNumOfPage != 0 {
+		err = c.Find(q).Sort(op.Sortkey).Skip((op.Page - 1) * op.ItemNumOfPage).Limit(op.ItemNumOfPage).All(&results)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// Page, ItemNumOfPage 값중 하나라도 0 이라면 전체값을 반환한다.
+		err = c.Find(q).Sort(op.Sortkey).All(&results)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return results, nil
 }

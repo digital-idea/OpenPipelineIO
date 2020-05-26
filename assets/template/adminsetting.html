@@ -276,7 +276,8 @@
                 <div class="form-group">
                     <label>페이지당 아이템갯수</label>
                     <select name="ItemNumberOfPage" class="form-control">
-                        <option value="20" {{if eq .Setting.ItemNumberOfPage 0 20}}selected{{end}}>20</option>
+                        <option value="0" {{if eq .Setting.ItemNumberOfPage 0}}selected{{end}}>페이지설정 없음(데이터가 너무 많다면, 서버 과부화 이슈가 발생할 수 있음.)</option>
+                        <option value="20" {{if eq .Setting.ItemNumberOfPage 20}}selected{{end}}>20</option>
                         <option value="50" {{if eq .Setting.ItemNumberOfPage 50}}selected{{end}}>50</option>
                         <option value="100" {{if eq .Setting.ItemNumberOfPage 100}}selected{{end}}>100</option>
                     </select>

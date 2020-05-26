@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"gopkg.in/mgo.v2"
@@ -29,10 +30,12 @@ type SearchOption struct {
 	// 상태
 	TrueStatus []string `json:"truestatus"` // true 상태리스트
 	// 요소
-	Shot   bool `json:"shot"`
-	Assets bool `json:"assets"`
-	Type3d bool `json:"type3d"`
-	Type2d bool `json:"type2d"`
+	Shot          bool `json:"shot"`
+	Assets        bool `json:"assets"`
+	Type3d        bool `json:"type3d"`
+	Type2d        bool `json:"type2d"`
+	Page          int  `json:"page"`
+	ItemNumOfPage int  `json:"itemnumofpage"`
 }
 
 // SearchOption과 관련된 메소드
@@ -148,6 +151,11 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 	op.Hold = str2bool(q.Get("hold"))       // legacy
 	op.Out = str2bool(q.Get("out"))         // legacy
 	op.None = str2bool(q.Get("none"))       // legacy
+	page, err := strconv.Atoi(q.Get("page"))
+	if err != nil {
+		op.Page = 0
+	}
+	op.Page = page
 	for _, s := range strings.Split(q.Get("truestatus"), ",") {
 		if s == "" {
 			continue
@@ -205,6 +213,13 @@ func (op *SearchOption) LoadCookie(session *mgo.Session, r *http.Request) error 
 		}
 		if cookie.Name == "SearchbarTemplate" {
 			op.SearchbarTemplate = cookie.Value
+		}
+		if cookie.Name == "Page" {
+			page, err := strconv.Atoi(cookie.Value)
+			if err != nil {
+				op.Page = 1
+			}
+			op.Page = page
 		}
 	}
 	if op.Project == "" {
