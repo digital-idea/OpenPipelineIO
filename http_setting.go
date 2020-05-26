@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"gopkg.in/mgo.v2"
 )
@@ -122,7 +123,12 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
-
+	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	s.DefaultScaleRatioOfUndistortionPlate = ratio
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
