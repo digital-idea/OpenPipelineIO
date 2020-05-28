@@ -48,15 +48,11 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Searchword string
 		Status     []Status
+		Reviews    []Review
 	}
 	rcp := recipe{}
 	rcp.Searchword = q.Get("searchword")
 	err = rcp.SearchOption.LoadCookie(session, r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Status, err = AllStatus(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -69,6 +65,16 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status, err = AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

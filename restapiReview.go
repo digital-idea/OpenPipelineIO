@@ -86,8 +86,8 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "progress의 값이 숫자가 아닙니다.", http.StatusBadRequest)
 			return
 		}
-		if !(0 <= n && n <= 101) {
-			http.Error(w, "progress의 값은 0~100 사이의 수가 되어야 합니다.", http.StatusBadRequest)
+		if !(0 < n && n < 101) {
+			http.Error(w, "progress의 값은 1~100 사이의 수가 되어야 합니다.", http.StatusBadRequest)
 			return
 		}
 		rcp.Review.Progress = n

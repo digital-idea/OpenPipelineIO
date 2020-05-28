@@ -22,7 +22,7 @@
                 </small>
                 <div class="form-group pt-5">
                     <label>Project</label>
-                    <select id="Project" name="Project" class="form-control" onchange="changeReportExcelURI()">
+                    <select id="searchbox-project" name="Project" class="form-control" onchange="changeReportExcelURI()">
                         {{range .Projectlist}}
                             <option value="{{.}}">{{.}}</option>
                         {{end}}
