@@ -177,6 +177,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Dday = dday
 	}
+
 	rcp.Items, err = Search(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -184,7 +185,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Searchnum, err = Searchnum(rcp.SearchOption, rcp.Items)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

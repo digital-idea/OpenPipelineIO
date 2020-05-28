@@ -417,16 +417,16 @@ func main() {
 		var playlist []string
 		for _, project := range reviewProjectlist {
 			op := SearchOption{
-				Project:    project,
-				Searchword: *flagDate,
-				Assign:     true,
-				Ready:      true,
-				Wip:        true,
-				Confirm:    true,
-				Done:       true,
-				Out:        true,
-				Sortkey:    "name",
-				Page:       0,
+				Project:       project,
+				Searchword:    *flagDate,
+				Assign:        true,
+				Ready:         true,
+				Wip:           true,
+				Confirm:       true,
+				Done:          true,
+				Out:           true,
+				Sortkey:       "name",
+				Page:          0,
 				ItemNumOfPage: 0,
 			}
 			items, err := Search(session, op)

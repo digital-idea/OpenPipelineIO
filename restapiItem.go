@@ -7298,3 +7298,62 @@ func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPITotalSearchnum 함수는 검색어의 전체 갯수를 구한다.
+func handleAPITotalSearchnum(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project        string `json:"project"`
+		Task           string `json:"task"`
+		Searchword     string `json:"searchword"`
+		TotalSearchnum int    `json:"totalsearchnum"`
+	}
+	rcp := Recipe{}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	rcp.Task = r.FormValue("task")
+	searchword := r.FormValue("searchword")
+	if searchword == "" {
+		http.Error(w, "검색어를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Searchword = searchword
+
+	num, err := Searchnum(session, project, task, searchword)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TotalSearchnum = num
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
