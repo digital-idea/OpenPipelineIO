@@ -12,30 +12,29 @@ import (
 
 // SearchOption 은 웹 검색창의 옵션 자료구조이다.
 type SearchOption struct {
-	Project           string `json:"project"`           // 선택한 프로젝트
-	Searchword        string `json:"searchword"`        // 검색어
-	Sortkey           string `json:"sortkey"`           // 정렬방식
-	Template          string `json:"template"`          // 템플릿 이름
-	SearchbarTemplate string `json:"searchbartemplate"` // 검색바 탬플릿 이름
-	Task              string `json:"task"`              // Task명
-	Assign            bool   `json:"assign"`            // legacy
-	Ready             bool   `json:"ready"`             // legacy
-	Wip               bool   `json:"wip"`               // legacy
-	Confirm           bool   `json:"confirm"`           // legacy
-	Done              bool   `json:"done"`              // legacy
-	Omit              bool   `json:"omit"`              // legacy
-	Hold              bool   `json:"hold"`              // legacy
-	Out               bool   `json:"out"`               // legacy
-	None              bool   `json:"none"`              // legacy
-	// 상태
-	TrueStatus []string `json:"truestatus"` // true 상태리스트
-	// 요소
-	Shot          bool `json:"shot"`
-	Assets        bool `json:"assets"`
-	Type3d        bool `json:"type3d"`
-	Type2d        bool `json:"type2d"`
-	Page          int  `json:"page"`
-	ItemNumOfPage int  `json:"itemnumofpage"`
+	Project           string   `json:"project"`           // 선택한 프로젝트
+	Searchword        string   `json:"searchword"`        // 검색어
+	Sortkey           string   `json:"sortkey"`           // 정렬방식
+	Template          string   `json:"template"`          // 템플릿 이름
+	SearchbarTemplate string   `json:"searchbartemplate"` // 검색바 탬플릿 이름
+	Task              string   `json:"task"`              // Task명
+	TrueStatus        []string `json:"truestatus"`        // true 상태리스트
+	Shot              bool     `json:"shot"`
+	Assets            bool     `json:"assets"`
+	Type3d            bool     `json:"type3d"`
+	Type2d            bool     `json:"type2d"`
+	Page              int      `json:"page"`          // 페이지 수
+	ItemNumOfPage     int      `json:"itemnumofpage"` // 한페이지에 처리되는 아이템 갯수
+	// legacy
+	Assign  bool `json:"assign"`  // legacy
+	Ready   bool `json:"ready"`   // legacy
+	Wip     bool `json:"wip"`     // legacy
+	Confirm bool `json:"confirm"` // legacy
+	Done    bool `json:"done"`    // legacy
+	Omit    bool `json:"omit"`    // legacy
+	Hold    bool `json:"hold"`    // legacy
+	Out     bool `json:"out"`     // legacy
+	None    bool `json:"none"`    // legacy
 }
 
 // SearchOption과 관련된 메소드
