@@ -18,13 +18,16 @@ func addReview(session *mgo.Session, r Review) error {
 }
 
 // searchReview 함수는 Review를 검색한다.
-func searchReview(session *mgo.Session, searchwords []string) ([]Review, error) {
+func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
+	var results []Review
+	if searchword == "" {
+		return results, nil
+	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	allQueries := []bson.M{}
-	for _, word := range searchwords {
+	for _, word := range strings.Split(searchword, " ") {
 		orQueries := []bson.M{}
-		andQueries := []bson.M{}
 		if strings.HasPrefix(word, "daily:") {
 			orQueries = append(orQueries, bson.M{"createtime": &bson.RegEx{Pattern: strings.TrimPrefix(word, "daily:")}})
 		} else if strings.HasPrefix(word, "status:") {
@@ -39,11 +42,9 @@ func searchReview(session *mgo.Session, searchwords []string) ([]Review, error) 
 			orQueries = append(orQueries, bson.M{"path": &bson.RegEx{Pattern: word}})
 		}
 		allQueries = append(allQueries, bson.M{"$or": orQueries})
-		allQueries = append(allQueries, bson.M{"$and": andQueries})
 	}
 	q := bson.M{"$and": allQueries}
-	var results []Review
-	err := c.Find(q).Sort("updatetime").All(&results)
+	err := c.Find(q).Sort("createtime").All(&results)
 	if err != nil {
 		return results, err
 	}

@@ -18,30 +18,13 @@
                 </div>
             </div>
             <div class="overflow-auto" style="height: 65vh; overflow-y: scroll; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);">
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 1<span class="ml-3 badge badge-secondary">wait</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 2<span class="ml-3 badge badge-success">approve</span></div>
-                <div class="p-2 m-1 bg-dark">Review Item 3<span class="ml-3 badge badge-warning">comment</span></div>
+                {{range .Reviews}}
+                    <div class="p-2 m-1 bg-dark">
+                        <span class="text-muted">{{.Project}}</span>
+                        <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
+                        <span class="ml-3 badge badge-secondary">{{.Status}}</span>
+                    </div>
+                {{end}}
             </div>
             
             
