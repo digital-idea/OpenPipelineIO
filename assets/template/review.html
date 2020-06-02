@@ -5,24 +5,28 @@
         {{template "navbar" .}}
     </div>
     <div id="blinkspace" style="height:60px"></div><!--기본 100px 여유를 두고 navbar와의 간격을 조정한다.-->
+    
     <div class="row m-3">
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
-            <div class="w-100">
-                <div class="input-group p-1">
-                    <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
-                    <div class="input-group-btn input-group-append">
-                        <button class="btn btn-sm btn-darkmode" id="button">
-                            Search
-                        </button>
+            <form action="/review-submit" method="POST">
+                <div class="w-100">
+                    <div class="input-group p-1">
+                        <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
+                        <div class="input-group-btn input-group-append">
+                            <button class="btn btn-sm btn-darkmode" id="button">
+                                Search
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="overflow-auto" style="height: 65vh; overflow-y: scroll; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);">
                 {{range .Reviews}}
                     <div class="p-2 m-1 bg-dark">
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
-                        <span class="ml-3 badge badge-secondary">{{.Status}}</span>
+                        <span class="ml-1 badge badge-secondary">{{.Task}}</span>
+                        <span class="ml-1 badge badge-secondary">{{.Status}}</span>
                     </div>
                 {{end}}
             </div>
