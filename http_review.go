@@ -47,9 +47,10 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Devmode     bool
 		SearchOption
-		Searchword string
-		Status     []Status
-		Reviews    []Review
+		Searchword       string
+		Status           []Status
+		Reviews          []Review
+		TasksettingNames []string
 	}
 	rcp := recipe{}
 	rcp.Searchword = q.Get("searchword")
@@ -66,6 +67,11 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingNames, err = TasksettingNames(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
