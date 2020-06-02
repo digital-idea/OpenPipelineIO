@@ -5,4 +5,4 @@ filename="csi-$time.tgz"
 tar -zcvf ./$filename ./dump
 rm -rf ./dump
 cp ./$filename /idea/app/csi/dump
-rm -f: $filename
+rm -f $filename
