@@ -3674,3 +3674,30 @@ function addPublish() {
         }
     });
 }
+
+function addReview() {
+    let token = document.getElementById("token").value
+    $.ajax({
+        url: "/api/addreview",
+        type: "post",
+        data: {
+            project: document.getElementById("modal-addreview-project").value,
+            name: document.getElementById("modal-addreview-name").value,
+            task: document.getElementById("modal-addreview-task").value,
+            author: document.getElementById("modal-addreview-author").value,
+            path: document.getElementById("modal-addreview-path").value,
+            description: document.getElementById("modal-addreview-description").value,
+            camerainfo: document.getElementById("modal-addreview-camerainfo").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function() {
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
