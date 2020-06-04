@@ -257,6 +257,9 @@ func webserver(port string) {
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
 
+	// Error
+	http.HandleFunc("/error-captcha", handleErrorCaptcha)
+
 	// restAPI Project
 	http.HandleFunc("/api/project", handleAPIProject)
 	http.HandleFunc("/api/projects", handleAPIProjects)
