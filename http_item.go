@@ -480,7 +480,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
-	stereo := r.FormValue("Stereo")
+	typ := r.FormValue("Type")
 	mkdir := str2bool(r.FormValue("Mkdir"))
 	setRendersize := str2bool(r.FormValue("SetRendersize"))
 	f := func(c rune) bool {
@@ -523,10 +523,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		i := Item{}
 		i.Name = n
-		i.Type = "org"
-		if stereo == "true" {
-			i.Type = "left"
-		}
+		i.Type = typ
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Seq = strings.Split(i.Name, "_")[0]
@@ -537,31 +534,39 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
 		i.Scantime = time.Now().Format(time.RFC3339)
 		i.Updatetime = time.Now().Format(time.RFC3339)
-		i.Status = ASSIGN
-		i.StatusV2 = "assign"
-		if setRendersize {
-			width := int(float64(pinfo.PlateWidth) * admin.DefaultScaleRatioOfUndistortionPlate)
-			height := int(float64(pinfo.PlateHeight) * admin.DefaultScaleRatioOfUndistortionPlate)
-			i.Platesize = fmt.Sprintf("%dx%d", pinfo.PlateWidth, pinfo.PlateHeight)
-			i.Dsize = fmt.Sprintf("%dx%d", width, height)
-			i.Rendersize = fmt.Sprintf("%dx%d", width, height)
+		if i.Type == "org" || i.Type == "left" {
+			i.Status = ASSIGN // legacy
+			i.StatusV2 = "assign"
+			if setRendersize {
+				width := int(float64(pinfo.PlateWidth) * admin.DefaultScaleRatioOfUndistortionPlate)
+				height := int(float64(pinfo.PlateHeight) * admin.DefaultScaleRatioOfUndistortionPlate)
+				i.Platesize = fmt.Sprintf("%dx%d", pinfo.PlateWidth, pinfo.PlateHeight)
+				i.Dsize = fmt.Sprintf("%dx%d", width, height)
+				i.Rendersize = fmt.Sprintf("%dx%d", width, height)
+			}
+		} else {
+			i.Status = NONE // legacy
+			i.StatusV2 = "none"
 		}
 		// 기본적으로 생성해야할 Task를 추가한다.
-		i.Tasks = make(map[string]Task)
-		for _, task := range tasks {
-			if !task.InitGenerate {
-				continue
+		if i.Type == "org" || i.Type == "left" {
+			i.Tasks = make(map[string]Task)
+			for _, task := range tasks {
+				if !task.InitGenerate {
+					continue
+				}
+				if task.Type != "shot" {
+					continue
+				}
+				t := Task{
+					Title:    task.Name,
+					Status:   ASSIGN, // legacy
+					StatusV2: "assign",
+				}
+				i.Tasks[task.Name] = t
 			}
-			if task.Type != "shot" {
-				continue
-			}
-			t := Task{
-				Title:    task.Name,
-				Status:   ASSIGN, // legacy
-				StatusV2: "assign",
-			}
-			i.Tasks[task.Name] = t
 		}
+
 		err = addItem(session, project, i)
 		if err != nil {
 			s.Error = err.Error()
