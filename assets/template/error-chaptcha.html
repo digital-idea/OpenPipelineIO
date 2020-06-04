@@ -1,0 +1,29 @@
+{{define "error-chaptcha"}}
+{{template "headBootstrap"}}
+<body>
+<div class="container p-5">
+    <div class="col-lg-6 col-md-6 col-sm-12 mx-auto">
+        <div class="pt-3 pb-5">
+            <h2 class="text-center section-heading text-muted">Error</h2>
+        </div>
+        <div>
+            <h5 class="text-center text-muted">
+                입력하신 Chaptcha 코드가 잘못되었습니다.<br>
+                Chaptcha는 매 발급시마다 새로 생성되기때문에<br>
+                오류가 발생하면 다시 가입해야합니다.<br>
+            </h5>
+        </div>
+        <div class="text-center">
+            <a href="/signup" class="btn btn-outline-danger mt-5">다시 가입하기</a>
+        </div>
+    </div>
+</div>
+{{template "footerBootstrap"}}
+</body>
+<!--add javascript-->
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+<script src="/assets/js/dotori.js"></script>
+</html>
+{{end}}

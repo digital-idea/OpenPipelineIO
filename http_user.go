@@ -502,8 +502,7 @@ func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organiz
 func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if !captcha.VerifyString(r.FormValue("CaptchaID"), r.FormValue("CaptchaNum")) {
-		err := errors.New("CaptchaID 값과 CaptchaNum 값이 다릅니다")
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Redirect(w, r, "/error-chaptcha", http.StatusSeeOther)
 		return
 	}
 	if r.FormValue("ID") == "" {
