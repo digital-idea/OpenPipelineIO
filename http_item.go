@@ -191,6 +191,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		Dilog               string
 		Wfs                 string
 		Item                Item
+		TasksettingNames    []string
 		TasksettingOrderMap map[string]float64
 		Status              []Status
 	}
@@ -233,6 +234,11 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		rcp.TasksettingOrderMap[t.Name] = t.Order
 	}
 	rcp.Status, err = AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingNames, err = TasksettingNames(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
