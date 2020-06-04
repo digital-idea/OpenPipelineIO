@@ -23,7 +23,7 @@
             </form>
             <div class="overflow-auto" style="height: 65vh; overflow-y: scroll; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);">
                 {{range .Reviews}}
-                    <div class="p-2 m-1 bg-dark">
+                    <div class="p-2 m-1 reviewitem" tabindex="1">
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
                         <span class="ml-1 badge badge-secondary">{{.Task}}</span>

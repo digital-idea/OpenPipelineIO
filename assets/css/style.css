@@ -521,3 +521,13 @@ input[type=checkbox]:checked+div{
 .no-resize {
 	resize: none;
 }
+
+.reviewitem {
+	background-color: #343A3F;
+}
+
+.reviewitem:focus {
+	background-color: rgb(37, 42, 46);
+	border: none;
+	outline: none;
+}
