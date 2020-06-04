@@ -3701,3 +3701,8 @@ function addReview() {
         }
     });
 }
+
+function setTypeAddShot(type, readOnly) {
+    document.getElementById("addshot-type").value = type
+    document.getElementById('addshot-type').readOnly = readOnly
+}
