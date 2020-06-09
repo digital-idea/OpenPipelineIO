@@ -3715,4 +3715,5 @@ function selectReviewItem(id) {
     }
     // 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
+    document.getElementById("selectReviewItemID").value = id;
 }

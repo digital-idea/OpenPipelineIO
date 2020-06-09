@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -74,6 +75,10 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
 		return
 	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		http.Error(w, path+"파일이 서버에 존재하지 않습니다", http.StatusBadRequest)
+		return
+	}
 	rcp.Review.Path = path
 	rcp.Review.Status = "wait"
 
@@ -94,7 +99,30 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Createtime = time.Now().Format("2006-01-02 15:04:05")
 	rcp.Review.Updatetime = rcp.Review.Createtime
-	rcp.ID = bson.NewObjectId()
+	rcp.Review.ID = bson.NewObjectId()
+
+	// adminsetting을 가지고 온다.
+	admin, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// ogg 를 만든다.
+	err = genOgg(admin, rcp.Review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Review.CreatedOgg = true
+
+	// mp4 를 만든다.
+	err = genMp4(admin, rcp.Review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Review.CreatedMp4 = true
+
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

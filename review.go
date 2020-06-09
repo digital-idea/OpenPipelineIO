@@ -21,6 +21,8 @@ type Review struct {
 	Description string        `json:"description"`             // 설명
 	Progress    int           `json:"progress"`                // 진행률
 	CameraInfo  string        `json:"camerainfo"`              // 카메라정보
+	CreatedOgg  bool          `json:"createogg"`               // Ogg 생성여부
+	CreatedMp4  bool          `json:"createmp4"`               // Mp4 생성여부
 }
 
 // Sketch 는 스케치 자료구조이다.
