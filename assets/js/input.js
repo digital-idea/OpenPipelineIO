@@ -3732,7 +3732,7 @@ function selectReviewItem(id) {
         })();
     }, 0);
 
-    v.addEventListener('timeupdate', function () {
+    v.addEventListener('timeupdate', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
         var $this = this; //cache
         (function loop() {
             ctx.drawImage($this, 0, 0);
