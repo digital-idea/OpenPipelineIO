@@ -3731,6 +3731,14 @@ function selectReviewItem(id) {
             }
         })();
     }, 0);
+
+    v.addEventListener('timeupdate', function () {
+        var $this = this; //cache
+        (function loop() {
+            ctx.drawImage($this, 0, 0);
+            setTimeout(loop, 1000 / 24); // drawing at 24fps
+        })();
+    }, 0);
     
     /*
     v.addEventListener("play", function() {i = window.setInterval(function() {ctx.drawImage(v,5,5,260,125)},20);}, false);
