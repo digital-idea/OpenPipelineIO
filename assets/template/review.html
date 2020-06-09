@@ -32,14 +32,12 @@
                     </div>
                 {{end}}
             </div>
-            
-            
-            
         </div>
         <div class="col-8 border-darkmode bg-black">
-            <div class="text-center">
-                <span class="text-darkmode">Player(재생창)</span>
-            </div>
+            <video id="video1" controls width="270" autoplay>
+                <source src="/reviewdata?id=5edf218f41a78948b6f79d11" type='video/mp4'>
+            </video>
+            <canvas id="player" width="500" height="250"></canvas>
         </div>
         <div class="col-2 p-1 border-darkmode overflow-auto text-darkmode">
             <div style="height: 80%">

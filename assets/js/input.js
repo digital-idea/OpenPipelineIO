@@ -3716,4 +3716,46 @@ function selectReviewItem(id) {
     // 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
     document.getElementById("selectReviewItemID").value = id;
+    // 동영상을 불러온다.
+    var v = document.getElementById("video1");
+    var c = document.getElementById("player");
+    var ctx = c.getContext("2d");
+    
+    
+    v.addEventListener('play', function () {
+        var $this = this; //cache
+        (function loop() {
+            if (!$this.paused && !$this.ended) {
+                ctx.drawImage($this, 0, 0);
+                setTimeout(loop, 1000 / 24); // drawing at 24fps
+            }
+        })();
+    }, 0);
+    
+    /*
+    v.addEventListener("play", function() {i = window.setInterval(function() {ctx.drawImage(v,5,5,260,125)},20);}, false);
+    v.addEventListener("pause", function() {window.clearInterval(i);}, false);
+    v.addEventListener("ended", function() {clearInterval(i);}, false); 
+
+    /*
+    let canvas = document.getElementById("player");
+    let ctx = canvas.getContext("2d");
+    let video = document.createElement("VIDIO");
+    video.setAttribute("src", "/reviewdata?id="+id);
+    video.setAttribute("controls", true);
+    let i;
+    video.addEventListener("play", function() {
+        i = window.setInterval(
+            function(){
+                ctx.drawImage(video, 5,5,260,125)
+            },
+            20);
+        },
+    false);
+    ctx.drawImage(video, 0, 0, 1280, 720);
+    /*
+    video.addEventListener('play', function(){
+        draw(video,ctx,1280,720);
+    },false);
+    */
 }
