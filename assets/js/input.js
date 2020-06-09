@@ -3731,13 +3731,33 @@ function selectReviewItem(id) {
             }
         })();
     }, 0);
-
+    v.addEventListener('playing', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
+    }, 0);
+    v.addEventListener('seeking', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
+    }, 0);
+    v.addEventListener('seeked', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
+    }, 0);
+    v.addEventListener('pause', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
+    }, 0);
     v.addEventListener('timeupdate', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
         var $this = this; //cache
-        (function loop() {
-            ctx.drawImage($this, 0, 0);
-            setTimeout(loop, 1000 / 24); // drawing at 24fps
-        })();
+        ctx.drawImage($this, 0, 0);
+    }, 0);
+    v.addEventListener('stalled', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
+    }, 0);
+    v.addEventListener('waiting', function () { // https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0);
     }, 0);
     
     /*
