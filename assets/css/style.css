@@ -521,3 +521,7 @@ input[type=checkbox]:checked+div{
 .no-resize {
 	resize: none;
 }
+
+.reviewitem {
+	background-color: #343A3F;
+}
