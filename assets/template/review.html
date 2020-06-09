@@ -33,11 +33,8 @@
                 {{end}}
             </div>
         </div>
-        <div class="col-8 border-darkmode bg-black">
-            <video id="video1" controls width="270" autoplay>
-                <source src="/reviewdata?id=5edf218f41a78948b6f79d11" type='video/mp4'>
-            </video>
-            <canvas id="player" width="500" height="250"></canvas>
+        <div class="col-8 border-darkmode bg-black p-0">
+            <canvas id="player" width="1920" height="1080"></canvas>
         </div>
         <div class="col-2 p-1 border-darkmode overflow-auto text-darkmode">
             <div style="height: 80%">
@@ -62,6 +59,9 @@
             편집상의 앞뒤 컷, 이전 또는 이후 버전의 선택
         </div>
     </div>
+    <video id="video1" controls width="270" autoplay>
+        <source src="/reviewdata?id=5edf218f41a78948b6f79d11" type='video/mp4'>
+    </video>
     
     {{template "footerBootstrap"}}
 </body>
