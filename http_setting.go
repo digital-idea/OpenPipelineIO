@@ -123,6 +123,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
+	s.ReviewDataPath = r.FormValue("ReviewDataPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
