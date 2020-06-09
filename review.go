@@ -12,8 +12,6 @@ type Review struct {
 	Updatetime  string        `json:"updatetime"`              // 업데이트 시간
 	Author      string        `json:"author"`                  // 작성자
 	Path        string        `json:"path"`                    // 리뷰경로
-	PathMp4     string        `json:"pathmp4"`                 // Mp4 패스경로, 웹 재생을 위해 필요함.
-	PathOgg     string        `json:"pathogg"`                 // Ogg 패스경로, 웹 재생을 위해 필요함.
 	Status      string        `json:"status"`                  // 상태 approve, comment, waiting
 	Sketches    []Sketch      `json:"sketches"`                // 스케치 프레임
 	Playlist    []string      `json:"playlist"`                // 플레이리스트 목록
@@ -21,7 +19,6 @@ type Review struct {
 	Description string        `json:"description"`             // 설명
 	Progress    int           `json:"progress"`                // 진행률
 	CameraInfo  string        `json:"camerainfo"`              // 카메라정보
-	CreatedOgg  bool          `json:"createogg"`               // Ogg 생성여부
 	CreatedMp4  bool          `json:"createmp4"`               // Mp4 생성여부
 }
 
