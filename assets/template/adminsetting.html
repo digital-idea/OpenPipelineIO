@@ -269,6 +269,11 @@
                     <small class="form-text text-muted">FFmpeg Path를 설정합니다.</small>
                 </div>
                 <div class="form-group">
+                    <label for="FFmpeg">Review Data Path</label>
+                    <input type="text" class="form-control" id="ReviewDataPath" name="ReviewDataPath" placeholder="/path/review" value={{.Setting.ReviewDataPath}}>
+                    <small class="form-text text-muted">리뷰데이터가 쌓이는 경로를 설정합니다.</small>
+                </div>
+                <div class="form-group">
                     <label for="DefaultScaleRatioOfUndistortionPlate">언디스토션 플레이트 기본 스케일 비율</label>
                     <input type="text" class="form-control" id="DefaultScaleRatioOfUndistortionPlate" name="DefaultScaleRatioOfUndistortionPlate" placeholder="1.1" value={{.Setting.DefaultScaleRatioOfUndistortionPlate}}>
                     <small class="form-text text-muted">언디스토션 플레이트의 기본 스케일 비율을 입력합니다.</small>

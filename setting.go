@@ -8,6 +8,7 @@ type Setting struct {
 	ExcludeProject                       string  `json:"excludeproject"`                       // Search옵션에 제외할 프로젝트명, 마이그레이션 시 사용한다.
 	OCIOConfig                           string  `json:"ocioconfig"`                           // OpenColorIO Config Path 설정
 	FFmpeg                               string  `json:"ffmpeg"`                               // FFmpeg 경로 셋팅
+	ReviewDataPath                       string  `json:"reviewdatapath"`                       // 리뷰 데이터가 저장되는 경로
 	Umask                                string  `json:"umask"`                                // Umask 값. 예) 0002
 	RootPath                             string  `json:"rootpath"`                             // Root경로 예) /show
 	ProjectPath                          string  `json:"projectpath"`                          // Project경로 예) /show/{{.Project}}
