@@ -93,6 +93,33 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleReviewData 함수는 리뷰 영상데이터를 전송한다.
+func handleReviewData(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	admin, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	q := r.URL.Query()
+	id := q.Get("id")
+	http.ServeFile(w, r, fmt.Sprintf("%s/%s.mp4", admin.ReviewDataPath, id))
+}
+
 // handleReviewSubmit 함수는 리뷰 검색창의 검색어를 입력받아 새로운 URI로 리다이렉션 한다.
 func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

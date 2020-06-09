@@ -107,14 +107,6 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// ogg 를 만든다.
-	err = genOgg(admin, rcp.Review)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Review.CreatedOgg = true
-
 	// mp4 를 만든다.
 	err = genMp4(admin, rcp.Review)
 	if err != nil {
