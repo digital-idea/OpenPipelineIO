@@ -3708,7 +3708,17 @@ function setTypeAddShot(type, readOnly) {
 }
 
 function selectReviewItem(id) {
-    // init reviewItemColor
+    // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
+    let canvas = document.getElementById("player");
+    canvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    canvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
+    let playerboxWidth = playerbox.clientWidth
+    let playerboxHeight = playerbox.clientHeight
+    canvas.setAttribute("width", playerboxWidth)
+    canvas.setAttribute("height", playerboxHeight)
+    
+    // 리뷰 아이템 선택컬러를 초기화 한다.
     let items = document.querySelectorAll('div[name=reviewitem]');
     for (let i = 0; i < items.length; i++) {
         document.getElementById(items[i].id).style.backgroundColor = "rgb(52, 58, 63)";
@@ -3716,4 +3726,52 @@ function selectReviewItem(id) {
     // 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
     document.getElementById("selectReviewItemID").value = id;
+
+    // 동영상을 불러온다.
+    var v = document.getElementById("video1");
+    var ctx = canvas.getContext("2d");
+    
+    v.addEventListener('play', function () {
+        var $this = this; //cache
+        (function loop() {
+            if (!$this.paused && !$this.ended) {
+                let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
+                console.log("플레이어 높이:"+playerboxHeight)
+                console.log(playerboxHeight - h)
+                //ctx.drawImage($this, 0, 0, playerbox.clientWidth, h);
+                ctx.drawImage($this, 0, 0, playerboxWidth, h);
+                setTimeout(loop, 1000 / 24); // drawing at 24fps
+            }
+        })();
+    }, 0);
+    /*
+    v.addEventListener('playing', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('seeking', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('seeked', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('pause', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('timeupdate', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('stalled', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    v.addEventListener('waiting', function () {
+        var $this = this; //cache
+        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+    }, 0);
+    */
 }

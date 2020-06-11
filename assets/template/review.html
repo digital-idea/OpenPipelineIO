@@ -32,16 +32,11 @@
                     </div>
                 {{end}}
             </div>
-            
-            
-            
         </div>
-        <div class="col-8 border-darkmode bg-black">
-            <div class="text-center">
-                <span class="text-darkmode">Player(재생창)</span>
-            </div>
+        <div class="col-8 border-darkmode bg-black p-0" id="playerbox" style="height: 70vh;">
+            <canvas class="p-0" id="player"></canvas>
         </div>
-        <div class="col-2 p-1 border-darkmode overflow-auto text-darkmode">
+        <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
             <div style="height: 80%">
                 Review text(리뷰내용)
             </div>
@@ -64,6 +59,9 @@
             편집상의 앞뒤 컷, 이전 또는 이후 버전의 선택
         </div>
     </div>
+    <video id="video1" controls width="270" autoplay>
+        <source src="/reviewdata?id=5edf218f41a78948b6f79d11" type='video/mp4'>
+    </video>
     
     {{template "footerBootstrap"}}
 </body>
