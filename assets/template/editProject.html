@@ -29,17 +29,17 @@
 						<div class="col">
 							<small class="form-text text-muted">Type</small>
 							<select name="Style" class="form-control">
-								<option value="영화" {{if eq .Project.Style "영화"}}selected{{end}}>영화</option>
-								<option value="드라마" {{if eq .Project.Style "드라마"}}selected{{end}}>드라마</option>
-								<option value="애니메이션" {{if eq .Project.Style "애니메이션"}}selected{{end}}>애니메이션</option>
-								<option value="광고" {{if eq .Project.Style "광고"}}selected{{end}}>광고</option>
-								<option value="공연" {{if eq .Project.Style "공연"}}selected{{end}}>공연</option>
-								<option value="게임" {{if eq .Project.Style "게임"}}selected{{end}}>게임</option>
-								<option value="VR" {{if eq .Project.Style "VR"}}selected{{end}}>VR</option>
-								<option value="AR" {{if eq .Project.Style "AR"}}selected{{end}}>AR</option>
-								<option value="MR" {{if eq .Project.Style "MR"}}selected{{end}}>MR</option>
-								<option value="R&D" {{if eq .Project.Style "R&D"}}selected{{end}}>R&D</option>
-								<option value="Sound" {{if eq .Project.Style "Sound"}}selected{{end}}>Sound</option>
+								<option value="영화" {{if eq .Project.Style "영화" }}selected{{end}}>영화</option>
+								<option value="드라마" {{if eq .Project.Style "드라마" }}selected{{end}}>드라마</option>
+								<option value="애니메이션" {{if eq .Project.Style "애니메이션" }}selected{{end}}>애니메이션</option>
+								<option value="광고" {{if eq .Project.Style "광고" }}selected{{end}}>광고</option>
+								<option value="공연" {{if eq .Project.Style "공연" }}selected{{end}}>공연</option>
+								<option value="게임" {{if eq .Project.Style "게임" }}selected{{end}}>게임</option>
+								<option value="VR" {{if eq .Project.Style "VR" }}selected{{end}}>VR</option>
+								<option value="AR" {{if eq .Project.Style "AR" }}selected{{end}}>AR</option>
+								<option value="MR" {{if eq .Project.Style "MR" }}selected{{end}}>MR</option>
+								<option value="R&D" {{if eq .Project.Style "R&D" }}selected{{end}}>R&D</option>
+								<option value="Sound" {{if eq .Project.Style "Sound" }}selected{{end}}>Sound</option>
 							</select>
 						</div>
 					</div>
@@ -211,10 +211,10 @@
 						<div class="col">
 							<small class="form-text text-muted">확장자</small>
 							<select name="PlateExt" class="form-control">
-								<option value="exr" {{if eq .Project.PlateExt "exr"}}selected{{end}}>exr</option>
-								<option value="dpx" {{if eq .Project.PlateExt "dpx"}}selected{{end}}>dpx</option>
-								<option value="mov" {{if eq .Project.PlateExt "mov"}}selected{{end}}>mov</option>
-								<option value="tga" {{if eq .Project.PlateExt "tga"}}selected{{end}}>tga</option>
+								<option value="exr" {{if eq .Project.PlateExt "exr" }}selected{{end}}>exr</option>
+								<option value="dpx" {{if eq .Project.PlateExt "dpx" }}selected{{end}}>dpx</option>
+								<option value="mov" {{if eq .Project.PlateExt "mov" }}selected{{end}}>mov</option>
+								<option value="tga" {{if eq .Project.PlateExt "tga" }}selected{{end}}>tga</option>
 							</select>
 						</div>
 					</div>
@@ -230,23 +230,25 @@
 						<div class="col">
 							<small class="form-text text-muted">Resize 방식</small>
 							<select name="ResizeType" class="form-control">
-								<option value="fill" {{if eq .Project.ResizeType "" "fill"}}selected{{end}}>fill</option>
-								<option value="width" {{if eq .Project.ResizeType "width"}}selected{{end}}>width</option>
-								<option value="none" {{if eq .Project.ResizeType "none"}}selected{{end}}>none</option>
+								<option value="fill" {{if eq .Project.ResizeType "" "fill" }}selected{{end}}>fill</option>
+								<option value="fit" {{if eq .Project.ResizeType "" "fit" }}selected{{end}}>fit</option>
+								<option value="width" {{if eq .Project.ResizeType "width" }}selected{{end}}>width</option>
+								<option value="distort" {{if eq .Project.ResizeType "distort" }}selected{{end}}>distort</option>
+								<option value="none" {{if eq .Project.ResizeType "none" }}selected{{end}}>none</option>
 							</select>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">EXR 압축</small>
 							<select name="ExrCompression" class="form-control">
-								<option value="none" {{if eq .Project.ExrCompression "none"}}selected{{end}}>none</option>
-								<option value="Zip (1 scanline)" {{if eq .Project.ExrCompression "" "Zip (1 scanline)"}}selected{{end}}>Zip (1 scanline)</option>
-								<option value="Zip (16 scanlines)" {{if eq .Project.ExrCompression "" "Zip (16 scanlines)"}}selected{{end}}>Zip (16 scanlines)</option>
-								<option value="PIZ Wavelet (32 scanlines)" {{if eq .Project.ExrCompression "" "PIZ Wavelet (32 scanlines)"}}selected{{end}}>PIZ Wavelet (32 scanlines)</option>
-								<option value="RLE" {{if eq .Project.ExrCompression "" "RLE"}}selected{{end}}>RLE</option>
-								<option value="B44" {{if eq .Project.ExrCompression "" "B44"}}selected{{end}}>B44</option>
-								<option value="B44A" {{if eq .Project.ExrCompression "" "B44A"}}selected{{end}}>B44A</option>
-								<option value="DWAA" {{if eq .Project.ExrCompression "" "DWAA"}}selected{{end}}>DWAA</option>
-								<option value="DWAB" {{if eq .Project.ExrCompression "" "DWAB"}}selected{{end}}>DWAB</option>
+								<option value="none" {{if eq .Project.ExrCompression "none" }}selected{{end}}>none</option>
+								<option value="Zip (1 scanline)" {{if eq .Project.ExrCompression "" "Zip (1 scanline)" }}selected{{end}}>Zip (1 scanline)</option>
+								<option value="Zip (16 scanlines)" {{if eq .Project.ExrCompression "" "Zip (16 scanlines)" }}selected{{end}}>Zip (16 scanlines)</option>
+								<option value="PIZ Wavelet (32 scanlines)" {{if eq .Project.ExrCompression "" "PIZ Wavelet (32 scanlines)" }}selected{{end}}>PIZ Wavelet (32 scanlines)</option>
+								<option value="RLE" {{if eq .Project.ExrCompression "" "RLE" }}selected{{end}}>RLE</option>
+								<option value="B44" {{if eq .Project.ExrCompression "" "B44" }}selected{{end}}>B44</option>
+								<option value="B44A" {{if eq .Project.ExrCompression "" "B44A" }}selected{{end}}>B44A</option>
+								<option value="DWAA" {{if eq .Project.ExrCompression "" "DWAA" }}selected{{end}}>DWAA</option>
+								<option value="DWAB" {{if eq .Project.ExrCompression "" "DWAB" }}selected{{end}}>DWAB</option>
 							</select>
 						</div>
 					</div>
@@ -339,13 +341,13 @@
 						<div class="col-6">
 							<small class="form-text text-muted">Codec</small>
 							<select name="OutputMov.Codec" class="form-control">
-								<option value="Apple_Prores_422HQ" {{if eq .Project.OutputMov.Codec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
-								<option value="Apple_Prores_4444" {{if eq .Project.OutputMov.Codec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
-								<option value="Apple_Prores_422" {{if eq .Project.OutputMov.Codec "Apple_Prores_422"}}selected{{end}}>Apple_Prores_422</option>
-								<option value="Apple_Prores_422LT" {{if eq .Project.OutputMov.Codec "Apple_Prores_422LT"}}selected{{end}}>Apple_Prores_422LT</option>
-								<option value="Apple_Prores_422Proxy" {{if eq .Project.OutputMov.Codec "Apple_Prores_422Proxy"}}selected{{end}}>Apple_Prores_422Proxy</option>
-								<option value="H.264" {{if eq .Project.OutputMov.Codec "H.264"}}selected{{end}}>H.264</option>
-								<option value="Avid_DNxHD_Codec" {{if eq .Project.OutputMov.Codec "Avid_DNxHD_Codec"}}selected{{end}}>Avid_DNxHD_Codec</option>
+								<option value="Apple_Prores_422HQ" {{if eq .Project.OutputMov.Codec "Apple_Prores_422HQ" }}selected{{end}}>Apple_Prores_422HQ</option>
+								<option value="Apple_Prores_4444" {{if eq .Project.OutputMov.Codec "Apple_Prores_4444" }}selected{{end}}>Apple_Prores_4444</option>
+								<option value="Apple_Prores_422" {{if eq .Project.OutputMov.Codec "Apple_Prores_422" }}selected{{end}}>Apple_Prores_422</option>
+								<option value="Apple_Prores_422LT" {{if eq .Project.OutputMov.Codec "Apple_Prores_422LT" }}selected{{end}}>Apple_Prores_422LT</option>
+								<option value="Apple_Prores_422Proxy" {{if eq .Project.OutputMov.Codec "Apple_Prores_422Proxy" }}selected{{end}}>Apple_Prores_422Proxy</option>
+								<option value="H.264" {{if eq .Project.OutputMov.Codec "H.264" }}selected{{end}}>H.264</option>
+								<option value="Avid_DNxHD_Codec" {{if eq .Project.OutputMov.Codec "Avid_DNxHD_Codec" }}selected{{end}}>Avid_DNxHD_Codec</option>
 							</select>
 						</div>
 					</div>
@@ -409,14 +411,14 @@
 						<div class="col-6">
 							<small class="form-text text-muted">Codec</small>
 							<select name="EditMov.Codec" class="form-control">
-								<option value="Apple_Prores_422HQ" {{if eq .Project.EditMov.Codec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
-								<option value="Apple_Prores_4444" {{if eq .Project.EditMov.Codec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
-								<option value="Apple_Prores_422" {{if eq .Project.EditMov.Codec "Apple_Prores_422"}}selected{{end}}>Apple_Prores_422</option>
-								<option value="Apple_Prores_422LT" {{if eq .Project.EditMov.Codec "Apple_Prores_422LT"}}selected{{end}}>Apple_Prores_422LT</option>
-								<option value="Apple_Prores_422Proxy" {{if eq .Project.EditMov.Codec "Apple_Prores_422Proxy"}}selected{{end}}>Apple_Prores_422Proxy</option>
-								<option value="H.264" {{if eq .Project.EditMov.Codec "H.264"}}selected{{end}}>H.264</option>
-								<option value="Avid_DNxHD_Codec" {{if eq .Project.EditMov.Codec "Avid_DNxHD_Codec"}}selected{{end}}>Avid_DNxHD_Codec</option>
-								<option value="" {{if eq .Project.EditMov.Codec ""}}selected{{end}}>unknown</option>
+								<option value="Apple_Prores_422HQ" {{if eq .Project.EditMov.Codec "Apple_Prores_422HQ" }}selected{{end}}>Apple_Prores_422HQ</option>
+								<option value="Apple_Prores_4444" {{if eq .Project.EditMov.Codec "Apple_Prores_4444" }}selected{{end}}>Apple_Prores_4444</option>
+								<option value="Apple_Prores_422" {{if eq .Project.EditMov.Codec "Apple_Prores_422" }}selected{{end}}>Apple_Prores_422</option>
+								<option value="Apple_Prores_422LT" {{if eq .Project.EditMov.Codec "Apple_Prores_422LT" }}selected{{end}}>Apple_Prores_422LT</option>
+								<option value="Apple_Prores_422Proxy" {{if eq .Project.EditMov.Codec "Apple_Prores_422Proxy" }}selected{{end}}>Apple_Prores_422Proxy</option>
+								<option value="H.264" {{if eq .Project.EditMov.Codec "H.264" }}selected{{end}}>H.264</option>
+								<option value="Avid_DNxHD_Codec" {{if eq .Project.EditMov.Codec "Avid_DNxHD_Codec" }}selected{{end}}>Avid_DNxHD_Codec</option>
+								<option value="" {{if eq .Project.EditMov.Codec "" }}selected{{end}}>unknown</option>
 							</select>
 						</div>
 					</div>
