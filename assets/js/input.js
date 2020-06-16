@@ -3718,60 +3718,71 @@ function selectReviewItem(id) {
     canvas.setAttribute("width", playerboxWidth)
     canvas.setAttribute("height", playerboxHeight)
     
-    // 리뷰 아이템 선택컬러를 초기화 한다.
+    // 왼쪽 리뷰 아이템 선택컬러를 초기화 한다.
     let items = document.querySelectorAll('div[name=reviewitem]');
     for (let i = 0; i < items.length; i++) {
         document.getElementById(items[i].id).style.backgroundColor = "rgb(52, 58, 63)";
     }
-    // 선택한 아이템만 컬러를 바꾼다.
+    // 왼쪽 리뷰 아이템중 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
     document.getElementById("selectReviewItemID").value = id;
 
     // 동영상을 불러온다.
-    var v = document.getElementById("video1");
-    var ctx = canvas.getContext("2d");
+    let video = document.createElement('video');
+    video.src = "reviewdata?id=" + id;
+    video.autoplay = true;
+    let ctx = canvas.getContext("2d");
+    let playButton = document.getElementById("player-play");
+    let pauseButton = document.getElementById("player-pause");
+    let startButton = document.getElementById("player-start");
+    let endButton = document.getElementById("player-end");
+    let beforeFrameButton = document.getElementById("player-left");
+    let afterFrameButton = document.getElementById("player-right");
+
+    // 플레이 버튼을 클릭할 때 이벤트
+    playButton.addEventListener("click", function() {
+        video.play();
+    });
+
+    // 일시정지 버튼을 클릭할 때 이벤트
+    pauseButton.addEventListener("click", function() {
+        video.pause();
+    });
+
+    // 처음으로 이동하는 버튼을 클릭할 때 이벤트
+    startButton.addEventListener("click", function() {
+        video.currentTime = video.seekable.start(0);
+    });
+
+    // 끝으로 이동하는 버튼을 클릭할 때 이벤트
+    endButton.addEventListener("click", function() {
+        video.currentTime = video.seekable.end(0);
+    });
+
+    // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    beforeFrameButton.addEventListener("click", function() {
+        video.currentTime -= (1/24);
+    });
+
+    // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    afterFrameButton.addEventListener("click", function() {
+        video.currentTime += (1/24);
+    });
     
-    v.addEventListener('play', function () {
-        var $this = this; //cache
+    video.addEventListener('play', function () {
+        let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
                 let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
-                console.log("플레이어 높이:"+playerboxHeight)
-                console.log(playerboxHeight - h)
-                //ctx.drawImage($this, 0, 0, playerbox.clientWidth, h);
                 ctx.drawImage($this, 0, 0, playerboxWidth, h);
                 setTimeout(loop, 1000 / 24); // drawing at 24fps
             }
         })();
     }, 0);
-    /*
-    v.addEventListener('playing', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
+
+    video.addEventListener('timeupdate', function () {
+        let $this = this; //cache
+        let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
+        ctx.drawImage($this, 0, 0, playerboxWidth, h);
     }, 0);
-    v.addEventListener('seeking', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    v.addEventListener('seeked', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    v.addEventListener('pause', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    v.addEventListener('timeupdate', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    v.addEventListener('stalled', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    v.addEventListener('waiting', function () {
-        var $this = this; //cache
-        ctx.drawImage($this, 0, 0, playerbox.clientWidth, playerbox.clientWidth * $this.height / $this.width);
-    }, 0);
-    */
 }
