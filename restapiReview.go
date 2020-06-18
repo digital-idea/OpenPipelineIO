@@ -80,8 +80,14 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Review.Path = path
+	fpsString := r.FormValue("fps")
+	fps, err := strconv.ParseFloat(fpsString, 64)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("%s 는 fps로 사용할 수 없는 값 입니다", fpsString), http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Fps = fps
 	rcp.Review.Status = "wait"
-
 	rcp.Review.Description = r.FormValue("description")
 	rcp.Review.CameraInfo = r.FormValue("camerainfo")
 	progress := r.FormValue("progress")
