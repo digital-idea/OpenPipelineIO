@@ -1247,6 +1247,20 @@
                     <label class="form-text">Path</label>
                     <input type="text" class="form-control" placeholder="데일리로 올릴 미디어 경로" value="" id="modal-addreview-path">
                 </div>
+                <div class="form-group p-0 m-0">
+                    <label class="form-text">FPS</label>
+                    <select id="modal-addreview-fps" class="form-control">
+                        <option value="24">24</option>
+                        <option value="23.976">23.976</option>
+                        <option value="23.98">23.98</option>
+                        <option value="25">25</option>
+                        <option value="30">30</option>
+                        <option value="29.97">29.97</option>                        
+                        <option value="59.94">59.94</option>
+                        <option value="60">60</option>
+                    </select>
+                    <small>리뷰 재생시 필요한 fps. 리뷰창에서 프레임을 앞뒤로 움직일때도 사용됩니다.</small>
+                </div>
                 <div class="form-group">
                     <label for="modal-addreview-description" class="col-form-label">Description</label>
                     <textarea class="form-control" id="modal-addreview-description" rows="2"></textarea>

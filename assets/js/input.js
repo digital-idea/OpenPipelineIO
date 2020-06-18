@@ -3677,6 +3677,7 @@ function addPublish() {
 
 function addReview() {
     let token = document.getElementById("token").value
+    let reviewFps = document.getElementById("modal-addreview-fps")
     $.ajax({
         url: "/api/addreview",
         type: "post",
@@ -3688,6 +3689,7 @@ function addReview() {
             path: document.getElementById("modal-addreview-path").value,
             description: document.getElementById("modal-addreview-description").value,
             camerainfo: document.getElementById("modal-addreview-camerainfo").value,
+            fps: reviewFps.options[reviewFps.selectedIndex].value,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -3707,7 +3709,7 @@ function setTypeAddShot(type, readOnly) {
     document.getElementById('addshot-type').readOnly = readOnly
 }
 
-function selectReviewItem(id) {
+function selectReviewItem(id, fps) {
     // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
     let canvas = document.getElementById("player");
     canvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
@@ -3761,12 +3763,12 @@ function selectReviewItem(id) {
 
     // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     beforeFrameButton.addEventListener("click", function() {
-        video.currentTime -= (1/24);
+        video.currentTime -= (1/parseFloat(fps));
     });
 
     // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {
-        video.currentTime += (1/24);
+        video.currentTime += (1/parseFloat(fps));
     });
     
     video.addEventListener('play', function () {
@@ -3775,7 +3777,7 @@ function selectReviewItem(id) {
             if (!$this.paused && !$this.ended) {
                 let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
                 ctx.drawImage($this, 0, 0, playerboxWidth, h);
-                setTimeout(loop, 1000 / 24); // drawing at 24fps
+                setTimeout(loop, 1000 / parseFloat(fps)); // drawing at fps
             }
         })();
     }, 0);
