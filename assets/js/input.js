@@ -3709,6 +3709,10 @@ function setTypeAddShot(type, readOnly) {
     document.getElementById('addshot-type').readOnly = readOnly
 }
 
+var drawCanvas, drawCtx;
+var mouseStartX=0, mouseStartY=0
+var drawing=false;
+
 function selectReviewItem(id, fps) {
     // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
     let canvas = document.getElementById("player");
@@ -3719,7 +3723,21 @@ function selectReviewItem(id, fps) {
     let playerboxHeight = playerbox.clientHeight
     canvas.setAttribute("width", playerboxWidth)
     canvas.setAttribute("height", playerboxHeight)
+
+    // draw캔버스를 초기화 한다.
+    let drawCanvas = document.getElementById("drawcanvas");
+    drawCanvas.setAttribute("width", playerboxWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
+    drawCanvas.setAttribute("height", playerboxHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
+
+    drawCtx = drawCanvas.getContext("2d")
+    drawCtx.lineWidth = 4;
+    drawCtx.strokeStyle = "#EFEAD6"
     
+    drawCanvas.addEventListener("mousemove", function (e) { move(e) }, false);
+    drawCanvas.addEventListener("mousedown", function (e) { down(e) }, false);
+    drawCanvas.addEventListener("mouseup", function (e) { up(e) }, false);
+    drawCanvas.addEventListener("mouseout", function (e) { out(e) }, false);
+
     // 왼쪽 리뷰 아이템 선택컬러를 초기화 한다.
     let items = document.querySelectorAll('div[name=reviewitem]');
     for (let i = 0; i < items.length; i++) {
@@ -3787,4 +3805,32 @@ function selectReviewItem(id, fps) {
         let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
         ctx.drawImage($this, 0, 0, playerboxWidth, h);
     }, 0);
+}
+
+function draw(curX, curY) {
+    drawCtx.beginPath();
+    drawCtx.moveTo(mouseStartX, mouseStartY);
+    drawCtx.lineTo(curX, curY);
+    drawCtx.stroke();
+}
+function down(e) {
+    mouseStartX = e.offsetX;
+    mouseStartY = e.offsetY;
+    drawing = true;
+}
+
+function up(e) {
+    drawing = false;
+}
+
+function move(e) {
+    if(!drawing) return; // 마우스가 눌러지지 않았으면 리턴
+    var curX = e.offsetX, curY = e.offsetY;
+    draw(curX, curY);
+    mouseStartX = curX;
+    mouseStartY = curY;
+}
+
+function out(e) {
+    drawing = false;
 }
