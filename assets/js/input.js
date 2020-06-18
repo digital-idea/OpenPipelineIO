@@ -3709,9 +3709,10 @@ function setTypeAddShot(type, readOnly) {
     document.getElementById('addshot-type').readOnly = readOnly
 }
 
+// 동영상에 그림을 그리기 위해 필요한 글로벌 변수를 셋팅한다.
 var drawCanvas, drawCtx;
 var mouseStartX=0, mouseStartY=0
-var drawing=false;
+var drawing = false;
 
 function selectReviewItem(id, fps) {
     // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
@@ -3724,19 +3725,21 @@ function selectReviewItem(id, fps) {
     canvas.setAttribute("width", playerboxWidth)
     canvas.setAttribute("height", playerboxHeight)
 
-    // draw캔버스를 초기화 한다.
+    // Draw 캔버스를 초기화 한다.
     let drawCanvas = document.getElementById("drawcanvas");
     drawCanvas.setAttribute("width", playerboxWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
     drawCanvas.setAttribute("height", playerboxHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
 
+    // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
-    drawCtx.lineWidth = 4;
-    drawCtx.strokeStyle = "#EFEAD6"
-    
-    drawCanvas.addEventListener("mousemove", function (e) { move(e) }, false);
-    drawCanvas.addEventListener("mousedown", function (e) { down(e) }, false);
-    drawCanvas.addEventListener("mouseup", function (e) { up(e) }, false);
-    drawCanvas.addEventListener("mouseout", function (e) { out(e) }, false);
+    drawCtx.lineWidth = 4; // 브러시 사이즈
+    drawCtx.strokeStyle = "#EFEAD6" // 브러시 컬러
+
+    // 마우스 이벤트 처리
+    drawCanvas.addEventListener("mousemove", function (e) {move(e)},false);
+    drawCanvas.addEventListener("mousedown", function (e) {down(e)}, false);
+    drawCanvas.addEventListener("mouseup", function (e) {up(e)}, false);
+    drawCanvas.addEventListener("mouseout", function (e) {out(e)}, false);
 
     // 왼쪽 리뷰 아이템 선택컬러를 초기화 한다.
     let items = document.querySelectorAll('div[name=reviewitem]');
@@ -3749,7 +3752,7 @@ function selectReviewItem(id, fps) {
 
     // 동영상을 불러온다.
     let video = document.createElement('video');
-    video.src = "reviewdata?id=" + id;
+    video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
     let ctx = canvas.getContext("2d");
     let playButton = document.getElementById("player-play");
@@ -3759,35 +3762,13 @@ function selectReviewItem(id, fps) {
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
 
-    // 플레이 버튼을 클릭할 때 이벤트
-    playButton.addEventListener("click", function() {
-        video.play();
-    });
-
-    // 일시정지 버튼을 클릭할 때 이벤트
-    pauseButton.addEventListener("click", function() {
-        video.pause();
-    });
-
-    // 처음으로 이동하는 버튼을 클릭할 때 이벤트
-    startButton.addEventListener("click", function() {
-        video.currentTime = video.seekable.start(0);
-    });
-
-    // 끝으로 이동하는 버튼을 클릭할 때 이벤트
-    endButton.addEventListener("click", function() {
-        video.currentTime = video.seekable.end(0);
-    });
-
-    // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
-    beforeFrameButton.addEventListener("click", function() {
-        video.currentTime -= (1/parseFloat(fps));
-    });
-
-    // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
-    afterFrameButton.addEventListener("click", function() {
-        video.currentTime += (1/parseFloat(fps));
-    });
+    // 플레이어 하단 이벤트
+    playButton.addEventListener("click", function() {video.play();}); // 플레이 버튼을 클릭할 때 이벤트
+    pauseButton.addEventListener("click", function() {video.pause();}); // 일시정지 버튼을 클릭할 때 이벤트
+    startButton.addEventListener("click", function() {video.currentTime = video.seekable.start(0);}); // 처음으로 이동하는 버튼을 클릭할 때 이벤트
+    endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0);}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트
+    beforeFrameButton.addEventListener("click", function() {video.currentTime -= (1/parseFloat(fps));}); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    afterFrameButton.addEventListener("click", function() {video.currentTime += (1/parseFloat(fps));}); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     
     video.addEventListener('play', function () {
         let $this = this; //cache
@@ -3807,30 +3788,38 @@ function selectReviewItem(id, fps) {
     }, 0);
 }
 
+// draw 함수는 x,y 좌표를 받아 그림을 그린다.
 function draw(curX, curY) {
     drawCtx.beginPath();
     drawCtx.moveTo(mouseStartX, mouseStartY);
     drawCtx.lineTo(curX, curY);
     drawCtx.stroke();
 }
+
+// down 함수는 마우스를 클릭할 때 현재 위치를 마우스의 시작좌표로 설정하고 그림을 그린다고 설정한다.
 function down(e) {
     mouseStartX = e.offsetX;
     mouseStartY = e.offsetY;
     drawing = true;
 }
 
+// up 함수는 마우스 버튼을 땔 때 그림그리는 모드를 종료한다.
 function up(e) {
     drawing = false;
 }
 
+// move 함수는 그림을 그리는 상태이고 마우스가 이동할 때 현재 위치에 그림을 그리고 현재위치를 다시 마우스의 시작위치로 바꾼다.
 function move(e) {
-    if(!drawing) return; // 마우스가 눌러지지 않았으면 리턴
+    if (!drawing) {
+        return; // 마우스가 눌러지지 않았으면 리턴
+    }
     var curX = e.offsetX, curY = e.offsetY;
     draw(curX, curY);
     mouseStartX = curX;
     mouseStartY = curY;
 }
 
+// out 함수는 화면 밖으로 커서가 나가면 그림그리는 모드를 끈다.
 function out(e) {
     drawing = false;
 }
