@@ -285,6 +285,7 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 			orQueries = append(orQueries, bson.M{"id": strings.TrimPrefix(word, "id:")})
 		} else {
 			orQueries = append(orQueries, bson.M{"id": &bson.RegEx{Pattern: word}})
+			orQueries = append(orQueries, bson.M{"employeenumber": &bson.RegEx{Pattern: word, Options: "i"}})
 			orQueries = append(orQueries, bson.M{"firstnamekor": &bson.RegEx{Pattern: word}})
 			orQueries = append(orQueries, bson.M{"lastnamekor": &bson.RegEx{Pattern: word}})
 			orQueries = append(orQueries, bson.M{"firstnameeng": &bson.RegEx{Pattern: word}})

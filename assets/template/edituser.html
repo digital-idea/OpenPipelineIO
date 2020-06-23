@@ -44,6 +44,12 @@
             <small class="form-text text-muted pb-3">중국 콘텐츠 크레딧 제작시 한자이름을 요구하는 경우가 있습니다.</small>
 
             <div class="form-group">
+                <label>EmployeeNumber / 사번</label>
+                <input type="text" name="EmployeeNumber" class="form-control" placeholder="사번" value="{{.User.EmployeeNumber}}">
+                <small class="form-text text-muted">회사 내부에서 사용하는 사번을 적어주세요.</small>
+            </div>
+
+            <div class="form-group">
                 <label>E-mail / 사내 이메일</label>
                 <input type="email" name="Email" class="form-control" placeholder="사번@{{.MailDNS}}" value="{{.User.Email}}">
                 <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>

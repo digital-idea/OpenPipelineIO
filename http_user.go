@@ -181,6 +181,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	u, err := getUser(session, id)
+	u.EmployeeNumber = strings.TrimSpace(r.FormValue("EmployeeNumber"))
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))
@@ -525,6 +526,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	u.Password = pw
+	u.EmployeeNumber = strings.TrimSpace(r.FormValue("EmployeeNumber"))
 	u.FirstNameKor = strings.TrimSpace(r.FormValue("FirstNameKor"))
 	u.LastNameKor = strings.TrimSpace(r.FormValue("LastNameKor"))
 	u.FirstNameEng = strings.Title(strings.TrimSpace(strings.ToLower(r.FormValue("FirstNameEng"))))
