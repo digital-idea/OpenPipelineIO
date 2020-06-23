@@ -3823,3 +3823,26 @@ function move(e) {
 function out(e) {
     drawing = false;
 }
+
+// screenshot 함수는 리뷰중인 스크린을 스크린샷 합니다.
+function screenshot() {
+    let fg = document.getElementById("drawcanvas");
+    let bg = document.getElementById("player");
+    let bgctx = bg.getContext('2d')
+    bgctx.drawImage(fg, 0, 0) // 배경에 fg를 그린다.
+    let dataURL = bg.toDataURL("image/png")
+    let link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'screenshot.png';
+    link.click();
+}
+
+// removeDrawing 함수는 리뷰 스케치를 제거합니다.
+function removeDrawing() {
+    let playerbox = document.getElementById("playerbox"); // player 캔버스를 담을 div를 가지고 온다.
+    let playerboxWidth = playerbox.clientWidth
+    let playerboxHeight = playerbox.clientHeight
+    let fg = document.getElementById("drawcanvas");
+    let ctx = fg.getContext("2d");
+    ctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
+}

@@ -408,8 +408,6 @@ func handleAPI3Items(w http.ResponseWriter, r *http.Request) {
 		Hold:              str2bool(q.Get("hold")),
 		Out:               str2bool(q.Get("out")),
 		None:              str2bool(q.Get("none")),
-		Shot:              str2bool(q.Get("shot")),
-		Assets:            str2bool(q.Get("asset")),
 		Type3d:            str2bool(q.Get("type3d")),
 		Type2d:            str2bool(q.Get("type2d")),
 		TrueStatus:        strings.Split(q.Get("truestatus"), ","),

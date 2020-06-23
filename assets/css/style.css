@@ -616,6 +616,24 @@ span.player-expand {
     width: 36px;
 }
 
+span.player-screenshot {
+    background: url(/assets/img/player-screenshot.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
+span.player-trash {
+    background: url(/assets/img/player-trash.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
 .no-selection {
 	-webkit-user-select: none;
 	-webkit-user-drag: none;
