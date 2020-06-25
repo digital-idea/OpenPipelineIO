@@ -5,6 +5,12 @@
 <div id="item-{{$.Item.ID}}" class="pt-5">
 	<div class="row ml-1 mr-1 pt-1 pl-3 pr-3">
 		<div class="col-sm-12 col-md-6 col-lg-2">
+			<div>
+				<span class="text-white itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span>
+				{{if $.Item.Updatetime|CheckUpdate}}
+					<span class="badge badge-warning align-top mt-1 ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
+				{{end}}
+			</div>
 			<!--Thumbnail-->
 			<div class="row">
 				<input type="checkbox" class="form-check-input" id="{{$.Item.ID}}" name="selectID" style="opacity:0; position:absolute;">
@@ -35,7 +41,6 @@
 							</div>
 						{{end}}
 					</div>
-					<div class="centered-top"><span class="text-white black-opbg itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span></div>
 					<div class="top-right">
 						<div class="row" id="platesize-{{$.Item.Name}}">
 							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Platesize}}S: {{$.Item.Platesize}}{{else}}S:{{end}}</span>
@@ -179,11 +184,6 @@
 
 			<div class="row">
 				<div class="mx-auto pt-1 row">
-					<div id="update-{{$.Item.Name}}">
-						{{if $.Item.Updatetime|CheckUpdate}}
-							<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
-						{{end}}
-					</div>
 					<div id="button-thumbplay-{{$.Item.Name}}">
 						<a href="dilink://{{$.Item.Thummov}}" class="play">PLAY</a>
 					</div>
