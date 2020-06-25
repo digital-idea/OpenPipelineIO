@@ -12,6 +12,7 @@
 <div class="row ml-1 mr-1 pt-1 pl-3 pr-3" >
 	<div class="col-sm-12 col-md-6 col-lg-2">
 		<!--Thumbnail-->
+		<div><span class="text-white itemname finger" onclick="mailInfo('{{.Project}}','{{.ID}}')">{{.Name}}</span></div>
 		<div class="row">
 			<input type="checkbox" class="form-check-input" id="{{.ID}}" name="selectID" style="opacity:0; position:absolute;">
 			<div class="thumbnailbox ml-1">
@@ -41,7 +42,6 @@
 						</div>
 					{{end}}
 				</div>
-				<div class="centered-top"><span class="text-white black-opbg itemname finger" onclick="mailInfo('{{.Project}}','{{.ID}}')">{{.Name}}</span></div>
 				<div class="top-right">
 					<div class="row" id="platesize-{{.Name}}">
 						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Platesize}}S: {{.Platesize}}{{else}}S:{{end}}</span>
