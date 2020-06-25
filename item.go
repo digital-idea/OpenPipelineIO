@@ -86,6 +86,7 @@ type Item struct {
 	Scantime    string          `json:"scantime"`    // 스캔 등록시간 RFC3339
 	Thumpath    string          `json:"thumpath"`    // 썸네일경로
 	Thummov     string          `json:"thummov"`     // 썸네일 mov 경로
+	Editmov     string          `json:"editmov"`     // Edit(편집본) mov 경로
 	Beforemov   string          `json:"beforemov"`   // 전에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
 	Aftermov    string          `json:"aftermov"`    // 후에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
 	Retimeplate string          `json:"retimeplate"` // 리타임 플레이트 경로

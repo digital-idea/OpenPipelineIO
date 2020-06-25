@@ -1473,9 +1473,11 @@ function rmReference(project, id, title) {
     }
 }
 
-function setThummov(project, id, path) {
+function setThummov(path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-iteminfo-project').value;
+    let id = document.getElementById('modal-iteminfo-id').value;
     $.ajax({
         url: "/api/setthummov",
         type: "post",
@@ -1498,9 +1500,11 @@ function setThummov(project, id, path) {
     });
 }
 
-function setBeforemov(project, id, path) {
+function setBeforemov(path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-iteminfo-project').value;
+    let id = document.getElementById('modal-iteminfo-id').value;
     $.ajax({
         url: "/api/setbeforemov",
         type: "post",
@@ -1523,15 +1527,44 @@ function setBeforemov(project, id, path) {
     });
 }
 
-function setAftermov(project, id, path) {
+function setAftermov(path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-iteminfo-project').value;
+    let id = document.getElementById('modal-iteminfo-id').value;
     $.ajax({
         url: "/api/setaftermov",
         type: "post",
         data: {
             project: project,
             name: id2name(id),
+            path: path,
+            userid: userid,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            console.info(data);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setEditmov(path) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-iteminfo-project').value;
+    let id = document.getElementById('modal-iteminfo-id').value;
+    $.ajax({
+        url: "/api/seteditmov",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
             path: path,
             userid: userid,
         },
@@ -1675,6 +1708,7 @@ function setIteminfoModal(project, id) {
             document.getElementById('modal-iteminfo-thummov').value = data.thummov;
             document.getElementById('modal-iteminfo-beforemov').value = data.beforemov;
             document.getElementById('modal-iteminfo-aftermov').value = data.aftermov;
+            document.getElementById('modal-iteminfo-editmov').value = data.editmov;
             document.getElementById('modal-iteminfo-retimeplate').value = data.retimeplate;
             document.getElementById('modal-iteminfo-ociocc').value = data.ociocc;
             document.getElementById('modal-iteminfo-rollmedia').value = data.rollmedia;
