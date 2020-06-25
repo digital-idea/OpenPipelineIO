@@ -1896,6 +1896,21 @@ func SetAftermov(session *mgo.Session, project, name, path string) error {
 	return nil
 }
 
+// SetEditmov 함수는 item에 Edit(편집본) mov값을 셋팅한다.
+func SetEditmov(session *mgo.Session, project, id, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"editmov": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetTaskStatus 함수는 item에 task의 status 값을 셋팅한다. // legacy
 func SetTaskStatus(session *mgo.Session, project, id, task, status string) error {
 	session.SetMode(mgo.Monotonic, true)

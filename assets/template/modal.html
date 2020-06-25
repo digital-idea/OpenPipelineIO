@@ -1033,21 +1033,28 @@
                 <input type="hidden" class="form-control" id="modal-iteminfo-id">
                 <div class="form-group">
                     <label>Thumbnail MOV</label>
-                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-thummov" value="" class="form-control form-control-sm" onchange="setThummov(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-thummov" value="" class="form-control form-control-sm" onchange="setThummov(this.value)">
                     <small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
                 </div>
                     
                 <div class="form-group">
                     <label>앞쪽 연결 MOV</label>
-                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-beforemov" value="" class="form-control form-control-sm" onchange="setBeforemov(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-beforemov" value="" class="form-control form-control-sm" onchange="setBeforemov(this.value)">
                     <small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
                 </div>
 
                 <div class="form-group">
                     <label>뒤쪽 연결 MOV</label>
-                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-aftermov" value="" class="form-control form-control-sm" onchange="setAftermov(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-aftermov" value="" class="form-control form-control-sm" onchange="setAftermov(this.value)">
                     <small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
                 </div>
+
+                <div class="form-group">
+                    <label>편집본 MOV</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-editmov" value="" class="form-control form-control-sm" onchange="setEditmov(this.value)">
+                    <small class="form-text text-muted">편집본 mov 설정</small>
+                </div>
+
                 <div class="form-group">
                     <label>리타임 플레이트 위치</label>
                     <input type="text" size="55" maxlength="256" id="modal-iteminfo-retimeplate" value="" class="form-control form-control-sm" onchange="setRetimeplate(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
@@ -1058,15 +1065,21 @@
                     <input type="text" size="55" id="modal-iteminfo-ociocc" value="" class="form-control form-control-sm" onchange="setOCIOcc(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
                     <small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
                 </div>
-                <div class="form-group">
-                    <label>현장툴 Rollmedia</label>
-                    <input type="text" maxlength="25" id="modal-iteminfo-rollmedia" value="" class="form-control form-control-sm" onchange="setRollmedia(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
-                    <small class="form-text text-muted">Setellite에서 사용한 Rollmedia 값을 입력해주세요.</small>
-                </div>
-                <div class="form-group">
-                    <label>Scanname</label>
-                    <input type="text" maxlength="25" id="modal-iteminfo-scanname" value="" class="form-control form-control-sm" onchange="setScanname(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
-                    <small class="form-text text-muted">Scanname 값을 수정 또는 설정합니다.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>현장툴 Rollmedia</label>
+                            <input type="text" maxlength="25" id="modal-iteminfo-rollmedia" value="" class="form-control form-control-sm" onchange="setRollmedia(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                            <small class="form-text text-muted">Setellite2 에서 사용된 Rollmedia 값</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Scanname</label>
+                            <input type="text" maxlength="25" id="modal-iteminfo-scanname" value="" class="form-control form-control-sm" onchange="setScanname(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                            <small class="form-text text-muted">Scanname 이름</small>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
