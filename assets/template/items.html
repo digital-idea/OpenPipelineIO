@@ -276,7 +276,7 @@
 						</div>
 						<div id="{{$id}}-task-{{.Title}}-publish">
 							{{if .Publishes }}
-								<a href="/detail?project={{$project}}&id={{$id}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="ml-1 publish">Pub</a>
+								<a href="/detail?project={{$project}}&id={{$id}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}#publish-{{.Title}}" class="ml-1 publish">Pub</a>
 							{{end}}
 						</div>
 						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
