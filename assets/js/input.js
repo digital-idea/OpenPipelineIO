@@ -3898,3 +3898,14 @@ function removeDrawing() {
     let screenshotctx = screenshot.getContext("2d");
     screenshotctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
 }
+
+// copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.
+function copyButton(value) {
+    let id = document.createElement("input");   // input요소를 만듬
+    id.setAttribute("value", value);        // input요소에 값을 추가
+    document.body.appendChild(id);              // body에 요소 추가
+    id.select();                                // input요소를 선택
+    document.execCommand("copy");               // 복사기능 실행
+    document.body.removeChild(id);              // body에 요소 삭제
+    alert(value + "\n값이 클립보드에 복사되었습니다.")
+}
