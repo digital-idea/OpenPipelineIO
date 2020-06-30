@@ -3596,7 +3596,7 @@ function mailInfo(project, id) {
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
-    });   
+    });
 }
 
 function foldingmenu() {
@@ -3748,7 +3748,7 @@ var drawCanvas, drawCtx;
 var mouseStartX=0, mouseStartY=0
 var drawing = false;
 
-function selectReviewItem(id, fps) {
+function selectReviewItem(id, fps, project, name) {
     // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
     let canvas = document.getElementById("player");
     canvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
@@ -3768,6 +3768,39 @@ function selectReviewItem(id, fps) {
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", playerboxWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", playerboxHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+
+    // 하단의 아이템을 드로잉하기
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/searchreview",
+        type: "post",
+        data: {
+            "searchword": "project:" + project + " " + "name:" + name,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            let reviewgroup = document.getElementById("reviewgroup");
+            for (let i = 0; i < data.length; i++) {
+                let video = document.createElement('video');
+                video.setAttribute("height","100%")
+                video.src = "/reviewdata?id=" + data[i].id;
+                video.autoplay = false
+                video.classList.add("p-0")
+                video.classList.add("m-0")
+                video.classList.add("pr-1")
+                console.log(video);
+                // border 0px
+                reviewgroup.appendChild(video)
+                
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
