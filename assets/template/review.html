@@ -24,7 +24,7 @@
             </form>
             <div class="overflow-auto" style="height: 65vh; overflow-y: scroll; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);">
                 {{range .Reviews}}
-                    <div class="p-2 m-1 reviewitem finger" name="reviewitem" id="{{.ID.Hex}}" onclick="selectReviewItem('{{.ID.Hex}}','{{.Fps}}')">
+                    <div class="p-2 m-1 reviewitem finger" name="reviewitem" id="{{.ID.Hex}}" onclick="selectReviewItem('{{.ID.Hex}}','{{.Fps}}','{{.Project}}','{{.Name}}')">
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
                         <span class="ml-1 badge badge-secondary">{{.Task}}</span>
@@ -76,9 +76,7 @@
         </div>
     </div>
     <div class="row ml-3 mr-3">
-        <div class="col-12 border-darkmode text-darkmode" style="height: 10vh;">
-            Name(샷,에셋)과 관련된 모든 검색결과를 출력함.<br>
-            편집상의 앞뒤 컷, 이전 또는 이후 버전의 선택
+        <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="height: 10vh; overflow-x: auto; overflow-y: hidden;" id="reviewgroup">
         </div>
     </div>
     {{template "footerBootstrap"}}
