@@ -3764,6 +3764,11 @@ function selectReviewItem(id, fps) {
     drawCanvas.setAttribute("width", playerboxWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
     drawCanvas.setAttribute("height", playerboxHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
 
+    // screenshot 캔버스를 초기화 한다.
+    let screenshotCanvas = document.getElementById("screenshot");
+    screenshotCanvas.setAttribute("width", playerboxWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("height", playerboxHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
     drawCtx.lineWidth = 4; // 브러시 사이즈
@@ -3860,23 +3865,36 @@ function out(e) {
 
 // screenshot 함수는 리뷰중인 스크린을 스크린샷 합니다.
 function screenshot() {
+    let screenshot = document.getElementById("screenshot");
     let fg = document.getElementById("drawcanvas");
     let bg = document.getElementById("player");
-    let bgctx = bg.getContext('2d')
-    bgctx.drawImage(fg, 0, 0) // 배경에 fg를 그린다.
-    let dataURL = bg.toDataURL("image/png")
+    let screenshotctx = screenshot.getContext('2d')
+    screenshotctx.drawImage(bg, 0, 0) // 배경에 bg를 그린다.
+    screenshotctx.drawImage(fg, 0, 0) // 배경에 fg를 그린다.
+    let dataURL = screenshot.toDataURL("image/png")
     let link = document.createElement('a');
     link.href = dataURL;
     link.download = 'screenshot.png';
+    link.setAttribute("type","hidden") // firefox에서는 꼭 DOM구조를 지켜야 한다.
+    document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
+    link.remove();
 }
 
 // removeDrawing 함수는 리뷰 스케치를 제거합니다.
 function removeDrawing() {
-    let playerbox = document.getElementById("playerbox"); // player 캔버스를 담을 div를 가지고 온다.
+    // 지울 영역을 구한다. - player 캔버스를 담을 div 의 가로세로 사이즈를 구한다.
+    let playerbox = document.getElementById("playerbox");
     let playerboxWidth = playerbox.clientWidth
     let playerboxHeight = playerbox.clientHeight
+ 
+    // drawcanvas를 지운다.
     let fg = document.getElementById("drawcanvas");
-    let ctx = fg.getContext("2d");
-    ctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
+    let fgctx = fg.getContext("2d");
+    fgctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
+
+    // drawcanvas를 지운다.
+    let screenshot = document.getElementById("screenshot");
+    let screenshotctx = screenshot.getContext("2d");
+    screenshotctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
 }
