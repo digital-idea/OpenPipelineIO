@@ -255,6 +255,15 @@ func webserver(port string) {
 	http.HandleFunc("/rmstatus", handleRmStatus)
 	http.HandleFunc("/rmstatus-submit", handleRmStatusSubmit)
 
+	// Publish Key
+	http.HandleFunc("/publishkey", handlePublishKey)
+	http.HandleFunc("/addpublishkey", handleAddPublishKey)
+	http.HandleFunc("/addpublishkey-submit", handleAddPublishKeySubmit)
+	http.HandleFunc("/editpublishkey", handleEditPublishKey)
+	http.HandleFunc("/editpublishkey-submit", handleEditPublishKeySubmit)
+	http.HandleFunc("/rmpublishkey", handleRmPublishKey)
+	http.HandleFunc("/rmpublishkey-submit", handleRmPublishKeySubmit)
+
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
 
