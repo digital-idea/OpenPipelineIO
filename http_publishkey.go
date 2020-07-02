@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"gopkg.in/mgo.v2"
@@ -190,7 +189,6 @@ func handleRmPublishKeySubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 
 	id := r.FormValue("id")
-	fmt.Println(id)
 	err = RmPublishKey(session, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
