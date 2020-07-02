@@ -396,6 +396,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/status", handleAPIStatus)
 	http.HandleFunc("/api/addstatus", handleAPIAddStatus)
 
+	// restAPI PublishKey
+	http.HandleFunc("/api/publishkey", handleAPIPublishKey)
+
 	// restAPI Review
 	http.HandleFunc("/api/addreview", handleAPIAddReview)
 	http.HandleFunc("/api/searchreview", handleAPISearchReview)
