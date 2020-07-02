@@ -555,12 +555,19 @@
                     <input type="hidden" class="form-control" id="modal-addpublish-project">
                     <input type="hidden" class="form-control" id="modal-addpublish-name">
                     <input type="hidden" class="form-control" id="modal-addpublish-task">
-                    
-                    <div class="form-group">
-                        <label for="modal-addpublish-key" class="col-form-label">Key</label>
-                        <input type="text" class="form-control" id="modal-addpublish-key">
-                        <small class="form-text text-muted">Publish 데이터 key 이름을 입력해주세요.</small>
-                        <small class="form-text text-muted">예) precomp, publish, cache 등등.</small>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="modal-addpublish-key" class="col-form-label">Primary Key</label>
+                            <input type="text" class="form-control" id="modal-addpublish-key">
+                            <small class="form-text text-muted">Primary Key 이름을 입력해주세요.</small>
+                            <small class="form-text text-muted">예) 툴이름</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="modal-addpublish-secondarykey" class="col-form-label">Secondary Key</label>
+                            <input type="text" class="form-control" id="modal-addpublish-secondarykey">
+                            <small class="form-text text-muted">Secondary Key 이름을 입력해주세요.</small>
+                            <small class="form-text text-muted">예) 종류, 형태</small>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="modal-addpublish-key" class="col-form-label">Path</label>

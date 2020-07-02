@@ -141,14 +141,15 @@ type Item struct {
 
 // Publish 자료구조는 Task의 Publish 자료구조입니다.
 type Publish struct {
-	Path        string `json:"path"`        // 퍼블리시 경로
-	MainVersion string `json:"mainversion"` // 메인버전
-	SubVersion  string `json:"subversion"`  // 서브버전
-	Subject     string `json:"subject"`     // Publish 주제
-	Createtime  string `json:"createtime"`  // 생성시간 RFC3339
-	FileType    string `json:"filetype"`    // 파일타입
-	KindOfUSD   string `json:"kindofusd"`   // .usd 포멧 kind: component, group, assembly
-	Status      string `json:"status"`      // UseThis, NotUse, Working
+	SecondaryKey string `json:"secondarykey"` // 세컨더리 키
+	Path         string `json:"path"`         // 퍼블리시 경로
+	MainVersion  string `json:"mainversion"`  // 메인버전
+	SubVersion   string `json:"subversion"`   // 서브버전
+	Subject      string `json:"subject"`      // Publish 주제
+	Createtime   string `json:"createtime"`   // 생성시간 RFC3339
+	FileType     string `json:"filetype"`     // 파일타입
+	KindOfUSD    string `json:"kindofusd"`    // .usd 포멧 kind: component, group, assembly
+	Status       string `json:"status"`       // UseThis, NotUse, Working
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
@@ -168,7 +169,7 @@ type Task struct {
 	Promday      int                  `json:"promday"`      // 실제 멘데이
 	UserNote     string               `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
 	TaskLevel    `json:"tasklevel"`   // 샷 레벨
-	Publishes    map[string][]Publish // 퍼블리쉬 정보
+	Publishes    map[string][]Publish // 퍼블리쉬 정보, string값은 "Primary Key"가 된다.
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다. // legacy
