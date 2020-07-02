@@ -787,6 +787,34 @@ function setAddPublishModal(project, name, task) {
     document.getElementById("modal-addpublish-project").value = project
     document.getElementById("modal-addpublish-name").value = name
     document.getElementById("modal-addpublish-task").value = task
+    // publishkey를 셋팅한다.
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/publishkeys",
+        type: "get",
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(datas) {
+            if (datas.length == 0) {
+                alert("PublishKey 등록이 필요합니다.");
+                document.getElementById('modal-addpublish-addbutton').disabled = true;
+                return
+            }
+            let keys = document.getElementById('modal-addpublish-key');
+            keys.innerHTML = "";
+            for (let i = 0; i < datas.length; i++){
+                let opt = document.createElement('option');
+                opt.value = datas[i].id;
+                opt.innerHTML = datas[i].id;
+                keys.appendChild(opt);
+            }
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 function setAddCommentModal(project, id) {

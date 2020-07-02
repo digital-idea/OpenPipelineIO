@@ -558,8 +558,10 @@
                     <div class="row">
                         <div class="col-6 form-group">
                             <label for="modal-addpublish-key" class="col-form-label">Primary Key</label>
-                            <input type="text" class="form-control" id="modal-addpublish-key">
-                            <small class="form-text text-warning">* Primary Key 이름을 입력해주세요.</small>
+                            <select id="modal-addpublish-key" class="form-control">
+                                <option value="">PublishKey 등록필요</option>
+                            </select>
+                            <small class="form-text text-warning">Primary Key 이름을 입력해주세요.(필수)</small>
                         </div>
                         <div class="col-6 form-group">
                             <label for="modal-addpublish-secondarykey" class="col-form-label">Secondary Key</label>
@@ -576,7 +578,7 @@
                         <div class="col-6 form-group">
                             <label class="col-form-label">Status</label>
                             <select id="modal-addpublish-status" class="form-control">
-                                <option value="usethis">Use This(사용 버전)</option>                        
+                                <option value="usethis">Use This(사용 버전)</option>
                                 <option value="working">Working(작업중인 버전)</option>
                                 <option value="notuse">Not Use(미사용 버전)</option>
                             </select>
@@ -621,7 +623,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="addPublish()" data-dismiss="modal">ADD</button>
+                    <button id="modal-addpublish-addbutton" type="button" class="btn btn-outline-warning" onclick="addPublish()" data-dismiss="modal">ADD</button>
                 </div>
             </div>
         </div>
