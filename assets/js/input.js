@@ -3680,6 +3680,7 @@ function addPublish() {
     let subject = document.getElementById('modal-addpublish-subject').value
     let mainversion = document.getElementById('modal-addpublish-mainversion').value
     let subversion = document.getElementById('modal-addpublish-subversion').value
+    let filetype = document.getElementById('modal-addpublish-filetype').value
     let kindofusd = document.getElementById('modal-addpublish-kindofusd').value
     $.ajax({
         url: "/api/addpublish",
@@ -3694,6 +3695,7 @@ function addPublish() {
             subject: subject,
             mainversion: mainversion,
             subversion: subversion,
+            filetype: filetype,
             kindofusd: kindofusd,
         },
         headers: {

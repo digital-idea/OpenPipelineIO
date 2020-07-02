@@ -593,16 +593,24 @@
                             <small class="form-text text-muted">서브버전을 입력해주세요.</small>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Pixar USD kind setting</label>
-                        <select id="modal-addpublish-kindofusd" class="form-control">
-                            <option value="">Pixar USD 아님</option>
-                            <option value="component">Component</option>
-                            <option value="group">Group</option>
-                            <option value="assembly">Assembly</option>
-                        </select>
-                        <small class="form-text text-muted">.usd 에셋 구성 형태를 선택해주세요.</small>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">File Type</label>
+                            <input type="text" placeholder=".ext" class="form-control" id="modal-addpublish-filetype">
+                            <small class="form-text text-muted">파일 타입을 입력해주세요. 확장자명</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label>Pixar USD Kind Type</label>
+                            <select id="modal-addpublish-kindofusd" class="form-control">
+                                <option value="">Pixar USD 아님</option>
+                                <option value="component">Component</option>
+                                <option value="group">Group</option>
+                                <option value="assembly">Assembly</option>
+                            </select>
+                            <small class="form-text text-muted">.usd 에셋 구조</small>
+                        </div>
                     </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>

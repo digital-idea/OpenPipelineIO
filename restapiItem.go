@@ -7032,6 +7032,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		MainVersion string `json:"mainversion"`
 		SubVersion  string `json:"subversion"`
 		Subject     string `json:"subject"`
+		FileType    string `json:"filetype"`
 		KindOfUSD   string `json:"kindofusd"`
 		Status      string `json:"status"`
 		Createtime  string `json:"createtime"`
@@ -7089,6 +7090,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.MainVersion = r.FormValue("mainversion")
 	rcp.SubVersion = r.FormValue("subversion")
 	rcp.Subject = r.FormValue("subject")
+	rcp.FileType = r.FormValue("filetype")
 	rcp.KindOfUSD = r.FormValue("kindofusd")
 	status := r.FormValue("status")
 	if !(status == "usethis" || status == "notuse" || status == "working") {
@@ -7102,6 +7104,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		SubVersion:  rcp.SubVersion,
 		Path:        rcp.Path,
 		Subject:     rcp.Subject,
+		FileType:    rcp.FileType,
 		KindOfUSD:   rcp.KindOfUSD,
 		Status:      rcp.Status,
 		Createtime:  rcp.Createtime,
