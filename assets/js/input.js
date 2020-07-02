@@ -3675,6 +3675,7 @@ function addPublish() {
     let name = document.getElementById('modal-addpublish-name').value
     let task = document.getElementById('modal-addpublish-task').value
     let key = document.getElementById('modal-addpublish-key').value
+    let secondarykey = document.getElementById('modal-addpublish-secondarykey').value
     let path = document.getElementById('modal-addpublish-path').value
     let status = document.getElementById('modal-addpublish-status').value
     let subject = document.getElementById('modal-addpublish-subject').value
@@ -3690,6 +3691,7 @@ function addPublish() {
             name: name,
             task: task,
             key: key,
+            secondarykey: secondarykey,
             path: path,
             status: status,
             subject: subject,

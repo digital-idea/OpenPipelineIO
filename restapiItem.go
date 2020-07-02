@@ -7024,19 +7024,20 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project     string `json:"project"`
-		Name        string `json:"name"`
-		Task        string `json:"task"`
-		Key         string `json:"key"`
-		Path        string `json:"path"`
-		MainVersion string `json:"mainversion"`
-		SubVersion  string `json:"subversion"`
-		Subject     string `json:"subject"`
-		FileType    string `json:"filetype"`
-		KindOfUSD   string `json:"kindofusd"`
-		Status      string `json:"status"`
-		Createtime  string `json:"createtime"`
-		UserID      string `json:"userid"`
+		Project      string `json:"project"`
+		Name         string `json:"name"`
+		Task         string `json:"task"`
+		Key          string `json:"key"`          // Primary Key
+		SecondaryKey string `json:"secondarykey"` // Secondary Key
+		Path         string `json:"path"`
+		MainVersion  string `json:"mainversion"`
+		SubVersion   string `json:"subversion"`
+		Subject      string `json:"subject"`
+		FileType     string `json:"filetype"`
+		KindOfUSD    string `json:"kindofusd"`
+		Status       string `json:"status"`
+		Createtime   string `json:"createtime"`
+		UserID       string `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7081,6 +7082,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
+	rcp.SecondaryKey = r.FormValue("secondarykey")
 	path := r.FormValue("path")
 	if path == "" {
 		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
@@ -7100,6 +7102,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.Status = status
 	rcp.Createtime = time.Now().Format(time.RFC3339)
 	p := Publish{
+		SecondaryKey: rcp.SecondaryKey,
 		MainVersion: rcp.MainVersion,
 		SubVersion:  rcp.SubVersion,
 		Path:        rcp.Path,
