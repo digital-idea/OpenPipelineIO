@@ -8,7 +8,7 @@ import (
 )
 
 // handleAPIPulishKey 함수는 모든 PublishKey 항목을 반환하는 restAPI 이다.
-func handleAPIPublishKey(w http.ResponseWriter, r *http.Request) {
+func handleAPIPublishKeys(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
