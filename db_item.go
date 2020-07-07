@@ -3027,7 +3027,7 @@ func GetShottype(session *mgo.Session, project, name string) (string, error) {
 }
 
 // setTaskPublish함수는 해당 샷 Task에 Publish를 설정하는 함수이다.
-func setTaskPublish(session *mgo.Session, project, name, task, key string, p Publish) error {
+func addTaskPublish(session *mgo.Session, project, name, task, key string, p Publish) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {

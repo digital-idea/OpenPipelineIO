@@ -7117,7 +7117,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Status:       rcp.Status,
 		Createtime:   rcp.Createtime,
 	}
-	err = setTaskPublish(session, project, name, task, key, p)
+	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

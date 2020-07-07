@@ -817,6 +817,121 @@ function setAddPublishModal(project, name, task) {
     });
 }
 
+function setEditPublishModal(project, id, task, key, time) {
+    document.getElementById("modal-editpublish-project").value = project
+    document.getElementById("modal-editpublish-id").value = id
+    document.getElementById("modal-editpublish-task").value = task
+    let token = document.getElementById("token").value;
+    // publishkey를 셋팅한다.
+    $.ajax({
+        url: "/api/publishkeys",
+        type: "get",
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(datas) {
+            if (datas.length == 0) {
+                alert("PublishKey 등록이 필요합니다.");
+                document.getElementById('modal-editpublish-editbutton').disabled = true;
+                return
+            }
+            let keys = document.getElementById('modal-editpublish-key');
+            keys.innerHTML = "";
+            for (let i = 0; i < datas.length; i++){
+                let opt = document.createElement('option');
+                opt.value = datas[i].id;
+                opt.innerHTML = datas[i].id;
+                keys.appendChild(opt);
+            }
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+
+    // 아이템 정보를 가지고 와서 modal-editpublish를 채운다.
+    $.ajax({
+        url: "/api/getpublish",
+        type: "post",
+        data: {
+            "project": project,
+            "id": id,
+            "task": task,
+            "key": key,
+            "time": time,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById('modal-editpublish-key').value = key;
+            document.getElementById('modal-editpublish-secondarykey').value = data.secondarykey;
+            document.getElementById('modal-editpublish-path').value = data.path;
+            document.getElementById('modal-editpublish-status').value = data.status;
+            document.getElementById('modal-editpublish-subject').value = data.subject;
+            document.getElementById('modal-editpublish-mainversion').value = data.mainversion;
+            document.getElementById('modal-editpublish-subversion').value = data.subversion;
+            document.getElementById('modal-editpublish-filetype').value = data.filetype;
+            document.getElementById('modal-editpublish-filetype').value = data.filetype;
+            document.getElementById('modal-editpublish-kindofuse').value = data.kindofusd;
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function editPublish() {
+    let token = document.getElementById("token").value
+    let project = document.getElementById('modal-editpublish-project').value
+    let id = document.getElementById('modal-editpublish-id').value
+    let task = document.getElementById('modal-editpublish-task').value
+    let key = document.getElementById('modal-editpublish-key').value
+    let time = document.getElementById('modal-editpublish-time').value
+    let secondarykey = document.getElementById('modal-editpublish-secondarykey').value
+    let path = document.getElementById('modal-editpublish-path').value
+    let status = document.getElementById('modal-editpublish-status').value
+    let subject = document.getElementById('modal-editpublish-subject').value
+    let mainversion = document.getElementById('modal-editpublish-mainversion').value
+    let subversion = document.getElementById('modal-editpublish-subversion').value
+    let filetype = document.getElementById('modal-editpublish-filetype').value
+    let kindofusd = document.getElementById('modal-editpublish-kindofusd').value
+    // 기존 데이터를 삭제한다.
+
+    // 새로운 데이터를 추가한다.
+    $.ajax({
+        url: "/api/editpublish",
+        type: "post",
+        data: {
+            project: project,
+            id: id,
+            task: task,
+            key: key,
+            time: time,
+            secondarykey: secondarykey,
+            path: path,
+            status: status,
+            subject: subject,
+            mainversion: mainversion,
+            subversion: subversion,
+            filetype: filetype,
+            kindofusd: kindofusd,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function() {
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
     document.getElementById("modal-addcomment-id").value = id;

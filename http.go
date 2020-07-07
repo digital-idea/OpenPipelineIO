@@ -398,6 +398,7 @@ func webserver(port string) {
 
 	// restAPI PublishKey
 	http.HandleFunc("/api/publishkeys", handleAPIPublishKeys)
+	http.HandleFunc("/api/getpublish", handleAPIGetPublish)
 
 	// restAPI Review
 	http.HandleFunc("/api/addreview", handleAPIAddReview)

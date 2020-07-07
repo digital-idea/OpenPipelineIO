@@ -607,8 +607,11 @@
 							{{if .Createtime | CheckUpdate}}
 								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
 							{{end}}								
+							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+								<span class="edit" data-toggle="modal" data-target="#modal-editpublish" onclick="setEditPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')">≡</span>
+							{{end}}
 							{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-								<span class="remove" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')">×</span>
+								<span class="remove ml-1" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')">×</span>
 							{{end}}
 						</div>
 					{{end}}
