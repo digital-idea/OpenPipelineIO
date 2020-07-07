@@ -7082,6 +7082,11 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
+	// key가 존재하는지 체크한다.
+	if !HasPublishKey(session, key) {
+		http.Error(w, key+" key는 등록된 키가 아닙니다. 사용할 수 없습니다", http.StatusBadRequest)
+		return
+	}
 	rcp.SecondaryKey = r.FormValue("secondarykey")
 	path := r.FormValue("path")
 	if path == "" {
@@ -7103,14 +7108,14 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.Createtime = time.Now().Format(time.RFC3339)
 	p := Publish{
 		SecondaryKey: rcp.SecondaryKey,
-		MainVersion: rcp.MainVersion,
-		SubVersion:  rcp.SubVersion,
-		Path:        rcp.Path,
-		Subject:     rcp.Subject,
-		FileType:    rcp.FileType,
-		KindOfUSD:   rcp.KindOfUSD,
-		Status:      rcp.Status,
-		Createtime:  rcp.Createtime,
+		MainVersion:  rcp.MainVersion,
+		SubVersion:   rcp.SubVersion,
+		Path:         rcp.Path,
+		Subject:      rcp.Subject,
+		FileType:     rcp.FileType,
+		KindOfUSD:    rcp.KindOfUSD,
+		Status:       rcp.Status,
+		Createtime:   rcp.Createtime,
 	}
 	err = setTaskPublish(session, project, name, task, key, p)
 	if err != nil {

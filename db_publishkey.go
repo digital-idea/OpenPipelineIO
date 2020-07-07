@@ -37,6 +37,20 @@ func GetPublishKey(session *mgo.Session, id string) (PublishKey, error) {
 	return key, nil
 }
 
+// HasPublishKey 함수는 PublishKey가 존재하는지 체크하는 함수이다.
+func HasPublishKey(session *mgo.Session, id string) bool {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("publishkey")
+	n, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		return false
+	}
+	if n == 0 {
+		return false
+	}
+	return true
+}
+
 // AddPublishKey 함수는 PublishKey를 DB에 추가한다.
 func AddPublishKey(session *mgo.Session, key PublishKey) error {
 	session.SetMode(mgo.Monotonic, true)
