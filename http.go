@@ -36,7 +36,7 @@ var funcMap = template.FuncMap{
 	"GetPath":                      GetPath,
 	"ReverseStringSlice":           ReverseStringSlice,
 	"ReverseCommentSlice":          ReverseCommentSlice,
-	"ByCreatetimeSortPublishSlice": ByCreatetimeSortPublishSlice,
+	"SortByCreatetimeForPublishes": SortByCreatetimeForPublishes,
 	"CutStringSlice":               CutStringSlice,
 	"CutCommentSlice":              CutCommentSlice,
 	"ToShortTime":                  ToShortTime,

@@ -183,8 +183,8 @@ func (a Publishes) Len() int           { return len(a) }
 func (a Publishes) Less(i, j int) bool { return a[i].Createtime > a[j].Createtime }
 func (a Publishes) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
-// ByCreatetimeSortPublishSlice 함수는 Publish 슬라이스의 아이템 순서를 역순으로 변경한다.
-func ByCreatetimeSortPublishSlice(lists []Publish) []Publish {
+// SortByCreatetimeForPublishes 함수는 Publish 슬라이스의 아이템 순서를 역순으로 변경한다.
+func SortByCreatetimeForPublishes(lists []Publish) []Publish {
 	sort.Sort(Publishes(lists))
 	return lists
 }
