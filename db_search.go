@@ -232,15 +232,6 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				query = append(query, bson.M{"type": "left"})
 			case "asset", "assets", "에셋":
 				query = append(query, bson.M{"type": "asset"})
-			case "전권":
-				query = append(query, bson.M{"tag": "1권"})
-				query = append(query, bson.M{"tag": "2권"})
-				query = append(query, bson.M{"tag": "3권"})
-				query = append(query, bson.M{"tag": "4권"})
-				query = append(query, bson.M{"tag": "5권"})
-				query = append(query, bson.M{"tag": "6권"})
-				query = append(query, bson.M{"tag": "7권"})
-				query = append(query, bson.M{"tag": "8권"})
 			default:
 				query = append(query, bson.M{"id": &bson.RegEx{Pattern: word, Options: "i"}})
 				query = append(query, bson.M{"comments.text": &bson.RegEx{Pattern: word, Options: "i"}})

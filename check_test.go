@@ -28,3 +28,28 @@ func TestShotname(t *testing.T) {
 		}
 	}
 }
+
+func TestVaildRnumTags(t *testing.T) {
+	cases := []struct {
+		in   string
+		want bool
+	}{{
+		in:   "1권",
+		want: true,
+	}, {
+		in:   "24권",
+		want: true,
+	}, {
+		in:   "SS_",
+		want: false,
+	}, {
+		in:   "권",
+		want: false,
+	}}
+	for _, c := range cases {
+		got := validRnumTag(c.in)
+		if got != c.want {
+			t.Fatalf("FullTime(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
+		}
+	}
+}
