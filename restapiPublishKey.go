@@ -78,9 +78,9 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "key 값이 빈 문자열입니다", http.StatusBadRequest)
 		return
 	}
-	time := r.FormValue("time")
-	if time == "" {
-		http.Error(w, "time 값이 빈 문자열입니다", http.StatusBadRequest)
+	createtime := r.FormValue("createtime")
+	if createtime == "" {
+		http.Error(w, "createtime 값이 빈 문자열입니다", http.StatusBadRequest)
 		return
 	}
 	item, err := getItem(session, project, id)
@@ -107,7 +107,7 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		}
 		hasKey = true
 		for _, p := range pubList {
-			if p.Createtime == time {
+			if p.Createtime == createtime {
 				hasTime = true
 				pubInfo = p
 			}
@@ -118,7 +118,7 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if !hasTime {
-		http.Error(w, time+" 시간으로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
+		http.Error(w, createtime+" 시간으로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송

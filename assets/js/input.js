@@ -817,7 +817,7 @@ function setAddPublishModal(project, name, task) {
     });
 }
 
-function setEditPublishModal(project, id, task, key, time) {
+function setEditPublishModal(project, id, task, key, createtime) {
     document.getElementById("modal-editpublish-project").value = project
     document.getElementById("modal-editpublish-id").value = id
     document.getElementById("modal-editpublish-task").value = task
@@ -859,7 +859,7 @@ function setEditPublishModal(project, id, task, key, time) {
             "id": id,
             "task": task,
             "key": key,
-            "time": time,
+            "createtime": createtime,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -875,7 +875,8 @@ function setEditPublishModal(project, id, task, key, time) {
             document.getElementById('modal-editpublish-subversion').value = data.subversion;
             document.getElementById('modal-editpublish-filetype').value = data.filetype;
             document.getElementById('modal-editpublish-filetype').value = data.filetype;
-            document.getElementById('modal-editpublish-kindofuse').value = data.kindofusd;
+            document.getElementById('modal-editpublish-kindofusd').value = data.kindofusd;
+            document.getElementById('modal-editpublish-createtime').value = data.createtime;
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -889,7 +890,7 @@ function editPublish() {
     let id = document.getElementById('modal-editpublish-id').value
     let task = document.getElementById('modal-editpublish-task').value
     let key = document.getElementById('modal-editpublish-key').value
-    let time = document.getElementById('modal-editpublish-time').value
+    let createtime = document.getElementById('modal-editpublish-createtime').value
     let secondarykey = document.getElementById('modal-editpublish-secondarykey').value
     let path = document.getElementById('modal-editpublish-path').value
     let status = document.getElementById('modal-editpublish-status').value
@@ -898,18 +899,40 @@ function editPublish() {
     let subversion = document.getElementById('modal-editpublish-subversion').value
     let filetype = document.getElementById('modal-editpublish-filetype').value
     let kindofusd = document.getElementById('modal-editpublish-kindofusd').value
-    // 기존 데이터를 삭제한다.
 
-    // 새로운 데이터를 추가한다.
+    // 기존 데이터를 삭제한다.
     $.ajax({
-        url: "/api/editpublish",
+        url: "/api/rmpublish",
         type: "post",
         data: {
             project: project,
             id: id,
             task: task,
             key: key,
-            time: time,
+            createtime: createtime,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function() {
+
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+
+    // 새로운 데이터를 추가한다.
+    $.ajax({
+        url: "/api/addpublish",
+        type: "post",
+        data: {
+            project: project,
+            name: id2name(id),
+            task: task,
+            key: key,
+            createtime: createtime,
             secondarykey: secondarykey,
             path: path,
             status: status,
@@ -1081,20 +1104,20 @@ function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-title").innerHTML = "Rm Publish Key" + multiInputTitle(id);
 }
 
-function setRmPublishModal(project, id, task, key, time) {
+function setRmPublishModal(project, id, task, key, createtime) {
     document.getElementById("modal-rmpublish-project").value = project
     document.getElementById("modal-rmpublish-id").value = id
     document.getElementById("modal-rmpublish-task").value = task
     document.getElementById("modal-rmpublish-key").value = key
-    document.getElementById("modal-rmpublish-time").value = time
+    document.getElementById("modal-rmpublish-createtime").value = createtime
 }
 
-function setPublishModal(project, id, task, key, time) {
+function setPublishModal(project, id, task, key, createtime) {
     document.getElementById("modal-setpublish-project").value = project;
     document.getElementById("modal-setpublish-id").value = id;
     document.getElementById("modal-setpublish-task").value = task;
     document.getElementById("modal-setpublish-key").value = key;
-    document.getElementById("modal-setpublish-time").value = time;
+    document.getElementById("modal-setpublish-createtime").value = createtime;
     document.getElementById("modal-setpublish-message").innerHTML = `
         ${project} > ${id} > ${task} > ${key}<br>
         ${time} 에 Publish 된 데이터를<br>
@@ -1227,7 +1250,7 @@ function rmPublish() {
             id: document.getElementById('modal-rmpublish-id').value,
             task: document.getElementById('modal-rmpublish-task').value,
             key: document.getElementById('modal-rmpublish-key').value,
-            time: document.getElementById('modal-rmpublish-time').value
+            createtime: document.getElementById('modal-rmpublish-createtime').value
         },
         headers: {
             "Authorization": "Basic "+ document.getElementById("token").value
@@ -3842,6 +3865,7 @@ function addPublish() {
             subversion: subversion,
             filetype: filetype,
             kindofusd: kindofusd,
+            createtime: "",
         },
         headers: {
             "Authorization": "Basic "+ token

@@ -568,7 +568,7 @@
 							<span class="remove" data-toggle="modal" data-target="#modal-rmpublishkey" onclick="setRmPublishKeyModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}')">×</span>
 						{{end}}
 					</div>
-					{{range ReversePublishSlice $publishes}}
+					{{range ByCreatetimeSortPublishSlice $publishes}}
 						<div class="row ml-3 mt-1">
 							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
 							<img src="/assets/img/copy.svg" class="finger" onclick="copyButton('{{.Path}}')">

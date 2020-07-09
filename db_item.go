@@ -3084,7 +3084,7 @@ func rmTaskPublishKey(session *mgo.Session, project, id, taskname, key string) e
 }
 
 // rmTaskPublish 함수는 item > tasks > publishes > 하나의 아이템을 제거한다.
-func rmTaskPublish(session *mgo.Session, project, id, taskname, key, timestring string) error {
+func rmTaskPublish(session *mgo.Session, project, id, taskname, key, createtime string) error {
 	session.SetMode(mgo.Monotonic, true)
 	item, err := getItem(session, project, id)
 	if err != nil {
@@ -3093,7 +3093,7 @@ func rmTaskPublish(session *mgo.Session, project, id, taskname, key, timestring 
 	var newList []Publish
 	pubList := item.Tasks[taskname].Publishes[key]
 	for _, p := range pubList {
-		if p.Createtime == timestring {
+		if p.Createtime == createtime {
 			continue
 		}
 		newList = append(newList, p)

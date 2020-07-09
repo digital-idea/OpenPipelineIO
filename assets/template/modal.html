@@ -643,6 +643,7 @@
                     <input type="hidden" class="form-control" id="modal-editpublish-project">
                     <input type="hidden" class="form-control" id="modal-editpublish-id">
                     <input type="hidden" class="form-control" id="modal-editpublish-task">
+                    <input type="hidden" class="form-control" id="modal-editpublish-createtime">
                     <div class="row">
                         <div class="col-6 form-group">
                             <label for="modal-editpublish-key" class="col-form-label">Primary Key</label>
@@ -732,12 +733,12 @@
                     <input type="hidden" class="form-control" id="modal-setpublish-id">
                     <input type="hidden" class="form-control" id="modal-setpublish-task">
                     <input type="hidden" class="form-control" id="modal-setpublish-key">
-                    <input type="hidden" class="form-control" id="modal-setpublish-time">
-                    <label id="modal-setpublish-message" class="col-form-label">Task의 Publish를 2020-05-13 시간 데이터로 변경하시겠습니까?</label>
+                    <input type="hidden" class="form-control" id="modal-setpublish-createtime">
+                    <label id="modal-setpublish-message" class="col-form-label">해당 Publish 데이터를 Use This로 설정하시겠습니까?</label>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="setPublish(document.getElementById('modal-setpublish-project').value, document.getElementById('modal-setpublish-id').value, document.getElementById('modal-setpublish-task').value, document.getElementById('modal-setpublish-key').value, document.getElementById('modal-setpublish-time').value)" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="setPublish(document.getElementById('modal-setpublish-project').value, document.getElementById('modal-setpublish-id').value, document.getElementById('modal-setpublish-task').value, document.getElementById('modal-setpublish-key').value, document.getElementById('modal-setpublish-createtime').value)" data-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>
@@ -783,7 +784,7 @@
                     <input type="hidden" class="form-control" id="modal-rmpublish-id">
                     <input type="hidden" class="form-control" id="modal-rmpublish-task">
                     <input type="hidden" class="form-control" id="modal-rmpublish-key">
-                    <input type="hidden" class="form-control" id="modal-rmpublish-time">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-createtime">
                     <label id="modal-rmpublish-text" class="col-form-label">해당 Publish 아이템을 삭제하겠습니까?</label>
                 </div>
                 <div class="modal-footer">
