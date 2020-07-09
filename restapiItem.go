@@ -7105,7 +7105,14 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Status = status
-	rcp.Createtime = time.Now().Format(time.RFC3339)
+	// 사용자가 설정한 시간이 있다면 해당시간으로 설정한다.
+	rcp.Createtime = r.FormValue("createtime")
+	_, err = time.Parse(time.RFC3339, rcp.Createtime)
+	if err != nil {
+		// 시간포멧이 다르다면 현재시간을 입력한다.
+		rcp.Createtime = time.Now().Format(time.RFC3339)
+	}
+
 	p := Publish{
 		SecondaryKey: rcp.SecondaryKey,
 		MainVersion:  rcp.MainVersion,
@@ -7117,7 +7124,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Status:       rcp.Status,
 		Createtime:   rcp.Createtime,
 	}
-	err = setTaskPublish(session, project, name, task, key, p)
+	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -7236,12 +7243,12 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		ID      string `json:"id"`
-		Task    string `json:"task"`
-		Key     string `json:"key"`
-		Time    string `json:"time"`
-		UserID  string `json:"userid"`
+		Project    string `json:"project"`
+		ID         string `json:"id"`
+		Task       string `json:"task"`
+		Key        string `json:"key"`
+		Createtime string `json:"createtime"`
+		UserID     string `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7285,13 +7292,13 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
-	time := r.FormValue("time")
-	if key == "" {
-		http.Error(w, "key를 설정해주세요", http.StatusBadRequest)
+	createtime := r.FormValue("createtime")
+	if createtime == "" {
+		http.Error(w, "createtime을 설정해주세요", http.StatusBadRequest)
 		return
 	}
-	rcp.Time = time
-	err = rmTaskPublish(session, project, id, task, key, time)
+	rcp.Createtime = createtime
+	err = rmTaskPublish(session, project, id, task, key, createtime)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

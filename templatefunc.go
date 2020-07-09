@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 )
@@ -175,16 +176,17 @@ func ReverseStringSlice(lists []string) []string {
 	return result
 }
 
-// ReversePublishSlice 함수는 Publish 슬라이스의 아이템 순서를 역순으로 변경한다.
-func ReversePublishSlice(lists []Publish) []Publish {
-	if lists == nil {
-		return []Publish{}
-	}
-	var result []Publish
-	for i := len(lists); i > 0; i-- {
-		result = append(result, lists[i-1])
-	}
-	return result
+// Publishes 자료구조를 정리하기 위해 사용하는 자료구조
+type Publishes []Publish
+
+func (a Publishes) Len() int           { return len(a) }
+func (a Publishes) Less(i, j int) bool { return a[i].Createtime > a[j].Createtime }
+func (a Publishes) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
+// SortByCreatetimeForPublishes 함수는 Publish 슬라이스의 아이템 순서를 역순으로 변경한다.
+func SortByCreatetimeForPublishes(lists []Publish) []Publish {
+	sort.Sort(Publishes(lists))
+	return lists
 }
 
 // ReverseCommentSlice 함수는 받아들인 string 슬라이스의 아이템 순서를 역순으로 변경한다.

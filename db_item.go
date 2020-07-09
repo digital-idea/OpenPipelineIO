@@ -3027,7 +3027,7 @@ func GetShottype(session *mgo.Session, project, name string) (string, error) {
 }
 
 // setTaskPublish함수는 해당 샷 Task에 Publish를 설정하는 함수이다.
-func setTaskPublish(session *mgo.Session, project, name, task, key string, p Publish) error {
+func addTaskPublish(session *mgo.Session, project, name, task, key string, p Publish) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -3084,7 +3084,7 @@ func rmTaskPublishKey(session *mgo.Session, project, id, taskname, key string) e
 }
 
 // rmTaskPublish 함수는 item > tasks > publishes > 하나의 아이템을 제거한다.
-func rmTaskPublish(session *mgo.Session, project, id, taskname, key, timestring string) error {
+func rmTaskPublish(session *mgo.Session, project, id, taskname, key, createtime string) error {
 	session.SetMode(mgo.Monotonic, true)
 	item, err := getItem(session, project, id)
 	if err != nil {
@@ -3093,7 +3093,7 @@ func rmTaskPublish(session *mgo.Session, project, id, taskname, key, timestring 
 	var newList []Publish
 	pubList := item.Tasks[taskname].Publishes[key]
 	for _, p := range pubList {
-		if p.Createtime == timestring {
+		if p.Createtime == createtime {
 			continue
 		}
 		newList = append(newList, p)
