@@ -7038,6 +7038,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Status       string `json:"status"`
 		Createtime   string `json:"createtime"`
 		UserID       string `json:"userid"`
+		TaskToUse    string `json:"tasktouse"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7112,6 +7113,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		// 시간포멧이 다르다면 현재시간을 입력한다.
 		rcp.Createtime = time.Now().Format(time.RFC3339)
 	}
+	rcp.TaskToUse = r.FormValue("tasktouse")
 
 	p := Publish{
 		SecondaryKey: rcp.SecondaryKey,
@@ -7123,6 +7125,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		KindOfUSD:    rcp.KindOfUSD,
 		Status:       rcp.Status,
 		Createtime:   rcp.Createtime,
+		TaskToUse:    rcp.TaskToUse,
 	}
 	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {

@@ -572,7 +572,7 @@
                     <div class="form-group">
                         <label for="modal-addpublish-key" class="col-form-label">Path</label>
                         <input type="text" class="form-control" id="modal-addpublish-path">
-                        <small class="form-text text-muted">Publish 파일 경로를 입력해주세요.</small>
+                        <small class="form-text text-warning">Publish 파일 경로를 입력해주세요.(필수)</small>
                     </div>
                     <div class="row">
                         <div class="col-6 form-group">
@@ -585,11 +585,23 @@
                             <small class="form-text text-muted">Publish 상태를 선택해주세요.</small>
                         </div>
                         <div class="col-6 form-group">
-                            <label for="modal-addpublish-subject" class="col-form-label">Subject</label>
-                            <input type="text" class="form-control" id="modal-addpublish-subject">
-                            <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
+                            <label for="modal-addpublish-tasktouse" class="col-form-label">Task To Use</label>
+                            <select id="modal-addpublish-tasktouse" class="form-control">
+                                <option value="">Unknown</option>
+                                {{range .TasksettingNames}}
+							        <option value="{{.}}">{{.}}</option>
+						        {{end}}
+                            </select>
+                            <small class="form-text text-muted">Publish된 데이터를 사용하게 될 Task</small>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-addpublish-subject" class="col-form-label">Subject</label>
+                        <input type="text" class="form-control" id="modal-addpublish-subject">
+                        <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
+                    </div>
+                
                     <div class="row">
                         <div class="col-6 form-group">
                             <label class="col-form-label col-form-label-sm">Main Version</label>
@@ -674,10 +686,20 @@
                             <small class="form-text text-muted">Publish 상태를 선택해주세요.</small>
                         </div>
                         <div class="col-6 form-group">
-                            <label for="modal-editpublish-subject" class="col-form-label">Subject</label>
-                            <input type="text" class="form-control" id="modal-editpublish-subject">
-                            <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
+                            <label for="modal-editpublish-tasktouse" class="col-form-label">Task To Use</label>
+                            <select id="modal-editpublish-tasktouse" class="form-control">
+                                <option value="">Unknown</option>
+                                {{range .TasksettingNames}}
+							        <option value="{{.}}">{{.}}</option>
+						        {{end}}
+                            </select>
+                            <small class="form-text text-muted">Publish된 데이터를 사용하게 될 Task</small>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editpublish-subject" class="col-form-label">Subject</label>
+                        <input type="text" class="form-control" id="modal-editpublish-subject">
+                        <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
                     </div>
                     <div class="row">
                         <div class="col-6 form-group">
