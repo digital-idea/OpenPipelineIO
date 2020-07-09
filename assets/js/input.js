@@ -817,10 +817,11 @@ function setAddPublishModal(project, name, task) {
     });
 }
 
-function setEditPublishModal(project, id, task, key, createtime) {
+function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
     document.getElementById("modal-editpublish-project").value = project
     document.getElementById("modal-editpublish-id").value = id
     document.getElementById("modal-editpublish-task").value = task
+    document.getElementById("modal-editpublish-tasktouse").value = tasktouse
     let token = document.getElementById("token").value;
     // publishkey를 셋팅한다.
     $.ajax({
@@ -870,6 +871,7 @@ function setEditPublishModal(project, id, task, key, createtime) {
             document.getElementById('modal-editpublish-secondarykey').value = data.secondarykey;
             document.getElementById('modal-editpublish-path').value = data.path;
             document.getElementById('modal-editpublish-status').value = data.status;
+            document.getElementById('modal-editpublish-tasktouse').value = data.tasktouse;
             document.getElementById('modal-editpublish-subject').value = data.subject;
             document.getElementById('modal-editpublish-mainversion').value = data.mainversion;
             document.getElementById('modal-editpublish-subversion').value = data.subversion;
@@ -894,6 +896,7 @@ function editPublish() {
     let secondarykey = document.getElementById('modal-editpublish-secondarykey').value
     let path = document.getElementById('modal-editpublish-path').value
     let status = document.getElementById('modal-editpublish-status').value
+    let tasktouse = document.getElementById('modal-editpublish-tasktouse').value
     let subject = document.getElementById('modal-editpublish-subject').value
     let mainversion = document.getElementById('modal-editpublish-mainversion').value
     let subversion = document.getElementById('modal-editpublish-subversion').value
@@ -936,6 +939,7 @@ function editPublish() {
             secondarykey: secondarykey,
             path: path,
             status: status,
+            tasktouse: tasktouse,
             subject: subject,
             mainversion: mainversion,
             subversion: subversion,
@@ -3844,6 +3848,7 @@ function addPublish() {
     let secondarykey = document.getElementById('modal-addpublish-secondarykey').value
     let path = document.getElementById('modal-addpublish-path').value
     let status = document.getElementById('modal-addpublish-status').value
+    let tasktouse = document.getElementById('modal-addpublish-tasktouse').value
     let subject = document.getElementById('modal-addpublish-subject').value
     let mainversion = document.getElementById('modal-addpublish-mainversion').value
     let subversion = document.getElementById('modal-addpublish-subversion').value
@@ -3860,6 +3865,7 @@ function addPublish() {
             secondarykey: secondarykey,
             path: path,
             status: status,
+            tasktouse: tasktouse,
             subject: subject,
             mainversion: mainversion,
             subversion: subversion,
