@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 )
 
@@ -212,27 +213,16 @@ func (item *Item) setRnumTag() {
 		return
 	}
 	var rnumTag string
-	switch item.Rnum[0] {
-	case 'a', 'A':
-		rnumTag = "1권"
-	case 'b', 'B':
-		rnumTag = "2권"
-	case 'c', 'C':
-		rnumTag = "3권"
-	case 'd', 'D':
-		rnumTag = "4권"
-	case 'e', 'E':
-		rnumTag = "5권"
-	case 'f', 'F':
-		rnumTag = "6권"
-	case 'g', 'G':
-		rnumTag = "7권"
-	case 'h', 'H':
-		rnumTag = "8권"
+	preChar := item.Rnum[0]
+	switch preChar {
+	case 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H': // 영화 1권~8권
+		rnumTag = fmt.Sprintf("%d권", int(preChar)-64)
+	case 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z': // 드라마외
+		rnumTag = fmt.Sprintf("%d권", int(preChar)-64)
 	}
 	var newTags []string
 	for _, t := range item.Tag {
-		if !(t == "1권" || t == "2권" || t == "3권" || t == "4권" || t == "5권" || t == "6권" || t == "7권" || t == "8권") {
+		if !validRnumTag(t) {
 			newTags = append(newTags, t)
 		}
 	}

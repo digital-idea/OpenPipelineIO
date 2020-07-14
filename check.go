@@ -41,8 +41,11 @@ var regexpRollMedia = regexp.MustCompile(`^\d+_[A-Z0-9]+_\d+_[A-Z0-9]+$`)
 // Timecode 정규식: 00:00:00:00 또는 00:00:00;00 형태 ref: https://en.wikipedia.org/wiki/SMPTE_timecode
 var regexpTimecode = regexp.MustCompile(`^\d{2}[:;.]\d{2}[:;.]\d{2}[:;.]\d{2}$`)
 
-// Rnum 정규식: A0001~H9999
-var regexpRnum = regexp.MustCompile(`^[A-H]\d{4}$`)
+// Rnum 정규식: A0001~Z9999
+var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
+
+// RnumKor 정규식: 1권~24권
+var regexpRnumKor = regexp.MustCompile(`^\d{1,2}권$`)
 
 // Handle 정규식: 5, 10
 var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)
@@ -109,12 +112,8 @@ func validAssettype(typ string) (bool, error) {
 
 // 롤넘버가 유효한지 체크하는 함수이다.
 func validRnumTag(rnum string) bool {
-	switch rnum {
-	case "1권", "2권", "3권", "4권", "5권", "6권", "7권", "8권":
-		return true
-	default:
-		return false
-	}
+	b, _ := regexp.MatchString(`^\d{1,2}권$`, rnum)
+	return b
 }
 
 // validShottype 함수는 샷타입이 유효한지 체크하는 함수이다.
