@@ -2,6 +2,9 @@
 $('#modal-addcomment').on('shown.bs.modal', function () {
     $('#modal-addcomment-text').trigger('focus')
 })
+$('#modal-editcomment').on('shown.bs.modal', function () {
+    $('#modal-editcomment-text').trigger('focus')
+})
 $('#modal-setnote').on('shown.bs.modal', function () {
     $('#modal-setnote-text').trigger('focus')
 })
@@ -962,13 +965,20 @@ function editPublish() {
 function setAddCommentModal(project, id) {
     document.getElementById("modal-addcomment-project").value = project;
     document.getElementById("modal-addcomment-id").value = id;
-    document.getElementById("modal-addcomment-media").value = "";
     document.getElementById("modal-addcomment-title").innerHTML = "Add Comment" + multiInputTitle(id);
+    // init media, media title
+    document.getElementById("modal-addcomment-media").value = "";
+    document.getElementById("modal-addcomment-mediatitle").value = "";
 }
 
-function addComment(project, id, text, media) {
+function addComment() {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-addcomment-project').value;
+    let id = document.getElementById('modal-addcomment-id').value;
+    let text = document.getElementById('modal-addcomment-text').value
+    let media = document.getElementById('modal-addcomment-media').value
+    let mediatitle = document.getElementById('modal-addcomment-mediatitle').value
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (let i = 0; i < cboxes.length; ++i) {
@@ -984,6 +994,7 @@ function addComment(project, id, text, media) {
                     project: project,
                     name: id2name(currentID),
                     text: text,
+                    mediatitle: mediatitle,
                     media: media,
                     userid: userid,
                 },
@@ -996,14 +1007,24 @@ function addComment(project, id, text, media) {
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.id}-${data.date}">
                     <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                    <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.media}')">≡</span>
+                    <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                     <br><small class="text-warning">${body}</small>`
                     if (data.media != "") {
                         if (data.media.includes("http")) {
-                            newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                            newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                         } else {
-                            newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                            newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="dilink://${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                         }
                     }
                     newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
@@ -1022,6 +1043,7 @@ function addComment(project, id, text, media) {
                 project: project,
                 name: id2name(id),
                 text: text,
+                mediatitle: mediatitle,
                 media: media,
                 userid: userid,
             },
@@ -1034,14 +1056,24 @@ function addComment(project, id, text, media) {
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comment-${data.id}-${data.date}">
                 <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-                <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.media}')">≡</span>
+                <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
                 <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
-                <br><small class="text-warning">${body}</small>`
+                <br><div class="text-warning small">${body}</div>`
                 if (data.media != "") {
                     if (data.media.includes("http")) {
-                        newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                        newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                     } else {
-                        newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                        newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="dilink://${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                     }
                 }
                 newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
@@ -1054,8 +1086,14 @@ function addComment(project, id, text, media) {
     }
 }
 
-function editComment(project, id, time, text, media) {
+function editComment() {
     let token = document.getElementById("token").value;
+    let project = document.getElementById('modal-editcomment-project').value;
+    let id = document.getElementById('modal-editcomment-id').value;
+    let time = document.getElementById('modal-editcomment-time').value
+    let text = document.getElementById('modal-editcomment-text').value
+    let mediatitle = document.getElementById('modal-editcomment-mediatitle').value
+    let media = document.getElementById('modal-editcomment-media').value
     $.ajax({
         url: "/api/editcomment",
         type: "post",
@@ -1064,6 +1102,7 @@ function editComment(project, id, time, text, media) {
             id: id,
             time: time,
             text: text,
+            mediatitle: mediatitle,
             media: media,
         },
         headers: {
@@ -1074,14 +1113,24 @@ function editComment(project, id, time, text, media) {
             // comments-${data.id}}-${data.time} 내부 내용을 업데이트 한다.
             let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
             let newComment = `<span class="text-badge">${data.time} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
-            <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}', '${data.media}')">≡</span>
+            <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}')">×</span>
-            <br><small class="text-warning">${body}</small>`
+            <br><div class="text-warning small">${body}</div>`
             if (data.media != "") {
                 if (data.media.includes("http")) {
-                    newComment += `<br><a href="${data.media}" class="link">∞</a>`
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                 } else {
-                    newComment += `<br><a href="dilink://${data.media}" class="link">∞</a>`
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+								<a href="dilink://${data.media}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2 small">${data.mediatitle}</span>
+							</div>`
                 }
             }
             document.getElementById(`comment-${data.id}-${data.time}`).innerHTML = newComment
@@ -1129,11 +1178,12 @@ function setPublishModal(project, id, task, key, createtime) {
     `
 }
 
-function setEditCommentModal(project, id, time, text, media) {
+function setEditCommentModal(project, id, time, text, mediatitle, media) {
     document.getElementById("modal-editcomment-project").value = project;
     document.getElementById("modal-editcomment-id").value = id;
     document.getElementById("modal-editcomment-time").value = time;
     document.getElementById("modal-editcomment-text").value = text;
+    document.getElementById("modal-editcomment-mediatitle").value = mediatitle;
     document.getElementById("modal-editcomment-media").value = media;
     document.getElementById("modal-editcomment-title").innerHTML = "Edit Comment" + multiInputTitle(id);
 }
@@ -1168,7 +1218,7 @@ function setDetailCommentsModal(project, id) {
                 info.append(userinfo)
                 cmt.append(info)
                 cmt.append(br)
-                let text = document.createElement("small")
+                let text = document.createElement("div")
                 text.setAttribute("class","text-white")
                 text.innerHTML = "<br />" + comments[i].text.replace(/\n/g, "<br />")
                 cmt.append(text)
@@ -1180,9 +1230,12 @@ function setDetailCommentsModal(project, id) {
                         protocol = ""
                     }
                     link.setAttribute("href", protocol + comments[i].media)
-                    link.setAttribute("class","link")
-                    link.innerHTML = "∞"
+                    link.innerHTML = `<img src="/assets/img/link.svg" class="finger">`
                     cmt.append(link)
+                    let span = document.createElement("span")
+                    span.setAttribute("class","text-white pl-2")
+                    span.innerHTML = comments[i].mediatitle
+                    cmt.append(span)
                 }
                 let line = document.createElement("hr")
                 line.setAttribute("class","my-1 p-0 m-0 divider")
