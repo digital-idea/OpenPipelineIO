@@ -2808,7 +2808,7 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media, 
 }
 
 // EditComment 함수는 item에 수정사항을 수정한다.
-func EditComment(session *mgo.Session, project, id, date, text, media string) (string, error) {
+func EditComment(session *mgo.Session, project, id, date, text, mediatitle, media string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2822,6 +2822,7 @@ func EditComment(session *mgo.Session, project, id, date, text, media string) (s
 	for _, c := range i.Comments {
 		if c.Date == date {
 			c.Text = text
+			c.MediaTitle = mediatitle
 			c.Media = media
 			comments = append(comments, c)
 			continue

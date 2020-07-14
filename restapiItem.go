@@ -5693,13 +5693,14 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		ID      string `json:"id"`
-		Name    string `json:"name"`
-		Time    string `json:"time"`
-		Text    string `json:"text"`
-		Media   string `json:"media"`
-		UserID  string `json:"userid"`
+		Project    string `json:"project"`
+		ID         string `json:"id"`
+		Name       string `json:"name"`
+		Time       string `json:"time"`
+		Text       string `json:"text"`
+		MediaTitle string `json:"mediatitle"`
+		Media      string `json:"media"`
+		UserID     string `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -5719,43 +5720,33 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "time":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Time = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Text = v
-		case "media":
-			if len(values) == 1 {
-				rcp.Media = values[0]
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	rcp.Name, err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.Text, rcp.Media)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	time := r.FormValue("time")
+	if time == "" {
+		http.Error(w, "time을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Time = time
+	text := r.FormValue("text")
+	if text == "" {
+		http.Error(w, "text를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Text = text
+	rcp.Media = r.FormValue("media")
+	rcp.MediaTitle = r.FormValue("mediatitle")
+	rcp.Name, err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.Text, rcp.MediaTitle, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

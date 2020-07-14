@@ -541,11 +541,11 @@
 				<div id="comment-{{$id}}-{{.Date}}">
 					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-						<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}','{{.Media}}')">≡</span>
+						<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}','{{.MediaTitle}}','{{.Media}}')">≡</span>
 						<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}')">×</span>
 					{{end}}
 					<br>
-					<small class="text-{{if $first}}warning{{else}}white{{end}}">
+					<div class="text-{{if $first}}warning{{else}}white{{end}} small">
 						{{range Split .Text "\n"}}
 							{{.}}<br>
 						{{end}}
@@ -557,7 +557,7 @@
 								<span class="text-white pl-2">{{.MediaTitle}}</span>
 							</div>
 						{{end}}
-					</small>
+					</div>
 					<hr class="my-1 p-0 m-0 divider">
 				</div>
 				{{$first = false}}
