@@ -2777,7 +2777,7 @@ func SetNote(session *mgo.Session, project, id, userID, text string, overwrite b
 }
 
 // AddComment 함수는 item에 수정사항을 추가한다.
-func AddComment(session *mgo.Session, project, name, userID, date, text, media string) (string, error) {
+func AddComment(session *mgo.Session, project, name, userID, date, text, media, mediatitle string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2793,10 +2793,11 @@ func AddComment(session *mgo.Session, project, name, userID, date, text, media s
 		return id, err
 	}
 	c := Comment{
-		Date:   date,
-		Author: userID,
-		Text:   text,
-		Media:  media,
+		Date:       date,
+		Author:     userID,
+		Text:       text,
+		Media:      media,
+		MediaTitle: mediatitle,
 	}
 	i.Comments = append(i.Comments, c)
 	err = setItem(session, project, i)

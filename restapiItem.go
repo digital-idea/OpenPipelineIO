@@ -5608,14 +5608,15 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		ID      string `json:"id"`
-		Date    string `json:"date"`
-		Text    string `json:"text"`
-		Media   string `json:"media"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project    string `json:"project"`
+		Name       string `json:"name"`
+		ID         string `json:"id"`
+		Date       string `json:"date"`
+		Text       string `json:"text"`
+		Media      string `json:"media"`
+		MediaTitle string `json:"mediatitle"`
+		UserID     string `json:"userid"`
+		Error      string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -5635,46 +5636,28 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "text":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Text = v
-		case "media":
-			if len(values) == 1 {
-				rcp.Media = values[0]
-			}
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	text := r.FormValue("text")
+	if text == "" {
+		http.Error(w, "text를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Text = text
+	rcp.Media = r.FormValue("media")
+	rcp.MediaTitle = r.FormValue("mediatitle")
 	rcp.Date = time.Now().Format(time.RFC3339)
-	id, err := AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media)
+	id, err := AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media, rcp.MediaTitle)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -5693,7 +5676,11 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

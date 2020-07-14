@@ -550,7 +550,12 @@
 							{{.}}<br>
 						{{end}}
 						{{if .Media}}
-							<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" class="link">∞</a>
+							<div class="row pl-3 pt-3 pb-1">
+								<a href="{{Protocol .Media}}://{{RmProtocol .Media}}">
+									<img src="/assets/img/link.svg" class="finger">
+								</a>
+								<span class="text-white pl-2">{{.MediaTitle}}</span>
+							</div>
 						{{end}}
 					</small>
 					<hr class="my-1 p-0 m-0 divider">
