@@ -158,3 +158,32 @@ func TasksettingNames(session *mgo.Session) ([]string, error) {
 	sort.Strings(results)
 	return results, nil
 }
+
+// Unique 함수는 리스트에서 중복되는 문자열을 제거한다.
+func Unique(stringSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range stringSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
+// TasksettingNamesByExcelOrder 함수는 Tasksetting 이름을 ExcelOrder순으로 반환한다.
+func TasksettingNamesByExcelOrder(session *mgo.Session) ([]string, error) {
+	var tasksettings []Tasksetting
+	var results []string
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("tasksetting")
+	err := c.Find(bson.M{}).Sort("excelorder").All(&tasksettings)
+	if err != nil {
+		return nil, err
+	}
+	for _, t := range tasksettings {
+		results = append(results, t.Name)
+	}
+	return Unique(results), nil
+}

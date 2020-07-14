@@ -31,9 +31,14 @@
             <small class="form-text text-muted">wfs 클릭시 열리는 경로.</small>
         </div>
         <div class="form-group">
-            <label>Order</label>
+            <label>Task Order</label>
             <input type="number" name="order" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.Order}}>
-            <small class="form-text text-muted">Task 정렬시 사용되는 순서</small>
+            <small class="form-text text-muted">Task 정렬시 사용되는 값. 낮을수록 위에 위치함</small>
+        </div>
+        <div class="form-group">
+            <label>Excel Order</label>
+            <input type="number" name="excelorder" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.ExcelOrder}}>
+            <small class="form-text text-muted">Excel Export 할 때 Task 정렬시 사용되는 값. 낮을수록 앞쪽에 위치함</small>
         </div>
         <div class="form-group">
             <label>Category</label>
