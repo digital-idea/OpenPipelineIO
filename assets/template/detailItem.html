@@ -216,7 +216,7 @@
 
 
 		<!--Task-->
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-6 col-lg-5">
 			{{if eq $.Item.Type "org" "left" "asset"}}
 				<div class="" id="{{$.Item.Name}}-add-taskbutton}}">
 					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -286,7 +286,7 @@
 			</div>
 		</div>
 		<!--작업내용 & Source-->
-		<div class="col-sm-12 col-md-12 col-lg-4">
+		<div class="col-sm-12 col-md-12 col-lg-5">
 			<!--Tags-->
 			<div class="row">
 				<div>
@@ -518,39 +518,11 @@
 			</div>
 
 		</div>
-
-		<!--수정사항-->
-		<div class="col-sm-12 col-md-12 col-lg-3">		
-			{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-				<div class="float-right">
-					<span class="add" data-toggle="modal" data-target="#modal-addcomment" onclick="setAddCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}')">＋</span>
-				</div>
-			{{end}}
-			<div id="comments-{{$.Item.ID}}" onclick="selectCheckboxNone()">
-				{{range ReverseCommentSlice $.Item.Comments}}
-					<div id="comment-{{$.Item.ID}}-{{.Date}}">
-						<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
-						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-							<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$.Item.Project}}','{{$.Item.ID}}','{{.Date}}','{{.Text}}','{{.Media}}')">≡</span>
-							<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{.Date}}','{{.Text}}')">×</span>
-						{{end}}
-						<br>
-						<small class="text-white">
-							{{range Split .Text "\n"}}
-								{{.}}<br>
-							{{end}}
-							{{if .Media}}
-								<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" class="link">∞</a>
-							{{end}}
-						</small>
-						<hr class="my-1 p-0 m-0 divider">
-					</div>
-				{{end}}
-			</div>
-		</div>
 	</div>
+
+	<!--Publish Information-->
 	<div class="ml-1 mr-1 pt-5 pl-3 pr-3">
-		<div class="row pl-3 text-darkmode h5">Publish Information</div>
+		<div class="row pl-3 text-darkmode h4">Publishes Information</div>
 		{{range mapToSlice $.Item.Tasks $.TasksettingOrderMap}}
 			<div class="text-darkmode pl-3" id="publish-{{.Title}}">
 				{{.Title}}
@@ -621,6 +593,41 @@
 				</div>
 			{{end}}
 		{{end}}
+	</div>
+
+	<!--Comments Information-->
+	<div class="ml-1 mr-1 pt-5 pl-3 pr-3">
+		<div class="row pl-3 text-darkmode h4">Comments Information</div>
+		<!--수정사항-->
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+				<div class="float-right">
+					<span class="add" data-toggle="modal" data-target="#modal-addcomment" onclick="setAddCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}')">＋</span>
+				</div>
+			{{end}}
+			<div id="comments-{{$.Item.ID}}" onclick="selectCheckboxNone()">
+				{{range ReverseCommentSlice $.Item.Comments}}
+					<div id="comment-{{$.Item.ID}}-{{.Date}}">
+						<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
+						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+							<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$.Item.Project}}','{{$.Item.ID}}','{{.Date}}','{{.Text}}','{{.Media}}')">≡</span>
+							<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$.Item.Project}}', '{{$.Item.ID}}', '{{.Date}}','{{.Text}}')">×</span>
+						{{end}}
+						<br>
+						<small class="text-white">
+							{{range Split .Text "\n"}}
+								{{.}}<br>
+							{{end}}
+							{{if .Media}}
+								<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" class="link">∞</a>
+							{{end}}
+						</small>
+						<hr class="my-1 p-0 m-0 divider">
+					</div>
+				{{end}}
+			</div>
+		</div>
+		</div>
 	</div>
 </div>
 
