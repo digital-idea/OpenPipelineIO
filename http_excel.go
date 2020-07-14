@@ -922,7 +922,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		"2D마감",
 		"3D마감",
 	}
-	tasks, err := TasksettingNames(session)
+	tasks, err := TasksettingNamesByExcelOrder(session)
 	if err != nil {
 		log.Println(err)
 	}
@@ -1280,7 +1280,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 		"2D마감",
 		"3D마감",
 	}
-	tasks, err := TasksettingNames(session)
+	tasks, err := TasksettingNamesByExcelOrder(session)
 	if err != nil {
 		log.Println(err)
 	}
@@ -1517,7 +1517,6 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s%s.xlsx", project, "currentPage", op.Task))
-	w.WriteHeader(200)
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 

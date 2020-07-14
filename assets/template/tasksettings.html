@@ -21,8 +21,11 @@
 						<div class="card-body">
 							<p class="card-text m-0 p-0 small">
 								Order: <span class="badge badge-darkmode">{{.Order}}</span>
-								{{if .InitGenerate}}<span class="badge badge-warning">기본생성</span>{{end}}
+								{{if .InitGenerate}}
+									<span class="ml-2 badge badge-warning">아이템 생성시 기본적으로 생성</span>
+								{{end}}
 								<br>
+								Excel Order: <span class="badge badge-darkmode">{{.ExcelOrder}}</span><br>
 								LinuxPath: {{.LinuxPath}}<br>
 								WindowPath: {{.WindowPath}}<br>
 								MacOSPath: {{.MacOSPath}}<br>
