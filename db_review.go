@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"strings"
 
 	"gopkg.in/mgo.v2"
@@ -11,6 +12,30 @@ func addReview(session *mgo.Session, r Review) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	err := c.Insert(r)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getReview(session *mgo.Session, id string) (Review, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	r := Review{}
+	err := c.FindId(bson.ObjectIdHex(id)).One(&r)
+	if err != nil {
+		return r, err
+	}
+	return r, nil
+}
+
+func setReviewStatus(session *mgo.Session, id, status string) error {
+	if !(status == "approve" || status == "wait" || status == "comment") {
+		return errors.New("wait, approve, comment 상태만 사용가능합니다")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"status": status}})
 	if err != nil {
 		return err
 	}

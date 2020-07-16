@@ -1,7 +1,7 @@
 {{define "review" }}
 {{template "headBootstrap" .}}
 <body>
-    <input type="hidden" id="selectReviewItemID" value="">
+    <input type="hidden" id="current-review-id" value="">
     <div id="floatingmenu">
         {{template "navbar" .}}
     </div>
@@ -28,7 +28,13 @@
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
                         <span class="ml-1 badge badge-secondary">{{.Task}}</span>
-                        <span class="ml-1 badge badge-secondary">{{.Status}}</span>
+                        {{if eq .Status "comment" }}
+                            <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-warning">{{.Status}}</span>
+                        {{else if eq .Status "approve" }}
+                            <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-success">{{.Status}}</span>
+                        {{else}}
+                            <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-secondary">{{.Status}}</span>
+                        {{end}}
                     </div>
                 {{end}}
             </div>
@@ -46,10 +52,10 @@
                 <textarea class="form-control no-resize" id="Reviewcomment" name="Reviewcomment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
                 <div class="pt-1 row">
                     <div class="col">
-                        <span class="btn btn-sm btn-outline-warning w-100">comment</span>
+                        <span class="btn btn-sm btn-outline-warning w-100" onclick="setReviewStatus('comment')">comment</span>
                     </div>
                     <div class="col">
-                        <span class="btn btn-sm btn-outline-success w-100">approve</span>
+                        <span class="btn btn-sm btn-outline-success w-100" onclick="setReviewStatus('approve')">approve</span>
                     </div>
                 </div>
             </div>
