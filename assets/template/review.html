@@ -28,7 +28,13 @@
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
                         <span class="ml-1 badge badge-secondary">{{.Task}}</span>
-                        <span class="ml-1 badge badge-secondary">{{.Status}}</span>
+                        {{if eq .Status "comment" }}
+                            <span class="ml-1 badge badge-warning">{{.Status}}</span>
+                        {{else if eq .Status "approve" }}
+                            <span class="ml-1 badge badge-success">{{.Status}}</span>
+                        {{else}}
+                            <span class="ml-1 badge badge-secondary">{{.Status}}</span>
+                        {{end}}
                     </div>
                 {{end}}
             </div>
