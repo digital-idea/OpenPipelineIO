@@ -2251,10 +2251,9 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string `json:"project"`
-		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Path    string `json:"path"`
 		UserID  string `json:"userid"`
-		Error   string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -2274,58 +2273,47 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "path":
-			if len(values) == 1 {
-				rcp.Path = values[0]
-			} else {
-				rcp.Path = ""
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	err = SetCameraPubPath(session, rcp.Project, rcp.Name, rcp.Path)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Path = path
+	err = SetCameraPubPath(session, rcp.Project, rcp.ID, rcp.Path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Pub Path: %s", rcp.Path), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Pub Path: %s", rcp.Path), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Pub Path: %s\nProject: %s, Name: %s, Author: %s", rcp.Path, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Pub Path: %s\nProject: %s, ID: %s, Author: %s", rcp.Path, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
@@ -2339,7 +2327,7 @@ func handleAPISetCameraPubTask(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string `json:"project"`
-		Name    string `json:"name"`
+		ID      string `json:"id"`
 		Task    string `json:"task"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
@@ -2362,76 +2350,63 @@ func handleAPISetCameraPubTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	err = SetCameraPubTask(session, rcp.Project, rcp.Name, rcp.Task)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	err = SetCameraPubTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Pub Task: %s", rcp.Task), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Pub Task: %s", rcp.Task), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Pub Task: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Pub Task: %s\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
 
-// handleAPISetCameraProjection 함수는 아이템의 Camera Projection 여부를 설정한다.
-func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
+// handleAPISetCameraLensmm 함수는 아이템의 Camera Lensmm를 설정한다.
+func handleAPISetCameraLensmm(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	type Recipe struct {
-		Project    string `json:"project"`
-		Name       string `json:"name"`
-		Projection bool   `json:"projection"`
-		UserID     string `json:"userid"`
-		Error      string `json:"error"`
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Lensmm  string `json:"lensmm"`
+		UserID  string `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -2451,61 +2426,123 @@ func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "projection":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if strings.ToLower(v) == "true" {
-				rcp.Projection = true
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	err = SetCameraProjection(session, rcp.Project, rcp.Name, rcp.Projection)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	lensmm := r.FormValue("lensmm")
+	if lensmm == "" {
+		http.Error(w, "lensmm를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Lensmm = lensmm
+	err = SetCameraLensmm(session, rcp.Project, rcp.ID, rcp.Lensmm)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Projection: %t", rcp.Projection), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Lens mm: %s", rcp.Lensmm), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Projection: %t\nProject: %s, Name: %s, Author: %s", rcp.Projection, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Lens mm: %s\nProject: %s, ID: %s, Author: %s", rcp.Lensmm, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetCameraProjection 함수는 아이템의 Camera Projection 여부를 설정한다.
+func handleAPISetCameraProjection(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project    string `json:"project"`
+		ID         string `json:"id"`
+		Projection bool   `json:"projection"`
+		UserID     string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	projection := r.FormValue("projection")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Projection = str2bool(projection)
+	err = SetCameraProjection(session, rcp.Project, rcp.ID, rcp.Projection)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Camera Projection: %t", rcp.Projection), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Camera Projection: %t\nProject: %s, ID: %s, Author: %s", rcp.Projection, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

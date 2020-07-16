@@ -1791,18 +1791,14 @@ func SetFrame(session *mgo.Session, project, name, key string, frame int) error 
 }
 
 // SetCameraPubPath 함수는 해당 카메라 퍼블리쉬 경로를 설정한다.
-func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
+func SetCameraPubPath(session *mgo.Session, project, id, path string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"productioncam.pubpath": path, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1810,7 +1806,7 @@ func SetCameraPubPath(session *mgo.Session, project, name, path string) error {
 }
 
 // SetCameraPubTask 함수는 해당 카메라 퍼블리쉬 팀을 설정한다.
-func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
+func SetCameraPubTask(session *mgo.Session, project, id, task string) error {
 	if !(task == "" || task == "mm" || task == "layout" || task == "ani") {
 		return errors.New("none(빈문자열), mm, layout, ani 팀만 카메라 publish가 가능합니다")
 	}
@@ -1819,12 +1815,23 @@ func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetCameraLensmm 함수는 해당 아이템에 카메라 렌즈mm를 설정한다.
+func SetCameraLensmm(session *mgo.Session, project, id, lensmm string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.pubtask": task, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"productioncam.lensmm": lensmm, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
@@ -1832,18 +1839,14 @@ func SetCameraPubTask(session *mgo.Session, project, name, task string) error {
 }
 
 // SetCameraProjection 함수는 샷에 Projection 카메라 사용여부를 체크한다.
-func SetCameraProjection(session *mgo.Session, project, name string, isProjection bool) error {
+func SetCameraProjection(session *mgo.Session, project, id string, isProjection bool) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": name + "_" + typ}, bson.M{"$set": bson.M{"productioncam.projection": isProjection, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"productioncam.projection": isProjection, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
