@@ -207,21 +207,32 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
-                <h5 class="modal-title" id="modal-edittask-title">Edit Task</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                    <h5 class="modal-title" id="modal-edittask-title">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-darkmode">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body mb-0 pb-0">
-                    <label class="col-form-label">User:</label>
-                    <div class="row form-group">
-                        <div class="col-9">
-                            <input type="text" class="form-control form-control-sm" id="modal-edittask-user" autocomplete="off">
+                    <div class="row">
+                        <div class="col-8 form-group">
+                            <label class="col-form-label col-form-label-sm">User</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" class="form-control form-control-sm" id="modal-edittask-user" autocomplete="off">
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser()">SET USER</button>
+                                </div>
+                            </div>
+                            <small class="form-text text-mute">사용자 이름만 입력해주세요.</small>
                         </div>
-                        <div class="col-3">
-                            <button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-user').value)">SET USER</button>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">User Comment</label>
+                            <input type="text" class="form-control form-control-sm" id="modal-edittask-usercomment" placeholder="참고정보" onchange="setTaskUserComment()">
+                            <small class="form-text text-mute">아티스트명 뒷쪽 메모</small>
                         </div>
                     </div>
+                    
                 </div>
                 <div class="modal-body">
                     <input type="hidden" class="form-control" id="modal-edittask-project">
@@ -293,9 +304,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="multi-input-link" class="col-form-label col-form-label-sm">User Note:</label>
-                        <input type="text" id="modal-edittask-usernote" class="form-control form-control-sm" value="" placeholder="User Note" onchange="setTaskUserNote(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
-                        <small class="form-text text-mute">Task 작업노트</small>
+                        <label for="multi-input-link" class="col-form-label col-form-label-sm">공지사항</label>
+                        <input type="text" id="modal-edittask-usernote" class="form-control form-control-sm" value="" placeholder="공지사항" onchange="setTaskUserNote(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
+                        <small class="form-text text-mute">Task 작업에 참고할 공지사항</small>
                     </div>
                     
                 </div>			
