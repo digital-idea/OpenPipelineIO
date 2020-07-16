@@ -159,6 +159,7 @@ type Publish struct {
 type Task struct {
 	Title        string               `json:"title"`        // 테스크 네임
 	User         string               `json:"user"`         // 아티스트명
+	UserComment  string               `json:"usercomment"`  // 아티스트 코멘트
 	Status       string               `json:"status"`       // 상태 legacy
 	StatusV2     string               `json:"statusv2"`     // 샷 상태.
 	ReviewStatus string               `json:"reviewstatus"` // 리뷰상태

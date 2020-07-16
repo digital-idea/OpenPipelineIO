@@ -917,6 +917,89 @@ func handleAPISetTaskExpectDay(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetTaskUserComment 함수는 Task에 UserComment를 설정한다.
+func handleAPISetTaskUserComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project     string `json:"project"`
+		ID          string `json:"id"`
+		Task        string `json:"task"`
+		UserComment string `json:"usercomment"`
+		UserID      string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	usercomment := r.FormValue("usercomment")
+	if usercomment == "" {
+		http.Error(w, "usercomment를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.UserComment = usercomment
+	err = setTaskUserComment(session, rcp.Project, rcp.ID, rcp.Task, rcp.UserComment)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set UserComment: %s %s", rcp.Task, rcp.UserComment), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set UserComment: %s %s\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.UserComment, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetTaskResultDay 함수는 Task에 실제 작업일을 설정한다.
 func handleAPISetTaskResultDay(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

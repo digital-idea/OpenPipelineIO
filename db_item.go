@@ -1615,6 +1615,25 @@ func setTaskResultDay(session *mgo.Session, project, id, task string, resultDay 
 	return nil
 }
 
+// setTaskUserComment함수는 해당 아이템의 Task에 UserComment를 설정하는 함수이다.
+func setTaskUserComment(session *mgo.Session, project, id, task, comment string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".usercomment": comment}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // setTaskLevel함수는 해당 샷에 level를 설정하는 함수이다.
 func setTaskLevel(session *mgo.Session, project, name, task, level string) error {
 	session.SetMode(mgo.Monotonic, true)

@@ -106,6 +106,7 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-path').value=data.task.mov;
             document.getElementById('modal-edittask-usernote').value=data.task.usernote;
             document.getElementById('modal-edittask-user').value=data.task.user;
+            document.getElementById('modal-edittask-usercomment').value=data.task.usercomment;
             document.getElementById('modal-edittask-id').value=data.id;
             // ver2로 검색하면 modal-edittask-status 가 존재하지 않을 수 있다.
             try {
@@ -2090,9 +2091,13 @@ function setTaskResultDay(resultday) {
     }
 }
 
-function setTaskUser(project, id, task, user) {
+function setTaskUser() {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-edittask-project').value
+    let id = document.getElementById('modal-edittask-id').value
+    let task = document.getElementById('modal-edittask-task').value
+    let user = document.getElementById('modal-edittask-user').value
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -2147,6 +2152,73 @@ function setTaskUser(project, id, task, user) {
                     document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
                 } else {
                     document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskUserComment() {
+    let token = document.getElementById("token").value;
+    let project = document.getElementById('modal-edittask-project').value
+    let id = document.getElementById('modal-edittask-id').value
+    let task = document.getElementById('modal-edittask-task').value
+    let usercomment = document.getElementById('modal-edittask-usercomment').value
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/settaskusercomment",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    task: task,
+                    usercomment: usercomment,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    if (data.username === "") {
+                        document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = "";
+                    } else {
+                        document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.usercomment}</span>`;
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskusercomment",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                task: task,
+                usercomment: usercomment,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                if (data.username === "") {
+                    document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = "";
+                } else {
+                    document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.usercomment}</span>`;
                 }
             },
             error: function(request,status,error){

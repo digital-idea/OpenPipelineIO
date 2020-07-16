@@ -269,6 +269,11 @@
 						<div id="{{$id}}-task-{{.Title}}-user">
 							<a href="/user?id={{onlyID .User}}" class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</a>
 						</div>
+						<div id="{{$id}}-task-{{.Title}}-usercomment">
+							{{if .UserComment}}
+								<span class="mt-1 ml-0 badge badge-darkmode">{{.UserComment}}</span>
+							{{end}}
+						</div>
 						<div id="{{$id}}-task-{{.Title}}-playbutton">
 							{{if .Mov }}
 								<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>

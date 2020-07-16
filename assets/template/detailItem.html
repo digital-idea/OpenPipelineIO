@@ -260,8 +260,14 @@
 							<div id="{{$.Item.ID}}-task-{{.Title}}-date">
 								<span class="mt-1 ml-1 badge badge-{{CheckDdlinev2 .Date}}" title="2차마감">{{ToShortTime .Date}}</span>
 							</div>
+							
 							<div id="{{$.Item.ID}}-task-{{.Title}}-user">
 								<span class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</span>
+							</div>
+							<div id="{{$.Item.ID}}-task-{{.Title}}-usercomment">
+								{{if .UserComment}}
+									<span class="mt-1 ml-0 badge badge-darkmode">{{.UserComment}}</span>
+								{{end}}
 							</div>
 							<div id="{{$.Item.ID}}-task-{{.Title}}-playbutton">
 								{{if .Mov }}
