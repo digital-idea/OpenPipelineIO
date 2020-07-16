@@ -486,24 +486,21 @@ function setScanTimecodeIn(project, id, timecode, userid) {
     });
 }
 
-function setCameraPubTask(project, id, task) {
-    let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
+function setCameraPubTask() {
     $.ajax({
         url: "/api/setcamerapubtask",
         type: "post",
         data: {
-            project: project,
-            name: id2name(id),
-            task: task,
-            userid: userid,
+            project: document.getElementById('modal-cameraoption-project').value,
+            id: document.getElementById('modal-cameraoption-id').value,
+            task: document.getElementById('modal-cameraoption-pubtask').value,
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubtask-"+data.name).innerHTML = `<span class="text-badge ml-1">Pub-${data.task}</span>`;
+            document.getElementById("campubtask-"+data.id).innerHTML = `<span class="text-badge ml-1">${data.task}</span>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -511,24 +508,43 @@ function setCameraPubTask(project, id, task) {
     });
 }
 
-function setCameraPubPath(project, id, path) {
-    let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
+function setCameraLensmm() {
+    $.ajax({
+        url: "/api/setcameralensmm",
+        type: "post",
+        data: {
+            project: document.getElementById('modal-cameraoption-project').value,
+            id: document.getElementById('modal-cameraoption-id').value,
+            lensmm: document.getElementById('modal-cameraoption-lensmm').value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("camlensmm-"+data.id).innerHTML = `<span class="text-badge ml-1">${data.lensmm}mm</span>`;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setCameraPubPath() {
     $.ajax({
         url: "/api/setcamerapubpath",
         type: "post",
         data: {
-            project: project,
-            name: id2name(id),
-            path: path,
-            userid: userid,
+            project: document.getElementById('modal-cameraoption-project').value,
+            id: document.getElementById('modal-cameraoption-id').value,
+            path: document.getElementById('modal-cameraoption-pubpath').value,
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubpath-"+data.name).innerHTML = `, <a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a>`;
+            document.getElementById("campubpath-"+data.id).innerHTML = `<a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -548,6 +564,8 @@ function setCameraOptionModal(project, id) {
         },
         dataType: "json",
         success: function(data) {
+            document.getElementById('modal-cameraoption-pubtask').value = data.productioncam.pubtask;
+            document.getElementById('modal-cameraoption-lensmm').value = data.productioncam.lensmm;
             document.getElementById('modal-cameraoption-pubpath').value = data.productioncam.pubpath;
             if (data.productioncam.projection) {
                 document.getElementById("modal-cameraoption-projection").checked = true;
@@ -561,28 +579,24 @@ function setCameraOptionModal(project, id) {
     });
 }
 
-function setCameraProjection(project, id) {
-    let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
-    let projection = document.getElementById("modal-cameraoption-projection").checked;
+function setCameraProjection() {
     $.ajax({
         url: "/api/setcameraprojection",
         type: "post",
         data: {
-            project: project,
-            name: id2name(id),
-            projection: projection,
-            userid: userid,
+            project: document.getElementById('modal-cameraoption-project').value,
+            id: document.getElementById('modal-cameraoption-id').value,
+            projection: document.getElementById("modal-cameraoption-projection").checked,
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function(data) {
-            if (data.projection === true) {
-                document.getElementById("camprojection-"+data.name).innerHTML = `<span class="text-badge ml-1">, Projection</span>`;
+            if (data.projection) {
+                document.getElementById("camprojection-"+data.id).innerHTML = `<span class="text-badge ml-1">ProjectionCam</span>`;
             } else {
-                document.getElementById("camprojection-"+data.name).innerHTML = "";
+                document.getElementById("camprojection-"+data.id).innerHTML = "";
             }
         },
         error: function(request,status,error){
@@ -1221,7 +1235,7 @@ function setDetailCommentsModal(project, id) {
                 cmt.append(info)
                 cmt.append(br)
                 let text = document.createElement("div")
-                text.setAttribute("class","text-white")
+                text.setAttribute("class","text-darkmode small")
                 text.innerHTML = "<br />" + comments[i].text.replace(/\n/g, "<br />")
                 cmt.append(text)
                 cmt.append(br)
@@ -1235,7 +1249,7 @@ function setDetailCommentsModal(project, id) {
                     link.innerHTML = `<img src="/assets/img/link.svg" class="finger">`
                     cmt.append(link)
                     let span = document.createElement("span")
-                    span.setAttribute("class","text-white pl-2")
+                    span.setAttribute("class","text-darkmode small pl-2")
                     span.innerHTML = comments[i].mediatitle
                     cmt.append(span)
                 }

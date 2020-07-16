@@ -6,7 +6,7 @@ type OnsetCam struct {
 	LensName       string  `json:"lensname"`       // 렌즈명 Arri Master Prime
 	DataName       string  `json:"dataname"`       // 샷의 데이터네임 예) S#53 C#2 T#2 / A110-C009
 	RigName        string  `json:"rigname"`        // 리그 이름
-	Lensmm         float64 `json:"lensmm"`         // 32mm
+	Lensmm         float64 `json:"lensmm"`         // 렌즈mm
 	SerialNum      string  `json:"serialnum"`      // 렌즈 시리얼넘버. 입체시 Left
 	SerialNumRight string  `json:"serialnumright"` // 렌즈 시리얼넘버. Right
 	Iso            int     `json:"iso"`            // 800
@@ -23,4 +23,5 @@ type ProductionCam struct {
 	PubPath    string `json:"pubpath"`    // 퍼블리쉬 카메라 경로
 	PubTask    string `json:"pubtask"`    // 카메라 퍼블리쉬 Task : mm,layout,ani
 	Projection bool   `json:"projection"` // 프로젝션을 사용하는 카메라인가?
+	Lensmm     string `json:"lensmm"`     // 렌즈mm
 }

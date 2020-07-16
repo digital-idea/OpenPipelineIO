@@ -397,26 +397,29 @@
 		<!--ProductionCam-->
 		{{if eq .Type "org" "left"}}
 		<div class="row">
-			<div id="caminfo-{{.Name}}">
+			<div id="caminfo-{{.ID}}">
 				<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setCameraOptionModal('{{$project}}', '{{$id}}')"{{end}}>
 					CamInfo:
 				</span>
 			</div>
-			<div id="campubtask-{{.Name}}">
+			<div id="campubtask-{{.ID}}">
 				{{if .ProductionCam.PubTask}}
-					<span class="text-badge ml-1" id="campubtask-{{.Name}}">Pub-{{.ProductionCam.PubTask}}</span>
+					<span class="text-badge ml-1">{{.ProductionCam.PubTask}}</span>
 				{{end}}
 			</div>
-			<div id="campubpath-{{.Name}}">
+			<div id="camlensmm-{{.ID}}">
+				{{if .ProductionCam.Lensmm}}
+					<span class="text-badge ml-1">{{.ProductionCam.Lensmm}}mm</span>
+				{{end}}
+			</div>
+			<div id="campubpath-{{.ID}}">
 				{{if .ProductionCam.PubPath}}
-					<span class="text-badge">,</span>
 					<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
 				{{end}}
 			</div>
-			<div id="camprojection-{{.Name}}">
+			<div id="camprojection-{{.ID}}">
 				{{if .ProductionCam.Projection}}
-					<span class="text-badge">,</span>
-					<span class="text-badge ml-1">Projection</span>
+					<span class="text-badge ml-1">ProjectionCam</span>
 				{{end}}
 			</div>
 		</div>
