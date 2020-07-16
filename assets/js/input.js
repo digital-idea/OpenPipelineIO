@@ -99,7 +99,8 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-startdate').value=data.task.startdate;
             document.getElementById('modal-edittask-predate').value=data.task.predate;
             document.getElementById('modal-edittask-date').value=data.task.date;
-            document.getElementById('modal-edittask-due').value=data.task.due;
+            document.getElementById('modal-edittask-expectday').value=data.task.expectday;
+            document.getElementById('modal-edittask-resultday').value=data.task.resultday;
             document.getElementById('modal-edittask-level').value=data.task.tasklevel;
             document.getElementById('modal-edittask-task').value=data.task.title;
             document.getElementById('modal-edittask-path').value=data.task.mov;
@@ -1973,9 +1974,12 @@ function setTaskMov(project, id, task, mov) {
     });
 }
 
-function setTaskDue(project, id, task, due) {
+function setTaskExpectDay(expectday) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-edittask-project').value;
+    let id = document.getElementById('modal-edittask-id').value;
+    let task = document.getElementById('modal-edittask-task').value;
+
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -1984,14 +1988,13 @@ function setTaskDue(project, id, task, due) {
             }
             let id = cboxes[i].getAttribute("id");
             $.ajax({
-                url: "/api/settaskdue",
+                url: "/api/settaskexpectday",
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
-                    due: due,
-                    userid: userid,
+                    expectday: expectday,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -2007,14 +2010,71 @@ function setTaskDue(project, id, task, due) {
         }
     } else {
         $.ajax({
-            url: "/api/settaskdue",
+            url: "/api/settaskexpectday",
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
-                due: due,
-                userid: userid,
+                expectday: expectday,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                console.info(data);
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskResultDay(resultday) {
+    let token = document.getElementById("token").value;
+    let project = document.getElementById('modal-edittask-project').value;
+    let id = document.getElementById('modal-edittask-id').value;
+    let task = document.getElementById('modal-edittask-task').value;
+
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/settaskresultday",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    task: task,
+                    resultday: resultday,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    console.info(data);
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskresultday",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                task: task,
+                resultday: resultday,
             },
             headers: {
                 "Authorization": "Basic "+ token

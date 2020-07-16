@@ -828,19 +828,19 @@ func handleAPI2SetTaskMov(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetTaskDue 함수는 Task에 마감일을 설정한다.
-func handleAPISetTaskDue(w http.ResponseWriter, r *http.Request) {
+// handleAPISetTaskExpectDay 함수는 Task에 예상일을 설정한다.
+func handleAPISetTaskExpectDay(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		Task    string `json:"task"`
-		Due     int    `json:"due"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project   string `json:"project"`
+		ID        string `json:"id"`
+		Task      string `json:"task"`
+		ExpectDay int    `json:"expectday"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -860,69 +860,147 @@ func handleAPISetTaskDue(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		case "due": // 앞뒤샷 포함 여러개의 mov를 등록할 수 있다.
-			if len(values) != 1 {
-				rcp.Due = 0
-			} else {
-				num, err := strconv.Atoi(values[0])
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusBadRequest)
-				}
-				rcp.Due = num
-			}
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	err = setTaskDue(session, rcp.Project, rcp.Name, rcp.Task, rcp.Due)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	expectday := r.FormValue("expectday")
+	if expectday == "" {
+		http.Error(w, "expectday를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	num, err := strconv.Atoi(expectday)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.ExpectDay = num
+	err = setTaskExpectDay(session, rcp.Project, rcp.ID, rcp.Task, rcp.ExpectDay)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Due: %s %d", rcp.Task, rcp.Due), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set ExpectDay: %s %d", rcp.Task, rcp.ExpectDay), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Due: %s %d\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Due, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set ExpectDay: %s %d\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.ExpectDay, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetTaskResultDay 함수는 Task에 실제 작업일을 설정한다.
+func handleAPISetTaskResultDay(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project   string `json:"project"`
+		ID        string `json:"id"`
+		Task      string `json:"task"`
+		ResultDay int    `json:"resultday"`
+		UserID    string `json:"userid"`
+		Error     string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	resultday := r.FormValue("resultday")
+	if resultday == "" {
+		http.Error(w, "resultday를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	num, err := strconv.Atoi(resultday)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.ResultDay = num
+	err = setTaskResultDay(session, rcp.Project, rcp.ID, rcp.Task, rcp.ResultDay)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set ResultDay: %s %d", rcp.Task, rcp.ResultDay), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set ResultDay: %s %d\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.ResultDay, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

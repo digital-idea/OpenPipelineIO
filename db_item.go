@@ -1577,24 +1577,38 @@ func setTaskMov(session *mgo.Session, project, name, task, mov string) (string, 
 	return id, nil
 }
 
-// setTaskDue함수는 해당 샷에 mov를 설정하는 함수이다.
-func setTaskDue(session *mgo.Session, project, name, task string, due int) error {
+// setTaskExpectDay함수는 해당 샷에 예상일을 설정하는 함수이다.
+func setTaskExpectDay(session *mgo.Session, project, id, task string, expectDay int) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
 		return err
 	}
 	c := session.DB("project").C(project)
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return err
-	}
-	id := name + "_" + typ
 	err = HasTask(session, project, id, task)
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".due": due, task + ".mdate": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".expectday": expectDay}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// setTaskResultDay함수는 해당 샷에 예상일을 설정하는 함수이다.
+func setTaskResultDay(session *mgo.Session, project, id, task string, resultDay int) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".resultday": resultDay}})
 	if err != nil {
 		return err
 	}
