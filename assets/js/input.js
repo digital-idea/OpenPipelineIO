@@ -4114,6 +4114,37 @@ function addReview() {
     });
 }
 
+function setReviewStatus(status) {
+    $.ajax({
+        url: "/api/setreviewstatus",
+        type: "post",
+        data: {
+            status: status,
+            id: document.getElementById("current-review-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("reviewstatus-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.status
+            // 상태의 색상을 바꾼다.
+            if (data.status === "approve") {
+                item.setAttribute("class","ml-1 badge badge-success")
+            } else if (data.status === "comment") {
+                item.setAttribute("class","ml-1 badge badge-warning")
+            } else {
+                item.setAttribute("class","ml-1 badge badge-secondary")
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setTypeAddShot(type, readOnly) {
     document.getElementById("addshot-type").value = type
     document.getElementById('addshot-type').readOnly = readOnly
@@ -4196,7 +4227,7 @@ function selectReviewItem(id, fps, project, name) {
     }
     // 왼쪽 리뷰 아이템중 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
-    document.getElementById("selectReviewItemID").value = id;
+    document.getElementById("current-review-id").value = id;
 
     // 동영상을 불러온다.
     let video = document.createElement('video');
