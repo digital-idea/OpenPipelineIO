@@ -2192,7 +2192,7 @@ function setTaskUserComment() {
                     if (data.username === "") {
                         document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = "";
                     } else {
-                        document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.usercomment}</span>`;
+                        document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.usercomment}</span>`;
                     }
                 },
                 error: function(request,status,error){
@@ -2218,7 +2218,7 @@ function setTaskUserComment() {
                 if (data.username === "") {
                     document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = "";
                 } else {
-                    document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.usercomment}</span>`;
+                    document.getElementById(`${data.id}-task-${data.task}-usercomment`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.usercomment}</span>`;
                 }
             },
             error: function(request,status,error){
