@@ -4228,38 +4228,6 @@ function selectReviewItem(id, fps, project, name) {
     screenshotCanvas.setAttribute("width", playerboxWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", playerboxHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 
-    // 하단의 아이템을 드로잉하기
-    let token = document.getElementById("token").value;
-    $.ajax({
-        url: "/api/searchreview",
-        type: "post",
-        data: {
-            "searchword": "project:" + project + " " + "name:" + name,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            let reviewgroup = document.getElementById("reviewgroup");
-            for (let i = 0; i < data.length; i++) {
-                let video = document.createElement('video');
-                video.setAttribute("height","100%")
-                video.src = "/reviewdata?id=" + data[i].id;
-                video.autoplay = false
-                video.classList.add("p-0")
-                video.classList.add("m-0")
-                video.classList.add("pr-1")
-                // border 0px
-                reviewgroup.appendChild(video)
-                
-            }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
     drawCtx.lineWidth = 4; // 브러시 사이즈
@@ -4319,6 +4287,41 @@ function selectReviewItem(id, fps, project, name) {
 
     // comments를 불러와서 렌더링 한다.
     drawReviewComments(id)
+    // 하단 ReviewGroup 업데이트
+    updateReviewGroup(project, name)
+}
+
+function updateReviewGroup(project, name) {
+    document.getElementById("reviewgroup").innerHTML = "";
+    // 하단의 아이템을 드로잉하기
+    $.ajax({
+        url: "/api/searchreview",
+        type: "post",
+        data: {
+            "searchword": "project:" + project + " " + "name:" + name,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        dataType: "json",
+        success: function(data) {
+            let reviewgroup = document.getElementById("reviewgroup");
+            for (let i = 0; i < data.length; i++) {
+                let video = document.createElement('video');
+                video.setAttribute("height","100%")
+                video.src = "/reviewdata?id=" + data[i].id;
+                video.autoplay = false
+                video.classList.add("p-0")
+                video.classList.add("m-0")
+                video.classList.add("pr-1")
+                // border 0px
+                reviewgroup.appendChild(video)
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 
