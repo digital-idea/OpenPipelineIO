@@ -4164,6 +4164,32 @@ function addReviewComment() {
         dataType: "json",
         success: function(data) {
             console.log(data)
+            // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
+            let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
+            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
+            <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
+            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}')">×</span>
+            <br><small class="text-white">${body}</small>`
+            if (data.media != "") {
+                if (data.media.includes("http")) {
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+                        <a href="${data.media}">
+                            <img src="/assets/img/link.svg" class="finger">
+                        </a>
+                        <span class="text-white pl-2 small">${data.mediatitle}</span>
+                    </div>`
+                } else {
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+                        <a href="dilink://${data.media}">
+                            <img src="/assets/img/link.svg" class="finger">
+                        </a>
+                        <span class="text-white pl-2 small">${data.mediatitle}</span>
+                    </div>`
+                }
+            }
+            newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
+            document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4224,7 +4250,6 @@ function selectReviewItem(id, fps, project, name) {
                 video.classList.add("p-0")
                 video.classList.add("m-0")
                 video.classList.add("pr-1")
-                console.log(video);
                 // border 0px
                 reviewgroup.appendChild(video)
                 

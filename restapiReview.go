@@ -330,6 +330,8 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		Text       string `json:"text"`
 		Media      string `json:"media"`
 		MediaTitle string `json:"mediatitle"`
+		Author     string `json:"author"`
+		Date       string `json:"date"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -372,7 +374,9 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	}
 	cmt := Comment{}
 	cmt.Date = time.Now().Format(time.RFC3339)
+	rcp.Date = cmt.Date
 	cmt.Author = rcp.UserID
+	rcp.Author = rcp.UserID
 	cmt.Text = rcp.Text
 	cmt.Media = rcp.Media
 	cmt.MediaTitle = rcp.MediaTitle
