@@ -274,30 +274,31 @@
                         <input type="text" class="form-control form-control-sm" id="modal-edittask-path" onchange="setTaskMov(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
                     </div>
                     <div class="row">
-                        <div class="col-6 form-group">
-                            <label class="col-form-label col-form-label-sm">시작일</label>
-                            <input type=date class="form-control form-control-sm" id="modal-edittask-startdate" value="" onchange="setTaskStartdate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
-                        </div>
-                        <div class="col-2 form-group">
+                        <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">예상일수</label>
                             <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-expectday" onchange="setTaskExpectDay(this.value)">
                         </div>
-                        <div class="col-2 form-group">
+                        <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">작업일수</label>
                             <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-resultday" onchange="setTaskResultDay(this.value)">
                         </div>
-                        <div class="col-2 form-group">
+                        <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">Level</label>
                             <input type="number" min="0" max="5" step="1" class="form-control form-control-sm" id="modal-edittask-level" onchange="setTaskLevel(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6 form-group">
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">시작일</label>
+                            <input type=date class="form-control form-control-sm" id="modal-edittask-startdate" value="" onchange="setTaskStartdate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
+                            <small class="form-text text-mute">작업 시작일</small>
+                        </div>
+                        <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">1차마감</label>
                             <input type=date class="form-control form-control-sm" id="modal-edittask-predate" value="" onchange="setTaskPredate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
-                            <small class="form-text text-mute">협업을 위해 1차 데이터를 넘기는 날짜</small>
+                            <small class="form-text text-mute">협업을 위한 중간 마감일</small>
                         </div>
-                        <div class="col-6 form-group">
+                        <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">2차마감</label>
                             <input type=date class="form-control form-control-sm" id="modal-edittask-date" value="" onchange="setTaskDate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)" placeholder="YYYY-MM-DD">
                             <small class="form-text text-mute">최종마감일</small>

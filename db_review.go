@@ -79,3 +79,17 @@ func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
 	}
 	return results, nil
 }
+
+// addReviewComment 함수는 Review에 Comment를 추가한다.
+func addReviewComment(session *mgo.Session, id string, cmt Comment) error {
+	if cmt.Text == "" {
+		return errors.New("comment가 빈 문자열입니다")
+	}
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$push": bson.M{"comments": cmt}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

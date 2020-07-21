@@ -4114,6 +4114,11 @@ function addReview() {
     });
 }
 
+function clickCommentButton() {
+    setReviewStatus('comment')
+    addReviewComment()
+}
+
 function setReviewStatus(status) {
     $.ajax({
         url: "/api/setreviewstatus",
@@ -4138,6 +4143,27 @@ function setReviewStatus(status) {
             } else {
                 item.setAttribute("class","ml-1 badge badge-secondary")
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function addReviewComment() {
+    $.ajax({
+        url: "/api/addreviewcomment",
+        type: "post",
+        data: {
+            id: document.getElementById("current-review-id").value,
+            text: document.getElementById("review-comment").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            console.log(data)
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4265,6 +4291,61 @@ function selectReviewItem(id, fps, project, name) {
         let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
         ctx.drawImage($this, 0, 0, playerboxWidth, h);
     }, 0);
+
+    // comments를 불러와서 렌더링 한다.
+    drawReviewComments(id)
+}
+
+
+// drawReviewComments 함수는 review id를 받아서 review-comments에 리뷰를 드로잉한다.
+function drawReviewComments(id) {
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            "id": id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        dataType: "json",
+        success: function(data) {
+            // review comment를 넣기전 먼저 초기화 한다.
+            document.getElementById("review-comments").innerHTML = ""
+            let comments = data.comments
+            for (let i = 0; i < comments.length; i++) {
+                let body = comments[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                let newComment = `<div id="reviewcomment-${id}-${comments[i].date}" class="p-1">
+                <span class="text-badge">${comments[i].date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
+                <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${id}', '${comments[i].date}', '${comments[i].text}', '${comments[i].mediatitle}', '${comments[i].media}')">≡</span>
+                <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${id}')">×</span>
+                <br><small class="text-white">${body}</small>`
+                if (comments[i].media != "") {
+                    if (comments[i].media.includes("http")) {
+                        newComment += `<div class="row pl-3 pt-3 pb-1">
+                            <a href="${comments[i].media}">
+                                <img src="/assets/img/link.svg" class="finger">
+                            </a>
+                            <span class="text-white pl-2 small">${comments[i].mediatitle}</span>
+                        </div>`
+                    } else {
+                        newComment += `<div class="row pl-3 pt-3 pb-1">
+                            <a href="dilink://${comments[i].media}">
+                                <img src="/assets/img/link.svg" class="finger">
+                            </a>
+                            <span class="text-white pl-2 small">${comments[i].mediatitle}</span>
+                        </div>`
+                    }
+                }
+                newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
+                document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+
 }
 
 // draw 함수는 x,y 좌표를 받아 그림을 그린다.
