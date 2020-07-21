@@ -4244,15 +4244,14 @@ function selectReviewItem(id, fps, project, name) {
     for (let i = 0; i < items.length; i++) {
         document.getElementById(items[i].id).style.backgroundColor = "rgb(52, 58, 63)";
     }
-    // 왼쪽 리뷰 아이템중 선택한 아이템만 컬러를 바꾼다.
+    // 왼쪽 리뷰바 아이템중 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
     document.getElementById("current-review-id").value = id;
+    
+    
+    
 
-    // 동영상을 불러온다.
-    let video = document.createElement('video');
-    video.src = "/reviewdata?id=" + id;
-    video.autoplay = true;
-    let ctx = canvas.getContext("2d");
+    // 버튼설정
     let playButton = document.getElementById("player-play");
     let pauseButton = document.getElementById("player-pause");
     let startButton = document.getElementById("player-start");
@@ -4267,7 +4266,15 @@ function selectReviewItem(id, fps, project, name) {
     endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0);}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트
     beforeFrameButton.addEventListener("click", function() {video.currentTime -= (1/parseFloat(fps));}); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {video.currentTime += (1/parseFloat(fps));}); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+
+    // 동영상을 불러온다.
+    let video = document.createElement('video');
+    video.src = "/reviewdata?id=" + id;
+    video.autoplay = true;
     
+    let ctx = canvas.getContext("2d");
+
+
     video.addEventListener('play', function () {
         let $this = this; //cache
         (function loop() {
@@ -4287,13 +4294,8 @@ function selectReviewItem(id, fps, project, name) {
 
     // comments를 불러와서 렌더링 한다.
     drawReviewComments(id)
-    // 하단 ReviewGroup 업데이트
-    updateReviewGroup(project, name)
-}
-
-function updateReviewGroup(project, name) {
-    document.getElementById("reviewgroup").innerHTML = "";
-    // 하단의 아이템을 드로잉하기
+    
+    // 하단의 ReviewGroup 아이템을 드로잉하기
     $.ajax({
         url: "/api/searchreview",
         type: "post",
@@ -4305,6 +4307,8 @@ function updateReviewGroup(project, name) {
         },
         dataType: "json",
         success: function(data) {
+            // 하단 ReviewGroup 초기화
+            document.getElementById("reviewgroup").innerHTML = "";
             let reviewgroup = document.getElementById("reviewgroup");
             for (let i = 0; i < data.length; i++) {
                 let video = document.createElement('video');
@@ -4314,7 +4318,9 @@ function updateReviewGroup(project, name) {
                 video.classList.add("p-0")
                 video.classList.add("m-0")
                 video.classList.add("pr-1")
-                // border 0px
+                video.classList.add("finger")
+                //video.onclick = selectReviewItem(id,fps,project,name)
+                video.onclick = (function() { selectReviewItem(data[i].id, data[i].fps, data[i].project, data[i].name); });
                 reviewgroup.appendChild(video)
             }
         },
