@@ -4246,10 +4246,7 @@ function selectReviewItem(id, fps, project, name) {
     }
     // 왼쪽 리뷰바 아이템중 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
-    document.getElementById("current-review-id").value = id;
-    
-    
-    
+    document.getElementById("current-review-id").value = id;    
 
     // 버튼설정
     let playButton = document.getElementById("player-play");
