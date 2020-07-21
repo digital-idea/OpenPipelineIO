@@ -196,6 +196,50 @@ func handleAPISearchReview(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIReview 함수는 id를 받아서 review 데이터를 반환하는 핸들러이다.
+func handleAPIReview(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID string `json:"userid"`
+		Review Review `json:"review"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	review, err := getReview(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Review = review
+	data, err := json.Marshal(rcp.Review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetReviewStatus 함수는 review의 상태를 설정하는 RestAPI 이다.
 func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -264,6 +308,97 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIAddReviewComment 함수는 review에 comment를 설정하는 RestAPI 이다.
+func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID     string `json:"userid"`
+		ID         string `json:"id"`
+		Text       string `json:"text"`
+		Media      string `json:"media"`
+		MediaTitle string `json:"mediatitle"`
+		Author     string `json:"author"`
+		Date       string `json:"date"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+
+	text := r.FormValue("text")
+	if text == "" {
+		http.Error(w, "comment를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Text = text
+	rcp.Media = r.FormValue("media")
+	rcp.MediaTitle = r.FormValue("mediatitle")
+
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	cmt := Comment{}
+	cmt.Date = time.Now().Format(time.RFC3339)
+	rcp.Date = cmt.Date
+	cmt.Author = rcp.UserID
+	rcp.Author = rcp.UserID
+	cmt.Text = rcp.Text
+	cmt.Media = rcp.Media
+	cmt.MediaTitle = rcp.MediaTitle
+	err = addReviewComment(session, rcp.ID, cmt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Review Comment: %s, %s", rcp.ID, rcp.Text), review.Project, review.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// slack log
+	err = slacklog(session, review.Project, fmt.Sprintf("Add Review Comment: %s, \nProject: %s, Name: %s, Author: %s", rcp.Text, review.Project, review.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
