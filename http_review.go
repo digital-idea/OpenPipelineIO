@@ -49,7 +49,6 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Searchword       string
 		Status           []Status // css 생성을 위해서 필요함
-		ReviewID         string   // 포커싱이 필요한 Review ID
 		CurrentReview    Review   // 현재 리뷰 자료구조
 		Reviews          []Review // 옆 Review 항목
 		ReviewGroup      []Review // 하단 Review 항목
@@ -57,7 +56,7 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Searchword = q.Get("searchword")
-	rcp.ReviewID = q.Get("id")
+	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -90,8 +89,8 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if rcp.ReviewID != "" {
-		review, err := getReview(session, rcp.ReviewID)
+	if id != "" {
+		review, err := getReview(session, id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

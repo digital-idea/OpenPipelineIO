@@ -48,10 +48,10 @@
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
             <div style="height: 80%; overflow-y: auto; overflow-x: hidden;" id="review-comments">
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
-                    <div id="reviewcomment-{{$.ReviewID}}-{{.Date}}" class="p-1">
+                    <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
-                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.ReviewID}}', '{{.Date}}', '{{.Text}}', '{{.MediaTitle}}', '{{.Media}}')">≡</span>
-                    <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.ReviewID}}', '{{.Date}}')">×</span>
+                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}', '{{.Text}}', '{{.MediaTitle}}', '{{.Media}}')">≡</span>
+                    <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
                     <br><small class="text-white">{{.Text}}</small>
                     <hr class="my-1 p-0 m-0 divider"></hr></div>
                 {{end}}
