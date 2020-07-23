@@ -1,7 +1,7 @@
 {{define "review" }}
 {{template "headBootstrap" .}}
 <body>
-    <input type="hidden" id="current-review-id" value="">
+    <input type="hidden" id="current-review-id" value="{{.CurrentReview.ID.Hex}}">
     <div id="floatingmenu">
         {{template "navbar" .}}
     </div>
@@ -22,9 +22,10 @@
                     </div>
                 </div>
             </form>
+
             <div class="overflow-auto" style="height: 65vh; overflow-y: scroll; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);">
                 {{range .Reviews}}
-                    <div class="p-2 m-1 reviewitem finger" name="reviewitem" id="{{.ID.Hex}}" onclick="selectReviewItem('{{.ID.Hex}}','{{.Fps}}','{{.Project}}','{{.Name}}')">
+                    <div class="p-2 m-1 {{if eq .ID.Hex $.CurrentReview.ID.Hex}}selectreviewitem border border-warning{{else}}reviewitem{{end}} finger" name="reviewitem" id="{{.ID.Hex}}"  onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}')">
                         <span class="text-muted">{{.Project}}</span>
                         <a href="dilink://{{.Path}}" class="text-darkmode">{{.Name}}</a>
                         <span class="ml-1 badge badge-secondary">{{.Task}}</span>
@@ -40,9 +41,21 @@
             </div>
         </div>
         <div class="col-8 border-darkmode bg-black p-0" id="playerbox" style="height: 70vh; position: relative;">
+            <canvas class="p-0" id="drawcanvas" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+            <canvas class="p-0" id="screenshot" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+            <canvas class="p-0" id="player" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
         </div>
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 70vh;">
-            <div style="height: 80%; overflow-y: auto; overflow-x: hidden;" id="review-comments"></div>
+            <div style="height: 80%; overflow-y: auto; overflow-x: hidden;" id="review-comments">
+                {{range ReverseCommentSlice .CurrentReview.Comments}}
+                    <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
+                    <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
+                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}', '{{.Text}}', '{{.MediaTitle}}', '{{.Media}}')">≡</span>
+                    <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
+                    <br><small class="text-white">{{.Text}}</small>
+                    <hr class="my-1 p-0 m-0 divider"></hr></div>
+                {{end}}
+            </div>
             <div style="height: 20%">
                 <textarea class="form-control no-resize" id="review-comment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
                 <div class="pt-1 row">
@@ -78,6 +91,9 @@
     </div>
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="height: 10vh; overflow-x: auto; overflow-y: hidden;" id="reviewgroup">
+            {{range .ReviewGroup}}
+                <video src="/reviewdata?id={{.ID.Hex}}" class="p-0 m-0 pr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:100%" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}')"></video>
+            {{end}}
         </div>
     </div>
     {{template "footerBootstrap"}}
@@ -86,5 +102,8 @@
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 <script src="/assets/js/input.js"></script>
 <script src="/assets/js/csi_v02.js"></script>
+<script type="text/javascript">
+    selectReviewItem('{{.CurrentReview.ID.Hex}}', '{{.CurrentReview.Fps}}')
+</script>
 </html>
 {{end}}

@@ -526,6 +526,10 @@ input[type=checkbox]:checked+div{
 	background-color: #343A3F;
 }
 
+.selectreviewitem {
+	background-color:rgb(37, 42, 46);
+}
+
 span.player-pen {
     background: url(/assets/img/player-pen.svg) no-repeat center center;
     background-size: contain;

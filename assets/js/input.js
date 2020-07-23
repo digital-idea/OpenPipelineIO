@@ -4115,6 +4115,10 @@ function addReview() {
 }
 
 function clickCommentButton() {
+    if (document.getElementById("review-comment").value === "") {
+        alert("comment가 비어있습니다")
+        return
+    }
     setReviewStatus('comment')
     addReviewComment()
 }
@@ -4207,63 +4211,31 @@ var drawCanvas, drawCtx;
 var mouseStartX=0, mouseStartY=0
 var drawing = false;
 
-function selectReviewItem(id, fps, project, name) {
+function selectReviewItem(id, fps) {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
-    let playerboxWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
-    let playerboxHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
-
-    playerbox.innerHTML = ''
-
-    // 필요한 캔버스를 만든다.
-    let playerCanvas = document.createElement('canvas');
-    playerCanvas.classList.add("p-0")
-    playerCanvas.id = "player"
-    playerCanvas.style.position = "absolute";
-    playerCanvas.style.left = "0";
-    playerCanvas.style.top = "0";
-    playerCanvas.style.zIndex = "0";
-    playerbox.appendChild(playerCanvas)
-
-    let screenshotCanvas = document.createElement('canvas');
-    screenshotCanvas.classList.add("p-0")
-    screenshotCanvas.id = "screenshot"
-    screenshotCanvas.style.position = "absolute";
-    screenshotCanvas.style.left = "0";
-    screenshotCanvas.style.top = "0";
-    screenshotCanvas.style.zIndex = "1";
-    playerbox.appendChild(screenshotCanvas)
-
-    let drawCanvas = document.createElement('canvas');
-    drawCanvas.classList.add("p-0")
-    drawCanvas.id = "drawcanvas"
-    drawCanvas.style.position = "absolute";
-    drawCanvas.style.left = "0";
-    drawCanvas.style.top = "0";
-    drawCanvas.style.zIndex = "2";
-    playerbox.appendChild(drawCanvas)
-
-     // <canvas class="p-0" id="drawcanvas" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
-            
-            
+    let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
+    let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
 
     // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
-    //let canvas = document.getElementById("player");
+    let playerCanvas = document.getElementById("player");
     playerCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     playerCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    playerCanvas.setAttribute("width", playerboxWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
-    playerCanvas.setAttribute("height", playerboxHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
+    playerCanvas.setAttribute("width", clientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
+    playerCanvas.setAttribute("height", clientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
 
     // Draw 캔버스를 초기화 한다.
+    let drawCanvas = document.getElementById("drawcanvas");
     drawCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    drawCanvas.setAttribute("width", playerboxWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
-    drawCanvas.setAttribute("height", playerboxHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
+    drawCanvas.setAttribute("width", clientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
+    drawCanvas.setAttribute("height", clientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
 
     // screenshot 캔버스를 초기화 한다.
+    let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    screenshotCanvas.setAttribute("width", playerboxWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
-    screenshotCanvas.setAttribute("height", playerboxHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
@@ -4275,15 +4247,6 @@ function selectReviewItem(id, fps, project, name) {
     drawCanvas.addEventListener("mousedown", function (e) {down(e)}, false);
     drawCanvas.addEventListener("mouseup", function (e) {up(e)}, false);
     drawCanvas.addEventListener("mouseout", function (e) {out(e)}, false);
-
-    // 왼쪽 리뷰 아이템 선택컬러를 초기화 한다.
-    let items = document.querySelectorAll('div[name=reviewitem]');
-    for (let i = 0; i < items.length; i++) {
-        document.getElementById(items[i].id).style.backgroundColor = "rgb(52, 58, 63)";
-    }
-    // 왼쪽 리뷰바 아이템중 선택한 아이템만 컬러를 바꾼다.
-    document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
-    document.getElementById("current-review-id").value = id;    
 
     // 버튼설정 및 버튼 이벤트
     let playButton = document.getElementById("player-play");
@@ -4299,18 +4262,20 @@ function selectReviewItem(id, fps, project, name) {
     beforeFrameButton.addEventListener("click", function() {video.currentTime -= (1/parseFloat(fps));}); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {video.currentTime += (1/parseFloat(fps));}); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
 
-    // 동영상을 불러온다.
+    // video 객체를 생성한다.
     let video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
+    // 캔버스에 객체를 넣는다.
     let ctx = playerCanvas.getContext("2d");
-
+    video.play(); // 함수가 로딩되면 자동으로 한번 플레이시킨다.
+    
     video.addEventListener('play', function () {
         let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
-                let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
-                ctx.drawImage($this, 0, 0, playerboxWidth, h);
+                let h = (clientWidth * $this.videoHeight) / $this.videoWidth
+                ctx.drawImage($this, 0, 0, clientWidth, h);
                 setTimeout(loop, 1000 / parseFloat(fps)); // drawing at fps
             }
         })();
@@ -4318,98 +4283,9 @@ function selectReviewItem(id, fps, project, name) {
 
     video.addEventListener('timeupdate', function () {
         let $this = this; //cache
-        let h = (playerboxWidth * $this.videoHeight) / $this.videoWidth
-        ctx.drawImage($this, 0, 0, playerboxWidth, h);
+        let h = (clientWidth * $this.videoHeight) / $this.videoWidth
+        ctx.drawImage($this, 0, 0, clientWidth, h);
     }, 0);
-
-    // comments를 불러와서 렌더링 한다.
-    drawReviewComments(id)
-    
-    // 하단의 ReviewGroup 아이템을 드로잉하기
-    $.ajax({
-        url: "/api/searchreview",
-        type: "post",
-        data: {
-            "searchword": "project:" + project + " " + "name:" + name,
-        },
-        headers: {
-            "Authorization": "Basic "+ document.getElementById("token").value,
-        },
-        dataType: "json",
-        success: function(data) {
-            // 하단 ReviewGroup 초기화
-            document.getElementById("reviewgroup").innerHTML = "";
-            let reviewgroup = document.getElementById("reviewgroup");
-            for (let i = 0; i < data.length; i++) {
-                let video = document.createElement('video');
-                video.setAttribute("height","100%")
-                video.src = "/reviewdata?id=" + data[i].id;
-                video.autoplay = false
-                video.classList.add("p-0")
-                video.classList.add("m-0")
-                video.classList.add("pr-1")
-                video.classList.add("finger")
-                //video.onclick = selectReviewItem(id,fps,project,name)
-                video.onclick = (function() { selectReviewItem(data[i].id, data[i].fps, data[i].project, data[i].name); });
-                reviewgroup.appendChild(video)
-            }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-
-// drawReviewComments 함수는 review id를 받아서 review-comments에 리뷰를 드로잉한다.
-function drawReviewComments(id) {
-    $.ajax({
-        url: "/api/review",
-        type: "post",
-        data: {
-            "id": id,
-        },
-        headers: {
-            "Authorization": "Basic "+ document.getElementById("token").value,
-        },
-        dataType: "json",
-        success: function(data) {
-            // review comment를 넣기전 먼저 초기화 한다.
-            document.getElementById("review-comments").innerHTML = ""
-            let comments = data.comments
-            for (let i = 0; i < comments.length; i++) {
-                let body = comments[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                let newComment = `<div id="reviewcomment-${id}-${comments[i].date}" class="p-1">
-                <span class="text-badge">${comments[i].date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
-                <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${id}', '${comments[i].date}', '${comments[i].text}', '${comments[i].mediatitle}', '${comments[i].media}')">≡</span>
-                <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${id}')">×</span>
-                <br><small class="text-white">${body}</small>`
-                if (comments[i].media != "") {
-                    if (comments[i].media.includes("http")) {
-                        newComment += `<div class="row pl-3 pt-3 pb-1">
-                            <a href="${comments[i].media}">
-                                <img src="/assets/img/link.svg" class="finger">
-                            </a>
-                            <span class="text-white pl-2 small">${comments[i].mediatitle}</span>
-                        </div>`
-                    } else {
-                        newComment += `<div class="row pl-3 pt-3 pb-1">
-                            <a href="dilink://${comments[i].media}">
-                                <img src="/assets/img/link.svg" class="finger">
-                            </a>
-                            <span class="text-white pl-2 small">${comments[i].mediatitle}</span>
-                        </div>`
-                    }
-                }
-                newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
-                document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
-            }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-
 }
 
 // draw 함수는 x,y 좌표를 받아 그림을 그린다.
@@ -4470,18 +4346,18 @@ function screenshot() {
 function removeDrawing() {
     // 지울 영역을 구한다. - player 캔버스를 담을 div 의 가로세로 사이즈를 구한다.
     let playerbox = document.getElementById("playerbox");
-    let playerboxWidth = playerbox.clientWidth
-    let playerboxHeight = playerbox.clientHeight
+    let clientWidth = playerbox.clientWidth
+    let clientHeight = playerbox.clientHeight
  
     // drawcanvas를 지운다.
     let fg = document.getElementById("drawcanvas");
     let fgctx = fg.getContext("2d");
-    fgctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
+    fgctx.clearRect(0, 0, clientWidth, clientHeight);
 
     // drawcanvas를 지운다.
     let screenshot = document.getElementById("screenshot");
     let screenshotctx = screenshot.getContext("2d");
-    screenshotctx.clearRect(0, 0, playerboxWidth, playerboxHeight);
+    screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
 }
 
 // copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.

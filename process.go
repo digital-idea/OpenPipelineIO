@@ -15,6 +15,8 @@ func genMp4(admin Setting, item Review) error {
 		"-qscale:v",
 		"7",
 		"-an",
+		"-pix_fmt",
+		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
 		admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4",
 	}
 	err := exec.Command(admin.FFmpeg, args...).Run()

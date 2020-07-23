@@ -48,12 +48,15 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		SearchOption
 		Searchword       string
-		Status           []Status
-		Reviews          []Review
+		Status           []Status // css 생성을 위해서 필요함
+		CurrentReview    Review   // 현재 리뷰 자료구조
+		Reviews          []Review // 옆 Review 항목
+		ReviewGroup      []Review // 하단 Review 항목
 		TasksettingNames []string
 	}
 	rcp := recipe{}
 	rcp.Searchword = q.Get("searchword")
+	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -85,6 +88,19 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	if id != "" {
+		review, err := getReview(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.CurrentReview = review
+		rcp.ReviewGroup, err = searchReview(session, fmt.Sprintf("project:%s name:%s", review.Project, review.Name))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "review", rcp)
 	if err != nil {
