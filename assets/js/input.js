@@ -4208,57 +4208,62 @@ var mouseStartX=0, mouseStartY=0
 var drawing = false;
 
 function selectReviewItem(id, fps, project, name) {
-    // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
-    let canvas = document.getElementById("player");
-    canvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    canvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
-    let playerboxWidth = playerbox.clientWidth
-    let playerboxHeight = playerbox.clientHeight
-    canvas.setAttribute("width", playerboxWidth)
-    canvas.setAttribute("height", playerboxHeight)
+    let playerboxWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
+    let playerboxHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
+
+    playerbox.innerHTML = ''
+
+    // 필요한 캔버스를 만든다.
+    let playerCanvas = document.createElement('canvas');
+    playerCanvas.classList.add("p-0")
+    playerCanvas.id = "player"
+    playerCanvas.style.position = "absolute";
+    playerCanvas.style.left = "0";
+    playerCanvas.style.top = "0";
+    playerCanvas.style.zIndex = "0";
+    playerbox.appendChild(playerCanvas)
+
+    let screenshotCanvas = document.createElement('canvas');
+    screenshotCanvas.classList.add("p-0")
+    screenshotCanvas.id = "screenshot"
+    screenshotCanvas.style.position = "absolute";
+    screenshotCanvas.style.left = "0";
+    screenshotCanvas.style.top = "0";
+    screenshotCanvas.style.zIndex = "1";
+    playerbox.appendChild(screenshotCanvas)
+
+    let drawCanvas = document.createElement('canvas');
+    drawCanvas.classList.add("p-0")
+    drawCanvas.id = "drawcanvas"
+    drawCanvas.style.position = "absolute";
+    drawCanvas.style.left = "0";
+    drawCanvas.style.top = "0";
+    drawCanvas.style.zIndex = "2";
+    playerbox.appendChild(drawCanvas)
+
+     // <canvas class="p-0" id="drawcanvas" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+            
+            
+
+    // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
+    //let canvas = document.getElementById("player");
+    playerCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    playerCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    playerCanvas.setAttribute("width", playerboxWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
+    playerCanvas.setAttribute("height", playerboxHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
 
     // Draw 캔버스를 초기화 한다.
-    let drawCanvas = document.getElementById("drawcanvas");
+    drawCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    drawCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("width", playerboxWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
     drawCanvas.setAttribute("height", playerboxHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
 
     // screenshot 캔버스를 초기화 한다.
-    let screenshotCanvas = document.getElementById("screenshot");
+    screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("width", playerboxWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", playerboxHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
-
-    // 하단의 아이템을 드로잉하기
-    let token = document.getElementById("token").value;
-    $.ajax({
-        url: "/api/searchreview",
-        type: "post",
-        data: {
-            "searchword": "project:" + project + " " + "name:" + name,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            let reviewgroup = document.getElementById("reviewgroup");
-            for (let i = 0; i < data.length; i++) {
-                let video = document.createElement('video');
-                video.setAttribute("height","100%")
-                video.src = "/reviewdata?id=" + data[i].id;
-                video.autoplay = false
-                video.classList.add("p-0")
-                video.classList.add("m-0")
-                video.classList.add("pr-1")
-                // border 0px
-                reviewgroup.appendChild(video)
-                
-            }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
 
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
@@ -4276,30 +4281,30 @@ function selectReviewItem(id, fps, project, name) {
     for (let i = 0; i < items.length; i++) {
         document.getElementById(items[i].id).style.backgroundColor = "rgb(52, 58, 63)";
     }
-    // 왼쪽 리뷰 아이템중 선택한 아이템만 컬러를 바꾼다.
+    // 왼쪽 리뷰바 아이템중 선택한 아이템만 컬러를 바꾼다.
     document.getElementById(id).style.backgroundColor = "rgb(37, 42, 46)";
-    document.getElementById("current-review-id").value = id;
+    document.getElementById("current-review-id").value = id;    
 
-    // 동영상을 불러온다.
-    let video = document.createElement('video');
-    video.src = "/reviewdata?id=" + id;
-    video.autoplay = true;
-    let ctx = canvas.getContext("2d");
+    // 버튼설정 및 버튼 이벤트
     let playButton = document.getElementById("player-play");
     let pauseButton = document.getElementById("player-pause");
     let startButton = document.getElementById("player-start");
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
-
-    // 플레이어 하단 이벤트
     playButton.addEventListener("click", function() {video.play();}); // 플레이 버튼을 클릭할 때 이벤트
     pauseButton.addEventListener("click", function() {video.pause();}); // 일시정지 버튼을 클릭할 때 이벤트
     startButton.addEventListener("click", function() {video.currentTime = video.seekable.start(0);}); // 처음으로 이동하는 버튼을 클릭할 때 이벤트
     endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0);}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트
     beforeFrameButton.addEventListener("click", function() {video.currentTime -= (1/parseFloat(fps));}); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {video.currentTime += (1/parseFloat(fps));}); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
-    
+
+    // 동영상을 불러온다.
+    let video = document.createElement('video');
+    video.src = "/reviewdata?id=" + id;
+    video.autoplay = true;
+    let ctx = playerCanvas.getContext("2d");
+
     video.addEventListener('play', function () {
         let $this = this; //cache
         (function loop() {
@@ -4319,6 +4324,40 @@ function selectReviewItem(id, fps, project, name) {
 
     // comments를 불러와서 렌더링 한다.
     drawReviewComments(id)
+    
+    // 하단의 ReviewGroup 아이템을 드로잉하기
+    $.ajax({
+        url: "/api/searchreview",
+        type: "post",
+        data: {
+            "searchword": "project:" + project + " " + "name:" + name,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        dataType: "json",
+        success: function(data) {
+            // 하단 ReviewGroup 초기화
+            document.getElementById("reviewgroup").innerHTML = "";
+            let reviewgroup = document.getElementById("reviewgroup");
+            for (let i = 0; i < data.length; i++) {
+                let video = document.createElement('video');
+                video.setAttribute("height","100%")
+                video.src = "/reviewdata?id=" + data[i].id;
+                video.autoplay = false
+                video.classList.add("p-0")
+                video.classList.add("m-0")
+                video.classList.add("pr-1")
+                video.classList.add("finger")
+                //video.onclick = selectReviewItem(id,fps,project,name)
+                video.onclick = (function() { selectReviewItem(data[i].id, data[i].fps, data[i].project, data[i].name); });
+                reviewgroup.appendChild(video)
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 
