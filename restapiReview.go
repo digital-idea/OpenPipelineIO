@@ -106,21 +106,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.Createtime = time.Now().Format("2006-01-02 15:04:05")
 	rcp.Review.Updatetime = rcp.Review.Createtime
 	rcp.Review.ID = bson.NewObjectId()
-
-	// adminsetting을 가지고 온다.
-	admin, err := GetAdminSetting(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// mp4 를 만든다.
-	err = genMp4(admin, rcp.Review)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Review.CreatedMp4 = true
-
+	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
