@@ -7427,6 +7427,7 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Task       string `json:"task"`
 		Key        string `json:"key"`
 		Createtime string `json:"createtime"`
+		Path string `json:"path"`
 		UserID     string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -7471,13 +7472,19 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Path = path
 	createtime := r.FormValue("createtime")
 	if createtime == "" {
 		http.Error(w, "createtime을 설정해주세요", http.StatusBadRequest)
 		return
 	}
 	rcp.Createtime = createtime
-	err = rmTaskPublish(session, project, id, task, key, createtime)
+	err = rmTaskPublish(session, project, id, task, key, createtime, path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

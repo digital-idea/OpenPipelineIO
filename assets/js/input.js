@@ -931,6 +931,7 @@ function editPublish() {
             id: id,
             task: task,
             key: key,
+            path: path,
             createtime: createtime,
         },
         headers: {
