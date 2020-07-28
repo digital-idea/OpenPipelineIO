@@ -4,6 +4,27 @@ body {
 	background-color: #2e2d2d;
 }
 
+/* width */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #2d2d2d;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #6d6d6d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #7e7e7e;
+}
+
 #floatingmenu {
 	position: fixed;
 	background-color: #2e2d2d;

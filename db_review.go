@@ -18,6 +18,29 @@ func addReview(session *mgo.Session, r Review) error {
 	return nil
 }
 
+// GetWaitProcessStatusReview 함수는 processstatus 가 wait 값인 아이템을 하나 반환하고 상태를 processing으로 바꾼다.
+func GetWaitProcessStatusReview() (Review, error) {
+	var review Review
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		return review, err
+	}
+	defer session.Close()
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err = c.Find(bson.M{"processstatus": "wait"}).One(&review)
+	if err != nil {
+		return review, err
+	}
+	// 참고: 아래 부분은 추가 mongo-driver로 바꾸면 한번에 처리할 수 있다.
+	err = setReviewProcessStatus(session, review.ID.Hex(), "processing")
+	if err != nil {
+		return review, err
+	}
+	review.ProcessStatus = "processing"
+	return review, nil
+}
+
 func getReview(session *mgo.Session, id string) (Review, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
@@ -36,6 +59,16 @@ func setReviewStatus(session *mgo.Session, id, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"status": status}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setReviewProcessStatus(session *mgo.Session, id, status string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"processstatus": status}})
 	if err != nil {
 		return err
 	}
