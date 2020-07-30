@@ -4275,19 +4275,37 @@ function selectReviewItem(id, fps) {
         let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
+                let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
                 let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
-                let hOffset = (clientHeight - renderHeight) / 2
-                ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
-                setTimeout(loop, 1000 / parseFloat(fps)); // drawing at fps
+                if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+                    // 가로형: 가로비율이 맞고, 높이가 적을 때
+                    let hOffset = (clientHeight - renderHeight) / 2
+                    ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+                } else {
+                    // 세로형: 가로비율이 작고 높이가 맞을 때
+                    
+                    let wOffset = (clientWidth - renderWidth) / 2
+                    ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+                }
+                // fps에 맞게 드로잉한다.
+                setTimeout(loop, 1000 / parseFloat(fps));
             }
         })();
     }, 0);
 
     video.addEventListener('timeupdate', function () {
         let $this = this; //cache
+        let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
         let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
-        let hOffset = (clientHeight - renderHeight) / 2
-        ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+        if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+            // 가로형: 가로비율이 맞고, 높이가 적을 때
+            let hOffset = (clientHeight - renderHeight) / 2
+            ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+        } else {
+            // 세로형: 가로비율이 작고 높이을 꽉 채울 때
+            let wOffset = (clientWidth - renderWidth) / 2
+            ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+        }
     }, 0);
 }
 
