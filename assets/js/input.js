@@ -4346,7 +4346,7 @@ function out(e) {
 }
 
 // screenshot 함수는 리뷰중인 스크린을 스크린샷 합니다.
-function screenshot() {
+function screenshot(filename) {
     let screenshot = document.getElementById("screenshot");
     let fg = document.getElementById("drawcanvas");
     let bg = document.getElementById("player");
@@ -4356,7 +4356,9 @@ function screenshot() {
     let dataURL = screenshot.toDataURL("image/png")
     let link = document.createElement('a');
     link.href = dataURL;
-    link.download = 'screenshot.png';
+    let today = new Date();
+    let time = '_' + today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate()+'_'+today.getHours() + today.getMinutes() + today.getSeconds();
+    link.download = filename + time + '.png';
     link.setAttribute("type","hidden") // firefox에서는 꼭 DOM구조를 지켜야 한다.
     document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
