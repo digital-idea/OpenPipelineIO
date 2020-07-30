@@ -4275,8 +4275,9 @@ function selectReviewItem(id, fps) {
         let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
-                let h = (clientWidth * $this.videoHeight) / $this.videoWidth
-                ctx.drawImage($this, 0, 0, clientWidth, h);
+                let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
+                let hOffset = (clientHeight - renderHeight) / 2
+                ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
                 setTimeout(loop, 1000 / parseFloat(fps)); // drawing at fps
             }
         })();
@@ -4284,8 +4285,9 @@ function selectReviewItem(id, fps) {
 
     video.addEventListener('timeupdate', function () {
         let $this = this; //cache
-        let h = (clientWidth * $this.videoHeight) / $this.videoWidth
-        ctx.drawImage($this, 0, 0, clientWidth, h);
+        let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
+        let hOffset = (clientHeight - renderHeight) / 2
+        ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
     }, 0);
 }
 
