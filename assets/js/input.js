@@ -4357,8 +4357,9 @@ function screenshot(filename) {
     let link = document.createElement('a');
     link.href = dataURL;
     let today = new Date();
-    let time = '_' + today.getFullYear()+'_'+(today.getMonth()+1)+'_'+today.getDate()+'_'+today.getHours() + today.getMinutes() + today.getSeconds();
-    link.download = filename + time + '.png';
+    let date = today.getFullYear()+("0"+(today.getMonth()+1)).slice(-2)+today.getDate()
+    let time = String(today.getHours()) + String(today.getMinutes()) + String(today.getSeconds());
+    link.download = filename + '_'+ date + '_' + time + '.png';
     link.setAttribute("type","hidden") // firefox에서는 꼭 DOM구조를 지켜야 한다.
     document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
