@@ -226,9 +226,6 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if current.Deadline != t {
 		renewal.Deadline = t
 	}
-	if current.Netapp != str2bool(r.FormValue("Netapp")) {
-		renewal.Netapp = str2bool(r.FormValue("Netapp"))
-	}
 	if current.Director != r.FormValue("Director") {
 		renewal.Director = r.FormValue("Director")
 	}
