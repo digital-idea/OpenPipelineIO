@@ -83,7 +83,6 @@ type Project struct {
 	MayaCropMaskSize         string        `json:"mayacropmasksize"`         // Maya CropMask에 사용되는 size 정보이다.
 	HoudiniImportScale       float64       `json:"houdiniimportscale"`       // Houdini에서 사용하는 Import Scale 값입니다. 기본값은 0.1입니다.
 	ScreenxOverlay           float64       `json:"screenxoverlay"`           // ScreenX에 사용되는 카메라 Overlay 값입니다. 기본값은 1.0입니다.
-	Netapp                   bool          `json:"netapp"`                   // Netapp을 사용하는지 체크
 	ExrCompression           string        `json:"exrcompression"`           // EXR Compression 옵션
 	AWSS3                    string        `json:"awss3"`                    // AWS S3 버킷주소
 	AWSProfile               string        `json:"awsprofile"`               // AWS Profile 이름
@@ -114,6 +113,5 @@ func NewProject(name string) *Project {
 		FxElement:                "explosion,destruction,smoke,dust",
 		HoudiniImportScale:       0.1,
 		ScreenxOverlay:           1.0,
-		Netapp:                   true,
 	}
 }

@@ -32,6 +32,7 @@
 								<option value="영화" {{if eq .Project.Style "영화" }}selected{{end}}>영화</option>
 								<option value="드라마" {{if eq .Project.Style "드라마" }}selected{{end}}>드라마</option>
 								<option value="애니메이션" {{if eq .Project.Style "애니메이션" }}selected{{end}}>애니메이션</option>
+								<option value="netflix" {{if eq .Project.Style "netflix" }}selected{{end}}>Netflix</option>
 								<option value="광고" {{if eq .Project.Style "광고" }}selected{{end}}>광고</option>
 								<option value="공연" {{if eq .Project.Style "공연" }}selected{{end}}>공연</option>
 								<option value="게임" {{if eq .Project.Style "게임" }}selected{{end}}>게임</option>
@@ -69,10 +70,6 @@
 						<div class="form-check col">
 							<input type="checkbox" id="Stereo" name="Stereo" class="form-check-input" value="true" {{if eq .Project.Stereo true}}checked{{end}}>
 							<label class="form-check-label" for="Stereo">입체 / Stereo</label>
-						</div>
-						<div class="form-check col">
-							<input type="checkbox" id="Netapp" name="Netapp" class="form-check-input" value="true" {{if eq .Project.Netapp true}}checked{{end}}>
-							<label class="form-check-label" for="Netapp">Netapp 스토리지 사용</label>
 						</div>
 					</div>
 				</div>
