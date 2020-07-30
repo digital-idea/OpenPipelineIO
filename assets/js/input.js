@@ -4237,6 +4237,7 @@ function selectReviewItem(id, fps) {
     screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+    screenshotCtx = screenshotCanvas.getContext("2d")
 
     // 브러쉬 설정
     drawCtx = drawCanvas.getContext("2d")
@@ -4267,9 +4268,30 @@ function selectReviewItem(id, fps) {
     let video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
+    // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
+    let frameLineHeight = 12;
+    let totalFrame = 0
+    video.onloadedmetadata = function() {
+        // Draw 캔버스에 프레임 표기 그림을 그린다.
+        totalFrame = Math.floor(this.duration * parseFloat(fps))
+        // totalFrame을 표기한다.
+        document.getElementById("totalframe").innerHTML = " / " + totalFrame;
+        let frameLineOffset = clientWidth / totalFrame
+        screenshotCtx.beginPath();
+        for (let i = 0; i < totalFrame; i++) {
+            screenshotCtx.moveTo(i*frameLineOffset, clientHeight-frameLineHeight);
+            screenshotCtx.lineTo(i*frameLineOffset, clientHeight);
+            screenshotCtx.strokeStyle = '#333333';
+            screenshotCtx.lineWidth = 2;
+            screenshotCtx.stroke();
+        }
+    };
+    
     // 캔버스에 객체를 넣는다.
     let ctx = playerCanvas.getContext("2d");
-    video.play(); // 함수가 로딩되면 자동으로 한번 플레이시킨다.
+    
+    // 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
+    video.play();
     
     video.addEventListener('play', function () {
         let $this = this; //cache
@@ -4283,12 +4305,22 @@ function selectReviewItem(id, fps) {
                     ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
                 } else {
                     // 세로형: 가로비율이 작고 높이가 맞을 때
-                    
                     let wOffset = (clientWidth - renderWidth) / 2
                     ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
                 // fps에 맞게 드로잉한다.
+                let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
+                document.getElementById("currentframe").innerHTML = currentFrame
+                // 커서의 위치를 드로잉 한다.
+                screenshotCtx.fillStyle = "#FF0000";
+                let length = clientWidth / totalFrame
+                let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
+                console.log(x)
+                let y = clientHeight-(frameLineHeight/2)
+                screenshotCtx.fillRect(x, y, x, clientHeight);
+                // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
+                
             }
         })();
     }, 0);
@@ -4306,6 +4338,16 @@ function selectReviewItem(id, fps) {
             let wOffset = (clientWidth - renderWidth) / 2
             ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
         }
+        // fps에 맞게 드로잉한다.
+        let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
+        document.getElementById("currentframe").innerHTML = currentFrame
+        // 커서의 위치를 드로잉 한다.
+        screenshotCtx.fillStyle = "#FF0000";
+        let length = clientWidth / totalFrame
+        let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
+        console.log(x)
+        let y = clientHeight-(frameLineHeight/2)
+        screenshotCtx.fillRect(x, y, x, clientHeight);
     }, 0);
 }
 
