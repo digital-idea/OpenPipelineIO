@@ -4257,12 +4257,26 @@ function selectReviewItem(id, fps) {
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
-    playButton.addEventListener("click", function() {video.play();}); // 플레이 버튼을 클릭할 때 이벤트
+    playButton.addEventListener("click", function() {
+        video.play();
+    }); // 플레이 버튼을 클릭할 때 이벤트
     pauseButton.addEventListener("click", function() {video.pause();}); // 일시정지 버튼을 클릭할 때 이벤트
-    startButton.addEventListener("click", function() {video.currentTime = video.seekable.start(0);}); // 처음으로 이동하는 버튼을 클릭할 때 이벤트
-    endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0);}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트
-    beforeFrameButton.addEventListener("click", function() {video.currentTime -= (1/parseFloat(fps));}); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
-    afterFrameButton.addEventListener("click", function() {video.currentTime += (1/parseFloat(fps));}); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    startButton.addEventListener("click", function() {video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))}); // 처음으로 이동하는 버튼을 클릭할 때 이벤트. 맨 앞에서 1/fps만큼 이후로 이동해야 함.
+    endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트. 맨 뒤에서 1/fps만큼 이전으로 이동해야 함.
+    beforeFrameButton.addEventListener("click", function() {
+        if (video.currentTime > 0.0) {
+            video.currentTime -= (1/parseFloat(fps));
+        } else {
+            video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))
+        }
+    }); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    afterFrameButton.addEventListener("click", function() {
+        if (video.currentTime < video.seekable.end(0)) {
+            video.currentTime += (1/parseFloat(fps));
+        } else {
+            video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
+        }
+    }); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
 
     // video 객체를 생성한다.
     let video = document.createElement('video');
@@ -4310,17 +4324,16 @@ function selectReviewItem(id, fps) {
                 }
                 // fps에 맞게 드로잉한다.
                 let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
-                document.getElementById("currentframe").innerHTML = currentFrame
+                
+                document.getElementById("currentframe").innerHTML = currentFrame + 1
                 // 커서의 위치를 드로잉 한다.
                 screenshotCtx.fillStyle = "#FF0000";
                 let length = clientWidth / totalFrame
                 let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
-                console.log(x)
                 let y = clientHeight-(frameLineHeight/2)
                 screenshotCtx.fillRect(x, y, x, clientHeight);
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
-                
             }
         })();
     }, 0);
@@ -4340,12 +4353,12 @@ function selectReviewItem(id, fps) {
         }
         // fps에 맞게 드로잉한다.
         let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
-        document.getElementById("currentframe").innerHTML = currentFrame
+        document.getElementById("currentframe").innerHTML = currentFrame + 1
+        
         // 커서의 위치를 드로잉 한다.
         screenshotCtx.fillStyle = "#FF0000";
         let length = clientWidth / totalFrame
         let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
-        console.log(x)
         let y = clientHeight-(frameLineHeight/2)
         screenshotCtx.fillRect(x, y, x, clientHeight);
     }, 0);
