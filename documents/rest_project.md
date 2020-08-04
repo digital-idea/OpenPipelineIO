@@ -7,6 +7,22 @@ Python, Go, Java, C++, node.JS 언어를 이용해서 restAPI를 사용할 수 �
 이 문서는 파이썬을 이용해서 RestAPI를 프로젝트정보를 가지고 오는 방법을 다룹니다.
 파이프라인에 사용될 확률이 높은 코드라서, 에러처리까지 코드로 다루었습니다.
 
+# RestAPI for Item
+
+## Get
+
+| URI | Description | Attributes | Curl Example |
+| --- | --- | --- | --- |
+| /api/project | 프로젝트 정보를 가지고 온다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/project?id=TEMP"` |
+| /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 온다. | status | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projects?status=post"` |
+| /api/projecttags | 프로젝트에 사용중인 tag리스트 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projecttags?project=TEMP"` |
+
+## Post
+
+| URI | Description | Attributes | Curl Example |
+| --- | --- | --- | --- |
+| /api/addproject | 프로젝트를 생성한다. | id | `$ curl -X POST -d "id=TEMP" -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/addproject"` |
+
 #### 프로젝트리스트 가지고오기
 - 작업중인 프로젝트 리스트가지고오기
 
