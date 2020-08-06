@@ -4324,7 +4324,7 @@ function selectReviewItem(id, fps) {
                     ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
                 // fps에 맞게 currentFrame을 드로잉한다.
-                let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
+                let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
                 if (currentFrame < totalFrame) {
                     document.getElementById("currentframe").innerHTML = currentFrame + 1
                 } else {
@@ -4357,7 +4357,7 @@ function selectReviewItem(id, fps) {
             ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
         }
         // fps에 맞게 currentFrame을 드로잉한다.
-        let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
+        let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
         if (currentFrame < totalFrame) {
             document.getElementById("currentframe").innerHTML = currentFrame + 1
         } else {
