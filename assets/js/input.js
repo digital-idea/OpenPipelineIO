@@ -4330,7 +4330,6 @@ function selectReviewItem(id, fps) {
                 } else {
                     document.getElementById("currentframe").innerHTML = totalFrame
                 }
-                
                 // 커서의 위치를 드로잉 한다.
                 screenshotCtx.fillStyle = "#FF0000";
                 let length = clientWidth / totalFrame
