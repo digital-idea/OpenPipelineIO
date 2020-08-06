@@ -4328,6 +4328,7 @@ function selectReviewItem(id, fps) {
                 if (currentFrame < totalFrame) {
                     document.getElementById("currentframe").innerHTML = currentFrame + 1
                 } else {
+                    // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
                     document.getElementById("currentframe").innerHTML = totalFrame
                 }
                 // 커서의 위치를 드로잉 한다.
@@ -4360,6 +4361,7 @@ function selectReviewItem(id, fps) {
         if (currentFrame < totalFrame) {
             document.getElementById("currentframe").innerHTML = currentFrame + 1
         } else {
+            // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
             document.getElementById("currentframe").innerHTML = totalFrame
         }
         
