@@ -4282,6 +4282,13 @@ function selectReviewItem(id, fps) {
     let video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
+    
+    // 비디오를 그리기 위한 캔버스용 ctx 객체를 생성한다.
+    let ctx = playerCanvas.getContext("2d");
+    // 검정으로 한번 채운다.
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, clientWidth, clientHeight);
+    
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
     let frameLineHeight = 12;
     let totalFrame = 0
@@ -4299,13 +4306,11 @@ function selectReviewItem(id, fps) {
             screenshotCtx.lineWidth = 2;
             screenshotCtx.stroke();
         }
+        // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
+        video.play();
     };
     
-    // 캔버스에 객체를 넣는다.
-    let ctx = playerCanvas.getContext("2d");
     
-    // 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
-    video.play();
     
     video.addEventListener('play', function () {
         let $this = this; //cache
@@ -4322,10 +4327,14 @@ function selectReviewItem(id, fps) {
                     let wOffset = (clientWidth - renderWidth) / 2
                     ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
-                // fps에 맞게 드로잉한다.
-                let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
-                
-                document.getElementById("currentframe").innerHTML = currentFrame + 1
+                // fps에 맞게 currentFrame을 드로잉한다.
+                let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
+                if (currentFrame < totalFrame) {
+                    document.getElementById("currentframe").innerHTML = currentFrame + 1
+                } else {
+                    // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
+                    document.getElementById("currentframe").innerHTML = totalFrame
+                }
                 // 커서의 위치를 드로잉 한다.
                 screenshotCtx.fillStyle = "#FF0000";
                 let length = clientWidth / totalFrame
@@ -4351,10 +4360,14 @@ function selectReviewItem(id, fps) {
             let wOffset = (clientWidth - renderWidth) / 2
             ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
         }
-        // fps에 맞게 드로잉한다.
-        let currentFrame = Math.floor(video.currentTime * parseFloat(fps))
-        document.getElementById("currentframe").innerHTML = currentFrame + 1
-        
+        // fps에 맞게 currentFrame을 드로잉한다.
+        let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
+        if (currentFrame < totalFrame) {
+            document.getElementById("currentframe").innerHTML = currentFrame + 1
+        } else {
+            // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
+            document.getElementById("currentframe").innerHTML = totalFrame
+        }
         // 커서의 위치를 드로잉 한다.
         screenshotCtx.fillStyle = "#FF0000";
         let length = clientWidth / totalFrame
