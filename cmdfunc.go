@@ -78,6 +78,7 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Scantime:   now,
 		Platesize:  platesize,
 		Updatetime: now,
+		UseType: typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
 	}
 	i.Tasks = make(map[string]Task)
 	session, err := mgo.Dial(*flagDBIP)

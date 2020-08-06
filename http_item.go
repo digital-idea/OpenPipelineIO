@@ -524,6 +524,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i := Item{}
 		i.Name = n
 		i.Type = typ
+		i.UseType = typ
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Seq = strings.Split(i.Name, "_")[0]
