@@ -4282,6 +4282,13 @@ function selectReviewItem(id, fps) {
     let video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
+    
+    // 비디오를 그리기 위한 캔버스용 ctx 객체를 생성한다.
+    let ctx = playerCanvas.getContext("2d");
+    // 검정으로 한번 채운다.
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, clientWidth, clientHeight);
+    
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
     let frameLineHeight = 12;
     let totalFrame = 0
@@ -4302,9 +4309,6 @@ function selectReviewItem(id, fps) {
         // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
         video.play();
     };
-    
-    // 비디오를 그리기 위한 캔버스용 ctx 객체를 생성한다.
-    let ctx = playerCanvas.getContext("2d");
     
     
     
