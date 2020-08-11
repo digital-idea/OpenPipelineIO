@@ -664,3 +664,9 @@ span.player-trash {
 	-webkit-user-drag: none;
 	-webkit-app-region: no-drag;
 }
+
+.monospace { 
+	font-family: monospace;
+	font-size: 18pt;
+	vertical-align: top;
+}

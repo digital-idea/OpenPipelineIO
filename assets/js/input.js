@@ -65,6 +65,13 @@ function OpenEditfolder() {
     window.location = uri;
 }
 
+function padNumber(number) {
+    number = number.toString();
+    while(number.length < 4) {
+        number = "0" + number;
+    }
+    return number;
+}
 
 function id2name(id) {
     l = id.split("_");
@@ -4261,13 +4268,35 @@ function selectReviewItem(id, fps) {
         video.play();
     }); // 플레이 버튼을 클릭할 때 이벤트
     pauseButton.addEventListener("click", function() {video.pause();}); // 일시정지 버튼을 클릭할 때 이벤트
-    startButton.addEventListener("click", function() {video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))}); // 처음으로 이동하는 버튼을 클릭할 때 이벤트. 맨 앞에서 1/fps만큼 이후로 이동해야 함.
-    endButton.addEventListener("click", function() {video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))}); // 끝으로 이동하는 버튼을 클릭할 때 이벤트. 맨 뒤에서 1/fps만큼 이전으로 이동해야 함.
-    beforeFrameButton.addEventListener("click", function() {
-        if (video.currentTime > 0.0) {
-            video.currentTime -= (1/parseFloat(fps));
+    startButton.addEventListener("click", function() {
+        if (fps == 25) {
+            video.currentTime = video.seekable.start(0)
         } else {
             video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))
+        }
+    }); // 처음으로 이동하는 버튼을 클릭할 때 이벤트. 맨 앞에서 1/fps만큼 이후로 이동해야 함.
+    endButton.addEventListener("click", function() {
+        if (fps == 60 || fps == 23.976) {
+            video.currentTime = video.seekable.end(0)
+        } else {
+            // 끝으로 이동하는 버튼을 클릭할 때 이벤트. 맨 뒤에서 1/fps만큼 이전으로 이동해야 함.
+            video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
+        }
+    });
+    beforeFrameButton.addEventListener("click", function() {
+        if (fps == 25) {
+            // 25fps를 가지고 있는 미디어는 시작 프레임이 2프레임에서 시작된다.
+            if (video.currentTime > 0.0) {
+                video.currentTime -= (1/parseFloat(fps));
+            } else {
+                video.currentTime = video.seekable.start(0)
+            }
+        } else {
+            if (video.currentTime > 0.0) {
+                video.currentTime -= (1/parseFloat(fps));
+            } else {
+                video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))
+            }
         }
     }); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {
@@ -4294,9 +4323,9 @@ function selectReviewItem(id, fps) {
     let totalFrame = 0
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
-        totalFrame = Math.floor(this.duration * parseFloat(fps))
+        totalFrame = Math.round(this.duration * parseFloat(fps)) // round로 해야 23.976fps에서 frame 에러가 발생하지 않는다.
         // totalFrame을 표기한다.
-        document.getElementById("totalframe").innerHTML = " / " + totalFrame;
+        document.getElementById("totalframe").innerHTML = " / " + padNumber(totalFrame);
         let frameLineOffset = clientWidth / totalFrame
         screenshotCtx.beginPath();
         for (let i = 0; i < totalFrame; i++) {
@@ -4330,10 +4359,10 @@ function selectReviewItem(id, fps) {
                 // fps에 맞게 currentFrame을 드로잉한다.
                 let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
                 if (currentFrame < totalFrame) {
-                    document.getElementById("currentframe").innerHTML = currentFrame + 1
+                    document.getElementById("currentframe").innerHTML = padNumber(currentFrame + 1)
                 } else {
                     // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
-                    document.getElementById("currentframe").innerHTML = totalFrame
+                    document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
                 }
                 // 커서의 위치를 드로잉 한다.
                 screenshotCtx.fillStyle = "#FF0000";
@@ -4363,10 +4392,10 @@ function selectReviewItem(id, fps) {
         // fps에 맞게 currentFrame을 드로잉한다.
         let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
         if (currentFrame < totalFrame) {
-            document.getElementById("currentframe").innerHTML = currentFrame + 1
+            document.getElementById("currentframe").innerHTML = padNumber(currentFrame + 1)
         } else {
             // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
-            document.getElementById("currentframe").innerHTML = totalFrame
+            document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
         }
         // 커서의 위치를 드로잉 한다.
         screenshotCtx.fillStyle = "#FF0000";
