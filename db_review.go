@@ -75,6 +75,17 @@ func setReviewProcessStatus(session *mgo.Session, id, status string) error {
 	return nil
 }
 
+// setErrReview 함수는 id와 log를 입력받아서 에러상태 변경 및 로그를 기록한다.
+func setErrReview(session *mgo.Session, id, log string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"processstatus": "error", "log": log}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // searchReview 함수는 Review를 검색한다.
 func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
 	var results []Review

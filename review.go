@@ -22,6 +22,7 @@ type Review struct {
 	CameraInfo    string        `json:"camerainfo"`              // 카메라정보
 	CreatedMp4    bool          `json:"createmp4"`               // Mp4 생성여부
 	Fps           float64       `json:"fps"`                     // fps
+	Log           string        `json:"log"`                     // Log 예로 Errlog가 있다.
 }
 
 // Sketch 는 스케치 자료구조이다.
