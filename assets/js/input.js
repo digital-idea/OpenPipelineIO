@@ -4325,7 +4325,7 @@ function selectReviewItem(id, fps) {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
         totalFrame = Math.round(this.duration * parseFloat(fps)) // round로 해야 23.976fps에서 frame 에러가 발생하지 않는다.
         // totalFrame을 표기한다.
-        document.getElementById("totalframe").innerHTML = " / " + padNumber(totalFrame);
+        document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
         let frameLineOffset = clientWidth / totalFrame
         screenshotCtx.beginPath();
         for (let i = 0; i < totalFrame; i++) {
@@ -4454,9 +4454,16 @@ function screenshot(filename) {
     let link = document.createElement('a');
     link.href = dataURL;
     let today = new Date();
-    let date = today.getFullYear()+("0"+(today.getMonth()+1)).slice(-2)+today.getDate()
-    let time = String(today.getHours()) + String(today.getMinutes()) + String(today.getSeconds());
-    link.download = filename + '_'+ date + '_' + time + '.png';
+    let y = today.getFullYear().toString().substr(-2);
+    let m = ("0"+(today.getMonth()+1)).slice(-2);
+    let d = ("0"+(today.getDate())).slice(-2);
+    let hour = ("0"+(today.getHours())).slice(-2);
+    let min = ("0"+(today.getMinutes())).slice(-2);
+    let sec = ("0"+(today.getSeconds())).slice(-2);
+    let date = y + m + d
+    let time = hour + min + sec
+    let currentFrame = document.getElementById("currentframe").innerHTML
+    link.download = filename + '_'+ currentFrame + 'f' + '_' + date + '_' + time + '.png';
     link.setAttribute("type","hidden") // firefox에서는 꼭 DOM구조를 지켜야 한다.
     document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
