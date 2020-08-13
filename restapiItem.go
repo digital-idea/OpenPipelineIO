@@ -966,12 +966,7 @@ func handleAPISetTaskUserComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Task = task
-	usercomment := r.FormValue("usercomment")
-	if usercomment == "" {
-		http.Error(w, "usercomment를 설정해주세요", http.StatusBadRequest)
-		return
-	}
-	rcp.UserComment = usercomment
+	rcp.UserComment = r.FormValue("usercomment")
 	err = setTaskUserComment(session, rcp.Project, rcp.ID, rcp.Task, rcp.UserComment)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -7427,7 +7422,7 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Task       string `json:"task"`
 		Key        string `json:"key"`
 		Createtime string `json:"createtime"`
-		Path string `json:"path"`
+		Path       string `json:"path"`
 		UserID     string `json:"userid"`
 	}
 	rcp := Recipe{}
