@@ -77,7 +77,8 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 	}
 	for _, word := range words {
 		query := []bson.M{}
-		if MatchShortTime.MatchString(word) { // 1121 형식의 날짜
+		if MatchShortTime.MatchString(word) {
+			// 1121 형식의 날짜
 			regFullTime := fmt.Sprintf(`^\d{4}-%s-%sT\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}$`, word[0:2], word[2:4])
 			if len(selectTasks) == 0 {
 				for _, task := range allTasks {
@@ -247,11 +248,13 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 				// Task가 선언 되어있을 때
 				if len(selectTasks) == 0 {
 					for _, task := range allTasks {
-						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})        // 아티스트명을 검색한다.
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".usercomment": &bson.RegEx{Pattern: word}}) // UserComment를 검색한다.
 					}
 				} else {
 					for _, task := range selectTasks {
-						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".user": &bson.RegEx{Pattern: word}})        // 아티스트명을 검색한다.
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".usercomment": &bson.RegEx{Pattern: word}}) // UserComment를 검색한다.
 					}
 				}
 			}
