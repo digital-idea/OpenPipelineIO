@@ -4454,16 +4454,15 @@ function screenshot(filename) {
     let link = document.createElement('a');
     link.href = dataURL;
     let today = new Date();
-    let y = today.getFullYear().toString().substr(-2);
+    let y = today.getFullYear().toString();
     let m = ("0"+(today.getMonth()+1)).slice(-2);
     let d = ("0"+(today.getDate())).slice(-2);
     let hour = ("0"+(today.getHours())).slice(-2);
     let min = ("0"+(today.getMinutes())).slice(-2);
     let sec = ("0"+(today.getSeconds())).slice(-2);
-    let date = y + m + d
-    let time = hour + min + sec
     let currentFrame = document.getElementById("currentframe").innerHTML
-    link.download = filename + '_'+ currentFrame + 'f' + '_' + date + '_' + time + '.png';
+    let timestamp = y + m + d + 'T' + hour + min + sec; // ISO 8601 format 
+    link.download = filename + '_'+ currentFrame + 'f' + '_' + timestamp + '.png';
     link.setAttribute("type","hidden") // firefox에서는 꼭 DOM구조를 지켜야 한다.
     document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
