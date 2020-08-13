@@ -217,6 +217,25 @@ func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
 					}
 				}
 			}
+		} else if strings.HasPrefix(word, "usercomment:") {
+			userComment := strings.TrimPrefix(word, "usercomment:")
+			if len(selectTasks) == 0 {
+				for _, task := range allTasks {
+					if userComment != "" {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".usercomment": userComment})
+					} else {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".usercomment": ""})
+					}
+				}
+			} else {
+				for _, task := range selectTasks {
+					if userComment != "" {
+						query = append(query, bson.M{"tasks." + task + ".usercomment": userComment})
+					} else {
+						query = append(query, bson.M{"tasks." + task + ".usercomment": ""})
+					}
+				}
+			}
 		} else if strings.HasPrefix(word, "rnum:") { // 롤넘버 형태일 때
 			query = append(query, bson.M{"rnum": &bson.RegEx{Pattern: strings.TrimPrefix(word, "rnum:"), Options: "i"}})
 		} else if regexTaskStatusQuery.MatchString(word) {
