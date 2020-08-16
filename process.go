@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"time"
 
@@ -65,23 +66,48 @@ func processingItem(review Review) {
 		return
 	}
 	defer session.Close()
+	reviewID := review.ID.Hex()
 	// 연산에 필요한 설정을 가지고 온다.
 	admin, err := GetAdminSetting(session)
 	if err != nil {
-		log.Println(err)
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
-	// 연산한다.
+	// ffmpeg 경로를 체크한다.
+	if _, err := os.Stat(admin.FFmpeg); os.IsNotExist(err) {
+		err = setErrReview(session, reviewID, "ffmpeg가 존재하지 않습니다")
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	// ReviewDataPath가 존재하는지 경로를 체크한다.
+	if _, err := os.Stat(admin.ReviewDataPath); os.IsNotExist(err) {
+		err = setErrReview(session, reviewID, "admin 셋팅에 ReviewDataPath가 존재하지 않습니다")
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	// mp4를 생성한다.
 	err = genMp4(admin, review)
 	if err != nil {
-		log.Println(err)
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 	// 연산 상태를 done 으로 바꾼다.
-	reviewID := review.ID.Hex()
 	err = setReviewProcessStatus(session, reviewID, "done")
 	if err != nil {
-		log.Println(err)
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 	return
