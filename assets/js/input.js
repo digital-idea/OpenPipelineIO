@@ -4108,6 +4108,8 @@ function addReview() {
             description: document.getElementById("modal-addreview-description").value,
             camerainfo: document.getElementById("modal-addreview-camerainfo").value,
             fps: reviewFps.options[reviewFps.selectedIndex].value,
+            mainversion: document.getElementById("modal-addreview-mainversion").value,
+            subversion: document.getElementById("modal-addreview-subversion").value,
         },
         headers: {
             "Authorization": "Basic "+ token

@@ -105,6 +105,18 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Createtime = time.Now().Format("2006-01-02 15:04:05")
 	rcp.Review.Updatetime = rcp.Review.Createtime
+	mainVer, err := strconv.Atoi(r.FormValue("mainversion"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.MainVersion = mainVer
+	subVer, err := strconv.Atoi(r.FormValue("subversion"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.SubVersion = subVer
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 	err = addReview(session, rcp.Review)
