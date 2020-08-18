@@ -4240,6 +4240,22 @@ function selectReviewItem(id, fps) {
     drawCanvas.setAttribute("width", clientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
     drawCanvas.setAttribute("height", clientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
 
+    // UX 캔버스를 초기화 한다.
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    uxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    uxCanvas.setAttribute("width", clientWidth) // UX 캔버스 가로 사이즈를 설정한다.
+    uxCanvas.setAttribute("height", clientHeight) // UX 캔버스 세로 사이즈를 설정한다.
+    uxCtx = uxCanvas.getContext("2d")
+
+    // Animation UX 캔버스를 초기화 한다.
+    let aniuxCanvas = document.getElementById("aniuxcanvas");
+    aniuxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    aniuxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
+    aniuxCanvas.setAttribute("width", clientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
+    aniuxCanvas.setAttribute("height", clientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
+    aniuxCtx = aniuxCanvas.getContext("2d")
+
     // screenshot 캔버스를 초기화 한다.
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
@@ -4321,7 +4337,7 @@ function selectReviewItem(id, fps) {
     ctx.fillRect(0, 0, clientWidth, clientHeight);
     
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
-    let frameLineHeight = 12;
+    let frameLineMarkHeight = 12; // 프레임 표시라인 높이
     let totalFrame = 0
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
@@ -4329,13 +4345,13 @@ function selectReviewItem(id, fps) {
         // totalFrame을 표기한다.
         document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
         let frameLineOffset = clientWidth / totalFrame
-        screenshotCtx.beginPath();
-        for (let i = 0; i < totalFrame; i++) {
-            screenshotCtx.moveTo(i*frameLineOffset, clientHeight-frameLineHeight);
-            screenshotCtx.lineTo(i*frameLineOffset, clientHeight);
-            screenshotCtx.strokeStyle = '#333333';
-            screenshotCtx.lineWidth = 2;
-            screenshotCtx.stroke();
+        uxCtx.beginPath();
+        for (let i = 0; i < totalFrame + 1; i++) {
+            uxCtx.strokeStyle = '#333333';
+            uxCtx.lineWidth = 2;
+            uxCtx.stroke();
+            uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
+            uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
         }
         // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
         video.play();
@@ -4367,11 +4383,14 @@ function selectReviewItem(id, fps) {
                     document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
                 }
                 // 커서의 위치를 드로잉 한다.
-                screenshotCtx.fillStyle = "#FF0000";
-                let length = clientWidth / totalFrame
-                let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
-                let y = clientHeight-(frameLineHeight/2)
-                screenshotCtx.fillRect(x, y, x, clientHeight);
+                aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
+                aniuxCtx.strokeStyle = "#FF0000";
+                aniuxCtx.lineWidth = 4;
+                let frameLineOffset = clientWidth / totalFrame
+                aniuxCtx.beginPath();
+                aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
+                aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+                aniuxCtx.stroke();
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
             }
@@ -4400,11 +4419,14 @@ function selectReviewItem(id, fps) {
             document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
         }
         // 커서의 위치를 드로잉 한다.
-        screenshotCtx.fillStyle = "#FF0000";
-        let length = clientWidth / totalFrame
-        let x = (currentFrame * length) / 2 // 왜 2로 나누어야 하는가?
-        let y = clientHeight-(frameLineHeight/2)
-        screenshotCtx.fillRect(x, y, x, clientHeight);
+        aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
+        aniuxCtx.strokeStyle = "#FF0000";
+        aniuxCtx.lineWidth = 4;
+        let frameLineOffset = clientWidth / totalFrame
+        aniuxCtx.beginPath();
+        aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
+        aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+        aniuxCtx.stroke();
     }, 0);
 }
 
@@ -4483,7 +4505,7 @@ function removeDrawing() {
     let fgctx = fg.getContext("2d");
     fgctx.clearRect(0, 0, clientWidth, clientHeight);
 
-    // drawcanvas를 지운다.
+    // screenshot를 지운다.
     let screenshot = document.getElementById("screenshot");
     let screenshotctx = screenshot.getContext("2d");
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
