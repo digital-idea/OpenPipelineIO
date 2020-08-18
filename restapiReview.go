@@ -107,16 +107,16 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.Updatetime = rcp.Review.Createtime
 	mainVer, err := strconv.Atoi(r.FormValue("mainversion"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "mainversion은 숫자로 입력되어 합니다", http.StatusBadRequest)
 		return
 	}
 	rcp.MainVersion = mainVer
 	subVer, err := strconv.Atoi(r.FormValue("subversion"))
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		rcp.SubVersion = 0 // 서브버전은 없을 수 있다. 설정되지 않는다면 0값을 기본으로 한다.
+	} else {
+		rcp.SubVersion = subVer
 	}
-	rcp.SubVersion = subVer
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 	err = addReview(session, rcp.Review)
