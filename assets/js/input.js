@@ -4521,3 +4521,23 @@ function copyButton(value) {
     document.body.removeChild(id);              // body에 요소 삭제
     alert(value + "\n값이 클립보드에 복사되었습니다.");
 }
+
+document.onkeydown = function(e) {
+    // 인풋창에서는 화살표를 움직였을 때 페이지가 이동되면 안된다.
+    if (event.target.tagName === "INPUT") {
+        return
+    }
+    if (e.which == 37) { // arrow left
+        document.getElementById("player-left").click();
+    } else if (e.which == 39) { // arrow right
+        document.getElementById("player-right").click();
+    } else if (e.which == 80) { // p
+        document.getElementById("player-play").click();
+    } else if (e.which == 83) { // s
+        document.getElementById("player-pause").click();
+    } else if (e.which == 219) { // [
+        document.getElementById("player-start").click();
+    } else if (e.which == 221) { // ]
+        document.getElementById("player-end").click();
+    }
+};
