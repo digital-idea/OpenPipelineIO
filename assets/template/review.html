@@ -6,7 +6,7 @@
         {{template "navbar" .}}
     </div>
     {{template "modal" .}}
-    <div id="blinkspace" style="height:120px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
+    <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
     
     <div class="row mt-3 ml-3 mr-3">
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
@@ -81,11 +81,10 @@
     </div>
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-center text-darkmode no-selection" style="height: 3.6vh;">
-            <span class="player-trash" id="player-trash" onclick="removeDrawing()"></span>
+            <span class="player-trash" id="player-trash" onclick="removeDrawing()" title="t"></span>
             <span class="player-pen" id="player-pen"></span>
             <span class="player-text" id="player-text"></span>
-            <span class="player-screenshot mr-5" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')"></span>
-
+            <span class="player-screenshot mr-5" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')" title="c"></span>
             <span class="player-start" id="player-start" title="["></span>
             <span class="player-left" id="player-left" title="←"></span>
             <span class="player-pause" id="player-pause" title="s" hidden></span>
