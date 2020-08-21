@@ -4278,14 +4278,32 @@ function selectReviewItem(id, fps) {
     // 버튼설정 및 버튼 이벤트
     let playButton = document.getElementById("player-play");
     let pauseButton = document.getElementById("player-pause");
+    let playAndPauseButton = document.getElementById("player-playandpause");
     let startButton = document.getElementById("player-start");
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
+    let btn = document.getElementById("player-playandpause")
+    // 플레이 버튼을 클릭할 때 이벤트
     playButton.addEventListener("click", function() {
+        btn.className = "player-pause"
         video.play();
-    }); // 플레이 버튼을 클릭할 때 이벤트
-    pauseButton.addEventListener("click", function() {video.pause();}); // 일시정지 버튼을 클릭할 때 이벤트
+    });
+    // 일시정지 버튼을 클릭할 때 이벤트
+    pauseButton.addEventListener("click", function() {
+        btn.className = "player-play"
+        video.pause();
+    });
+    // 재생과 정지가 같이 진행되는 버튼
+    playAndPauseButton.addEventListener("click", function() {
+        if (!video.paused) {
+            btn.className = "player-play"
+            video.pause();    
+        } else {
+            btn.className = "player-pause"
+            video.play();
+        }
+    });
     startButton.addEventListener("click", function() {
         if (fps == 25) {
             video.currentTime = video.seekable.start(0)
@@ -4354,6 +4372,7 @@ function selectReviewItem(id, fps) {
             uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
         }
         // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
+        btn.className = "player-pause"
         video.play();
     };
     
@@ -4528,16 +4547,18 @@ document.onkeydown = function(e) {
         return
     }
     if (e.which == 37) { // arrow left
+        document.getElementById("player-pause").click();
         document.getElementById("player-left").click();
     } else if (e.which == 39) { // arrow right
-        document.getElementById("player-right").click();
-    } else if (e.which == 80) { // p
-        document.getElementById("player-play").click();
-    } else if (e.which == 83) { // s
         document.getElementById("player-pause").click();
+        document.getElementById("player-right").click();
+    } else if (e.which == 80 || e.which == 83 || e.which == 32) { // p, s, space
+        document.getElementById("player-playandpause").click();
     } else if (e.which == 219) { // [
+        document.getElementById("player-pause").click();
         document.getElementById("player-start").click();
     } else if (e.which == 221) { // ]
+        document.getElementById("player-pause").click();
         document.getElementById("player-end").click();
     }
 };
