@@ -4510,6 +4510,11 @@ function screenshot(filename) {
     document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
     link.click();
     link.remove();
+    // 스크린샷을 위해서 합성한 이미지를 제거한다.
+    let playerbox = document.getElementById("playerbox");
+    let clientWidth = playerbox.clientWidth
+    let clientHeight = playerbox.clientHeight
+    screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
 }
 
 // removeDrawing 함수는 리뷰 스케치를 제거합니다.
