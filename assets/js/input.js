@@ -4541,6 +4541,8 @@ function copyButton(value) {
     alert(value + "\n값이 클립보드에 복사되었습니다.");
 }
 
+// 리뷰페이지 핫키
+// Hotkey: http://gcctech.org/csc/javascript/javascript_keycodes.htm
 document.onkeydown = function(e) {
     // 인풋창에서는 화살표를 움직였을 때 페이지가 이동되면 안된다.
     if (event.target.tagName === "INPUT") {
@@ -4560,5 +4562,9 @@ document.onkeydown = function(e) {
     } else if (e.which == 221) { // ]
         document.getElementById("player-pause").click();
         document.getElementById("player-end").click();
+    } else if (e.which == 84) { // t
+        document.getElementById("player-trash").click();
+    } else if (e.which == 67) { // c
+        document.getElementById("player-screenshot").click();
     }
 };
