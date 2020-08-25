@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"html/template"
+	"image"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
 	"strconv"
 
+	"github.com/disintegration/imaging"
 	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 )
@@ -24,6 +26,7 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 		Project string `json:"project"`
 		Name    string `json:"name"`
 		Type    string `json:"type"`
+		Path    string `json:"path"`
 		UserID  string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -65,7 +68,11 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 폼을 분석한다.
-	r.ParseForm()
+	err = r.ParseMultipartForm(int64(adminSetting.MultipartFormBufferSize))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	project := r.FormValue("project")
 	if project == "" {
 		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
@@ -85,13 +92,15 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Type = typ
-
-	buffer := adminSetting.MultipartFormBufferSize
-	err = r.ParseMultipartForm(int64(buffer))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if len(r.MultipartForm.File) == 0 { // 파일이 없다면 에러처리한다.
+		http.Error(w, "썸네일 이미지의 경로를 설정해주세요", http.StatusBadRequest)
 		return
 	}
+	if len(r.MultipartForm.File) != 1 { // 파일이 복수일 때
+		http.Error(w, "썸네일 이미지가 여러개 설정되어있습니다", http.StatusBadRequest)
+		return
+	}
+	// 썸네일이 존재한다면 썸네일을 처리한다.
 	for _, files := range r.MultipartForm.File {
 		for _, f := range files {
 			if f.Size == 0 {
@@ -112,6 +121,7 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+				// adminsetting에 설정된 썸네일 템플릿에 실제 값을 넣는다.
 				var thumbImgPath bytes.Buffer
 				thumbImgPathTmpl, err := template.New("thumbImgPath").Parse(adminSetting.ThumbnailImagePath)
 				if err != nil {
@@ -119,15 +129,15 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				err = thumbImgPathTmpl.Execute(&thumbImgPath, rcp)
+				// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
 				if _, err := os.Stat(thumbImgPath.String()); os.IsExist(err) {
-					// 썸네일 이미지가 이미 존재하는 경우, 지운다.
 					err = os.Remove(thumbImgPath.String())
 					if err != nil {
 						http.Error(w, err.Error(), http.StatusInternalServerError)
 						return
 					}
 				}
-				// 썸네일 경로를 생서한다.
+				// 썸네일 경로를 생성한다.
 				path, _ := path.Split(thumbImgPath.String())
 				if _, err := os.Stat(path); os.IsNotExist(err) {
 					// 폴더를 생성한다.
@@ -136,18 +146,28 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 						http.Error(w, err.Error(), http.StatusInternalServerError)
 						return
 					}
-					// 폴더의 권한을 설정한다.
-					err = os.Chown(path, uid, gid)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
+					// 위 폴더가 잘 생성되어 존재한다면 폴더의 권한을 설정한다.
+					if _, err := os.Stat(path); os.IsExist(err) {
+						err = os.Chown(path, uid, gid)
+						if err != nil {
+							http.Error(w, err.Error(), http.StatusInternalServerError)
+							return
+						}
 					}
 				}
-				err = ioutil.WriteFile(thumbImgPath.String(), data, os.FileMode(permission))
+				// 사용자가 업로드한 데이터를 이미지 자료구조로 만들고 리사이즈 한다.
+				img, _, err := image.Decode(bytes.NewReader(data)) // 전송된 바이트 파일을 이미지 자료구조로 변환한다.
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+				resizedImage := imaging.Fill(img, 410, 222, imaging.Center, imaging.Lanczos)
+				err = imaging.Save(resizedImage, thumbImgPath.String())
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				rcp.Path = thumbImgPath.String()
 			default:
 				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 				return
