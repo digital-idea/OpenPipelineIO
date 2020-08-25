@@ -140,3 +140,36 @@ func addReviewComment(session *mgo.Session, id string, cmt Comment) error {
 	}
 	return nil
 }
+
+// RmReviewComment 함수는 review에 comment를 삭제합니다.
+func RmReviewComment(session *mgo.Session, id, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	reviewItem, err := getReview(session, id)
+	if err != nil {
+		return err
+	}
+	var newComments []Comment
+	for _, comment := range reviewItem.Comments {
+		if comment.Date == date {
+			continue
+		}
+		newComments = append(newComments, comment)
+	}
+	reviewItem.Comments = newComments
+	err = setReviewItem(session, reviewItem)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// setReviewItem은 Review 자료구조를 새로운 Review로 설정한다.
+func setReviewItem(session *mgo.Session, r Review) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(r.ID, r)
+	if err != nil {
+		return err
+	}
+	return nil
+}

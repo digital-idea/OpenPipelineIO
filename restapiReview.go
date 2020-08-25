@@ -406,3 +406,87 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIRmReviewComment 함수는 리뷰에서 수정사항을 삭제합니다.
+func handleAPIRmReviewComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID      string `json:"id"`
+		Time    string `json:"time"`
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Text    string `json:"text"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	reviewTime := r.FormValue("time")
+	if reviewTime == "" {
+		http.Error(w, "time을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Time = reviewTime
+	reviewProject := r.FormValue("project")
+	if reviewProject == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = reviewProject
+	reviewName := r.FormValue("name")
+	if reviewName == "" {
+		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = reviewName
+	err = RmReviewComment(session, rcp.ID, rcp.Time)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Review Comment: %s, %s", rcp.ID, rcp.Text), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Rm Review Comment: %s\nProject: %s, Name: %s, Author: %s", rcp.Text, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

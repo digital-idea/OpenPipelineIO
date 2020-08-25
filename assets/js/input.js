@@ -1173,6 +1173,14 @@ function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
+function setRmReviewCommentModal(id, time, project, name, text) {
+    document.getElementById("modal-rmreviewcomment-id").value = id;
+    document.getElementById("modal-rmreviewcomment-time").value = time;
+    document.getElementById("modal-rmreviewcomment-project").value = project;
+    document.getElementById("modal-rmreviewcomment-name").value = name;
+    document.getElementById("modal-rmreviewcomment-text").value = text;
+}
+
 function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-project").value = project;
     document.getElementById("modal-rmpublishkey-id").value = id;
@@ -1292,6 +1300,30 @@ function rmComment(project, id, date) {
         dataType: "json",
         success: function(data) {
             document.getElementById(`comment-${data.id}-${data.date}`).remove();
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function rmReviewComment() {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/rmreviewcomment",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-rmreviewcomment-id").value,
+            time: document.getElementById("modal-rmreviewcomment-time").value,
+            project: document.getElementById("modal-rmreviewcomment-project").value,
+            name: document.getElementById("modal-rmreviewcomment-name").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`reviewcomment-${data.id}-${data.time}`).remove();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
