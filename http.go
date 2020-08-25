@@ -378,6 +378,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setpublishstatus", handleAPISetTaskPublishStatus)
 	http.HandleFunc("/api/rmpublish", handleAPIRmTaskPublish)
 	http.HandleFunc("/api/rmpublishkey", handleAPIRmTaskPublishKey)
+	http.HandleFunc("/api/uploadthumbnail", handleAPIUploadThumbnail)
 
 	// restAPI USER
 	http.HandleFunc("/api/user", handleAPIUser)

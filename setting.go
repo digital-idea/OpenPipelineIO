@@ -39,6 +39,11 @@ type Setting struct {
 	AssetPathPermission                  string  `json:"assetpathpermission"`                  // 개별 Asset 경로의 권한
 	AssetPathUID                         string  `json:"assetpathuid"`                         // 개별 Asset 경로의 User ID
 	AssetPathGID                         string  `json:"assetpathgid"`                         // 개별 Asset 경로의 Group ID
+	ThumbnailImagePath                   string  `json:"thumbnailimagepath"`                   // 썸네일 이미지 경로 /thumbnail/{{.Project}}/{{.Name}}_{{.Type}}
+	ThumbnailImagePathPermission         string  `json:"thumbnailimagepathpermission"`         // 썸네일 이미지 경로의 권한
+	ThumbnailImagePathUID                string  `json:"thumbnailimagepathuid"`                // 썸네일 이미지 경로의 User ID
+	ThumbnailImagePathGID                string  `json:"thumbnailimagepathgid"`                // 썸네일 이미지 경로의 Group ID
 	DefaultScaleRatioOfUndistortionPlate float64 `json:"defaultscaleratioofundistortionplate"` // 언디스토션 플레이트의 기본 스케일비율 1.1배
 	ItemNumberOfPage                     int     `json:"itemnumberofpage"`                     // 한 페이지에 보이는 아이템 갯수
+	MultipartFormBufferSize              int     `json:"multipartformbuffersize"`              // Multipart form buffer size
 }
