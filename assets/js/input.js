@@ -4553,6 +4553,9 @@ document.onkeydown = function(e) {
     if (event.target.tagName === "INPUT") {
         return
     }
+    if (event.target.tagName === "TEXTAREA") {
+        return
+    }
     if (e.which == 37) { // arrow left
         document.getElementById("player-pause").click();
         document.getElementById("player-left").click();
