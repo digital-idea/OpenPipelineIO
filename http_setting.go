@@ -146,6 +146,24 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.MultipartFormBufferSize = multipartFormBufferSize
+	thumbnailImageWidth, err := strconv.Atoi(r.FormValue("ThumbnailImageWidth"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if thumbnailImageWidth == 0 {
+		thumbnailImageWidth = 410
+	}
+	s.ThumbnailImageWidth = thumbnailImageWidth
+	thumbnailImageHeight, err := strconv.Atoi(r.FormValue("ThumbnailImageHeight"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if thumbnailImageHeight == 0 {
+		thumbnailImageHeight = 222
+	}
+	s.ThumbnailImageHeight = thumbnailImageHeight
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

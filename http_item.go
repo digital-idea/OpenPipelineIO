@@ -473,7 +473,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1119,7 +1118,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleEditItemSubmitv2 함수는 Item의 수정사항을 처리하는 페이지이다. legacy
+// handleEditItemSubmitv2 함수는 Item의 수정사항을 처리하는 페이지이다. legacy 코드이다.
 func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -1145,7 +1144,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
 		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -1174,7 +1172,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		if os.IsNotExist(err) {
 			err := os.MkdirAll(thumbnailDir, 0775)
 			if err != nil {
-				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -1182,7 +1179,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 			if *flagCompany == "digitalidea" {
 				err = dipath.Ideapath(thumbnailDir)
 				if err != nil {
-					log.Println(err)
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
@@ -1191,13 +1187,23 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		// 이미지변환
 		src, err := imaging.Open(tempPath)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer session.Close()
+		admin, err := GetAdminSetting(session)
+		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		// Resize the cropped image to width = 200px preserving the aspect ratio.
-		dst := imaging.Fill(src, 410, 222, imaging.Center, imaging.Lanczos)
-		err = imaging.Save(dst, thumbnailPath)
+		resizedImage := imaging.Fill(src, admin.ThumbnailImageWidth, admin.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
+		err = imaging.Save(resizedImage, thumbnailPath)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1207,7 +1213,6 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		if *flagCompany == "digitalidea" {
 			err = dipath.Ideapath(thumbnailPath)
 			if err != nil {
-				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

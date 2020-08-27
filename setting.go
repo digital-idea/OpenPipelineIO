@@ -46,4 +46,6 @@ type Setting struct {
 	DefaultScaleRatioOfUndistortionPlate float64 `json:"defaultscaleratioofundistortionplate"` // 언디스토션 플레이트의 기본 스케일비율 1.1배
 	ItemNumberOfPage                     int     `json:"itemnumberofpage"`                     // 한 페이지에 보이는 아이템 갯수
 	MultipartFormBufferSize              int     `json:"multipartformbuffersize"`              // Multipart form buffer size
+	ThumbnailImageWidth                  int     `json:"thumbnailimagewidth"`                  // Thumbnail Image 가로사이즈
+	ThumbnailImageHeight                 int     `json:"thumbnailimageheight"`                 // Thumbnail Image 세로사이즈
 }

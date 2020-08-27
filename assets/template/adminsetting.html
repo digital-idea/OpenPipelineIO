@@ -322,6 +322,22 @@
                     <input type="text" class="form-control" id="MultipartFormBufferSize" name="MultipartFormBufferSize" placeholder="200000" value={{.Setting.MultipartFormBufferSize}}>
                     <small class="form-text text-muted">MultipartFormBufferSize: 1048576 == 1메가</small>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ThumbnailImageWidth">썸네일 Width</label>
+                            <input type="text" class="form-control" id="ThumbnailImageWidth" name="ThumbnailImageWidth" placeholder="410" value={{.Setting.ThumbnailImageWidth}}>
+                            <small class="form-text text-muted">썸네일 이미지 가로사이즈</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ThumbnailImageHeight">썸네일 Height</label>
+                            <input type="text" class="form-control" id="ThumbnailImageHeight" name="ThumbnailImageHeight" placeholder="222" value={{.Setting.ThumbnailImageHeight}}>
+                            <small class="form-text text-muted">썸네일 이미지 세로사이즈</small>
+                        </div>
+                    </div>
+                </div>
             </div>        
             
         </div>

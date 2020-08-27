@@ -161,7 +161,7 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-				resizedImage := imaging.Fill(img, 410, 222, imaging.Center, imaging.Lanczos)
+				resizedImage := imaging.Fill(img, adminSetting.ThumbnailImageWidth, adminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
 				err = imaging.Save(resizedImage, thumbImgPath.String())
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
