@@ -95,6 +95,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setpublishstatus | Publish status를 변경한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, id, task, key, status | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&status=usethis" https://csi.lazypic.org/api/setstatuspublish`|
 | /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
 | /api/rmpublish | Publish 를 삭제한다. | project, id, task, key, createtime | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&createtime=2020-05-21T09:00:00%2B09:00" https://csi.lazypic.org/api/rmpublish`|
+| /api/uploadthumbnail | 썸네일 업로드 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -F  project=TEMP -F name=SS_0010 -F type=org -F "image=@/path/thumbnail.png" https://csi.lazypic.org/api/uploadthumbnail`|
 
 #### URL Encode
 `/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야한다.

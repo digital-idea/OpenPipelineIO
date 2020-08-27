@@ -239,6 +239,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ThumbnailImagePath">Thumbnail Image Path</label>
+                            <input type="text" class="form-control" id="ThumbnailImagePath" name="ThumbnailImagePath" placeholder="/thumbnail/&#123;&#123;.Project&#125;&#125;/&#123;&#123;.Name&#125;&#125;_&#123;&#123;.Type&#125;&#125;.png" value={{.Setting.ThumbnailImagePath}}>
+                            <small class="form-text text-muted">썸네일 이미지가 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailImagePathPermission">Permission</label>
+                            <input type="text" class="form-control" id="ThumbnailImagePathPermission" name="ThumbnailImagePathPermission" placeholder="0775" value={{.Setting.ThumbnailImagePathPermission}}>
+                            <small class="form-text text-muted">썸네일 이미지 경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailImagePathUID">UID</label>
+                            <input type="text" class="form-control" id="ThumbnailImagePathUID" name="ThumbnailImagePathUID" placeholder="500" value={{.Setting.ThumbnailImagePathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailImagePathGID">GID</label>
+                            <input type="text" class="form-control" id="ThumbnailImagePathGID" name="ThumbnailImagePathGID" placeholder="500" value={{.Setting.ThumbnailImagePathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
                 
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
@@ -286,6 +316,11 @@
                         <option value="100" {{if eq .Setting.ItemNumberOfPage 100}}selected{{end}}>100</option>
                     </select>
                     <small class="form-text text-muted">한 페이지당 보이는 아이템 갯수를 설정합니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="MultipartFormBufferSize">MultipartFormBufferSize</label>
+                    <input type="text" class="form-control" id="MultipartFormBufferSize" name="MultipartFormBufferSize" placeholder="200000" value={{.Setting.MultipartFormBufferSize}}>
+                    <small class="form-text text-muted">MultipartFormBufferSize: 1048576 == 1메가</small>
                 </div>
             </div>        
             

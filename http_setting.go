@@ -117,6 +117,10 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.AssetPathPermission = r.FormValue("AssetPathPermission")
 	s.AssetPathUID = r.FormValue("AssetPathUID")
 	s.AssetPathGID = r.FormValue("AssetPathGID")
+	s.ThumbnailImagePath = r.FormValue("ThumbnailImagePath")
+	s.ThumbnailImagePathPermission = r.FormValue("ThumbnailImagePathPermission")
+	s.ThumbnailImagePathUID = r.FormValue("ThumbnailImagePathUID")
+	s.ThumbnailImagePathGID = r.FormValue("ThumbnailImagePathGID")
 
 	s.RunScriptAfterSignup = r.FormValue("RunScriptAfterSignup")
 	s.RunScriptAfterEditUserProfile = r.FormValue("RunScriptAfterEditUserProfile")
@@ -136,6 +140,12 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.ItemNumberOfPage = itemNumberOfPage
+	multipartFormBufferSize, err := strconv.Atoi(r.FormValue("MultipartFormBufferSize"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	s.MultipartFormBufferSize = multipartFormBufferSize
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
