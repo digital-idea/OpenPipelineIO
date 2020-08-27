@@ -4215,7 +4215,7 @@ function addReviewComment() {
             let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
             <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
             <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
-            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}', '${data.date}')">×</span>
+            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}')">×</span>
             <br><small class="text-white">${body}</small>`
             if (data.media != "") {
                 if (data.media.includes("http")) {
