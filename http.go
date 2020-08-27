@@ -411,6 +411,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setreviewstatus", handleAPISetReviewStatus)
 	http.HandleFunc("/api/addreviewcomment", handleAPIAddReviewComment)
 	http.HandleFunc("/api/rmreviewcomment", handleAPIRmReviewComment)
+	http.HandleFunc("/api/addreviewrmreviewcomment", handleAPIRmReviewComment)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy

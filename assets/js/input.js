@@ -1173,12 +1173,34 @@ function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
-function setRmReviewCommentModal(id, time, project, name, text) {
+function setRmReviewCommentModal(id, time) {
     document.getElementById("modal-rmreviewcomment-id").value = id;
     document.getElementById("modal-rmreviewcomment-time").value = time;
-    document.getElementById("modal-rmreviewcomment-project").value = project;
-    document.getElementById("modal-rmreviewcomment-name").value = name;
-    document.getElementById("modal-rmreviewcomment-text").value = text;
+    // review id의 데이터를 가지고 와서 모달을 설정한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-rmreviewcomment-project").value = data.project;
+            document.getElementById("modal-rmreviewcomment-name").value = data.name;
+            for (let i = 0; i < data.comments.length; i++) {
+                if (data.comments[i].date == time) {
+                    document.getElementById("modal-rmreviewcomment-text").value = data.comments[i].text;
+                    break
+                }
+            }
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
 }
 
 function setRmPublishKeyModal(project, id, task, key) {
@@ -4209,13 +4231,12 @@ function addReviewComment() {
         },
         dataType: "json",
         success: function(data) {
-            console.log(data)
             // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
             let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
             let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
             <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
-            <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
-            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}')">×</span>
+            <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
+            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
             <br><small class="text-white">${body}</small>`
             if (data.media != "") {
                 if (data.media.includes("http")) {
