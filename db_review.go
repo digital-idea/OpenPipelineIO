@@ -173,3 +173,14 @@ func setReviewItem(session *mgo.Session, r Review) error {
 	}
 	return nil
 }
+
+// RmReview 함수는 Review를 DB에서 삭제한다.
+func RmReview(session *mgo.Session, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.RemoveId(bson.ObjectIdHex(id))
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -1203,6 +1203,30 @@ function setRmReviewCommentModal(id, time) {
     })
 }
 
+function setRmReviewModal(id) {
+    // review id의 데이터를 가지고 와서 모달을 설정한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-rmreview-id").innerHTML = "ID: " + id;
+            document.getElementById("modal-rmreview-id").value = id;
+            document.getElementById("modal-rmreview-project").innerHTML = "Project: " + data.project;
+            document.getElementById("modal-rmreview-name").innerHTML = "Name: " + data.name;
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-project").value = project;
     document.getElementById("modal-rmpublishkey-id").value = id;
@@ -1322,6 +1346,27 @@ function rmComment(project, id, date) {
         dataType: "json",
         success: function(data) {
             document.getElementById(`comment-${data.id}-${data.date}`).remove();
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function rmReview() {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/rmreview",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-rmreview-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`review-${data.id}`).remove();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
