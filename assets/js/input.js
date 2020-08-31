@@ -1203,6 +1203,30 @@ function setRmReviewCommentModal(id, time) {
     })
 }
 
+function setRmReviewModal(id) {
+    // review id의 데이터를 가지고 와서 모달을 설정한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-rmreview-id").innerHTML = "ID: " + id;
+            document.getElementById("modal-rmreview-id").value = id;
+            document.getElementById("modal-rmreview-project").innerHTML = "Project: " + data.project;
+            document.getElementById("modal-rmreview-name").innerHTML = "Name: " + data.name;
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-project").value = project;
     document.getElementById("modal-rmpublishkey-id").value = id;
@@ -1322,6 +1346,28 @@ function rmComment(project, id, date) {
         dataType: "json",
         success: function(data) {
             document.getElementById(`comment-${data.id}-${data.date}`).remove();
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function rmReview() {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/rmreview",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-rmreview-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`review-${data.id}`).remove();
+            initCanvas();
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4170,7 +4216,7 @@ function addReview() {
         },
         dataType: "json",
         success: function() {
-            location.reload()
+            alert("리뷰가 정상적으로 등록되었습니다.");
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4274,51 +4320,60 @@ var drawCanvas, drawCtx;
 var mouseStartX=0, mouseStartY=0
 var drawing = false;
 
-function selectReviewItem(id, fps) {
+function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
-
-    // 사용자의 윈도우즈를 분석하여 canvas 사이즈를 설정한다.
+    // Player 캔버스를 초기화 한다.
     let playerCanvas = document.getElementById("player");
     playerCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     playerCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     playerCanvas.setAttribute("width", clientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
     playerCanvas.setAttribute("height", clientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
-
     // Draw 캔버스를 초기화 한다.
     let drawCanvas = document.getElementById("drawcanvas");
     drawCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("width", clientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
     drawCanvas.setAttribute("height", clientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
-
     // UX 캔버스를 초기화 한다.
     let uxCanvas = document.getElementById("uxcanvas");
     uxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     uxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     uxCanvas.setAttribute("width", clientWidth) // UX 캔버스 가로 사이즈를 설정한다.
     uxCanvas.setAttribute("height", clientHeight) // UX 캔버스 세로 사이즈를 설정한다.
-    uxCtx = uxCanvas.getContext("2d")
-
     // Animation UX 캔버스를 초기화 한다.
     let aniuxCanvas = document.getElementById("aniuxcanvas");
     aniuxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     aniuxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     aniuxCanvas.setAttribute("width", clientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
     aniuxCanvas.setAttribute("height", clientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
-    aniuxCtx = aniuxCanvas.getContext("2d")
-
-    // screenshot 캔버스를 초기화 한다.
+    // Screenshot 캔버스를 초기화 한다.
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+}
+
+function selectReviewItem(id, fps) {
+    let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
+    let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
+    let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
+
+    initCanvas();
+    let playerCanvas = document.getElementById("player");
+    let playerCtx = playerCanvas.getContext("2d");
+    let drawCanvas = document.getElementById("drawcanvas");
+    drawCtx = drawCanvas.getContext("2d")
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCtx = uxCanvas.getContext("2d")
+    let aniuxCanvas = document.getElementById("aniuxcanvas");
+    aniuxCtx = aniuxCanvas.getContext("2d")
+    let screenshotCanvas = document.getElementById("screenshot");
     screenshotCtx = screenshotCanvas.getContext("2d")
 
     // 브러쉬 설정
-    drawCtx = drawCanvas.getContext("2d")
     drawCtx.lineWidth = 4; // 브러시 사이즈
     drawCtx.strokeStyle = "#EFEAD6" // 브러시 컬러
 
@@ -4401,11 +4456,9 @@ function selectReviewItem(id, fps) {
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
     
-    // 비디오를 그리기 위한 캔버스용 ctx 객체를 생성한다.
-    let ctx = playerCanvas.getContext("2d");
     // 검정으로 한번 채운다.
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, clientWidth, clientHeight);
+    playerCtx.fillStyle = "#000000";
+    playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
     let frameLineMarkHeight = 12; // 프레임 표시라인 높이
@@ -4440,11 +4493,11 @@ function selectReviewItem(id, fps) {
                 if (clientWidth <= renderWidth && renderHeight < clientHeight) {
                     // 가로형: 가로비율이 맞고, 높이가 적을 때
                     let hOffset = (clientHeight - renderHeight) / 2
-                    ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+                    playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
                 } else {
                     // 세로형: 가로비율이 작고 높이가 맞을 때
                     let wOffset = (clientWidth - renderWidth) / 2
-                    ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+                    playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
                 // fps에 맞게 currentFrame을 드로잉한다.
                 let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
@@ -4476,11 +4529,11 @@ function selectReviewItem(id, fps) {
         if (clientWidth <= renderWidth && renderHeight < clientHeight) {
             // 가로형: 가로비율이 맞고, 높이가 적을 때
             let hOffset = (clientHeight - renderHeight) / 2
-            ctx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+            playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
         } else {
             // 세로형: 가로비율이 작고 높이을 꽉 채울 때
             let wOffset = (clientWidth - renderWidth) / 2
-            ctx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+            playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
         }
         // fps에 맞게 currentFrame을 드로잉한다.
         let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
