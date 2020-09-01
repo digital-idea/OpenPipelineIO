@@ -4682,3 +4682,28 @@ document.onkeydown = function(e) {
         document.getElementById("player-screenshot").click();
     }
 };
+
+function rvplay(id) {
+    // review id의 데이터를 가지고 path값을 구하고 dilink를 통해 rv player에 연결한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            let link = document.createElement('a');
+            link.href = "dilink://" + data.path;
+            document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
+            link.click();
+            link.remove();
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
