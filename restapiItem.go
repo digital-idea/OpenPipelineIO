@@ -7582,12 +7582,9 @@ func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for n, p := range i.Tasks[task].Publishes[key] {
-		// 대상시간과 틀린 아이템은 notuse 상태로 변경한다.
-		if p.Createtime != rcp.Createtime {
-			i.Tasks[task].Publishes[key][n].Status = "notuse"
-			continue
+		if p.Createtime == rcp.Createtime {
+			i.Tasks[task].Publishes[key][n].Status = rcp.Status
 		}
-		i.Tasks[task].Publishes[key][n].Status = rcp.Status
 	}
 	err = setItem(session, project, i)
 	if err != nil {

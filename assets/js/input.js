@@ -1243,17 +1243,14 @@ function setRmPublishModal(project, id, task, key, createtime) {
     document.getElementById("modal-rmpublish-createtime").value = createtime
 }
 
-function setPublishModal(project, id, task, key, createtime) {
+function setPublishModal(project, id, task, key, createtime, status) {
     document.getElementById("modal-setpublish-project").value = project;
     document.getElementById("modal-setpublish-id").value = id;
     document.getElementById("modal-setpublish-task").value = task;
     document.getElementById("modal-setpublish-key").value = key;
     document.getElementById("modal-setpublish-createtime").value = createtime;
-    document.getElementById("modal-setpublish-message").innerHTML = `
-        ${project} > ${id} > ${task} > ${key}<br>
-        ${time} 에 Publish 된 데이터를<br>
-        타팀의 아티스트가 사용해야 할 버전으로 설정하시겠습니까?
-    `
+    document.getElementById("modal-setpublish-status").value = status;
+    document.getElementById("modal-setpublish-status").innerHTML = status;
 }
 
 function setEditCommentModal(project, id, time, text, mediatitle, media) {
@@ -4131,7 +4128,7 @@ function setPublish(project, id, task, key, createtime) {
             task: task,
             key: key,
             createtime: createtime,
-            status: "usethis",
+            status: document.getElementById("modal-setpublish-status").value,
         },
         headers: {
             "Authorization": "Basic "+ token
