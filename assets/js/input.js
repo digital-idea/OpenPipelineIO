@@ -809,7 +809,24 @@ function editNote(project, id, text) {
     });
 }
 
+// initPublishModal 함수는 modal-addpublish 를 초기화 한다.
+function initPublishModal() {
+    document.getElementById("modal-addpublish-project").value = ""
+    document.getElementById("modal-addpublish-name").value = ""
+    document.getElementById("modal-addpublish-task").value = ""
+    document.getElementById("modal-addpublish-secondarykey").value = ""
+    document.getElementById("modal-addpublish-path").value = ""
+    document.getElementById("modal-addpublish-status").value= "usethis"
+    document.getElementById("modal-addpublish-tasktouse").value= ""
+    document.getElementById("modal-addpublish-subject").value= ""
+    document.getElementById("modal-addpublish-mainversion").value= 1
+    document.getElementById("modal-addpublish-subversion").value= 0
+    document.getElementById("modal-addpublish-filetype").value= ""
+    document.getElementById("modal-addpublish-kindofusd").value= ""
+}
+
 function setAddPublishModal(project, name, task) {
+    initPublishModal() // AddPublishModal을 한번 초기화 한다.
     document.getElementById("modal-addpublish-project").value = project
     document.getElementById("modal-addpublish-name").value = name
     document.getElementById("modal-addpublish-task").value = task
