@@ -9,7 +9,7 @@
     <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
     
     <div class="row mt-3 ml-3 mr-3">
-        <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
+        <div class="col-3 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
             <form action="/review-submit" method="POST">
                 <div class="w-100">
                     <div class="input-group p-1">
@@ -26,10 +26,11 @@
             <div class="overflow-auto" style="height: 76vh; overflow-y: scroll; scrollbar-color: #6d6d6d #2d2d2d;">
                 {{range .Reviews}}
                     <div class="row p-2 m-1 {{if eq .ID.Hex $.CurrentReview.ID.Hex}}selectreviewitem border border-warning{{else}}reviewitem{{end}} finger" name="reviewitem" id="review-{{.ID.Hex}}">
-                        <div class="col-11" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}')">
+                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}')">
                             <span class="text-muted">{{.Project}}</span>
                             <span class="text-darkmode">{{.Name}}</span>
                             <span class="ml-1 badge badge-secondary">{{.Task}}</span>
+                            <span class="ml-1 badge badge-secondary">{{.AuthorNameKor}}</span>
                             <span class="ml-1 badge badge-darkmode">v{{.MainVersion}}</span>
                             {{if ne .SubVersion 0 }} <!-- SubVersion 값이 0이면 SubVersion이 설정되지 않음을 의미한다. -->
                                 <span class="ml-1 badge badge-darkmode">w{{.SubVersion}}</span>
@@ -46,7 +47,7 @@
                                 {{end}}
                             {{end}}
                         </div>
-                        <div class="col-1">
+                        <div class="col-1 p-0">
                             <!-- 리뷰 삭제버튼 -->
                             <img src="/assets/img/delete.svg" class="finger" data-toggle="modal" data-target="#modal-rmreview" onclick="setRmReviewModal('{{.ID.Hex}}')">
                         </div>                        
@@ -54,7 +55,7 @@
                 {{end}}
             </div>
         </div>
-        <div class="col-8 border-darkmode bg-black p-0" id="playerbox" style="height: 80vh; position: relative;">
+        <div class="col-7 border-darkmode bg-black p-0" id="playerbox" style="height: 80vh; position: relative;">
             <canvas class="p-0" id="drawcanvas" style="position: absolute; left: 0; top: 0; z-index: 4;"></canvas>
             <canvas class="p-0" id="aniuxcanvas" style="position: absolute; left: 0; top: 0; z-index: 3;"></canvas>
             <canvas class="p-0" id="uxcanvas" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>

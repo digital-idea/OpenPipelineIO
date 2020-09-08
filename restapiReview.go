@@ -70,6 +70,14 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Author = author
 
+	// 사용자의 아이디를 이용해서 이름을 가지고 온다.
+	user, err := getUser(session, author)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Review.AuthorNameKor = user.LastNameKor + user.FirstNameKor
+
 	path := r.FormValue("path")
 	if path == "" {
 		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
