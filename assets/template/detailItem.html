@@ -598,7 +598,7 @@
 								<span class="edit" data-toggle="modal" data-target="#modal-editpublish" onclick="setEditPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}', '{{.TaskToUse}}', '{{$key}}','{{.Createtime}}')">≡</span>
 							{{end}}
 							{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-								<span class="remove ml-1" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}')">×</span>
+								<span class="remove ml-1" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}', '{{.Path}}')">×</span>
 							{{end}}
 						</div>
 					{{end}}

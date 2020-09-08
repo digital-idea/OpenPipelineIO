@@ -1252,12 +1252,13 @@ function setRmPublishKeyModal(project, id, task, key) {
     document.getElementById("modal-rmpublishkey-title").innerHTML = "Rm Publish Key" + multiInputTitle(id);
 }
 
-function setRmPublishModal(project, id, task, key, createtime) {
+function setRmPublishModal(project, id, task, key, createtime, path) {
     document.getElementById("modal-rmpublish-project").value = project
     document.getElementById("modal-rmpublish-id").value = id
     document.getElementById("modal-rmpublish-task").value = task
     document.getElementById("modal-rmpublish-key").value = key
     document.getElementById("modal-rmpublish-createtime").value = createtime
+    document.getElementById("modal-rmpublish-path").value = path
 }
 
 function setPublishModal(project, id, task, key, createtime, status) {
@@ -1445,7 +1446,8 @@ function rmPublish() {
             id: document.getElementById('modal-rmpublish-id').value,
             task: document.getElementById('modal-rmpublish-task').value,
             key: document.getElementById('modal-rmpublish-key').value,
-            createtime: document.getElementById('modal-rmpublish-createtime').value
+            createtime: document.getElementById('modal-rmpublish-createtime').value,
+            path: document.getElementById('modal-rmpublish-path').value,
         },
         headers: {
             "Authorization": "Basic "+ document.getElementById("token").value
