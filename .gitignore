@@ -8,3 +8,6 @@ thumbnail/**
 !thumbnail/Readme.md
 cert.pem
 key.pem
+assets_vfsdata.go
+csi3.exe
+csi3
