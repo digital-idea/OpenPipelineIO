@@ -11,6 +11,7 @@ type Review struct {
 	Createtime    string        `json:"createtime"`              // 생성시간
 	Updatetime    string        `json:"updatetime"`              // 업데이트 시간
 	Author        string        `json:"author"`                  // 작성자
+	AuthorNameKor string        `json:"authornamekor"`           // 작성자 한글 이름
 	Path          string        `json:"path"`                    // 리뷰경로
 	Status        string        `json:"status"`                  // 상태 approve, comment, waiting
 	ProcessStatus string        `json:"processstatus"`           // 연산상태. wait, error, done
