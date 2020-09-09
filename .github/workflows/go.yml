@@ -36,4 +36,6 @@ jobs:
         go build -v .
 
     - name: Test
-      run: go test -v .
+      run: |
+        go run assets/asset_generate.go
+        go test -v .
