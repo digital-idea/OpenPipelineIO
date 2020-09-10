@@ -8,6 +8,9 @@ env:
 
 services:
  - mongodb
+ 
+before-install:
+ - go run assets/asset_generate.go 
 
 script:
  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
