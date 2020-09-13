@@ -2,20 +2,14 @@
 {{template "headBootstrap"}}
 {{template "navbar" .}}
 
-<div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-	<div class="text-center py-3 bg-{{Status2string .Item.Status}}">
-		<span class="text-dark">{{.Project.ID}}</span>
-		<span class="text-dark">{{.Item.Name}}({{.Item.Type}})</span>
-		<span class="text-dark">{{.Item.Status|Status2capString}}</span>
-	</div>
-			
+<div class="col-lg-6 col-md-8 col-sm-12 mx-auto">		
 	<form action="/edititem-submit" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="project" value={{.Project.ID}}>
 		<input type="hidden" name="id" value={{.Item.ID}}>
 		<div class="form-group pt-5">
-			<label>Thumbnail 이미지 변경</label>
+			<label>{{.Project.ID}} 프로젝트 {{.Item.ID}} 아이템의 Thumbnail을 변경합니다</label>
 			<input type="file" name="Thumbnail" class="form-control">
-			<small class="form-text text-muted">Thumbnail 이미지를 업데이트 합니다.</small>
+			<small class="form-text text-mute">핸드폰을 이용해서 사진촬영으로 썸네일을 업로드 할 경우 가로모드로 촬영해주세요.</small>
 		</div>
 		<div class="row">
 			<div class="mx-auto text-center">
