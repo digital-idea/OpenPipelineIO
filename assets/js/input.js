@@ -120,7 +120,6 @@ function setEditTaskModal(project, id, task) {
                 document.getElementById("modal-edittask-status").value=data.task.status;
             }
             catch(err) {
-                console.log(err);
                 document.getElementById("modal-edittask-statusv2").value=data.task.statusv2;
             }
             
@@ -2047,7 +2046,6 @@ function setScanname(project, id, scanname) {
         },
         dataType: "json",
         success: function(data) {
-            console.log(data);
             document.getElementById(`${data.project}-${data.id}-scanname`).innerHTML = data.scanname;
         },
         error: function(request,status,error){
@@ -3808,9 +3806,8 @@ function rmItem() {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.log(data);
                     document.getElementById(`item-${data.id}`).remove();
-                    
+                    document.getElementById("topbtn").innerHTML = "Top" // 삭제가되면 Top버튼에서 선택된 아이템 갯수를 리셋한다.
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
