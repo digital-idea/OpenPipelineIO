@@ -306,7 +306,7 @@ $ pip install requests
 import requests
 import json
 
-url = 'http://192.168.0.12/api/rmpublish'
+url = 'https://csi.lazypic.org/api/rmpublish'
 info = { 'project' : 'TEMP',
 		'id' : 'SS_0010_org',
 		'task' : 'comp',
@@ -314,7 +314,7 @@ info = { 'project' : 'TEMP',
 		'createtime' : '2020-09-09T11:32:24+09:00',
 		'path' : 'test/path2',
 		}
-header = {"Authorization": "Basic JDJhJDEwJHRVWU1iUU12b2NoQ2loUm9VYVZwL2VmWTJ1eXAvR3FmMnVKclhPbGNZN1BDaGtPMUl3YmJL"}
+header = {"Authorization": "Basic <Token>"}
 result = requests.post(url=url, data=info, headers=header)
 print(result.json())
 ```
