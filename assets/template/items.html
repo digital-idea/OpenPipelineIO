@@ -229,8 +229,8 @@
 					<span class="add" data-toggle="modal" data-target="#modal-addtask" onclick="setAddTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">＋</span>
 					<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtask" onclick="setRmTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">－</span>
 				{{else}}
-					<span class="add" onclick="alert('권한이 없습니다.')">＋</span>
-					<span class="remove ml-0" onclick="alert('권한이 없습니다.')">－</span>
+					<span class="add" onclick="alert('Task를 추가할 수 있는 권한이 없습니다.')">＋</span>
+					<span class="remove ml-0" onclick="alert('Task를 삭제할 수 있는 권한이 없습니다.')">－</span>
 				{{end}}
 			</div>
 		{{end}}
