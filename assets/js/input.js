@@ -4316,6 +4316,7 @@ function addReviewComment() {
             }
             newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
             document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
+            document.getElementById("review-comment").value = ""; // 입력한 값을 초기화 한다.
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
