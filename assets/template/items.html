@@ -225,7 +225,7 @@
 	<div class="col-sm-12 col-md-6 col-lg-3">
 		{{if eq .Type "org" "left" "asset"}}
 			<div class="" id="{{.Name}}-add-taskbutton}}">
-				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 					<span class="add" data-toggle="modal" data-target="#modal-addtask" onclick="setAddTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">＋</span>
 					<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtask" onclick="setRmTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">－</span>
 				{{else}}
