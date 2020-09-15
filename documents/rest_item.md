@@ -291,3 +291,30 @@ $ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" https:/
 # + 문자는 web에서 %2B 이다. 터미널에서 curl로 테스트시 + 대신 %2B를 넣어주어야 한다.
 $ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" https://csi.lazypic.org/api/setpredate
 ```
+
+#### python에서 publish 삭제하기
+python3을 이용해서 publish 삭제하기
+- python 3.4 이후 버전부터는 requests가 자동 설치됨
+- python 3.4 이전 버전은 requests 모듈을 수동으로 설치해주어야 함
+```sh
+$ pip install requests
+```
+
+```python
+#!/usr/bin/python
+#coding:utf8
+import requests
+import json
+
+url = 'https://csi.lazypic.org/api/rmpublish'
+info = { 'project' : 'TEMP',
+		'id' : 'SS_0010_org',
+		'task' : 'comp',
+		'key' : 'maya',
+		'createtime' : '2020-09-09T11:32:24+09:00',
+		'path' : 'test/path2',
+		}
+header = {"Authorization": "Basic <Token>"}
+result = requests.post(url=url, data=info, headers=header)
+print(result.json())
+```
