@@ -298,7 +298,7 @@ python3을 이용해서 publish 삭제하기
 - python 3.4 이전 버전은 requests 모듈을 수동으로 설치해주어야 함
 ```sh
 $ pip install requests
-```
+```
 
 ```python
 #!/usr/bin/python
