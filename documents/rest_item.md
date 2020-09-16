@@ -296,7 +296,8 @@ $ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34
 python3을 이용해서 publish 삭제하기
 - python 3.4 이후 버전부터는 requests가 자동 설치됨
 - python 3.4 이전 버전은 requests 모듈을 수동으로 설치해주어야 함
-```sh
+
+```bash
 $ pip install requests
 ```
 
@@ -312,7 +313,7 @@ info = { 'project' : 'TEMP',
 		'task' : 'comp',
 		'key' : 'maya',
 		'createtime' : '2020-09-09T11:32:24+09:00',
-		'path' : 'test/path2',
+		'path' : '/show/project/path',
 		}
 header = {"Authorization": "Basic <Token>"}
 result = requests.post(url=url, data=info, headers=header)
