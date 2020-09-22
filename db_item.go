@@ -3131,3 +3131,18 @@ func rmTaskPublish(session *mgo.Session, project, id, taskname, key, createtime,
 	}
 	return nil
 }
+
+// HasItem 함수는 입력받은 project에 해당 id를 가진 item이 존재하는지 체크한다. mongoDB의 objectID가 아닌 csi내에서 정의된 id를 사용한다.
+func HasItem(session *mgo.Session, project, id string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	num, err := c.Find(bson.M{"id": id}).Count()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num > 0 {
+		return nil
+	}
+	return errors.New(project + " 프로젝트에 해당 Item이 존재하지 않습니다.")
+}
