@@ -7488,11 +7488,11 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// id가 존재하는지 체크
-	// err = HasItem(session, project, id)
-	// if err != nil{
-	// 	http.Error(w, err.Error(), http.StatusBadRequest)
-	// 	return
-	// }
+	err = HasItem(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 	// Item 가져오기
 	item, err := getItem(session, project, id)
 	if err != nil {
