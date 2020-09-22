@@ -7507,7 +7507,7 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !hasTask {
-		http.Error(w, "해당 Task가 존재하지 않습니다", http.StatusBadRequest)
+		http.Error(w, task+" Task가 존재하지 않습니다", http.StatusBadRequest)
 		return
 	}
 	// Publish Primary key가 존재하는지 체크
