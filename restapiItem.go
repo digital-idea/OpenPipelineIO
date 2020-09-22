@@ -7479,6 +7479,32 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Createtime = createtime
+
+	// 에러 처리
+	// project가 존재하는지 체크
+	err = HasProject(session, project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// id가 존재하는지 체크
+	// HasItem을 만들어서 추가
+	// Item 가져오기
+	item, err := getItem(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// task가 존재하는지 체크
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// Publish Primary key가 존재하는지 체크
+	// HasPubPrimaryKey
+	// path가 존재하는지 체크
+	// createtime이 존재하는지 체크
 	err = rmTaskPublish(session, project, id, task, key, createtime, path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
