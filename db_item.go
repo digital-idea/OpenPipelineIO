@@ -3114,15 +3114,15 @@ func rmTaskPublish(session *mgo.Session, project, id, taskname, key, createtime,
 	if err != nil {
 		return err
 	}
-	var newList []Publish
+	var keepList []Publish
 	pubList := item.Tasks[taskname].Publishes[key]
 	for _, p := range pubList {
 		if p.Createtime == createtime && p.Path == path {
-			continue
+			continue // 삭제데이터의 조건이 맞다면 keepList에 넣지 않는다.
 		}
-		newList = append(newList, p)
+		keepList = append(keepList, p)
 	}
-	item.Tasks[taskname].Publishes[key] = newList
+	item.Tasks[taskname].Publishes[key] = keepList // 퍼블리쉬 리스트를 교체한다.
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": item.ID}, item)
