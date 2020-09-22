@@ -95,7 +95,7 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !hasTask {
-		http.Error(w, "해당 Task가 존재하지 않습니다", http.StatusBadRequest)
+		http.Error(w, task+" Task가 존재하지 않습니다", http.StatusBadRequest)
 		return
 	}
 	hasKey := false
