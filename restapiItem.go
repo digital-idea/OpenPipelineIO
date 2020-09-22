@@ -7488,7 +7488,11 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// id가 존재하는지 체크
-	// HasItem을 만들어서 추가
+	// err = HasItem(session, project, id)
+	// if err != nil{
+	// 	http.Error(w, err.Error(), http.StatusBadRequest)
+	// 	return
+	// }
 	// Item 가져오기
 	item, err := getItem(session, project, id)
 	if err != nil {
@@ -7496,15 +7500,50 @@ func handleAPIRmTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// task가 존재하는지 체크
-	err = HasTask(session, project, id, task)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	hasTask := false
+	for _, t := range item.Tasks {
+		if t.Title == task {
+			hasTask = true
+		}
+	}
+	if !hasTask {
+		http.Error(w, "해당 Task가 존재하지 않습니다", http.StatusBadRequest)
 		return
 	}
 	// Publish Primary key가 존재하는지 체크
-	// HasPubPrimaryKey
 	// path가 존재하는지 체크
 	// createtime이 존재하는지 체크
+	hasKey := false
+	hasTime := false
+	hasPath := false
+	for k, pubList := range item.Tasks[task].Publishes {
+		if key != k {
+			continue
+		}
+		hasKey = true
+		for _, p := range pubList {
+			if p.Path != path {
+				continue
+			}
+			hasPath = true
+			if p.Createtime == createtime {
+				hasTime = true
+			}
+		}
+	}
+	if !hasKey {
+		http.Error(w, key+" key로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
+		return
+	}
+	if !hasPath {
+		http.Error(w, path+" path로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
+		return
+	}
+	if !hasTime {
+		http.Error(w, createtime+" 시간으로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
+		return
+	}
+	// 에러처리가 끝나면 해당 publish를 지운다.
 	err = rmTaskPublish(session, project, id, task, key, createtime, path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
