@@ -859,11 +859,12 @@ function setAddPublishModal(project, name, task) {
     });
 }
 
-function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
+function setEditPublishModal(project, id, task, tasktouse, key, createtime, path) {
     document.getElementById("modal-editpublish-project").value = project
     document.getElementById("modal-editpublish-id").value = id
     document.getElementById("modal-editpublish-task").value = task
     document.getElementById("modal-editpublish-tasktouse").value = tasktouse
+    document.getElementById("modal-editpublish-path").value = path
     let token = document.getElementById("token").value;
     // publishkey를 셋팅한다.
     $.ajax({
@@ -902,6 +903,7 @@ function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
             "id": id,
             "task": task,
             "key": key,
+            "path": path,
             "createtime": createtime,
         },
         headers: {
@@ -965,46 +967,47 @@ function editPublish() {
             "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
-        success: function() {
-
+        success: function(data) {
+            // 새로운 데이터를 추가한다.
+            $.ajax({
+                url: "/api/addpublish",
+                type: "post",
+                data: {
+                    project: project,
+                    name: id2name(id),
+                    task: task,
+                    key: key,
+                    createtime: createtime,
+                    secondarykey: secondarykey,
+                    path: path,
+                    status: status,
+                    tasktouse: tasktouse,
+                    subject: subject,
+                    mainversion: mainversion,
+                    subversion: subversion,
+                    filetype: filetype,
+                    kindofusd: kindofusd,
+                    isoutput: isoutput,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    location.reload()
+                    console.log(data)
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 
-    // 새로운 데이터를 추가한다.
-    $.ajax({
-        url: "/api/addpublish",
-        type: "post",
-        data: {
-            project: project,
-            name: id2name(id),
-            task: task,
-            key: key,
-            createtime: createtime,
-            secondarykey: secondarykey,
-            path: path,
-            status: status,
-            tasktouse: tasktouse,
-            subject: subject,
-            mainversion: mainversion,
-            subversion: subversion,
-            filetype: filetype,
-            kindofusd: kindofusd,
-            isoutput: isoutput,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function() {
-            location.reload()
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
+    
 }
 
 function setAddCommentModal(project, id) {

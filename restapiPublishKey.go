@@ -78,6 +78,11 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "key 값이 빈 문자열입니다", http.StatusBadRequest)
 		return
 	}
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path 값이 빈 문자열입니다", http.StatusBadRequest)
+		return
+	}
 	createtime := r.FormValue("createtime")
 	if createtime == "" {
 		http.Error(w, "createtime 값이 빈 문자열입니다", http.StatusBadRequest)
@@ -100,6 +105,7 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 	}
 	hasKey := false
 	hasTime := false
+	hasPath := false
 	pubInfo := Publish{}
 	for k, pubList := range item.Tasks[task].Publishes {
 		if key != k {
@@ -107,14 +113,19 @@ func handleAPIGetPublish(w http.ResponseWriter, r *http.Request) {
 		}
 		hasKey = true
 		for _, p := range pubList {
-			if p.Createtime == createtime {
+			if p.Createtime == createtime && p.Path == path {
 				hasTime = true
+				hasPath = true
 				pubInfo = p
 			}
 		}
 	}
 	if !hasKey {
 		http.Error(w, key+" key로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
+		return
+	}
+	if !hasPath {
+		http.Error(w, path+" 값으로 Publish한 데이터가 존재하지 않습니다", http.StatusInternalServerError)
 		return
 	}
 	if !hasTime {
