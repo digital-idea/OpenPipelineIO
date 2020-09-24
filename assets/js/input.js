@@ -967,47 +967,46 @@ function editPublish() {
             "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
-        success: function(data) {
-            // 새로운 데이터를 추가한다.
-            $.ajax({
-                url: "/api/addpublish",
-                type: "post",
-                data: {
-                    project: project,
-                    name: id2name(id),
-                    task: task,
-                    key: key,
-                    createtime: createtime,
-                    secondarykey: secondarykey,
-                    path: path,
-                    status: status,
-                    tasktouse: tasktouse,
-                    subject: subject,
-                    mainversion: mainversion,
-                    subversion: subversion,
-                    filetype: filetype,
-                    kindofusd: kindofusd,
-                    isoutput: isoutput,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    location.reload()
-                    console.log(data)
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-                }
-            });
+        success: function() {
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
 
-    
+    // 새로운 데이터를 추가한다.
+    $.ajax({
+        url: "/api/addpublish",
+        type: "post",
+        data: {
+            project: project,
+            name: id2name(id),
+            task: task,
+            key: key,
+            createtime: createtime,
+            secondarykey: secondarykey,
+            path: path,
+            status: status,
+            tasktouse: tasktouse,
+            subject: subject,
+            mainversion: mainversion,
+            subversion: subversion,
+            filetype: filetype,
+            kindofusd: kindofusd,
+            isoutput: isoutput,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }
 
 function setAddCommentModal(project, id) {
