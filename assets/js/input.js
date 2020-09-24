@@ -1265,11 +1265,12 @@ function setRmPublishModal(project, id, task, key, createtime, path) {
     document.getElementById("modal-rmpublish-path").value = path
 }
 
-function setPublishModal(project, id, task, key, createtime, status) {
+function setPublishModal(project, id, task, key, path, createtime, status) {
     document.getElementById("modal-setpublish-project").value = project;
     document.getElementById("modal-setpublish-id").value = id;
     document.getElementById("modal-setpublish-task").value = task;
     document.getElementById("modal-setpublish-key").value = key;
+    document.getElementById("modal-setpublish-path").value = path;
     document.getElementById("modal-setpublish-createtime").value = createtime;
     document.getElementById("modal-setpublish-status").value = status;
     document.getElementById("modal-setpublish-status").innerHTML = status;
@@ -4138,17 +4139,18 @@ function TopClick() {
     }
 }
 
-function setPublish(project, id, task, key, createtime) {
+function setPublish() {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setpublishstatus",
         type: "post",
         data: {
-            project: project,
-            id: id,
-            task: task,
-            key: key,
-            createtime: createtime,
+            project: document.getElementById('modal-setpublish-project').value,
+            id: document.getElementById('modal-setpublish-id').value,
+            task: document.getElementById('modal-setpublish-task').value,
+            key: document.getElementById('modal-setpublish-key').value,
+            path: document.getElementById('modal-setpublish-path').value,
+            createtime: document.getElementById('modal-setpublish-createtime').value,
             status: document.getElementById("modal-setpublish-status").value,
         },
         headers: {

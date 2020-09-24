@@ -838,6 +838,7 @@
                     <input type="hidden" class="form-control" id="modal-setpublish-id">
                     <input type="hidden" class="form-control" id="modal-setpublish-task">
                     <input type="hidden" class="form-control" id="modal-setpublish-key">
+                    <input type="hidden" class="form-control" id="modal-setpublish-path">
                     <input type="hidden" class="form-control" id="modal-setpublish-createtime">
                     <label id="modal-setpublish-message" class="col-form-label">
                         해당 Publish 데이터를 <span id="modal-setpublish-status"></span>로 설정하시겠습니까?
@@ -845,7 +846,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="setPublish(document.getElementById('modal-setpublish-project').value, document.getElementById('modal-setpublish-id').value, document.getElementById('modal-setpublish-task').value, document.getElementById('modal-setpublish-key').value, document.getElementById('modal-setpublish-createtime').value)" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="setPublish()" data-dismiss="modal">Yes</button>
                 </div>
             </div>
         </div>

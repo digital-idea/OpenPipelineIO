@@ -558,11 +558,11 @@
 							<img src="/assets/img/copy.svg" class="finger" onclick="copyButton('{{.Path}}')">
 							<small id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}-{{.Createtime}}" value="{{.Createtime}}" class="font-italic pl-3">
 								{{if eq .Status "usethis" }}
-									<span class="badge badge-info ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}', 'notuse')"> ◀ Use This</span>
+									<span class="badge badge-info ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Path}}','{{.Createtime}}', 'notuse')"> ◀ Use This</span>
 								{{else if eq .Status "working"}}								
-									<span class="badge badge-success ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}', 'usethis')"> Working</span>
+									<span class="badge badge-success ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Path}}','{{.Createtime}}','usethis')"> Working</span>
 								{{else}}
-									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}', 'usethis')"> Not Use</span>
+									<span class="badge badge-outline-darkmode ml-1 mr-1 finger" data-toggle="modal" data-target="#modal-setpublish" onclick="setPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Path}}','{{.Createtime}}','usethis')"> Not Use</span>
 								{{end}}
 							</small>
 							<small class="font-italic font-weight-bold pl-3">
