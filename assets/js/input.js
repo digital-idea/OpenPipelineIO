@@ -921,6 +921,7 @@ function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
             document.getElementById('modal-editpublish-filetype').value = data.filetype;
             document.getElementById('modal-editpublish-kindofusd').value = data.kindofusd;
             document.getElementById('modal-editpublish-createtime').value = data.createtime;
+            document.getElementById('modal-editpublish-isoutput').checked = data.isoutput;
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -944,7 +945,10 @@ function editPublish() {
     let subversion = document.getElementById('modal-editpublish-subversion').value
     let filetype = document.getElementById('modal-editpublish-filetype').value
     let kindofusd = document.getElementById('modal-editpublish-kindofusd').value
-
+    let isoutput = false
+    if (document.getElementById('modal-editpublish-isoutput').checked) {
+        isoutput = true
+    }
     // 기존 데이터를 삭제한다.
     $.ajax({
         url: "/api/rmpublish",
@@ -988,6 +992,7 @@ function editPublish() {
             subversion: subversion,
             filetype: filetype,
             kindofusd: kindofusd,
+            isoutput: isoutput,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -4174,6 +4179,11 @@ function addPublish() {
     let subversion = document.getElementById('modal-addpublish-subversion').value
     let filetype = document.getElementById('modal-addpublish-filetype').value
     let kindofusd = document.getElementById('modal-addpublish-kindofusd').value
+    let isoutput = false
+    if (document.getElementById('modal-addpublish-isoutput').checked) {
+        isoutput = true
+    }
+    
     $.ajax({
         url: "/api/addpublish",
         type: "post",
@@ -4192,6 +4202,7 @@ function addPublish() {
             filetype: filetype,
             kindofusd: kindofusd,
             createtime: "",
+            isoutput: isoutput,
         },
         headers: {
             "Authorization": "Basic "+ token

@@ -153,6 +153,7 @@ type Publish struct {
 	KindOfUSD    string `json:"kindofusd"`    // .usd 포멧 kind: component, group, assembly
 	Status       string `json:"status"`       // UseThis, NotUse, Working
 	TaskToUse    string `json:"tasktouse"`    // Publish 데이터를 사용하게될 연결된 Task
+	IsOutput     bool   `json:"isoutput"`     // 아웃풋 데이터인가?
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.

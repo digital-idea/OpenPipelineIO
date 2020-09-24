@@ -7210,6 +7210,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Createtime   string `json:"createtime"`
 		UserID       string `json:"userid"`
 		TaskToUse    string `json:"tasktouse"`
+		IsOutput     bool   `json:"isoutput"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7285,6 +7286,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		rcp.Createtime = time.Now().Format(time.RFC3339)
 	}
 	rcp.TaskToUse = r.FormValue("tasktouse")
+	rcp.IsOutput = str2bool(r.FormValue("isoutput"))
 
 	p := Publish{
 		SecondaryKey: rcp.SecondaryKey,
@@ -7297,6 +7299,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		Status:       rcp.Status,
 		Createtime:   rcp.Createtime,
 		TaskToUse:    rcp.TaskToUse,
+		IsOutput:     rcp.IsOutput,
 	}
 	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {
