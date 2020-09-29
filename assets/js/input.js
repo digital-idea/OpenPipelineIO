@@ -3939,7 +3939,10 @@ function autocomplete(inp) {
   });
 }
 
-autocomplete(document.getElementById("modal-edittask-user"));
+let input = document.getElementsByClassName("searchuser");
+for (var i = 0; i < input.length; i++) {
+    autocomplete(input[i])
+}
 
 function setAddTaskModal(project, id, type) {
     document.getElementById("modal-addtask-project").value = project;
