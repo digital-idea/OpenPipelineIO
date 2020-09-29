@@ -143,17 +143,18 @@ type Item struct {
 
 // Publish 자료구조는 Task의 Publish 자료구조입니다.
 type Publish struct {
-	SecondaryKey string `json:"secondarykey"` // 세컨더리 키
-	Path         string `json:"path"`         // 퍼블리시 경로
-	MainVersion  string `json:"mainversion"`  // 메인버전
-	SubVersion   string `json:"subversion"`   // 서브버전
-	Subject      string `json:"subject"`      // Publish 주제
-	Createtime   string `json:"createtime"`   // 생성시간 RFC3339
-	FileType     string `json:"filetype"`     // 파일타입
-	KindOfUSD    string `json:"kindofusd"`    // .usd 포멧 kind: component, group, assembly
-	Status       string `json:"status"`       // UseThis, NotUse, Working
-	TaskToUse    string `json:"tasktouse"`    // Publish 데이터를 사용하게될 연결된 Task
-	IsOutput     bool   `json:"isoutput"`     // 아웃풋 데이터인가?
+	SecondaryKey  string `json:"secondarykey"`  // 세컨더리 키
+	Path          string `json:"path"`          // 퍼블리시 경로
+	MainVersion   string `json:"mainversion"`   // 메인버전
+	SubVersion    string `json:"subversion"`    // 서브버전
+	Subject       string `json:"subject"`       // Publish 주제
+	Createtime    string `json:"createtime"`    // 생성시간 RFC3339
+	FileType      string `json:"filetype"`      // 파일타입
+	KindOfUSD     string `json:"kindofusd"`     // .usd 포멧 kind: component, group, assembly
+	Status        string `json:"status"`        // UseThis, NotUse, Working
+	TaskToUse     string `json:"tasktouse"`     // Publish 데이터를 사용하게될 연결된 Task
+	IsOutput      bool   `json:"isoutput"`      // 아웃풋 데이터인가?
+	AuthorNameKor string `json:"authornamekor"` // 작성자, 아티스트 한글 이름
 }
 
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
