@@ -3849,7 +3849,7 @@ function autocomplete(inp) {
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
-        var a, b, i, val = this.value;
+        var a, b, i, val = this.value; // a:유저를 표기하는 박스, b:유저를 표기하는 박스 내부의 한 요소, i: for문에 필요한 인수, val: input창에 입력한 값
         /*이미 열려있는 리스트를 닫는다.*/
         closeAllLists();
         if (!val) { return false;}
@@ -3942,7 +3942,10 @@ function autocomplete(inp) {
   });
 }
 
-autocomplete(document.getElementById("modal-edittask-user"));
+let input = document.getElementsByClassName("searchuser");
+for (var i = 0; i < input.length; i++) {
+    autocomplete(input[i])
+}
 
 function setAddTaskModal(project, id, type) {
     document.getElementById("modal-addtask-project").value = project;
