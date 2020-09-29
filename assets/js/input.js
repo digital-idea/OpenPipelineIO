@@ -859,11 +859,12 @@ function setAddPublishModal(project, name, task) {
     });
 }
 
-function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
+function setEditPublishModal(project, id, task, tasktouse, key, createtime, path) {
     document.getElementById("modal-editpublish-project").value = project
     document.getElementById("modal-editpublish-id").value = id
     document.getElementById("modal-editpublish-task").value = task
     document.getElementById("modal-editpublish-tasktouse").value = tasktouse
+    document.getElementById("modal-editpublish-path").value = path
     let token = document.getElementById("token").value;
     // publishkey를 셋팅한다.
     $.ajax({
@@ -902,6 +903,7 @@ function setEditPublishModal(project, id, task, tasktouse, key, createtime) {
             "id": id,
             "task": task,
             "key": key,
+            "path": path,
             "createtime": createtime,
         },
         headers: {
@@ -966,7 +968,7 @@ function editPublish() {
         },
         dataType: "json",
         success: function() {
-
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -998,7 +1000,7 @@ function editPublish() {
             "Authorization": "Basic "+ token
         },
         dataType: "json",
-        success: function() {
+        success: function(data) {
             location.reload()
         },
         error: function(request,status,error){
@@ -1265,11 +1267,12 @@ function setRmPublishModal(project, id, task, key, createtime, path) {
     document.getElementById("modal-rmpublish-path").value = path
 }
 
-function setPublishModal(project, id, task, key, createtime, status) {
+function setPublishModal(project, id, task, key, path, createtime, status) {
     document.getElementById("modal-setpublish-project").value = project;
     document.getElementById("modal-setpublish-id").value = id;
     document.getElementById("modal-setpublish-task").value = task;
     document.getElementById("modal-setpublish-key").value = key;
+    document.getElementById("modal-setpublish-path").value = path;
     document.getElementById("modal-setpublish-createtime").value = createtime;
     document.getElementById("modal-setpublish-status").value = status;
     document.getElementById("modal-setpublish-status").innerHTML = status;
@@ -4141,17 +4144,18 @@ function TopClick() {
     }
 }
 
-function setPublish(project, id, task, key, createtime) {
+function setPublish() {
     let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/setpublishstatus",
         type: "post",
         data: {
-            project: project,
-            id: id,
-            task: task,
-            key: key,
-            createtime: createtime,
+            project: document.getElementById('modal-setpublish-project').value,
+            id: document.getElementById('modal-setpublish-id').value,
+            task: document.getElementById('modal-setpublish-task').value,
+            key: document.getElementById('modal-setpublish-key').value,
+            path: document.getElementById('modal-setpublish-path').value,
+            createtime: document.getElementById('modal-setpublish-createtime').value,
             status: document.getElementById("modal-setpublish-status").value,
         },
         headers: {

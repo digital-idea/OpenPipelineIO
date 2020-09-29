@@ -7586,6 +7586,7 @@ func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
 		Task       string `json:"task"`
 		Key        string `json:"key"`
 		Status     string `json:"status"`
+		Path       string `json:"path"`
 		Createtime string `json:"createtime"`
 		UserID     string `json:"userid"`
 	}
@@ -7632,6 +7633,12 @@ func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Key = key
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Path = path
 	createtime := r.FormValue("createtime")
 	if createtime == "" {
 		http.Error(w, "createtime을 설정해주세요", http.StatusBadRequest)
@@ -7650,7 +7657,7 @@ func handleAPISetTaskPublishStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for n, p := range i.Tasks[task].Publishes[key] {
-		if p.Createtime == rcp.Createtime {
+		if p.Createtime == rcp.Createtime && p.Path == rcp.Path {
 			i.Tasks[task].Publishes[key][n].Status = rcp.Status
 		}
 	}
