@@ -20,6 +20,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
 | /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/assets?project=TEMP"` |
 | /api/usetypes | 샷의 usetype 리스트 가지고오기 | project, name | `$ curl "https://csi.lazypic.org/api/usetypes?project=TEMP&name=SS_0010"` |
+|/api/publishkeys|존재하는 Publish Key 를 가지고 온다||`$ curl -X GET -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/publishkeys`|
 
 ## Post
 
@@ -95,7 +96,6 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setpublishstatus | Publish status를 변경한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, id, task, key, path, status | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&path=/path/path&status=usethis" https://csi.lazypic.org/api/setstatuspublish`|
 | /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
 | /api/rmpublish | Publish 를 삭제한다. | project, id, task, key, createtime, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&createtime=2020-05-21T09:00:00%2B09:00&path=/show/test" https://csi.lazypic.org/api/rmpublish`|
-|/api/publishkeys|존재하는 Publish Key 를 가지고 온다||`$ curl -X GET -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/publishkeys`|
 | /api/uploadthumbnail | 썸네일 업로드 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -F  project=TEMP -F name=SS_0010 -F type=org -F "image=@/path/thumbnail.png" https://csi.lazypic.org/api/uploadthumbnail`|
 
 #### URL Encode
