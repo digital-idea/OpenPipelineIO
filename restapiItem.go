@@ -7225,6 +7225,7 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	r.ParseForm()
 	rcp.AuthorNameKor = r.FormValue("authornamekor")
 	if rcp.AuthorNameKor == "" {
 		// authornamekor 값이 비어있다면, 사용자의 아이디를 이용해서 DB에 등록된 이름을 가지고 온다.
@@ -7235,13 +7236,11 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.AuthorNameKor = user.LastNameKor + user.FirstNameKor
 	}
-
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm()
 	project := r.FormValue("project")
 	if project == "" {
 		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
@@ -7300,17 +7299,18 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.IsOutput = str2bool(r.FormValue("isoutput"))
 
 	p := Publish{
-		SecondaryKey: rcp.SecondaryKey,
-		MainVersion:  rcp.MainVersion,
-		SubVersion:   rcp.SubVersion,
-		Path:         rcp.Path,
-		Subject:      rcp.Subject,
-		FileType:     rcp.FileType,
-		KindOfUSD:    rcp.KindOfUSD,
-		Status:       rcp.Status,
-		Createtime:   rcp.Createtime,
-		TaskToUse:    rcp.TaskToUse,
-		IsOutput:     rcp.IsOutput,
+		SecondaryKey:  rcp.SecondaryKey,
+		MainVersion:   rcp.MainVersion,
+		SubVersion:    rcp.SubVersion,
+		Path:          rcp.Path,
+		Subject:       rcp.Subject,
+		FileType:      rcp.FileType,
+		KindOfUSD:     rcp.KindOfUSD,
+		Status:        rcp.Status,
+		Createtime:    rcp.Createtime,
+		TaskToUse:     rcp.TaskToUse,
+		IsOutput:      rcp.IsOutput,
+		AuthorNameKor: rcp.AuthorNameKor,
 	}
 	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {

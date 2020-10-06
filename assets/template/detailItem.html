@@ -588,7 +588,10 @@
 									Task To Use: {{.TaskToUse}}
 								{{end}}
 							</small>
-							<small class="font-italic pl-3">
+							<small class="font-italic pl-3 pr-1">
+								{{if .AuthorNameKor}}
+									{{.AuthorNameKor}} - 
+								{{end}}
 								{{.Createtime}} 에 생성되었습니다.
 							</small>
 							{{if .Createtime | CheckUpdate}}
