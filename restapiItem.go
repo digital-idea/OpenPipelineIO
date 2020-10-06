@@ -7195,22 +7195,23 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project      string `json:"project"`
-		Name         string `json:"name"`
-		Task         string `json:"task"`
-		Key          string `json:"key"`          // Primary Key
-		SecondaryKey string `json:"secondarykey"` // Secondary Key
-		Path         string `json:"path"`
-		MainVersion  string `json:"mainversion"`
-		SubVersion   string `json:"subversion"`
-		Subject      string `json:"subject"`
-		FileType     string `json:"filetype"`
-		KindOfUSD    string `json:"kindofusd"`
-		Status       string `json:"status"`
-		Createtime   string `json:"createtime"`
-		UserID       string `json:"userid"`
-		TaskToUse    string `json:"tasktouse"`
-		IsOutput     bool   `json:"isoutput"`
+		Project       string `json:"project"`
+		Name          string `json:"name"`
+		Task          string `json:"task"`
+		Key           string `json:"key"`          // Primary Key
+		SecondaryKey  string `json:"secondarykey"` // Secondary Key
+		Path          string `json:"path"`
+		MainVersion   string `json:"mainversion"`
+		SubVersion    string `json:"subversion"`
+		Subject       string `json:"subject"`
+		FileType      string `json:"filetype"`
+		KindOfUSD     string `json:"kindofusd"`
+		Status        string `json:"status"`
+		Createtime    string `json:"createtime"`
+		UserID        string `json:"userid"`
+		TaskToUse     string `json:"tasktouse"`
+		IsOutput      bool   `json:"isoutput"`
+		AuthorNameKor string `json:"authornamekor"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7224,13 +7225,22 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-
+	r.ParseForm()
+	rcp.AuthorNameKor = r.FormValue("authornamekor")
+	if rcp.AuthorNameKor == "" {
+		// authornamekor 값이 비어있다면, 사용자의 아이디를 이용해서 DB에 등록된 이름을 가지고 온다.
+		user, err := getUser(session, rcp.UserID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.AuthorNameKor = user.LastNameKor + user.FirstNameKor
+	}
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	r.ParseForm()
 	project := r.FormValue("project")
 	if project == "" {
 		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
@@ -7289,17 +7299,18 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	rcp.IsOutput = str2bool(r.FormValue("isoutput"))
 
 	p := Publish{
-		SecondaryKey: rcp.SecondaryKey,
-		MainVersion:  rcp.MainVersion,
-		SubVersion:   rcp.SubVersion,
-		Path:         rcp.Path,
-		Subject:      rcp.Subject,
-		FileType:     rcp.FileType,
-		KindOfUSD:    rcp.KindOfUSD,
-		Status:       rcp.Status,
-		Createtime:   rcp.Createtime,
-		TaskToUse:    rcp.TaskToUse,
-		IsOutput:     rcp.IsOutput,
+		SecondaryKey:  rcp.SecondaryKey,
+		MainVersion:   rcp.MainVersion,
+		SubVersion:    rcp.SubVersion,
+		Path:          rcp.Path,
+		Subject:       rcp.Subject,
+		FileType:      rcp.FileType,
+		KindOfUSD:     rcp.KindOfUSD,
+		Status:        rcp.Status,
+		Createtime:    rcp.Createtime,
+		TaskToUse:     rcp.TaskToUse,
+		IsOutput:      rcp.IsOutput,
+		AuthorNameKor: rcp.AuthorNameKor,
 	}
 	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {

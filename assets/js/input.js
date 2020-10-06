@@ -4190,7 +4190,6 @@ function addPublish() {
     if (document.getElementById('modal-addpublish-isoutput').checked) {
         isoutput = true
     }
-    
     $.ajax({
         url: "/api/addpublish",
         type: "post",
