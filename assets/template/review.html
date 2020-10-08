@@ -1,13 +1,14 @@
 {{define "review" }}
 {{template "headBootstrap" .}}
-<body style="overflow: hidden;">
+<!--리뷰 데이터가 로딩되면 해당 리뷰아이템으로 focus후, 문서의 스크롤상태를 원점(0,0)으로 돌린다.-->
+<body style="overflow: hidden;" onload="focusReview('{{.CurrentReview.ID.Hex}}')">
     <input type="hidden" id="current-review-id" value="{{.CurrentReview.ID.Hex}}">
     <div id="floatingmenu">
         {{template "navbar" .}}
     </div>
     {{template "modal" .}}
     <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
-    
+
     <div class="row mt-3 ml-3 mr-3">
         <div class="col-3 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
             <form action="/review-submit" method="POST">

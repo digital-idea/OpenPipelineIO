@@ -4738,3 +4738,9 @@ function rvplay(id) {
         }
     })
 }
+
+// fouseReview 함수는 리뷰 ID를 받아서 해당 ID를 가진 리뷰아이템의 스크롤을 포커싱 한다.
+function focusReview(id) {
+    document.getElementById('review-' + id).scrollIntoView(); // 해당아이템을 포커스한다.
+    window.scrollTo({top:0, left:0, behavior:'auto'}); // 위 아이템을 포커싱 하면서 windows 포커싱이 틀어질 수 있다. windows 스크롤을 리셋한다.
+}
