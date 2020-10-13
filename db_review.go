@@ -120,7 +120,7 @@ func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
 		allQueries = append(allQueries, bson.M{"$or": orQueries})
 	}
 	q := bson.M{"$and": allQueries}
-	err := c.Find(q).Sort("createtime").All(&results)
+	err := c.Find(q).Sort("-createtime").All(&results)
 	if err != nil {
 		return results, err
 	}
