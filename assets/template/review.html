@@ -64,6 +64,12 @@
             <canvas class="p-0" id="player" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
         </div>
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
+            <!--임시 description-->
+            <div class="p-1">
+                <h4>Description</h4>
+                <br><small class="text-white">{{.CurrentReview.Description}}</small>
+                <hr class="my-1 p-0 m-0 divider"></hr>
+            </div>
             <div style="height: 68vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
