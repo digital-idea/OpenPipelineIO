@@ -141,6 +141,28 @@ func addReviewComment(session *mgo.Session, id string, cmt Comment) error {
 	return nil
 }
 
+// EditReviewComment 함수는 review에 comment를 수정합니다.
+func EditReviewComment(session *mgo.Session, id, date, text string) error {
+	session.SetMode(mgo.Monotonic, true)
+	reviewItem, err := getReview(session, id)
+	if err != nil {
+		return err
+	}
+	var newComments []Comment
+	for _, comment := range reviewItem.Comments {
+		if comment.Date == date {
+			comment.Text = text
+		}
+		newComments = append(newComments, comment)
+	}
+	reviewItem.Comments = newComments
+	err = setReviewItem(session, reviewItem)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RmReviewComment 함수는 review에 comment를 삭제합니다.
 func RmReviewComment(session *mgo.Session, id, date string) error {
 	session.SetMode(mgo.Monotonic, true)

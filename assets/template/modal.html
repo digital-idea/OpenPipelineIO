@@ -590,6 +590,31 @@
         </div>
     </div>
 
+    <!-- Modal: Edit ReviewComment-->
+    <div class="modal fade" id="modal-editreviewcomment" tabindex="-1" role="dialog" aria-labelledby="modal-editreviewcomment" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-editreviewcomment-title">Edit Review Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-editreviewcomment-id">
+                    <input type="hidden" class="form-control" id="modal-editreviewcomment-time">
+                    <div class="form-group">
+                        <textarea class="form-control" id="modal-editreviewcomment-text" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="editReviewComment()" data-dismiss="modal">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Rm Review-->
     <div class="modal fade" id="modal-rmreview" tabindex="-1" role="dialog" aria-labelledby="modal-rmreview" aria-hidden="true">
         <div class="modal-dialog" role="document">

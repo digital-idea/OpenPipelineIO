@@ -405,6 +405,66 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIEditReviewComment 함수는 리뷰에서 코멘트를 수정합니다.
+func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID     string `json:"id"`
+		Time   string `json:"time"`
+		Text   string `json:"text"`
+		UserID string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	reviewTime := r.FormValue("time")
+	if reviewTime == "" {
+		http.Error(w, "time을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Time = reviewTime
+	reviewText := r.FormValue("text")
+	if reviewText == "" {
+		http.Error(w, "text를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Text = reviewText
+	err = EditReviewComment(session, rcp.ID, rcp.Time, rcp.Text)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPIRmReviewComment 함수는 리뷰에서 수정사항을 삭제합니다.
 func handleAPIRmReviewComment(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
