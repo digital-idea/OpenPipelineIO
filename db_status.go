@@ -46,6 +46,9 @@ func GetInitStatusID(session *mgo.Session) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if n == 0 {
+		return "", errors.New("초기 상태값 설정이 필요합니다")
+	}
 	if n != 1 {
 		return "", errors.New("초기 설정값이 고유하지 않습니다")
 	}

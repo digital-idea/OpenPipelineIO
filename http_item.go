@@ -508,6 +508,11 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	initStatus, err := GetInitStatusID(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	for _, n := range names {
 		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
 			continue
@@ -536,7 +541,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		if i.Type == "org" || i.Type == "left" {
 			i.Status = ASSIGN // legacy
-			i.StatusV2 = "assign"
+			i.StatusV2 = initStatus
 			if setRendersize {
 				width := int(float64(pinfo.PlateWidth) * admin.DefaultScaleRatioOfUndistortionPlate)
 				height := int(float64(pinfo.PlateHeight) * admin.DefaultScaleRatioOfUndistortionPlate)
@@ -561,7 +566,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				t := Task{
 					Title:    task.Name,
 					Status:   ASSIGN, // legacy
-					StatusV2: "assign",
+					StatusV2: initStatus,
 				}
 				i.Tasks[task.Name] = t
 			}
@@ -850,6 +855,11 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	initStatusID, err := GetInitStatusID(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
 	assettype := r.FormValue("Assettype")
@@ -890,7 +900,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Status = ASSIGN
-		i.StatusV2 = "assign"
+		i.StatusV2 = initStatusID
 		i.Updatetime = time.Now().Format(time.RFC3339)
 		i.Assettype = assettype
 		i.Assettags = []string{assettype, construction}
@@ -907,7 +917,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 			t := Task{
 				Title:    task.Name,
 				Status:   ASSIGN, // legacy
-				StatusV2: "assign",
+				StatusV2: initStatusID,
 			}
 			i.Tasks[task.Name] = t
 		}

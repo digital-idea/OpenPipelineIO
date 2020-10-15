@@ -61,6 +61,15 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if *flagThumbnailMovPath == "" {
 		thumbnailMovPath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ)
 	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
+	initStatusID, err := GetInitStatusID(session)
+	if err != nil {
+		log.Fatal(err)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
@@ -69,7 +78,7 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN, // legacy
-		StatusV2:   "assign",
+		StatusV2:   initStatusID,
 		Thumpath:   thumbnailPath,
 		Platepath:  platePath,
 		Thummov:    thumbnailMovPath,
@@ -78,14 +87,10 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Scantime:   now,
 		Platesize:  platesize,
 		Updatetime: now,
-		UseType: typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
+		UseType:    typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
 	}
 	i.Tasks = make(map[string]Task)
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
+
 	tasks, err := AllTaskSettings(session)
 	if err != nil {
 		log.Fatal(err)
@@ -100,7 +105,7 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		t := Task{
 			Title:    task.Name,
 			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
-			StatusV2: "assign",
+			StatusV2: initStatusID,
 		}
 		i.Tasks[task.Name] = t
 	}
@@ -162,22 +167,27 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
+	initStatusID, err := GetInitStatusID(session)
+	if err != nil {
+		log.Fatal(err)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN,
-		StatusV2:   "assign",
+		StatusV2:   initStatusID,
 		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
 		Assettags:  []string{},
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
+
 	tasks, err := AllTaskSettings(session)
 	if err != nil {
 		log.Fatal(err)
@@ -193,7 +203,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		t := Task{
 			Title:    task.Name,
 			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
-			StatusV2: "assign",
+			StatusV2: initStatusID,
 		}
 		i.Tasks[task.Name] = t
 	}
