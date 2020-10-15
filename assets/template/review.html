@@ -64,12 +64,15 @@
             <canvas class="p-0" id="player" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
         </div>
         <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
-            <!--임시 description-->
-            <div style="height: 10vh;" class="p-1">
-                <h4>Description</h4>
-                <br><small class="text-white">{{.CurrentReview.Description}}</small>
-                <hr class="my-1 p-0 m-0 divider"></hr>
+            <!--description-->
+            <div style="height: 9vh; overflow-y: auto; overflow-x: hidden;" class="p-1">
+                <h5>Description</h5>
+                <small class="text-white">
+                    {{range Split .CurrentReview.Description "\n" -}}{{.}}<br>{{- end}}
+                </small>
             </div>
+            <hr class="my-1 p-0 m-0 divider"></hr>
+            <!--comments-->
             <div style="height: 60vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
@@ -80,8 +83,8 @@
                     <hr class="my-1 p-0 m-0 divider"></hr></div>
                 {{end}}
             </div>
-            <!--comment-->
-            <div style="height: 30vh">
+            <!--comment input-->
+            <div style="height: 31vh">
                 <textarea class="form-control no-resize" id="review-comment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
                 <div class="pt-1 row">
                     <div class="col">
