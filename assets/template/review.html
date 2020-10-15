@@ -76,7 +76,10 @@
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
                     <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
-                    <br><small class="text-white">{{.Text}}</small>
+                    <br>
+                    <small id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-text" class="text-white">
+                        {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
+                    </small>
                     <hr class="my-1 p-0 m-0 divider"></hr></div>
                 {{end}}
             </div>

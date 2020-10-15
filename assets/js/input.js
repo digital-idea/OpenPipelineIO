@@ -1226,6 +1226,34 @@ function setRmReviewCommentModal(id, time) {
     })
 }
 
+function setEditReviewCommentModal(id, time) {
+    document.getElementById("modal-editreviewcomment-id").value = id;
+    document.getElementById("modal-editreviewcomment-time").value = time;
+    // review id의 데이터를 가지고 와서 모달을 설정한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            for (let i = 0; i < data.comments.length; i++) {
+                if (data.comments[i].date == time) {
+                    document.getElementById("modal-editreviewcomment-text").value = data.comments[i].text;
+                    break
+                }
+            }
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 function setRmReviewModal(id) {
     // review id의 데이터를 가지고 와서 모달을 설정한다.
     $.ajax({
@@ -1390,6 +1418,29 @@ function rmReview() {
         success: function(data) {
             document.getElementById(`review-${data.id}`).remove();
             initCanvas();
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function editReviewComment() {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: "/api/editreviewcomment",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreviewcomment-id").value,
+            time: document.getElementById("modal-editreviewcomment-time").value,
+            text: document.getElementById("modal-editreviewcomment-text").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`reviewcomment-${data.id}-${data.time}-text`).innerText = data.text
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
