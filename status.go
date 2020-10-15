@@ -11,6 +11,7 @@ type Status struct {
 	Description string  `json:"description"` // 설명
 	Order       float64 `json:"order"`       // Status 우선순위
 	DefaultOn   bool    `json:"defaulton"`   // 기본선택 여부
+	InitStatus  bool    `json:"initstatus"`  // 아이템 생성시 최초 설정되는 Status 설정값
 }
 
 // CheckError 메소드는 Status 자료구조의 에러를 체크한다.
