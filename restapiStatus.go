@@ -97,6 +97,7 @@ func handleAPIAddStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.BorderColor = bordercolor
 	rcp.DefaultOn = str2bool(r.FormValue("defaulton"))
+	rcp.InitStatus = str2bool(r.FormValue("initstatus"))
 
 	err = AddStatus(session, rcp)
 	if err != nil {
