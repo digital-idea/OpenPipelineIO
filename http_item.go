@@ -381,7 +381,11 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 만약 SearchbarTempate 값이 설정되어 있다면 해당 SearchbarTemplate으로 변경한다.
-	rcp.SearchOption.SearchbarTemplate = "searchbarV1"
+	rcp.SearchOption.SearchbarTemplate = "searchbarV1" // legacy
+	// 개발 모드로 프로그램을 실행하면 항상 검색바 searchbarV2로 실행한다.
+	if *flagDevmode {
+		rcp.SearchOption.SearchbarTemplate = "searchbarV2"
+	}
 	q := r.URL.Query()
 	searchbarTemplate := q.Get("searchbartemplate")
 	if searchbarTemplate != "" {

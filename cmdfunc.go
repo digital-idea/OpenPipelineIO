@@ -181,7 +181,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		Name:       name,
 		Type:       typ,
 		ID:         name + "_" + typ,
-		Status:     ASSIGN,
+		Status:     ASSIGN, // legacy
 		StatusV2:   initStatusID,
 		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
