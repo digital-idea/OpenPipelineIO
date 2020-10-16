@@ -50,7 +50,7 @@ func GetInitStatusID(session *mgo.Session) (string, error) {
 		return "", errors.New("초기 상태값 설정이 필요합니다")
 	}
 	if n != 1 {
-		return "", errors.New("초기 설정값이 고유하지 않습니다")
+		return "", errors.New("초기 상태 설정값이 1개가 아닙니다")
 	}
 	err = c.Find(bson.M{"initstatus": true}).One(&s)
 	if err != nil {
