@@ -293,7 +293,6 @@ function addTask(project, id, task) {
                     project: project,
                     id: id,
                     task: task,
-                    status: 'true',
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -329,7 +328,6 @@ function addTask(project, id, task) {
                 project: project,
                 id: id,
                 task: task,
-                status: 'true',
             },
             headers: {
                 "Authorization": "Basic "+ token
