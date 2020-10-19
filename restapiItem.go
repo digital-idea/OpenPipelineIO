@@ -3379,6 +3379,92 @@ func handleAPISetAssignTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIAddTask 함수는 아이템에 task를 추가한다.
+func handleAPIAddTask(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		ID      string `json:"id"`
+		Task    string `json:"task"`
+		Status  string `json:"status"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	for key, values := range r.PostForm {
+		switch key {
+		case "status":
+			v, err := PostFormValueInList(key, values)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			rcp.Status = v
+		}
+	}
+	id, err := SetAssignTask(session, rcp.Project, rcp.Name, rcp.Task, str2bool(rcp.Status))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.ID = id
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Assign Task: %s(%s)", rcp.Task, rcp.Status), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Assign Task: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Status, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, _ := json.Marshal(rcp)
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetTaskUser 함수는 아이템의 task에 대한 유저를 설정한다.
 func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
