@@ -330,6 +330,7 @@
 							out={{$.SearchOption.Out}}&
 							none={{$.SearchOption.None}}&
 							template={{$.SearchOption.Template}}&
+							truestatus={{Join $.SearchOption.TrueStatus "," }}&
 							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
 						</div>
 					{{- end}}
@@ -353,6 +354,7 @@
 						none={{$.SearchOption.None}}&
 						template={{$.SearchOption.Template}}&
 						searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+						truestatus={{Join $.SearchOption.TrueStatus "," }}&
 						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
 					</div>
 				{{end}}

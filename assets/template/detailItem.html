@@ -321,6 +321,7 @@
 								none={{$.SearchOption.None}}&
 								template={{$.SearchOption.Template}}&
 								searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+								truestatus={{Join $.AllStatusIDs "," }}&
 								task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
 							</div>
 						{{- end}}
@@ -344,6 +345,7 @@
 							none={{$.SearchOption.None}}&
 							template={{$.SearchOption.Template}}&
 							searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+							truestatus={{Join $.AllStatusIDs "," }}&
 							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
 						</div>
 					{{end}}

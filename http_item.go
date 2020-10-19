@@ -194,6 +194,7 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		TasksettingNames    []string
 		TasksettingOrderMap map[string]float64
 		Status              []Status
+		AllStatusIDs        []string
 	}
 	rcp := recipe{}
 	rcp.Wfs = *flagWFS
@@ -237,6 +238,9 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	for _, status := range rcp.Status {
+		rcp.AllStatusIDs = append(rcp.AllStatusIDs, status.ID)
 	}
 	rcp.TasksettingNames, err = TasksettingNames(session)
 	if err != nil {
