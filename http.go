@@ -312,7 +312,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/taskanduserstatusnum", handleAPITaskAndUserStatusNum)
 	http.HandleFunc("/api/userstatusnum", handleAPIUserStatusNum)
 	http.HandleFunc("/api/statusnum", handleAPIStatusNum)
-	http.HandleFunc("/api/setassigntask", handleAPISetAssignTask)
+	http.HandleFunc("/api/addtask", handleAPIAddTask)
 	http.HandleFunc("/api/rmtask", handleAPIRmTask)
 	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)
 	http.HandleFunc("/api/settaskusercomment", handleAPISetTaskUserComment)
