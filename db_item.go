@@ -2069,59 +2069,41 @@ func HasTask(session *mgo.Session, project, id, task string) error {
 	return nil
 }
 
-// SetAssignTask 함수는 item에 task의 assign을 셋팅한다.
-func SetAssignTask(session *mgo.Session, project, name, taskname string, remove bool) (string, error) {
+// AddTask 함수는 item에 task를 추가한다.
+func AddTask(session *mgo.Session, project, id, task, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return "", err
+		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return "", err
+		return err
 	}
-	task := strings.ToLower(taskname)
+	taskname := strings.ToLower(task)
 	// 기존에 Task가 없다면 추가한다.
 	if _, found := item.Tasks[task]; !found {
 		t := Task{}
-		t.Title = task
-		t.Status = ASSIGN
-		statuslist, err := AllStatus(session)
-		if err != nil {
-			return "", err
-		}
-		for _, s := range statuslist {
-			if s.ID == "assign" {
-				t.StatusV2 = "assign"
-			}
-		}
-
+		t.Title = taskname
+		t.Status = ASSIGN // legacy
+		t.StatusV2 = status
 		item.Tasks[task] = t
 	} else {
-		return id, fmt.Errorf("이미 %s 에 %s Task가 존재합니다", name, taskname)
-	}
-
-	if !remove {
-		delete(item.Tasks, task)
+		return fmt.Errorf("이미 %s 에 %s Task가 존재합니다", id, taskname)
 	}
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	item.updateStatus() // legacy
 	globalStatus, err := AllStatus(session)
 	if err != nil {
-		return id, err
+		return err
 	}
 	item.updateStatusV2(globalStatus)
 	err = c.Update(bson.M{"id": item.ID}, item)
 	if err != nil {
-		return "", err
+		return err
 	}
-	return id, nil
+	return nil
 }
 
 // RmTask 함수는 item에 task를 제거한다.

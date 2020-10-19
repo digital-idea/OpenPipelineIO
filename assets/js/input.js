@@ -278,7 +278,6 @@ function multiInputTitle(id) {
 
 function addTask(project, id, task) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -288,14 +287,12 @@ function addTask(project, id, task) {
             let id = cboxes[i].getAttribute("id");
             sleep(200);
             $.ajax({
-                url: "/api/setassigntask",
+                url: "/api/addtask",
                 type: "post",
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
-                    status: 'true',
-                    userid: userid,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -304,7 +301,7 @@ function addTask(project, id, task) {
                 success: function(data) {
                     let newItem = `<div class="row" id="${data.id}-task-${data.task}">
 					<div id="${data.id}-task-${data.task}-status">
-						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
+						<span class="finger mt-1 badge badge-${data.status} statusbox">${data.task}</span>
 					</div>
 					<div id="${data.id}-task-${data.task}-predate"></div>
 					<div id="${data.id}-task-${data.task}-date"></div>
@@ -323,17 +320,14 @@ function addTask(project, id, task) {
                 }
             });
         }
-
     } else {
         $.ajax({
-            url: "/api/setassigntask",
+            url: "/api/addtask",
             type: "post",
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
-                status: 'true',
-                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
@@ -342,7 +336,7 @@ function addTask(project, id, task) {
             success: function(data) {
                 let newItem = `<div class="row" id="${data.id}-task-${data.task}">
 					<div id="${data.id}-task-${data.task}-status">
-						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
+						<span class="finger mt-1 badge badge-${data.status} statusbox">${data.task}</span>
 					</div>
 					<div id="${data.id}-task-${data.task}-predate"></div>
 					<div id="${data.id}-task-${data.task}-date"></div>
@@ -365,7 +359,6 @@ function addTask(project, id, task) {
 
 function rmTask(project, id, task) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {

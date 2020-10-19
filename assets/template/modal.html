@@ -258,8 +258,9 @@
                                 </select>
                             </div>
                         {{else}}
+                            <!--Status v2-->
                             <div class="col-6 form-group">
-                                <label class="col-form-label text-muted">StatusV2(BETA)</label>
+                                <label class="col-form-label text-muted">Status</label>
                                 <select class="text-muted form-control form-control-sm" id="modal-edittask-statusv2" onchange="setTaskStatusV2(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-statusv2').value)">
                                     {{range .Status}}
                                         <option value="{{.ID}}">{{.ID}}</option>
