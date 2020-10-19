@@ -43,6 +43,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		TasksettingOrderMap map[string]float64
 		Dday                string
 		Status              []Status
+		AllStatusIDs        []string
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -75,6 +76,9 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+	for _, status := range rcp.Status {
+		rcp.AllStatusIDs = append(rcp.AllStatusIDs, status.ID)
 	}
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	rcp.User, err = getUser(session, ssid.ID)
