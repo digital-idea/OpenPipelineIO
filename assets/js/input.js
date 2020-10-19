@@ -304,7 +304,7 @@ function addTask(project, id, task) {
                 success: function(data) {
                     let newItem = `<div class="row" id="${data.id}-task-${data.task}">
 					<div id="${data.id}-task-${data.task}-status">
-						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
+						<span class="finger mt-1 badge badge-${data.task} statusbox">${data.task}</span>
 					</div>
 					<div id="${data.id}-task-${data.task}-predate"></div>
 					<div id="${data.id}-task-${data.task}-date"></div>
@@ -342,7 +342,7 @@ function addTask(project, id, task) {
             success: function(data) {
                 let newItem = `<div class="row" id="${data.id}-task-${data.task}">
 					<div id="${data.id}-task-${data.task}-status">
-						<span class="finger mt-1 badge badge-assign statusbox">${data.task}</span>
+						<span class="finger mt-1 badge badge-${data.task} statusbox">${data.task}</span>
 					</div>
 					<div id="${data.id}-task-${data.task}-predate"></div>
 					<div id="${data.id}-task-${data.task}-date"></div>
@@ -365,7 +365,6 @@ function addTask(project, id, task) {
 
 function rmTask(project, id, task) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {

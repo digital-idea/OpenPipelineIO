@@ -2090,17 +2090,16 @@ func SetAssignTask(session *mgo.Session, project, name, taskname string, remove 
 	if _, found := item.Tasks[task]; !found {
 		t := Task{}
 		t.Title = task
-		t.Status = ASSIGN
+		t.Status = ASSIGN // legacy
 		statuslist, err := AllStatus(session)
 		if err != nil {
 			return "", err
 		}
 		for _, s := range statuslist {
-			if s.ID == "assign" {
-				t.StatusV2 = "assign"
+			if s.InitStatus {
+				t.StatusV2 = s.ID
 			}
 		}
-
 		item.Tasks[task] = t
 	} else {
 		return id, fmt.Errorf("이미 %s 에 %s Task가 존재합니다", name, taskname)
