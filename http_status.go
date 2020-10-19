@@ -81,6 +81,7 @@ func handleAddStatusSubmit(w http.ResponseWriter, r *http.Request) {
 		BorderColor: "#" + r.FormValue("bordercolor"),
 		Order:       order,
 		DefaultOn:   str2bool(r.FormValue("defaulton")),
+		InitStatus:  str2bool(r.FormValue("initstatus")),
 	}
 	err = s.CheckError()
 	if err != nil {
@@ -289,6 +290,7 @@ func handleEditStatusSubmit(w http.ResponseWriter, r *http.Request) {
 		BorderColor: "#" + r.FormValue("bordercolor"),
 		Order:       order,
 		DefaultOn:   str2bool(r.FormValue("defaulton")),
+		InitStatus:  str2bool(r.FormValue("initstatus")),
 	}
 	err = s.CheckError()
 	if err != nil {

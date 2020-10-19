@@ -37,6 +37,28 @@ func GetStatus(session *mgo.Session, id string) (Status, error) {
 	return s, nil
 }
 
+// GetInitStatusID 함수는 초기 Status를 DB에서 가지고 온다.
+func GetInitStatusID(session *mgo.Session) (string, error) {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("setting").C("status")
+	s := Status{}
+	n, err := c.Find(bson.M{"initstatus": true}).Count()
+	if err != nil {
+		return "", err
+	}
+	if n == 0 {
+		return "", errors.New("초기 상태값 설정이 필요합니다")
+	}
+	if n != 1 {
+		return "", errors.New("초기 상태 설정값이 1개가 아닙니다")
+	}
+	err = c.Find(bson.M{"initstatus": true}).One(&s)
+	if err != nil {
+		return "", err
+	}
+	return s.ID, nil
+}
+
 // AddStatus 함수는 tasksetting을 DB에 추가한다.
 func AddStatus(session *mgo.Session, s Status) error {
 	session.SetMode(mgo.Monotonic, true)

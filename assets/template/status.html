@@ -22,6 +22,9 @@
 							{{end}}
 							{{.ID}}
 							<span class="badge badge-light">{{.Order}}</span>
+							{{if .InitStatus}}
+								<span class="badge badge-danger">초기 상태값 / Default Status</span>
+							{{end}}
 						</a>
 					</div>
 				</div>

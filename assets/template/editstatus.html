@@ -82,6 +82,10 @@
             <input type="checkbox" id="defaulton" name="defaulton" class="form-check-input" value="true" {{if eq .Status.DefaultOn true}}checked{{end}}>
             <label class="form-check-label" for="defaulton">기본 검색시 Check 상태 여부</label>
         </div>
+        <div class="form-check">
+            <input type="checkbox" id="initstatus" name="initstatus" class="form-check-input" value="true" {{if eq .Status.InitStatus true}}checked{{end}}>
+            <label class="form-check-label" for="initstatus">아이템(샷,에셋) 생성시 초기 상태값으로 사용</label>
+        </div>
         <div class="text-center">
             <button type="submit" class="btn btn-outline-danger mt-5">Edit Status</button>
         </div>
