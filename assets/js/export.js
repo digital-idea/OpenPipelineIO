@@ -121,3 +121,44 @@ function exportExcelCurrentPage() {
     let url = `/download-excel-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}`
     location.href = url
 }
+
+// exportJsonCurrentPage는 현재 페이지를 .json 으로 뽑는다.
+function exportJsonCurrentPage() {
+    let project = document.getElementById("searchbox-project").value
+    let task = document.getElementById("searchbox-task").value
+    let searchword = document.getElementById("searchbox-searchword").value
+    let sortkey = document.getElementById("searchbox-sortkey").value
+    let searchbartemplate = document.getElementById("searchbox-searchbar-template").value
+    let assign = false; // legacy
+    let ready = false; // legacy
+    let wip = false; // legacy
+    let confirm = false; // legacy
+    let done = false; // legacy
+    let omit = false; // legacy
+    let hold = false; // legacy
+    let out = false; // legacy
+    let none = false; // legacy
+    let truestatusList = []
+    if (searchbartemplate === "searchbarV2") {
+        let checkStatus = document.querySelectorAll('*[id^="searchbox-checkbox-"]');
+        for (i=0;i<checkStatus.length;i++) {
+            if (checkStatus[i].checked) {
+                truestatusList.push(checkStatus[i].getAttribute("status"))
+            }
+        }
+        truestatus = truestatusList.join(",")
+    } else {
+        assign = document.getElementById("searchbox-checkbox-assign").checked
+        ready = document.getElementById("searchbox-checkbox-ready").checked
+        wip = document.getElementById("searchbox-checkbox-wip").checked
+        confirm = document.getElementById("searchbox-checkbox-confirm").checked
+        done = document.getElementById("searchbox-checkbox-done").checked
+        omit = document.getElementById("searchbox-checkbox-omit").checked
+        hold = document.getElementById("searchbox-checkbox-hold").checked
+        out = document.getElementById("searchbox-checkbox-out").checked
+        none = document.getElementById("searchbox-checkbox-none").checked
+    }
+    // 요청
+    let url = `/download-json-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}`
+    location.href = url
+}

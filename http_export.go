@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -1517,6 +1518,85 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s%s.xlsx", project, "currentPage", op.Task))
+	http.ServeFile(w, r, tempDir+"/"+filename)
+}
+
+// handleDownloadJsonFile 함수는 전송된 값을 이용해서 export json을 처리한다.
+func handleDownloadJsonFile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	q := r.URL.Query()
+	op := SearchOption{}
+	project := q.Get("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	op.Project = project
+	op.Task = q.Get("task")
+	searchword := q.Get("searchword")
+	if searchword == "" {
+		http.Error(w, "검색어를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	op.Searchword = searchword
+	op.Sortkey = q.Get("sortkey")
+	op.SearchbarTemplate = q.Get("searchbartemplate") // legacy
+	op.Assign = str2bool(q.Get("assign"))             // legacy
+	op.Ready = str2bool(q.Get("ready"))               // legacy
+	op.Wip = str2bool(q.Get("wip"))                   // legacy
+	op.Confirm = str2bool(q.Get("confirm"))           // legacy
+	op.Done = str2bool(q.Get("done"))                 // legacy
+	op.Omit = str2bool(q.Get("omit"))                 // legacy
+	op.Hold = str2bool(q.Get("hold"))                 // legacy
+	op.Out = str2bool(q.Get("out"))                   // legacy
+	op.None = str2bool(q.Get("none"))                 // legacy
+	op.TrueStatus = strings.Split(q.Get("truestatus"), ",")
+	op.Shot = true
+	op.Assets = true
+	op.Type2d = true
+	op.Type3d = true
+	items, err := Searchv2(session, op)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.MarshalIndent(items, "", "    ") // json 파일이 보기 좋게 정렬되어 있어야 한다.
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	tempDir, err := ioutil.TempDir("", "json")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer os.RemoveAll(tempDir)
+	filename := "currentPage.json"
+	err = ioutil.WriteFile(tempDir+"/"+filename, data, 0664)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 저장된 Json 파일을 다운로드 시킨다.
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s%s.json", project, "currentPage", op.Task))
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 
