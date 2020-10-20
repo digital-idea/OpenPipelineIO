@@ -1578,7 +1578,7 @@ func handleDownloadJsonFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	data, err := json.MarshalIndent(items, "", "    ")
+	data, err := json.MarshalIndent(items, "", "    ") // json 파일이 보기 좋게 정렬되어 있어야 한다.
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
