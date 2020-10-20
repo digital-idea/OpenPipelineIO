@@ -42,6 +42,9 @@ func TestShotname(t *testing.T) {
 		in:   "S001_C0010A",
 		want: true,
 	}, {
+		in:   "001_0010",
+		want: true,
+	}, {
 		in:   "S001-C0010A",
 		want: true,
 	}, {
