@@ -18,6 +18,9 @@ func TestShotname(t *testing.T) {
 		in:   "ss_0010",
 		want: true,
 	}, {
+		in:   "ss0010",
+		want: true,
+	}, {
 		in:   "",
 		want: false,
 	}, {
