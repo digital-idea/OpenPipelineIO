@@ -12,6 +12,15 @@ func TestShotname(t *testing.T) {
 		in:   "SS_0010",
 		want: true,
 	}, {
+		in:   "SS-0010",
+		want: true,
+	}, {
+		in:   "ss_0010",
+		want: true,
+	}, {
+		in:   "ss0010",
+		want: true,
+	}, {
 		in:   "",
 		want: false,
 	}, {
@@ -19,7 +28,31 @@ func TestShotname(t *testing.T) {
 		want: false,
 	}, {
 		in:   "SS_0010_C001",
-		want: false,
+		want: true,
+	}, {
+		in:   "SS_00100",
+		want: true,
+	}, {
+		in:   "SS-00100",
+		want: true,
+	}, {
+		in:   "S001_C0010",
+		want: true,
+	}, {
+		in:   "S001-C0010",
+		want: true,
+	}, {
+		in:   "S001_C0010A",
+		want: true,
+	}, {
+		in:   "001_0010",
+		want: true,
+	}, {
+		in:   "S001-C0010A",
+		want: true,
+	}, {
+		in:   "S001_C0010_A",
+		want: true,
 	}}
 	for _, c := range cases {
 		got := regexpShotname.MatchString(c.in)
