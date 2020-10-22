@@ -236,7 +236,7 @@ func webserver(port string) {
 	http.HandleFunc("/upload-excel", handleUploadExcel)
 	http.HandleFunc("/download-excel-template", handleDownloadExcelTemplate)
 	http.HandleFunc("/download-excel-file", handleDownloadExcelFile)
-	http.HandleFunc("/download-json-file", handleDownloadJsonFile)
+	http.HandleFunc("/download-json-file", handleDownloadJSONFile)
 
 	// Task
 	http.HandleFunc("/tasksettings", handleTasksettings)

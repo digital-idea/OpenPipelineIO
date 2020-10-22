@@ -1521,8 +1521,8 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 
-// handleDownloadJsonFile 함수는 전송된 값을 이용해서 export json을 처리한다.
-func handleDownloadJsonFile(w http.ResponseWriter, r *http.Request) {
+// handleDownloadJSONFile 함수는 전송된 값을 이용해서 export json을 처리한다.
+func handleDownloadJSONFile(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
