@@ -529,24 +529,25 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		s.Project = project
 		s.Name = n
 		if !regexpShotname.MatchString(n) {
-			s.Error = "SS_0010 형식의 이름이 아닙니다"
+			s.Error = "지원하는 샷이름 형식이 아닙니다"
 			fails = append(fails, s)
 			continue
 		}
+		now := time.Now().Format(time.RFC3339)
 		i := Item{}
 		i.Name = n
+		i.SetSeq() // Name을 이용해서 Seq를 설정한다.
+		i.SetCut() // Name을 이용해서 Cut을 설정한다.
 		i.Type = typ
 		i.UseType = typ
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
-		i.Seq = strings.Split(i.Name, "_")[0]
-		i.Cut = strings.Split(i.Name, "_")[1]
 		i.Shottype = "2d"
 		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
 		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
 		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
-		i.Scantime = time.Now().Format(time.RFC3339)
-		i.Updatetime = time.Now().Format(time.RFC3339)
+		i.Scantime = now
+		i.Updatetime = now
 		if i.Type == "org" || i.Type == "left" {
 			i.Status = ASSIGN // legacy
 			i.StatusV2 = initStatus
@@ -787,7 +788,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "addShot_success", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -833,13 +833,11 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "addAsset", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -858,7 +856,6 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1126,11 +1123,9 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "addAsset_success", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

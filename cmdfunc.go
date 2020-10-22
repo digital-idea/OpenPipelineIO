@@ -46,21 +46,7 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if !regexpShotname.MatchString(name) {
 		log.Fatal("샷 이름 규칙이 아닙니다.")
 	}
-	seq := strings.Split(name, "_")[0]
-	cut := strings.Split(name, "_")[1]
 	now := time.Now().Format(time.RFC3339)
-	thumbnailPath := *flagThumbPath
-	if *flagThumbPath == "" {
-		thumbnailPath = fmt.Sprintf("/%s/%s_%s.jpg", project, name, typ)
-	}
-	platePath := *flagPlatePath
-	if *flagPlatePath == "" {
-		platePath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name)
-	}
-	thumbnailMovPath := *flagThumbnailMovPath
-	if *flagThumbnailMovPath == "" {
-		thumbnailMovPath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ)
-	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Fatal(err)
@@ -73,24 +59,38 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	i := Item{
 		Project:    project,
 		Name:       name,
-		Seq:        seq,
-		Cut:        cut,
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN, // legacy
 		StatusV2:   initStatusID,
-		Thumpath:   thumbnailPath,
-		Platepath:  platePath,
-		Thummov:    thumbnailMovPath,
-		Dataname:   scanname, // 보통 스캔네임과 데이터네임은 같다. 데이터 입력자의 노동을 줄이기 위해 기본적으로 동일값을 넣고, 필요시 수정한다.
 		Scanname:   scanname,
+		Dataname:   scanname, // 보통 스캔네임과 데이터네임은 같다. 데이터 입력자의 노동을 줄이기 위해 기본적으로 동일값을 넣고, 필요시 수정한다.
 		Scantime:   now,
 		Platesize:  platesize,
 		Updatetime: now,
 		UseType:    typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
 	}
 	i.Tasks = make(map[string]Task)
-
+	i.SetSeq()
+	i.SetCut()
+	// 썸네일 경로 자동설정
+	if *flagThumbPath == "" {
+		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
+	} else {
+		i.Thumpath = *flagThumbPath
+	}
+	// 플레이트 경로 자동설정
+	if *flagPlatePath == "" {
+		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
+	} else {
+		i.Platepath = *flagPlatePath
+	}
+	// 썸네일Mov 경로 자동설정
+	if *flagThumbnailMovPath == "" {
+		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
+	} else {
+		i.Thummov = *flagThumbnailMovPath
+	}
 	tasks, err := AllTaskSettings(session)
 	if err != nil {
 		log.Fatal(err)
@@ -227,30 +227,31 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	if !regexpShotname.MatchString(name) {
 		log.Fatal("소스, 재스캔 이름 규칙이 아닙니다.")
 	}
-	seq := strings.Split(name, "_")[0]
 	now := time.Now().Format(time.RFC3339)
-	platePath := *flagPlatePath
-	if *flagPlatePath == "" {
-		platePath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", project, seq, name)
-	}
-	thumbnailMovPath := *flagThumbnailMovPath
-	if *flagThumbnailMovPath == "" {
-		thumbnailMovPath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", project, seq, name, name, typ)
-	}
+
 	i := Item{
 		Project:    project,
 		Name:       name,
-		Seq:        seq,
 		Type:       typ,
 		ID:         name + "_" + typ,
-		Platepath:  platePath,
-		Thummov:    thumbnailMovPath,
 		Status:     NONE,
 		StatusV2:   "none",
 		Dataname:   scanname, // 일반적인 프로젝트는 스캔네임과 데이터네임이 같다. PM의 노가다를 줄이기 위해서 기본적으로 같은값이 들어가고 추후 수동처리해야하는 부분은 손으로 수정한다.
 		Scanname:   scanname,
 		Scantime:   now,
 		Updatetime: now,
+	}
+	i.SetSeq()
+	platePath := *flagPlatePath
+	if *flagPlatePath == "" {
+		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
+	} else {
+		i.Platepath = *flagPlatePath
+	}
+	if *flagThumbnailMovPath == "" {
+		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
+	} else {
+		i.Thummov = *flagThumbnailMovPath
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {

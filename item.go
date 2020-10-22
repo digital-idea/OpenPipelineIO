@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strings"
 )
 
 const ( // legacy
@@ -250,4 +251,34 @@ func (item *Item) setAssettags() {
 	}
 	sort.Strings(tags)
 	item.Assettags = tags
+}
+
+// SetSeq 메소드는 Item 자료구조에서 Name을 이용해 Seq 이름을 구한다.
+func (item *Item) SetSeq() {
+	if item.Name != "" {
+		// _, - 문자가 포함되어있는지 체크한다.
+		if strings.Contains(item.Name, "_") {
+			item.Seq = strings.Split(item.Name, "_")[0]
+			return
+		} else if strings.Contains(item.Name, "-") {
+			item.Seq = strings.Split(item.Name, "-")[0]
+			return
+		}
+	}
+}
+
+// SetCut 메소드는 Item 자료구조에서 Name을 이용해 Cut 이름을 구한다.
+func (item *Item) SetCut() {
+	if item.Name != "" {
+		// _, - 문자가 포함되어있는지 체크한다.
+		if strings.Contains(item.Name, "_") {
+			slice := strings.Split(item.Name, "_")
+			item.Cut = strings.Join(append(slice[:0], slice[1:]...), "_")
+			return
+		} else if strings.Contains(item.Name, "-") {
+			slice := strings.Split(item.Name, "-")
+			item.Cut = strings.Join(append(slice[:0], slice[1:]...), "-")
+			return
+		}
+	}
 }
