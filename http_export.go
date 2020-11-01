@@ -807,6 +807,65 @@ func handleExportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleExportJSON 함수는 엑셀파일을 Export 하는 페이지 이다.
+func handleExportJSON(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		User
+		Projectlist []string
+		SessionID   string
+		Devmode     bool
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.SessionID = ssid.ID
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당프로젝트만 보여야한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, i)
+			}
+		}
+		rcp.Projectlist = accessProjects
+	}
+
+	err = TEMPLATES.ExecuteTemplate(w, "exportjson", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // handleExportExcelSubmit 함수는 export excel을 처리한다.
 func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -1160,6 +1219,87 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	// 저장된 Excel 파일을 다운로드 시킨다.
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s-%s.xlsx", project, format, task))
+	http.ServeFile(w, r, tempDir+"/"+filename)
+}
+
+// handleExportJSONSubmit 함수는 export json을 처리한다.
+func handleExportJSONSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	project := r.FormValue("project")
+	format := r.FormValue("format")
+	sortkey := r.FormValue("sortkey")
+	task := r.FormValue("task")
+
+	var searchItems []Item
+	switch format {
+	case "shot":
+		searchItems, err = SearchAllShot(session, project, sortkey)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "asset":
+		searchItems, err = SearchAllAsset(session, project, sortkey)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	case "", "all":
+		searchItems, err = SearchAll(session, project, sortkey)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	// task가 선택되어 있다면 item을 돌면서 item을 거른다.
+	var items []Item
+	if task == "all" {
+		items = searchItems
+	} else {
+		for _, i := range searchItems {
+			if _, found := i.Tasks[task]; !found {
+				continue
+			}
+			items = append(items, i)
+		}
+	}
+	data, err := json.MarshalIndent(items, "", "    ") // json 파일이 보기 좋게 정렬되어 있어야 한다.
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	tempDir, err := ioutil.TempDir("", "json")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer os.RemoveAll(tempDir)
+	filename := format + ".json"
+	err = ioutil.WriteFile(tempDir+"/"+filename, data, 0664)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 저장된 Json 파일을 다운로드 시킨다.
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s-%s-%s.json", project, format, task))
 	http.ServeFile(w, r, tempDir+"/"+filename)
 }
 
