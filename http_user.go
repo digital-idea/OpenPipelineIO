@@ -506,21 +506,26 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/error-captcha", http.StatusSeeOther)
 		return
 	}
-	if r.FormValue("ID") == "" {
+	id := r.FormValue("ID")
+	if id == "" {
 		http.Error(w, "ID 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
-	if r.FormValue("Password") == "" {
+	if !regexpUserID.MatchString(id) {
+		http.Error(w, "ID값은 영문,숫자로만 이루어져야 합니다", http.StatusBadRequest)
+		return
+	}
+	pw := r.FormValue("Password")
+	if pw == "" {
 		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
-	if r.FormValue("Password") != r.FormValue("ConfirmPassword") {
+	if pw != r.FormValue("ConfirmPassword") {
 		http.Error(w, "입력받은 2개의 패스워드가 서로 다릅니다", http.StatusInternalServerError)
 		return
 	}
-	id := r.FormValue("ID")
 	u := *NewUser(id)
-	pw, err := Encrypt(r.FormValue("Password"))
+	pw, err := Encrypt(pw)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -646,18 +651,22 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleSigninSubmit 함수는 회원가입 페이지이다.
+// handleSigninSubmit 함수는 사용자 로그인값을 처리하는 핸들러이다.
 func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
-	if r.FormValue("ID") == "" {
+	id := r.FormValue("ID")
+	if !regexpUserID.MatchString(id) {
+		http.Error(w, "ID값은 영문,숫자로만 이루어져야 합니다", http.StatusBadRequest)
+		return
+	}
+	if id == "" {
 		http.Error(w, "ID 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
-	if r.FormValue("Password") == "" {
+	pw := r.FormValue("Password")
+	if pw == "" {
 		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusBadRequest)
 		return
 	}
-	id := r.FormValue("ID")
-	pw := r.FormValue("Password")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
