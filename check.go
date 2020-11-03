@@ -17,6 +17,9 @@ var regexpShotname = regexp.MustCompile(`^[a-zA-Z0-9_-]+[a-zA-Z0-9]$`)
 // 에셋 네임값 정규식: stone01 형태
 var regexpAssetname = regexp.MustCompile(`^[a-zA-Z0-9_]+$`)
 
+// UserID값 정규식
+var regexpUserID = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+
 // ID값 정규식: organization
 var regexpID = regexp.MustCompile(`^[a-z0-9]+$`)
 
@@ -30,7 +33,7 @@ var regexpEmail = regexp.MustCompile(`^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$`)
 var regexWebColor = regexp.MustCompile(`^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$`)
 
 // Task값 정규식: task
-var regexpTask = regexp.MustCompile(`^[a-z0-9.]+$`)
+var regexpTask = regexp.MustCompile(`^[a-z0-9]+$`)
 
 // 검색쿼리형식: tasks.ani.status:done
 var regexTaskStatusQuery = regexp.MustCompile(`^[tasks]+\.[a-z0-9]+\.[stau]+\:[a-z]+$`)
