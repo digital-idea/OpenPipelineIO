@@ -1,5 +1,30 @@
-# RestAPI User
 
+# 사용자 권한
+CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한이 다릅니다.
+아래표를 참고하세요.
+
+#### 기능별 접근 권한정보
+
+| 구 분                 | Unknown | Guest | Client | Artist | Lead | PM | SV | IO,IT | PD | HQ | Dev | Admin |
+| -------------------- | ------- | ----- | ------ | ------ | ---- | -- | -- | ----- | -- | -- | --- | ----- |
+| Level                | 0       | 1     | 2      | 3      | 4    | 5  | 6  | 7     | 8  | 9  | 10  | 11    |
+| Import / Export 메뉴  | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| Review 메뉴           | X       | X     | X      | O      | O    | O  | O  | O     | O  | O  | O   | O     |
+| List 메뉴             | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| Add 메뉴              | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| Remove 메뉴           | X       | X     | X      | X      | X    | O  | X  | O     | O  | X  | O   | O     |
+| 도움말 메뉴             | O       | O     | O      | O      | O    | O  | O  | O     | O  | O  | O   | O     |
+| Task 수정             | X       | X     | X      | O      | O    | O  | O  | O     | O  | O  | O   | O     |
+| 태그 수정              | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| 소스 수정              | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| 레퍼런스 수정           | X       | X     | X      | X      | O    | O  | O  | O     | O  | O  | O   | O     |
+| 프로젝트 제어           | X       | X     | X      | X      | X    | X  | X  | X     | X  | X  | X   | O     |
+| User 제어             | X       | X     | X      | X      | X    | X  | X  | X     | X  | X  | X   | O     |
+| 사용자 AccessLevel 수정 | X       | X     | X      | X      | X    | X  | X  | X     | X  | X  | X   | O     |
+| 조직관리 삭제           | X       | X     | X      | X      | X    | X  | X  | X     | X  | X  | O   | O     |
+| 프로젝트 삭제           | X       | X     | X      | X      | X    | X  | X  | X     | X  | X  | X   | O     |
+
+# RestAPI User
 
 ## Get
 | uri | description | attribute name | example |
@@ -36,21 +61,6 @@ curl -H "Authorization: Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1Tn
 ```bash
 $ sudo csi3 -accesslevel 4 -id khw7096
 ```
-
-- 0: 권한이 없는 레벨
-- 1: 손님
-- 2: 클라이언트
-- 3: 아티스트
-- 4: 팀장, 실무 매니저
-- 5: 프로젝트 매니저
-- 6: 슈퍼바이저
-- 7: IO매니저, 서버권한이슈
-- 8: PD, 자금이슈
-- 9: 경영지원(인사,재무)
-- 10: 개발자
-- 11: 시스템 관리자
-
-Accesslevel이 10인 유저라면 웹 GUI에서도 각 사용자별 Accesslevel을 수정할 수 있습니다.
 
 #### JWT에 사용되는 환경변수
 CSI_JWT_TOKEN_KEY 로 세션 암호화에 사용될 문자를 환경변수로 잡아주세요.
