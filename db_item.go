@@ -56,7 +56,6 @@ func setItem(session *mgo.Session, project string, i Item) error {
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": i.ID}, i)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil
