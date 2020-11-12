@@ -9,44 +9,104 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleAPIUser 함수는 사용자의 id를 받아서 사용자 정보를 반환한다.
+// handleAPIUser 함수는 사용자관련 REST API이다. GET, DELETE를 지원한다.
 func handleAPIUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+	//GET 메소드는 사용자의 id를 받아서 사용자 정보를 반환한다.
+	if r.Method == http.MethodGet {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer session.Close()
+		_, _, err = TokenHandler(r, session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		id := r.FormValue("id")
+		if id == "" {
+			http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+			return
+		}
+		user, err := getUser(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		type recipe struct {
+			Data User `json:"data"`
+		}
+		rcp := recipe{}
+		// 불필요한 정보는 초기화 시킨다.
+		user.Password = ""
+		user.Token = ""
+		rcp.Data = user
+		err = json.NewEncoder(w).Encode(rcp)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//responce
+		data, err := json.Marshal(rcp)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data)
+		return
+		// DELETE 메소드는 사용자의 ID를 받아 해당 사용자를 DB에서 삭제한다.
+	} else if r.Method == http.MethodDelete {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer session.Close()
+		// accesslevel 체크. user 삭제는 admin만 가능하다.
+		_, accesslevel, err := TokenHandler(r, session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		if int(accesslevel) < 11 {
+			http.Error(w, "permission is low", http.StatusUnauthorized)
+			return
+		}
+		id := r.FormValue("id")
+		if id == "" {
+			http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+			return
+		}
+		user, err := getUser(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		err = rmUser(session, user)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//responce
+		data, err := json.Marshal("deleted")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data)
+		return
+	} else {
+		http.Error(w, "Not Supported Method", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	defer session.Close()
-	_, _, err = TokenHandler(r, session)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	q := r.URL.Query()
-	id := q.Get("id")
-	user, err := getUser(session, id)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
-	type recipe struct {
-		Data User `json:"data"`
-	}
-	rcp := recipe{}
-	// 불필요한 정보는 초기화 시킨다.
-	user.Password = ""
-	user.Token = ""
-	rcp.Data = user
-	err = json.NewEncoder(w).Encode(rcp)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-		return
-	}
+
 }
 
 // handleAPISearchUser 함수는 단어를 받아서 조건에 맞는 사용자 정보를 반환한다.

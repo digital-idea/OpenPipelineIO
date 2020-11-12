@@ -37,11 +37,15 @@ CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한�
 
 
 ## Post
-
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
 | /api/setleaveuser | 유저가 퇴사 상태 설정(권한은 Unknown으로 변경)| id, leave | `$ curl -d "id=id&leave=true" http://127.0.0.1/api/setleaveuser` |
+
+## Delete
+| uri | description | attribute name | example |
+| --- | --- | --- | --- |
+| /api/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://csi.lazypic.org/api/user?id=woong` |
 
 ## 인증을 통한 restAPI 사용방법
 
