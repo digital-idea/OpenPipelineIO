@@ -2888,7 +2888,7 @@ func RmComment(session *mgo.Session, project, name, userID, date string) (string
 }
 
 // AddSource 함수는 item에 소스링크를 추가한다.
-func AddSource(session *mgo.Session, project, name, userID, title, path string) (string, error) {
+func AddSource(session *mgo.Session, project, name, author, title, path string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2910,7 +2910,7 @@ func AddSource(session *mgo.Session, project, name, userID, title, path string) 
 	}
 	s := Source{}
 	s.Date = time.Now().Format(time.RFC3339)
-	s.Author = userID
+	s.Author = author
 	s.Title = title
 	s.Path = path
 	i.Sources = append(i.Sources, s)
@@ -2921,8 +2921,8 @@ func AddSource(session *mgo.Session, project, name, userID, title, path string) 
 	return id, nil
 }
 
-// AddReference 함수는 item에 소스링크를 추가한다.
-func AddReference(session *mgo.Session, project, name, userID, title, path string) (string, error) {
+// AddReference 함수는 item에 레퍼런스 링크를 추가한다.
+func AddReference(session *mgo.Session, project, name, author, title, path string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2939,7 +2939,7 @@ func AddReference(session *mgo.Session, project, name, userID, title, path strin
 	}
 	r := Source{}
 	r.Date = time.Now().Format(time.RFC3339)
-	r.Author = userID
+	r.Author = author
 	r.Title = title
 	r.Path = path
 	i.References = append(i.References, r)
