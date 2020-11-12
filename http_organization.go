@@ -117,7 +117,7 @@ func handleRmOrganizationSubmit(w http.ResponseWriter, r *http.Request) {
 	typ := r.FormValue("organizationtype")
 	id := r.FormValue("id")
 	if !regexpTask.MatchString(id) {
-		http.Error(w, "task 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
+		http.Error(w, "task 이름은 소문자, 숫자, 언더바로만 이루어져야 합니다", http.StatusBadRequest)
 		return
 	}
 	switch typ {

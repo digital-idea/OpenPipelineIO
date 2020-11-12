@@ -163,7 +163,7 @@ func handleAddTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	name := r.FormValue("name")
 	if !regexpTask.MatchString(name) {
-		http.Error(w, "task 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
+		http.Error(w, "task 이름은 소문자, 숫자, 언더바로만 이루어져야 합니다", http.StatusBadRequest)
 		return
 	}
 	typ := r.FormValue("type")
@@ -242,7 +242,7 @@ func handleRmTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	name := r.FormValue("name")
 	if !regexpTask.MatchString(name) {
-		http.Error(w, "task 이름은 소문자로만 이루어져야 합니다", http.StatusBadRequest)
+		http.Error(w, "task 이름은 소문자, 숫자, 언더바로만 이루어져야 합니다", http.StatusBadRequest)
 		return
 	}
 	typ := r.FormValue("type")

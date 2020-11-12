@@ -86,3 +86,40 @@ func TestVaildRnumTags(t *testing.T) {
 		}
 	}
 }
+
+func TestTaskname(t *testing.T) {
+	cases := []struct {
+		in   string
+		want bool
+	}{{
+		in:   "comp", //소문자
+		want: true,
+	}, {
+		in:   "comp1", //소문자, 숫자
+		want: true,
+	}, {
+		in:   "comp_test", //소문자, 언더바
+		want: true,
+	}, {
+		in:   "comp_1", //소문자, 언더바, 숫자
+		want: true,
+	}, {
+		in:   "", //빈문자열
+		want: false,
+	}, {
+		in:   "Comp", //대문자 포함
+		want: false,
+	}, {
+		in:   "comp-1", //대쉬 포함
+		want: false,
+	}, {
+		in:   "Comp-1", // 대문자, 대쉬 포함
+		want: false,
+	}}
+	for _, c := range cases {
+		got := regexpTask.MatchString(c.in)
+		if got != c.want {
+			t.Fatalf("TestShotname(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
+		}
+	}
+}
