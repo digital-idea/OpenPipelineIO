@@ -88,6 +88,75 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleImportJSON 함수는 JSON 파일을 Import 하는 페이지 이다.
+func handleImportJSON(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	type recipe struct {
+		User
+		SessionID   string
+		Devmode     bool
+		Projectlist []string
+	}
+	rcp := recipe{}
+	rcp.Devmode = *flagDevmode
+	rcp.SessionID = ssid.ID
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당리스트를 사용한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, j)
+			}
+		}
+		rcp.Projectlist = accessProjects
+	}
+	// 기존 Temp 경로 내부 .json 데이터를 삭제한다.
+	tmp, err := userTemppath(ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = RemoveJSON(tmp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "importjson", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleUploadExcel 핸들러는 Excel 파일을 받아 서버에 저장한다.
 func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -101,7 +170,8 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	// dropzone setting
 	file, header, err := r.FormFile("file")
 	if err != nil {
-		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	defer file.Close()
 	mimeType := header.Header.Get("Content-Type")
@@ -109,39 +179,84 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 	case "text/csv":
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		tmp, err := userTemppath(ssid.ID)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		path := tmp + "/" + header.Filename // 업로드한 파일 리스트를 불러오기 위해 뒤에 붙는 Unixtime을 제거한다.
 		err = ioutil.WriteFile(path, data, 0666)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		fmt.Println(path)
 	case "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": // MS-Excel, Google & Libre Excel
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		tmp, err := userTemppath(ssid.ID)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		path := tmp + "/" + header.Filename // 업로드한 파일 리스트를 불러오기 위해 뒤에 붙는 Unixtime을 제거한다.
 		err = ioutil.WriteFile(path, data, 0666)
 		if err != nil {
-			fmt.Fprintf(w, "%v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	default:
-		// 지원하지 않는 파일. 저장하지 않는다.
-		log.Printf("Not support: %s", mimeType)
+		http.Error(w, fmt.Sprintf("Not support: %s", mimeType), http.StatusInternalServerError) // 지원하지 않는 파일. 저장하지 않는다.
+		return
+	}
+}
+
+// handleUploadJSON 핸들러는 JSON 파일을 받아 서버에 저장한다.
+func handleUploadJSON(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	// dropzone setting
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer file.Close()
+	mimeType := header.Header.Get("Content-Type")
+	switch mimeType {
+	case "application/json":
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		tmp, err := userTemppath(ssid.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		path := tmp + "/" + header.Filename // 업로드한 파일 리스트를 불러오기 위해 뒤에 붙는 Unixtime을 제거한다.
+		err = ioutil.WriteFile(path, data, 0666)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	default:
+		http.Error(w, fmt.Sprintf("Not support: %s", mimeType), http.StatusInternalServerError) // 지원하지 않는 파일. 저장하지 않는다.
+		return
 	}
 }
 
@@ -344,6 +459,109 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+// handleReportJSON 함수는 json 파일을 체크하고 분석 보고서로 Redirection 한다.
+func handleReportJSON(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	// 파일네임을 구한다.
+	tmppath, err := userTemppath(ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// .json 파일을 읽는다.
+	jsons, err := GetJSON(tmppath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(jsons) != 1 {
+		http.Redirect(w, r, "/importjson", http.StatusSeeOther)
+		return
+	}
+	jsonFile, err := ioutil.ReadFile(jsons[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 파일이 정상인지 체크한다.
+	type recipe struct {
+		Project   string
+		Filename  string
+		Overwrite bool
+		Rows      []Item
+		User
+		SessionID string
+		Devmode   bool
+		SearchOption
+		Projectlist []string
+	}
+	rcp := recipe{}
+	rcp.Project = project
+	rcp.SessionID = ssid.ID
+	rcp.Devmode = *flagDevmode
+	rcp.SearchOption = handleRequestToSearchOption(r)
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Projectlist, err = OnProjectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 만약 사용자에게 AccessProjects가 설정되어있다면 해당리스트를 사용한다.
+	if len(rcp.User.AccessProjects) != 0 {
+		var accessProjects []string
+		for _, i := range rcp.Projectlist {
+			for _, j := range rcp.User.AccessProjects {
+				if i != j {
+					continue
+				}
+				accessProjects = append(accessProjects, j)
+			}
+		}
+		rcp.Projectlist = accessProjects
+	}
+
+	var rows []Item
+	err = json.Unmarshal(jsonFile, &rows)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(rows) == 0 {
+		http.Error(w, "json 값이 비어있습니다.", http.StatusBadRequest)
+		return
+	}
+	rcp.Rows = rows
+	err = TEMPLATES.ExecuteTemplate(w, "reportjson", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleExcelSubmit 함수는 excel 파일을 전송한다.
@@ -746,6 +964,104 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+// handleJSONSubmit 함수는 json 파일을 전송한다.
+func handleJSONSubmit(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	// 파일네임을 구한다.
+	tmppath, err := userTemppath(ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 로그 기록을 위해서 host 값을 구한다.
+	_, _, err = net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	// .xlsx 파일을 읽는다.
+	jsonFiles, err := GetJSON(tmppath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(jsonFiles) != 1 {
+		http.Redirect(w, r, "/importexcel", http.StatusSeeOther)
+		return
+	}
+	jsonFile, err := ioutil.ReadFile(jsonFiles[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type recipe struct {
+		Filename string
+		User
+		SessionID string
+		Devmode   bool
+		SearchOption
+	}
+	rcp := recipe{}
+	rcp.SessionID = ssid.ID
+	rcp.Devmode = *flagDevmode
+	rcp.SearchOption = handleRequestToSearchOption(r)
+	rcp.User, err = getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	project := r.FormValue("project")
+	overwrite := str2bool(r.FormValue("overwrite"))
+	var rows []Item
+	err = json.Unmarshal(jsonFile, &rows)
+
+	if len(rows) == 0 {
+		http.Error(w, "json 값이 비어있습니다.", http.StatusBadRequest)
+		return
+	}
+	for _, i := range rows {
+		if overwrite {
+			// 기존데이터를 삭제한다.
+			err = setItem(session, project, i)
+			if err == mgo.ErrNotFound {
+				// 새로운 데이터를 추가한다.
+				err = addItem(session, project, i)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+			} else {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+	}
+	err = TEMPLATES.ExecuteTemplate(w, "resultjson", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 // handleExportExcel 함수는 엑셀파일을 Export 하는 페이지 이다.

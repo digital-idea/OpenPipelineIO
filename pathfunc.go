@@ -43,6 +43,29 @@ func RemoveXLSX(dir string) error {
 	return nil
 }
 
+// RemoveJSON 함수는 폴더 내부 .xlsx 파일을 지운다.
+func RemoveJSON(dir string) error {
+	d, err := os.Open(dir)
+	if err != nil {
+		return err
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		return err
+	}
+	for _, name := range names {
+		if filepath.Ext(name) != ".json" {
+			continue
+		}
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // GetXLSX 함수는 폴더 내부에 .xlsx 파일을 찾는다.
 func GetXLSX(dir string) ([]string, error) {
 	var result []string
@@ -57,6 +80,27 @@ func GetXLSX(dir string) ([]string, error) {
 	}
 	for _, name := range names {
 		if filepath.Ext(name) != ".xlsx" {
+			continue
+		}
+		result = append(result, filepath.Join(dir, name))
+	}
+	return result, nil
+}
+
+// GetJSON 함수는 폴더 내부에 .json 파일을 찾는다.
+func GetJSON(dir string) ([]string, error) {
+	var result []string
+	d, err := os.Open(dir)
+	if err != nil {
+		return result, err
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		return result, err
+	}
+	for _, name := range names {
+		if filepath.Ext(name) != ".json" {
 			continue
 		}
 		result = append(result, filepath.Join(dir, name))

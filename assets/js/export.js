@@ -4,6 +4,12 @@ function changeReportExcelURI() {
     document.getElementById("reportexcelURI").href = "/reportexcel?project=" + project;
 }
 
+// changeReportJSONURI 함수는 프로젝트를 선택하면 reportjson url을 설정한다.
+function changeReportJSONURI() {
+    let project = CurrentProject();
+    document.getElementById("reportJSONURI").href = "/reportjson?project=" + project;
+}
+
 // changeExportFormatType 함수는 ExportExcel의 포멧 옵션이 변경될 때 실행되는 함수이다.
 function changeExportFormatType() {
     let token = document.getElementById("token").value;
@@ -139,6 +145,7 @@ function exportJsonCurrentPage() {
     let out = false; // legacy
     let none = false; // legacy
     let truestatusList = []
+    let truestatus = "" // ver1 검색바 때문에 이 값이 필요하다.
     if (searchbartemplate === "searchbarV2") {
         let checkStatus = document.querySelectorAll('*[id^="searchbox-checkbox-"]');
         for (i=0;i<checkStatus.length;i++) {

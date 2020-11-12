@@ -1,0 +1,87 @@
+{{define "reportjson"}}
+
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+    <div class="p-5">
+        <div class="col-12 mx-auto">
+            <div class="pt-3 pb-3">
+                <h2 class="section-heading">Report JSON</h2>
+            </div>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-darkmode">Name</th>
+                        <th scope="col" class="text-darkmode">Rollnum</th>
+                        <th scope="col" class="text-darkmode">Type</th>
+                        <th scope="col" class="text-darkmode">작업내용</th>
+                        <th scope="col" class="text-darkmode">Tags</th>
+                        <th scope="col" class="text-darkmode">JustTCIn</th>
+                        <th scope="col" class="text-darkmode">JustTCOut</th>
+                        <th scope="col" class="text-darkmode">2D마감</th>
+                        <th scope="col" class="text-darkmode">3D마감</th>
+                        <th scope="col" class="text-darkmode">Final Date</th>
+                        <th scope="col" class="text-darkmode">Final Version</th>
+                        <th scope="col" class="text-darkmode">HandleIn</th>
+                        <th scope="col" class="text-darkmode">HandleOut</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Rows}}
+                        <tr>
+                            <td class="text-darkmode">{{if .Name}}{{.Name}}{{else}}NO_NAME{{end}}</td>
+                            <td class="text-darkmode">{{.Rnum}}</td>
+                            <td class="text-darkmode">{{.Shottype}}</td>
+                            <td class="text-darkmode small">{{.Note.Text}}</td>
+                            <td class="text-darkmode small">{{List2str .Tag}}</td>
+                            <td class="text-darkmode">{{.JustTimecodeIn}}</td>
+                            <td class="text-darkmode">{{.JustTimecodeOut}}</td>
+                            <td class="text-darkmode">{{ToNormalTime .Ddline2d}}</td>
+                            <td class="text-darkmode">{{ToNormalTime .Ddline3d}}</td>
+                            <td class="text-darkmode">{{ToNormalTime .Findate}}</td>
+                            <td class="text-darkmode">{{.Finver}}</td>
+                            <td class="text-darkmode">{{.HandleIn}}</td>
+                            <td class="text-darkmode">{{.HandleOut}}</td>
+                        </tr>
+                    {{end}}
+                </tbody>
+            </table>
+            
+        </div>
+        
+        <div class="col-lg-4 col-md-8 col-sm-12 mx-auto">
+            <form action="/json-submit" method="POST">
+                <div class="form-group">
+                    <label>Project</label>
+                    <select name="project" class="form-control">
+                        {{range .Projectlist}}
+                            <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">import 대상 프로젝트를 선택해주세요.</small>
+                </div>
+                <div class="col-sm">
+                    <div class="form-check">
+                        <input type="checkbox" id="overwrite" name="overwrite" class="form-check-input" value="true">
+                        <label class="form-check-label" for="overwrite">작업내용 덮어쓰기</label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-warning mt-5">Process JSON</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+</html>
+
+{{end}}

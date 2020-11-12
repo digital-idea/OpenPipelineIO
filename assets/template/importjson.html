@@ -1,0 +1,45 @@
+{{define "importjson"}}
+
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+    <div class="container p-5">
+        <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+            <div class="pt-3 pb-3">
+                <h2 class="section-heading">Import JSON</h2>
+            </div>
+            <div class="">
+                <form action="/upload-json" class="dropzone">
+                    <div class="fallback">
+                        <input name="file" type="file" />
+                    </div>
+                </form>
+                <small class="form-text text-mute">업로드할 .json 파일을 Drag & Drop 해주세요.</small>
+                <div class="form-group pt-5">
+                    <label>Project</label>
+                    <select id="searchbox-project" name="Project" class="form-control" onchange="changeReportJSONURI()">
+                        {{range .Projectlist}}
+                            <option value="{{.}}">{{.}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">import할 대상의 프로젝트를 선택해주세요.</small>
+                </div>
+            </div>
+        </div>
+        <div class="text-center pt-5">
+            <a href="/reportjson?project={{index .Projectlist 0}}" id="reportJSONURI" class="btn btn-outline-warning">NEXT</a>
+        </div>
+    </div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
+<script src="/assets/js/csi_v02.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+<script src="/assets/js/export.js"></script>
+</html>
+
+{{end}}
