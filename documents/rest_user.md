@@ -99,3 +99,23 @@ try:
 except:
     print "error"
 ```
+
+#### Python 예제: 사용자ID로 User 정보를 가지고 오는 코드
+
+```python
+#!/usr/bin/python
+#coding:utf-8
+import urllib2
+import json
+
+try:
+    id = "userid"
+    endpoint = "https://csi.lazypic.org/api/user?id=%s" % (id)
+    request = urllib2.Request(endpoint)
+    key = "<Token>"
+    request.add_header("Authorization", "Basic %s" % key)
+    data = urllib2.urlopen(request)
+    print data.read()
+except:
+    print("RestAPI 를 가지고 올 수 없습니다.")
+```
