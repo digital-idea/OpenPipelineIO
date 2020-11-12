@@ -305,10 +305,19 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	if err != nil {
 		log.Fatal(err)
 	}
-	// src 라면 기존 plate에 소스 등록을 진행한다.
-	_, err = AddSource(session, project, name, "scantool", name+"_"+typ, platePath)
-	if err != nil {
-		log.Println(err)
+	// 만약 typ에 src 문자로 시작하면 소스로 판단하고 기존 item에 자동으로 소스 등록을 진행한다.
+	if strings.HasPrefix(typ, "src") {
+		_, err = AddSource(session, project, name, "scantool", name+"_"+typ, platePath)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+	// 만약 typ이 ref 문자로 시작하면 레퍼런스로 판단하고 기존 item에 자동으로 레퍼런스 등록을 진행한다.
+	if strings.HasPrefix(typ, "ref") {
+		_, err = AddReference(session, project, name, "scantool", name+"_"+typ, platePath)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	// org1, left1 형태의 아이템이 처리되면 org, left 아이템의 .UseType을 추가해준다.
 	// 이 값은 썸네일을 업데이트하고, 아티스트가 재스캔 되었을 때 사용할 타입의 알람으로 사용된다.
