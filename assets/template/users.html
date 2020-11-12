@@ -57,7 +57,8 @@
                     <a href="/users?search=tag:{{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
                 {{end}}
                 {{if eq $.User.AccessLevel 11}}
-                    <a href="/edituser?id={{.ID}}" class="btn btn-danger btn-sm p-1 mt-1">Edit</a>
+                    <a href="/edituser?id={{.ID}}" class="btn btn-outline-warning btn-sm p-1 mt-1">Edit</a>
+                    <a href="/edituser?id={{.ID}}" class="btn btn-outline-danger btn-sm p-1 mt-1">DEL</a>
                 {{end}}
                 </div>
             </div>
