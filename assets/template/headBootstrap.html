@@ -13,16 +13,16 @@
 <link rel="stylesheet" type="text/css" href="/assets/font/NanumSquare/nanumsquare.css">
 <style>
     {{range .Status}}
-        .bg-{{.ID}}, .bg-{{.ID}}:hover, .badge-{{.ID}}, .badge-6 {
-            background-color: {{.BGColor}};
-            color: {{.TextColor}};
-            border: 1px solid {{.BorderColor}};
+        .bg-{{.ID}}, .bg-{{.ID}}:hover, .badge-{{.ID}} {
+            background-color: {{.BGColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            border: 1px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
         }
         .text-{{.ID}}, .text-{{.ID}}:hover {
-            color: {{.TextColor}};
+            color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
         }
         .border-{{.ID}} {
-            border: 4px solid {{.BorderColor}};
+            border: 4px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
         }
     {{end}}
 </style>

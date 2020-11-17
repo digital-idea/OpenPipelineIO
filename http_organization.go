@@ -104,7 +104,7 @@ func handleRmOrganizationSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel != 10 {
+	if ssid.AccessLevel != 11 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
