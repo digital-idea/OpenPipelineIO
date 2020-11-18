@@ -115,7 +115,7 @@ try:
     key = "<Token>"
     request.add_header("Authorization", "Basic %s" % key)
     data = urllib2.urlopen(request)
-    print data.read()
+    print json.load(data)
 except:
     print("RestAPI 를 가지고 올 수 없습니다.")
 ```

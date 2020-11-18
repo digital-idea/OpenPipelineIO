@@ -9,11 +9,10 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleAPIUser 함수는 사용자관련 REST API이다. GET, DELETE를 지원한다.
-func handleAPIUser(w http.ResponseWriter, r *http.Request) {
-	//GET 메소드는 사용자의 id를 받아서 사용자 정보를 반환한다.
+// handleAPI2User 함수는 사용자관련 REST API이다. GET, DELETE를 지원한다.
+func handleAPI2User(w http.ResponseWriter, r *http.Request) {
+	// GET 메소드는 사용자의 id를 받아서 사용자 정보를 반환한다.
 	if r.Method == http.MethodGet {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -35,21 +34,11 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		type recipe struct {
-			Data User `json:"data"`
-		}
-		rcp := recipe{}
 		// 불필요한 정보는 초기화 시킨다.
 		user.Password = ""
 		user.Token = ""
-		rcp.Data = user
-		err = json.NewEncoder(w).Encode(rcp)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		//responce
-		data, err := json.Marshal(rcp)
+		// json 으로 결과 전송
+		data, err := json.Marshal(user)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -60,7 +49,6 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		return
 		// DELETE 메소드는 사용자의 ID를 받아 해당 사용자를 DB에서 삭제한다.
 	} else if r.Method == http.MethodDelete {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -106,7 +94,6 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Not Supported Method", http.StatusMethodNotAllowed)
 		return
 	}
-
 }
 
 // handleAPISearchUser 함수는 단어를 받아서 조건에 맞는 사용자 정보를 반환한다.
