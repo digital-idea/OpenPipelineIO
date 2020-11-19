@@ -292,8 +292,54 @@ $ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05" https:/
 $ curl -X POST -d "project=TEMP&name=SS_0011&task=fx&predate=2018-06-05T14:45:34%2B09:00" https://csi.lazypic.org/api/setpredate
 ```
 
-#### python에서 publish 삭제하기
-python3을 이용해서 publish 삭제하기
+#### Python2.7.x 에서 publish값을 notuse로 바꾸는 예제
+
+```python
+#!/usr/bin/python
+#coding:utf8
+import urllib
+import urllib2
+import json
+
+url = 'https://csi.lazypic.org/api/setpublishstatus'
+header = {"Authorization": "Basic <Token>"}
+data = { 'project' : 'TEMP',
+		'id' : 'SS_0010_org',
+		'task' : 'comp',
+		'key' : 'maya',
+		'status' : 'notuse',
+		'createtime' : '2020-11-19T11:35:27+09:00',
+		'path' : '/show/test.nk',
+		}
+req = urllib2.Request(url=url, data=urllib.urlencode(data), headers=header)
+f = urllib2.urlopen(req)
+print(json.load(f))
+```
+
+#### Python2.7.x 에서 publish 삭제 예제
+
+```python
+#!/usr/bin/python
+#coding:utf8
+import urllib
+import urllib2
+import json
+
+url = 'https://csi.lazypic.org/api/rmpublish'
+header = {"Authorization": "Basic <Token>"}
+data = { 'project' : 'TEMP',
+		'id' : 'SS_0010_org',
+		'task' : 'comp',
+		'key' : 'maya',
+		'createtime' : '2020-11-19T11:35:27+09:00',
+		'path' : '/show/test.nk',
+		}
+req = urllib2.Request(url=url, data=urllib.urlencode(data), headers=header)
+f = urllib2.urlopen(req)
+print(json.load(f))
+```
+
+#### Python3 에서 publish 삭제 예제
 - python 3.4 이후 버전부터는 requests가 자동 설치됨
 - python 3.4 이전 버전은 requests 모듈을 수동으로 설치해주어야 함
 
@@ -308,7 +354,7 @@ import requests
 import json
 
 url = 'https://csi.lazypic.org/api/rmpublish'
-info = { 'project' : 'TEMP',
+data = { 'project' : 'TEMP',
 		'id' : 'SS_0010_org',
 		'task' : 'comp',
 		'key' : 'maya',
@@ -316,6 +362,6 @@ info = { 'project' : 'TEMP',
 		'path' : '/show/project/path',
 		}
 header = {"Authorization": "Basic <Token>"}
-result = requests.post(url=url, data=info, headers=header)
+result = requests.post(url=url, data=data, headers=header)
 print(result.json())
 ```
