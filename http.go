@@ -388,7 +388,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/uploadthumbnail", handleAPIUploadThumbnail)
 
 	// restAPI USER
-	http.HandleFunc("/api/user", handleAPIUser)
+	http.HandleFunc("/api/user", handleAPIUser) // legacy
+	http.HandleFunc("/api2/user", handleAPI2User)
 	http.HandleFunc("/api/users", handleAPISearchUser)
 	http.HandleFunc("/api/validuser", handleAPIValidUser) // 보안취약점 이슈가 있다. 다른 툴과 쉽게 연동할 때 편리하다. 보안레벨을 높게 올릴때는 허용하지 않도록 한다.
 	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
