@@ -4795,7 +4795,6 @@ function focusReview(id) {
 
 function rmUser() {
     let id = document.getElementById("modal-rmuser-id").value
-    console.log(id)
     $.ajax({
         url: "/api2/user?id="+id,
         type: "DELETE",
