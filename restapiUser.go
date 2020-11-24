@@ -80,6 +80,11 @@ func handleAPI2User(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		err = rmToken(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		//responce
 		data, err := json.Marshal("deleted")
 		if err != nil {
