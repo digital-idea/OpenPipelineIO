@@ -59,8 +59,7 @@
                 {{end}}
                 {{if eq $.User.AccessLevel 11}}
                     <a href="/edituser?id={{.ID}}" class="btn btn-outline-warning btn-sm p-1 mt-1">Edit</a>
-                    <!--<span type="button" class="remove ml-1 btn btn-outline-danger" data-toggle="modal" data-target="#modal-rmuser" onclick="setRmUserModal('{{.ID}}')">DELETE</span>-->
-                    <span class="remove" onclick="setRmUserModal('{{.ID}}')" data-toggle="modal" data-target="#modal-rmuser">DEL</span>
+                    <span class="btn btn-outline-danger btn-sm p-1 mt-1" onclick="setRmUserModal('{{.ID}}')" data-toggle="modal" data-target="#modal-rmuser">DEL</span>
                 {{end}}
                 </div>
             </div>
