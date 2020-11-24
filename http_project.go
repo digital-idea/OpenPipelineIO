@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/digital-idea/ditime"
@@ -482,7 +484,7 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	project := r.FormValue("Project")
-
+	rmReviews := str2bool(r.FormValue("rmreviews"))
 	type recipe struct {
 		User    User
 		Devmode bool
@@ -504,6 +506,39 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	// 리뷰데이터 삭제
+	if rmReviews {
+		// 1. 리뷰 데이터의 물리적인 삭제
+		reviews, err := searchReview(session, "project:"+rcp.Project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		adminsetting, err := GetAdminSetting(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		for _, r := range reviews {
+			path := fmt.Sprintf("%s/%s.mp4", adminsetting.ReviewDataPath, r.ID.Hex())
+			fmt.Println(path)
+			if _, err := os.Stat(path); !os.IsNotExist(err) {
+				err = os.Remove(path) // Review 데이터가 존재하면 삭제한다.
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			}
+		}
+		// 2. 실제 Review DB 삭제
+		err = RmProjectReview(session, rcp.Project)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// 프로젝트 삭제
 	err = rmProject(session, rcp.Project)
 	if err != nil {
 		rcp.Error = err.Error()
