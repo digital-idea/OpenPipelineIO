@@ -118,10 +118,10 @@ func getToken(session *mgo.Session, id string) (Token, error) {
 }
 
 // rmUser 함수는 사용자를 삭제하는 함수이다.
-func rmUser(session *mgo.Session, u User) error {
+func rmUser(session *mgo.Session, id string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("user").C("users")
-	err := c.Remove(bson.M{"id": u.ID})
+	err := c.Remove(bson.M{"id": id})
 	if err != nil {
 		return err
 	}

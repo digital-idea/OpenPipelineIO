@@ -244,12 +244,7 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// 유저 삭제
-		user, err := getUser(session, id)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		err = rmUser(session, user)
+		err = rmUser(session, id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
