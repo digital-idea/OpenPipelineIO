@@ -395,7 +395,25 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	if searchbarTemplate != "" {
 		rcp.SearchOption.SearchbarTemplate = searchbarTemplate
 	}
-
+	// 혹시나 프로젝트가 삭제되면 프로젝트가 존재하지 않을 수 있다. DB에 프로젝트가 존재하는지 체크한다.
+	plist, err := Projectlist(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	hasProject := false
+	for _, p := range plist {
+		if p == rcp.SearchOption.Project {
+			hasProject = true
+			break
+		}
+		continue
+	}
+	// Project가 존재하지 않으면 전체 ProjectList의 첫번째 프로젝트를 가지고 온다.
+	if !hasProject {
+		rcp.SearchOption.Project = plist[0]
+	}
+	// 리다이렉션 한다.
 	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
