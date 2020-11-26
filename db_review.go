@@ -206,3 +206,14 @@ func RmReview(session *mgo.Session, id string) error {
 	}
 	return nil
 }
+
+// RmProjectReview 함수는 해당 프로젝트의 Review 데이터를 DB에서 삭제한다.
+func RmProjectReview(session *mgo.Session, project string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	_, err := c.RemoveAll(bson.M{"project": &bson.RegEx{Pattern: project}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
