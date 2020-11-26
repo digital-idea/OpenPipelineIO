@@ -521,7 +521,6 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		for _, r := range reviews {
 			path := fmt.Sprintf("%s/%s.mp4", adminsetting.ReviewDataPath, r.ID.Hex())
-			fmt.Println(path)
 			if _, err := os.Stat(path); !os.IsNotExist(err) {
 				err = os.Remove(path) // Review 데이터가 존재하면 삭제한다.
 				if err != nil {
