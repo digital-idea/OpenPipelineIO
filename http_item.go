@@ -401,6 +401,12 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 프로젝트가 하나도 없다면, 프로젝트 생성페이지로 이동한다.
+	if len(plist) == 0 {
+		http.Redirect(w, r, "/addproject", http.StatusSeeOther)
+		return
+	}
+	// 기존 검색바의 프로젝트 문자열이 DB에 존재하는지 체크한다.
 	hasProject := false
 	for _, p := range plist {
 		if p == rcp.SearchOption.Project {
