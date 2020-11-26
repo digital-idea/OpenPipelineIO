@@ -241,8 +241,8 @@ func handleRmTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	defer session.Close()
 	name := r.FormValue("name")
-	if !regexpTask.MatchString(name) {
-		http.Error(w, "task 이름은 소문자, 숫자, 언더바로만 이루어져야 합니다", http.StatusBadRequest)
+	if name == "" {
+		http.Error(w, "task명을 입력해주세요", http.StatusBadRequest)
 		return
 	}
 	typ := r.FormValue("type")
