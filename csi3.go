@@ -272,7 +272,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = rmUser(session, u)
+		err = rmUser(session, u.ID)
 		if err != nil {
 			log.Fatal(err)
 		}
