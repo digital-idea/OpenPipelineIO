@@ -1371,6 +1371,10 @@ function setDetailCommentsModal(project, id) {
     });
 }
 
+function setRmUserModal(id) {
+    document.getElementById("modal-rmuser-id").value = id;
+}
+
 function rmComment(project, id, date) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
@@ -4787,4 +4791,22 @@ function rvplay(id) {
 function focusReview(id) {
     document.getElementById('review-' + id).scrollIntoView(); // 해당아이템을 포커스한다.
     window.scrollTo({top:0, left:0, behavior:'auto'}); // 위 아이템을 포커싱 하면서 windows 포커싱이 틀어질 수 있다. windows 스크롤을 리셋한다.
+}
+
+function rmUser() {
+    let id = document.getElementById("modal-rmuser-id").value
+    $.ajax({
+        url: "/api2/user?id="+id,
+        type: "DELETE",
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            location.reload()
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
 }

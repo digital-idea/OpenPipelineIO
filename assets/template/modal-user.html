@@ -1,0 +1,28 @@
+{{define "modal-user"}}
+<!-- Modal: Preset value-->
+<input type="hidden" id="token" value="{{$.User.Token}}">
+<input type="hidden" id="userid" value="{{$.User.ID}}">
+<!-- Modal: Rm User-->
+<div class="modal fade" id="modal-rmuser" tabindex="-1" role="dialog" aria-labelledby="modal-rmuser" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-rmpublishkey-title">Rm User</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-rmuser-id">
+                <label id="modal-rmuser-text" class="col-form-label">해당 User를 삭제하겠습니까?</label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-danger" onclick="rmUser()" data-dismiss="modal">DELETE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+{{end}}

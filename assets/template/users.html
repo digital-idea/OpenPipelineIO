@@ -1,6 +1,7 @@
 {{define "users" }}
 {{template "headBootstrap"}}
 {{template "navbar" .}}
+{{template "modal-user" .}}
 <body>
 
 <!--searchbox-->
@@ -58,7 +59,7 @@
                 {{end}}
                 {{if eq $.User.AccessLevel 11}}
                     <a href="/edituser?id={{.ID}}" class="btn btn-outline-warning btn-sm p-1 mt-1">Edit</a>
-                    <a href="/edituser?id={{.ID}}" class="btn btn-outline-danger btn-sm p-1 mt-1">DEL</a>
+                    <span class="btn btn-outline-danger btn-sm p-1 mt-1" onclick="setRmUserModal('{{.ID}}')" data-toggle="modal" data-target="#modal-rmuser">DEL</span>
                 {{end}}
                 </div>
             </div>
@@ -71,5 +72,6 @@
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/input.js"></script>
 </html>
 {{end}}

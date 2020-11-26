@@ -237,6 +237,13 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
 			return
 		}
+		// 토큰 삭제
+		err = rmToken(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// 유저 삭제
 		user, err := getUser(session, id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

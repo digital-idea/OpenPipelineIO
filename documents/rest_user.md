@@ -45,7 +45,7 @@ CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한�
 ## Delete
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://csi.lazypic.org/api/user?id=woong` |
+| /api2/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://csi.lazypic.org/api2/user?id=woong` |
 
 ## 인증을 통한 restAPI 사용방법
 
