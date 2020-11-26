@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/md5"
+	"encoding/base64"
 	"fmt"
 	"strings"
 
@@ -63,4 +64,9 @@ func Encrypt(s string) (string, error) {
 // Str2md5 함수는 문자를 받아서 md5로 암호화된 문자를 반환한다.
 func Str2md5(str string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(str)))
+}
+
+// Str2Base64 함수는 문자를 받아서 base64로 인코딩한다.
+func Str2Base64(str string) string {
+	return base64.StdEncoding.EncodeToString([]byte(str))
 }
