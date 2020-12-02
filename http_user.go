@@ -351,7 +351,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignup 함수는 회원가입 페이지이다.
 func handleSignup(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	RmSessionID(w) // SignIn을 할 때 역시 기존의 세션을 지운다. 여러사용자 2중 로그인 방지
 	type recipe struct {
 		Company     string
 		CaptchaID   string
@@ -615,6 +615,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignin 함수는 로그인 페이지이다.
 func handleSignin(w http.ResponseWriter, r *http.Request) {
+	RmSessionID(w) // SignIn을 할 때 역시 기존의 세션을 지운다. 여러사용자 2중 로그인 방지
 	w.Header().Set("Content-Type", "text/html")
 	type recipe struct {
 		Company string
