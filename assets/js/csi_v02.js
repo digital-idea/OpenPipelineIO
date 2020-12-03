@@ -4,6 +4,7 @@ if (navigator.appVersion.indexOf("Mac") != -1) OSName="Mac";
 if (navigator.appVersion.indexOf("X11") != -1) OSName="Linux";
 if (navigator.appVersion.indexOf("Linux") != -1) OSName="Linux";
 
+// changeTitle 함수는 검색바의 프로젝트를 가지고 와서 웹페이지의 Title을 변경한다.
 function changeTitle() {
 	let pretitle = "CSI: "
 	let e = document.getElementById("Project");
