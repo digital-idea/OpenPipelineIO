@@ -351,7 +351,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignup 함수는 회원가입 페이지이다.
 func handleSignup(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	RmSessionID(w) // SignIn을 할 때 역시 기존의 세션을 지운다. 여러사용자 2중 로그인 방지
 	type recipe struct {
 		Company     string
 		CaptchaID   string
@@ -399,7 +399,6 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -407,7 +406,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 
 // handleInvalidAccess 함수는 사용자의 레벨이 부족할 때 접속하는 페이지이다.
 func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	RmSessionID(w)
 	err := TEMPLATES.ExecuteTemplate(w, "invalidaccess", nil)
 	if err != nil {
 		log.Println(err)
@@ -418,10 +417,9 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 
 // handleInvalidPass 함수는 사용자의 패스워드가 많이 틀려서 접속되는 페이지이다.
 func handleInvalidPass(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	RmSessionID(w)
 	err := TEMPLATES.ExecuteTemplate(w, "invalidpass", nil)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -615,7 +613,7 @@ func handleSignupSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleSignin 함수는 로그인 페이지이다.
 func handleSignin(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	RmSessionID(w) // SignIn을 할 때 역시 기존의 세션을 지운다. 여러사용자 2중 로그인 방지
 	type recipe struct {
 		Company string
 		Message string
