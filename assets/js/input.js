@@ -4435,7 +4435,10 @@ function initCanvas() {
     screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
-function selectReviewItem(id, fps) {
+function selectReviewItem(id, project, fps) {
+    // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
+    document.title = "Review: " + project;
+
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
