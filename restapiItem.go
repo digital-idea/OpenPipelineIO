@@ -5535,46 +5535,29 @@ func handleAPIRenameTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "before":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Before = v
-		case "after":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.After = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	before := r.FormValue("before")
+	if before == "" {
+		http.Error(w, "before를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Before = strings.Replace(before, " ", "", -1) // 빈 공백을 제거한다.
+	after := r.FormValue("after")
+	if after == "" {
+		http.Error(w, "after를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.After = strings.Replace(after, " ", "", -1) // 빈 공백을 제거한다.
 	err = RenameTag(session, rcp.Project, rcp.Before, rcp.After)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rename Tag: %s > %s", rcp.Before, rcp.After), rcp.Project, "", "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -5588,7 +5571,11 @@ func handleAPIRenameTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
