@@ -998,7 +998,6 @@ func handleReplaceTagSubmit(w http.ResponseWriter, r *http.Request) {
 
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1010,6 +1009,6 @@ func handleReplaceTagSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// users 리다리렉트한다.
+	// users 리다이렉트한다.
 	http.Redirect(w, r, "/users", http.StatusSeeOther)
 }
