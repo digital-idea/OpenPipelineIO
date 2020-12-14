@@ -13,41 +13,37 @@ Python, Go, Java, C++, node.JS 언어를 이용해서 restAPI를 사용할 수 �
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/project | 프로젝트 정보를 가지고 온다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/project?id=TEMP"` |
-| /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 온다. | status | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projects?status=post"` |
-| /api/projecttags | 프로젝트에 사용중인 tag리스트 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projecttags?project=TEMP"` |
+| /api/project | 프로젝트 정보를 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/project?id=TEMP"` |
+| /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 옵니다. | status | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projects?status=post"` |
+| /api/projecttags | 프로젝트에 사용중인 tags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projecttags?project=TEMP"` |
+| /api/projectassettags | 프로젝트에 사용중인 asssettags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projectassettags?project=TEMP"` |
 
 ## Post
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/addproject | 프로젝트를 생성한다. | id | `$ curl -X POST -d "id=TEMP" -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/addproject"` |
+| /api/addproject | 프로젝트를 생성합니다. | id | `$ curl -X POST -d "id=TEMP" -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/addproject"` |
 
 #### 프로젝트리스트 가지고오기
 - 작업중인 프로젝트 리스트가지고오기
 
-```
-#coding:utf-8
-import json
+```python
+#!/usr/bin/python
+#coding:utf8
 import urllib2
+import json
 
-restURL = "http://10.0.90.251/api/projects" # 기본적으로 현재 작업중인 프로젝트를 가지고옵니다.(pre + post + backup상태)
-restURL = "http://10.0.90.251/api/projects?status=pre" # Preproduction 상태를 가진 프로젝트를 가지고 옵니다.
-try:
-	projects = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-
-if projects["error"]:
-	print(projects["error"])
-	# 에러처리
-	# sys.exit(projects["error"]) #일반 Cmd 툴일때는 옆 처럼 에러처리를 해준다.
-	# 그래픽스 툴이면 에러박스를 띄운다.
-print(projects["data"])
+endPoint = "http://10.0.90.251/api/projects" # 기본적으로 현재 작업중인 프로젝트를 가지고옵니다.(pre + post + backup상태)
+# 특정상태의 프로젝트만 가지고 오고 싶다면 status 인수를 사용해주세요.
+# endPoint = "http://10.0.90.251/api/projects?status=pre" # Preproduction 상태를 가진 프로젝트를 가지고 옵니다.
+request = urllib2.Request(endPoint)
+request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+result = urllib2.urlopen(request)
+data = json.load(result)
+print(data)
 ```
 
-##### 프로젝트 상태는 아래와 같습니다.
+##### 프로젝트의 상태는 아래상태로 정의됩니다.
 - test : 테스트 단계
 - pre : 프리프로덕션 단계(컨셉,프리비즈,계약단계)의 프로젝트
 - post : 진행중인 프로젝트
@@ -56,46 +52,37 @@ print(projects["data"])
 - layover : 중단된 프로젝트
 - archive : 백업완료된 프로젝트
 
-#### 특정 프로젝트의 프로젝트정보(ProjectInfo)값을 가지고 오기
-- 군함도 프로젝트정보중 EmailHead를 가지고오는 방법
 
-```
-#coding:utf-8
-import json
+#### 프로젝트 정보 및 담당자 가지고오기
+```python
+#!/usr/bin/python
+#coding:utf8
 import urllib2
-
-restURL = "http://10.0.90.251/api/project?id=gunhamdo" # 군함도 프로젝트 자료구조를 가지고 옵니다.
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-
-if "error" in data:
-	print(data["error"])
-	# 에러처리
-print(data["mailhead"]) # 프로젝트의 MailHead를 가지고오는 방법
-```
-
-#### 프로젝트 담당자 가지고오기
-```
-#coding:utf-8
 import json
-import urllib2
 
-restURL = "http://10.0.90.251/api/project?id=gunhamdo" # 군함도 프로젝트 자료구조를 가지고 옵니다.
-try:
-	data = json.load(urllib2.urlopen(restURL))
-except:
-	print("RestAPI에 연결할 수 없습니다.")
-	# 에러처리
-
-if "error" in data:
-	print(data["error"])
-	# 에러처리
+request = urllib2.Request("https://csi.lazypic.org/api/project?id=TEMP") # TEMP 프로젝트 자료구조를 가지고 옵니다.
+request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+result = urllib2.urlopen(request)
+data = json.load(result)
+print(data)
+print(data["mailhead"]) # 프로젝트의 MailHead를 구하는 방법
 print(data["super"])   # 슈퍼바이저
 print(data["cgsuper"]) # CG슈퍼바이저
 print(data["pd"])      # PD
 print(data["pm"])      # PM
 print(data["pa"])      # PA
+```
+
+#### 프로젝트에 사용중인 에셋태그 가지고오기
+```python
+#!/usr/bin/python
+#coding:utf8
+import urllib2
+import json
+
+request = urllib2.Request("https://csi.lazypic.org/api/projectassettags?project=TEMP")
+request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+result = urllib2.urlopen(request)
+data = json.load(result)
+print(data)
 ```
