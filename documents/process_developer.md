@@ -21,9 +21,9 @@ $ brew install letsencrypt
 $ sudo certbot certonly --standalone -d csi.lazypic.org
 ```
 
-인증서가 생성되는 경로는 아래와 같습니다.
+일반적으로 인증서가 생성되는 경로는 아래와 같습니다.
 
-```
+```bash
 /etc/letsencrypt/live/csi.lazypic.org/fullchain.pem
 /etc/letsencrypt/live/csi.lazypic.org/privkey.pem
 ```
@@ -35,6 +35,16 @@ $ sudo certbot renew
 ```
 
 - reference: https://certbot.eff.org/lets-encrypt/osx-other
+
+#### 인증서 경로를 수동으로 설정하여 서비스를 실행하는 방법
+
+[Letsencrypt](https://letsencrypt.org)는 기존 인증서가 존재하는 상태에서 새로운 인증서를 재발급하면 `/etc/letsencrypt/live` 하위경로에 DNS 문자 뒤 숫자가 붙는 형태로 경로가 생성됩니다.
+만약 재발급된 새로운 인증서를 사용하여 웹서비스를 운용하고 싶다면, CSI를 실행할 때 certfullchanin, certprivkey 옵션을 이용해서 fullchain.pem, privkey.pem 경로 설정 후 서비스를 운용할 수 있습니다.
+
+```bash
+$ sudo csi3 -certfullchanin /etc/letsencrypt/live/csi.lazypic.org-0002/fullchain.pem -certprivkey /etc/letsencrypt/live/csi.lazypic.org-0002/privkey.pem
+```
+
 
 #### https 서비스를 위한 자가 인증서 생성
 자가 인증방식입니다. 접속시 에러가 있지만, https 보안프로토콜을 사용할 수 있습니다.
