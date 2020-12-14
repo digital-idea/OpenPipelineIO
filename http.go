@@ -282,6 +282,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/projects", handleAPIProjects)
 	http.HandleFunc("/api/addproject", handleAPIAddproject)
 	http.HandleFunc("/api/projecttags", handleAPIProjectTags)
+	http.HandleFunc("/api/projectassettags", handleAPIProjectAssetTags)
 
 	// restAPI Onset(Setellite)
 	http.HandleFunc("/api/setellite", handleAPISetelliteItems)

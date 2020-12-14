@@ -127,6 +127,53 @@ func handleAPIProjectTags(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIProjectAssetTags 함수는 프로젝트에 사용되는 에셋 태그리스트를 불러온다.
+func handleAPIProjectAssetTags(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	_, err = getProject(session, project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	assettags, err := Distinct(session, project, "assettags")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 에셋태그 중 빈 문자열을 제거한다.
+	var filteredTags []string
+	for _, t := range assettags {
+		if t == "" {
+			continue
+		}
+		filteredTags = append(filteredTags, t)
+	}
+	data, err := json.Marshal(filteredTags)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPIProjects 함수는 프로젝트 리스트를 반환한다.
 func handleAPIProjects(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
