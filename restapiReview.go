@@ -509,18 +509,23 @@ func handleAPIRmReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Time = reviewTime
-	reviewProject := r.FormValue("project")
-	if reviewProject == "" {
-		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+
+	// ID를 이용해서 삭제할 리뷰아이템을 가져와 Project, Name, Text를 반환될 json에 설정합니다.
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Project = reviewProject
-	reviewName := r.FormValue("name")
-	if reviewName == "" {
-		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
-		return
+	rcp.Project = review.Project
+	rcp.Name = review.Name
+	for _, t := range review.Comments {
+		if t.Date == reviewTime {
+			rcp.Text = t.Text
+			break
+		}
 	}
-	rcp.Name = reviewName
+
+	// 리뷰데이터를 삭제합니다.
 	err = RmReviewComment(session, rcp.ID, rcp.Time)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
