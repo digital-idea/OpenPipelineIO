@@ -37,7 +37,7 @@ endPoint = "http://10.0.90.251/api/projects" # 기본적으로 현재 작업중�
 # 특정상태의 프로젝트만 가지고 오고 싶다면 status 인수를 사용해주세요.
 # endPoint = "http://10.0.90.251/api/projects?status=pre" # Preproduction 상태를 가진 프로젝트를 가지고 옵니다.
 request = urllib2.Request(endPoint)
-request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+request.add_header("Authorization", "Basic <Token>")
 result = urllib2.urlopen(request)
 data = json.load(result)
 print(data)
@@ -61,7 +61,7 @@ import urllib2
 import json
 
 request = urllib2.Request("https://csi.lazypic.org/api/project?id=TEMP") # TEMP 프로젝트 자료구조를 가지고 옵니다.
-request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+request.add_header("Authorization", "Basic <Token>")
 result = urllib2.urlopen(request)
 data = json.load(result)
 print(data)
@@ -81,7 +81,7 @@ import urllib2
 import json
 
 request = urllib2.Request("https://csi.lazypic.org/api/projectassettags?project=TEMP")
-request.add_header("Authorization", "Basic JDJhJDEwJDY2THR4bnM0VEhDUWJRWE1QdWpXdnVmYXAzLmFicEY5cE5Vd3F4cmcydzMuVEFLbmFBckhP")
+request.add_header("Authorization", "Basic <Token>")
 result = urllib2.urlopen(request)
 data = json.load(result)
 print(data)
