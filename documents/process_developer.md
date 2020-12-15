@@ -145,21 +145,3 @@ KeepAlive가 설정되어 있다면, 프로세스가 종료되더라도 완전�
 $ launchctl unload ~/Library/LaunchAgents/org.lazypic.csi.plist
 $ rm ~/Library/LaunchAgents/org.lazypic.csi.plist
 ```
-
-## 웹 프로토콜
-
-#### macOS Root에 경로를 만드는 방법
-macOS에서는 Security Integrity Protection(SIP) 때문에 루트경로에 디렉토리를 만들 수 없습니다.
-심볼릭 링크를 만들어서 루트경로에 디렉토리를 생성하는 방법을 알아보겠습니다.
-
-관리자 권한으로 /etc/synthetic.conf 파일을 편집합니다.
-
-```bash
-$ sudo vim /etc/synthetic.conf
-```
-
-```bash
-show /Users/kimhanwoong/show
-```
-
-위 처럼 심볼릭 링크를 추가하고 macOS를 재부팅 해줍니다.
