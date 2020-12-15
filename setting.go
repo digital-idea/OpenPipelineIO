@@ -43,6 +43,14 @@ type Setting struct {
 	ThumbnailImagePathPermission         string  `json:"thumbnailimagepathpermission"`         // 썸네일 이미지 경로의 권한
 	ThumbnailImagePathUID                string  `json:"thumbnailimagepathuid"`                // 썸네일 이미지 경로의 User ID
 	ThumbnailImagePathGID                string  `json:"thumbnailimagepathgid"`                // 썸네일 이미지 경로의 Group ID
+	ThumbnailMovPath                     string  `json:"thumbnailmovpath"`                     // 썸네일 동영상 경로
+	ThumbnailMovPathPermission           string  `json:"thumbnailmovpathpermission"`           // 썸네일 동영상 경로의 권한
+	ThumbnailMovPathUID                  string  `json:"thumbnailmovpathuid"`                  // 썸네일 동영상 경로의 User ID
+	ThumbnailMovPathGID                  string  `json:"thumbnailmovpathgid"`                  // 썸네일 동영상 경로의 Group ID
+	PlatePath                            string  `json:"platepath"`                            // Plate 경로
+	PlatePathPermission                  string  `json:"platepathpermission"`                  // Plate 경로의 권한
+	PlatePathUID                         string  `json:"platepathuid"`                         // Plate 경로의 User ID
+	PlatePathGID                         string  `json:"platepathgid"`                         // Plate 경로의 Group ID
 	DefaultScaleRatioOfUndistortionPlate float64 `json:"defaultscaleratioofundistortionplate"` // 언디스토션 플레이트의 기본 스케일비율 1.1배
 	ItemNumberOfPage                     int     `json:"itemnumberofpage"`                     // 한 페이지에 보이는 아이템 갯수
 	MultipartFormBufferSize              int     `json:"multipartformbuffersize"`              // Multipart form buffer size

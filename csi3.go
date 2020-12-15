@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"flag"
 	"fmt"
@@ -68,7 +69,6 @@ var (
 	// Commandline Args
 	flagAdd              = flag.String("add", "", "add project, add item(shot, asset)")
 	flagRm               = flag.String("rm", "", "remove project, shot, asset, user")
-	flagRootPath         = flag.String("root", "/show", "root path")
 	flagProject          = flag.String("project", "", "project name")
 	flagName             = flag.String("name", "", "name")
 	flagType             = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
@@ -333,7 +333,22 @@ func main() {
 					item.JustIn = *flagJustin
 					item.JustOut = *flagJustout
 					item.UseType = *flagType
-					item.Thummov = fmt.Sprintf("%s/%s/seq/%s/%s/plate/%s_%s.mov", *flagRootPath, *flagProject, name2seq(*flagName), *flagName, *flagName, *flagType)
+					// adminsetting 값을 가지고와서 Thumbnailmov 값을 설정한다.
+					admin, err := GetAdminSetting(session)
+					if err != nil {
+						log.Fatal(err)
+					}
+					var thumbnailMovPath bytes.Buffer
+					thumbnailMovPathTmpl, err := template.New("thumbnailMovPath").Parse(admin.ThumbnailMovPath)
+					if err != nil {
+						log.Fatal(err)
+					}
+					err = thumbnailMovPathTmpl.Execute(&thumbnailMovPath, item)
+					if err != nil {
+						log.Fatal(err)
+					}
+					item.Thummov = thumbnailMovPath.String()
+
 					err = setItem(session, *flagProject, item)
 					if err != nil {
 						log.Fatal(err)

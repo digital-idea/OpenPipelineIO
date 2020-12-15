@@ -545,21 +545,22 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	for _, n := range names {
-		if n == " " || n == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
+
+	for _, name := range names {
+		if name == " " || name == "" { // 사용자가 실수로 여러개의 스페이스를 추가할 수 있다.
 			continue
 		}
 		s := Shot{}
 		s.Project = project
-		s.Name = n
-		if !regexpShotname.MatchString(n) {
+		s.Name = name
+		if !regexpShotname.MatchString(name) {
 			s.Error = "지원하는 샷이름 형식이 아닙니다"
 			fails = append(fails, s)
 			continue
 		}
 		now := time.Now().Format(time.RFC3339)
 		i := Item{}
-		i.Name = n
+		i.Name = name
 		i.SetSeq() // Name을 이용해서 Seq를 설정한다.
 		i.SetCut() // Name을 이용해서 Cut을 설정한다.
 		i.Type = typ
@@ -567,9 +568,51 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Shottype = "2d"
-		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
-		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate", i.Project, i.Seq, i.Name)
-		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
+
+		// adminsetting에서 값을 가지고 와서 경로를 설정한다.
+		var thumbnailImagePath bytes.Buffer
+		thumbnailImagePathTmpl, err := template.New("thumbnailImagePath").Parse(admin.ThumbnailImagePath)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		err = thumbnailImagePathTmpl.Execute(&thumbnailImagePath, i)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		var thumbnailMovPath bytes.Buffer
+		thumbnailMovPathTmpl, err := template.New("thumbnailMovPath").Parse(admin.ThumbnailMovPath)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		err = thumbnailMovPathTmpl.Execute(&thumbnailMovPath, i)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		var platePath bytes.Buffer
+		thumbnailPlatePathTmpl, err := template.New("pathPath").Parse(admin.PlatePath)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+		err = thumbnailPlatePathTmpl.Execute(&platePath, i)
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
+
+		i.Thumpath = thumbnailImagePath.String()
+		i.Thummov = thumbnailMovPath.String()
+		i.Platepath = platePath.String()
 		i.Scantime = now
 		i.Updatetime = now
 		if i.Type == "org" || i.Type == "left" {
@@ -613,16 +656,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		// 폴더 생성 옵션을 체크하면 폴더를 생성한다.
 		if mkdir {
-			adminSetting, err := GetAdminSetting(session)
-			if err != nil {
-				s.Error = err.Error()
-				fails = append(fails, s)
-				continue
-			}
 			var shotRootPath bytes.Buffer
 			var seqPath bytes.Buffer
 			var shotPath bytes.Buffer
-			shotRootPathTmpl, err := template.New("shotRootPath").Parse(adminSetting.ShotRootPath)
+			shotRootPathTmpl, err := template.New("shotRootPath").Parse(admin.ShotRootPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
@@ -634,7 +671,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				fails = append(fails, s)
 				continue
 			}
-			seqPathTmpl, err := template.New("seqPath").Parse(adminSetting.SeqPath)
+			seqPathTmpl, err := template.New("seqPath").Parse(admin.SeqPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
@@ -646,7 +683,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				fails = append(fails, s)
 				continue
 			}
-			shotPathTmpl, err := template.New("shotPath").Parse(adminSetting.ShotPath)
+			shotPathTmpl, err := template.New("shotPath").Parse(admin.ShotPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
@@ -659,10 +696,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// Umask를 셋팅한다.
-			if adminSetting.Umask == "" {
+			if admin.Umask == "" {
 				unix.Umask(0)
 			} else {
-				umask, err := strconv.Atoi(adminSetting.Umask)
+				umask, err := strconv.Atoi(admin.Umask)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
@@ -672,7 +709,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			}
 			// ShotRootPath를 점검하고 없다면 경로를 생성한다.
 			if _, err := os.Stat(shotRootPath.String()); os.IsNotExist(err) {
-				per, err := strconv.ParseInt(adminSetting.ShotRootPathPermission, 8, 64)
+				per, err := strconv.ParseInt(admin.ShotRootPathPermission, 8, 64)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
@@ -685,14 +722,14 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 				// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-				if adminSetting.ShotRootPathUID != "" && adminSetting.ShotRootPathGID != "" {
-					uid, err := strconv.Atoi(adminSetting.ShotRootPathUID)
+				if admin.ShotRootPathUID != "" && admin.ShotRootPathGID != "" {
+					uid, err := strconv.Atoi(admin.ShotRootPathUID)
 					if err != nil {
 						s.Error = err.Error()
 						fails = append(fails, s)
 						continue
 					}
-					gid, err := strconv.Atoi(adminSetting.ShotRootPathGID)
+					gid, err := strconv.Atoi(admin.ShotRootPathGID)
 					if err != nil {
 						s.Error = err.Error()
 						fails = append(fails, s)
@@ -707,7 +744,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 			// 개별 샷 경로를 생성한다.
-			per, err := strconv.ParseInt(adminSetting.ShotPathPermission, 8, 64)
+			per, err := strconv.ParseInt(admin.ShotPathPermission, 8, 64)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
@@ -720,14 +757,14 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-			if adminSetting.ShotPathUID != "" && adminSetting.ShotPathGID != "" {
-				uid, err := strconv.Atoi(adminSetting.ShotPathUID)
+			if admin.ShotPathUID != "" && admin.ShotPathGID != "" {
+				uid, err := strconv.Atoi(admin.ShotPathUID)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
 					continue
 				}
-				gid, err := strconv.Atoi(adminSetting.ShotPathGID)
+				gid, err := strconv.Atoi(admin.ShotPathGID)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
@@ -741,8 +778,8 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 			// Seq 경로의 Permission을 설정한다.
-			if adminSetting.SeqPathPermission != "" {
-				per, err := strconv.ParseInt(adminSetting.SeqPathPermission, 8, 64)
+			if admin.SeqPathPermission != "" {
+				per, err := strconv.ParseInt(admin.SeqPathPermission, 8, 64)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
@@ -756,14 +793,14 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 			// Seq 경로의 UID, GID를 설정한다.
-			if adminSetting.SeqPathUID != "" && adminSetting.SeqPathGID != "" {
-				uid, err := strconv.Atoi(adminSetting.SeqPathUID)
+			if admin.SeqPathUID != "" && admin.SeqPathGID != "" {
+				uid, err := strconv.Atoi(admin.SeqPathUID)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
 					continue
 				}
-				gid, err := strconv.Atoi(adminSetting.SeqPathGID)
+				gid, err := strconv.Atoi(admin.SeqPathGID)
 				if err != nil {
 					s.Error = err.Error()
 					fails = append(fails, s)
@@ -779,7 +816,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		success = append(success, s)
 		// slack log
-		err = slacklog(session, project, fmt.Sprintf("Add Shot: %s\nProject: %s, Author: %s", n, project, ssid.ID))
+		err = slacklog(session, project, fmt.Sprintf("Add Shot: %s\nProject: %s, Author: %s", name, project, ssid.ID))
 		if err != nil {
 			log.Println(err)
 			continue
@@ -792,6 +829,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		TrueStatus []string
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -808,7 +846,16 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
-
+	status, err := AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, s := range status {
+		if s.DefaultOn {
+			rcp.TrueStatus = append(rcp.TrueStatus, s.ID)
+		}
+	}
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "addShot_success", rcp)
 	if err != nil {
@@ -1131,6 +1178,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		TrueStatus []string
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -1147,6 +1195,16 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	status, err := AllStatus(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, s := range status {
+		if s.DefaultOn {
+			rcp.TrueStatus = append(rcp.TrueStatus, s.ID)
+		}
+	}
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "addAsset_success", rcp)
 	if err != nil {

@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
+	"html/template"
 	"log"
 	"os/user"
 	"strings"
@@ -56,6 +57,10 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if err != nil {
 		log.Fatal(err)
 	}
+	admin, err := GetAdminSetting(session)
+	if err != nil {
+		log.Fatal(err)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
@@ -74,22 +79,52 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	i.SetSeq()
 	i.SetCut()
 	// 썸네일 경로 자동설정
-	if *flagThumbPath == "" {
-		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
-	} else {
+	if *flagThumbPath != "" {
 		i.Thumpath = *flagThumbPath
-	}
-	// 플레이트 경로 자동설정
-	if *flagPlatePath == "" {
-		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
 	} else {
-		i.Platepath = *flagPlatePath
+		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
+		var thumbnailImagePath bytes.Buffer
+		thumbnailImagePathTmpl, err := template.New("thumbnailImagePath").Parse(admin.ThumbnailImagePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = thumbnailImagePathTmpl.Execute(&thumbnailImagePath, i)
+		if err != nil {
+			log.Fatal(err)
+		}
+		i.Thumpath = thumbnailImagePath.String()
 	}
 	// 썸네일Mov 경로 자동설정
-	if *flagThumbnailMovPath == "" {
-		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
-	} else {
+	if *flagThumbnailMovPath != "" {
 		i.Thummov = *flagThumbnailMovPath
+	} else {
+		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
+		var thumbnailMovPath bytes.Buffer
+		thumbnailMovPathTmpl, err := template.New("thumbnailMovPath").Parse(admin.ThumbnailMovPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = thumbnailMovPathTmpl.Execute(&thumbnailMovPath, i)
+		if err != nil {
+			log.Fatal(err)
+		}
+		i.Thummov = thumbnailMovPath.String()
+	}
+	// 플레이트 경로 자동설정
+	if *flagPlatePath != "" {
+		i.Platepath = *flagPlatePath
+	} else {
+		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
+		var platePath bytes.Buffer
+		platePathTmpl, err := template.New("platePath").Parse(admin.PlatePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = platePathTmpl.Execute(&platePath, i)
+		if err != nil {
+			log.Fatal(err)
+		}
+		i.Platepath = platePath.String()
 	}
 	tasks, err := AllTaskSettings(session)
 	if err != nil {
@@ -228,7 +263,15 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		log.Fatal("소스, 재스캔 이름 규칙이 아닙니다.")
 	}
 	now := time.Now().Format(time.RFC3339)
-
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
+	admin, err := GetAdminSetting(session)
+	if err != nil {
+		log.Fatal(err)
+	}
 	i := Item{
 		Project:    project,
 		Name:       name,
@@ -243,21 +286,36 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	}
 	i.SetSeq()
 	platePath := *flagPlatePath
-	if *flagPlatePath == "" {
-		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
-	} else {
+	if *flagPlatePath != "" {
 		i.Platepath = *flagPlatePath
-	}
-	if *flagThumbnailMovPath == "" {
-		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
 	} else {
+		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
+		var platePath bytes.Buffer
+		platePathTmpl, err := template.New("platePath").Parse(admin.PlatePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = platePathTmpl.Execute(&platePath, i)
+		if err != nil {
+			log.Fatal(err)
+		}
+		i.Platepath = platePath.String()
+	}
+	if *flagThumbnailMovPath != "" {
 		i.Thummov = *flagThumbnailMovPath
+	} else {
+		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
+		var thumbnailMovPath bytes.Buffer
+		thumbnailMovPathTmpl, err := template.New("thumbnailMovPath").Parse(admin.ThumbnailMovPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = thumbnailMovPathTmpl.Execute(&thumbnailMovPath, i)
+		if err != nil {
+			log.Fatal(err)
+		}
+		i.Thummov = thumbnailMovPath.String()
 	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
 	// org1, src1 같은 아이템도 키코드가 들어가야 한다.
 	if scanframe != 0 {
 		i.ScanFrame = scanframe

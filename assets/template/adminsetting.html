@@ -243,7 +243,7 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="ThumbnailImagePath">Thumbnail Image Path</label>
-                            <input type="text" class="form-control" id="ThumbnailImagePath" name="ThumbnailImagePath" placeholder="/thumbnail/&#123;&#123;.Project&#125;&#125;/&#123;&#123;.Name&#125;&#125;_&#123;&#123;.Type&#125;&#125;.png" value={{.Setting.ThumbnailImagePath}}>
+                            <input type="text" class="form-control" id="ThumbnailImagePath" name="ThumbnailImagePath" placeholder="/thumbnail/&#123;&#123;.Project&#125;&#125;/&#123;&#123;.Name&#125;&#125;_&#123;&#123;.Type&#125;&#125;.jpg" value={{.Setting.ThumbnailImagePath}}>
                             <small class="form-text text-muted">썸네일 이미지가 생성되는 경로</small>
                         </div>
                     </div>
@@ -269,7 +269,66 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ThumbnailMovPath">Thumbnail Mov Path</label>
+                            <input type="text" class="form-control" id="ThumbnailMovPath" name="ThumbnailMovPath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Name&#125;&#125;/plate/&#123;&#123;.Name&#125;&#125;_&#123;&#123;.Type&#125;&#125;.mov" value={{.Setting.ThumbnailMovPath}}>
+                            <small class="form-text text-muted">썸네일 동영상이 생성되는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailMovPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="ThumbnailMovPathPermission" name="ThumbnailMovPathPermission" placeholder="0775" value={{.Setting.ThumbnailMovPathPermission}}>
+                            <small class="form-text text-muted">썸네일 동영상 경로 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailMovPathUID">UID</label>
+                            <input type="text" class="form-control" id="ThumbnailMovPathUID" name="ThumbnailMovPathUID" placeholder="500" value={{.Setting.ThumbnailMovPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ThumbnailMovPathGID">GID</label>
+                            <input type="text" class="form-control" id="ThumbnailMovPathGID" name="ThumbnailMovPathGID" placeholder="500" value={{.Setting.ThumbnailMovPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="PlatePath">Plate Path</label>
+                            <input type="text" class="form-control" id="PlatePath" name="PlatePath" placeholder="/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Name&#125;&#125;/plate" value={{.Setting.PlatePath}}>
+                            <small class="form-text text-muted">Plate가 존재하는 경로</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="PlatePathPermission">Permission</label>
+                            <input type="text" class="form-control" id="PlatePathPermission" name="PlatePathPermission" placeholder="0775" value={{.Setting.PlatePathPermission}}>
+                            <small class="form-text text-muted">Plate Path 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="PlatePathUID">UID</label>
+                            <input type="text" class="form-control" id="PlatePathUID" name="PlatePathUID" placeholder="500" value={{.Setting.PlatePathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="PlatePathGID">GID</label>
+                            <input type="text" class="form-control" id="PlatePathGID" name="PlatePathGID" placeholder="500" value={{.Setting.PlatePathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="form-group">
