@@ -202,7 +202,7 @@
 						{{if eq $.Item.Type "asset" -}}	
 							<a href="dilink:///show/{{$.Item.Project}}/assets/{{$.Item.Assettype}}/{{$.Item.Name}}" class="badge badge-darkmode ml-1">F</a>
 						{{- else -}}
-							<a href="dilink:///show/{{$.Item.Project}}/seq/{{$.Item.Seq}}/{{$.Item.Name}}" class="badge badge-darkmode ml-1">F</a>
+							<a href="dilink://{{Parentpath $.Item.Platepath}}" class="badge badge-darkmode ml-1">F</a>
 						{{- end}}
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
