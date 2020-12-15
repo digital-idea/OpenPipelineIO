@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/dchest/captcha"
@@ -27,6 +28,7 @@ var funcMap = template.FuncMap{
 	"title":                        strings.Title,
 	"Split":                        strings.Split,
 	"Join":                         strings.Join,
+	"Parentpath":                   filepath.Dir,
 	"projectStatus2color":          projectStatus2color,
 	"Status2capString":             Status2capString, // regacy
 	"Status2string":                Status2string,
@@ -310,6 +312,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcamerapubtask", handleAPISetCameraPubTask)
 	http.HandleFunc("/api/setcameralensmm", handleAPISetCameraLensmm)
 	http.HandleFunc("/api/setcameraprojection", handleAPISetCameraProjection)
+	http.HandleFunc("/api/setplatepath", handleAPISetPlatePath)
 	http.HandleFunc("/api/setthummov", handleAPISetThummov)
 	http.HandleFunc("/api/setbeforemov", handleAPISetBeforemov)
 	http.HandleFunc("/api/setaftermov", handleAPISetAftermov)

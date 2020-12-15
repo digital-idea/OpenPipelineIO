@@ -1891,6 +1891,28 @@ function rmReference(project, id, title) {
     }
 }
 
+function setPlatePath(path) {
+    $.ajax({
+        url: "/api/setplatepath",
+        type: "post",
+        data: {
+            project: document.getElementById('modal-iteminfo-project').value,
+            id: document.getElementById('modal-iteminfo-id').value,
+            path: path,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        dataType: "json",
+        success: function(data) {
+            return data;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setThummov(path) {
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
@@ -2122,6 +2144,7 @@ function setIteminfoModal(project, id) {
         },
         dataType: "json",
         success: function(data) {
+            document.getElementById('modal-iteminfo-platepath').value = data.platepath;
             document.getElementById('modal-iteminfo-thummov').value = data.thummov;
             document.getElementById('modal-iteminfo-beforemov').value = data.beforemov;
             document.getElementById('modal-iteminfo-aftermov').value = data.aftermov;
