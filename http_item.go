@@ -568,7 +568,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.ID = i.Name + "_" + i.Type
 		i.Shottype = "2d"
 		i.Thumpath = fmt.Sprintf("/%s/%s_%s.jpg", i.Project, i.Name, i.Type)
-		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate/", i.Project, i.Seq, i.Name)
+		i.Platepath = fmt.Sprintf("/show/%s/seq/%s/%s/plate", i.Project, i.Seq, i.Name)
 		i.Thummov = fmt.Sprintf("/show/%s/seq/%s/%s/plate/%s_%s.mov", i.Project, i.Seq, i.Name, i.Name, i.Type)
 		i.Scantime = now
 		i.Updatetime = now
