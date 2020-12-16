@@ -26,8 +26,6 @@ var (
 	WFS = "http://127.0.0.1:8081"
 	// DILOG 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	DILOG = "http://127.0.0.1:8080"
-	// THUMBPATH 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	THUMBPATH = "thumbnail"
 	// DNS 값은 서비스 DNS 값입니다.
 	DNS = "csi.lazypic.org"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -42,9 +40,9 @@ var (
 	BUILDTIME = "2012-11-08T10:00:00" // 최초로 만든 시간
 
 	// 주요서비스 인수
-	flagDBIP           = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
-	flagMailDNS        = flag.String("maildns", MAILDNS, "mail DNS name")
-	flagThumbPath      = flag.String("thumbpath", THUMBPATH, "thumbnail path")
+	flagDBIP    = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
+	flagMailDNS = flag.String("maildns", MAILDNS, "mail DNS name")
+
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
 	flagDevmode        = flag.Bool("devmode", false, "dev mode")
 	flagHTTPPort       = flag.String("http", "", "Web Service Port number.")          // 웹서버 포트
@@ -60,25 +58,26 @@ var (
 	flagMaxProcessNum     = flag.Int("maxprocessnum", 4, "max process number")        // 최대 연산 갯수
 
 	// RV
-	flagRV   = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
-	flagPlay = flag.Bool("play", false, "Play RV")
+	flagRVPath = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
+	flagPlay   = flag.Bool("play", false, "Play RV")
 	// Etc Service
 	flagDILOG = flag.String("dilog", DILOG, "dilog webserver url and port. ex) "+DILOG)
 	flagWFS   = flag.String("wfs", WFS, "wfs webserver url and port. ex) "+WFS)
 
 	// Commandline Args
-	flagAdd              = flag.String("add", "", "add project, add item(shot, asset)")
-	flagRm               = flag.String("rm", "", "remove project, shot, asset, user")
-	flagProject          = flag.String("project", "", "project name")
-	flagName             = flag.String("name", "", "name")
-	flagType             = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
-	flagAssettags        = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,group,assembly 형태로 입력")
-	flagAssettype        = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
-	flagHelp             = flag.Bool("help", false, "자세한 도움말을 봅니다.")
-	flagDate             = flag.String("date", "", "Date. ex) 2016-12-06")
-	flagThumbnailPath    = flag.String("thumbnailpath", "", "Thumbnail 경로")
-	flagThumbnailMovPath = flag.String("thumbnailmovpath", "", "Thumbnail mov 경로")
-	flagPlatePath        = flag.String("platepath", "", "Plate 경로")
+	flagAdd                = flag.String("add", "", "add project, add item(shot, asset)")
+	flagRm                 = flag.String("rm", "", "remove project, shot, asset, user")
+	flagProject            = flag.String("project", "", "project name")
+	flagName               = flag.String("name", "", "name")
+	flagType               = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
+	flagAssettags          = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,group,assembly 형태로 입력")
+	flagAssettype          = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
+	flagHelp               = flag.Bool("help", false, "자세한 도움말을 봅니다.")
+	flagDate               = flag.String("date", "", "Date. ex) 2016-12-06")
+	flagThumbnailRootPath  = flag.String("thumbnailrootpath", "thumbnail", "thumbnail root path")
+	flagThumbnailImagePath = flag.String("thumbnailimagepath", "", "Thumbnail image 경로")
+	flagThumbnailMovPath   = flag.String("thumbnailmovpath", "", "Thumbnail mov 경로")
+	flagPlatePath          = flag.String("platepath", "", "Plate 경로")
 	// Commandline Args: User
 	flagID                = flag.String("id", "", "user id")
 	flagInitPass          = flag.String("initpass", "", "initialize user password")
@@ -374,18 +373,27 @@ func main() {
 		rmItemCmd(*flagProject, *flagName, *flagType)
 		return
 	} else if *flagHTTPPort != "" {
-		if _, err := os.Stat(*flagThumbPath); err != nil {
+		// 만약 프로젝트가 하나도 없다면 "TEMP" 프로젝트를 생성한다. 프로젝트가 있어야 템플릿이 작동하기 때문이다.
+		session, err := mgo.DialWithTimeout(*flagDBIP, 2*time.Second)
+		if err != nil {
+			log.Fatal("DB가 실행되고 있지 않습니다.")
+		}
+		admin, err := GetAdminSetting(session)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// 만약 Admin설정에 ThumbnailRootPath가 잡혀있다면 그 값을 이용한다.
+		if admin.ThumbnailRootPath != "" {
+			*flagThumbnailRootPath = admin.ThumbnailRootPath
+		}
+		if _, err := os.Stat(*flagThumbnailRootPath); err != nil {
 			os.Stderr.WriteString("CSI에 사용되는 썸네일 경로가 존재하지 않습니다.\n")
 			os.Stderr.WriteString("csi에서 생성되는 이미지, 사용자 프로필사진을 저장할 thumbnail 경로가 필요합니다.\n")
 			os.Stderr.WriteString("명령어를 실행하는 곳에 thumbnail 폴더를 생성하거나,\n")
 			os.Stderr.WriteString("-thumbpath 옵션을 이용하여 thumbnail로 사용될 경로를 지정하여 csi를 실행해주세요.\n")
 			os.Exit(1)
 		}
-		// 만약 프로젝트가 하나도 없다면 "TEMP" 프로젝트를 생성한다. 프로젝트가 있어야 템플릿이 작동하기 때문이다.
-		session, err := mgo.DialWithTimeout(*flagDBIP, 2*time.Second)
-		if err != nil {
-			log.Fatal("DB가 실행되고 있지 않습니다.")
-		}
+
 		plist, err := Projectlist(session)
 		if err != nil {
 			log.Fatal(err)
@@ -485,11 +493,19 @@ func main() {
 		}
 		// -play 인수가 붙어있다면, RV를 이용해서 플레이한다.
 		if *flagPlay {
-			if _, err := os.Stat(*flagRV); os.IsNotExist(err) {
+			// adminsetting에 RV 경로가 설정되어 있다면 해당 설정경로를 가지고 온다.
+			admin, err := GetAdminSetting(session)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if admin.RVPath != "" {
+				*flagRVPath = admin.RVPath
+			}
+			if _, err := os.Stat(*flagRVPath); os.IsNotExist(err) {
 				fmt.Println("RV가 rvpath에 존재하지 않습니다.")
 				os.Exit(1)
 			}
-			out, err := exec.Command(*flagRV, playlist...).CombinedOutput()
+			out, err := exec.Command(*flagRVPath, playlist...).CombinedOutput()
 			if err != nil {
 				fmt.Printf("%v: %s\n", err, string(out))
 				os.Exit(1)

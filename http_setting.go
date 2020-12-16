@@ -117,6 +117,10 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.AssetPathPermission = r.FormValue("AssetPathPermission")
 	s.AssetPathUID = r.FormValue("AssetPathUID")
 	s.AssetPathGID = r.FormValue("AssetPathGID")
+	s.ThumbnailRootPath = r.FormValue("ThumbnailRootPath")
+	s.ThumbnailRootPathPermission = r.FormValue("ThumbnailRootPathPermission")
+	s.ThumbnailRootPathUID = r.FormValue("ThumbnailRootPathUID")
+	s.ThumbnailRootPathGID = r.FormValue("ThumbnailRootPathGID")
 	s.ThumbnailImagePath = r.FormValue("ThumbnailImagePath")
 	s.ThumbnailImagePathPermission = r.FormValue("ThumbnailImagePathPermission")
 	s.ThumbnailImagePathUID = r.FormValue("ThumbnailImagePathUID")
@@ -134,6 +138,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
+	s.RVPath = r.FormValue("RVPath")
 	s.ReviewDataPath = r.FormValue("ReviewDataPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {

@@ -1260,7 +1260,7 @@ func handleEditItemSubmitv2(w http.ResponseWriter, r *http.Request) {
 		tempFile.Close()
 		defer os.Remove(tempPath)
 		//fmt.Println(tempPath)
-		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbPath, project, id)
+		thumbnailPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbnailRootPath, project, id)
 		thumbnailDir := filepath.Dir(thumbnailPath)
 		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
 		_, err = os.Stat(thumbnailDir)

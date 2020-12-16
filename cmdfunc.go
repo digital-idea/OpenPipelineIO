@@ -79,8 +79,8 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	i.SetSeq()
 	i.SetCut()
 	// 썸네일 경로 자동설정
-	if *flagThumbPath != "" {
-		i.Thumpath = *flagThumbPath
+	if *flagThumbnailImagePath != "" {
+		i.Thumpath = *flagThumbnailImagePath
 	} else {
 		// 만약 빈값이라면 adminSetting의 설정값을 이용해서 설정한다.
 		var thumbnailImagePath bytes.Buffer

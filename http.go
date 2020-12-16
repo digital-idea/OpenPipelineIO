@@ -145,7 +145,7 @@ func maxAgeHandler(seconds int, h http.Handler) http.Handler {
 // webserver함수는 웹서버의 URL을 선언하는 함수입니다.
 func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
-	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
+	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbnailRootPath)))))
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
 	http.HandleFunc("/", handleIndex)
