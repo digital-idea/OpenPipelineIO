@@ -418,7 +418,7 @@ func main() {
 			log.Fatal(err)
 		}
 		TEMPLATES = vfsTempates
-		go ProcessMain()
+		go ProcessMain() // 연산(Review데이터 등등)이 필요한 것들이 있다면 연산을 시작한다.
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.
