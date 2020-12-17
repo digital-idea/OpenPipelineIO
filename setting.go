@@ -8,6 +8,7 @@ type Setting struct {
 	ExcludeProject                       string  `json:"excludeproject"`                       // Search옵션에 제외할 프로젝트명, 마이그레이션 시 사용한다.
 	OCIOConfig                           string  `json:"ocioconfig"`                           // OpenColorIO Config Path 설정
 	FFmpeg                               string  `json:"ffmpeg"`                               // FFmpeg 경로 셋팅
+	RVPath                               string  `json:"rvpath"`                               // RV 경로 셋팅
 	ReviewDataPath                       string  `json:"reviewdatapath"`                       // 리뷰 데이터가 저장되는 경로
 	Umask                                string  `json:"umask"`                                // Umask 값. 예) 0002
 	RootPath                             string  `json:"rootpath"`                             // Root경로 예) /show
@@ -39,10 +40,22 @@ type Setting struct {
 	AssetPathPermission                  string  `json:"assetpathpermission"`                  // 개별 Asset 경로의 권한
 	AssetPathUID                         string  `json:"assetpathuid"`                         // 개별 Asset 경로의 User ID
 	AssetPathGID                         string  `json:"assetpathgid"`                         // 개별 Asset 경로의 Group ID
+	ThumbnailRootPath                    string  `json:"thumbnailrootpath"`                    // 썸네일 이미지 Root 경로
+	ThumbnailRootPathPermission          string  `json:"thumbnailrootpathpermission"`          // 썸네일 이미지 Root 경로의 권한
+	ThumbnailRootPathUID                 string  `json:"thumbnailrootpathuid"`                 // 썸네일 이미지 Root 경로의 User ID
+	ThumbnailRootPathGID                 string  `json:"thumbnailrootpathgid"`                 // 썸네일 이미지 Root 경로의 Group ID
 	ThumbnailImagePath                   string  `json:"thumbnailimagepath"`                   // 썸네일 이미지 경로 /thumbnail/{{.Project}}/{{.Name}}_{{.Type}}
 	ThumbnailImagePathPermission         string  `json:"thumbnailimagepathpermission"`         // 썸네일 이미지 경로의 권한
 	ThumbnailImagePathUID                string  `json:"thumbnailimagepathuid"`                // 썸네일 이미지 경로의 User ID
 	ThumbnailImagePathGID                string  `json:"thumbnailimagepathgid"`                // 썸네일 이미지 경로의 Group ID
+	ThumbnailMovPath                     string  `json:"thumbnailmovpath"`                     // 썸네일 동영상 경로
+	ThumbnailMovPathPermission           string  `json:"thumbnailmovpathpermission"`           // 썸네일 동영상 경로의 권한
+	ThumbnailMovPathUID                  string  `json:"thumbnailmovpathuid"`                  // 썸네일 동영상 경로의 User ID
+	ThumbnailMovPathGID                  string  `json:"thumbnailmovpathgid"`                  // 썸네일 동영상 경로의 Group ID
+	PlatePath                            string  `json:"platepath"`                            // Plate 경로
+	PlatePathPermission                  string  `json:"platepathpermission"`                  // Plate 경로의 권한
+	PlatePathUID                         string  `json:"platepathuid"`                         // Plate 경로의 User ID
+	PlatePathGID                         string  `json:"platepathgid"`                         // Plate 경로의 Group ID
 	DefaultScaleRatioOfUndistortionPlate float64 `json:"defaultscaleratioofundistortionplate"` // 언디스토션 플레이트의 기본 스케일비율 1.1배
 	ItemNumberOfPage                     int     `json:"itemnumberofpage"`                     // 한 페이지에 보이는 아이템 갯수
 	MultipartFormBufferSize              int     `json:"multipartformbuffersize"`              // Multipart form buffer size

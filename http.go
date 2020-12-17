@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/dchest/captcha"
@@ -27,6 +28,7 @@ var funcMap = template.FuncMap{
 	"title":                        strings.Title,
 	"Split":                        strings.Split,
 	"Join":                         strings.Join,
+	"Parentpath":                   filepath.Dir,
 	"projectStatus2color":          projectStatus2color,
 	"Status2capString":             Status2capString, // regacy
 	"Status2string":                Status2string,
@@ -143,7 +145,7 @@ func maxAgeHandler(seconds int, h http.Handler) http.Handler {
 // webserver함수는 웹서버의 URL을 선언하는 함수입니다.
 func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
-	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbPath)))))
+	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbnailRootPath)))))
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
 	http.HandleFunc("/", handleIndex)
@@ -310,6 +312,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcamerapubtask", handleAPISetCameraPubTask)
 	http.HandleFunc("/api/setcameralensmm", handleAPISetCameraLensmm)
 	http.HandleFunc("/api/setcameraprojection", handleAPISetCameraProjection)
+	http.HandleFunc("/api/setplatepath", handleAPISetPlatePath)
 	http.HandleFunc("/api/setthummov", handleAPISetThummov)
 	http.HandleFunc("/api/setbeforemov", handleAPISetBeforemov)
 	http.HandleFunc("/api/setaftermov", handleAPISetAftermov)
