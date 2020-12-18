@@ -1891,6 +1891,28 @@ function rmReference(project, id, title) {
     }
 }
 
+function setSeq(seq) {
+    $.ajax({
+        url: "/api/setseq",
+        type: "post",
+        data: {
+            project: document.getElementById('modal-iteminfo-project').value,
+            id: document.getElementById('modal-iteminfo-id').value,
+            seq: seq,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        dataType: "json",
+        success: function(data) {
+            return data;
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setPlatePath(path) {
     $.ajax({
         url: "/api/setplatepath",
@@ -2144,6 +2166,10 @@ function setIteminfoModal(project, id) {
         },
         dataType: "json",
         success: function(data) {
+            document.getElementById('modal-iteminfo-name').value = data.name;
+            document.getElementById('modal-iteminfo-type').value = data.type;
+            document.getElementById('modal-iteminfo-seq').value = data.seq;
+            document.getElementById('modal-iteminfo-cut').value = data.cut;
             document.getElementById('modal-iteminfo-platepath').value = data.platepath;
             document.getElementById('modal-iteminfo-thummov').value = data.thummov;
             document.getElementById('modal-iteminfo-beforemov').value = data.beforemov;
