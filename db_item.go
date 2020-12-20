@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"sort"
 	"strconv"
@@ -21,7 +20,6 @@ func addItem(session *mgo.Session, project string, i Item) error {
 	c := session.DB("projectinfo").C(project)
 	num, err := c.Find(bson.M{"id": project}).Count()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if num != 1 {
@@ -70,7 +68,6 @@ func getItem(session *mgo.Session, project, id string) (Item, error) {
 	var result Item
 	err := c.Find(bson.M{"id": id}).One(&result)
 	if err != nil {
-		log.Println(err)
 		return Item{}, err
 	}
 	return result, nil
@@ -96,7 +93,6 @@ func Shot(session *mgo.Session, project string, name string) (Item, error) {
 	}
 	err = c.Find(q).One(&result)
 	if err != nil {
-		log.Println(err)
 		return Item{}, err
 	}
 	return result, nil
@@ -149,7 +145,6 @@ func Seqs(session *mgo.Session, project string) ([]string, error) {
 	var results []Item
 	err := c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}}).Select(bson.M{"seq": 1}).All(&results)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 	keys := make(map[string]bool)
@@ -173,7 +168,6 @@ func Shots(session *mgo.Session, project string, seq string) ([]string, error) {
 	query := bson.M{"name": &bson.RegEx{Pattern: seq, Options: "i"}, "type": bson.M{"$in": []string{"org", "left"}}}
 	err := c.Find(query).Select(bson.M{"name": 1}).All(&results)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 	keys := make(map[string]bool)
@@ -253,7 +247,6 @@ func Distinct(session *mgo.Session, project string, key string) ([]string, error
 	c := session.DB("project").C(project)
 	err := c.Find(bson.M{}).Distinct(key, &result)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 	sort.Strings(result)
@@ -270,7 +263,6 @@ func DistinctDdline(session *mgo.Session, project string, key string) ([]string,
 	c := session.DB("project").C(project)
 	err := c.Find(bson.M{}).Distinct(key, &result)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 	//result로 datelist를 만든다.
@@ -372,7 +364,6 @@ func SearchAssetTree(session *mgo.Session, op SearchOption) ([]Item, error) {
 		if err == mgo.ErrNotFound {
 			return []Item{}, nil
 		}
-		log.Println("DB Find Err : ", err)
 		return nil, err
 	}
 
@@ -487,7 +478,6 @@ func SearchKey(session *mgo.Session, op SearchOption, key string) ([]Item, error
 	}}
 	err := c.Find(q).Sort(op.Sortkey).All(&results)
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return nil, err
 	}
 	return results, nil
@@ -543,7 +533,6 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 	var results []Item
 	err := c.Find(q).Sort(op.Sortkey).All(&results)
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return nil, err
 	}
 	return results, nil
@@ -656,7 +645,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var assignnum int
 	assignnum, err := c.Find(assign).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -668,7 +656,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var readynum int
 	readynum, err = c.Find(ready).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -679,7 +666,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var wipnum int
 	wipnum, err = c.Find(wip).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -691,7 +677,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var confirmnum int
 	confirmnum, err = c.Find(confirm).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -702,7 +687,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var donenum int
 	donenum, err = c.Find(done).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -713,7 +697,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var omitnum int
 	omitnum, err = c.Find(omit).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -724,7 +707,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var holdnum int
 	holdnum, err = c.Find(hold).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -735,7 +717,6 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var outnum int
 	outnum, err = c.Find(out).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -746,14 +727,12 @@ func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	var nonenum int
 	nonenum, err = c.Find(none).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
 	var totalnum int
 	totalnum, err = c.Find(bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}}).Count()
 	if err != nil {
-		log.Println("DB Find Err : ", err)
 		return Infobarnum{}, err
 	}
 
@@ -3149,7 +3128,6 @@ func HasItem(session *mgo.Session, project, id string) error {
 	c := session.DB("project").C(project)
 	num, err := c.Find(bson.M{"id": id}).Count()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if num > 0 {

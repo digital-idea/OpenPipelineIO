@@ -11,7 +11,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/item | 아이템 가지고 오기 | project, id | `$ curl "https://csi.lazypic.org/api/item?project=TEMP&id=SS_0020_org"` |
+| /api2/item | 아이템 가지고 오기 | project, name or id, (type) | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api2/item?project=TEMP&name=SS_0020&type=org"` |
 | /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태 | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&wip=true"` 또는 `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=task:mm+user:jason&assign=true&wip=true"` |
 | /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assing,wip"` |
 | /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
@@ -20,7 +20,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
 | /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/assets?project=TEMP"` |
 | /api/usetypes | 샷의 usetype 리스트 가지고오기 | project, name | `$ curl "https://csi.lazypic.org/api/usetypes?project=TEMP&name=SS_0010"` |
-|/api/publishkeys|존재하는 Publish Key 를 가지고 온다||`$ curl -X GET -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/publishkeys`|
+| /api/publishkeys | 존재하는 Publish Key 를 가지고 온다 | | `$ curl -X GET -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/publishkeys` |
 
 ## Post
 

@@ -81,52 +81,68 @@ func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPIItem 함수는 아이템 자료구조를 불러온다. // legacy
-func handleAPIItem(w http.ResponseWriter, r *http.Request) {
+// handleAPI2Item 함수는 아이템 자료구조를 불러온다.
+func handleAPI2Item(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	_, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	if project == "" {
-		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "project가 빈 문자열입니다.")
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
 		return
 	}
-	// 과거 slug 방식의 api에서 id 방식의 api로 변경중이다.
-	var id string
-	if q.Get("slug") != "" {
-		id = q.Get("slug")
-	} else if q.Get("id") != "" {
-		id = q.Get("id")
+	id := q.Get("id")
+	name := q.Get("name")
+	if id == "" && name == "" {
+		http.Error(w, "id(SS_0010_org) 또는 name(SS_0010)을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	typ := q.Get("type")
+	if typ == "" || id == "" {
+		if name == "" && regexpID.MatchString(id) && typ != "" {
+			name = strings.Split(id, "_")[0] + "_" + strings.Split(id, "_")[1]
+			typ, err = Type(session, project, name)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else if name != "" && typ == "" {
+			typ, err = Type(session, project, name)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
 	}
 	if id == "" {
-		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "id 또는 slug가 빈 문자열입니다.")
-		return
+		id = name + "_" + typ
 	}
 	item, err := getItem(session, project, id)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = json.NewEncoder(w).Encode(item)
+	data, err := json.Marshal(item)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	return
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIItemV2 함수는 아이템 자료구조를 불러온다.

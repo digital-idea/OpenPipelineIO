@@ -264,3 +264,51 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// handleAPIItem 함수는 아이템 자료구조를 불러온다. // legacy
+func handleAPIItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "project가 빈 문자열입니다.")
+		return
+	}
+	// 과거 slug 방식의 api에서 id 방식의 api로 변경중이다.
+	var id string
+	if q.Get("slug") != "" {
+		id = q.Get("slug")
+	} else if q.Get("id") != "" {
+		id = q.Get("id")
+	}
+	if id == "" {
+		fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "id 또는 slug가 빈 문자열입니다.")
+		return
+	}
+	item, err := getItem(session, project, id)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	err = json.NewEncoder(w).Encode(item)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	return
+}
