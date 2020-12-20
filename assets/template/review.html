@@ -102,6 +102,7 @@
     </div>
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-center text-darkmode no-selection" style="height: 3.6vh;">
+            <span class="player-original" id="player-original" onclick="playOriginal('{{$.CurrentReview.Project}}', '{{$.CurrentReview.Name}}')"></span>
             <span class="player-rv" id="player-rv" onclick="rvplay('{{$.CurrentReview.ID.Hex}}')"></span>
             <span class="player-trash" id="player-trash" onclick="removeDrawing()" title="t"></span>
             <span class="player-pen" id="player-pen"></span>

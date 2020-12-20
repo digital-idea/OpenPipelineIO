@@ -632,6 +632,15 @@ span.player-rv {
     width: 36px;
 }
 
+span.player-original {
+    background: url(/assets/img/player-original.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
 span.player-mute {
     background: url(/assets/img/player-mute.svg) no-repeat center center;
     background-size: contain;
