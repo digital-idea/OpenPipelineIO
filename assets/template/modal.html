@@ -1586,5 +1586,103 @@
         </div>
         </div>
     </div>
+
+    <!-- Modal: Edit Review -->
+    <div class="modal fade" id="modal-editreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-editreview-title">Edit Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Project</label>
+                                <select id="modal-editreview-project" class="form-control">
+                                    {{range .Projectlist}}
+                                        <option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
+                                    {{end}}
+                                </select>
+                                <small>프로젝트를 선택해주세요.</small>
+                            </div>
+                        </div>
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Task</label>
+                                <select id="modal-editreview-task" class="form-control">
+                                    {{range .TasksettingNames}}
+                                        <option value="{{.}}" {{if eq $.SearchOption.Task . }}selected{{end}}>{{.}}</option>
+                                    {{end}}
+                                </select>
+                                <small>Task를 선택해주세요.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Name</label>
+                                <input type="text" class="form-control" id="modal-editreview-name" value="">
+                                <small>Shot, Asset 이름. 예) SS_0010</small>
+                            </div>
+                        </div>
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Author</label>
+                                <input type="text" class="form-control" id="modal-editreview-author" value="{{.User.ID}}" disabled>
+                                <small>사용자 ID</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group pt-0 m-0">
+                        <label class="form-text">Path</label>
+                        <input type="text" class="form-control" placeholder="데일리로 올릴 미디어 경로" value="" id="modal-editreview-path">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="form-text">Main Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-editreview-mainversion">
+                            <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="form-text">Sub Version</label>
+                            <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-editreview-subversion">
+                            <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="form-group p-0 m-0">
+                        <label class="form-text">FPS</label>
+                        <select id="modal-editreview-fps" class="form-control">
+                            <option value="24">24</option>
+                            <option value="23.976">23.976</option>
+                            <option value="23.98">23.98</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="29.97">29.97</option>
+                            <option value="59.94">59.94</option>
+                            <option value="60">60</option>
+                        </select>
+                        <small>리뷰 재생시 필요한 fps. 리뷰창에서 프레임을 앞뒤로 움직일때도 사용됩니다.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editreview-description" class="col-form-label">Description</label>
+                        <textarea class="form-control" id="modal-editreview-description" rows="2"></textarea>
+                    </div>
+                    <div class="form-group p-0 m-0">
+                        <label class="form-text">Camera Info</label>
+                        <input type="text" class="form-control" placeholder="camera info" value="" id="modal-editreview-camerainfo">
+                        <small>카메라 렌즈 미리수 정보처럼 리뷰어의 판단에 영향을 미치는 정보를 기록해 주세요.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {{end}}

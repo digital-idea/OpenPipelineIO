@@ -1189,6 +1189,36 @@ function setRmCommentModal(project, id, time, text) {
     document.getElementById("modal-rmcomment-title").innerHTML = "Rm Comment" + multiInputTitle(id);
 }
 
+function setEditReviewModal(id) {
+    document.getElementById("modal-editreviewcomment-id").value = id;
+    // review id의 데이터를 가지고 와서 모달을 설정한다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-editreview-project").value = data.project;
+            document.getElementById("modal-editreview-task").value = data.task;
+            document.getElementById("modal-editreview-name").value = data.name;
+            document.getElementById("modal-editreview-path").value = data.path;
+            document.getElementById("modal-editreview-mainversion").value = data.mainversion;
+            document.getElementById("modal-editreview-subversion").value = data.subversion;
+            document.getElementById("modal-editreview-fps").value = data.fps;
+            document.getElementById("modal-editreview-description").value = data.description;
+            document.getElementById("modal-editreview-camerainfo").value = data.camerainfo;
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 function setRmReviewCommentModal(id, time) {
     document.getElementById("modal-rmreviewcomment-id").value = id;
     document.getElementById("modal-rmreviewcomment-time").value = time;
