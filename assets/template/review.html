@@ -49,6 +49,8 @@
                             {{end}}
                         </div>
                         <div class="col-1 p-0">
+                            <!-- 리뷰 수정버튼 -->
+                            <img src="/assets/img/edit.svg" class="finger" data-toggle="modal" data-target="#modal-editreview" onclick="setEditReviewModal('{{.ID.Hex}}')">
                             <!-- 리뷰 삭제버튼 -->
                             <img src="/assets/img/delete.svg" class="finger" data-toggle="modal" data-target="#modal-rmreview" onclick="setRmReviewModal('{{.ID.Hex}}')">
                         </div>                        
