@@ -4839,6 +4839,29 @@ function rvplay(id) {
     })
 }
 
+// playOriginal 함수는 project와 name을 받아서 해당 아이템의 썸네일동영상을 재생한다. 원본 플레이트 영상을 재생하기 위해서 사용한다.
+function playOriginal(project, name) {
+    let token = document.getElementById("token").value;
+    $.ajax({
+        url: `/api2/item?project=${project}&name=${name}`,
+        type: "get",
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            let link = document.createElement('a');
+            link.href = "dilink://" + data.thummov; // 썸네일 동영상이 보통은 썸네일을 플레이할 때의 Original Plate 이다.
+            document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
+            link.click();
+            link.remove();
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 // fouseReview 함수는 리뷰 ID를 받아서 해당 ID를 가진 리뷰아이템의 스크롤을 포커싱 한다.
 function focusReview(id) {
     document.getElementById('review-' + id).scrollIntoView(); // 해당아이템을 포커스한다.

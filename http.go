@@ -292,7 +292,8 @@ func webserver(port string) {
 
 	// restAPI Item
 	http.HandleFunc("/api/timeinfo", handleAPITimeinfo)
-	http.HandleFunc("/api/item", handleAPIItem)     // legacy
+	http.HandleFunc("/api/item", handleAPIItem) // legacy
+	http.HandleFunc("/api2/item", handleAPI2Item)
 	http.HandleFunc("/api/rmitem", handleAPIRmItem) // legacy
 	http.HandleFunc("/api/rmitemid", handleAPIRmItemID)
 	http.HandleFunc("/api/items", handleAPI2Items)  // legacy
