@@ -622,7 +622,7 @@ func handleAPISetReviewProject(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		ID      string `json:"id"`
-		Project string `json:"text"`
+		Project string `json:"project"`
 		UserID  string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -652,6 +652,59 @@ func handleAPISetReviewProject(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Project = project
 	err = SetReviewProject(session, rcp.ID, rcp.Project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewTask 함수는 리뷰에서 Task를 설정합니다.
+func handleAPISetReviewTask(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID     string `json:"id"`
+		Task   string `json:"task"`
+		UserID string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task 를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	err = SetReviewTask(session, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -222,7 +222,18 @@ func RmProjectReview(session *mgo.Session, project string) error {
 func SetReviewProject(session *mgo.Session, id string, project string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
-	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"project": project})
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"project": project}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewTask 함수는 Review에 Task를 설정한다.
+func SetReviewTask(session *mgo.Session, id string, task string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"task": task}})
 	if err != nil {
 		return err
 	}
