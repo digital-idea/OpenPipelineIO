@@ -217,3 +217,14 @@ func RmProjectReview(session *mgo.Session, project string) error {
 	}
 	return nil
 }
+
+// SetReviewProject 함수는 Review에 Project를 설정한다.
+func SetReviewProject(session *mgo.Session, id string, project string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"project": project})
+	if err != nil {
+		return err
+	}
+	return nil
+}
