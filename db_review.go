@@ -239,3 +239,14 @@ func SetReviewTask(session *mgo.Session, id string, task string) error {
 	}
 	return nil
 }
+
+// SetReviewTask 함수는 Review에 Name을 설정한다.
+func SetReviewName(session *mgo.Session, id string, name string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"name": name}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
