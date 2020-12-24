@@ -122,6 +122,7 @@ function exportExcelCurrentPage() {
         hold = document.getElementById("searchbox-checkbox-hold").checked
         out = document.getElementById("searchbox-checkbox-out").checked
         none = document.getElementById("searchbox-checkbox-none").checked
+        truestatus = truestatusList.join(",")
     }
     // 요청
     let url = `/download-excel-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}`

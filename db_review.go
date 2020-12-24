@@ -217,3 +217,102 @@ func RmProjectReview(session *mgo.Session, project string) error {
 	}
 	return nil
 }
+
+// SetReviewProject 함수는 Review에 Project를 설정한다.
+func SetReviewProject(session *mgo.Session, id string, project string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"project": project}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewTask 함수는 Review에 Task를 설정한다.
+func SetReviewTask(session *mgo.Session, id string, task string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"task": task}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewName 함수는 Review에 Name을 설정한다.
+func SetReviewName(session *mgo.Session, id string, name string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"name": name}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewPath 함수는 Review에 Path를 설정한다.
+func SetReviewPath(session *mgo.Session, id string, path string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"path": path}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewMainVersion 함수는 Review에 MainVersion을 설정한다.
+func SetReviewMainVersion(session *mgo.Session, id string, mainversion int) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"mainversion": mainversion}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewSubVersion 함수는 Review에 SubVersion을 설정한다.
+func SetReviewSubVersion(session *mgo.Session, id string, subversion int) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"subversion": subversion}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewFps 함수는 Review에 Fps를 설정한다.
+func SetReviewFps(session *mgo.Session, id string, fps float64) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"fps": fps}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewDescription 함수는 Review에 Description을 설정한다.
+func SetReviewDescription(session *mgo.Session, id string, description string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"description": description}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewCameraInfo 함수는 Review에 CameraInfo를 설정한다.
+func SetReviewCameraInfo(session *mgo.Session, id string, camerainfo string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"camerainfo": camerainfo}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
