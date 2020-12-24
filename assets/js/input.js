@@ -1190,7 +1190,7 @@ function setRmCommentModal(project, id, time, text) {
 }
 
 function setEditReviewModal(id) {
-    document.getElementById("modal-editreviewcomment-id").value = id;
+    document.getElementById("modal-editreview-id").value = id;
     // review id의 데이터를 가지고 와서 모달을 설정한다.
     $.ajax({
         url: "/api/review",
@@ -4420,6 +4420,232 @@ function setReviewStatus(status) {
         }
     });
 }
+
+function setReviewProcessStatus(id, status) {
+    $.ajax({
+        url: "/api/setreviewprocessstatus",
+        type: "post",
+        data: {
+            status: status,
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("reviewstatus-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.status
+            // 상태의 색상을 바꾼다.
+            if (data.processstatus === "wait") {
+                item.setAttribute("class","ml-1 badge badge-danger")
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewProject 함수는 리뷰데이터의 Project를 변경한다.
+function setReviewProject() {
+    $.ajax({
+        url: "/api/setreviewproject",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            project: document.getElementById("modal-editreview-project").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`${data.id}-project`).innerText = data.project
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewTask 함수는 리뷰데이터의 Task을 변경한다.
+function setReviewTask() {
+    $.ajax({
+        url: "/api/setreviewtask",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            task: document.getElementById("modal-editreview-task").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`${data.id}-task`).innerText = data.task
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewPath 함수는 리뷰데이터의 Path를 변경한다.
+function setReviewPath() {
+    $.ajax({
+        url: "/api/setreviewpath",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            path: document.getElementById("modal-editreview-path").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            setReviewProcessStatus(data.id, "wait") // 만약 Path가 수정되면 Status가 wait으로 바뀌고 동영상이 다시 연산이 되어야 한다.
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewMainVersion 함수는 리뷰데이터의 MainVersion을 변경한다.
+function setReviewMainVersion() {
+    $.ajax({
+        url: "/api/setreviewmainversion",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            mainversion: document.getElementById("modal-editreview-mainversion").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`${data.id}-mainversion`).innerText = "v" + data.mainversion
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewSubVersion 함수는 리뷰데이터의 SubVersion을 변경한다.
+function setReviewSubVersion() {
+    $.ajax({
+        url: "/api/setreviewsubversion",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            subversion: document.getElementById("modal-editreview-subversion").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`${data.id}-subversion`).innerText = "v" + data.subversion
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewFps 함수는 리뷰데이터의 Fps를 변경한다.
+function setReviewFps() {
+    $.ajax({
+        url: "/api/setreviewfps",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            fps: document.getElementById("modal-editreview-fps").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            return
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewDescription함수는 리뷰데이터의 Description을 변경한다.
+function setReviewDescription() {
+    $.ajax({
+        url: "/api/setreviewdescription",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            description: document.getElementById("modal-editreview-description").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("description").innerText = data.description
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewCameraInfo 함수는 리뷰데이터의 CameraInfo를 변경한다.
+function setReviewCameraInfo() {
+    $.ajax({
+        url: "/api/setreviewcamerainfo",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            camerainfo: document.getElementById("modal-editreview-camerainfo").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            return
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewName 함수는 리뷰데이터의 Name을 변경한다.
+function setReviewName() {
+    $.ajax({
+        url: "/api/setreviewname",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            name: document.getElementById("modal-editreview-name").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById(`${data.id}-name`).innerText = data.name
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 
 function addReviewComment() {
     $.ajax({
