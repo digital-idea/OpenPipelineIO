@@ -431,6 +431,11 @@ func webserver(port string) {
 	http.HandleFunc("/api/setreviewtask", handleAPISetReviewTask)
 	http.HandleFunc("/api/setreviewname", handleAPISetReviewName)
 	http.HandleFunc("/api/setreviewpath", handleAPISetReviewPath)
+	http.HandleFunc("/api/setreviewmainversion", handleAPISetReviewMainVersion)
+	http.HandleFunc("/api/setreviewsubversion", handleAPISetReviewSubVersion)
+	http.HandleFunc("/api/setreviewfps", handleAPISetReviewFps)
+	http.HandleFunc("/api/setreviewdescription", handleAPISetReviewDescription)
+	http.HandleFunc("/api/setreviewcamerainfo", handleAPISetReviewCameraInfo)
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	http.HandleFunc("/edititem", handleEditItem)                    // legacy

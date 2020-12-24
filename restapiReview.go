@@ -822,3 +822,265 @@ func handleAPISetReviewPath(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPISetReviewMainVersion 함수는 리뷰에서 MainVersion을 설정합니다.
+func handleAPISetReviewMainVersion(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID          string `json:"id"`
+		MainVersion int    `json:"mainversion"`
+		UserID      string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	mainVersion := r.FormValue("mainversion")
+	if mainVersion == "" {
+		http.Error(w, "mainversion 이 빈 문자열입니다", http.StatusBadRequest)
+		return
+	}
+	rcp.MainVersion, err = strconv.Atoi(mainVersion)
+	if err != nil {
+		http.Error(w, "mainversion 을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	err = SetReviewMainVersion(session, rcp.ID, rcp.MainVersion)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewSubVersion 함수는 리뷰에서 SubVersion을 설정합니다.
+func handleAPISetReviewSubVersion(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID         string `json:"id"`
+		SubVersion int    `json:"subversion"`
+		UserID     string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	subVersion := r.FormValue("subversion")
+	if subVersion == "" {
+		http.Error(w, "subversion 이 빈 문자열입니다", http.StatusBadRequest)
+		return
+	}
+	rcp.SubVersion, err = strconv.Atoi(subVersion)
+	if err != nil {
+		http.Error(w, "subversion 을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	err = SetReviewSubVersion(session, rcp.ID, rcp.SubVersion)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewFps 함수는 리뷰에서 Fps를 설정합니다.
+func handleAPISetReviewFps(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID     string  `json:"id"`
+		Fps    float64 `json:"fps"`
+		UserID string  `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	fps := r.FormValue("fps")
+	if fps == "" {
+		http.Error(w, "fps가 빈 문자열입니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Fps, err = strconv.ParseFloat(fps, 8)
+	if err != nil {
+		http.Error(w, "fps를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	err = SetReviewFps(session, rcp.ID, rcp.Fps)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewDescription 함수는 리뷰에서 Description을 설정합니다.
+func handleAPISetReviewDescription(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID          string `json:"id"`
+		Description string `json:"description"`
+		UserID      string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	rcp.Description = r.FormValue("description")
+	err = SetReviewDescription(session, rcp.ID, rcp.Description)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewCameraInfo 함수는 리뷰에서 CameraInfo를 설정합니다.
+func handleAPISetReviewCameraInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID         string `json:"id"`
+		CameraInfo string `json:"camerainfo"`
+		UserID     string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	rcp.CameraInfo = r.FormValue("camerainfo")
+	err = SetReviewCameraInfo(session, rcp.ID, rcp.CameraInfo)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
