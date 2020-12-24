@@ -560,6 +560,24 @@ span.player-pen {
     width: 36px;
 }
 
+span.player-loop {
+    background: url(/assets/img/player-loop.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
+span.player-loop-off {
+    background: url(/assets/img/player-loop-off.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
 span.player-text {
     background: url(/assets/img/player-text.svg) no-repeat center center;
     background-size: contain;
