@@ -569,8 +569,8 @@ span.player-loop {
     width: 36px;
 }
 
-span.player-loop-off {
-    background: url(/assets/img/player-loop-off.svg) no-repeat center center;
+span.player-loopoff {
+    background: url(/assets/img/player-loopoff.svg) no-repeat center center;
     background-size: contain;
     cursor: pointer;
     display: inline-block;

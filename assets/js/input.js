@@ -4774,29 +4774,41 @@ function selectReviewItem(id, project, fps) {
     let playButton = document.getElementById("player-play");
     let pauseButton = document.getElementById("player-pause");
     let playAndPauseButton = document.getElementById("player-playandpause");
+    let loopAndLoofOffButton = document.getElementById("player-loopandloopoff");
     let startButton = document.getElementById("player-start");
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
-    let btn = document.getElementById("player-playandpause")
+    
     // 플레이 버튼을 클릭할 때 이벤트
     playButton.addEventListener("click", function() {
-        btn.className = "player-pause"
+        playAndPauseButton.className = "player-pause"
         video.play();
     });
     // 일시정지 버튼을 클릭할 때 이벤트
     pauseButton.addEventListener("click", function() {
-        btn.className = "player-play"
+        playAndPauseButton.className = "player-play"
         video.pause();
     });
+
     // 재생과 정지가 같이 진행되는 버튼
     playAndPauseButton.addEventListener("click", function() {
         if (!video.paused) {
-            btn.className = "player-play"
+            playAndPauseButton.className = "player-play"
             video.pause();    
         } else {
-            btn.className = "player-pause"
+            playAndPauseButton.className = "player-pause"
             video.play();
+        }
+    });
+    // Loop버튼 클릭시
+    loopAndLoofOffButton.addEventListener("click", function() {
+        if (loopAndLoofOffButton.className == "player-loop") {
+            loopAndLoofOffButton.className = "player-loopoff"
+            video.loop = false
+        } else {
+            loopAndLoofOffButton.className = "player-loop"
+            video.loop = true
         }
     });
     startButton.addEventListener("click", function() {
@@ -4842,6 +4854,7 @@ function selectReviewItem(id, project, fps) {
     let video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
+    video.loop = true;
     
     // 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
@@ -4865,7 +4878,7 @@ function selectReviewItem(id, project, fps) {
             uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
         }
         // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
-        btn.className = "player-pause"
+        playAndPauseButton.className = "player-pause"
         video.play();
     };
     
@@ -5067,6 +5080,8 @@ document.onkeydown = function(e) {
         document.getElementById("player-trash").click();
     } else if (e.which == 67) { // c
         document.getElementById("player-screenshot").click();
+    } else if (e.which == 76) { // l
+        document.getElementById("player-loopandloopoff").click();
     }
 };
 
