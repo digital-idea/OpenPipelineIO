@@ -139,6 +139,7 @@ func checkQuicktimeFileStruct(item Review) error {
 	if err != nil {
 		return err
 	}
+	defer file.Close()
 	fileinfo, err := file.Stat()
 	if err != nil {
 		return err
