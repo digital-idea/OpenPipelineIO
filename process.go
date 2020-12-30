@@ -140,11 +140,11 @@ func checkQuicktimeFileStruct(item Review) error {
 		return err
 	}
 	defer file.Close()
-	fileinfo, err := file.Stat()
+	info, err := file.Stat()
 	if err != nil {
 		return err
 	}
-	_, err = quicktime.BuildTree(file, uint64(fileinfo.Size()))
+	_, err = quicktime.BuildTree(file, uint64(info.Size()))
 	if err != nil {
 		return err
 	}
@@ -162,8 +162,7 @@ func checkMp4FileStruct(admin Setting, item Review) error {
 	if err != nil {
 		return err
 	}
-	size := info.Size()
-	_, err = mp4.OpenFromReader(file, size)
+	_, err = mp4.OpenFromReader(file, info.Size())
 	if err != nil {
 		return err
 	}
