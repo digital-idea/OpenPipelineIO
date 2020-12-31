@@ -141,3 +141,5 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - [Mgo](https://github.com/go-mgo/mgo): https://github.com/go-mgo/mgo/blob/v2-unstable/LICENSE
 - [JWT go](https://github.com/dgrijalva/jwt-go): MIT license
 - [OpenColorIO](https://github.com/AcademySoftwareFoundation/OpenColorIO): BSD 3-Clause License
+- [alfg/mp4](https://github.com/alfg/mp4): MIT license
+- [amarburg/go-quicktime](https://github.com/amarburg/go-quicktime): MIT license

@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"time"
 
+	"github.com/alfg/mp4"
+	"github.com/amarburg/go-quicktime"
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2"
 )
@@ -92,8 +94,26 @@ func processingItem(review Review) {
 		}
 		return
 	}
+	// review데이터가 atom 구조를 같는지 체크한다.
+	err = checkQuicktimeFileStruct(review)
+	if err != nil {
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
 	// mp4를 생성한다.
 	err = genMp4(admin, review)
+	if err != nil {
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	// 생성된 .mp4 파일이 mp4 자료구조를 같는지 체크한다.
+	err = checkMp4FileStruct(admin, review)
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -111,6 +131,42 @@ func processingItem(review Review) {
 		return
 	}
 	return
+}
+
+// checkQuicktimeFileStruct 함수는 리뷰 아이템 정보를 이용해서 atom 구조가 정상인지 체크한다.
+func checkQuicktimeFileStruct(item Review) error {
+	file, err := os.Open(item.Path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	info, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	_, err = quicktime.BuildTree(file, uint64(info.Size()))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// checkMp4FileStruct 함수는 리뷰 아이템 정보를 mp4 구조가 정상인지 체크한다.
+func checkMp4FileStruct(admin Setting, item Review) error {
+	file, err := os.Open(admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	info, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	_, err = mp4.OpenFromReader(file, info.Size())
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // genMp4 는 리뷰 아이템 정보를 이용해서 .mp4 동영상을 만든다.

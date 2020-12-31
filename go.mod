@@ -5,6 +5,8 @@ go 1.13
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.0.2
 	github.com/GeertJohan/go.rice v1.0.0
+	github.com/alfg/mp4 v0.0.0-20200917033056-6857ee13db2a
+	github.com/amarburg/go-quicktime v0.0.0-20180102160802-53825554ea37
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20181208062437-4a19b1a876b7
 	github.com/daaku/go.zipexe v1.0.1 // indirect
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
