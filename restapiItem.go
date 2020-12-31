@@ -2808,8 +2808,8 @@ func handleAPISetPlatePath(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetThummov 함수는 아이템의 Thummov 값을 설정한다.
-func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
+// handleAPI2SetThummov 함수는 아이템의 Thummov 값을 설정한다.
+func handleAPI2SetThummov(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
@@ -2819,7 +2819,6 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		Name    string `json:"name"`
 		Path    string `json:"path"`
 		UserID  string `json:"userid"`
-		Error   string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -2839,40 +2838,25 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "path":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Path = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Path = path
+
 	err = SetThummov(session, rcp.Project, rcp.Name, rcp.Path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -2891,7 +2875,11 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

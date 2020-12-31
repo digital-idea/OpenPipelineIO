@@ -39,7 +39,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api2/settaskmov | mov등록 | project, name, task, mov | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api2/settaskmov` |
 | /api/setshottype | shottype 변경 | project, name, type | `$ curl -X POST -d "project=TEMP&name=SS_0030&shottype=3d" https://csi.lazypic.org/api/setshottype` |
 | /api/setusetype | usetype 변경 | project, id, type | `$ curl -X POST -d "project=TEMP&id=SS_0030_org&type=org1" https://csi.lazypic.org/api/setusetype` |
-| /api/setthummov | 썸네일mov변경 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" https://csi.lazypic.org/api/setthummov` |
+| /api2/setthummov | 썸네일mov변경 | project, name, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" https://csi.lazypic.org/api2/setthummov` |
 | /api/setbeforemov | 썸네일 이전 mov 등록 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0030&path=/show/before.mov" https://csi.lazypic.org/api/setbeforemov` |
 | /api/setaftermov | 썸네일 이후 mov 등록 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0030&path=/show/after.mov" https://csi.lazypic.org/api/setaftermov` |
 | /api/seteditmov | 편집본 mov 등록 | project, id, path | `$ curl -X POST -d "project=TEMP&id=SS_0030_org&path=/show/edit.mov" https://csi.lazypic.org/api/seteditmov` |
