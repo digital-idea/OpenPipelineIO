@@ -686,6 +686,15 @@ span.player-screenshot {
     width: 36px;
 }
 
+span.player-save {
+    background: url(/assets/img/player-save.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
 span.player-trash {
     background: url(/assets/img/player-trash.svg) no-repeat center center;
     background-size: contain;

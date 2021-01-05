@@ -5065,17 +5065,21 @@ document.onkeydown = function(e) {
     if (e.which == 37) { // arrow left
         document.getElementById("player-pause").click();
         document.getElementById("player-left").click();
+        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 39) { // arrow right
         document.getElementById("player-pause").click();
         document.getElementById("player-right").click();
+        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 80 || e.which == 83 || e.which == 32) { // p, s, space
         document.getElementById("player-playandpause").click();
     } else if (e.which == 219) { // [
         document.getElementById("player-pause").click();
         document.getElementById("player-start").click();
+        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 221) { // ]
         document.getElementById("player-pause").click();
         document.getElementById("player-end").click();
+        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 84) { // t
         document.getElementById("player-trash").click();
     } else if (e.which == 67) { // c
