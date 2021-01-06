@@ -1229,7 +1229,7 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
-				imgPath := fmt.Sprintf("%s/%s.%04d.png", adminSetting.ReviewDataPath, id, sktch.Frame)
+				imgPath := fmt.Sprintf("%s/%s.%06d.png", adminSetting.ReviewDataPath, id, sktch.Frame)
 				if _, err := os.Stat(imgPath); os.IsExist(err) {
 					err = os.Remove(imgPath)
 					if err != nil {
