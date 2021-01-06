@@ -5023,6 +5023,42 @@ function screenshot(filename) {
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
 }
 
+// saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
+function saveDrawing(id) {
+    let token = document.getElementById("token").value;
+    // canvas의 드로잉을 .png 파일로 파일화 한다.
+    let fg = document.getElementById("drawcanvas").toDataURL("image/png");
+    let blobBin = atob(fg.split(',')[1]); // base64 데이터를 바이너리로 변경한다.
+    let array = [];
+    for (let i = 0; i < blobBin.length; i++) {
+        array.push(blobBin.charCodeAt(i));
+    }
+    let file = new Blob([new Uint8Array(array)], {type: 'image/png'}); // Blob 생성
+
+    let formData = new FormData();
+    formData.append("file", file); // .png 추가
+    formData.append("id", id)
+    formData.append("frame", document.getElementById("currentframe").innerHTML)
+    $.ajax({
+        url: "/api/uploadreviewdrawing",
+        type: "POST",
+        enctype: "multipart/form-data",
+        processData: false,
+        contentType : false,
+        cache: false,
+        data: formData,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
+}
+
 // removeDrawing 함수는 리뷰 스케치를 제거합니다.
 function removeDrawing() {
     // 지울 영역을 구한다. - player 캔버스를 담을 div 의 가로세로 사이즈를 구한다.

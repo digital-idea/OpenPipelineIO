@@ -109,7 +109,7 @@
             <span class="player-trash" id="player-trash" onclick="removeDrawing()" title="t"></span>
             <span class="player-pen" id="player-pen"></span>
             <span class="player-text" id="player-text"></span>
-            <span class="player-save" id="player-save" title="b"></span>
+            <span class="player-save" id="player-save"  onclick="saveDrawing('{{.CurrentReview.ID.Hex}}')" title="b"></span>
             <span class="player-screenshot mr-5" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')" title="c"></span>
             <span class="player-start" id="player-start" title="["></span>
             <span class="player-left" id="player-left" title="←"></span>
