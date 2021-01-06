@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"image"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
@@ -10,6 +13,8 @@ import (
 	"time"
 
 	"github.com/digital-idea/dilog"
+	"github.com/disintegration/imaging"
+	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -1127,6 +1132,129 @@ func handleAPISetReviewProcessStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIUploadReviewDrawing 함수는 리뷰 드로잉이미지를 업로드 하는 RestAPI 이다.
+func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+
+	type Recipe struct {
+		Data   Review `json:"data"`
+		UserID string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	// 어드민 셋팅을 불러온다.
+	adminSetting, err := GetAdminSetting(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	umask, err := strconv.Atoi(adminSetting.Umask)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 폼을 분석한다.
+	err = r.ParseMultipartForm(int64(adminSetting.MultipartFormBufferSize))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Data.ID = bson.ObjectIdHex(id)
+	frame := r.FormValue("frame")
+	if frame == "" {
+		http.Error(w, "frame을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	sktch := Sketch{}
+	sktch.Frame, err = strconv.Atoi(frame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if len(r.MultipartForm.File) == 0 { // 파일이 없다면 에러처리한다.
+		http.Error(w, "드로잉 이미지를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	if len(r.MultipartForm.File) != 1 { // 파일이 복수일 때
+		http.Error(w, "드로잉 이미지가 여러개 설정되어있습니다", http.StatusBadRequest)
+		return
+	}
+	// 썸네일이 존재한다면 썸네일을 처리한다.
+	for _, files := range r.MultipartForm.File {
+		for _, f := range files {
+			if f.Size == 0 {
+				http.Error(w, "파일사이즈가 0 바이트입니다", http.StatusBadRequest)
+				return
+			}
+			file, err := f.Open()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				continue
+			}
+			defer file.Close()
+			unix.Umask(umask)
+			switch f.Header.Get("Content-Type") {
+			case "image/jpeg", "image/png":
+				data, err := ioutil.ReadAll(file)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
+				imgPath := fmt.Sprintf("%s/%s.%04d.png", adminSetting.ReviewDataPath, id, sktch.Frame)
+				if _, err := os.Stat(imgPath); os.IsExist(err) {
+					err = os.Remove(imgPath)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+				}
+				// 사용자가 업로드한 데이터를 이미지 자료구조로 만들고 리사이즈 한다.
+				img, _, err := image.Decode(bytes.NewReader(data)) // 전송된 바이트 파일을 이미지 자료구조로 변환한다.
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				err = imaging.Save(img, imgPath)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				sktch.SketchPath = imgPath
+			default:
+				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
+				return
+			}
+		}
+	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

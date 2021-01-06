@@ -359,6 +359,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ReviewDataPath">Review Data Path</label>
+                            <input type="text" class="form-control" id="ReviewDataPath" name="ReviewDataPath" placeholder="/path/review" value={{.Setting.ReviewDataPath}}>
+                            <small class="form-text text-muted">리뷰데이터가 쌓이는 경로를 설정합니다.</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewDataPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="ReviewDataPathPermission" name="ReviewDataPathPermission" placeholder="0775" value={{.Setting.ReviewDataPathPermission}}>
+                            <small class="form-text text-muted">Plate Path 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewDataPathUID">UID</label>
+                            <input type="text" class="form-control" id="ReviewDataPathUID" name="ReviewDataPathUID" placeholder="500" value={{.Setting.ReviewDataPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewDataPathGID">GID</label>
+                            <input type="text" class="form-control" id="ReviewDataPathGID" name="ReviewDataPathGID" placeholder="500" value={{.Setting.ReviewDataPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="form-group">
@@ -391,11 +421,6 @@
                     <label for="RVPath">RV Path</label>
                     <input type="text" class="form-control" id="RVPath" name="RVPath" placeholder="/opt/rv-Linux-x86-64-7.0.0/bin/rv" value={{.Setting.RVPath}}>
                     <small class="form-text text-muted">RV Player Path를 설정합니다.</small>
-                </div>
-                <div class="form-group">
-                    <label for="FFmpeg">Review Data Path</label>
-                    <input type="text" class="form-control" id="ReviewDataPath" name="ReviewDataPath" placeholder="/path/review" value={{.Setting.ReviewDataPath}}>
-                    <small class="form-text text-muted">리뷰데이터가 쌓이는 경로를 설정합니다.</small>
                 </div>
                 <div class="form-group">
                     <label for="DefaultScaleRatioOfUndistortionPlate">언디스토션 플레이트 기본 스케일 비율</label>

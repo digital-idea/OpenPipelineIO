@@ -133,13 +133,17 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.PlatePathPermission = r.FormValue("PlatePathPermission")
 	s.PlatePathUID = r.FormValue("PlatePathUID")
 	s.PlatePathGID = r.FormValue("PlatePathGID")
+	s.ReviewDataPath = r.FormValue("ReviewDataPath")
+	s.ReviewDataPathPermission = r.FormValue("ReviewDataPathPermission")
+	s.ReviewDataPathUID = r.FormValue("ReviewDataPathUID")
+	s.ReviewDataPathGID = r.FormValue("ReviewDataPathGID")
+
 	s.RunScriptAfterSignup = r.FormValue("RunScriptAfterSignup")
 	s.RunScriptAfterEditUserProfile = r.FormValue("RunScriptAfterEditUserProfile")
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
 	s.RVPath = r.FormValue("RVPath")
-	s.ReviewDataPath = r.FormValue("ReviewDataPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
