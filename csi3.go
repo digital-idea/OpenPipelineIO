@@ -38,6 +38,8 @@ var (
 	SHA1VER = "26b300a004abae553650c924514dc550e7385c9e" // 첫번째 커밋
 	// BUILDTIME 은 빌드타임 시간이다.
 	BUILDTIME = "2012-11-08T10:00:00" // 최초로 만든 시간
+	//
+	CachedAdminSetting = Setting{}
 
 	// 주요서비스 인수
 	flagDBIP    = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
@@ -382,6 +384,8 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		// 어드민설정을 한번 저장한다. CachedAdminSetting값은 매번 DB를 호출하면 안되는 작업에서 사용된다.
+		CachedAdminSetting = admin
 		// 만약 Admin설정에 ThumbnailRootPath가 잡혀있다면 그 값을 이용한다.
 		if admin.ThumbnailRootPath != "" {
 			*flagThumbnailRootPath = admin.ThumbnailRootPath

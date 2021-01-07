@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -116,24 +117,35 @@ func handleReviewData(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel == 0 {
+	if ssid.AccessLevel < 2 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
-		return
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	admin, err := GetAdminSetting(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	q := r.URL.Query()
 	id := q.Get("id")
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s.mp4", admin.ReviewDataPath, id))
+	http.ServeFile(w, r, fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, id))
+}
+
+// handleReviewDrawingData 함수는 리뷰 드로잉 데이터를 전송한다.
+func handleReviewDrawingData(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < 2 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	q := r.URL.Query()
+	id := q.Get("id")
+	frameStr := q.Get("frame")
+	frame, err := strconv.Atoi(frameStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	http.ServeFile(w, r, fmt.Sprintf("%s/%s.%06d.png", CachedAdminSetting.ReviewDataPath, id, frame))
 }
 
 // handleReviewSubmit 함수는 리뷰 검색창의 검색어를 입력받아 새로운 URI로 리다이렉션 한다.
