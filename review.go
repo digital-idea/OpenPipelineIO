@@ -34,6 +34,5 @@ type Sketch struct {
 	Duration   int    `json:"duration"`   // 스케치의 길이
 	Author     string `json:"author"`     // 스케치를 그린사람
 	SketchPath string `json:"sketchpath"` // 스케치 경로
-	Createtime string `json:"createtime"` // 생성시간
 	Updatetime string `json:"updatetime"` // 업데이트 시간
 }

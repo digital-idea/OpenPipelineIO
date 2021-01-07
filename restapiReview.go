@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"time"
 
@@ -1188,17 +1189,29 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Data.ID = bson.ObjectIdHex(id)
+	sktch := Sketch{}
+	// 프레임 설정
 	frame := r.FormValue("frame")
 	if frame == "" {
 		http.Error(w, "frame을 설정해주세요", http.StatusBadRequest)
 		return
 	}
-	sktch := Sketch{}
 	sktch.Frame, err = strconv.Atoi(frame)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	// Duration 설정
+	durationStr := r.FormValue("duration")
+	if durationStr == "" {
+		durationStr = "1"
+	}
+	sktch.Duration, err = strconv.Atoi(durationStr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// 파일체크
 	if len(r.MultipartForm.File) == 0 { // 파일이 없다면 에러처리한다.
 		http.Error(w, "드로잉 이미지를 설정해주세요", http.StatusBadRequest)
 		return
@@ -1249,11 +1262,37 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				sktch.SketchPath = imgPath
+				sktch.Author = rcp.UserID
+				sktch.Updatetime = time.Now().Format(time.RFC3339)
 			default:
 				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 				return
 			}
 		}
+	}
+	review, err := getReview(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	hasFrame := false
+	for _, s := range review.Sketches {
+		if s.Frame == sktch.Frame {
+			hasFrame = true
+		}
+	}
+	if !hasFrame {
+		review.Sketches = append(review.Sketches, sktch)
+		// Frame 순서로 스케치정보를 정렬한다.
+		sort.SliceStable(review.Sketches, func(i, j int) bool {
+			return review.Sketches[i].Frame < review.Sketches[j].Frame
+		})
+		err = setReviewItem(session, review)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Data = review
 	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
