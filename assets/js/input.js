@@ -4826,6 +4826,7 @@ function selectReviewItem(id, project, fps) {
             video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
         }
     });
+    // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     beforeFrameButton.addEventListener("click", function() {
         if (fps == 25) {
             // 25fps를 가지고 있는 미디어는 시작 프레임이 2프레임에서 시작된다.
@@ -4841,14 +4842,15 @@ function selectReviewItem(id, project, fps) {
                 video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))
             }
         }
-    }); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    }); 
+    // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {
         if (video.currentTime < video.seekable.end(0)) {
             video.currentTime += (1/parseFloat(fps));
         } else {
             video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
         }
-    }); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    });
 
     // video 객체를 생성한다.
     let video = document.createElement('video');
@@ -4952,6 +4954,24 @@ function selectReviewItem(id, project, fps) {
         aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
         aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
         aniuxCtx.stroke();
+        // 프레임을 이동하면 드로잉이 지워져야 한다.
+        removeDrawing()
+        // 드로잉이 존재하면 fg 캔버스에 그린다.
+        let drawing = new Image()
+        let id = document.getElementById("current-review-id").value
+        let frame = document.getElementById("currentframe").innerHTML
+        let url = `/reviewdrawingdata?id=${id}&frame=${frame}`
+        let http = new XMLHttpRequest();
+        http.open("HEAD", url, false)
+        http.send()
+        if (http.status === 200) {
+            let fg = document.getElementById("drawcanvas")
+            let fgctx = fg.getContext("2d")
+            drawing.src = url
+            drawing.onload = function() {
+                fgctx.drawImage(drawing, 0, 0, clientWidth, clientHeight);
+            };
+        }
     }, 0);
 }
 
@@ -5101,41 +5121,17 @@ document.onkeydown = function(e) {
     if (e.which == 37) { // arrow left
         document.getElementById("player-pause").click();
         document.getElementById("player-left").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
-        // 드로잉이 존재하면 fg 캔버스에 그린다.
-        let drawing = new Image()
-        let id = document.getElementById("current-review-id").value
-        let frame = document.getElementById("currentframe").innerHTML
-        let fg = document.getElementById("drawcanvas")
-        let fgctx = fg.getContext("2d")
-        drawing.src = `/reviewdrawingdata?id=${id}&frame=${frame}`
-        drawing.onload = function() {
-            fgctx.drawImage(drawing, 0, 0);
-        };
     } else if (e.which == 39) { // arrow right
         document.getElementById("player-pause").click();
         document.getElementById("player-right").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
-        // 드로잉이 존재하면 fg 캔버스에 그린다.
-        let drawing = new Image()
-        let id = document.getElementById("current-review-id").value
-        let frame = document.getElementById("currentframe").innerHTML
-        let fg = document.getElementById("drawcanvas")
-        let fgctx = fg.getContext("2d")
-        drawing.src = `/reviewdrawingdata?id=${id}&frame=${frame}`
-        drawing.onload = function() {
-            fgctx.drawImage(drawing, 0, 0);
-        };
     } else if (e.which == 80 || e.which == 83 || e.which == 32) { // p, s, space
         document.getElementById("player-playandpause").click();
     } else if (e.which == 219) { // [
         document.getElementById("player-pause").click();
         document.getElementById("player-start").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 221) { // ]
         document.getElementById("player-pause").click();
         document.getElementById("player-end").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 84) { // t
         document.getElementById("player-trash").click();
     } else if (e.which == 67) { // c
