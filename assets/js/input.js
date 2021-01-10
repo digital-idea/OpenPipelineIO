@@ -4740,14 +4740,19 @@ function initCanvas() {
     screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
+var globalClientWidth = 0;
+var globalClientHeight = 0;
+var globalReviewRenderWidth = 0;
+var globalReviewRenderHeight = 0;
+var globalReviewRenderWidthOffset = 0;
+var globalReviewRenderHeightOffset = 0;
+
 function selectReviewItem(id, project, fps) {
     // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
     document.title = "Review: " + project;
-
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
-
     initCanvas();
     let playerCanvas = document.getElementById("player");
     let playerCtx = playerCanvas.getContext("2d");
@@ -4884,21 +4889,25 @@ function selectReviewItem(id, project, fps) {
         video.play();
     };
     
-    
-    
     video.addEventListener('play', function () {
         let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
-                let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
-                let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
+                renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
+                renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
                 if (clientWidth <= renderWidth && renderHeight < clientHeight) {
                     // 가로형: 가로비율이 맞고, 높이가 적을 때
                     let hOffset = (clientHeight - renderHeight) / 2
+                    globalReviewRenderWidth = clientWidth
+                    globalReviewRenderHeight = renderHeight
+                    globalReviewRenderHeightOffset = hOffset
                     playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
                 } else {
                     // 세로형: 가로비율이 작고 높이가 맞을 때
                     let wOffset = (clientWidth - renderWidth) / 2
+                    globalReviewRenderWidth = renderWidth
+                    globalReviewRenderHeight = clientHeight
+                    globalReviewRenderWidthOffset = wOffset
                     playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
                 // fps에 맞게 currentFrame을 드로잉한다.
@@ -4925,17 +4934,15 @@ function selectReviewItem(id, project, fps) {
     }, 0);
 
     video.addEventListener('timeupdate', function () {
-        let $this = this; //cache
-        let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
-        let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
-        if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+        let $this = this; //cache 화
+        if (clientWidth <= globalReviewRenderWidth && globalReviewRenderHeight < clientHeight) {
             // 가로형: 가로비율이 맞고, 높이가 적을 때
-            let hOffset = (clientHeight - renderHeight) / 2
-            playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+            let hOffset = (clientHeight - globalReviewRenderHeight) / 2
+            playerCtx.drawImage($this, 0, hOffset, clientWidth, globalReviewRenderHeight);
         } else {
             // 세로형: 가로비율이 작고 높이을 꽉 채울 때
-            let wOffset = (clientWidth - renderWidth) / 2
-            playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+            let wOffset = (clientWidth - globalReviewRenderWidth) / 2
+            playerCtx.drawImage($this, wOffset, 0, globalReviewRenderWidth, clientHeight);
         }
         // fps에 맞게 currentFrame을 드로잉한다.
         let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
@@ -4969,7 +4976,8 @@ function selectReviewItem(id, project, fps) {
             let fgctx = fg.getContext("2d")
             drawing.src = url
             drawing.onload = function() {
-                fgctx.drawImage(drawing, 0, 0, clientWidth, clientHeight);
+                fgctx.drawImage(drawing, 0, 0, drawing.width, drawing.height,
+                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight);
             };
         }
     }, 0);
@@ -5046,8 +5054,21 @@ function screenshot(filename) {
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
 function saveDrawing(id) {
     let token = document.getElementById("token").value;
+    // Crop Canvas를 생성한다.
+    let cropCanvas = document.createElement("canvas");
+    cropCanvas.id = "cropCanvas";
+    cropCanvas.width = globalReviewRenderWidth;
+    cropCanvas.height = globalReviewRenderHeight;
+    console.log(globalReviewRenderWidth)
+    console.log(globalReviewRenderHeight)
+    let ctx = cropCanvas.getContext('2d');
+    
+    let drawingCanvas = document.getElementById("drawcanvas")
+    let drawingCtx = drawingCanvas.getContext('2d');
+    ctx.drawImage(drawingCanvas, globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight, 0, 0, globalReviewRenderWidth, globalReviewRenderHeight)
+
     // canvas의 드로잉을 .png 파일로 파일화 한다.
-    let fg = document.getElementById("drawcanvas").toDataURL("image/png");
+    let fg = cropCanvas.toDataURL("image/png");
     let blobBin = atob(fg.split(',')[1]); // base64 데이터를 바이너리로 변경한다.
     let array = [];
     for (let i = 0; i < blobBin.length; i++) {
