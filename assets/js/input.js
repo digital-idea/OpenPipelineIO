@@ -4699,10 +4699,17 @@ function setTypeAddShot(type, readOnly) {
     document.getElementById('addshot-type').readOnly = readOnly
 }
 
-// 동영상에 그림을 그리기 위해 필요한 글로벌 변수를 셋팅한다.
+// 리뷰를 위해서 동영상에 그림을 그리기 위해 필요한 글로벌 변수를 셋팅한다.
 var drawCanvas, drawCtx;
-var mouseStartX=0, mouseStartY=0
+var mouseStartX=0
+var mouseStartY=0
 var drawing = false;
+var globalClientWidth = 0;
+var globalClientHeight = 0;
+var globalReviewRenderWidth = 0;
+var globalReviewRenderHeight = 0;
+var globalReviewRenderWidthOffset = 0;
+var globalReviewRenderHeightOffset = 0;
 
 function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
@@ -4739,13 +4746,6 @@ function initCanvas() {
     screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
     screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
-
-var globalClientWidth = 0;
-var globalClientHeight = 0;
-var globalReviewRenderWidth = 0;
-var globalReviewRenderHeight = 0;
-var globalReviewRenderWidthOffset = 0;
-var globalReviewRenderHeightOffset = 0;
 
 function selectReviewItem(id, project, fps) {
     // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
@@ -4863,7 +4863,7 @@ function selectReviewItem(id, project, fps) {
     video.autoplay = true;
     video.loop = true;
     
-    // 검정으로 한번 채운다.
+    // 플레이어창의 배경을 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
@@ -4884,7 +4884,7 @@ function selectReviewItem(id, project, fps) {
             uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
             uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
         }
-        // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
+        // 재생에 필요한 모든 셋팅이 끝났다. 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
         video.play();
     };
@@ -4976,8 +4976,10 @@ function selectReviewItem(id, project, fps) {
             let fgctx = fg.getContext("2d")
             drawing.src = url
             drawing.onload = function() {
-                fgctx.drawImage(drawing, 0, 0, drawing.width, drawing.height,
-                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight);
+                fgctx.drawImage(drawing,
+                    0, 0, drawing.width, drawing.height,
+                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
+                );
             };
         }
     }, 0);
@@ -5059,12 +5061,8 @@ function saveDrawing(id) {
     cropCanvas.id = "cropCanvas";
     cropCanvas.width = globalReviewRenderWidth;
     cropCanvas.height = globalReviewRenderHeight;
-    console.log(globalReviewRenderWidth)
-    console.log(globalReviewRenderHeight)
     let ctx = cropCanvas.getContext('2d');
-    
     let drawingCanvas = document.getElementById("drawcanvas")
-    let drawingCtx = drawingCanvas.getContext('2d');
     ctx.drawImage(drawingCanvas, globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight, 0, 0, globalReviewRenderWidth, globalReviewRenderHeight)
 
     // canvas의 드로잉을 .png 파일로 파일화 한다.
