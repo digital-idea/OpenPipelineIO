@@ -4699,10 +4699,17 @@ function setTypeAddShot(type, readOnly) {
     document.getElementById('addshot-type').readOnly = readOnly
 }
 
-// 동영상에 그림을 그리기 위해 필요한 글로벌 변수를 셋팅한다.
+// 리뷰를 위해서 동영상에 그림을 그리기 위해 필요한 글로벌 변수를 셋팅한다.
 var drawCanvas, drawCtx;
-var mouseStartX=0, mouseStartY=0
+var mouseStartX=0
+var mouseStartY=0
 var drawing = false;
+var globalClientWidth = 0;
+var globalClientHeight = 0;
+var globalReviewRenderWidth = 0;
+var globalReviewRenderHeight = 0;
+var globalReviewRenderWidthOffset = 0;
+var globalReviewRenderHeightOffset = 0;
 
 function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
@@ -4743,11 +4750,9 @@ function initCanvas() {
 function selectReviewItem(id, project, fps) {
     // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
     document.title = "Review: " + project;
-
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
-
     initCanvas();
     let playerCanvas = document.getElementById("player");
     let playerCtx = playerCanvas.getContext("2d");
@@ -4826,6 +4831,7 @@ function selectReviewItem(id, project, fps) {
             video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
         }
     });
+    // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     beforeFrameButton.addEventListener("click", function() {
         if (fps == 25) {
             // 25fps를 가지고 있는 미디어는 시작 프레임이 2프레임에서 시작된다.
@@ -4841,14 +4847,15 @@ function selectReviewItem(id, project, fps) {
                 video.currentTime = video.seekable.start(0) + (1/parseFloat(fps))
             }
         }
-    }); // 이전 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    }); 
+    // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
     afterFrameButton.addEventListener("click", function() {
         if (video.currentTime < video.seekable.end(0)) {
             video.currentTime += (1/parseFloat(fps));
         } else {
             video.currentTime = video.seekable.end(0) - (1/parseFloat(fps))
         }
-    }); // 다음 프레임으로 이동하는 버튼을 클릭할 때 이벤트
+    });
 
     // video 객체를 생성한다.
     let video = document.createElement('video');
@@ -4856,7 +4863,7 @@ function selectReviewItem(id, project, fps) {
     video.autoplay = true;
     video.loop = true;
     
-    // 검정으로 한번 채운다.
+    // 플레이어창의 배경을 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
@@ -4877,26 +4884,30 @@ function selectReviewItem(id, project, fps) {
             uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
             uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
         }
-        // 재생에 필요한 준비가 끝났다. 리뷰 데이터를 자동으로 한번 플레이시킨다.
+        // 재생에 필요한 모든 셋팅이 끝났다. 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
         video.play();
     };
-    
-    
     
     video.addEventListener('play', function () {
         let $this = this; //cache
         (function loop() {
             if (!$this.paused && !$this.ended) {
-                let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
-                let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
+                renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
+                renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
                 if (clientWidth <= renderWidth && renderHeight < clientHeight) {
                     // 가로형: 가로비율이 맞고, 높이가 적을 때
                     let hOffset = (clientHeight - renderHeight) / 2
+                    globalReviewRenderWidth = clientWidth
+                    globalReviewRenderHeight = renderHeight
+                    globalReviewRenderHeightOffset = hOffset
                     playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
                 } else {
                     // 세로형: 가로비율이 작고 높이가 맞을 때
                     let wOffset = (clientWidth - renderWidth) / 2
+                    globalReviewRenderWidth = renderWidth
+                    globalReviewRenderHeight = clientHeight
+                    globalReviewRenderWidthOffset = wOffset
                     playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
                 }
                 // fps에 맞게 currentFrame을 드로잉한다.
@@ -4923,17 +4934,15 @@ function selectReviewItem(id, project, fps) {
     }, 0);
 
     video.addEventListener('timeupdate', function () {
-        let $this = this; //cache
-        let renderWidth = ($this.videoWidth * clientHeight) / $this.videoHeight // 실제로 렌더링되는 너비
-        let renderHeight = ($this.videoHeight * clientWidth) / $this.videoWidth // 실제로 렌더링되는 높이
-        if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+        let $this = this; //cache 화
+        if (clientWidth <= globalReviewRenderWidth && globalReviewRenderHeight < clientHeight) {
             // 가로형: 가로비율이 맞고, 높이가 적을 때
-            let hOffset = (clientHeight - renderHeight) / 2
-            playerCtx.drawImage($this, 0, hOffset, clientWidth, renderHeight);
+            let hOffset = (clientHeight - globalReviewRenderHeight) / 2
+            playerCtx.drawImage($this, 0, hOffset, clientWidth, globalReviewRenderHeight);
         } else {
             // 세로형: 가로비율이 작고 높이을 꽉 채울 때
-            let wOffset = (clientWidth - renderWidth) / 2
-            playerCtx.drawImage($this, wOffset, 0, renderWidth, clientHeight);
+            let wOffset = (clientWidth - globalReviewRenderWidth) / 2
+            playerCtx.drawImage($this, wOffset, 0, globalReviewRenderWidth, clientHeight);
         }
         // fps에 맞게 currentFrame을 드로잉한다.
         let currentFrame = Math.floor($this.currentTime * parseFloat(fps))
@@ -4952,6 +4961,27 @@ function selectReviewItem(id, project, fps) {
         aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
         aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
         aniuxCtx.stroke();
+        // 프레임을 이동하면 드로잉이 지워져야 한다.
+        removeDrawing()
+        // 드로잉이 존재하면 fg 캔버스에 그린다.
+        let drawing = new Image()
+        let id = document.getElementById("current-review-id").value
+        let frame = document.getElementById("currentframe").innerHTML
+        let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
+        let http = new XMLHttpRequest();
+        http.open("HEAD", url, false)
+        http.send()
+        if (http.status === 200) {
+            let fg = document.getElementById("drawcanvas")
+            let fgctx = fg.getContext("2d")
+            drawing.src = url
+            drawing.onload = function() {
+                fgctx.drawImage(drawing,
+                    0, 0, drawing.width, drawing.height,
+                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
+                );
+            };
+        }
     }, 0);
 }
 
@@ -5026,8 +5056,17 @@ function screenshot(filename) {
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
 function saveDrawing(id) {
     let token = document.getElementById("token").value;
+    // Crop Canvas를 생성한다.
+    let cropCanvas = document.createElement("canvas");
+    cropCanvas.id = "cropCanvas";
+    cropCanvas.width = globalReviewRenderWidth;
+    cropCanvas.height = globalReviewRenderHeight;
+    let ctx = cropCanvas.getContext('2d');
+    let drawingCanvas = document.getElementById("drawcanvas")
+    ctx.drawImage(drawingCanvas, globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight, 0, 0, globalReviewRenderWidth, globalReviewRenderHeight)
+
     // canvas의 드로잉을 .png 파일로 파일화 한다.
-    let fg = document.getElementById("drawcanvas").toDataURL("image/png");
+    let fg = cropCanvas.toDataURL("image/png");
     let blobBin = atob(fg.split(',')[1]); // base64 데이터를 바이너리로 변경한다.
     let array = [];
     for (let i = 0; i < blobBin.length; i++) {
@@ -5101,21 +5140,17 @@ document.onkeydown = function(e) {
     if (e.which == 37) { // arrow left
         document.getElementById("player-pause").click();
         document.getElementById("player-left").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 39) { // arrow right
         document.getElementById("player-pause").click();
         document.getElementById("player-right").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 80 || e.which == 83 || e.which == 32) { // p, s, space
         document.getElementById("player-playandpause").click();
     } else if (e.which == 219) { // [
         document.getElementById("player-pause").click();
         document.getElementById("player-start").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 221) { // ]
         document.getElementById("player-pause").click();
         document.getElementById("player-end").click();
-        removeDrawing() // 프레임을 이동하면 드로잉이 지워져야 한다.
     } else if (e.which == 84) { // t
         document.getElementById("player-trash").click();
     } else if (e.which == 67) { // c
