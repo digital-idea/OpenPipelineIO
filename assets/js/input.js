@@ -4967,7 +4967,7 @@ function selectReviewItem(id, project, fps) {
         let drawing = new Image()
         let id = document.getElementById("current-review-id").value
         let frame = document.getElementById("currentframe").innerHTML
-        let url = `/reviewdrawingdata?id=${id}&frame=${frame}`
+        let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
         let http = new XMLHttpRequest();
         http.open("HEAD", url, false)
         http.send()

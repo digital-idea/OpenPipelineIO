@@ -140,6 +140,7 @@ func handleReviewDrawingData(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	id := q.Get("id")
 	frameStr := q.Get("frame")
+	_ = q.Get("time") // 브라우저에서 캐쉬되지 않은 이미지를 가지고 오기 위해 time 옵션을 사용한다. 리소스 URL로 이미지를 캐쉬하기 때문이다.
 	frame, err := strconv.Atoi(frameStr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
