@@ -120,10 +120,11 @@
             <span class="player-end" id="player-end" title="]"></span>
             <span class="player-loop" id="player-loopandloopoff" title="l"></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
-            <span class="monospace ml-5" id="currentframe"></span>
+            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame('{{.CurrentReview.ID.Hex}}')"></span>
             <span class="monospace">/</span>
             <span class="monospace" id="totalframe"></span>
-            <span class="monospace pl-4" id="fps">{{.CurrentReview.Fps}}fps</span>
+            <span class="monospace pl-4" id="currentfps">{{.CurrentReview.Fps}}</span>
+            <span class="monospace" >fps</span>
             <!--
                 <span class="player-mute" id="player-mute"></span>
                 <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">

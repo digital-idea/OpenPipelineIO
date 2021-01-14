@@ -4858,10 +4858,11 @@ function selectReviewItem(id, project, fps) {
     });
 
     // video 객체를 생성한다.
-    let video = document.createElement('video');
+    var video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
     video.loop = true;
+    video.setAttribute("id", "currentvideo");
     
     // 플레이어창의 배경을 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
@@ -5230,4 +5231,18 @@ function rmUser() {
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
+}
+
+function setModalGotoFrame(id) {
+    document.getElementById("modal-gotoframe-id").value = id;
+    document.getElementById("modal-gotoframe-frame").value = parseInt(document.getElementById("currentframe").innerHTML);
+}
+
+function gotoFrame() {
+    id = document.getElementById("modal-gotoframe-id").value
+    frame = parseFloat(document.getElementById("modal-gotoframe-frame").value)
+    fps = parseFloat(document.getElementById("currentfps").innerHTML)
+    video = document.getElementById("currentvideo")
+    console.log(video)
+    video.currentTime = frame / fps
 }
