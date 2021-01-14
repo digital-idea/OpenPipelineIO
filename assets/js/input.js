@@ -4784,7 +4784,13 @@ function selectReviewItem(id, project, fps) {
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
-    
+    let gotoFrameInput = document.getElementById("modal-gotoframe-frame");
+
+    gotoFrameInput.addEventListener("change", function() {
+        targetFrame = document.getElementById("modal-gotoframe-frame").value
+        video.currentTime = gotoFrame(targetFrame, fps) // video.currentTime이 바뀌기 때문에 video.addEventListener('timeupdate', function () {}) 이벤트가 발생해서 드로잉이 띄워진다.
+    });
+
     // 플레이 버튼을 클릭할 때 이벤트
     playButton.addEventListener("click", function() {
         playAndPauseButton.className = "player-pause"
@@ -4871,19 +4877,48 @@ function selectReviewItem(id, project, fps) {
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
     let frameLineMarkHeight = 12; // 프레임 표시라인 높이
     let totalFrame = 0
+    let sketchesFrame = [];
+    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        async: false,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            for (let i = 0; i < data.sketches.length; i++) {
+                sketchesFrame.push(data.sketches[i].frame)
+            }
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
         totalFrame = Math.round(this.duration * parseFloat(fps)) // round로 해야 23.976fps에서 frame 에러가 발생하지 않는다.
         // totalFrame을 표기한다.
         document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
+        // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
         let frameLineOffset = clientWidth / totalFrame
-        uxCtx.beginPath();
-        for (let i = 0; i < totalFrame + 1; i++) {
-            uxCtx.strokeStyle = '#333333';
+        
+        for (let i = 0; i < totalFrame; i++) {
+            uxCtx.beginPath();
+            if (sketchesFrame.includes(i+1)) {                
+                uxCtx.strokeStyle = '#FFFF00';
+            } else {
+                uxCtx.strokeStyle = '#333333';
+            }
             uxCtx.lineWidth = 2;
-            uxCtx.stroke();
             uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
             uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
+            uxCtx.stroke();
+            uxCtx.closePath();
         }
         // 재생에 필요한 모든 셋팅이 끝났다. 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
@@ -4928,8 +4963,10 @@ function selectReviewItem(id, project, fps) {
                 aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
                 aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
                 aniuxCtx.stroke();
+
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
+
             }
         })();
     }, 0);
@@ -4953,7 +4990,8 @@ function selectReviewItem(id, project, fps) {
             // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
             document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
         }
-        // 커서의 위치를 드로잉 한다.
+        // 빨간 커서의 위치를 드로잉 한다.
+        
         aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
         aniuxCtx.strokeStyle = "#FF0000";
         aniuxCtx.lineWidth = 4;
@@ -4962,7 +5000,8 @@ function selectReviewItem(id, project, fps) {
         aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
         aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
         aniuxCtx.stroke();
-        // 프레임을 이동하면 드로잉이 지워져야 한다.
+        
+        // 프레임을 이동하면 기존 드로잉이 지워져야 한다.
         removeDrawing()
         // 드로잉이 존재하면 fg 캔버스에 그린다.
         let drawing = new Image()
@@ -4985,6 +5024,11 @@ function selectReviewItem(id, project, fps) {
         }
     }, 0);
 }
+
+function gotoFrame(frame, fps) {
+    return ((parseFloat(frame) - (1.0/parseFloat(fps))) / parseFloat(fps))
+}
+
 
 // draw 함수는 x,y 좌표를 받아 그림을 그린다.
 function draw(curX, curY) {
@@ -5233,16 +5277,6 @@ function rmUser() {
     });
 }
 
-function setModalGotoFrame(id) {
-    document.getElementById("modal-gotoframe-id").value = id;
+function setModalGotoFrame() {
     document.getElementById("modal-gotoframe-frame").value = parseInt(document.getElementById("currentframe").innerHTML);
-}
-
-function gotoFrame() {
-    id = document.getElementById("modal-gotoframe-id").value
-    frame = parseFloat(document.getElementById("modal-gotoframe-frame").value)
-    fps = parseFloat(document.getElementById("currentfps").innerHTML)
-    video = document.getElementById("currentvideo")
-    console.log(video)
-    video.currentTime = frame / fps
 }
