@@ -4710,6 +4710,7 @@ var globalReviewRenderWidth = 0;
 var globalReviewRenderHeight = 0;
 var globalReviewRenderWidthOffset = 0;
 var globalReviewRenderHeightOffset = 0;
+var framelineOffset = 0;
 
 function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
@@ -4895,32 +4896,33 @@ function selectReviewItem(id, project, fps) {
                 sketchesFrame.push(data.sketches[i].frame)
             }
         },
-        error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        error: function(){
+            return
         }
     })
+    // 비디오가 로딩되면 메타데이터로 처리할 수 있는 과정을 처리한다.
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
         totalFrame = Math.round(this.duration * parseFloat(fps)) // round로 해야 23.976fps에서 frame 에러가 발생하지 않는다.
         // totalFrame을 표기한다.
         document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
+        // 프레임 표기바의 간격을 구하고 global 변수에 저장한다.
+        framelineOffset = clientWidth / totalFrame
         // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
-        let frameLineOffset = clientWidth / totalFrame
-        
         for (let i = 0; i < totalFrame; i++) {
             uxCtx.beginPath();
             if (sketchesFrame.includes(i+1)) {                
-                uxCtx.strokeStyle = '#FFFF00';
+                uxCtx.strokeStyle = '#FFCD31';
             } else {
                 uxCtx.strokeStyle = '#333333';
             }
             uxCtx.lineWidth = 2;
-            uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
-            uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
+            uxCtx.moveTo(i*framelineOffset + (framelineOffset / 2) , clientHeight - frameLineMarkHeight);
+            uxCtx.lineTo(i*framelineOffset + (framelineOffset / 2), clientHeight);
             uxCtx.stroke();
             uxCtx.closePath();
         }
-        // 재생에 필요한 모든 셋팅이 끝났다. 리뷰 데이터를 플레이시킨다.
+        // 재생에 필요한 모든 설정이 완료되면 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
         video.play();
     };
@@ -4958,10 +4960,9 @@ function selectReviewItem(id, project, fps) {
                 aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
                 aniuxCtx.strokeStyle = "#FF0000";
                 aniuxCtx.lineWidth = 4;
-                let frameLineOffset = clientWidth / totalFrame
                 aniuxCtx.beginPath();
-                aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
-                aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+                aniuxCtx.moveTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight - frameLineMarkHeight);
+                aniuxCtx.lineTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight);
                 aniuxCtx.stroke();
 
                 // 다음화면 갱신
@@ -4991,14 +4992,12 @@ function selectReviewItem(id, project, fps) {
             document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
         }
         // 빨간 커서의 위치를 드로잉 한다.
-        
         aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
         aniuxCtx.strokeStyle = "#FF0000";
         aniuxCtx.lineWidth = 4;
-        let frameLineOffset = clientWidth / totalFrame
         aniuxCtx.beginPath();
-        aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
-        aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+        aniuxCtx.moveTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight - frameLineMarkHeight);
+        aniuxCtx.lineTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight);
         aniuxCtx.stroke();
         
         // 프레임을 이동하면 기존 드로잉이 지워져야 한다.
