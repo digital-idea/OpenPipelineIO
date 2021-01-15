@@ -4787,12 +4787,60 @@ function selectReviewItem(id, project, fps) {
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
     let gotoFrameInput = document.getElementById("modal-gotoframe-frame");
+    let prevDrawing = document.getElementById("drawing-prev");
+    let nextDrawing = document.getElementById("drawing-next");
 
+    // GotoFrame 모달창에서 프레임이 변경되면 해당 프레임으로 이동한다.
     gotoFrameInput.addEventListener("change", function() {
         targetFrame = document.getElementById("modal-gotoframe-frame").value
         video.currentTime = gotoFrame(targetFrame, fps) // video.currentTime이 바뀌기 때문에 video.addEventListener('timeupdate', function () {}) 이벤트가 발생해서 드로잉이 띄워진다.
     });
 
+    // prev Drawing 버튼을 클릭할 때 이벤트
+    prevDrawing.addEventListener("click", function() {
+        $.ajax({
+            url: "/api/reviewdrawingframe",
+            type: "post",
+            data: {
+                id: id,
+                frame: document.getElementById("currentframe").innerHTML,
+                mode: "prev",
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                video.currentTime = gotoFrame(data.resultframe, fps)
+            },
+            error: function(){
+                return
+            }
+        })
+    });
+
+    // next Drawing 버튼을 클릭할 때 이벤트
+    nextDrawing.addEventListener("click", function() {
+        $.ajax({
+            url: "/api/reviewdrawingframe",
+            type: "post",
+            data: {
+                id: id,
+                frame: document.getElementById("currentframe").innerHTML,
+                mode: "next",
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                video.currentTime = gotoFrame(data.resultframe, fps)
+            },
+            error: function(){
+                return
+            }
+        })
+    });
     // 플레이 버튼을 클릭할 때 이벤트
     playButton.addEventListener("click", function() {
         playAndPauseButton.className = "player-pause"
@@ -5047,6 +5095,7 @@ function down(e) {
 // up 함수는 마우스 버튼을 땔 때 그림그리는 모드를 종료한다.
 function up(e) {
     drawing = false;
+    saveDrawing()
 }
 
 // move 함수는 그림을 그리는 상태이고 마우스가 이동할 때 현재 위치에 그림을 그리고 현재위치를 다시 마우스의 시작위치로 바꾼다.
@@ -5128,7 +5177,8 @@ function screenshot(filename) {
 }
 
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
-function saveDrawing(id) {
+function saveDrawing() {
+    let id = document.getElementById("current-review-id").value;
     let token = document.getElementById("token").value;
     // Crop Canvas를 생성한다.
     let cropCanvas = document.createElement("canvas");
@@ -5257,6 +5307,10 @@ document.onkeydown = function(e) {
         document.getElementById("player-screenshot").click();
     } else if (e.which == 76) { // l
         document.getElementById("player-loopandloopoff").click();
+    } else if (e.which == 190) { // .
+        document.getElementById("drawing-next").click();
+    } else if (e.which == 188) { // ,
+        document.getElementById("drawing-prev").click();
     }
 };
 

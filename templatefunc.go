@@ -176,6 +176,19 @@ func ReverseStringSlice(lists []string) []string {
 	return result
 }
 
+// ReverseIntSlice 함수는 받아들인 int 슬라이스의 아이템 순서를 역순으로 변경한다.
+// 받아들인 값이 nil이라면 빈 int 슬라이스를 반환한다.
+func ReverseIntSlice(lists []int) []int {
+	if lists == nil {
+		return []int{}
+	}
+	var result []int
+	for i := len(lists); i > 0; i-- {
+		result = append(result, lists[i-1])
+	}
+	return result
+}
+
 // Publishes 자료구조를 정리하기 위해 사용하는 자료구조
 type Publishes []Publish
 
