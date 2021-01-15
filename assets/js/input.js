@@ -5065,8 +5065,8 @@ function out(e) {
     drawing = false;
 }
 
-// checkDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
-function checkDrawingFrame() {
+// changeYellowDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function changeYellowDrawingFrame() {
     let uxCanvas = document.getElementById("uxcanvas");
     uxCtx = uxCanvas.getContext("2d")
     currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
@@ -5079,8 +5079,8 @@ function checkDrawingFrame() {
     uxCtx.closePath();
 }
 
-// rmDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
-function rmDrawingFrame() {
+// changeDrawingGrayFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function changeDrawingGrayFrame() {
     let uxCanvas = document.getElementById("uxcanvas");
     uxCtx = uxCanvas.getContext("2d")
     currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
@@ -5124,7 +5124,7 @@ function screenshot(filename) {
     let clientWidth = playerbox.clientWidth
     let clientHeight = playerbox.clientHeight
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
-    checkDrawingFrame()
+    changeYellowDrawingFrame()
 }
 
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
@@ -5164,8 +5164,7 @@ function saveDrawing(id) {
             "Authorization": "Basic "+ token
         },
         success: function(data) {
-            console.log(data);
-            checkDrawingFrame()
+            changeYellowDrawingFrame()
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5173,23 +5172,48 @@ function saveDrawing(id) {
     })
 }
 
-// removeDrawing 함수는 리뷰 스케치를 제거합니다.
+// removeDrawing 함수는 리뷰 스케치를 제거합니다. 프레임을 갱신할 때 사용합니다.
 function removeDrawing() {
-    // 지울 영역을 구한다. - player 캔버스를 담을 div 의 가로세로 사이즈를 구한다.
-    let playerbox = document.getElementById("playerbox");
-    let clientWidth = playerbox.clientWidth
-    let clientHeight = playerbox.clientHeight
- 
     // drawcanvas를 지운다.
     let fg = document.getElementById("drawcanvas");
     let fgctx = fg.getContext("2d");
-    fgctx.clearRect(0, 0, clientWidth, clientHeight);
-
+    fgctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
     // screenshot를 지운다.
     let screenshot = document.getElementById("screenshot");
     let screenshotctx = screenshot.getContext("2d");
-    screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
-    rmDrawingFrame() // 그림이 그려진 프레임의 노란바를 회색바로 변경한다.
+    screenshotctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+}
+
+// removeDrawingAndData 함수는 리뷰 스케치를 제거하고 서버의 이미지도 제거합니다.
+function removeDrawingAndData() {
+    // drawcanvas를 지운다.
+    let fg = document.getElementById("drawcanvas");
+    let fgctx = fg.getContext("2d");
+    fgctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+    // screenshot를 지운다.
+    let screenshot = document.getElementById("screenshot");
+    let screenshotctx = screenshot.getContext("2d");
+    screenshotctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+    // 서버에 파일이 존재하면 삭제한다.
+    $.ajax({
+        url: "/api/rmreviewdrawing",
+        type: "post",
+        data: {
+            id: document.getElementById("current-review-id").value,
+            frame: parseInt(document.getElementById("currentframe").innerHTML),
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            // 파일이 잘 삭제되면, 그림이 그려진 프레임의 노란바를 회색바로 변경한다.
+            changeDrawingGrayFrame()
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
 }
 
 // copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.

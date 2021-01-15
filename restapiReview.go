@@ -1303,3 +1303,79 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIRmReviewDrawing 함수는 리뷰 드로잉이미지를 삭제하는 RestAPI 이다.
+func handleAPIRmReviewDrawing(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID     string `json:"id"`
+		Frame  int    `json:"frame"`
+		UserID string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	frame := r.FormValue("frame")
+	if frame == "" {
+		http.Error(w, "frame을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Frame, err = strconv.Atoi(frame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// DB에 저장된 드로잉 프레임을 제거한다.
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	newSketchs := []Sketch{}
+	for _, s := range review.Sketches {
+		if s.Frame != rcp.Frame {
+			newSketchs = append(newSketchs, s)
+		}
+	}
+	review.Sketches = newSketchs
+	err = setReviewItem(session, review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 썸네일 이미지가 존재한다면 이미지 파일을 지운다.
+	imgPath := fmt.Sprintf("%s/%s.%06d.png", CachedAdminSetting.ReviewDataPath, rcp.ID, rcp.Frame)
+	err = os.Remove(imgPath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
