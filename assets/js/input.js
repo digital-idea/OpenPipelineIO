@@ -4711,41 +4711,42 @@ var globalReviewRenderHeight = 0;
 var globalReviewRenderWidthOffset = 0;
 var globalReviewRenderHeightOffset = 0;
 var framelineOffset = 0;
+var frameLineMarkHeight = 12; // 프레임 표시라인 높이
 
 function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
-    let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
-    let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
+    globalClientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
+    globalClientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
     // Player 캔버스를 초기화 한다.
     let playerCanvas = document.getElementById("player");
     playerCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     playerCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    playerCanvas.setAttribute("width", clientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
-    playerCanvas.setAttribute("height", clientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
+    playerCanvas.setAttribute("width", globalClientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
+    playerCanvas.setAttribute("height", globalClientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
     // Draw 캔버스를 초기화 한다.
     let drawCanvas = document.getElementById("drawcanvas");
     drawCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    drawCanvas.setAttribute("width", clientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
-    drawCanvas.setAttribute("height", clientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
+    drawCanvas.setAttribute("width", globalClientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
+    drawCanvas.setAttribute("height", globalClientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
     // UX 캔버스를 초기화 한다.
     let uxCanvas = document.getElementById("uxcanvas");
     uxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     uxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    uxCanvas.setAttribute("width", clientWidth) // UX 캔버스 가로 사이즈를 설정한다.
-    uxCanvas.setAttribute("height", clientHeight) // UX 캔버스 세로 사이즈를 설정한다.
+    uxCanvas.setAttribute("width", globalClientWidth) // UX 캔버스 가로 사이즈를 설정한다.
+    uxCanvas.setAttribute("height", globalClientHeight) // UX 캔버스 세로 사이즈를 설정한다.
     // Animation UX 캔버스를 초기화 한다.
     let aniuxCanvas = document.getElementById("aniuxcanvas");
     aniuxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     aniuxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    aniuxCanvas.setAttribute("width", clientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
-    aniuxCanvas.setAttribute("height", clientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
+    aniuxCanvas.setAttribute("width", globalClientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
+    aniuxCanvas.setAttribute("height", globalClientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
     // Screenshot 캔버스를 초기화 한다.
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
-    screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("width", globalClientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("height", globalClientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
 function selectReviewItem(id, project, fps) {
@@ -4876,7 +4877,6 @@ function selectReviewItem(id, project, fps) {
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
-    let frameLineMarkHeight = 12; // 프레임 표시라인 높이
     let totalFrame = 0
     let sketchesFrame = [];
     // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
@@ -5065,6 +5065,35 @@ function out(e) {
     drawing = false;
 }
 
+// checkDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function checkDrawingFrame() {
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCtx = uxCanvas.getContext("2d")
+    currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
+    uxCtx.beginPath();
+    uxCtx.strokeStyle = '#FFCD31';
+    uxCtx.lineWidth = 2;
+    uxCtx.moveTo(currentFrame*framelineOffset + (framelineOffset / 2) , globalClientHeight - frameLineMarkHeight);
+    uxCtx.lineTo(currentFrame*framelineOffset + (framelineOffset / 2), globalClientHeight);
+    uxCtx.stroke();
+    uxCtx.closePath();
+}
+
+// rmDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function rmDrawingFrame() {
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCtx = uxCanvas.getContext("2d")
+    currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
+    uxCtx.beginPath();
+    uxCtx.strokeStyle = '#333333';
+    uxCtx.lineWidth = 2;
+    uxCtx.moveTo(currentFrame*framelineOffset + (framelineOffset / 2) , globalClientHeight - frameLineMarkHeight);
+    uxCtx.lineTo(currentFrame*framelineOffset + (framelineOffset / 2), globalClientHeight);
+    uxCtx.stroke();
+    uxCtx.closePath();
+}
+
+
 // screenshot 함수는 리뷰중인 스크린을 스크린샷 합니다.
 function screenshot(filename) {
     let screenshot = document.getElementById("screenshot");
@@ -5095,6 +5124,7 @@ function screenshot(filename) {
     let clientWidth = playerbox.clientWidth
     let clientHeight = playerbox.clientHeight
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
+    checkDrawingFrame()
 }
 
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
@@ -5135,6 +5165,7 @@ function saveDrawing(id) {
         },
         success: function(data) {
             console.log(data);
+            checkDrawingFrame()
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5158,6 +5189,7 @@ function removeDrawing() {
     let screenshot = document.getElementById("screenshot");
     let screenshotctx = screenshot.getContext("2d");
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
+    rmDrawingFrame() // 그림이 그려진 프레임의 노란바를 회색바로 변경한다.
 }
 
 // copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.
