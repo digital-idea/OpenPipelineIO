@@ -1303,3 +1303,171 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIRmReviewDrawing 함수는 리뷰 드로잉이미지를 삭제하는 RestAPI 이다.
+func handleAPIRmReviewDrawing(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID     string `json:"id"`
+		Frame  int    `json:"frame"`
+		UserID string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	frame := r.FormValue("frame")
+	if frame == "" {
+		http.Error(w, "frame을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Frame, err = strconv.Atoi(frame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// DB에 저장된 드로잉 프레임을 제거한다.
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	newSketchs := []Sketch{}
+	for _, s := range review.Sketches {
+		if s.Frame != rcp.Frame {
+			newSketchs = append(newSketchs, s)
+		}
+	}
+	review.Sketches = newSketchs
+	err = setReviewItem(session, review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// 썸네일 이미지가 존재한다면 이미지 파일을 지운다.
+	imgPath := fmt.Sprintf("%s/%s.%06d.png", CachedAdminSetting.ReviewDataPath, rcp.ID, rcp.Frame)
+	err = os.Remove(imgPath)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIReviewDrawingFrame 함수는 리뷰 드로잉 프레임 정보를 가지고 오는 RestAPI 이다.
+func handleAPIReviewDrawingFrame(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID          string `json:"id"`
+		Frame       int    `json:"frame"`
+		ResultFrame int    `json:"resultframe"`
+		Mode        string `json:"mode"`
+		UserID      string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	mode := r.FormValue("mode")
+	if !(mode == "prev" || mode == "next") {
+		http.Error(w, "mode는 prev, next만 지원합니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Mode = mode
+	frame := r.FormValue("frame")
+	if frame == "" {
+		http.Error(w, "frame을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Frame, err = strconv.Atoi(frame)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	// DB에 저장된 드로잉 프레임을 제거한다.
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var frames []int
+	for _, n := range review.Sketches {
+		frames = append(frames, n.Frame)
+	}
+	if len(frames) == 0 {
+		http.Error(w, "드로잉 프레임이 존재하지 않습니다", http.StatusBadRequest)
+		return
+	}
+	if rcp.Mode == "prev" {
+		frames = ReverseIntSlice(frames)
+	}
+	for _, n := range frames {
+		if rcp.Mode == "prev" {
+			if n < rcp.Frame {
+				rcp.ResultFrame = n
+				break
+			}
+		} else {
+			if n > rcp.Frame {
+				rcp.ResultFrame = n
+				break
+			}
+		}
+	}
+	// 만약 조건에 맞지않는 프레임이 입력되면 UX에서 frame이 순환할 수 있도록 존재하는 프레임을 리턴한다.
+	if rcp.ResultFrame == 0 {
+		rcp.ResultFrame = frames[0]
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

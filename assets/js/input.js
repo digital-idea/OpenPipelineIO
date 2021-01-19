@@ -4710,41 +4710,43 @@ var globalReviewRenderWidth = 0;
 var globalReviewRenderHeight = 0;
 var globalReviewRenderWidthOffset = 0;
 var globalReviewRenderHeightOffset = 0;
+var framelineOffset = 0;
+var frameLineMarkHeight = 12; // 프레임 표시라인 높이
 
 function initCanvas() {
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
-    let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
-    let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
+    globalClientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
+    globalClientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
     // Player 캔버스를 초기화 한다.
     let playerCanvas = document.getElementById("player");
     playerCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     playerCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    playerCanvas.setAttribute("width", clientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
-    playerCanvas.setAttribute("height", clientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
+    playerCanvas.setAttribute("width", globalClientWidth) // 캔버스를 클라이언트 사용자의 가로사이즈로 설정한다.
+    playerCanvas.setAttribute("height", globalClientHeight) // 캔버스를 클라이언트 사용자의 세로사이즈로 설정한다.
     // Draw 캔버스를 초기화 한다.
     let drawCanvas = document.getElementById("drawcanvas");
     drawCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     drawCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    drawCanvas.setAttribute("width", clientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
-    drawCanvas.setAttribute("height", clientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
+    drawCanvas.setAttribute("width", globalClientWidth) // 그림을 그리는 캔버스 가로 사이즈를 설정한다.
+    drawCanvas.setAttribute("height", globalClientHeight) // 그림을 그리는 캔버스 세로 사이즈를 설정한다.
     // UX 캔버스를 초기화 한다.
     let uxCanvas = document.getElementById("uxcanvas");
     uxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     uxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    uxCanvas.setAttribute("width", clientWidth) // UX 캔버스 가로 사이즈를 설정한다.
-    uxCanvas.setAttribute("height", clientHeight) // UX 캔버스 세로 사이즈를 설정한다.
+    uxCanvas.setAttribute("width", globalClientWidth) // UX 캔버스 가로 사이즈를 설정한다.
+    uxCanvas.setAttribute("height", globalClientHeight) // UX 캔버스 세로 사이즈를 설정한다.
     // Animation UX 캔버스를 초기화 한다.
     let aniuxCanvas = document.getElementById("aniuxcanvas");
     aniuxCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     aniuxCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    aniuxCanvas.setAttribute("width", clientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
-    aniuxCanvas.setAttribute("height", clientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
+    aniuxCanvas.setAttribute("width", globalClientWidth) // Animation UX 캔버스 가로 사이즈를 설정한다.
+    aniuxCanvas.setAttribute("height", globalClientHeight) // Animation UX 캔버스 세로 사이즈를 설정한다.
     // Screenshot 캔버스를 초기화 한다.
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCanvas.setAttribute("width", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
     screenshotCanvas.setAttribute("height", 0) // 이 줄이 없으면 아이템을 클릭할 때 마다 캔버스가 계속 커진다.
-    screenshotCanvas.setAttribute("width", clientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
-    screenshotCanvas.setAttribute("height", clientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("width", globalClientWidth) // 스크린샷 캔버스 가로 사이즈를 설정한다.
+    screenshotCanvas.setAttribute("height", globalClientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
 function selectReviewItem(id, project, fps) {
@@ -4784,7 +4786,61 @@ function selectReviewItem(id, project, fps) {
     let endButton = document.getElementById("player-end");
     let beforeFrameButton = document.getElementById("player-left");
     let afterFrameButton = document.getElementById("player-right");
-    
+    let gotoFrameInput = document.getElementById("modal-gotoframe-frame");
+    let prevDrawing = document.getElementById("drawing-prev");
+    let nextDrawing = document.getElementById("drawing-next");
+
+    // GotoFrame 모달창에서 프레임이 변경되면 해당 프레임으로 이동한다.
+    gotoFrameInput.addEventListener("change", function() {
+        targetFrame = document.getElementById("modal-gotoframe-frame").value
+        video.currentTime = gotoFrame(targetFrame, fps) // video.currentTime이 바뀌기 때문에 video.addEventListener('timeupdate', function () {}) 이벤트가 발생해서 드로잉이 띄워진다.
+    });
+
+    // prev Drawing 버튼을 클릭할 때 이벤트
+    prevDrawing.addEventListener("click", function() {
+        $.ajax({
+            url: "/api/reviewdrawingframe",
+            type: "post",
+            data: {
+                id: id,
+                frame: document.getElementById("currentframe").innerHTML,
+                mode: "prev",
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                video.currentTime = gotoFrame(data.resultframe, fps)
+            },
+            error: function(){
+                return
+            }
+        })
+    });
+
+    // next Drawing 버튼을 클릭할 때 이벤트
+    nextDrawing.addEventListener("click", function() {
+        $.ajax({
+            url: "/api/reviewdrawingframe",
+            type: "post",
+            data: {
+                id: id,
+                frame: document.getElementById("currentframe").innerHTML,
+                mode: "next",
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                video.currentTime = gotoFrame(data.resultframe, fps)
+            },
+            error: function(){
+                return
+            }
+        })
+    });
     // 플레이 버튼을 클릭할 때 이벤트
     playButton.addEventListener("click", function() {
         playAndPauseButton.className = "player-pause"
@@ -4858,33 +4914,63 @@ function selectReviewItem(id, project, fps) {
     });
 
     // video 객체를 생성한다.
-    let video = document.createElement('video');
+    var video = document.createElement('video');
     video.src = "/reviewdata?id=" + id;
     video.autoplay = true;
     video.loop = true;
+    video.setAttribute("id", "currentvideo");
     
     // 플레이어창의 배경을 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
     // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
-    let frameLineMarkHeight = 12; // 프레임 표시라인 높이
     let totalFrame = 0
+    let sketchesFrame = [];
+    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        async: false,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            for (let i = 0; i < data.sketches.length; i++) {
+                sketchesFrame.push(data.sketches[i].frame)
+            }
+        },
+        error: function(){
+            return
+        }
+    })
+    // 비디오가 로딩되면 메타데이터로 처리할 수 있는 과정을 처리한다.
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
         totalFrame = Math.round(this.duration * parseFloat(fps)) // round로 해야 23.976fps에서 frame 에러가 발생하지 않는다.
         // totalFrame을 표기한다.
         document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
-        let frameLineOffset = clientWidth / totalFrame
-        uxCtx.beginPath();
-        for (let i = 0; i < totalFrame + 1; i++) {
-            uxCtx.strokeStyle = '#333333';
+        // 프레임 표기바의 간격을 구하고 global 변수에 저장한다.
+        framelineOffset = clientWidth / totalFrame
+        // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
+        for (let i = 0; i < totalFrame; i++) {
+            uxCtx.beginPath();
+            if (sketchesFrame.includes(i+1)) {                
+                uxCtx.strokeStyle = '#FFCD31';
+            } else {
+                uxCtx.strokeStyle = '#333333';
+            }
             uxCtx.lineWidth = 2;
+            uxCtx.moveTo(i*framelineOffset + (framelineOffset / 2) , clientHeight - frameLineMarkHeight);
+            uxCtx.lineTo(i*framelineOffset + (framelineOffset / 2), clientHeight);
             uxCtx.stroke();
-            uxCtx.moveTo(i*frameLineOffset + (frameLineOffset / 2) , clientHeight - frameLineMarkHeight);
-            uxCtx.lineTo(i*frameLineOffset + (frameLineOffset / 2), clientHeight);
+            uxCtx.closePath();
         }
-        // 재생에 필요한 모든 셋팅이 끝났다. 리뷰 데이터를 플레이시킨다.
+        // 재생에 필요한 모든 설정이 완료되면 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
         video.play();
     };
@@ -4922,13 +5008,14 @@ function selectReviewItem(id, project, fps) {
                 aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
                 aniuxCtx.strokeStyle = "#FF0000";
                 aniuxCtx.lineWidth = 4;
-                let frameLineOffset = clientWidth / totalFrame
                 aniuxCtx.beginPath();
-                aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
-                aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+                aniuxCtx.moveTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight - frameLineMarkHeight);
+                aniuxCtx.lineTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight);
                 aniuxCtx.stroke();
+
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
+
             }
         })();
     }, 0);
@@ -4952,16 +5039,16 @@ function selectReviewItem(id, project, fps) {
             // 재생이 멈추면 표기는 totalFrame이 되어야 하지만 실제 재생시점은 영상의 마지막이 되어야 한다.
             document.getElementById("currentframe").innerHTML = padNumber(totalFrame)
         }
-        // 커서의 위치를 드로잉 한다.
+        // 빨간 커서의 위치를 드로잉 한다.
         aniuxCtx.clearRect(0, 0, clientWidth, clientHeight);
         aniuxCtx.strokeStyle = "#FF0000";
         aniuxCtx.lineWidth = 4;
-        let frameLineOffset = clientWidth / totalFrame
         aniuxCtx.beginPath();
-        aniuxCtx.moveTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight - frameLineMarkHeight);
-        aniuxCtx.lineTo(currentFrame * frameLineOffset + (frameLineOffset/2), clientHeight);
+        aniuxCtx.moveTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight - frameLineMarkHeight);
+        aniuxCtx.lineTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight);
         aniuxCtx.stroke();
-        // 프레임을 이동하면 드로잉이 지워져야 한다.
+        
+        // 프레임을 이동하면 기존 드로잉이 지워져야 한다.
         removeDrawing()
         // 드로잉이 존재하면 fg 캔버스에 그린다.
         let drawing = new Image()
@@ -4985,6 +5072,11 @@ function selectReviewItem(id, project, fps) {
     }, 0);
 }
 
+function gotoFrame(frame, fps) {
+    return ((parseFloat(frame) - (1.0/parseFloat(fps))) / parseFloat(fps))
+}
+
+
 // draw 함수는 x,y 좌표를 받아 그림을 그린다.
 function draw(curX, curY) {
     drawCtx.beginPath();
@@ -5003,6 +5095,7 @@ function down(e) {
 // up 함수는 마우스 버튼을 땔 때 그림그리는 모드를 종료한다.
 function up(e) {
     drawing = false;
+    saveDrawing()
 }
 
 // move 함수는 그림을 그리는 상태이고 마우스가 이동할 때 현재 위치에 그림을 그리고 현재위치를 다시 마우스의 시작위치로 바꾼다.
@@ -5020,6 +5113,35 @@ function move(e) {
 function out(e) {
     drawing = false;
 }
+
+// changeYellowDrawingFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function changeYellowDrawingFrame() {
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCtx = uxCanvas.getContext("2d")
+    currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
+    uxCtx.beginPath();
+    uxCtx.strokeStyle = '#FFCD31';
+    uxCtx.lineWidth = 2;
+    uxCtx.moveTo(currentFrame*framelineOffset + (framelineOffset / 2) , globalClientHeight - frameLineMarkHeight);
+    uxCtx.lineTo(currentFrame*framelineOffset + (framelineOffset / 2), globalClientHeight);
+    uxCtx.stroke();
+    uxCtx.closePath();
+}
+
+// changeDrawingGrayFrame 함수는 프레임을 받아서 노란색 드로잉 마커를 체크한다.
+function changeDrawingGrayFrame() {
+    let uxCanvas = document.getElementById("uxcanvas");
+    uxCtx = uxCanvas.getContext("2d")
+    currentFrame = parseInt(document.getElementById("currentframe").innerHTML) - 1
+    uxCtx.beginPath();
+    uxCtx.strokeStyle = '#333333';
+    uxCtx.lineWidth = 2;
+    uxCtx.moveTo(currentFrame*framelineOffset + (framelineOffset / 2) , globalClientHeight - frameLineMarkHeight);
+    uxCtx.lineTo(currentFrame*framelineOffset + (framelineOffset / 2), globalClientHeight);
+    uxCtx.stroke();
+    uxCtx.closePath();
+}
+
 
 // screenshot 함수는 리뷰중인 스크린을 스크린샷 합니다.
 function screenshot(filename) {
@@ -5051,10 +5173,12 @@ function screenshot(filename) {
     let clientWidth = playerbox.clientWidth
     let clientHeight = playerbox.clientHeight
     screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
+    changeYellowDrawingFrame()
 }
 
 // saveDrawing 함수는 리뷰스크린에 드로잉된 이미지를 서버에 저장합니다.
-function saveDrawing(id) {
+function saveDrawing() {
+    let id = document.getElementById("current-review-id").value;
     let token = document.getElementById("token").value;
     // Crop Canvas를 생성한다.
     let cropCanvas = document.createElement("canvas");
@@ -5090,7 +5214,7 @@ function saveDrawing(id) {
             "Authorization": "Basic "+ token
         },
         success: function(data) {
-            console.log(data);
+            changeYellowDrawingFrame()
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5098,22 +5222,48 @@ function saveDrawing(id) {
     })
 }
 
-// removeDrawing 함수는 리뷰 스케치를 제거합니다.
+// removeDrawing 함수는 리뷰 스케치를 제거합니다. 프레임을 갱신할 때 사용합니다.
 function removeDrawing() {
-    // 지울 영역을 구한다. - player 캔버스를 담을 div 의 가로세로 사이즈를 구한다.
-    let playerbox = document.getElementById("playerbox");
-    let clientWidth = playerbox.clientWidth
-    let clientHeight = playerbox.clientHeight
- 
     // drawcanvas를 지운다.
     let fg = document.getElementById("drawcanvas");
     let fgctx = fg.getContext("2d");
-    fgctx.clearRect(0, 0, clientWidth, clientHeight);
-
+    fgctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
     // screenshot를 지운다.
     let screenshot = document.getElementById("screenshot");
     let screenshotctx = screenshot.getContext("2d");
-    screenshotctx.clearRect(0, 0, clientWidth, clientHeight);
+    screenshotctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+}
+
+// removeDrawingAndData 함수는 리뷰 스케치를 제거하고 서버의 이미지도 제거합니다.
+function removeDrawingAndData() {
+    // drawcanvas를 지운다.
+    let fg = document.getElementById("drawcanvas");
+    let fgctx = fg.getContext("2d");
+    fgctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+    // screenshot를 지운다.
+    let screenshot = document.getElementById("screenshot");
+    let screenshotctx = screenshot.getContext("2d");
+    screenshotctx.clearRect(0, 0, globalClientWidth, globalClientHeight);
+    // 서버에 파일이 존재하면 삭제한다.
+    $.ajax({
+        url: "/api/rmreviewdrawing",
+        type: "post",
+        data: {
+            id: document.getElementById("current-review-id").value,
+            frame: parseInt(document.getElementById("currentframe").innerHTML),
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            // 파일이 잘 삭제되면, 그림이 그려진 프레임의 노란바를 회색바로 변경한다.
+            changeDrawingGrayFrame()
+        },
+        error: function(request,status,error){
+            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    })
 }
 
 // copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.
@@ -5157,6 +5307,10 @@ document.onkeydown = function(e) {
         document.getElementById("player-screenshot").click();
     } else if (e.which == 76) { // l
         document.getElementById("player-loopandloopoff").click();
+    } else if (e.which == 190) { // .
+        document.getElementById("drawing-next").click();
+    } else if (e.which == 188) { // ,
+        document.getElementById("drawing-prev").click();
     }
 };
 
@@ -5230,4 +5384,8 @@ function rmUser() {
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
+}
+
+function setModalGotoFrame() {
+    document.getElementById("modal-gotoframe-frame").value = parseInt(document.getElementById("currentframe").innerHTML);
 }

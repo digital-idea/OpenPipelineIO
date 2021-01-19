@@ -587,6 +587,24 @@ span.player-text {
     width: 36px;
 }
 
+span.drawing-prev {
+    background: url(/assets/img/drawing-prev.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
+span.drawing-next {
+    background: url(/assets/img/drawing-next.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+}
+
 span.player-start {
     background: url(/assets/img/player-start.svg) no-repeat center center;
     background-size: contain;
