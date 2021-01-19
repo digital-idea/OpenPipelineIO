@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"net/http"
 
@@ -131,7 +130,6 @@ func handleAPITasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Path = tpl.String()
-	fmt.Println(tpl.String())
 	// json 으로 결과 전송
 	data, _ := json.Marshal(rcp)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
