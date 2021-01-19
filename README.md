@@ -53,9 +53,9 @@ CSI를 실행하기 전에 우선적으로 thumbnail 폴더가 필요합니다.
 썸네일 경로가 이미 존재한다면, 해당경로를 서비스 시작시 `-thumbpath` 인수를 이용해서 설정할 수 있습니다.
 
 ```bash
-$ mkdir thumbnail // 프로그램 시작전, thumbnail 경로가 없다면 생성해주세요.
+$ mkdir thumbnail # 프로그램 시작전, thumbnail 경로가 없다면 생성해주세요.
 $ sudo csi3 -http :80
-$ sudo csi3 -http :80 &> csi.log& // csi.log 파일에 로그가 생성되면서 서비스 실행
+$ sudo csi3 -http :80 &> csi.log& # csi.log 파일에 로그가 생성되면서 서비스 실행
 ```
 
 > 여러분이 macOS를 사용한다면 기본적으로 80포트는 아파치 서버가 사용중일 수 있습니다. 80포트에 실행되는 아파치 서버를 종료하기 위해서 `$ sudo apachectl stop` 를 터미널에 입력해주세요.
