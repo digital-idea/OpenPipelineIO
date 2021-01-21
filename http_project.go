@@ -465,7 +465,7 @@ func handleRmProject(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// handleRmProjectSubmit 함수는 shot을 삭제한다.
+// handleRmProjectSubmit 함수는 project를 삭제한다.
 func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -508,28 +508,35 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	// 리뷰데이터 삭제
 	if rmReviews {
-		// 1. 리뷰 데이터의 물리적인 삭제
+		// 1. 해당 프로젝트의 리뷰 데이터를 가지고 온다.
 		reviews, err := searchReview(session, "project:"+rcp.Project)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		adminsetting, err := GetAdminSetting(session)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		// 2. 리뷰 데이터의 물리적인 삭제
 		for _, r := range reviews {
-			path := fmt.Sprintf("%s/%s.mp4", adminsetting.ReviewDataPath, r.ID.Hex())
-			if _, err := os.Stat(path); !os.IsNotExist(err) {
-				err = os.Remove(path) // Review 데이터가 존재하면 삭제한다.
+			// 동영상 데이터가 있다면 삭제한다.
+			mp4Path := fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, r.ID.Hex())
+			if _, err := os.Stat(mp4Path); !os.IsNotExist(err) {
+				err = os.Remove(mp4Path) // Review 데이터가 존재하면 삭제한다.
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
 			}
+			// 드로잉 데이터가 있다면 삭제한다.
+			for _, sketch := range r.Sketches {
+				if _, err := os.Stat(sketch.SketchPath); err == nil {
+					err = os.Remove(sketch.SketchPath)
+					if err != nil {
+						log.Println(err)
+						continue
+					}
+				}
+			}
 		}
-		// 2. 실제 Review DB 삭제
+		// 3. 실제 Review DB 삭제
 		err = RmProjectReview(session, rcp.Project)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -537,7 +544,7 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// 프로젝트 삭제
+	// 4. 프로젝트 삭제
 	err = rmProject(session, rcp.Project)
 	if err != nil {
 		rcp.Error = err.Error()
@@ -545,7 +552,6 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "rmproject_success", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
