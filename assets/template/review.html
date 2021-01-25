@@ -1,7 +1,7 @@
 {{define "review" }}
 {{template "headBootstrap" .}}
 <!--리뷰 데이터가 로딩되면 해당 리뷰아이템으로 focus후, 문서의 스크롤상태를 원점(0,0)으로 돌린다.-->
-<body style="overflow: hidden;" onload="focusReview('{{.CurrentReview.ID.Hex}}')">
+<body style="overflow: hidden;">
     <input type="hidden" id="current-review-id" value="{{.CurrentReview.ID.Hex}}">
     <div id="floatingmenu">
         {{template "navbar" .}}

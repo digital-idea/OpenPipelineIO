@@ -4246,19 +4246,6 @@ function foldingmenu() {
     }
 }
 
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-    let topbtn = document.getElementById("topbtn");
-    
-	if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        topbtn.style.display = "block";
-	} else {
-        topbtn.style.display = "none";
-	}
-}
-
 // TopClick 함수는 스크롤시 보여지는 Top 버튼을 누를 때 발생하는 이벤트이다.
 function TopClick() {
     document.body.scrollTop = 0;
@@ -4790,6 +4777,13 @@ function selectReviewItem(id, project, fps) {
     let prevDrawing = document.getElementById("drawing-prev");
     let nextDrawing = document.getElementById("drawing-next");
 
+    // fouseReview 함수는 리뷰 ID를 받아서 해당 ID를 가진 리뷰아이템의 스크롤을 포커싱 한다.
+    if (id !== "") {
+        document.getElementById('review-' + id).scrollIntoView(); // 해당아이템을 포커스한다.
+        window.scrollTo({top:0, left:0, behavior:'auto'}); // 위 아이템을 포커싱 하면서 windows 포커싱이 틀어질 수 있다. windows 스크롤을 리셋한다.
+    }
+    
+
     // GotoFrame 모달창에서 프레임이 변경되면 해당 프레임으로 이동한다.
     gotoFrameInput.addEventListener("change", function() {
         targetFrame = document.getElementById("modal-gotoframe-frame").value
@@ -4948,6 +4942,7 @@ function selectReviewItem(id, project, fps) {
             return
         }
     })
+    
     // 비디오가 로딩되면 메타데이터로 처리할 수 있는 과정을 처리한다.
     video.onloadedmetadata = function() {
         // Draw 캔버스에 프레임 표기 그림을 그린다.
@@ -4956,6 +4951,7 @@ function selectReviewItem(id, project, fps) {
         document.getElementById("totalframe").innerHTML = padNumber(totalFrame);
         // 프레임 표기바의 간격을 구하고 global 변수에 저장한다.
         framelineOffset = clientWidth / totalFrame
+        
         // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
         for (let i = 0; i < totalFrame; i++) {
             uxCtx.beginPath();
@@ -4970,6 +4966,7 @@ function selectReviewItem(id, project, fps) {
             uxCtx.stroke();
             uxCtx.closePath();
         }
+        
         // 재생에 필요한 모든 설정이 완료되면 리뷰 데이터를 플레이시킨다.
         playAndPauseButton.className = "player-pause"
         video.play();
@@ -5360,12 +5357,6 @@ function playOriginal(project, name) {
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     })
-}
-
-// fouseReview 함수는 리뷰 ID를 받아서 해당 ID를 가진 리뷰아이템의 스크롤을 포커싱 한다.
-function focusReview(id) {
-    document.getElementById('review-' + id).scrollIntoView(); // 해당아이템을 포커스한다.
-    window.scrollTo({top:0, left:0, behavior:'auto'}); // 위 아이템을 포커싱 하면서 windows 포커싱이 틀어질 수 있다. windows 스크롤을 리셋한다.
 }
 
 function rmUser() {
