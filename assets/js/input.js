@@ -1407,15 +1407,13 @@ function setRmUserModal(id) {
 
 function rmComment(project, id, date) {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
     $.ajax({
         url: "/api/rmcomment",
         type: "post",
         data: {
             project: project,
             name: id2name(id),
-            date: date,
-            userid: userid
+            date: date
         },
         headers: {
             "Authorization": "Basic "+ token
