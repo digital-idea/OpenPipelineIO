@@ -1,4 +1,5 @@
 # RestAPI Item
+
 restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크만 연결되어있으면 OS, 디바이스 제약없이 사용할 수 있습니다.
 또한 Python 같은 언어를 이용해서 사내 API를 작성하더라도 OS별 코드가 서로 달라지는 상황이 없습니다.
 
@@ -32,7 +33,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/rmitemid | 아이템 삭제 | project, id | `$ curl -X POST -d "project=circle&id=SS_0010_org" https://csi.lazypic.org/api/rmitemid` |
 | /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/settaskstatus` |
 | /api2/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api2/settaskstatus` |
-| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -X POST -d "project=TEMP&name=mamma&task=light&user=김한웅" https://192.168.219.104/api/settaskuser` |
+| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -X POST -d "project=TEMP&name=mamma&task=light&user=김한웅" https://csi.lazypic.org/api/settaskuser` |
 | /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |
 | /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskpredate` |
 | /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskdate` |
@@ -63,11 +64,11 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
 | /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
-| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&tag=테스트" https://192.168.219.104/api/addtag` |
-| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&tag=태그3" https://192.168.219.114/api/rmtag` |
-| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://192.168.219.104/api/setnote` |
-| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://192.168.219.104/api/addcomment` |
-| /api/rmcomment | 수정사항 삭제 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://192.168.219.104/api/rmcomment` |
+| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
+| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&tag=태그3" https://csi.lazypic.org/api/rmtag` |
+| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://csi.lazypic.org/api/setnote` |
+| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://csi.lazypic.org/api/addcomment` |
+| /api/rmcomment | 수정사항 삭제 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2021-01-26T11:38:53%2B09:00" https://csi.lazypic.org/api/rmcomment` |
 | /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" https://csi.lazypic.org/api/addsource` |
 | /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&title=sourcename" https://csi.lazypic.org/api/rmsource` |
 | /api/setcameraprojection | 카메라 프로젝션여부 | project, id, projection | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&projection=true" https://csi.lazypic.org/api/setcameraprojection` |
