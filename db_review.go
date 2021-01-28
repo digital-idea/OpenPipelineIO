@@ -32,7 +32,7 @@ func GetWaitProcessStatusReview() (Review, error) {
 	if err != nil {
 		return review, err
 	}
-	// 참고: 아래 부분은 추가 mongo-driver로 바꾸면 한번에 처리할 수 있다.
+	// 참고: 아래 부분은 추후 mgo가 아닌 mongo-driver로 바꾸면 한번에 처리할 수 있다.
 	err = setReviewProcessStatus(session, review.ID.Hex(), "queued")
 	if err != nil {
 		return review, err

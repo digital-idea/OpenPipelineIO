@@ -43,7 +43,7 @@ func queueingItem(jobs chan<- Review) {
 		}
 		time.Sleep(time.Second * 10)
 		// ProcessStatus가 wait인 item을 가져온다.
-		review, err := GetWaitProcessStatusReview()
+		review, err := GetWaitProcessStatusReview() // 이 함수로 반환되는 아이템은 리뷰 아이템은 상태가 queued가 된 리뷰 아이템이다.
 		if err != nil {
 			// 가지고 올 문서가 없다면 기다렸다가 continue.
 			if err == mongo.ErrNoDocuments {
