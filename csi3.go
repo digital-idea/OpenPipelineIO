@@ -38,7 +38,7 @@ var (
 	SHA1VER = "26b300a004abae553650c924514dc550e7385c9e" // 첫번째 커밋
 	// BUILDTIME 은 빌드타임 시간이다.
 	BUILDTIME = "2012-11-08T10:00:00" // 최초로 만든 시간
-	//
+	// CachedAdminSetting 은 서비스 시작전 어드민 셋팅값을 메모리에 넣어서 사용되는 변수이다.
 	CachedAdminSetting = Setting{}
 
 	// 주요서비스 인수
@@ -58,6 +58,7 @@ var (
 	// Process
 	flagProcessBufferSize = flag.Int("processbuffersize", 100, "process buffer size") // 최대 대기 리스트
 	flagMaxProcessNum     = flag.Int("maxprocessnum", 4, "max process number")        // 최대 연산 갯수
+	flagReviewRender      = flag.Bool("reviewrender", false, "ffmpeg를 이용해서 리뷰 렌더링을 허용하는 옵션")
 
 	// RV
 	flagRVPath = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
@@ -422,7 +423,9 @@ func main() {
 			log.Fatal(err)
 		}
 		TEMPLATES = vfsTempates
-		go ProcessMain() // 연산(Review데이터 등등)이 필요한 것들이 있다면 연산을 시작한다.
+		if *flagReviewRender {
+			go ProcessMain() // 연산(Review데이터 등등)이 필요한 것들이 있다면 연산을 시작한다.
+		}
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.

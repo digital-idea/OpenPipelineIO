@@ -43,7 +43,7 @@ func queueingItem(jobs chan<- Review) {
 		}
 		time.Sleep(time.Second * 10)
 		// ProcessStatus가 wait인 item을 가져온다.
-		review, err := GetWaitProcessStatusReview()
+		review, err := GetWaitProcessStatusReview() // 이 함수로 반환되는 아이템은 리뷰 아이템은 상태가 queued가 된 리뷰 아이템이다.
 		if err != nil {
 			// 가지고 올 문서가 없다면 기다렸다가 continue.
 			if err == mongo.ErrNoDocuments {
@@ -69,8 +69,8 @@ func processingItem(review Review) {
 	}
 	defer session.Close()
 	reviewID := review.ID.Hex()
-	// 연산에 필요한 설정을 가지고 온다.
-	admin, err := GetAdminSetting(session)
+	// 연산 상태를 queued 으로 바꾼다. 바꾸는 이유는 ffmpeg 연산이 10초이상 진행될 때 상태가 바뀌지 않아서 이전에 연산중인 데이터가 다시 연산될 수 있기 때문이다.
+	err = setReviewProcessStatus(session, reviewID, "processing")
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -79,7 +79,7 @@ func processingItem(review Review) {
 		return
 	}
 	// ffmpeg 경로를 체크한다.
-	if _, err := os.Stat(admin.FFmpeg); os.IsNotExist(err) {
+	if _, err := os.Stat(CachedAdminSetting.FFmpeg); os.IsNotExist(err) {
 		err = setErrReview(session, reviewID, "ffmpeg가 존재하지 않습니다")
 		if err != nil {
 			log.Println(err)
@@ -87,7 +87,7 @@ func processingItem(review Review) {
 		return
 	}
 	// ReviewDataPath가 존재하는지 경로를 체크한다.
-	if _, err := os.Stat(admin.ReviewDataPath); os.IsNotExist(err) {
+	if _, err := os.Stat(CachedAdminSetting.ReviewDataPath); os.IsNotExist(err) {
 		err = setErrReview(session, reviewID, "admin 셋팅에 ReviewDataPath가 존재하지 않습니다")
 		if err != nil {
 			log.Println(err)
@@ -104,7 +104,7 @@ func processingItem(review Review) {
 		return
 	}
 	// mp4를 생성한다.
-	err = genMp4(admin, review)
+	err = genMp4(CachedAdminSetting, review)
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -113,7 +113,7 @@ func processingItem(review Review) {
 		return
 	}
 	// 생성된 .mp4 파일이 mp4 자료구조를 같는지 체크한다.
-	err = checkMp4FileStruct(admin, review)
+	err = checkMp4FileStruct(CachedAdminSetting, review)
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -182,6 +182,8 @@ func genMp4(admin Setting, item Review) error {
 		"-an",
 		"-pix_fmt",
 		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
+		"-threads",
+		"1", // 웹서버의 부하를 줄이기 위해서 쓰레드 1개만 사용한다.
 		admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4",
 	}
 	err := exec.Command(admin.FFmpeg, args...).Run()
@@ -202,6 +204,8 @@ func genOgg(admin Setting, item Review) error {
 		"-qscale:v",
 		"7",
 		"-an",
+		"-threads",
+		"1", // 웹서버의 부하를 줄이기 위해서 쓰레드 1개만 사용한다.
 		admin.ReviewDataPath + "/" + item.ID.Hex() + ".ogg",
 	}
 	err := exec.Command(admin.FFmpeg, args...).Run()
