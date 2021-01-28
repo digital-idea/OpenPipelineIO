@@ -15,7 +15,6 @@ type SearchOption struct {
 	Project           string `json:"project"`           // 선택한 프로젝트
 	Searchword        string `json:"searchword"`        // 검색어
 	Sortkey           string `json:"sortkey"`           // 정렬방식
-	Template          string `json:"template"`          // 템플릿 이름
 	SearchbarTemplate string `json:"searchbartemplate"` // 검색바 탬플릿 이름
 	Task              string `json:"task"`              // Task명
 	Assign            bool   `json:"assign"`            // legacy
@@ -139,7 +138,6 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 	op.Project = q.Get("project")
 	op.Searchword = q.Get("searchword")
 	op.Sortkey = q.Get("sortkey")
-	op.Template = q.Get("template")
 	op.SearchbarTemplate = q.Get("searchbartemplate")
 	op.Task = q.Get("task")
 	// 페이지를 구한다.
@@ -210,9 +208,6 @@ func (op *SearchOption) LoadCookie(session *mgo.Session, r *http.Request) error 
 		if cookie.Name == "None" {
 			op.None = str2bool(cookie.Value)
 		}
-		if cookie.Name == "Template" {
-			op.Template = cookie.Value
-		}
 		if cookie.Name == "SearchbarTemplate" {
 			op.SearchbarTemplate = cookie.Value
 		}
@@ -223,9 +218,6 @@ func (op *SearchOption) LoadCookie(session *mgo.Session, r *http.Request) error 
 			return err
 		}
 		op.Project = plist[0] // 프로젝트가 빈 문자열이면 첫번째 프로젝트를 설정합니다.
-	}
-	if op.Template == "" {
-		op.Template = "index"
 	}
 	return nil
 }

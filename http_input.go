@@ -44,6 +44,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Dday                string
 		Status              []Status
 		AllStatusIDs        []string
+		TotalPageNum        int
 	}
 	rcp := recipe{}
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
@@ -134,31 +135,26 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Ddline3d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline3d")
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Ddline2d, err = DistinctDdline(session, rcp.SearchOption.Project, "ddline2d")
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Tags, err = Distinct(session, rcp.SearchOption.Project, "tag")
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Totalnum, err = Totalnum(session, rcp.SearchOption.Project)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -175,14 +171,13 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Dday = dday
 	}
-	rcp.Items, err = Searchv2(session, rcp.SearchOption)
+	rcp.Items, rcp.TotalPageNum, err = SearchPage(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Searchnum, err = Searchnum(rcp.SearchOption, rcp.Items)
+	rcp.Searchnum, err = SearchStatusNum(rcp.SearchOption, rcp.Items)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -260,14 +255,8 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		MaxAge: 0,
 	}
 	http.SetCookie(w, &cookie)
-	cookie = http.Cookie{
-		Name:   "Template",
-		Value:  rcp.SearchOption.Template,
-		MaxAge: 0,
-	}
-	http.SetCookie(w, &cookie)
 
-	err = TEMPLATES.ExecuteTemplate(w, rcp.SearchOption.Template, rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "index", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

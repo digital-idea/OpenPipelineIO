@@ -58,7 +58,6 @@
 												project={{$.SearchOption.Project}}&
 												searchword=status:{{.ID}}&
 												sortkey={{$.SearchOption.Sortkey}}&
-												template={{$.SearchOption.Template}}&
 												searchbartemplate=searchbarV2&
 												truestatus={{.ID}}&
 												task={{$.SearchOption.Task}}">
@@ -77,7 +76,6 @@
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:2d&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	template={{.SearchOption.Template}}&
 																	searchbartemplate=searchbarV2&
 																	truestatus={{Join .SearchOption.TrueStatus "," }}&
 																	task={{.SearchOption.Task}}">2D <span class="badge badge-darkmode">{{.Searchnum.Shot2d}}</span></a>
@@ -85,7 +83,6 @@
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:3d&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	template={{.SearchOption.Template}}&
 																	searchbartemplate=searchbarV2&
 																	truestatus={{Join .SearchOption.TrueStatus "," }}&
 																	task={{.SearchOption.Task}}">3D <span class="badge badge-darkmode">{{.Searchnum.Shot3d}}</span></a>
@@ -93,7 +90,6 @@
 																	project={{.SearchOption.Project}}&
 																	searchword=type:shot&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	template={{.SearchOption.Template}}&
 																	searchbartemplate=searchbarV2&
 																	truestatus={{Join .SearchOption.TrueStatus "," }}&
 																	task={{.SearchOption.Task}}">Shot <span class="badge badge-darkmode">{{.Searchnum.Shot}}</span></a>
@@ -101,13 +97,11 @@
 																	project={{.SearchOption.Project}}&
 																	searchword=type:asset&
 																	sortkey={{.SearchOption.Sortkey}}&
-																	template={{.SearchOption.Template}}&
 																	searchbartemplate=searchbarV2&
 																	truestatus={{Join .SearchOption.TrueStatus "," }}&
 																	task={{.SearchOption.Task}}">Asset <span class="badge badge-darkmode">{{.Searchnum.Assets}}</span></a>
             </div>
 		</div>
-		<input type="hidden" name="Template" value="{{.SearchOption.Template}}">
     </div>
 </form>
 
