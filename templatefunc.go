@@ -189,6 +189,15 @@ func ReverseIntSlice(lists []int) []int {
 	return result
 }
 
+// GenPageNums 함수는 숫자를 받아서 그 숫자의 크기만큼의 int 슬라이스(Pages)를 만든다.
+func GenPageNums(size int) []int {
+	result := make([]int, size)
+	for i := 0; i < size; i++ {
+		result[i] = i + 1
+	}
+	return result
+}
+
 // Publishes 자료구조를 정리하기 위해 사용하는 자료구조
 type Publishes []Publish
 

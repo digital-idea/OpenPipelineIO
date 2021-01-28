@@ -17,6 +17,9 @@
     {{template "modal" .}}
     <div id="blinkspace" style="height:550px"></div><!--기본 550px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
     {{template "items" .}}
+    {{if ne .TotalPageNum 0}}<!--전체 페이지가 없다면 페이지 템플릿을 띄우지 않는다.-->
+        {{template "page" .}}
+    {{end}}
     {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>

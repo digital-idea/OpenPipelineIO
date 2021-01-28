@@ -3184,7 +3184,7 @@ function setAssettype(project, id) {
                     // remove old assettype tag
                     document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
                     // add new assettype tag
-                    let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`;
+                    let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`;
                     source = `<div id="tag-${data.name}-${data.type}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.type}</a></div>`;
                     document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
                 },
@@ -3213,7 +3213,7 @@ function setAssettype(project, id) {
                 // remove old assettype tag
                 document.getElementById(`assettag-${data.name}-${data.oldtype}`).remove();
                 // add new assettype tag
-                let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`;
+                let url = `/inputmode?project=${data.project}&searchword=assettags:${data.type}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`;
                 source = `<div id="tag-${data.name}-${data.type}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.type}</a></div>`;
                 document.getElementById("assettags-"+data.name).innerHTML = document.getElementById("assettags-"+data.name).innerHTML + source;
             },
@@ -3314,7 +3314,7 @@ function addTag(project, id, tag) {
                 dataType: "json",
                 success: function(data) {
                     // 기존 Tags에 추가된다.
-                    let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
+                    let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
                     source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
                     document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
                     // 요소갯수에 따라 버튼을 설정한다.
@@ -3351,7 +3351,7 @@ function addTag(project, id, tag) {
             dataType: "json",
             success: function(data) {
                 // 기존 Tags에 추가된다.
-                let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&template=index2&task=`
+                let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
                 let source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
                 document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
                 // 요소갯수에 따라 버튼을 설정한다.
@@ -5377,4 +5377,12 @@ function rmUser() {
 
 function setModalGotoFrame() {
     document.getElementById("modal-gotoframe-frame").value = parseInt(document.getElementById("currentframe").innerHTML);
+}
+
+// redirectPage 함수는 page를 받아서 해당 페이지로 리다이렉트 한다.
+function redirectPage(page) {
+    let href = new URL(window.location.href);
+    href.searchParams.set('page', page);
+    let url = href.toString();
+    window.location.href = url
 }

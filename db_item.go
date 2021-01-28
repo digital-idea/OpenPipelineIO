@@ -538,8 +538,8 @@ func SearchDdline(session *mgo.Session, op SearchOption, part string) ([]Item, e
 	return results, nil
 }
 
-// Searchnum 함수는 검색된 결과에 대한 상태별 갯수를 검색한다.
-func Searchnum(op SearchOption, items []Item) (Infobarnum, error) {
+// SearchStatusNum 함수는 검색된 결과에 대한 상태별 갯수를 검색한다.
+func SearchStatusNum(op SearchOption, items []Item) (Infobarnum, error) {
 	var results Infobarnum
 	results.Search = len(items)
 	results.StatusNum = make(map[string]int) // statusV2의 갯수를 처리하기 위해 StatusNum 맵을 초기화한다.

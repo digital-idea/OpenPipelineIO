@@ -69,6 +69,7 @@ var funcMap = template.FuncMap{
 	"onlyID":                       onlyID,
 	"mapToSlice":                   mapToSlice,
 	"hasStatus":                    hasStatus,
+	"GenPageNums":                  GenPageNums,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

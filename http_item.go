@@ -48,7 +48,6 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 	hold := str2bool(r.FormValue("Hold"))       // legacy
 	out := str2bool(r.FormValue("Out"))         // legacy
 	none := str2bool(r.FormValue("None"))       // legacy
-	template := r.FormValue("Template")
 	searchbarTemplate := r.FormValue("SearchbarTemplate")
 	task := r.FormValue("Task")
 	truestatus := r.FormValue("truestatus")
@@ -84,7 +83,7 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		truestatus = strings.Join(statuslist, ",")
 	}
-	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchbartemplate=%s&truestatus=%s`,
 		project,
 		searchword,
 		sortkey,
@@ -97,7 +96,6 @@ func handleSearchSubmit(w http.ResponseWriter, r *http.Request) {
 		hold,
 		out,
 		none,
-		template,
 		task,
 		searchbarTemplate,
 		truestatus,
@@ -123,7 +121,6 @@ func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("Project")
 	searchword := r.FormValue("Searchword")
 	sortkey := r.FormValue("Sortkey")
-	template := r.FormValue("Template")
 	searchbarTemplate := r.FormValue("SearchbarTemplate")
 	task := r.FormValue("Task")
 	// status를 체크할 때 마다 truestatus form에 값이 추가되어야 한다.
@@ -144,11 +141,10 @@ func handleSearchSubmitV2(w http.ResponseWriter, r *http.Request) {
 			truestatus = append(truestatus, status.ID)
 		}
 	}
-	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&template=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
+	redirectURL := fmt.Sprintf(`/inputmode?project=%s&searchword=%s&sortkey=%s&task=%s&searchbartemplate=%s&truestatus=%s`,
 		project,
 		searchword,
 		sortkey,
-		template,
 		task,
 		searchbarTemplate,
 		strings.Join(truestatus, ","),
@@ -419,8 +415,9 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 	if !hasProject {
 		rcp.SearchOption.Project = plist[0]
 	}
+
 	// 리다이렉션 한다.
-	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s",
+	url := fmt.Sprintf("/inputmode?project=%s&sortkey=%s&template=index&searchbartemplate=%s&endpoint=searchv2&assign=%t&ready=%t&wip=%t&confirm=%t&done=%t&omit=%t&hold=%t&out=%t&none=%t&task=%s&searchword=%s&truestatus=%s&page=%d",
 		rcp.SearchOption.Project,
 		rcp.SearchOption.Sortkey,
 		rcp.SearchOption.SearchbarTemplate,
@@ -436,6 +433,7 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 		rcp.SearchOption.Task,
 		rcp.SearchOption.Searchword,
 		strings.Join(rcp.SearchOption.TrueStatus, ","),
+		rcp.SearchOption.Page,
 	)
 	http.Redirect(w, r, url, http.StatusSeeOther)
 }
