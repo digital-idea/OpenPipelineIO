@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"gopkg.in/mgo.v2"
@@ -33,6 +34,8 @@ type SearchOption struct {
 	Assets bool `json:"assets"`
 	Type3d bool `json:"type3d"`
 	Type2d bool `json:"type2d"`
+	// Page
+	Page int `json:"page"`
 }
 
 // SearchOption과 관련된 메소드
@@ -139,6 +142,13 @@ func handleRequestToSearchOption(r *http.Request) SearchOption {
 	op.Template = q.Get("template")
 	op.SearchbarTemplate = q.Get("searchbartemplate")
 	op.Task = q.Get("task")
+	// 페이지를 구한다.
+	page, err := strconv.Atoi(q.Get("page"))
+	if err != nil {
+		op.Page = 1 // 에러가 발생하면 1페이지로 이동한다.
+	} else {
+		op.Page = page
+	}
 	op.Assign = str2bool(q.Get("assign"))   // legacy
 	op.Ready = str2bool(q.Get("ready"))     // legacy
 	op.Wip = str2bool(q.Get("wip"))         // legacy
