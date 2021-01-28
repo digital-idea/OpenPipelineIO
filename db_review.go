@@ -33,11 +33,11 @@ func GetWaitProcessStatusReview() (Review, error) {
 		return review, err
 	}
 	// 참고: 아래 부분은 추가 mongo-driver로 바꾸면 한번에 처리할 수 있다.
-	err = setReviewProcessStatus(session, review.ID.Hex(), "processing")
+	err = setReviewProcessStatus(session, review.ID.Hex(), "queued")
 	if err != nil {
 		return review, err
 	}
-	review.ProcessStatus = "processing"
+	review.ProcessStatus = "queued"
 	return review, nil
 }
 

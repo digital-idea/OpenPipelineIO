@@ -38,7 +38,7 @@ var (
 	SHA1VER = "26b300a004abae553650c924514dc550e7385c9e" // 첫번째 커밋
 	// BUILDTIME 은 빌드타임 시간이다.
 	BUILDTIME = "2012-11-08T10:00:00" // 최초로 만든 시간
-	//
+	// CachedAdminSetting 은 서비스 시작전 어드민 셋팅값을 메모리에 넣어서 사용되는 변수이다.
 	CachedAdminSetting = Setting{}
 
 	// 주요서비스 인수
