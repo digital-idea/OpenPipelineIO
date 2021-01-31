@@ -55,7 +55,8 @@ CSI를 실행하기 전에 우선적으로 thumbnail 폴더가 필요합니다.
 
 ```bash
 $ mkdir thumbnail # 프로그램 시작전, thumbnail 경로가 없다면 생성해주세요.
-$ sudo csi3 -http :80
+$ sudo csi3 -http :80 
+$ sudo csi3 -http :80 -reviewrender # 웹서버 및 FFmpeg를 이용하여 리뷰를 렌더링하는 서버가 됩니다.
 $ sudo csi3 -http :80 &> csi.log& # csi.log 파일에 로그가 생성되면서 서비스 실행
 ```
 
