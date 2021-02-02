@@ -9,7 +9,14 @@ CSI는 Go, mongoDB를 사용하여 진행되는 프로젝트입니다.
 
 ## 테스트서버
 - https://csi.lazypic.org
-- 내부 임시 개발서버: 10.0.90.215
+
+## 로드벨런서
+만약 웹서버에 많은 부하가 걸리게 되면 로드밸런서 셋팅을 추천합니다. 웹서버를 2개 이상 셋팅하고 사용해주세요.
+
+- HAProxy: http://www.haproxy.org
+- Reference
+    - 설명: https://d2.naver.com/helloworld/284659
+    - 이미지 서버 static 셋팅: http://www.mobileflow.co.kr/main/blog/220821876221
 
 ## 인증서 관리
 
