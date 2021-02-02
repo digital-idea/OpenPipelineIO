@@ -17,6 +17,7 @@ CSI는 Go, mongoDB를 사용하여 진행되는 프로젝트입니다.
 - Reference
     - 설명: https://d2.naver.com/helloworld/284659
     - 이미지 서버 static 셋팅: http://www.mobileflow.co.kr/main/blog/220821876221
+    - 알고리즘: https://chhanz.github.io/linux/2020/11/30/configuration-haproxy-rr/
 
 ## 인증서 관리
 
