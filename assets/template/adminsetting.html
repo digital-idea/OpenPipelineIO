@@ -412,10 +412,18 @@
                     <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
                     <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
                 </div>
-                <div class="form-group">
-                    <label for="FFmpeg">FFmpeg Path</label>
-                    <input type="text" class="form-control" id="FFmpeg" name="FFmpeg" placeholder="/path/ffmpeg" value={{.Setting.FFmpeg}}>
-                    <small class="form-text text-muted">FFmpeg Path를 설정합니다.</small>
+                <div class="row">
+                    
+                    <div class="form-group col-6">
+                        <label for="FFmpeg">FFmpeg Path</label>
+                        <input type="text" class="form-control" id="FFmpeg" name="FFmpeg" placeholder="/path/ffmpeg" value={{.Setting.FFmpeg}}>
+                        <small class="form-text text-muted">FFmpeg Path를 설정합니다.</small>
+                    </div>
+                    <div class="form-group col-6">
+                        <label class="form-text">Thread</label>
+                        <input type="number" class="form-control" id="FFmpegThread" name="FFmpegThread" min="1" max="8" step="1" value="{{.Setting.FFmpegThread}}" >
+                        <small class="form-text text-muted">FFmpeg 연산 Thread수를 입력해주세요.</small>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="RVPath">RV Path</label>
