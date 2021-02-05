@@ -143,14 +143,14 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
-	thread, err := strconv.Atoi(r.FormValue("FFmpegThread"))
+	threads, err := strconv.Atoi(r.FormValue("FFmpegThreads"))
 	if err != nil {
-		thread = 1
+		threads = 1
 	}
-	if thread == 0 {
-		thread = 1 // 최소한 1개의 CPU는 셋팅되어야 한다.
+	if threads == 0 {
+		threads = 1 // 최소한 1개의 CPU는 셋팅되어야 한다.
 	}
-	s.FFmpegThread = thread
+	s.FFmpegThreads = threads
 	s.RVPath = r.FormValue("RVPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
 	"time"
 
 	"github.com/alfg/mp4"
@@ -183,7 +184,7 @@ func genMp4(admin Setting, item Review) error {
 		"-pix_fmt",
 		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
 		"-threads",
-		"1", // 웹서버의 부하를 줄이기 위해서 쓰레드 1개만 사용한다.
+		strconv.Itoa(CachedAdminSetting.FFmpegThreads), // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
 		admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4",
 	}
 	err := exec.Command(admin.FFmpeg, args...).Run()
@@ -205,7 +206,7 @@ func genOgg(admin Setting, item Review) error {
 		"7",
 		"-an",
 		"-threads",
-		"1", // 웹서버의 부하를 줄이기 위해서 쓰레드 1개만 사용한다.
+		strconv.Itoa(CachedAdminSetting.FFmpegThreads), // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
 		admin.ReviewDataPath + "/" + item.ID.Hex() + ".ogg",
 	}
 	err := exec.Command(admin.FFmpeg, args...).Run()
