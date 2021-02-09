@@ -171,11 +171,13 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Dday = dday
 	}
+	// 페이지 검색을 진행한다. 페이지수에 맞는 아이템 갯수만 반환해야한다.
 	rcp.Items, rcp.TotalPageNum, err = SearchPage(session, rcp.SearchOption)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 검색바에 출력되는 갯수를 연산한다. 전체에서 갯수를 구해야한다.
 	rcp.Searchnum, err = SearchStatusNum(rcp.SearchOption, rcp.Items)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
