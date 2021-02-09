@@ -1670,7 +1670,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 	op.Assets = true
 	op.Type2d = true
 	op.Type3d = true
-	items, err := Searchv2(session, op)
+	items, err := Search(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -2028,7 +2028,7 @@ func handleDownloadJSONFile(w http.ResponseWriter, r *http.Request) {
 	op.Assets = true
 	op.Type2d = true
 	op.Type3d = true
-	items, err := Searchv2(session, op)
+	items, err := Search(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

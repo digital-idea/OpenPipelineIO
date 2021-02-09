@@ -544,20 +544,19 @@ func SearchStatusNum(op SearchOption, items []Item) (Infobarnum, error) {
 	results.Search = len(items)
 	results.StatusNum = make(map[string]int) // statusV2의 갯수를 처리하기 위해 StatusNum 맵을 초기화한다.
 	for _, item := range items {
+		if item.Shottype == "2D" || item.Shottype == "2d" {
+			results.Shot2d++
+		}
+		if item.Shottype == "3D" || item.Shottype == "3d" {
+			results.Shot3d++
+		}
+		if item.Type == "asset" {
+			results.Assets++
+		}
+		if item.Type == "org" || item.Type == "left" {
+			results.Shot++
+		}
 		if op.Task == "" {
-			// Task가 "All"로 선택되어 있을 때
-			if item.Shottype == "2D" || item.Shottype == "2d" {
-				results.Shot2d++
-			}
-			if item.Shottype == "3D" || item.Shottype == "3d" {
-				results.Shot3d++
-			}
-			if item.Type == "asset" {
-				results.Assets++
-			}
-			if item.Type == "org" || item.Type == "left" {
-				results.Shot++
-			}
 			// legacy statusV1
 			switch item.Status {
 			case ASSIGN:
@@ -582,21 +581,9 @@ func SearchStatusNum(op SearchOption, items []Item) (Infobarnum, error) {
 			// statusV2
 			results.StatusNum[item.StatusV2]++
 		} else {
-			// task가 존재할 때
+			// task가 존재하지 않으면 넘긴다.
 			if _, ok := item.Tasks[op.Task]; !ok {
 				continue
-			}
-			if item.Shottype == "2D" || item.Shottype == "2d" {
-				results.Shot2d++
-			}
-			if item.Shottype == "3D" || item.Shottype == "3d" {
-				results.Shot3d++
-			}
-			if item.Type == "asset" {
-				results.Assets++
-			}
-			if item.Type == "org" || item.Type == "left" {
-				results.Shot++
 			}
 			// legacy statusV1
 			switch item.Tasks[op.Task].Status {
@@ -622,10 +609,10 @@ func SearchStatusNum(op SearchOption, items []Item) (Infobarnum, error) {
 			// statusV2
 			results.StatusNum[item.Tasks[op.Task].StatusV2]++
 		}
-
 	}
 	return results, nil
 }
+
 
 // Totalnum 함수는 프로젝트의 전체샷에 대한 상태 갯수를 검색한다.
 func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
