@@ -118,7 +118,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.Review.Progress = n
 	}
-	rcp.Review.Createtime = time.Now().Format("2006-01-02 15:04:05")
+	rcp.Review.Createtime = time.Now().Format(time.RFC3339)
 	rcp.Review.Updatetime = rcp.Review.Createtime
 	mainVer, err := strconv.Atoi(r.FormValue("mainversion"))
 	if err != nil {
@@ -814,6 +814,69 @@ func handleAPISetReviewPath(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Path = path
 	err = SetReviewPath(session, rcp.ID, rcp.Path)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetReviewCreatetime 함수는 리뷰에서 Createtime을 설정합니다.
+func handleAPISetReviewCreatetime(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID         string `json:"id"`
+		Createtime string `json:"createtime"`
+		UserID     string `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+	createtime := r.FormValue("createtime")
+	if createtime == "" {
+		http.Error(w, "createtime 를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	// RFC3339 타입인지 체크한다.
+	_, err = time.Parse(time.RFC3339, createtime)
+	if err != nil {
+		http.Error(w, "createtime 값이 RFC3339 형태가 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Createtime = createtime
+	err = SetReviewCreatetime(session, rcp.ID, rcp.Createtime)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = SetReviewUpdatetime(session, rcp.ID, rcp.Createtime)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

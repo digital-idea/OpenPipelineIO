@@ -1206,6 +1206,7 @@ function setEditReviewModal(id) {
             document.getElementById("modal-editreview-project").value = data.project;
             document.getElementById("modal-editreview-task").value = data.task;
             document.getElementById("modal-editreview-name").value = data.name;
+            document.getElementById("modal-editreview-createtime").value = data.createtime;
             document.getElementById("modal-editreview-path").value = data.path;
             document.getElementById("modal-editreview-mainversion").value = data.mainversion;
             document.getElementById("modal-editreview-subversion").value = data.subversion;
@@ -4492,6 +4493,28 @@ function setReviewPath() {
         dataType: "json",
         success: function(data) {
             setReviewProcessStatus(data.id, "wait") // 만약 Path가 수정되면 Status가 wait으로 바뀌고 동영상이 다시 연산이 되어야 한다.
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// setReviewCreatetime 함수는 리뷰데이터의 Createtime을 변경한다.
+function setReviewCreatetime() {
+    $.ajax({
+        url: "/api/setreviewcreatetime",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            createtime: document.getElementById("modal-editreview-createtime").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            return
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
