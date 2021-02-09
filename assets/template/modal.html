@@ -1665,9 +1665,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group pt-0 m-0">
-                        <label class="form-text">Createtime</label>
-                        <input type="text" class="form-control" placeholder="0000-00-00T00:00:00+09:00" id="modal-editreview-createtime" onchange="setReviewCreatetime()">
+                    <div class="row">
+                        <div class="form-group pt-0 m-0 col-8">
+                            <label class="form-text">Createtime</label>
+                            <input type="text" class="form-control" placeholder="0000-00-00T00:00:00+09:00" id="modal-editreview-createtime" onchange="setReviewCreatetime()">
+                        </div>
+                        <div class="form-group pt-0 m-0 col-4">
+                            <label class="form-text">&nbsp;</label>
+                            <button class="btn btn-darkmode btn-block" onclick="setReviewCreatetimeNow()">Set Now!</button>
+                        </div>
                     </div>
                     <div class="form-group pt-0 m-0">
                         <label class="form-text">Path</label>
