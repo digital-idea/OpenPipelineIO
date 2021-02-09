@@ -381,8 +381,8 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 	return op, q
 }
 
-// Searchv2 함수는 다음 검색함수이다.
-func Searchv2(session *mgo.Session, op SearchOption) ([]Item, error) {
+// Search 함수는 다음 검색함수이다.
+func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
 	results := []Item{}
 	// 검색어가 없다면 바로 빈 값을 리턴한다.
 	if op.Searchword == "" {

@@ -371,7 +371,7 @@ func handleAPI2Items(w http.ResponseWriter, r *http.Request) {
 		Type3d:     str2bool(q.Get("type3d")),
 		Type2d:     str2bool(q.Get("type2d")),
 	}
-	result, err := Searchv2(session, op)
+	result, err := Search(session, op)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return
@@ -435,7 +435,7 @@ func handleAPI3Items(w http.ResponseWriter, r *http.Request) {
 	if q.Get("searchbartemplate") == "searchbarV2" {
 		op.SearchbarTemplate = "searchbarV2"
 	}
-	items, err := Searchv2(session, op)
+	items, err := Search(session, op)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -6619,7 +6619,7 @@ func handleAPISearch(w http.ResponseWriter, r *http.Request) {
 		None:              true,
 		SearchbarTemplate: "searchbarV1",
 	}
-	items, err := Searchv2(session, searchOp)
+	items, err := Search(session, searchOp)
 	if err != nil {
 		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
 		return

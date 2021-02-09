@@ -461,7 +461,7 @@ func main() {
 				Out:        true,
 				Sortkey:    "name",
 			}
-			items, err := Searchv2(session, op)
+			items, err := Search(session, op)
 			if err != nil {
 				log.Fatalln(err)
 			}

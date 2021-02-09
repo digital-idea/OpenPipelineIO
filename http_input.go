@@ -178,7 +178,12 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 검색바에 출력되는 갯수를 연산한다. 전체에서 갯수를 구해야한다.
-	rcp.Searchnum, err = SearchStatusNum(rcp.SearchOption, rcp.Items)
+	items, err := Search(session, rcp.SearchOption)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Searchnum, err = SearchStatusNum(rcp.SearchOption, items)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
