@@ -867,7 +867,7 @@ func handleAPISetReviewCreatetime(w http.ResponseWriter, r *http.Request) {
 	// RFC3339 타입인지 체크한다.
 	_, err = time.Parse(time.RFC3339, createtime)
 	if err != nil {
-		http.Error(w, "createtime 값이 RFC3339 형태가 아닙니다", http.StatusBadRequest)
+		http.Error(w, "createtime 값이 RFC3339 형태(2021-02-08T16:34:11+09:00)가 아닙니다", http.StatusBadRequest)
 		return
 	}
 	rcp.Createtime = createtime
