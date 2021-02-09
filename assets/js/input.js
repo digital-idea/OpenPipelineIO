@@ -4522,6 +4522,7 @@ function setReviewCreatetime() {
     });
 }
 
+// rfc3339 함수는 date 값을 받아서 RFC3339 포멧으로 반환한다.
 function rfc3339(d) {
     function pad(n) {
         return n < 10 ? "0" + n : n;
