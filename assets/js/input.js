@@ -1206,6 +1206,7 @@ function setEditReviewModal(id) {
             document.getElementById("modal-editreview-project").value = data.project;
             document.getElementById("modal-editreview-task").value = data.task;
             document.getElementById("modal-editreview-name").value = data.name;
+            document.getElementById("modal-editreview-createtime").value = data.createtime;
             document.getElementById("modal-editreview-path").value = data.path;
             document.getElementById("modal-editreview-mainversion").value = data.mainversion;
             document.getElementById("modal-editreview-subversion").value = data.subversion;
@@ -4497,6 +4498,76 @@ function setReviewPath() {
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
     });
+}
+
+// setReviewCreatetime 함수는 리뷰데이터의 Createtime을 변경한다.
+function setReviewCreatetime() {
+    $.ajax({
+        url: "/api/setreviewcreatetime",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            createtime: document.getElementById("modal-editreview-createtime").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            return
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+// rfc3339 함수는 date 값을 받아서 RFC3339 포멧으로 반환한다.
+function rfc3339(d) {
+    function pad(n) {
+        return n < 10 ? "0" + n : n;
+    }
+    function timezoneOffset(offset) {
+        var sign;
+        if (offset === 0) {
+            return "Z";
+        }
+        sign = (offset > 0) ? "-" : "+";
+        offset = Math.abs(offset);
+        return sign + pad(Math.floor(offset / 60)) + ":" + pad(offset % 60);
+    }
+    return d.getFullYear() + "-" +
+        pad(d.getMonth() + 1) + "-" +
+        pad(d.getDate()) + "T" +
+        pad(d.getHours()) + ":" +
+        pad(d.getMinutes()) + ":" +
+        pad(d.getSeconds()) + 
+        timezoneOffset(d.getTimezoneOffset());
+}
+
+// setReviewCreatetimeNow 함수는 리뷰데이터의 시간을 현재시간으로 설정한다.
+function setReviewCreatetimeNow() {
+    let date = new Date()
+    let time = rfc3339(date)
+    $.ajax({
+        url: "/api/setreviewcreatetime",
+        type: "post",
+        data: {
+            id: document.getElementById("modal-editreview-id").value,
+            createtime: time,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            document.getElementById("modal-editreview-createtime").value = time
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+    
 }
 
 // setReviewMainVersion 함수는 리뷰데이터의 MainVersion을 변경한다.

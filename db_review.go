@@ -265,6 +265,28 @@ func SetReviewPath(session *mgo.Session, id string, path string) error {
 	return nil
 }
 
+// SetReviewCreatetime 함수는 Review에 Createtime을 설정한다.
+func SetReviewCreatetime(session *mgo.Session, id string, createtime string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"createtime": createtime}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetReviewUpdatetime 함수는 Review에 Updatetime을 설정한다.
+func SetReviewUpdatetime(session *mgo.Session, id string, updatetime string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"updatetime": updatetime}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetReviewMainVersion 함수는 Review에 MainVersion을 설정한다.
 func SetReviewMainVersion(session *mgo.Session, id string, mainversion int) error {
 	session.SetMode(mgo.Monotonic, true)

@@ -434,6 +434,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setreviewtask", handleAPISetReviewTask)
 	http.HandleFunc("/api/setreviewname", handleAPISetReviewName)
 	http.HandleFunc("/api/setreviewpath", handleAPISetReviewPath)
+	http.HandleFunc("/api/setreviewcreatetime", handleAPISetReviewCreatetime)
 	http.HandleFunc("/api/setreviewmainversion", handleAPISetReviewMainVersion)
 	http.HandleFunc("/api/setreviewsubversion", handleAPISetReviewSubVersion)
 	http.HandleFunc("/api/setreviewfps", handleAPISetReviewFps)
