@@ -164,9 +164,8 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	searchword := r.FormValue("SearchReview")
-	redirectURL := fmt.Sprintf(`/review?searchword=%s`,
-		searchword,
-	)
+	searchword := r.FormValue("searchword")
+	reviewproject := r.FormValue("reviewproject")
+	redirectURL := fmt.Sprintf("/review?searchword=%s&project=%s", searchword, reviewproject)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }

@@ -14,7 +14,15 @@
             <form action="/review-submit" method="POST">
                 <div class="w-100">
                     <div class="input-group p-1">
-                        <input type="text" name="SearchReview" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
+                        <div class="input-group-prepend">
+                            <select name="reviewproject" class="custom-select rounded-left" id="review-searchbox-project">
+                                <option value="">All</option>
+                                {{range .Projectlist}}
+						        	<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
+						        {{end}}
+                            </select>
+                        </div>
+                        <input type="text" name="searchword" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
                         <div class="input-group-btn input-group-append">
                             <button class="btn btn-sm btn-darkmode" id="button">
                                 Search
