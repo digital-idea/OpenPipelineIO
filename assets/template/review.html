@@ -18,7 +18,7 @@
                             <select name="reviewproject" class="custom-select rounded-left" id="review-searchbox-project">
                                 <option value="">All</option>
                                 {{range .Projectlist}}
-						        	<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
+						        	<option value="{{.}}" {{if eq . $.Project}}selected{{end}}>{{.}}</option>
 						        {{end}}
                             </select>
                         </div>

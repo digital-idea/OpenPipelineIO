@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -54,8 +55,10 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		Reviews          []Review // 옆 Review 항목
 		ReviewGroup      []Review // 하단 Review 항목
 		TasksettingNames []string
+		Project          string
 	}
 	rcp := recipe{}
+	rcp.Project = q.Get("project")
 	rcp.Searchword = q.Get("searchword")
 	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -85,6 +88,20 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// Searchword에서 프로젝트가 있다면 제거한다.
+	var newWords []string
+	words := strings.Split(rcp.Searchword, " ")
+	for _, word := range words {
+		if strings.HasPrefix(word, "project:") {
+			continue
+		}
+		newWords = append(newWords, word)
+	}
+	if rcp.Project != "" {
+		newWords = append(newWords, "project:"+rcp.Project)
+	}
+	rcp.Searchword = strings.Join(newWords, " ")
+
 	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
