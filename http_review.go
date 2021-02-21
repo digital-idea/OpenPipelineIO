@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -88,19 +87,7 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// Searchword에서 프로젝트가 있다면 제거한다.
-	var newWords []string
-	words := strings.Split(rcp.Searchword, " ")
-	for _, word := range words {
-		if strings.HasPrefix(word, "project:") {
-			continue
-		}
-		newWords = append(newWords, word)
-	}
-	if rcp.Project != "" {
-		newWords = append(newWords, "project:"+rcp.Project)
-	}
-	rcp.Searchword = strings.Join(newWords, " ")
+	rcp.Searchword = setSearchFilter(rcp.Searchword, "project", rcp.Project)
 
 	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {

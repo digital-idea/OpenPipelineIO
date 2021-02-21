@@ -35,7 +35,7 @@
             <div class="overflow-auto" style="height: 76vh; overflow-y: scroll; scrollbar-color: #6d6d6d #2d2d2d;">
                 {{range .Reviews}}
                     <div class="row p-2 m-1 {{if eq .ID.Hex $.CurrentReview.ID.Hex}}selectreviewitem border border-warning{{else}}reviewitem{{end}} finger" name="reviewitem" id="review-{{.ID.Hex}}">
-                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}')">
+                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}')">
                             <span class="text-muted" id="{{.ID.Hex}}-project">{{.Project}}</span>
                             <span class="text-darkmode" id="{{.ID.Hex}}-name">{{.Name}}</span>
                             <span class="ml-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>
@@ -145,7 +145,7 @@
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="white-space: nowrap; height: 10vh; overflow-x: scroll; overflow-y: hidden; scrollbar-color: #6d6d6d #2d2d2d; scrollbar-color: dark;" id="reviewgroup">
             {{range .ReviewGroup}}
-                <video src="/reviewdata?id={{.ID.Hex}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}&id={{.ID.Hex}}')"></video>
+                <video src="/reviewdata?id={{.ID.Hex}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
             {{end}}
         </div>
     </div>
