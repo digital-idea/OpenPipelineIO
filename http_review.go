@@ -54,8 +54,10 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		Reviews          []Review // 옆 Review 항목
 		ReviewGroup      []Review // 하단 Review 항목
 		TasksettingNames []string
+		Project          string
 	}
 	rcp := recipe{}
+	rcp.Project = q.Get("project")
 	rcp.Searchword = q.Get("searchword")
 	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -85,6 +87,8 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Searchword = setSearchFilter(rcp.Searchword, "project", rcp.Project)
+
 	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -164,9 +168,8 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	searchword := r.FormValue("SearchReview")
-	redirectURL := fmt.Sprintf(`/review?searchword=%s`,
-		searchword,
-	)
+	searchword := r.FormValue("searchword")
+	reviewproject := r.FormValue("reviewproject")
+	redirectURL := fmt.Sprintf("/review?searchword=%s&project=%s", searchword, reviewproject)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }
