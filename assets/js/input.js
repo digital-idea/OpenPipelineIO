@@ -5114,27 +5114,33 @@ function selectReviewItem(id, project, fps) {
         aniuxCtx.lineTo(currentFrame * framelineOffset + (framelineOffset/2), clientHeight);
         aniuxCtx.stroke();
         
-        // 프레임을 이동하면 기존 드로잉이 지워져야 한다.
-        removeDrawing()
-        // 드로잉이 존재하면 fg 캔버스에 그린다.
-        let drawing = new Image()
-        let id = document.getElementById("current-review-id").value
-        let frame = document.getElementById("currentframe").innerHTML
-        let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
-        let http = new XMLHttpRequest();
-        http.open("HEAD", url, false)
-        http.send()
-        if (http.status === 200) {
-            let fg = document.getElementById("drawcanvas")
-            let fgctx = fg.getContext("2d")
-            drawing.src = url
-            drawing.onload = function() {
-                fgctx.drawImage(drawing,
-                    0, 0, drawing.width, drawing.height,
-                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
-                );
-            };
+        // 드로잉 프레임은 비디오가 정지될 때만 보여야한다.
+        if (video.paused) {
+            // 프레임을 이동하면 기존 드로잉이 지워져야 한다.
+            removeDrawing()
+            // 드로잉이 존재하면 fg 캔버스에 그린다.
+            let drawing = new Image()
+            let id = document.getElementById("current-review-id").value
+            let frame = document.getElementById("currentframe").innerHTML
+            let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
+            let http = new XMLHttpRequest();
+            http.open("HEAD", url, false)
+            http.send()
+            if (http.status === 200) {
+                let fg = document.getElementById("drawcanvas")
+                let fgctx = fg.getContext("2d")
+                drawing.src = url
+                drawing.onload = function() {
+                    fgctx.drawImage(drawing,
+                        0, 0, drawing.width, drawing.height,
+                        globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
+                    );
+                };
+            } else {
+                return
+            }
         }
+        
     }, 0);
 }
 
