@@ -266,6 +266,15 @@ func webserver(port string) {
 	http.HandleFunc("/rmstatus", handleRmStatus)
 	http.HandleFunc("/rmstatus-submit", handleRmStatusSubmit)
 
+	// Stage
+	http.HandleFunc("/stage", handleStage)
+	http.HandleFunc("/addstage", handleAddStage)
+	http.HandleFunc("/addstage-submit", handleAddStageSubmit)
+	http.HandleFunc("/editstage", handleEditStage)
+	http.HandleFunc("/editstage-submit", handleEditStageSubmit)
+	http.HandleFunc("/rmstage", handleRmStage)
+	http.HandleFunc("/rmstage-submit", handleRmStageSubmit)
+
 	// Publish Key
 	http.HandleFunc("/publishkey", handlePublishKey)
 	http.HandleFunc("/addpublishkey", handleAddPublishKey)
