@@ -1,0 +1,50 @@
+{{define "stage" }}
+{{template "headBootstrap"}}
+{{template "navbar" .}}
+
+<body>
+		
+<div class="p-2">
+	<div class="text-center mt-5 mb-3">
+		<span class="text-darkmode">
+			CSI에서 사용되는 Review Stage 목록입니다.<br>
+			리뷰 단계에 필요한 Stage가 없다면 <a href="/addstage" class="add ml-1" title="Stage 추가">＋</a> 버튼을 눌러주세요.
+		</span>
+	</div>
+	{{if .Stages}}
+		{{range .Stages}}
+			<div class="text-darkmode p-2">
+				<div class="row">
+					<div class="col-12">
+					<a href="/editstage?id={{.ID}}" class="btn w-100" style="color: {{.TextColor}};background-color: {{.BGColor}};border: 1px solid {{.BorderColor}};" title="{{.Description}}">
+							{{.ID}}
+							<span class="badge badge-light">{{.Order}}</span>
+							{{if .InitStage}}
+								<span class="badge badge-danger">초기 상태값 / Default Stage</span>
+							{{end}}
+						</a>
+					</div>
+				</div>
+			</div>
+		{{end}}
+	{{else}}
+		<div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+			<div class="text-center mt-5">
+				<span class="text-darkmode">Stage가 존재하지 않습니다. Stage를 생성해주세요.</span>
+			</div>
+			
+			<div class="text-center">
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10}}
+					<a href="/addstage" class="mt-5 mb-5 btn btn-outline-warning">Add Review Stage</a>
+				{{end}}
+			</div>
+		</div>
+	{{end}}
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+</html>
+{{end}}

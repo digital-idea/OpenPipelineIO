@@ -26,6 +26,7 @@ type Review struct {
 	Log           string        `json:"log"`                     // Log 예로 Errlog가 있다.
 	MainVersion   int           `json:"mainversion"`             // Main Version
 	SubVersion    int           `json:"subversion"`              // Sub Version
+	Stage         string        `json:"stage"`                   // 현재 리뷰 Stage 단계
 }
 
 // Sketch 는 스케치 자료구조이다.

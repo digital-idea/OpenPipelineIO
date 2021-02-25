@@ -104,6 +104,8 @@ func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
 			orQueries = append(orQueries, bson.M{"createtime": &bson.RegEx{Pattern: strings.TrimPrefix(word, "daily:")}})
 		} else if strings.HasPrefix(word, "status:") {
 			orQueries = append(orQueries, bson.M{"status": &bson.RegEx{Pattern: strings.TrimPrefix(word, "status:")}})
+		} else if strings.HasPrefix(word, "stage:") {
+			orQueries = append(orQueries, bson.M{"stage": &bson.RegEx{Pattern: strings.TrimPrefix(word, "stage:")}})
 		} else if strings.HasPrefix(word, "project:") {
 			orQueries = append(orQueries, bson.M{"project": &bson.RegEx{Pattern: strings.TrimPrefix(word, "project:")}})
 		} else if strings.HasPrefix(word, "name:") {
