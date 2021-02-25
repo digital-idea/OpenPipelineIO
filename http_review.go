@@ -50,6 +50,7 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Searchword       string
 		Status           []Status // css 생성을 위해서 필요함
+		Stages           []Stage
 		CurrentReview    Review   // 현재 리뷰 자료구조
 		Reviews          []Review // 옆 Review 항목
 		ReviewGroup      []Review // 하단 Review 항목
@@ -78,6 +79,11 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.TasksettingNames, err = TasksettingNames(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Stages, err = AllStages(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

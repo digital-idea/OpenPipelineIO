@@ -88,8 +88,8 @@ func RmStage(session *mgo.Session, id string) error {
 	return nil
 }
 
-// AllStage 함수는 모든 Stage값을 DB에서 가지고 온다.
-func AllStage(session *mgo.Session) ([]Stage, error) {
+// AllStages 함수는 모든 Stage값을 DB에서 가지고 온다.
+func AllStages(session *mgo.Session) ([]Stage, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("stage")
 	results := []Stage{}
