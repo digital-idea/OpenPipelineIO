@@ -52,6 +52,7 @@
                                 {{if eq .ProcessStatus "wait" "processing" }}
                                     <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-danger">{{.ProcessStatus}}</span>
                                 {{else}}
+                                    <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
                                     <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-secondary">{{.Status}}</span>
                                 {{end}}
                             {{end}}
