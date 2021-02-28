@@ -1206,6 +1206,7 @@ function setEditReviewModal(id) {
             document.getElementById("modal-editreview-project").value = data.project;
             document.getElementById("modal-editreview-task").value = data.task;
             document.getElementById("modal-editreview-name").value = data.name;
+            document.getElementById("modal-editreview-stage").value = data.stage;
             document.getElementById("modal-editreview-createtime").value = data.createtime;
             document.getElementById("modal-editreview-path").value = data.path;
             document.getElementById("modal-editreview-mainversion").value = data.mainversion;
@@ -4407,12 +4408,12 @@ function setReviewStatus(status) {
     });
 }
 
-function setReviewStage() {
+function setReviewStage(stage) {
     $.ajax({
         url: "/api/setreviewstage",
         type: "post",
         data: {
-            stage: document.getElementById("current-review-stage").value,
+            stage: stage,
             id: document.getElementById("current-review-id").value,
         },
         headers: {

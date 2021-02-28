@@ -1648,13 +1648,24 @@
                                 <small>Task를 선택해주세요.</small>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col pt-0 pb-0">
                             <div class="form-group">
                                 <label class="form-text">Name</label>
                                 <input type="text" class="form-control" id="modal-editreview-name" value="" onchange="setReviewName()">
-                                <small>Shot, Asset 이름. 예) SS_0010</small>
+                                <small>Shot, Asset 이름</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Stage</label>
+                                <select class="form-control" id="modal-editreview-stage" onchange="setReviewStage(this.value)">
+                                    {{range .Stages}}
+                                        <option value="{{.ID}}" {{if eq $.CurrentReview.Stage .ID}}selected{{end}}>{{.ID}}</option>
+                                    {{end}}
+                                </select>
+                                <small>리뷰 Stage 이름</small>
                             </div>
                         </div>
                         <div class="col pt-0 pb-0">

@@ -110,7 +110,7 @@
                         <span class="btn btn-sm btn-outline-success w-100" onclick="setReviewStatus('approve')">approve</span>
                     </div>
                     <div class="col pl-0">
-                        <select class="form-control form-control-sm" id="current-review-stage" onchange="setReviewStage()">
+                        <select class="form-control form-control-sm" id="current-review-stage" onchange="setReviewStage(this.value)">
                             {{range .Stages}}
                                 <option value="{{.ID}}" {{if eq $.CurrentReview.Stage .ID}}selected{{end}}>{{.ID}}</option>
                             {{end}}
