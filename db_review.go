@@ -71,6 +71,7 @@ func setReviewStage(session *mgo.Session, id, stage string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	// Stage가 바뀌면 다시 해당 스테이지에서 리뷰를 해야한다. 시간을 바꾼다.
+	// Stage가 바뀌면 Status가 다시 wait(리뷰대기)가 되어야 한다.
 	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"stage": stage, "status": "wait", "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
