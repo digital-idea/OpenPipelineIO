@@ -54,8 +54,8 @@ func getReview(session *mgo.Session, id string) (Review, error) {
 }
 
 func setReviewStatus(session *mgo.Session, id, status string) error {
-	if !(status == "approve" || status == "wait" || status == "comment") {
-		return errors.New("wait, approve, comment 상태만 사용가능합니다")
+	if !(status == "wait" || status == "comment" || status == "approve") {
+		return errors.New("wait, comment, approve 상태만 사용가능합니다")
 	}
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
@@ -71,7 +71,7 @@ func setReviewStage(session *mgo.Session, id, stage string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	// Stage가 바뀌면 다시 해당 스테이지에서 리뷰를 해야한다. 시간을 바꾼다.
-	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"stage": stage, "updatetime": time.Now().Format(time.RFC3339)}})
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"stage": stage, "status": "wait", "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

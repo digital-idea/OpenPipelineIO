@@ -45,8 +45,10 @@
                                 <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-subversion">w{{.SubVersion}}</span>
                             {{end}}
                             {{if eq .Status "comment" }}
+                                <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
                                 <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-warning">{{.Status}}</span>
                             {{else if eq .Status "approve" }}
+                                <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
                                 <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-success">{{.Status}}</span>
                             {{else}}
                                 {{if eq .ProcessStatus "wait" "processing" }}
