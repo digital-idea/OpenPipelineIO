@@ -4407,6 +4407,31 @@ function setReviewStatus(status) {
     });
 }
 
+function setReviewStage() {
+    $.ajax({
+        url: "/api/setreviewstage",
+        type: "post",
+        data: {
+            stage: document.getElementById("current-review-stage").value,
+            id: document.getElementById("current-review-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("review-stage-"+data.id)
+            // 해당 id의 stage 글씨를 바꾼다.
+            item.innerHTML = data.stage
+            // 해당 stage의 색상을 바꾼다.
+            item.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function setReviewProcessStatus(id, status) {
     $.ajax({
         url: "/api/setreviewprocessstatus",
