@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"strings"
+	"time"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -59,6 +60,18 @@ func setReviewStatus(session *mgo.Session, id, status string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("csi").C("review")
 	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"status": status}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// setReviewStage는 Stage를 변경합니다.
+func setReviewStage(session *mgo.Session, id, stage string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	// Stage가 바뀌면 다시 해당 스테이지에서 리뷰를 해야한다. 시간을 바꾼다.
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"stage": stage, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

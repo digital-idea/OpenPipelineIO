@@ -327,6 +327,97 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetReviewStage 함수는 review의 Stage를 설정하는 RestAPI 이다.
+func handleAPISetReviewStage(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID string `json:"userid"`
+		ID     string `json:"id"`
+		Stage  string `json:"stage"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	reviewID := r.FormValue("id")
+	if reviewID == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = reviewID
+
+	stage := r.FormValue("stage")
+	if stage == "" {
+		http.Error(w, "stage를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Stage = stage
+	hasStage := false
+	stages, err := AllStages(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, s := range stages {
+		if s.ID == stage {
+			hasStage = true
+		}
+	}
+	if !hasStage {
+		http.Error(w, stage+" Stage가 존재하지 않습니다", http.StatusBadRequest)
+		return
+	}
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = setReviewStage(session, rcp.ID, stage)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Review Stage: %s, %s", rcp.ID, rcp.Stage), review.Project, review.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// slack log
+	err = slacklog(session, review.Project, fmt.Sprintf("Set Review Stage: %s, \nProject: %s, Name: %s, Author: %s", stage, review.Project, review.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPIAddReviewComment 함수는 review에 comment를 설정하는 RestAPI 이다.
 func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
