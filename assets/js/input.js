@@ -4429,6 +4429,9 @@ function setReviewStage(stage) {
             let itemStatus = document.getElementById("reviewstatus-"+data.id)
             itemStatus.innerHTML = "wait"
             itemStatus.setAttribute("class","ml-1 badge badge-secondary")
+            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            document.getElementById("current-review-stage").value = data.stage
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
