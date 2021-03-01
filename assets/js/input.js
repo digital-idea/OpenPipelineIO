@@ -4425,7 +4425,7 @@ function setReviewStage(stage) {
             let itemStage = document.getElementById("review-stage-"+data.id)
             itemStage.innerHTML = data.stage
             itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
-            // 해당 아이템의 Status를 "wait"로 바꾼다.
+            // 해당 아이템의 Stage가 바뀌면 Status를 "wait"로 바꾼다.
             let itemStatus = document.getElementById("reviewstatus-"+data.id)
             itemStatus.innerHTML = "wait"
             itemStatus.setAttribute("class","ml-1 badge badge-secondary")
