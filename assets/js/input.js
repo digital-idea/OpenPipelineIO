@@ -4421,11 +4421,14 @@ function setReviewStage(stage) {
         },
         dataType: "json",
         success: function(data) {
-            let item = document.getElementById("review-stage-"+data.id)
-            // 해당 id의 stage 글씨를 바꾼다.
-            item.innerHTML = data.stage
-            // 해당 stage의 색상을 바꾼다.
-            item.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+            // 해당 id의 stage 글씨와 색상을 바꾼다.
+            let itemStage = document.getElementById("review-stage-"+data.id)
+            itemStage.innerHTML = data.stage
+            itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+            // 해당 아이템의 Status를 "wait"로 바꾼다.
+            let itemStatus = document.getElementById("reviewstatus-"+data.id)
+            itemStatus.innerHTML = "wait"
+            itemStatus.setAttribute("class","ml-1 badge badge-secondary")
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

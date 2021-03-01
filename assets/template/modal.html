@@ -1662,7 +1662,7 @@
                                 <label class="form-text">Stage</label>
                                 <select class="form-control" id="modal-editreview-stage" onchange="setReviewStage(this.value)">
                                     {{range .Stages}}
-                                        <option value="{{.ID}}" {{if eq $.CurrentReview.Stage .ID}}selected{{end}}>{{.ID}}</option>
+                                        <option value="{{.ID}}">{{.ID}}</option>
                                     {{end}}
                                 </select>
                                 <small>리뷰 Stage 이름</small>
