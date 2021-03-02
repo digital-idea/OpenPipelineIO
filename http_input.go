@@ -43,6 +43,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		TasksettingOrderMap map[string]float64
 		Dday                string
 		Status              []Status
+		Stages              []Stage
 		AllStatusIDs        []string
 		TotalPageNum        int
 	}
@@ -69,6 +70,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		rcp.TasksettingOrderMap[t.Name] = t.Order
 	}
 	rcp.TasksettingNames, err = TasksettingNames(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Stages, err = AllStages(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

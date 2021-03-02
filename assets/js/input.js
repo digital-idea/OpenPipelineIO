@@ -1206,6 +1206,7 @@ function setEditReviewModal(id) {
             document.getElementById("modal-editreview-project").value = data.project;
             document.getElementById("modal-editreview-task").value = data.task;
             document.getElementById("modal-editreview-name").value = data.name;
+            document.getElementById("modal-editreview-stage").value = data.stage;
             document.getElementById("modal-editreview-createtime").value = data.createtime;
             document.getElementById("modal-editreview-path").value = data.path;
             document.getElementById("modal-editreview-mainversion").value = data.mainversion;
@@ -4400,6 +4401,37 @@ function setReviewStatus(status) {
             } else {
                 item.setAttribute("class","ml-1 badge badge-secondary")
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewStage(stage) {
+    $.ajax({
+        url: "/api/setreviewstage",
+        type: "post",
+        data: {
+            stage: stage,
+            id: document.getElementById("current-review-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            // 해당 id의 stage 글씨와 색상을 바꾼다.
+            let itemStage = document.getElementById("review-stage-"+data.id)
+            itemStage.innerHTML = data.stage
+            itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+            // 해당 아이템의 Stage가 바뀌면 Status를 "wait"로 바꾼다.
+            let itemStatus = document.getElementById("reviewstatus-"+data.id)
+            itemStatus.innerHTML = "wait"
+            itemStatus.setAttribute("class","ml-1 badge badge-secondary")
+            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            document.getElementById("current-review-stage").value = data.stage
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

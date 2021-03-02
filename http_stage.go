@@ -120,7 +120,7 @@ func handleStage(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Devmode = *flagDevmode
-	rcp.Stages, err = AllStage(session)
+	rcp.Stages, err = AllStages(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

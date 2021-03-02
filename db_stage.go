@@ -47,10 +47,10 @@ func GetInitStageID(session *mgo.Session) (string, error) {
 		return "", err
 	}
 	if n == 0 {
-		return "", errors.New("초기 상태값 설정이 필요합니다")
+		return "", errors.New("초기 Review Stage 설정이 필요합니다")
 	}
 	if n != 1 {
-		return "", errors.New("초기 상태 설정값이 1개가 아닙니다")
+		return "", errors.New("초기 Review Stage 설정값이 1개가 아닙니다")
 	}
 	err = c.Find(bson.M{"initstage": true}).One(&s)
 	if err != nil {
@@ -88,8 +88,8 @@ func RmStage(session *mgo.Session, id string) error {
 	return nil
 }
 
-// AllStage 함수는 모든 Stage값을 DB에서 가지고 온다.
-func AllStage(session *mgo.Session) ([]Stage, error) {
+// AllStages 함수는 모든 Stage값을 DB에서 가지고 온다.
+func AllStages(session *mgo.Session) ([]Stage, error) {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("setting").C("stage")
 	results := []Stage{}

@@ -25,6 +25,19 @@
             border: 4px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
         }
     {{end}}
+    {{range .Stages}}
+        .bg-stage-{{.ID}}, .bg-stage-{{.ID}}:hover, .badge-stage-{{.ID}} {
+            background-color: {{.BGColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            border: 1px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+        }
+        .text-stage-{{.ID}}, .text-stage-{{.ID}}:hover {
+            color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+        }
+        .border-stage-{{.ID}} {
+            border: 4px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+        }
+    {{end}}
 </style>
 </head>
 {{end}}

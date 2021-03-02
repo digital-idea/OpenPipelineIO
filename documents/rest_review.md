@@ -10,6 +10,7 @@
 | /api/searchreview | 리뷰검색 | searchword | `$ curl -X POST -d "searchword=합성3팀" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/searchreview` |
 | /api/addreview | 리뷰데이터 추가 | project, name, task, path, author, authornamekor mainversion, subversion, description, fps, (camerainfo), (progress) | `$ curl -X POST -d "project=TEMP&name=SS_0010&task=comp&path=test.mov&description=3팀&fps=24&mainversion=1&sebversion=1&authornamekor=김한웅" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/addreview` |
 | /api/setreviewstatus | 리뷰상태 변경 | id, status(wait, approve, comment) | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&status=approve" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewstatus` |
+| /api/setreviewstage | 리뷰Stage 변경 | id, stage | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&stage=team" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewstage` |
 | /api/setreviewproject | 리뷰의 Project 변경 | id, project | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&project=projectname" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewproject` |
 | /api/setreviewtask | 리뷰의 Task 변경 | id, task | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&task=task" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewtask` |
 | /api/setreviewname | 리뷰의 Name 변경 | id, name | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&name=SS_0010" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewname` 

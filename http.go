@@ -110,6 +110,7 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		Sha1ver   string
 		BuildTime string
 		Status    []Status
+		Stages    []Stage
 	}
 
 	rcp := recipy{}
@@ -123,6 +124,11 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	rcp.Devmode = *flagDevmode
 	rcp.User = u
 	rcp.Wfs = *flagWFS
+	rcp.Stages, err = AllStages(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.Status, err = AllStatus(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -435,6 +441,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/review", handleAPIReview)
 	http.HandleFunc("/api/searchreview", handleAPISearchReview)
 	http.HandleFunc("/api/setreviewstatus", handleAPISetReviewStatus)
+	http.HandleFunc("/api/setreviewstage", handleAPISetReviewStage)
 	http.HandleFunc("/api/addreviewcomment", handleAPIAddReviewComment)
 	http.HandleFunc("/api/editreviewcomment", handleAPIEditReviewComment)
 	http.HandleFunc("/api/rmreviewcomment", handleAPIRmReviewComment)
