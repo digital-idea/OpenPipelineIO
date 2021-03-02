@@ -12,6 +12,7 @@ func setSearchFilter(org, key, value string) string {
 	words := strings.Split(org, " ")
 	for _, word := range words {
 		if strings.HasPrefix(word, key+":") {
+			// 키가 존재하면 값을 바꾼다.
 			newWords = append(newWords, key+":"+value)
 		} else {
 			newWords = append(newWords, word)
