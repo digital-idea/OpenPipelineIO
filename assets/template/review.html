@@ -23,10 +23,10 @@
                             </select>
                         </div>
                         <div class="input-group-append">
-                            <select name="reviewproject" class="custom-select" id="review-searchbox-stage">
-                                <option value="">All</option>
+                            <select name="reviewstage" class="custom-select" id="review-searchbox-stage">
+                                <option value="" {{if eq "" $.Stage}}selected{{end}}>All</option>
                                 {{range .Stages}}
-						        	<option value="{{.ID}}">{{.ID}}</option>
+						        	<option value="{{.ID}}" {{if eq $.Stage .ID}}selected{{end}}>{{.ID}}</option>
 						        {{end}}
                             </select>
                         </div>
