@@ -78,7 +78,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	if stage == "" {
 		rcp.Review.Stage, err = GetInitStageID(session)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else {
@@ -86,7 +86,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		hasStage := false
 		stages, err := AllStages(session)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		for _, s := range stages {
