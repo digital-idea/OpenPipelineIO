@@ -69,7 +69,38 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Review.Task = task
-
+	stage := r.FormValue("stage")
+	if stage == "" {
+		http.Error(w, "stage를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	// stage가 빈문자열이라면 기본 설정을 적용한다.
+	if stage == "" {
+		rcp.Review.Stage, err = GetInitStageID(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		// 아니라면 해당 Stage가 존재하는지 체크하고 존재하면 적용한다.
+		hasStage := false
+		stages, err := AllStages(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		for _, s := range stages {
+			if s.ID == stage {
+				hasStage = true
+				break
+			}
+		}
+		if !hasStage {
+			http.Error(w, stage+" Stage가 존재하지 않습니다", http.StatusBadRequest)
+			return
+		}
+		rcp.Review.Stage = stage
+	}
 	author := r.FormValue("author")
 	if author == "" {
 		rcp.Review.Author = rcp.UserID
