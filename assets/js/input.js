@@ -4346,6 +4346,7 @@ function addReview() {
         data: {
             project: document.getElementById("modal-addreview-project").value,
             name: document.getElementById("modal-addreview-name").value,
+            stage: document.getElementById("modal-addreview-stage").value,
             task: document.getElementById("modal-addreview-task").value,
             author: document.getElementById("modal-addreview-author").value,
             path: document.getElementById("modal-addreview-path").value,
