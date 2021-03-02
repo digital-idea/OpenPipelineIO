@@ -56,9 +56,11 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		ReviewGroup      []Review // 하단 Review 항목
 		TasksettingNames []string
 		Project          string
+		Stage            string
 	}
 	rcp := recipe{}
 	rcp.Project = q.Get("project")
+	rcp.Stage = q.Get("stage")
 	rcp.Searchword = q.Get("searchword")
 	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -94,6 +96,7 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Searchword = setSearchFilter(rcp.Searchword, "project", rcp.Project)
+	rcp.Searchword = setSearchFilter(rcp.Searchword, "stage", rcp.Stage)
 
 	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {
@@ -175,7 +178,8 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	searchword := r.FormValue("searchword")
-	reviewproject := r.FormValue("reviewproject")
-	redirectURL := fmt.Sprintf("/review?searchword=%s&project=%s", searchword, reviewproject)
+	reviewProject := r.FormValue("reviewproject")
+	reviewStage := r.FormValue("reviewstage")
+	redirectURL := fmt.Sprintf("/review?searchword=%s&project=%s&stage=%s", searchword, reviewProject, reviewStage)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 }

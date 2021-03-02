@@ -22,7 +22,15 @@
 						        {{end}}
                             </select>
                         </div>
-                        <input type="text" name="searchword" class="input-group-prepend form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
+                        <div class="input-group-append">
+                            <select name="reviewstage" class="custom-select" id="review-searchbox-stage">
+                                <option value="" {{if eq "" $.Stage}}selected{{end}}>All</option>
+                                {{range .Stages}}
+						        	<option value="{{.ID}}" {{if eq $.Stage .ID}}selected{{end}}>{{.ID}}</option>
+						        {{end}}
+                            </select>
+                        </div>
+                        <input type="text" name="searchword" class="input-group-append form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
                         <div class="input-group-btn input-group-append">
                             <button class="btn btn-sm btn-darkmode" id="button">
                                 Search
