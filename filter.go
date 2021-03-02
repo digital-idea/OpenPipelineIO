@@ -2,7 +2,7 @@ package main
 
 import "strings"
 
-// replaceSearchFilder 함수는 해당 값에서 key가 존재 한다면, value를 교체한다.
+// replaceSearchFilder 함수는 해당 값에서 key가 존재 한다면, value를 교체한다. 없으면 추가한다.
 func setSearchFilter(org, key, value string) string {
 	var newWords []string
 	// key가 없다면 포함시킨다.
