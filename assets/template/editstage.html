@@ -73,6 +73,31 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Next Stage</label>
+                    <select class="form-control" id="nextstage" name="nextstage">
+                        {{range .Stages}}
+                            <option value="{{.ID}}" {{if eq .ID $.Stage.NextStage}}selected{{end}}>{{.ID}}</option>
+                        {{end}}
+                    </select>
+                    <small class="form-text text-muted">Approve 시 바뀔 Stage</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Next Status</label>
+                    <select class="form-control" id="nextstatus" name="nextstatus">
+                        <option value="wait" {{if eq "wait" $.Stage.NextStatus}}selected{{end}}>wait</option>
+                        <option value="closed" {{if eq "closed" $.Stage.NextStatus}}selected{{end}}>closed</option>
+                        <option value="comment" {{if eq "comment" $.Stage.NextStatus}}selected{{end}}>comment</option>
+                        <option value="approve" {{if eq "approve" $.Stage.NextStatus}}selected{{end}}>approve</option>
+                    </select>
+                    <small class="form-text text-muted">Approve 시 바뀔 Status</small>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <label>Order</label>
             <input type="number" name="order" step="0.1" class="form-control" placeholder="0" value="{{.Stage.Order}}">
