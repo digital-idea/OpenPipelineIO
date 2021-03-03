@@ -4397,11 +4397,69 @@ function setReviewStatus(status) {
             // 상태의 색상을 바꾼다.
             if (data.status === "approve") {
                 item.setAttribute("class","ml-1 badge badge-success")
+                setReviewNextStatus(data.id)
+                setReviewNextStage(data.id)
             } else if (data.status === "comment") {
                 item.setAttribute("class","ml-1 badge badge-warning")
             } else {
                 item.setAttribute("class","ml-1 badge badge-secondary")
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewNextStatus(id) {
+    $.ajax({
+        url: "/api/setreviewnextstatus",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("reviewstatus-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.status
+            // 상태의 색상을 바꾼다.
+            if (data.status === "approve") {
+                item.setAttribute("class","ml-1 badge badge-success")
+            } else if (data.status === "comment") {
+                item.setAttribute("class","ml-1 badge badge-warning")
+            } else {
+                item.setAttribute("class","ml-1 badge badge-secondary")
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewNextStage(id) {
+    $.ajax({
+        url: "/api/setreviewnextstage",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("review-stage-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.stage
+            // 상태의 색상을 바꾼다.
+            item.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            document.getElementById("current-review-stage").value = data.stage
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
