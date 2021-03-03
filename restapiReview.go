@@ -290,6 +290,7 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		UserID string `json:"userid"`
 		ID     string `json:"id"`
 		Status string `json:"status"`
+		Stage  string `json:"stage"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -327,27 +328,24 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
+	rcp.Stage = review.Stage
 	err = setReviewStatus(session, rcp.ID, status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Review Status: %s, %s", rcp.ID, rcp.Status), review.Project, review.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	// slack log
 	err = slacklog(session, review.Project, fmt.Sprintf("Set Review Status: %s, \nProject: %s, Name: %s, Author: %s", status, review.Project, review.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
