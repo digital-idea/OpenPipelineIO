@@ -29,6 +29,7 @@ func handleAddStage(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Stages []Stage
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -43,6 +44,11 @@ func handleAddStage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	rcp.Stages, err = AllStages(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	err = TEMPLATES.ExecuteTemplate(w, "addstage", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -81,6 +87,8 @@ func handleAddStageSubmit(w http.ResponseWriter, r *http.Request) {
 		BorderColor: "#" + r.FormValue("bordercolor"),
 		Order:       order,
 		InitStage:   str2bool(r.FormValue("initstage")),
+		NextStage:   r.FormValue("nextstage"),
+		NextStatus:  r.FormValue("nextstatus"),
 	}
 	err = s.CheckError()
 	if err != nil {
@@ -230,6 +238,7 @@ func handleEditStage(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Stage
+		Stages []Stage
 	}
 	rcp := recipe{}
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -247,6 +256,11 @@ func handleEditStage(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	id := q.Get("id")
 	rcp.Stage, err = GetStage(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Stages, err = AllStages(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -289,6 +303,8 @@ func handleEditStageSubmit(w http.ResponseWriter, r *http.Request) {
 		BorderColor: "#" + r.FormValue("bordercolor"),
 		Order:       order,
 		InitStage:   str2bool(r.FormValue("initstage")),
+		NextStage:   r.FormValue("nextstage"),
+		NextStatus:  r.FormValue("nextstatus"),
 	}
 	err = s.CheckError()
 	if err != nil {

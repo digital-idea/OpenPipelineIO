@@ -4397,11 +4397,70 @@ function setReviewStatus(status) {
             // 상태의 색상을 바꾼다.
             if (data.status === "approve") {
                 item.setAttribute("class","ml-1 badge badge-success")
+                addReviewCommentText("Approved " + data.stage + " Stage.") // comment를 남긴다.
+                setReviewNextStatus(data.id) // 다음 Status를 설정한다.
+                setReviewNextStage(data.id) // 다음 Stage를 설정한다.
             } else if (data.status === "comment") {
                 item.setAttribute("class","ml-1 badge badge-warning")
             } else {
                 item.setAttribute("class","ml-1 badge badge-secondary")
             }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewNextStatus(id) {
+    $.ajax({
+        url: "/api/setreviewnextstatus",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("reviewstatus-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.status
+            // 상태의 색상을 바꾼다.
+            if (data.status === "approve") {
+                item.setAttribute("class","ml-1 badge badge-success")
+            } else if (data.status === "comment") {
+                item.setAttribute("class","ml-1 badge badge-warning")
+            } else {
+                item.setAttribute("class","ml-1 badge badge-secondary")
+            }
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewNextStage(id) {
+    $.ajax({
+        url: "/api/setreviewnextstage",
+        type: "post",
+        data: {
+            id: id,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            let item = document.getElementById("review-stage-"+data.id)
+            // 상태 내부 글씨를 바꾼다.
+            item.innerHTML = data.stage
+            // 상태의 색상을 바꾼다.
+            item.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
+            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            document.getElementById("current-review-stage").value = data.stage
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4426,13 +4485,8 @@ function setReviewStage(stage) {
             let itemStage = document.getElementById("review-stage-"+data.id)
             itemStage.innerHTML = data.stage
             itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
-            // 해당 아이템의 Stage가 바뀌면 Status를 "wait"로 바꾼다.
-            let itemStatus = document.getElementById("reviewstatus-"+data.id)
-            itemStatus.innerHTML = "wait"
-            itemStatus.setAttribute("class","ml-1 badge badge-secondary")
             // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
             document.getElementById("current-review-stage").value = data.stage
-            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4743,6 +4797,53 @@ function addReviewComment() {
         data: {
             id: document.getElementById("current-review-id").value,
             text: document.getElementById("review-comment").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
+            let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
+            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
+            <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
+            <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
+            <br><small class="text-white">${body}</small>`
+            if (data.media != "") {
+                if (data.media.includes("http")) {
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+                        <a href="${data.media}">
+                            <img src="/assets/img/link.svg" class="finger">
+                        </a>
+                        <span class="text-white pl-2 small">${data.mediatitle}</span>
+                    </div>`
+                } else {
+                    newComment += `<div class="row pl-3 pt-3 pb-1">
+                        <a href="dilink://${data.media}">
+                            <img src="/assets/img/link.svg" class="finger">
+                        </a>
+                        <span class="text-white pl-2 small">${data.mediatitle}</span>
+                    </div>`
+                }
+            }
+            newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
+            document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
+            document.getElementById("review-comment").value = ""; // 입력한 값을 초기화 한다.
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function addReviewCommentText(text) {
+    $.ajax({
+        url: "/api/addreviewcomment",
+        type: "post",
+        data: {
+            id: document.getElementById("current-review-id").value,
+            text: text,
         },
         headers: {
             "Authorization": "Basic "+ document.getElementById("token").value
