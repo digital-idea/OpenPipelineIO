@@ -70,10 +70,6 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Task = task
 	stage := r.FormValue("stage")
-	if stage == "" {
-		http.Error(w, "stage를 설정해주세요", http.StatusBadRequest)
-		return
-	}
 	// stage가 빈문자열이라면 기본 설정을 적용한다.
 	if stage == "" {
 		rcp.Review.Stage, err = GetInitStageID(session)
