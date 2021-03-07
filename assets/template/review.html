@@ -102,6 +102,9 @@
                     <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
                     <br>
                     <small id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-text" class="text-white">
+                        {{if .Stage}}
+                            <span class="badge badge-stage-{{.Stage}}">{{.Stage}}</span>
+                        {{end}}
                         {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
                     </small>
                     <hr class="my-1 p-0 m-0 divider"></hr></div>

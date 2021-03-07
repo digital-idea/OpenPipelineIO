@@ -4797,6 +4797,7 @@ function addReviewComment() {
         data: {
             id: document.getElementById("current-review-id").value,
             text: document.getElementById("review-comment").value,
+            stage: document.getElementById("current-review-stage").value,
         },
         headers: {
             "Authorization": "Basic "+ document.getElementById("token").value
@@ -4809,7 +4810,9 @@ function addReviewComment() {
             <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
             <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
-            <br><small class="text-white">${body}</small>`
+            <br>
+            <span class="badge badge-stage-${data.stage}">${data.stage}</span>
+            <small class="text-white">${body}</small>`
             if (data.media != "") {
                 if (data.media.includes("http")) {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
