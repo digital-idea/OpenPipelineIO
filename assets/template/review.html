@@ -98,7 +98,7 @@
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
-                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}')">≡</span>
+                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
                     <br>
                     {{if .Stage}}
