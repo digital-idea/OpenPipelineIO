@@ -70,10 +70,6 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.Task = task
 	stage := r.FormValue("stage")
-	if stage == "" {
-		http.Error(w, "stage를 설정해주세요", http.StatusBadRequest)
-		return
-	}
 	// stage가 빈문자열이라면 기본 설정을 적용한다.
 	if stage == "" {
 		rcp.Review.Stage, err = GetInitStageID(session)
@@ -610,6 +606,7 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		MediaTitle string `json:"mediatitle"`
 		Author     string `json:"author"`
 		Date       string `json:"date"`
+		Stage      string `json:"stage"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -650,6 +647,25 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Stage = r.FormValue("stage")
+	// Stage가 빈문자열이 아니라면 Stage가 존재하는지 체크하기
+	if rcp.Stage != "" {
+		hasStage := false
+		stages, err := AllStages(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		for _, s := range stages {
+			if s.ID == rcp.Stage {
+				hasStage = true
+			}
+		}
+		if !hasStage {
+			http.Error(w, rcp.Stage+" Stage는 존재하지 않는 Stage 입니다", http.StatusBadRequest)
+			return
+		}
+	}
 	cmt := Comment{}
 	cmt.Date = time.Now().Format(time.RFC3339)
 	rcp.Date = cmt.Date
@@ -658,6 +674,7 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	cmt.Text = rcp.Text
 	cmt.Media = rcp.Media
 	cmt.MediaTitle = rcp.MediaTitle
+	cmt.Stage = rcp.Stage
 	err = addReviewComment(session, rcp.ID, cmt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

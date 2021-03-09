@@ -49,6 +49,7 @@ type Comment struct {
 	Text       string `json:"text"`       // 내용
 	Media      string `json:"media"`      // media 경로
 	MediaTitle string `json:"mediatitle"` // media 제목
+	Stage      string `json:"stage"`      // 코멘트가 달린 리뷰 Stage
 }
 
 // Source 자료구조는 글을 작성할 때 사용하는 자료구조이다.
