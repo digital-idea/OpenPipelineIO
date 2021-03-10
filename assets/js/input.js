@@ -1269,6 +1269,7 @@ function setEditReviewCommentModal(id, time) {
             for (let i = 0; i < data.comments.length; i++) {
                 if (data.comments[i].date == time) {
                     document.getElementById("modal-editreviewcomment-text").value = data.comments[i].text;
+                    document.getElementById("modal-editreviewcomment-media").value = data.comments[i].media;
                     break
                 }
             }
@@ -1461,6 +1462,7 @@ function editReviewComment() {
             id: document.getElementById("modal-editreviewcomment-id").value,
             time: document.getElementById("modal-editreviewcomment-time").value,
             text: document.getElementById("modal-editreviewcomment-text").value,
+            media: document.getElementById("modal-editreviewcomment-media").value,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -1468,6 +1470,11 @@ function editReviewComment() {
         dataType: "json",
         success: function(data) {
             document.getElementById(`reviewcomment-${data.id}-${data.time}-text`).innerText = data.text
+            if (data.media.startsWith("http") || data.media.startsWith("rvlink")) {
+                document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", data.media)
+            } else {
+                document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", "dilink://" + data.media)
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4797,6 +4804,7 @@ function addReviewComment() {
         data: {
             id: document.getElementById("current-review-id").value,
             text: document.getElementById("review-comment").value,
+            media: document.getElementById("review-media").value,
             stage: document.getElementById("current-review-stage").value,
         },
         headers: {
@@ -4832,7 +4840,9 @@ function addReviewComment() {
             }
             newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
             document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
-            document.getElementById("review-comment").value = ""; // 입력한 값을 초기화 한다.
+            // 입력한 값을 초기화 한다.
+            document.getElementById("review-comment").value = ""; 
+            document.getElementById("review-media").value = "";
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
