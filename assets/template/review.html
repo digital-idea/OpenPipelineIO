@@ -94,7 +94,7 @@
             </div>
             <hr class="my-1 p-0 m-0 divider"></hr>
             <!--comments-->
-            <div style="height: 59vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
+            <div style="height: 58vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
@@ -111,8 +111,13 @@
                 {{end}}
             </div>
             <!--comment input-->
-            <div style="height: 31vh">
-                <textarea class="form-control no-resize" id="review-comment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
+            <div style="height: 32vh">
+                <textarea class="form-control form-control-sm no-resize" id="review-comment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
+                <div class="pt-1 row">
+                    <div class="col">
+                        <input type="text" class="form-control form-control-sm w-100" id="review-media" placeholder="첨부할 Media: dilink:// or rvlink://">
+                    </div>
+                </div>
                 <div class="pt-1 row">
                     <div class="col pr-0">
                         <span class="btn btn-sm btn-outline-warning w-100" onclick="clickCommentButton()">comment</span>
