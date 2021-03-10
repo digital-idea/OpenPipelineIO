@@ -714,6 +714,7 @@ func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
 		ID     string `json:"id"`
 		Time   string `json:"time"`
 		Text   string `json:"text"`
+		Media  string `json:"media"`
 		UserID string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -748,7 +749,8 @@ func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Text = reviewText
-	err = EditReviewComment(session, rcp.ID, rcp.Time, rcp.Text)
+	rcp.Media = r.FormValue("media")
+	err = EditReviewComment(session, rcp.ID, rcp.Time, rcp.Text, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -107,6 +107,16 @@
                     <small id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-text" class="text-white">
                         {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
                     </small>
+                    {{if .Media}}
+                        <div class="row pl-3 pt-3 pb-1">
+                            <a id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-media" href="{{Protocol .Media}}://{{RmProtocol .Media}}">
+                                <img src="/assets/img/link.svg" class="finger">
+                            </a>
+                            {{if .MediaTitle}}
+                                <span class="text-white pl-2">{{.MediaTitle}}</span>
+                            {{end}}
+                        </div>
+                    {{end}}
                     <hr class="my-1 p-0 m-0 divider"></hr></div>
                 {{end}}
             </div>
