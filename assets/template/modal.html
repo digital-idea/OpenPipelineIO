@@ -1567,8 +1567,12 @@
                         <div class="form-group">
                             <label class="form-text">Stage</label>
                             <select class="form-control" id="modal-addreview-stage">
-                                {{range .Stages}}
-                                    <option value="{{.ID}}" {{if .InitStage}}selected{{end}}>{{.ID}}</option>
+                                {{if not .Stages}}
+                                    <option value="">Stage 등록필요</option>
+                                {{else}}
+                                    {{range .Stages}}
+                                        <option value="{{.ID}}" {{if .InitStage}}selected{{end}}>{{.ID}}</option>
+                                    {{end}}
                                 {{end}}
                             </select>
                             <small>리뷰 Stage 이름</small>
