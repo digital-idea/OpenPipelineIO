@@ -85,6 +85,10 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		if len(stages) == 0 {
+			http.Error(w, "Stage 설정이 필요합니다", http.StatusBadRequest)
+			return
+		}
 		for _, s := range stages {
 			if s.ID == stage {
 				hasStage = true
