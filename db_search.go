@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -417,10 +418,14 @@ func Search(session *mgo.Session, op SearchOption) ([]Item, error) {
 
 // SearchPage 함수는 페이지로 검색하는 함수이다. "아이템, totalpagenum, 에러" 를 반환한다.
 func SearchPage(session *mgo.Session, op SearchOption) ([]Item, int, error) {
+	results := []Item{}
+	// 서비스를 최초에 설치할 때는 Page 갯수가 0이되고 0으로 나누면 서버에서 에러가 나기 때문에 아래 에러처리가 필요하다.
+	if CachedAdminSetting.ItemNumberOfPage == 0 {
+		return results, 0, errors.New("페이지에 보이는 아이템 갯수가 0이 될 수 없습니다. Admin setting 설정이 필요합니다")
+	}
 	if op.Page <= 0 {
 		op.Page = 1
 	}
-	results := []Item{}
 	// 검색어가 없다면 바로 빈 값을 리턴한다.
 	if op.Searchword == "" {
 		return results, 0, nil
