@@ -188,6 +188,16 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		thumbnailImageHeight = 222
 	}
 	s.ThumbnailImageHeight = thumbnailImageHeight
+	productionStartFrame, err := strconv.Atoi(r.FormValue("ProductionStartFrame"))
+	if err != nil {
+		productionStartFrame = 1
+	}
+	s.ProductionStartFrame = productionStartFrame
+	productionPaddingVersionNumber, err := strconv.Atoi(r.FormValue("ProductionPaddingVersionNumber"))
+	if err != nil {
+		productionPaddingVersionNumber = 2
+	}
+	s.ProductionPaddingVersionNumber = productionPaddingVersionNumber
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

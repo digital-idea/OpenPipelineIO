@@ -472,6 +472,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ProductionStartFrame">Start Frame</label>
+                            <input type="number" class="form-control" id="ProductionStartFrame" name="ProductionStartFrame" min="1" max="10001" step="1" value="{{.Setting.ProductionStartFrame}}" >
+                            <small class="form-text text-muted">프로덕션에 약속한 시작프레임 수</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ProductionPaddingVersionNumber">버전 자리수</label>
+                            <input type="number" class="form-control" id="ProductionPaddingVersionNumber" name="ProductionPaddingVersionNumber" min="1" max="8" step="1" value="{{.Setting.ProductionPaddingVersionNumber}}" >
+                            <small class="form-text text-muted">프로덕션에서 사용하는 버전 자리수</small>
+                        </div>
+                    </div>
+                </div>
             </div>        
             
         </div>
