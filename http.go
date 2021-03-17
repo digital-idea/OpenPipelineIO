@@ -25,6 +25,7 @@ func LoadTemplates() (*template.Template, error) {
 
 //템플릿 함수를 로딩합니다.
 var funcMap = template.FuncMap{
+	"AddProductionStartFrame":      AddProductionStartFrame,
 	"title":                        strings.Title,
 	"Split":                        strings.Split,
 	"Join":                         strings.Join,
