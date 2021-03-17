@@ -603,14 +603,16 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		UserID     string `json:"userid"`
-		ID         string `json:"id"`
-		Text       string `json:"text"`
-		Media      string `json:"media"`
-		MediaTitle string `json:"mediatitle"`
-		Author     string `json:"author"`
-		Date       string `json:"date"`
-		Stage      string `json:"stage"`
+		UserID       string `json:"userid"`
+		ID           string `json:"id"`
+		Text         string `json:"text"`
+		Media        string `json:"media"`
+		MediaTitle   string `json:"mediatitle"`
+		Author       string `json:"author"`
+		Date         string `json:"date"`
+		Stage        string `json:"stage"`
+		Frame        int    `json:"frame"`
+		FrameComment bool   `json:"framecomment"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -670,6 +672,14 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	rcp.FrameComment = str2bool(r.FormValue("framecomment"))
+	frame, err := strconv.Atoi(r.FormValue("frame"))
+	if err != nil {
+		frame = 0
+	}
+	if rcp.FrameComment {
+		rcp.Frame = frame
+	}
 	cmt := Comment{}
 	cmt.Date = time.Now().Format(time.RFC3339)
 	rcp.Date = cmt.Date
@@ -679,6 +689,8 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	cmt.Media = rcp.Media
 	cmt.MediaTitle = rcp.MediaTitle
 	cmt.Stage = rcp.Stage
+	cmt.Frame = rcp.Frame
+
 	err = addReviewComment(session, rcp.ID, cmt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

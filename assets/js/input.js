@@ -4806,6 +4806,8 @@ function addReviewComment() {
             text: document.getElementById("review-comment").value,
             media: document.getElementById("review-media").value,
             stage: document.getElementById("current-review-stage").value,
+            frame: document.getElementById("currentframe").innerHTML,
+            framecomment: document.getElementById("review-framecomment").checked,
         },
         headers: {
             "Authorization": "Basic "+ document.getElementById("token").value
