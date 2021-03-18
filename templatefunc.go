@@ -676,5 +676,5 @@ func hasStatus(statuslist []string, status string) bool {
 
 // AddProductionStartFrame 템플릿함수는 프레임에 프로덕션 시작 프레임을 더한다.
 func AddProductionStartFrame(frame int) int {
-	return CachedAdminSetting.ProductionStartFrame + frame
+	return CachedAdminSetting.ProductionStartFrame + frame - 1
 }

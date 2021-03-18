@@ -4821,8 +4821,11 @@ function addReviewComment() {
             <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
             <br>
-            <span class="badge badge-stage-${data.stage}">${data.stage}</span>
-            <small class="text-white">${body}</small>`
+            <span class="badge badge-stage-${data.stage}">${data.stage}</span>`
+            if (data.framecomment) {
+                newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f</span>`
+            }
+            newComment += `<small class="text-white">${body}</small>`
             if (data.media != "") {
                 if (data.media.includes("http")) {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
@@ -4845,6 +4848,7 @@ function addReviewComment() {
             // 입력한 값을 초기화 한다.
             document.getElementById("review-comment").value = ""; 
             document.getElementById("review-media").value = "";
+            document.getElementById("review-framecomment").checked = false;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5296,7 +5300,6 @@ function selectReviewItem(id, project, fps) {
 function gotoFrame(frame, fps) {
     return ((parseFloat(frame) - (1.0/parseFloat(fps))) / parseFloat(fps))
 }
-
 
 // draw 함수는 x,y 좌표를 받아 그림을 그린다.
 function draw(curX, curY) {

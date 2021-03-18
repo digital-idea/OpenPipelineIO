@@ -603,18 +603,20 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		UserID       string `json:"userid"`
-		ID           string `json:"id"`
-		Text         string `json:"text"`
-		Media        string `json:"media"`
-		MediaTitle   string `json:"mediatitle"`
-		Author       string `json:"author"`
-		Date         string `json:"date"`
-		Stage        string `json:"stage"`
-		Frame        int    `json:"frame"`
-		FrameComment bool   `json:"framecomment"`
+		UserID               string `json:"userid"`
+		ID                   string `json:"id"`
+		Text                 string `json:"text"`
+		Media                string `json:"media"`
+		MediaTitle           string `json:"mediatitle"`
+		Author               string `json:"author"`
+		Date                 string `json:"date"`
+		Stage                string `json:"stage"`
+		Frame                int    `json:"frame"`
+		FrameComment         bool   `json:"framecomment"`
+		ProductionStartFrame int    `json:"productionstartframe"` // UX 를 그릴 때 필요하다.
 	}
 	rcp := Recipe{}
+	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
