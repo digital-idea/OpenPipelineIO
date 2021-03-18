@@ -1270,6 +1270,7 @@ function setEditReviewCommentModal(id, time) {
                 if (data.comments[i].date == time) {
                     document.getElementById("modal-editreviewcomment-text").value = data.comments[i].text;
                     document.getElementById("modal-editreviewcomment-media").value = data.comments[i].media;
+                    document.getElementById("modal-editreviewcomment-frame").value = data.comments[i].frame;
                     break
                 }
             }
@@ -1463,6 +1464,7 @@ function editReviewComment() {
             time: document.getElementById("modal-editreviewcomment-time").value,
             text: document.getElementById("modal-editreviewcomment-text").value,
             media: document.getElementById("modal-editreviewcomment-media").value,
+            frame: document.getElementById("modal-editreviewcomment-frame").value,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -1470,6 +1472,12 @@ function editReviewComment() {
         dataType: "json",
         success: function(data) {
             document.getElementById(`reviewcomment-${data.id}-${data.time}-text`).innerText = data.text
+            if (data.frame == 0) {
+                document.getElementById(`reviewcomment-${data.id}-${data.time}-frame`).remove();
+            } else {
+                document.getElementById(`reviewcomment-${data.id}-${data.time}-frame`).innerText = data.frame + "/" + (data.frame + data.productionstartframe - 1)
+            }
+            
             if (data.media.startsWith("http") || data.media.startsWith("rvlink")) {
                 document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", data.media)
             } else {
