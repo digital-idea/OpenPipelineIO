@@ -145,6 +145,9 @@
                     <div class="col p-0">
                         <span class="btn btn-sm btn-outline-success w-100" onclick="setReviewStatus('approve')">approve</span>
                     </div>
+                    <div class="col p-0">
+                        <span class="btn btn-sm btn-outline-secondary w-100" onclick="setReviewStatus('wait')">wait</span>
+                    </div>
                     <div class="col pl-0">
                         <select class="form-control form-control-sm" id="current-review-stage" onchange="setReviewStage(this.value)">
                             {{range .Stages}}
