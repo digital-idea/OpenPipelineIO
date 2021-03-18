@@ -4823,7 +4823,7 @@ function addReviewComment() {
             <br>
             <span class="badge badge-stage-${data.stage}">${data.stage}</span>`
             if (data.framecomment) {
-                newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f</span>`
+                newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f / ${data.frame+data.productionstartframe-1}f</span>`
             }
             newComment += `<small class="text-white">${body}</small>`
             if (data.media != "") {

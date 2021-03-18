@@ -105,7 +105,7 @@
                         <span class="badge badge-stage-{{.Stage}}">{{.Stage}}</span>
                     {{end}}
                     {{if ne .Frame 0}}
-                        <span class="badge badge-secondary finger" id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{.Frame}}f</span>
+                        <span class="badge badge-secondary finger" id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{.Frame}}f / {{AddProductionStartFrame .Frame}}f</span>
                     {{end}}
                     <small id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-text" class="text-white">
                         {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
