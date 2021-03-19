@@ -729,13 +729,16 @@ func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		ID     string `json:"id"`
-		Time   string `json:"time"`
-		Text   string `json:"text"`
-		Media  string `json:"media"`
-		UserID string `json:"userid"`
+		ID                   string `json:"id"`
+		Time                 string `json:"time"`
+		Text                 string `json:"text"`
+		Media                string `json:"media"`
+		UserID               string `json:"userid"`
+		Frame                int    `json:"frame"`
+		ProductionStartFrame int    `json:"productionstartframe"`
 	}
 	rcp := Recipe{}
+	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -768,7 +771,13 @@ func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Text = reviewText
 	rcp.Media = r.FormValue("media")
-	err = EditReviewComment(session, rcp.ID, rcp.Time, rcp.Text, rcp.Media)
+	frame, err := strconv.Atoi(r.FormValue("frame"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rcp.Frame = frame
+	err = EditReviewComment(session, rcp.ID, rcp.Time, rcp.Text, rcp.Media, rcp.Frame)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

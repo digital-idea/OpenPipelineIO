@@ -161,7 +161,7 @@ func addReviewComment(session *mgo.Session, id string, cmt Comment) error {
 }
 
 // EditReviewComment 함수는 review에 comment를 수정합니다.
-func EditReviewComment(session *mgo.Session, id, date, text, media string) error {
+func EditReviewComment(session *mgo.Session, id, date, text, media string, frame int) error {
 	session.SetMode(mgo.Monotonic, true)
 	reviewItem, err := getReview(session, id)
 	if err != nil {
@@ -172,6 +172,7 @@ func EditReviewComment(session *mgo.Session, id, date, text, media string) error
 		if comment.Date == date {
 			comment.Text = text
 			comment.Media = media
+			comment.Frame = frame
 		}
 		newComments = append(newComments, comment)
 	}
