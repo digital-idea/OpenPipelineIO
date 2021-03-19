@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -677,4 +678,12 @@ func hasStatus(statuslist []string, status string) bool {
 // AddProductionStartFrame 템플릿함수는 프레임에 프로덕션 시작 프레임을 더한다.
 func AddProductionStartFrame(frame int) int {
 	return CachedAdminSetting.ProductionStartFrame + frame - 1
+}
+
+func ProductionVersionFormat(version int) string {
+	n := strconv.Itoa(version)
+	for len(n) < CachedAdminSetting.ProductionPaddingVersionNumber {
+		n = "0" + n
+	}
+	return n
 }
