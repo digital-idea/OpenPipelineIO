@@ -63,6 +63,7 @@ var funcMap = template.FuncMap{
 	"TaskDate":                     TaskDate,
 	"TaskPredate":                  TaskPredate,
 	"GetTaskLevel":                 GetTaskLevel,
+	"ProductionVersion":            ProductionVersion,
 	"Protocol":                     Protocol,
 	"RmProtocol":                   RmProtocol,
 	"ProtocolTarget":               ProtocolTarget,
