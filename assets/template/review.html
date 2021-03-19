@@ -48,9 +48,9 @@
                             <span class="text-darkmode" id="{{.ID.Hex}}-name">{{.Name}}</span>
                             <span class="ml-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>
                             <span class="ml-1 badge badge-secondary">{{.AuthorNameKor}}</span>
-                            <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-mainversion">v{{ProductionVersion .MainVersion}}</span>
+                            <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-mainversion">v{{ProductionVersionFormat .MainVersion}}</span>
                             {{if ne .SubVersion 0 }} <!-- SubVersion 값이 0이면 SubVersion이 설정되지 않음을 의미한다. -->
-                                <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-subversion">w{{ProductionVersion .SubVersion}}</span>
+                                <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-subversion">w{{ProductionVersionFormat .SubVersion}}</span>
                             {{end}}
                             {{if eq .Status "comment" }}
                                 <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>

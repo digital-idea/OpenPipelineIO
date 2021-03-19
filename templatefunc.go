@@ -680,7 +680,7 @@ func AddProductionStartFrame(frame int) int {
 	return CachedAdminSetting.ProductionStartFrame + frame - 1
 }
 
-func ProductionVersion(version int) string {
+func ProductionVersionFormat(version int) string {
 	n := strconv.Itoa(version)
 	for len(n) < CachedAdminSetting.ProductionPaddingVersionNumber {
 		n = "0" + n
