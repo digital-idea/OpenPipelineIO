@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label for="modal-addcomment-mediatitle" class="col-form-label">Media Title</label>
-                        <input type="text" class="form-control" id="modal-addcomment-mediatitle">
+                        <input type="text" class="form-control" id="modal-addcommenxt-mediatitle">
                         <small class="form-text text-muted">Media 제목, 용도를 입력해주세요</small>
                     </div>
                     <div class="form-group">
@@ -1593,7 +1593,20 @@
                 </div>
                 <div class="form-group pt-0 m-0">
                     <label class="form-text">Path</label>
-                    <input type="text" class="form-control" placeholder="데일리로 올릴 미디어 경로" value="" id="modal-addreview-path">
+                    <input type="text" class="form-control" placeholder="review 데이터 경로" value="" id="modal-addreview-path">
+                </div>
+                <div class="form-group pt-1 m-0">
+                    <form id="clipDropzone" action="/upload-reviewfile" method="post" class="dropzone" enctype="multipart/form-data">
+                        <div class="fallback">
+                            <input name="file" type="file"/>
+                        </div>
+                    </form>
+                    <div class="mt-2">
+                        <button id="btn-upload-file" class="btn btn-outline-warning btn-block">Upload Files</button>
+                    </div>
+                    <div class="mt-2">
+                        <small class="form-text text-muted">업로드할 Review 파일을 Drag & Drop 해주세요.</small>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6 form-group">
