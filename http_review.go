@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -182,4 +186,64 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 	reviewStage := r.FormValue("reviewstage")
 	redirectURL := fmt.Sprintf("/review?searchword=%s&project=%s&stage=%s", searchword, reviewProject, reviewStage)
 	http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+}
+
+// handleUploadReviewFile 함수는 리뷰 파일을 업로드 한다.
+func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
+	// MultipartForm을 파싱합니다.
+	buffer := CachedAdminSetting.MultipartFormBufferSize // 이 절차를 위해 매번 DB에 접근하지 않기 위해서 CachedAdminSetting을 이용합니다.
+	err := r.ParseMultipartForm(int64(buffer))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	for _, files := range r.MultipartForm.File {
+		for _, f := range files {
+			if f.Size == 0 {
+				http.Error(w, "파일사이즈가 0 바이트입니다", http.StatusInternalServerError)
+				return
+			}
+			file, err := f.Open()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				continue
+			}
+			defer file.Close()
+			mimeType := f.Header.Get("Content-Type")
+			switch mimeType {
+			case "video/quicktime", "video/mp4":
+				ext := strings.ToLower(filepath.Ext(f.Filename))
+				if !(ext == ".mov" || ext == ".mp4") { // .mov, .mp4 외에는 허용하지 않는다.
+					http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
+					return
+				}
+				data, err := ioutil.ReadAll(file)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewDataPathPermission, 8, 64)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				path, err := ioutil.TempDir("", "")
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				err = ioutil.WriteFile(path+"/"+f.Filename, data, os.FileMode(filePerm))
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				fmt.Println(path + "/" + f.Filename)
+			default:
+				//허용하지 않는 파일 포맷입니다.
+				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
+				return
+			}
+		}
+	}
+	// 업로드 경로를 리턴한다.
 }
