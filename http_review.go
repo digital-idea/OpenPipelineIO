@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -190,6 +191,10 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 
 // handleUploadReviewFile 함수는 리뷰 파일을 업로드 한다.
 func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
+	type Recipe struct {
+		Path string `json:"path"`
+	}
+	rcp := Recipe{}
 	// MultipartForm을 파싱합니다.
 	buffer := CachedAdminSetting.MultipartFormBufferSize // 이 절차를 위해 매번 DB에 접근하지 않기 위해서 CachedAdminSetting을 이용합니다.
 	err := r.ParseMultipartForm(int64(buffer))
@@ -238,6 +243,7 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				fmt.Println(path + "/" + f.Filename)
+				rcp.Path = path + "/" + f.Filename
 			default:
 				//허용하지 않는 파일 포맷입니다.
 				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
@@ -246,4 +252,12 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// 업로드 경로를 리턴한다.
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }

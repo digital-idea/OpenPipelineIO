@@ -3533,7 +3533,10 @@ function __guardMethod__(obj, methodName, transform) {
 Dropzone.options.reviewFileDropzone = {
   autoProcessQueue: true,
   maxFiles: 1, // hdri는 최대 업로드 파일 개수를 1개로 제한한다.
-  success: function success() {
-    // 전송이 완료되면 필요한 데이터를 콘솔에 출력한다.
-  },
+  init: function() {
+    this.on("success", function(file, response) {
+      document.getElementById("modal-addreview-path").value = response.path;
+      document.getElementById("modal-addreview-path").disabled = true;
+    })
+  }
 }
