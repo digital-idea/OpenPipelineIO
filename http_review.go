@@ -242,7 +242,6 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-				fmt.Println(path + "/" + f.Filename)
 				rcp.Path = path + "/" + f.Filename
 			default:
 				//허용하지 않는 파일 포맷입니다.
@@ -251,7 +250,7 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	// 업로드 경로를 리턴한다.
+	// 업로드 경로를 리턴합니다. Dropzone에서 활용하기 위해 json으로 반환합니다.
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
