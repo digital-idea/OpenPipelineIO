@@ -3528,3 +3528,15 @@ function __guardMethod__(obj, methodName, transform) {
     return undefined;
   }
 }
+
+// 리뷰파일을 드레그엔 드롭할 때 설정값
+Dropzone.options.reviewFileDropzone = {
+  autoProcessQueue: true,
+  maxFiles: 1, // hdri는 최대 업로드 파일 개수를 1개로 제한한다.
+  init: function() {
+    this.on("success", function(file, response) {
+      document.getElementById("modal-addreview-path").value = response.path;
+      document.getElementById("modal-addreview-path").disabled = true;
+    })
+  }
+}
