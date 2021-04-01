@@ -4370,6 +4370,7 @@ function addReview() {
             fps: reviewFps.options[reviewFps.selectedIndex].value,
             mainversion: document.getElementById("modal-addreview-mainversion").value,
             subversion: document.getElementById("modal-addreview-subversion").value,
+            removeafterprocess: document.getElementById("modal-addreview-removeafterprocess").checked,
         },
         headers: {
             "Authorization": "Basic "+ token

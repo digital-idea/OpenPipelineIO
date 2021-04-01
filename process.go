@@ -122,6 +122,17 @@ func processingItem(review Review) {
 		}
 		return
 	}
+	// 연산이 끝나고 해당 파일을 삭제해야 한다면 삭제를 진행한다.
+	if review.RemoveAfterProcess {
+		err = os.Remove(review.Path)
+		if err != nil {
+			err = setErrReview(session, reviewID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
 	// 연산 상태를 done 으로 바꾼다.
 	err = setReviewProcessStatus(session, reviewID, "done")
 	if err != nil {

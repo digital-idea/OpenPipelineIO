@@ -172,6 +172,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
