@@ -3534,11 +3534,15 @@ Dropzone.options.reviewFileDropzone = {
   autoProcessQueue: true,
   maxFiles: 1, // hdri는 최대 업로드 파일 개수를 1개로 제한한다.
   init: function() {
+    this.on("sending", function(file, xhr, formData){
+      formData.append("project", document.getElementById("modal-addreview-project").value);
+      formData.append("task", document.getElementById("modal-addreview-task").value);
+    });
     this.on("success", function(file, response) {
       document.getElementById("modal-addreview-path").value = response.path;
       document.getElementById("modal-addreview-path").disabled = true;
       document.getElementById("modal-addreview-removeafterprocess").disabled = false;
       document.getElementById("modal-addreview-removeafterprocess").checked = true;
-    })
+    });
   }
 }
