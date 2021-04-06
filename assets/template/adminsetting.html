@@ -364,14 +364,14 @@
                         <div class="form-group">
                             <label for="ReviewDataPath">Review Data Path</label>
                             <input type="text" class="form-control" id="ReviewDataPath" name="ReviewDataPath" placeholder="/path/review" value={{.Setting.ReviewDataPath}}>
-                            <small class="form-text text-muted">리뷰데이터가 쌓이는 경로를 설정합니다.</small>
+                            <small class="form-text text-muted">컨버팅이 완료된 웹브라우저용 리뷰데이터가 쌓이는 경로를 설정합니다.</small>
                         </div>
                     </div>
                     <div class="col-2">
                         <div class="form-group">
                             <label for="ReviewDataPathPermission">Permission</label>
                             <input type="text" class="form-control" id="ReviewDataPathPermission" name="ReviewDataPathPermission" placeholder="0775" value={{.Setting.ReviewDataPathPermission}}>
-                            <small class="form-text text-muted">Plate Path 권한설정 값</small>
+                            <small class="form-text text-muted">권한설정 값</small>
                         </div>
                     </div>
                     <div class="col-2">
@@ -385,6 +385,36 @@
                         <div class="form-group">
                             <label for="ReviewDataPathGID">GID</label>
                             <input type="text" class="form-control" id="ReviewDataPathGID" name="ReviewDataPathGID" placeholder="500" value={{.Setting.ReviewDataPathGID}}>
+                            <small class="form-text text-muted">그룹 ID</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="ReviewUploadPath">Review Upload Path</label>
+                            <input type="text" class="form-control" id="ReviewUploadPath" name="ReviewUploadPath" placeholder="/path/reviewupload" value={{.Setting.ReviewUploadPath}}>
+                            <small class="form-text text-muted">리뷰 데이터가 업로드 되는 경로를 설정합니다.</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewUploadPathPermission">Permission</label>
+                            <input type="text" class="form-control" id="ReviewUploadPathPermission" name="ReviewUploadPathPermission" placeholder="0775" value={{.Setting.ReviewUploadPathPermission}}>
+                            <small class="form-text text-muted">Path 권한설정 값</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewUploadPathUID">UID</label>
+                            <input type="text" class="form-control" id="ReviewUploadPathUID" name="ReviewUploadPathUID" placeholder="500" value={{.Setting.ReviewUploadPathUID}}>
+                            <small class="form-text text-muted">소유자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label for="ReviewUploadPathGID">GID</label>
+                            <input type="text" class="form-control" id="ReviewUploadPathGID" name="ReviewUploadPathGID" placeholder="500" value={{.Setting.ReviewUploadPathGID}}>
                             <small class="form-text text-muted">그룹 ID</small>
                         </div>
                     </div>

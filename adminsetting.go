@@ -60,6 +60,10 @@ type Setting struct {
 	ReviewDataPathPermission       string `json:"reviewdatapathpermission"`       // 리뷰 데이터가 저장되는 경로의 권한
 	ReviewDataPathUID              string `json:"reviewdatapathuid"`              // 리뷰 데이터가 저장되는 경로의 User ID
 	ReviewDataPathGID              string `json:"reviewdatapathgid"`              // 리뷰 데이터가 저장되는 경로의 Group ID
+	ReviewUploadPath               string `json:"reviewuploadpath"`               // 리뷰 업로드 파일이 저장되는 경로
+	ReviewUploadPathPermission     string `json:"reviewuploadpathpermission"`     // 리뷰 업로드 파일이 저장되는 경로의 권한
+	ReviewUploadPathUID            string `json:"reviewuploadpathuid"`            // 리뷰 업로드 파일이 저장되는 경로의 User ID
+	ReviewUploadPathGID            string `json:"reviewuploadpathgid"`            // 리뷰 업로드 파일이 저장되는 경로의 Group ID
 	ProductionStartFrame           int    `json:"prodcutionstartframe"`           // 프로덕션의 시작프레임
 	ProductionPaddingVersionNumber int    `json:"productionpaddingversionnumber"` // 프로덕션의 버전 자리수
 

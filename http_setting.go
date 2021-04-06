@@ -137,6 +137,10 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ReviewDataPathPermission = r.FormValue("ReviewDataPathPermission")
 	s.ReviewDataPathUID = r.FormValue("ReviewDataPathUID")
 	s.ReviewDataPathGID = r.FormValue("ReviewDataPathGID")
+	s.ReviewUploadPath = r.FormValue("ReviewUploadPath")
+	s.ReviewUploadPathPermission = r.FormValue("ReviewUploadPathPermission")
+	s.ReviewUploadPathUID = r.FormValue("ReviewUploadPathUID")
+	s.ReviewUploadPathGID = r.FormValue("ReviewUploadPathGID")
 
 	s.RunScriptAfterSignup = r.FormValue("RunScriptAfterSignup")
 	s.RunScriptAfterEditUserProfile = r.FormValue("RunScriptAfterEditUserProfile")

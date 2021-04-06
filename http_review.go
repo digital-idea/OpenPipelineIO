@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -192,9 +194,18 @@ func handleReviewSubmit(w http.ResponseWriter, r *http.Request) {
 // handleUploadReviewFile 함수는 리뷰 파일을 업로드 한다.
 func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
-		Path string `json:"path"`
+		Path     string `json:"path"`
+		Unixtime string `json:"unixtime"`
+		Project  string `json:"project"`
+		Vendor   string `json:"vendor"`
+		Partner  string `json:"partner"`
+		Task     string `json:"task"`
+		Year     string `json:"year"`
+		Month    string `json:"month"`
+		Day      string `json:"day"`
 	}
 	rcp := Recipe{}
+	rcp.Unixtime = fmt.Sprintf("%d", time.Now().Unix())
 	// MultipartForm을 파싱합니다.
 	buffer := CachedAdminSetting.MultipartFormBufferSize // 이 절차를 위해 매번 DB에 접근하지 않기 위해서 CachedAdminSetting을 이용합니다.
 	err := r.ParseMultipartForm(int64(buffer))
@@ -202,6 +213,14 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	rcp.Project = r.FormValue("project")
+	rcp.Vendor = r.FormValue("vendor")
+	rcp.Partner = r.FormValue("partner")
+	rcp.Task = r.FormValue("task")
+	y, m, d := time.Now().Date()
+	rcp.Year = fmt.Sprintf("%04d", y)
+	rcp.Month = fmt.Sprintf("%02d", int(m))
+	rcp.Day = fmt.Sprintf("%02d", d)
 	for _, files := range r.MultipartForm.File {
 		for _, f := range files {
 			if f.Size == 0 {
@@ -227,15 +246,55 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-				filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewDataPathPermission, 8, 64)
+				filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewUploadPathPermission, 8, 64)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-				path, err := ioutil.TempDir("", "")
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
+				var path string
+				if CachedAdminSetting.ReviewUploadPath == "" {
+					path, err = ioutil.TempDir("", "")
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+				} else {
+					// Review Upload Path를 파싱한다.
+					var reviewUploadPath bytes.Buffer
+					reviewUploadPathTmpl, err := template.New("reviewUploadPath").Parse(CachedAdminSetting.ReviewUploadPath)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					err = reviewUploadPathTmpl.Execute(&reviewUploadPath, rcp)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					path = reviewUploadPath.String()
+					// path가 존재하지 않으면 생성한다.
+					if _, err := os.Stat(path); os.IsNotExist(err) {
+						err = os.MkdirAll(path, os.FileMode(filePerm))
+						if err != nil {
+							http.Error(w, err.Error(), http.StatusInternalServerError)
+							return
+						}
+					}
+					uid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathUID)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					gid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathGID)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					err = os.Chown(path, uid, gid)
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
 				}
 				err = ioutil.WriteFile(path+"/"+f.Filename, data, os.FileMode(filePerm))
 				if err != nil {
