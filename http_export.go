@@ -750,7 +750,8 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		if tags != "" {
 			for _, tag := range strings.Split(tags, ",") {
-				_, err = AddTag(session, project, name+"_"+typ, tag)
+				removeSpaceTag := strings.Replace(tag, " ", "", -1) // Tag에 존재하는 띄어쓰기를 제거한다.
+				_, err = AddTag(session, project, name+"_"+typ, removeSpaceTag)
 				if err != nil {
 					rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 					continue
