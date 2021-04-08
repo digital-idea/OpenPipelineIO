@@ -1053,14 +1053,14 @@ function addComment() {
                     if (data.media != "") {
                         if (data.media.includes("http")) {
                             newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="${data.media}">
+								<a href="${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
 							</div>`
                         } else {
                             newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}">
+								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1102,14 +1102,14 @@ function addComment() {
                 if (data.media != "") {
                     if (data.media.includes("http")) {
                         newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="${data.media}">
+								<a href="${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
 							</div>`
                     } else {
                         newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}">
+								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1159,14 +1159,14 @@ function editComment() {
             if (data.media != "") {
                 if (data.media.includes("http")) {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="${data.media}">
+								<a href="${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
 							</div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}">
+								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1601,7 +1601,7 @@ function addSource(project, id, title, path) {
                     if (path.startsWith("http")) {
                         source = `<div id="source-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                     } else {
-                        source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                        source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                     }
                     document.getElementById("sources-"+data.name).innerHTML = document.getElementById("sources-"+data.name).innerHTML + source;
                     // 요소갯수에 따라 버튼을 설정한다.
@@ -1643,7 +1643,7 @@ function addSource(project, id, title, path) {
                 if (path.startsWith("http")) {
                     source = `<div id="source-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                 } else {
-                    source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                    source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                 }
                 document.getElementById("sources-"+data.name).innerHTML = document.getElementById("sources-"+data.name).innerHTML + source;
                 // 요소갯수에 따라 버튼을 설정한다.
@@ -1788,7 +1788,7 @@ function addReference(project, id, title, path) {
                     if (path.startsWith("http")) {
                         ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                     } else {
-                        ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                        ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                     }
                     document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
                     // 요소갯수에 따라 버튼을 설정한다.
@@ -1830,7 +1830,7 @@ function addReference(project, id, title, path) {
                 if (path.startsWith("http")) {
                     ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                 } else {
-                    ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
+                    ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                 }
                 document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
                 // 요소갯수에 따라 버튼을 설정한다.
@@ -4838,14 +4838,14 @@ function addReviewComment() {
             if (data.media != "") {
                 if (data.media.includes("http")) {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="${data.media}">
+                        <a href="${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
                     </div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="dilink://${data.media}">
+                        <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -4888,14 +4888,14 @@ function addReviewCommentText(text) {
             if (data.media != "") {
                 if (data.media.includes("http")) {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="${data.media}">
+                        <a href="${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
                     </div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="dilink://${data.media}">
+                        <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
