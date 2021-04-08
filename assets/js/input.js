@@ -5509,7 +5509,7 @@ function copyClipboard(value) {
     document.body.removeChild(id);              // body에 요소 삭제
 }
 
-// copyClipboardAndMessage 는 value 값을 받아서, 클립보드로 복사하는 기능이다.
+// copyClipboardAndMessage 는 value 값을 받아서, 클립보드로 복사하는 기능이다. 이후 메시지를 출력한다.
 function copyClipboardAndMessage(value) {
     let id = document.createElement("input");   // input요소를 만듬
     id.setAttribute("value", value);            // input요소에 값을 추가
