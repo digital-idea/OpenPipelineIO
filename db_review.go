@@ -110,6 +110,9 @@ func searchReview(session *mgo.Session, searchword string) ([]Review, error) {
 	c := session.DB("csi").C("review")
 	allQueries := []bson.M{}
 	for _, word := range strings.Split(searchword, " ") {
+		if len(word) < 2 { // 한글자의 단어는 무시한다.
+			continue
+		}
 		orQueries := []bson.M{}
 		if strings.HasPrefix(word, "daily:") {
 			if strings.TrimPrefix(word, "daily:") == "" {
