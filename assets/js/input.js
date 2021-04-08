@@ -5499,8 +5499,18 @@ function removeDrawingAndData() {
     })
 }
 
-// copyButton 은 value 값을 받아서, 클립보드로 복사하는 기능이다.
-function copyButton(value) {
+// copyClipboard 는 value 값을 받아서, 클립보드로 복사하는 기능이다.
+function copyClipboard(value) {
+    let id = document.createElement("input");   // input요소를 만듬
+    id.setAttribute("value", value);            // input요소에 값을 추가
+    document.body.appendChild(id);              // body에 요소 추가
+    id.select();                                // input요소를 선택
+    document.execCommand("copy");               // 복사기능 실행
+    document.body.removeChild(id);              // body에 요소 삭제
+}
+
+// copyClipboardAndMessage 는 value 값을 받아서, 클립보드로 복사하는 기능이다.
+function copyClipboardAndMessage(value) {
     let id = document.createElement("input");   // input요소를 만듬
     id.setAttribute("value", value);            // input요소에 값을 추가
     document.body.appendChild(id);              // body에 요소 추가
