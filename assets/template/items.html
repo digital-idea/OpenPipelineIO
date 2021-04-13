@@ -438,7 +438,7 @@
 				<div id="sources-{{.Name}}" class="row">
 					{{range .Sources -}}
 						<div id="source-{{$name}}-{{.Title}}">
-							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}" onclick="copyClipboard('{{.Path}}')">{{.Title}}</a>
 						</div>
 					{{- end}}
 				</div>
@@ -462,7 +462,7 @@
 				<div id="references-{{.Name}}" class="row">
 					{{range .References -}}
 						<div id="reference-{{$name}}-{{.Title}}">
-							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}">{{.Title}}</a>
+							<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}" onclick="copyClipboard('{{.Path}}')">{{.Title}}</a>
 						</div>
 					{{- end}}
 				</div>
@@ -562,7 +562,7 @@
 						{{end}}
 						{{if .Media}}
 							<div class="row pl-3 pt-3 pb-1">
-								<a href="{{Protocol .Media}}://{{RmProtocol .Media}}">
+								<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" onclick="copyClipboard('{{.Media}}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2">{{.MediaTitle}}</span>

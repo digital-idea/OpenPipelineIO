@@ -32,7 +32,8 @@
         <div class="col-lg-4 col-sm-8 w-10 mx-auto text-center">
             <div class="form-group">
                 <label>Token Key</label>
-                <input type="text" name="Token" class="form-control" placeholder="Token" value="{{.Token}}" readonly>
+                <input type="text" name="Token" class="form-control" placeholder="Token" value="{{.Token}}" readonly onclick="copyClipboardAndMessage('{{.Token}}')">
+                <small class="form-text text-muted">위 값을 클릭하면 클립보드로 복사됩니다.</small>
                 <small class="form-text text-muted">restAPI를 접근할 때 사용하는 Token 키입니다.</small>
             </div>
         </div>
@@ -43,6 +44,7 @@
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
+<script src="/assets/js/input.js"></script>
 <script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
 </html>
 {{end}}
