@@ -28,7 +28,10 @@
     <a href="/users?search=tag:{{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
 {{end}}
 {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-    <a href="/replacetag" class="btn btn-danger btn-sm p-1 mt-1">태그이름변경</a>
+    <a href="/replacetag" class="btn btn-outline-warning btn-sm p-1 mt-1">태그이름변경</a>
+{{end}}
+{{if eq .User.AccessLevel 9 10 11}}
+    <span class="btn btn-outline-danger btn-sm p-1 mt-1">패스워드 초기화</span>
 {{end}}
 </div>
 
@@ -37,12 +40,10 @@
         {{range .Users}}
         
         <div class="card w-10 mx-auto m-3 {{if eq .AccessLevel 0}}bg-danger{{else}}bg-darkmode{{end}}">
-            <a href="/user?id={{.ID}}">
-                <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
-            </a>
+            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
             <div class="card-body text-center">
-                <h4 class="card-title">{{.LastNameKor}}{{.FirstNameKor}}{{if .FirstNameChn}}({{.LastNameChn}}{{.FirstNameChn}}){{end}}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
+                <h4 class="card-title finger" onclick="window.location='/user?id={{.ID}}'">{{.LastNameKor}}{{.FirstNameKor}}{{if .FirstNameChn}}({{.LastNameChn}}{{.FirstNameChn}}){{end}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted finger" onclick="window.location='/user?id={{.ID}}'">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>
                 <p class="card-text">
                     <small>{{.EmployeeNumber}}</small><br>
                     <a href="mailto:{{.Email}}" class="text-darkmode"><small>{{.Email}}</small></a><br>
