@@ -72,4 +72,5 @@ type Setting struct {
 	MultipartFormBufferSize              int     `json:"multipartformbuffersize"`              // Multipart form buffer size
 	ThumbnailImageWidth                  int     `json:"thumbnailimagewidth"`                  // Thumbnail Image 가로사이즈
 	ThumbnailImageHeight                 int     `json:"thumbnailimageheight"`                 // Thumbnail Image 세로사이즈
+	InitPassword                         string  `json:"initpassword"`                         // 사용자가 패스워드를 잃어버렸을 때 사용하는 패스워드
 }
