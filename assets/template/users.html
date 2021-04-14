@@ -38,9 +38,8 @@
 <div class="p-3">
     <div class="row">
         {{range .Users}}
-        
-        <div class="card w-10 mx-auto m-3 {{if eq .AccessLevel 0}}bg-danger{{else}}bg-darkmode{{end}}">
-            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280">
+        <div class="card w-10 mx-auto m-3 {{if eq .AccessLevel 0}}bg-danger{{else}}bg-darkmode{{end}}" id={{.ID}}>
+            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280" onclick="selectUserID('{{.ID}}')">
             <div class="card-body text-center">
                 <h4 class="card-title finger" onclick="window.location='/user?id={{.ID}}'">{{.LastNameKor}}{{.FirstNameKor}}{{if .FirstNameChn}}({{.LastNameChn}}{{.FirstNameChn}}){{end}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted finger" onclick="window.location='/user?id={{.ID}}'">{{.FirstNameEng}} {{.LastNameEng}}<br>{{.ID}}</h6>

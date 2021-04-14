@@ -5634,3 +5634,14 @@ function redirectPage(page) {
     let url = href.toString();
     window.location.href = url
 }
+
+function selectUserID(id) {
+    let yellow = "rgb(255, 196, 35)" // 선택된 색상
+    let grey = "rgb(167, 165, 157)" // 기본 색상
+    if (document.getElementById(id).style.borderColor === yellow) {
+        document.getElementById(id).style.borderColor = grey
+    } else {
+        document.getElementById(id).style.borderColor = yellow
+    }
+    
+}
