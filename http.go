@@ -421,6 +421,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/validuser", handleAPIValidUser) // 보안취약점 이슈가 있다. 다른 툴과 쉽게 연동할 때 편리하다. 보안레벨을 높게 올릴때는 허용하지 않도록 한다.
 	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
 	http.HandleFunc("/api/autocompliteusers", handleAPIAutoCompliteUsers)
+	http.HandleFunc("/api/initpassword", handleAPIInitPassword)
 
 	// restAPI Organization
 	http.HandleFunc("/api/teams", handleAPIAllTeams)

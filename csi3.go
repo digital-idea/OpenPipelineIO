@@ -166,7 +166,7 @@ func main() {
 			log.Fatal(err)
 		}
 		defer session.Close()
-		err = initPassUser(session, *flagID)
+		err = initPassUser(session, *flagID, *flagInitPass)
 		if err != nil {
 			log.Fatal(err)
 		}
