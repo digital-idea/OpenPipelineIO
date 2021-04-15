@@ -5652,8 +5652,25 @@ function initPasswordUsers() {
     let usercards = document.getElementsByClassName("usercard");
     for (let i = 0; i < usercards.length; i++) {
         let userID = usercards[i].id
-        if (document.getElementById(userID).style.borderColor === selectColor) {
-            console.log(userID)
+        if (document.getElementById(userID).style.borderColor !== selectColor) {
+            continue
         }
+        $.ajax({
+            url: "/api/initpassword",
+            type: "post",
+            data: {
+                id: userID,
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                alert(data.id + " 사용자의 패스워드가 초기화 되었습니다.");
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
     }
 }
