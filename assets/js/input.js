@@ -5648,6 +5648,7 @@ function selectUserID(id) {
 
 function initPasswordUsers() {
     let selectColor = "rgb(255, 196, 35)" // 선택된 색상
+    let nonSelectColor = "rgb(167, 165, 157)" // 기본 색상
     // 선택된 사용자를 출력한다.
     let usercards = document.getElementsByClassName("usercard");
     for (let i = 0; i < usercards.length; i++) {
@@ -5666,7 +5667,9 @@ function initPasswordUsers() {
             },
             dataType: "json",
             success: function(data) {
-                alert(data.id + " 사용자의 패스워드가 초기화 되었습니다.");
+                // 성공하면 원래 색상으로 돌린다.
+                document.getElementById(data.id).style.borderColor = nonSelectColor
+                alert(`${data.id} 사용자의 패스워드가 초기화 되었습니다.`);
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
