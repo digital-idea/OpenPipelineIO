@@ -31,14 +31,14 @@
     <a href="/replacetag" class="btn btn-outline-warning btn-sm p-1 mt-1">태그이름변경</a>
 {{end}}
 {{if eq .User.AccessLevel 9 10 11}}
-    <span class="btn btn-outline-danger btn-sm p-1 mt-1">패스워드 초기화</span>
+    <span class="btn btn-outline-danger btn-sm p-1 mt-1" onclick="initPasswordUsers()">패스워드 초기화</span>
 {{end}}
 </div>
 
 <div class="p-3">
     <div class="row">
         {{range .Users}}
-        <div class="card w-10 mx-auto m-3 {{if eq .AccessLevel 0}}bg-danger{{else}}bg-darkmode{{end}}" id={{.ID}}>
+        <div class="usercard card w-10 mx-auto m-3 {{if eq .AccessLevel 0}}bg-danger{{else}}bg-darkmode{{end}}" id={{.ID}}>
             <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280" onclick="selectUserID('{{.ID}}')">
             <div class="card-body text-center">
                 <h4 class="card-title finger" onclick="window.location='/user?id={{.ID}}'">{{.LastNameKor}}{{.FirstNameKor}}{{if .FirstNameChn}}({{.LastNameChn}}{{.FirstNameChn}}){{end}}</h4>

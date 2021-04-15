@@ -5645,3 +5645,15 @@ function selectUserID(id) {
     }
     
 }
+
+function initPasswordUsers() {
+    let selectColor = "rgb(255, 196, 35)" // 선택된 색상
+    // 선택된 사용자를 출력한다.
+    let usercards = document.getElementsByClassName("usercard");
+    for (let i = 0; i < usercards.length; i++) {
+        let userID = usercards[i].id
+        if (document.getElementById(userID).style.borderColor === selectColor) {
+            console.log(userID)
+        }
+    }
+}
