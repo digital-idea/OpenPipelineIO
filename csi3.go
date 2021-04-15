@@ -83,7 +83,6 @@ var (
 	flagPlatePath          = flag.String("platepath", "", "Plate 경로")
 	// Commandline Args: User
 	flagID                = flag.String("id", "", "user id")
-	flagInitPass          = flag.String("initpass", "", "initialize user password")
 	flagAccessLevel       = flag.Int("accesslevel", -1, "edit user Access Level")
 	flagSignUpAccessLevel = flag.Int("signupaccesslevel", 3, "signup access level")
 	// scan정보 추가. plate scan tool에서 데이터를 등록할 때 활용되는 옵션
@@ -152,37 +151,6 @@ func main() {
 			log.Fatal(err)
 		}
 		err = addToken(session, u)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return
-
-	} else if *flagInitPass != "" && *flagID != "" {
-		if user.Username != "root" {
-			log.Fatal(errors.New("사용자의 비밀변호를 변경하기 위해서는 root 권한이 필요합니다"))
-		}
-		session, err := mgo.Dial(*flagDBIP)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer session.Close()
-		err = initPassUser(session, *flagID, *flagInitPass)
-		if err != nil {
-			log.Fatal(err)
-		}
-		u, err := getUser(session, *flagID)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = rmToken(session, u.ID)
-		if err != nil {
-			log.Println(err)
-		}
-		err = addToken(session, u)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = dilog.Add(*flagDBIP, ip, fmt.Sprintf("initpass - ID: %s 사용자의 패스워드가 초기화 되었습니다", *flagID), "", "", "csi", "root", 180)
 		if err != nil {
 			log.Fatal(err)
 		}
