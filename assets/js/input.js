@@ -1,3 +1,7 @@
+
+var SELECT_COLOR = "rgb(255, 196, 35)" // 선택된 색상
+var NON_SELECT_COLOR = "rgb(167, 165, 157)" // 기본 색상
+
 // modal이 뜨면 오토포커스가 되어야 한다.
 $('#modal-addcomment').on('shown.bs.modal', function () {
     $('#modal-addcomment-text').trigger('focus')
@@ -5636,24 +5640,19 @@ function redirectPage(page) {
 }
 
 function selectUserID(id) {
-    let selectColor = "rgb(255, 196, 35)" // 선택된 색상
-    let nonSelectColor = "rgb(167, 165, 157)" // 기본 색상
-    if (document.getElementById(id).style.borderColor === selectColor) {
-        document.getElementById(id).style.borderColor = nonSelectColor
+    if (document.getElementById(id).style.borderColor === SELECT_COLOR) {
+        document.getElementById(id).style.borderColor = NON_SELECT_COLOR
     } else {
-        document.getElementById(id).style.borderColor = selectColor
+        document.getElementById(id).style.borderColor = SELECT_COLOR
     }
-    
 }
 
 function initPasswordUsers() {
-    let selectColor = "rgb(255, 196, 35)" // 선택된 색상
-    let nonSelectColor = "rgb(167, 165, 157)" // 기본 색상
     // 선택된 사용자를 출력한다.
     let usercards = document.getElementsByClassName("usercard");
     for (let i = 0; i < usercards.length; i++) {
         let userID = usercards[i].id
-        if (document.getElementById(userID).style.borderColor !== selectColor) {
+        if (document.getElementById(userID).style.borderColor !== SELECT_COLOR) {
             continue
         }
         $.ajax({
@@ -5668,7 +5667,7 @@ function initPasswordUsers() {
             dataType: "json",
             success: function(data) {
                 // 성공하면 원래 색상으로 돌린다.
-                document.getElementById(data.id).style.borderColor = nonSelectColor
+                document.getElementById(data.id).style.borderColor = NON_SELECT_COLOR
                 alert(`${data.id} 사용자의 패스워드가 초기화 되었습니다.`);
             },
             error: function(request,status,error){
