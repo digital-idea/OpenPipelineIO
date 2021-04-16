@@ -1,3 +1,7 @@
+
+var SELECT_COLOR = "rgb(255, 196, 35)" // 선택된 색상
+var NON_SELECT_COLOR = "rgb(167, 165, 157)" // 기본 색상
+
 // modal이 뜨면 오토포커스가 되어야 한다.
 $('#modal-addcomment').on('shown.bs.modal', function () {
     $('#modal-addcomment-text').trigger('focus')
@@ -5633,4 +5637,42 @@ function redirectPage(page) {
     href.searchParams.set('page', page);
     let url = href.toString();
     window.location.href = url
+}
+
+function selectUserID(id) {
+    if (document.getElementById(id).style.borderColor === SELECT_COLOR) {
+        document.getElementById(id).style.borderColor = NON_SELECT_COLOR
+    } else {
+        document.getElementById(id).style.borderColor = SELECT_COLOR
+    }
+}
+
+function initPasswordUsers() {
+    // 선택된 사용자를 출력한다.
+    let usercards = document.getElementsByClassName("usercard");
+    for (let i = 0; i < usercards.length; i++) {
+        let userID = usercards[i].id
+        if (document.getElementById(userID).style.borderColor !== SELECT_COLOR) {
+            continue
+        }
+        $.ajax({
+            url: "/api/initpassword",
+            type: "post",
+            data: {
+                id: userID,
+            },
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value
+            },
+            dataType: "json",
+            success: function(data) {
+                // 성공하면 원래 색상으로 돌린다.
+                document.getElementById(data.id).style.borderColor = NON_SELECT_COLOR
+                alert(`${data.id} 사용자의 패스워드가 초기화 되었습니다.`);
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
 }

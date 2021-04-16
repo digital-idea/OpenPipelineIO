@@ -27,23 +27,24 @@ CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한�
 # RestAPI User
 
 ## Get
-| uri | description | attribute name | example |
+| Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/user | 유저정보를 가지고 오기 | id | `$ curl http://csi.lazypic.org/api/user?id=woong` |
-| /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=팀장` |
-| /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=합성팀,1팀,팀장` |
-| /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl http://192.168.219.104/api/users?searchword=개발팀,1팀` |
-| /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl http://192.168.219.104/api/autocompliteusers` |
+| /api/user | 유저정보를 가지고 오기 | id | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/user?id=woong` |
+| /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=팀장` |
+| /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=합성팀,1팀,팀장` |
+| /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=개발팀,1팀` |
+| /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/autocompliteusers` |
 
 
 ## Post
-| uri | description | attribute name | example |
+| Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/validuser | 유저가 유효한지 체크 | id, pw | `$ curl -d "id=id&pw=password" http://127.0.0.1/api/validuser` |
-| /api/setleaveuser | 유저가 퇴사 상태 설정(권한은 Unknown으로 변경)| id, leave | `$ curl -d "id=id&leave=true" http://127.0.0.1/api/setleaveuser` |
+| /api/validuser | 사용자의 ID,Password가 유효한지 체크 | id, pw | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&pw=password" https://csi.lazypic.org/api/validuser` |
+| /api/setleaveuser | 사용자의 퇴사 상태 설정(권한은 Unknown으로 변경)| id, leave | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&leave=true" https://csi.lazypic.org/api/setleaveuser` |
+| /api/initpassword | 사용자의 패스워드를 리셋한다.| id | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=userid" https://csi.lazypic.org/api/initpassword` |
 
 ## Delete
-| uri | description | attribute name | example |
+| Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api2/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://csi.lazypic.org/api2/user?id=woong` |
 

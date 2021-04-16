@@ -302,3 +302,72 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIInitPassword 함수는 User의 패스워드를 Adminsetting에 설정된 패스워드를 이용해서 패스워드를 리셋한다.
+func handleAPIInitPassword(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		ID          string      `json:"id"`
+		AccessLevel AccessLevel `json:"accesslevel"`
+		UserID      string      `json:"userid"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, rcp.AccessLevel, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	// 관리자만 이 API를 사용할 수 있도록 제한합니다.
+	if rcp.AccessLevel != AdminAccessLevel {
+		http.Error(w, "사용자의 패스워드를 초기화 하기 위해서 관리자 권한이 필요합니다", http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	// 사용자의 패스워드를 초기화 합니다.
+	err = initPassUser(session, rcp.ID, CachedAdminSetting.InitPassword)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 바뀐 패스워드의 유저를 불러옵니다.
+	u, err := getUser(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 기존 토근을 제거합니다.
+	err = rmToken(session, u.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 유저에 새로운 토큰을 추가합니다.
+	err = addToken(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
