@@ -74,6 +74,8 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		Platesize:  platesize,
 		Updatetime: now,
 		UseType:    typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
+		Season:     *flagSeason,
+		Episode:    *flagEpisode,
 	}
 	i.Tasks = make(map[string]Task)
 	i.SetSeq()
@@ -221,6 +223,8 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		Updatetime: time.Now().Format(time.RFC3339),
 		Assettype:  assettype,
 		Assettags:  []string{},
+		Season:     *flagSeason,
+		Episode:    *flagEpisode,
 	}
 
 	tasks, err := AllTaskSettings(session)
@@ -283,6 +287,8 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		Scanname:   scanname,
 		Scantime:   now,
 		Updatetime: now,
+		Season:     *flagSeason,
+		Episode:    *flagEpisode,
 	}
 	i.SetSeq()
 	platePath := *flagPlatePath
