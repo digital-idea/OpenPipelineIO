@@ -203,6 +203,8 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		productionPaddingVersionNumber = 2
 	}
 	s.ProductionPaddingVersionNumber = productionPaddingVersionNumber
+	s.NetflixRegionCode = r.FormValue("NetflixRegionCode")
+	s.NetflixVendorID = r.FormValue("NetflixVendorID")
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

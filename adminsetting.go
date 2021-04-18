@@ -73,4 +73,6 @@ type Setting struct {
 	ThumbnailImageWidth                  int     `json:"thumbnailimagewidth"`                  // Thumbnail Image 가로사이즈
 	ThumbnailImageHeight                 int     `json:"thumbnailimageheight"`                 // Thumbnail Image 세로사이즈
 	InitPassword                         string  `json:"initpassword"`                         // 사용자가 패스워드를 잃어버렸을 때 사용하는 패스워드
+	NetflixRegionCode                    string  `json:"netflixregioncode"`                    // 넷플릭스 지역코드
+	NetflixVendorID                      string  `json:"netflixvendorid"`                      // 넷플릭스 벤더ID
 }
