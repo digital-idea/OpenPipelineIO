@@ -6,6 +6,12 @@
 	<div class="row ml-1 mr-1 pt-1 pl-3 pr-3">
 		<div class="col-sm-12 col-md-6 col-lg-2">
 			<div>
+				{{if $.Item.Season}}
+					<span class="text-white itemname">{{$.Item.Season}}_</span>
+				{{end}}
+				{{if $.Item.Episode}}
+					<span class="text-white itemname">{{$.Item.Episode}}_</span>
+				{{end}}
 				<span class="text-white itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span>
 				{{if $.Item.Updatetime|CheckUpdate}}
 					<span class="badge badge-warning align-top mt-1 ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
