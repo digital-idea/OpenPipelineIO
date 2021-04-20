@@ -516,6 +516,8 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	project := r.FormValue("Project")
 	name := r.FormValue("Name")
 	typ := r.FormValue("Type")
+	season := r.FormValue("Season")
+	episode := r.FormValue("Episode")
 	mkdir := str2bool(r.FormValue("Mkdir"))
 	setRendersize := str2bool(r.FormValue("SetRendersize"))
 	f := func(c rune) bool {
@@ -572,6 +574,8 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Project = project
 		i.ID = i.Name + "_" + i.Type
 		i.Shottype = "2d"
+		i.Season = season
+		i.Episode = episode
 
 		// adminsetting에서 값을 가지고 와서 경로를 설정한다.
 		var thumbnailImagePath bytes.Buffer
