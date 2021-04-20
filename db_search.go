@@ -109,6 +109,10 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 			query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
 		} else if strings.HasPrefix(word, "type:asset") {
 			query = append(query, bson.M{"type": "asset"})
+		} else if strings.HasPrefix(word, "episode:") {
+			query = append(query, bson.M{"episode": &bson.RegEx{Pattern: strings.TrimPrefix(word, "episode:"), Options: "i"}})
+		} else if strings.HasPrefix(word, "season:") {
+			query = append(query, bson.M{"season": &bson.RegEx{Pattern: strings.TrimPrefix(word, "season:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "status:") {
 			status := strings.ToLower(strings.TrimPrefix(word, "status:"))
 			// 검색바에서 task를 선택했다면,
