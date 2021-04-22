@@ -97,6 +97,9 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
 | /api/rmpublish | Publish 를 삭제한다. | project, id, task, key, createtime, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&createtime=2020-05-21T09:00:00%2B09:00&path=/show/test" https://csi.lazypic.org/api/rmpublish`|
 | /api/uploadthumbnail | 썸네일 업로드 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -F  project=TEMP -F name=SS_0010 -F type=org -F "image=@/path/thumbnail.png" https://csi.lazypic.org/api/uploadthumbnail`|
+| /api/setseq | seq를 설정한다. | project, id, seq | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&seq=SS" https://csi.lazypic.org/api/setseq`|
+| /api/setseason | season를 설정한다. | project, id, season | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&season=S01" https://csi.lazypic.org/api/setseason`|
+| /api/setepisode | episode를 설정한다. | project, id, episode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&episode=E01" https://csi.lazypic.org/api/setepisode`|
 
 #### URL Encode
 `/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야한다.

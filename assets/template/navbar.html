@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         
-        {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+        {{if eq .User.AccessLevel 3 4 5 6 7 8 9 10 11}}
           <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 File
@@ -46,7 +46,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/projectinfo">Projects</a>
             <div class="dropdown-divider"></div>
-            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+            {{if eq .User.AccessLevel 3 4 5 6 7 8 9 10 11}}
               {{if eq .User.ID "guest" "demo" }}
                 <span class="fade dropdown-item">Users</span>
                 <div class="dropdown-divider"></div>

@@ -613,7 +613,6 @@ func SearchStatusNum(op SearchOption, items []Item) (Infobarnum, error) {
 	return results, nil
 }
 
-
 // Totalnum 함수는 프로젝트의 전체샷에 대한 상태 갯수를 검색한다.
 func Totalnum(session *mgo.Session, project string) (Infobarnum, error) {
 	if project == "" {
@@ -1849,6 +1848,36 @@ func SetSeq(session *mgo.Session, project, id, seq string) error {
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"seq": seq, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetSeason 함수는 item에 season 값을 셋팅한다.
+func SetSeason(session *mgo.Session, project, id, season string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"season": season, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetEpisode 함수는 item에 episode 값을 셋팅한다.
+func SetEpisode(session *mgo.Session, project, id, episode string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"episode": episode, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

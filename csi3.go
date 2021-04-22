@@ -72,6 +72,8 @@ var (
 	flagRm                 = flag.String("rm", "", "remove project, shot, asset, user")
 	flagProject            = flag.String("project", "", "project name")
 	flagName               = flag.String("name", "", "name")
+	flagSeason             = flag.String("season", "", "season")
+	flagEpisode            = flag.String("episode", "", "episode")
 	flagType               = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
 	flagAssettags          = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,group,assembly 형태로 입력")
 	flagAssettype          = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.

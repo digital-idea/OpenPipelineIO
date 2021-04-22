@@ -334,6 +334,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/setcameralensmm", handleAPISetCameraLensmm)
 	http.HandleFunc("/api/setcameraprojection", handleAPISetCameraProjection)
 	http.HandleFunc("/api/setseq", handleAPISetSeq)
+	http.HandleFunc("/api/setseason", handleAPISetSeason)
+	http.HandleFunc("/api/setepisode", handleAPISetEpisode)
 	http.HandleFunc("/api/setplatepath", handleAPISetPlatePath)
 	http.HandleFunc("/api/setthummov", handleAPISetThummov) // legacy
 	http.HandleFunc("/api2/setthummov", handleAPI2SetThummov)

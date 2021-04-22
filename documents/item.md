@@ -6,6 +6,7 @@ DB값만 생성되며, 샷 폴더가 생성되지는 않습니다.
 
 ```bash
 $ csi3 -add item -project [projectname] -name [SS_0010] -type [org]
+$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가하고 싶을 때
 ```
 
 #### Plate 정보와 함께 샷 등록
@@ -27,6 +28,8 @@ SS_0010 샷을 생성시 아래 정보를 함께 추가할 수 있습니다.
 - JustOut(Just구간 Out 프레임): 1098
 - JustTimecodeIn(Just구간 타임코드 In): 10:00:00:03
 - JustTimecodeOut(Just구간 타임코드 Out): 10:00:04:02
+- Episode: 에피소드명
+- Season: 시즌명
 
 ```bash
 $ csi3 -add item -project circle -name SS_0010 -type org -platesize 2048x1152 -scanname A007C006_160424_R28L -scantimecodein 10:00:00:00 -scantimecodeout 10:00:04:04 -scanframe 100 -scanin 456812 -scanout 456912 -platein 1001 -plateout 1101 -justin 1003 -justout 1098 -justtimecodein 10:00:00:03 -justtimecodeout 10:00:04:02
