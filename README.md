@@ -5,22 +5,20 @@
 
 ![screenshot](figures/screenshot.png)
 
-CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매니징 웹 어플리케이션(WAS) 입니다.
+![review](figures/review.png)
+
+CSI(Creation Status Integrator)는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션 입니다.
 
 - 속도, 검색어 방식, 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
 - 내부, 외부 서버에 설치가 가능합니다.
+- 리뷰 시스템
 - 사용자별 토큰키, 암호화키, 직급별 접근권한 사용이 가능합니다.
-
-### 다운로드
-- [Linux 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_linux_x86-64.tgz)
-- [macOS 64bit](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_darwin_x86-64.tgz)
-- [Linux 64bit for Digitalidea](https://github.com/digital-idea/csi3/releases/download/v3.1.6/csi3_linux_di_x86-64.tgz): 회사가 필요한 인수가 자동으로 설정되어 있습니다.
-
+- [Download](https://github.com/digital-idea/csi3/releases)
 
 ### Roadmap
 브라우저 지원 우선순위: 크롬 > 사파리 > 파이어폭스
 
-1. 리뷰(진행중)
+1. 리뷰(90% 진행완료)
 1. 파트너 관리툴 추가
 1. 통계, 레포트(개인, 팀장, 실장 페이지)
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
@@ -28,7 +26,7 @@ CSI(Creation Status Integrator)는 콘텐츠 제작을 위한 프로젝트 매�
 1. 장비관리 툴
 1. 간트챠트
 
-### 데이터베이스(mongoDB) 설치, 실행
+### 데이터베이스(mongoDB) 설치 및 서비스 실행
 
 CentOS
 - [CentOS7에서 mongoDB 설정](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
@@ -46,7 +44,7 @@ Windows
 - Download: https://www.mongodb.com/download-center/community?jmp=docs
 - Setup: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows-unattended/
 
-### CSI 실행하기
+### 실행하기
 CSI를 실행하기 전에 우선적으로 thumbnail 폴더가 필요합니다.
 이 경로는 CSI를 운용하면서 생성되는 썸네일 이미지, 사용자 프로필 사진이 저장되는 경로로 사용됩니다.
 썸네일 경로가 이미 존재한다면, 해당경로를 서비스 시작시 `-thumbpath` 인수를 이용해서 설정할 수 있습니다.
