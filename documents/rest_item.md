@@ -64,8 +64,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
 | /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
-| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
-| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&tag=태그3" https://csi.lazypic.org/api/rmtag` |
+| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
+| /api/rmtag | tags 삭제 | project, id, tag, (iscontain) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&tag=태그3&iscontain=true" https://csi.lazypic.org/api/rmtag` |
 | /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://csi.lazypic.org/api/setnote` |
 | /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://csi.lazypic.org/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2021-01-26T11:38:53%2B09:00" https://csi.lazypic.org/api/rmcomment` |
