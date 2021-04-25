@@ -5726,12 +5726,13 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		ID      string `json:"id"`
-		Tag     string `json:"tag"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project   string `json:"project"`
+		Name      string `json:"name"`
+		ID        string `json:"id"`
+		Tag       string `json:"tag"`
+		UserID    string `json:"userid"`
+		IsContain bool   `json:"iscontain"`
+		Error     string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -5773,7 +5774,8 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Tag = tag
-	rcp.Name, err = RmTag(session, rcp.Project, rcp.ID, rcp.Tag)
+	rcp.IsContain = str2bool(r.FormValue("iscontain"))
+	rcp.Name, err = RmTag(session, rcp.Project, rcp.ID, rcp.Tag, rcp.IsContain)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

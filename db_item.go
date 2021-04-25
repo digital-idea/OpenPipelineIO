@@ -2763,7 +2763,7 @@ func SetTags(session *mgo.Session, project, name string, tags []string) error {
 }
 
 // RmTag 함수는 item에 tag를 삭제한다.
-func RmTag(session *mgo.Session, project, id, inputTag string) (string, error) {
+func RmTag(session *mgo.Session, project, id, inputTag string, isContain bool) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2775,6 +2775,11 @@ func RmTag(session *mgo.Session, project, id, inputTag string) (string, error) {
 	}
 	var newTags []string
 	for _, tag := range i.Tag {
+		if isContain {
+			if strings.Contains(tag, inputTag) {
+				continue
+			}
+		}
 		if inputTag == tag {
 			continue
 		}
