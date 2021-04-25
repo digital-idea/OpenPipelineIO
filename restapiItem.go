@@ -5593,40 +5593,28 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "tag":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Tag = strings.Replace(v, " ", "", -1)
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	tag := r.FormValue("tag")
+	if tag == "" {
+		http.Error(w, "tag를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	if !regexpTag.MatchString(tag) {
+		http.Error(w, "tag 규칙이 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Tag = tag
 	rcp.Name, err = AddTag(session, rcp.Project, rcp.ID, rcp.Tag)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -5763,40 +5751,28 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "tag":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Tag = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	tag := r.FormValue("tag")
+	if tag == "" {
+		http.Error(w, "tag를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	if !regexpTag.MatchString(tag) {
+		http.Error(w, "tag 규칙이 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Tag = tag
 	rcp.Name, err = RmTag(session, rcp.Project, rcp.ID, rcp.Tag)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -5814,7 +5790,11 @@ func handleAPIRmTag(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
