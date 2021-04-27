@@ -3467,13 +3467,17 @@ function renameTag(project, before, after) {
 function setRmTagModal(project, id) {
     document.getElementById("modal-rmtag-project").value = project;
     document.getElementById("modal-rmtag-id").value = id;
-    document.getElementById("modal-rmtag-text").value = "";
+    document.getElementById("modal-rmtag-tag").value = "";
     document.getElementById("modal-rmtag-title").innerHTML = "Rm Tag" + multiInputTitle(id);
+    document.getElementById("modal-rmtag-iscontain").value = false;
 }
 
-function rmTag(project, id, tag) {
+function rmTag() {
     let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
+    let project = document.getElementById('modal-rmtag-project').value
+    let id = document.getElementById('modal-rmtag-id').value
+    let tag = document.getElementById('modal-rmtag-tag').value
+    let isContain = document.getElementById('modal-rmtag-iscontain').checked
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -3484,12 +3488,11 @@ function rmTag(project, id, tag) {
             $.ajax({
                 url: "/api/rmtag",
                 type: "post",
-                
                 data: {
                     project: project,
                     id: id,
                     tag: tag,
-                    userid: userid,
+                    iscontain: isContain,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -3518,12 +3521,11 @@ function rmTag(project, id, tag) {
         $.ajax({
             url: "/api/rmtag",
             type: "post",
-            
             data: {
                 project: project,
                 id: id,
                 tag: tag,
-                userid: userid,
+                iscontain: isContain,
             },
             headers: {
                 "Authorization": "Basic "+ token

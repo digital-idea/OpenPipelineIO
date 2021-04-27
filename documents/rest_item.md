@@ -1,7 +1,7 @@
 # RestAPI Item
 
 restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크만 연결되어있으면 OS, 디바이스 제약없이 사용할 수 있습니다.
-또한 Python 같은 언어를 이용해서 사내 API를 작성하더라도 OS별 코드가 서로 달라지는 상황이 없습니다.
+또한 Python 같은 언어를 이용해서 중간 관리를 위한 API를 작성하더라도 OS별로 코드가 서로 달라지는 상황이 없습니다.
 
 이 문서는 기본 restAPI옵션을 설명하고 파이썬을 이용해서 RestAPI를 사용하는 방법을 다룹니다.
 파이프라인에 사용될 확률이 높은 코드라서, 일부 에러처리까지 코드로 다루었습니다.
@@ -64,8 +64,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
 | /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
 | /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
-| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
-| /api/rmtag | tags 삭제 | project, id, tag | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&tag=태그3" https://csi.lazypic.org/api/rmtag` |
+| /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
+| /api/rmtag | tags 삭제 | project, id, tag, (iscontain) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&tag=태그3&iscontain=true" https://csi.lazypic.org/api/rmtag` |
 | /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://csi.lazypic.org/api/setnote` |
 | /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://csi.lazypic.org/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2021-01-26T11:38:53%2B09:00" https://csi.lazypic.org/api/rmcomment` |

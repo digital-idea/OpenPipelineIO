@@ -56,6 +56,9 @@ var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)
 // Version 정규식: 5, 10, 103, v5 v10, v100, v1001, V001, V1
 var regexpVersion = regexp.MustCompile(`[vV]?\d{1,4}`)
 
+// Tag 정규식
+var regexpTag = regexp.MustCompile(`^[가-힣a-zA-Z0-9]+$`)
+
 // Alexa 카메라의 형태 : N_AAAACCCC_YYMMDD_RRRR
 // - N : order
 // - AAAACCCC : reel name
