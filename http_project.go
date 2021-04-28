@@ -208,8 +208,8 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
 	}
-	if current.NetflixID != r.FormValue("NetflixID") {
-		renewal.NetflixID = r.FormValue("NetflixID")
+	if current.NetflixShowID != r.FormValue("NetflixShowID") {
+		renewal.NetflixShowID = r.FormValue("NetflixShowID")
 	}
 	if current.MailHead != r.FormValue("MailHead") {
 		renewal.MailHead = r.FormValue("MailHead")
