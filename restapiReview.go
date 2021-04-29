@@ -610,6 +610,7 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		Media                string `json:"media"`
 		MediaTitle           string `json:"mediatitle"`
 		Author               string `json:"author"`
+		AuthorName           string `json:"authorname"`
 		Date                 string `json:"date"`
 		Stage                string `json:"stage"`
 		Frame                int    `json:"frame"`
@@ -634,6 +635,13 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	// 사용자의 이름을 구한다.
+	u, err := getUser(session, rcp.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized) // 사용자가 존재하지 않으면 당연히 Comment를 작성하면 안된다.
+		return
+	}
+	rcp.AuthorName = u.LastNameKor + u.FirstNameKor
 	r.ParseForm()
 	id := r.FormValue("id")
 	if id == "" {
@@ -688,6 +696,7 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	rcp.Date = cmt.Date
 	cmt.Author = rcp.UserID
 	rcp.Author = rcp.UserID
+	cmt.AuthorName = rcp.AuthorName
 	cmt.Text = rcp.Text
 	cmt.Media = rcp.Media
 	cmt.MediaTitle = rcp.MediaTitle

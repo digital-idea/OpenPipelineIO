@@ -4878,7 +4878,7 @@ function addReviewComment() {
             // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
             let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
             let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
-            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
+            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.authorname}</a></span>
             <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
             <br>
@@ -4933,7 +4933,7 @@ function addReviewCommentText(text) {
             // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
             let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
             let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
-            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.author}</a></span>
+            <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.authorname}</a></span>
             <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
             <br><small class="text-white">${body}</small>`
