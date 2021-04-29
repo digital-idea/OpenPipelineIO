@@ -68,50 +68,51 @@ type Item struct {
 	Dataname string `json:"dataname"` // 영화카메라(Red,Alexa등)이 자동 생성시키는 이미지 파일명이다.
 
 	// 작업이 필요한 정보
-	Scanname    string          `json:"scanname"`    // 스캔이름
-	Platesize   string          `json:"platesize"`   // 플레이트 이미지사이즈
-	Name        string          `json:"name"`        // 샷이름 SS_0010
-	Season      string          `json:"season"`      // 시즌명
-	Episode     string          `json:"episode"`     // 에피소드명
-	Seq         string          `json:"seq"`         // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
-	Cut         string          `json:"cut"`         // 시퀀스이름 SS_0010 에서 0010문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
-	Type        string          `json:"type"`        // org, org1, src, asset..
-	Assettype   string          `json:"assettype"`   // char, env, prop, comp, plant, vehicle, group
-	CrowdAsset  bool            `json:"crowdasset"`  // 군중씬에서 사용하는 에셋인지 여부 체크
-	UseType     string          `json:"usetype"`     // 재스캔상황시 실제로 사용해야하는 타입표기
-	Scantime    string          `json:"scantime"`    // 스캔 등록시간 RFC3339
-	Thumpath    string          `json:"thumpath"`    // 썸네일경로
-	Thummov     string          `json:"thummov"`     // 썸네일 mov 경로
-	Editmov     string          `json:"editmov"`     // Edit(편집본) mov 경로
-	Beforemov   string          `json:"beforemov"`   // 전에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
-	Aftermov    string          `json:"aftermov"`    // 후에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
-	Retimeplate string          `json:"retimeplate"` // 리타임 플레이트 경로
-	Platepath   string          `json:"platepath"`   // 플레이트 경로
-	Shottype    string          `json:"shottype"`    // "", "2d", "3d"
-	Ddline3d    string          `json:"ddline3d"`    // 3D 데드라인 RFC3339
-	Ddline2d    string          `json:"ddline2d"`    // 2D 데드라인 RFC3339
-	Rnum        string          `json:"rnum"`        // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호 예) A0001. A는 1권을 H는 8권을 의미한다.
-	Tag         []string        `json:"tag"`         // 태그리스트
-	Assettags   []string        `json:"assettags"`   // 에셋그룹 태그
-	Finname     string          `json:"finname"`     // 파이널 파일이름
-	Finver      string          `json:"finver"`      // 파이널된 버젼
-	Findate     string          `json:"findate"`     // 파이널 데이터가 나간 날짜
-	Clientver   string          `json:"clientver"`   // 클라이언트에게 보낸 버전
-	Dsize       string          `json:"dsize"`       // 디스토션 사이즈
-	Rendersize  string          `json:"rendersize"`  // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
-	Status      string          `json:"status"`      // 샷 상태. legacy
-	StatusV2    string          `json:"statusv2"`    // 샷 상태.
-	Updatetime  string          `json:"updatetime"`  // 업데이트 시간 RFC3339
-	Focal       string          `json:"focal"`       // 렌즈 미리수
-	Stereotype  string          `json:"stereotype"`  // parallel(default), conversions
-	Stereoeye   string          `json:"stereoeye"`   // left(default), right
-	Outputname  string          `json:"outputname"`  // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
-	OCIOcc      string          `json:"ociocc"`      // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
-	Note        Comment         `json:"note"`        // 작업내용
-	Sources     []Source        `json:"links"`       // 연결소스
-	References  []Source        `json:"references"`  // 레퍼런스
-	Comments    []Comment       `json:"comments"`    // 수정내용
-	Tasks       map[string]Task `json:"tasks"`       // Task 리스트
+	Scanname         string          `json:"scanname"`         // 스캔이름
+	Platesize        string          `json:"platesize"`        // 플레이트 이미지사이즈
+	Name             string          `json:"name"`             // 샷이름 SS_0010
+	Season           string          `json:"season"`           // 시즌명
+	Episode          string          `json:"episode"`          // 에피소드명
+	Seq              string          `json:"seq"`              // 시퀀스이름 SS_0010 에서 SS문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
+	Cut              string          `json:"cut"`              // 시퀀스이름 SS_0010 에서 0010문자에 해당하는값. 에셋이면 "" 문자열이 들어간다.
+	Type             string          `json:"type"`             // org, org1, src, asset..
+	Assettype        string          `json:"assettype"`        // char, env, prop, comp, plant, vehicle, group
+	CrowdAsset       bool            `json:"crowdasset"`       // 군중씬에서 사용하는 에셋인지 여부 체크
+	UseType          string          `json:"usetype"`          // 재스캔상황시 실제로 사용해야하는 타입표기
+	Scantime         string          `json:"scantime"`         // 스캔 등록시간 RFC3339
+	Thumpath         string          `json:"thumpath"`         // 썸네일경로
+	Thummov          string          `json:"thummov"`          // 썸네일 mov 경로
+	Editmov          string          `json:"editmov"`          // Edit(편집본) mov 경로
+	Beforemov        string          `json:"beforemov"`        // 전에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
+	Aftermov         string          `json:"aftermov"`         // 후에 들어갈 mov. 만약 2개 이상이라면 space로 구분한다.
+	Retimeplate      string          `json:"retimeplate"`      // 리타임 플레이트 경로
+	Platepath        string          `json:"platepath"`        // 플레이트 경로
+	Shottype         string          `json:"shottype"`         // "", "2d", "3d"
+	Ddline3d         string          `json:"ddline3d"`         // 3D 데드라인 RFC3339
+	Ddline2d         string          `json:"ddline2d"`         // 2D 데드라인 RFC3339
+	Rnum             string          `json:"rnum"`             // 롤넘버, 영화를 권으로 나누었을 때 이 샷의 권 번호 예) A0001. A는 1권을 H는 8권을 의미한다.
+	Tag              []string        `json:"tag"`              // 태그리스트
+	Assettags        []string        `json:"assettags"`        // 에셋그룹 태그
+	Finname          string          `json:"finname"`          // 파이널 파일이름
+	Finver           string          `json:"finver"`           // 파이널된 버젼
+	Findate          string          `json:"findate"`          // 파이널 데이터가 나간 날짜
+	Clientver        string          `json:"clientver"`        // 클라이언트에게 보낸 버전
+	Dsize            string          `json:"dsize"`            // 언디스토션 사이즈 legacy
+	Rendersize       string          `json:"rendersize"`       // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
+	Undistortionsize string          `json:"undistortionsize"` // 언디스토션 사이즈 legacy
+	Status           string          `json:"status"`           // 샷 상태. legacy
+	StatusV2         string          `json:"statusv2"`         // 샷 상태.
+	Updatetime       string          `json:"updatetime"`       // 업데이트 시간 RFC3339
+	Focal            string          `json:"focal"`            // 렌즈 미리수
+	Stereotype       string          `json:"stereotype"`       // parallel(default), conversions
+	Stereoeye        string          `json:"stereoeye"`        // left(default), right
+	Outputname       string          `json:"outputname"`       // 프로젝트중 클라이언트가 제시하는 아웃풋 이름
+	OCIOcc           string          `json:"ociocc"`           // Neutural Grading Pipeline에 사용하는 .cc 파일의 경로.
+	Note             Comment         `json:"note"`             // 작업내용
+	Sources          []Source        `json:"links"`            // 연결소스
+	References       []Source        `json:"references"`       // 레퍼런스
+	Comments         []Comment       `json:"comments"`         // 수정내용
+	Tasks            map[string]Task `json:"tasks"`            // Task 리스트
 
 	//시간에 관련된 데이터이다.
 	ScanFrame       int                    `json:"scanframe"`       // 스캔 프레임수
