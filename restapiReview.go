@@ -914,6 +914,11 @@ func handleAPIRmReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
 	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
 	reviewID := r.FormValue("id")
 	if reviewID == "" {
@@ -921,19 +926,33 @@ func handleAPIRmReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.ID = reviewID
-	adminSetting, err := GetAdminSetting(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	// 데이터 삭제
-	reviewfile := fmt.Sprintf("%s/%s.mp4", adminSetting.ReviewDataPath, rcp.ID)
+	reviewfile := fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, rcp.ID)
 	if _, err := os.Stat(reviewfile); err == nil {
 		err = os.Remove(reviewfile)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	}
+	// 로그를 남기기 위해서 기본 정보를 불러온다.
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Review: %s", rcp.ID), review.Project, review.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// slack log
+	err = slacklog(session, review.Project, fmt.Sprintf("Rm Review: %s, \nProject: %s, Name: %s, Author: %s", rcp.ID, review.Project, review.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	// DB삭제
 	err = RmReview(session, rcp.ID)
