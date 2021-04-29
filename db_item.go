@@ -1648,9 +1648,9 @@ func Type(session *mgo.Session, project, name string) (string, error) {
 }
 
 // SetImageSize 함수는 해당 샷의 이미지 사이즈를 설정한다.
-// key 설정값 : platesize, distortionsize, rendersize
+// key 설정값 : platesize, undistortionsize, rendersize
 func SetImageSize(session *mgo.Session, project, name, key, size string) (string, error) {
-	if !(key == "platesize" || key == "dsize" || key == "rendersize") {
+	if !(key == "platesize" || key == "dsize" || key == "undistortionsize" || key == "rendersize") {
 		return "", errors.New("잘못된 key값입니다")
 	}
 	session.SetMode(mgo.Monotonic, true)
@@ -1664,9 +1664,16 @@ func SetImageSize(session *mgo.Session, project, name, key, size string) (string
 	}
 	id := name + "_" + typ
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
-	if err != nil {
-		return id, err
+	if key == "dsize" || key == "undistortionsize" {
+		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"dsize": size, "undistortionsize": size, "updatetime": time.Now().Format(time.RFC3339)}})
+		if err != nil {
+			return id, err
+		}
+	} else {
+		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
+		if err != nil {
+			return id, err
+		}
 	}
 	return id, nil
 }

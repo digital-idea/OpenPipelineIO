@@ -630,7 +630,8 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				width := int(float64(pinfo.PlateWidth) * admin.DefaultScaleRatioOfUndistortionPlate)
 				height := int(float64(pinfo.PlateHeight) * admin.DefaultScaleRatioOfUndistortionPlate)
 				i.Platesize = fmt.Sprintf("%dx%d", pinfo.PlateWidth, pinfo.PlateHeight)
-				i.Dsize = fmt.Sprintf("%dx%d", width, height)
+				i.Dsize = fmt.Sprintf("%dx%d", width, height) // legacy
+				i.Undistortionsize = fmt.Sprintf("%dx%d", width, height)
 				i.Rendersize = fmt.Sprintf("%dx%d", width, height)
 			}
 		} else {
