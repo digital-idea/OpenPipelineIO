@@ -5920,6 +5920,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		Media      string `json:"media"`
 		MediaTitle string `json:"mediatitle"`
 		UserID     string `json:"userid"`
+		AuthorName string `json:"authorname"`
 		Error      string `json:"error"`
 	}
 	rcp := Recipe{}
@@ -5934,6 +5935,13 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	// 사용자의 이름을 구한다.
+	u, err := getUser(session, rcp.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized) // 사용자가 존재하지 않으면 당연히 Comment를 작성하면 안된다.
+		return
+	}
+	rcp.AuthorName = u.LastNameKor + u.FirstNameKor
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -5961,7 +5969,7 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 	rcp.Media = r.FormValue("media")
 	rcp.MediaTitle = r.FormValue("mediatitle")
 	rcp.Date = time.Now().Format(time.RFC3339)
-	id, err := AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.Date, rcp.Text, rcp.Media, rcp.MediaTitle)
+	id, err := AddComment(session, rcp.Project, rcp.Name, rcp.UserID, rcp.AuthorName, rcp.Date, rcp.Text, rcp.Media, rcp.MediaTitle)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -6005,6 +6013,7 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 		MediaTitle string `json:"mediatitle"`
 		Media      string `json:"media"`
 		UserID     string `json:"userid"`
+		AuthorName string `json:"authorname"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -6018,6 +6027,13 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+	// 사용자의 이름을 구한다.
+	u, err := getUser(session, rcp.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized) // 사용자가 존재하지 않으면 당연히 Comment를 작성하면 안된다.
+		return
+	}
+	rcp.AuthorName = u.LastNameKor + u.FirstNameKor
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -6050,7 +6066,7 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 	rcp.Text = text
 	rcp.Media = r.FormValue("media")
 	rcp.MediaTitle = r.FormValue("mediatitle")
-	rcp.Name, err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.Text, rcp.MediaTitle, rcp.Media)
+	rcp.Name, err = EditComment(session, rcp.Project, rcp.ID, rcp.Time, rcp.AuthorName, rcp.Text, rcp.MediaTitle, rcp.Media)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -584,6 +584,13 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
+	// 사용자의 이름을 구한다.
+	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized) // 사용자가 존재하지 않으면 당연히 Comment를 작성하면 안된다.
+		return
+	}
+	authorName := u.LastNameKor + u.FirstNameKor
 	// 파일네임을 구한다.
 	tmppath, err := userTemppath(ssid.ID)
 	if err != nil {
@@ -731,7 +738,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if comment != "" {
-			_, err = AddComment(session, project, name, ssid.ID, time.Now().Format(time.RFC3339), comment, "", "")
+			_, err = AddComment(session, project, name, ssid.ID, authorName, time.Now().Format(time.RFC3339), comment, "", "")
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue

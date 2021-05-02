@@ -556,7 +556,7 @@
 			{{$first := true}}
 			{{range ReverseCommentSlice .Comments | CutCommentSlice}}
 				<div id="comment-{{$id}}-{{.Date}}">
-					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{.Author}}</a></span>
+					<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{if .AuthorName}}{{.AuthorName}}{{else}}{{.Author}}{{end}}</a></span>
 					{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
 						<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}','{{.MediaTitle}}','{{.Media}}')">≡</span>
 						<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}')">×</span>

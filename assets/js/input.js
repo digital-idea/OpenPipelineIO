@@ -1050,7 +1050,7 @@ function addComment() {
                     // comments-{{.Name}} 내부 내용에 추가한다.
                     let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                     let newComment = `<div id="comment-${data.id}-${data.date}">
-                    <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                    <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.authorname}</a></span>
                     <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
                     <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                     <br><small class="text-warning">${body}</small>`
@@ -1099,7 +1099,7 @@ function addComment() {
                 // comments-{{$id}} 내부 내용에 추가한다.
                 let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
                 let newComment = `<div id="comment-${data.id}-${data.date}">
-                <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+                <span class="text-badge">${data.date} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.authorname}</a></span>
                 <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
                 <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.date}', '${data.text}')">×</span>
                 <br><div class="text-warning small">${body}</div>`
@@ -1156,7 +1156,7 @@ function editComment() {
         success: function(data) {
             // comments-${data.id}}-${data.time} 내부 내용을 업데이트 한다.
             let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
-            let newComment = `<span class="text-badge">${data.time} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.userid}</a></span>
+            let newComment = `<span class="text-badge">${data.time} / <a href="/user?id=${data.userid}" class="text-darkmode">${data.authorname}</a></span>
             <span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}', '${data.mediatitle}', '${data.media}')">≡</span>
             <span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('${data.project}', '${data.id}', '${data.time}', '${data.text}')">×</span>
             <br><div class="text-warning small">${body}</div>`
