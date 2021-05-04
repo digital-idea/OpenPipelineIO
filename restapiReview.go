@@ -649,14 +649,12 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.ID = id
-
-	text := r.FormValue("text")
-	if text == "" {
-		http.Error(w, "comment를 설정해주세요", http.StatusBadRequest)
+	rcp.Text = r.FormValue("text")
+	rcp.Media = r.FormValue("media")
+	if rcp.Text == "" && rcp.Media == "" {
+		http.Error(w, "comment(text) 또는 첨부파일(media) 값 둘중 하나는 반드시 입력되어야 합니다", http.StatusBadRequest)
 		return
 	}
-	rcp.Text = text
-	rcp.Media = r.FormValue("media")
 	rcp.MediaTitle = r.FormValue("mediatitle")
 
 	review, err := getReview(session, rcp.ID)

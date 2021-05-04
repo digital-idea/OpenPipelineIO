@@ -4438,10 +4438,6 @@ function addReview() {
 }
 
 function clickCommentButton() {
-    if (document.getElementById("review-comment").value === "") {
-        alert("comment가 비어있습니다")
-        return
-    }
     setReviewStatus('comment')
     addReviewComment()
 }
