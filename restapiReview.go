@@ -330,6 +330,12 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Stage = review.Stage
+	// 만약 approve라면 task mov를 설정한다. 샷 또는 에셋이 없을 때 에러가 나더라도 에러처리하지 않는다.
+	if rcp.Status == "approve" {
+		_, _ = setTaskMov(session, review.Project, review.Name, review.Task, review.Path)
+	}
+
+	// 리뷰 상태를 설정한다.
 	err = setReviewStatus(session, rcp.ID, status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
