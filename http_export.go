@@ -1298,7 +1298,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		"Rollnumber",
 		"Thumbnail",
 		"ShotType(2d/3d)",
-		"UseType",
+		"UseType(재스캔사용버전)",
 		"상태",
 		"작업내용",
 		"수정사항",
@@ -1371,7 +1371,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			f.SetCellValue(sheet, pos, strings.ToUpper(i.Shottype))
 		}
 		f.SetCellStyle(sheet, pos, pos, style)
-		// UseType
+		// UseType(재스캔사용버전)
 		pos, err = excelize.CoordinatesToCellName(6, n+2)
 		if err != nil {
 			log.Println(err)
@@ -1745,7 +1745,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 		"Rollnumber",
 		"Thumbnail",
 		"ShotType(2d/3d)",
-		"UseType",
+		"UseType(재스캔사용버전)",
 		"상태",
 		"작업내용",
 		"수정사항",
@@ -1807,7 +1807,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 		}
 		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbnailRootPath, project, i.ID)
 		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
-		// UseType
+		// ShotType
 		pos, err = excelize.CoordinatesToCellName(5, n+2)
 		if err != nil {
 			log.Println(err)
@@ -1818,7 +1818,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 			f.SetCellValue(sheet, pos, strings.ToUpper(i.Shottype))
 		}
 		f.SetCellStyle(sheet, pos, pos, style)
-		// UseType
+		// UseType(재스캔사용버전)
 		pos, err = excelize.CoordinatesToCellName(6, n+2)
 		if err != nil {
 			log.Println(err)
