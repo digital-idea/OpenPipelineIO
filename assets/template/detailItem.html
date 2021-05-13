@@ -554,7 +554,7 @@
 							<span class="font-italic font-weight-light">Primary Key: </span>
 							{{$key}}
 						</span>
-						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+						{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 							<span class="remove" data-toggle="modal" data-target="#modal-rmpublishkey" onclick="setRmPublishKeyModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}')">×</span>
 						{{end}}
 					</div>
@@ -609,7 +609,7 @@
 							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 								<span class="edit" data-toggle="modal" data-target="#modal-editpublish" onclick="setEditPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}', '{{.TaskToUse}}', '{{$key}}','{{.Createtime}}','{{.Path}}')">≡</span>
 							{{end}}
-							{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 								<span class="remove ml-1" data-toggle="modal" data-target="#modal-rmpublish" onclick="setRmPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}','{{$key}}','{{.Createtime}}', '{{.Path}}')">×</span>
 							{{end}}
 						</div>
