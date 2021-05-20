@@ -3910,6 +3910,7 @@ function setRendersizeModal(project, id) {
         success: function(data) {
             document.getElementById('modal-rendersize-id').value = id;
             document.getElementById("modal-rendersize-size").value = data.rendersize;
+            document.getElementById("modal-rendersize-overscanratio").value = data.overscanratio;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3917,7 +3918,10 @@ function setRendersizeModal(project, id) {
     });
 }
 
-function setRendersize(project, id, size) {
+function setRendersize() {
+    let project = document.getElementById('modal-rendersize-project').value;
+    let id = document.getElementById('modal-rendersize-id').value;
+    let size = document.getElementById('modal-rendersize-size').value;
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
