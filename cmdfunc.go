@@ -62,20 +62,21 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 		log.Fatal(err)
 	}
 	i := Item{
-		Project:    project,
-		Name:       name,
-		Type:       typ,
-		ID:         name + "_" + typ,
-		Status:     ASSIGN, // legacy
-		StatusV2:   initStatusID,
-		Scanname:   scanname,
-		Dataname:   scanname, // 보통 스캔네임과 데이터네임은 같다. 데이터 입력자의 노동을 줄이기 위해 기본적으로 동일값을 넣고, 필요시 수정한다.
-		Scantime:   now,
-		Platesize:  platesize,
-		Updatetime: now,
-		UseType:    typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
-		Season:     *flagSeason,
-		Episode:    *flagEpisode,
+		Project:       project,
+		Name:          name,
+		Type:          typ,
+		ID:            name + "_" + typ,
+		Status:        ASSIGN, // legacy
+		StatusV2:      initStatusID,
+		Scanname:      scanname,
+		Dataname:      scanname, // 보통 스캔네임과 데이터네임은 같다. 데이터 입력자의 노동을 줄이기 위해 기본적으로 동일값을 넣고, 필요시 수정한다.
+		Scantime:      now,
+		Platesize:     platesize,
+		Updatetime:    now,
+		UseType:       typ, // 최초 생성시 사용타입은 자신의 Type과 같다.
+		Season:        *flagSeason,
+		Episode:       *flagEpisode,
+		OverscanRatio: 1.0,
 	}
 	i.Tasks = make(map[string]Task)
 	i.SetSeq()
@@ -214,17 +215,18 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 		log.Fatal(err)
 	}
 	i := Item{
-		Project:    project,
-		Name:       name,
-		Type:       typ,
-		ID:         name + "_" + typ,
-		Status:     ASSIGN, // legacy
-		StatusV2:   initStatusID,
-		Updatetime: time.Now().Format(time.RFC3339),
-		Assettype:  assettype,
-		Assettags:  []string{},
-		Season:     *flagSeason,
-		Episode:    *flagEpisode,
+		Project:       project,
+		Name:          name,
+		Type:          typ,
+		ID:            name + "_" + typ,
+		Status:        ASSIGN, // legacy
+		StatusV2:      initStatusID,
+		Updatetime:    time.Now().Format(time.RFC3339),
+		Assettype:     assettype,
+		Assettags:     []string{},
+		Season:        *flagSeason,
+		Episode:       *flagEpisode,
+		OverscanRatio: 1.0,
 	}
 
 	tasks, err := AllTaskSettings(session)
