@@ -329,6 +329,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	http.HandleFunc("/api/setundistortionsize", handleAPISetUnDistortionSize)
 	http.HandleFunc("/api/setrendersize", handleAPISetRenderSize)
+	http.HandleFunc("/api/setoverscanratio", handleAPISetOverscanRatio)
 	http.HandleFunc("/api/setcamerapubpath", handleAPISetCameraPubPath)
 	http.HandleFunc("/api/setcamerapubtask", handleAPISetCameraPubTask)
 	http.HandleFunc("/api/setcameralensmm", handleAPISetCameraLensmm)

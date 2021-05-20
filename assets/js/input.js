@@ -3978,6 +3978,63 @@ function setRendersize() {
     }
 }
 
+function setOverscanRatio() {
+    let project = document.getElementById('modal-rendersize-project').value;
+    let id = document.getElementById('modal-rendersize-id').value;
+    let ratio = document.getElementById('modal-rendersize-overscanratio').value;
+    let token = document.getElementById("token").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setoverscanratio",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    id: id,
+                    ratio: ratio,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("overscanratio-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">Overscan: ${data.overscanratio}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setoverscanratio",
+            type: "post",
+            
+            data: {
+                project: project,
+                id: id,
+                ratio: ratio,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("overscanratio-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">Overscan: ${data.overscanratio}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
 function CurrentProject() {
     let e = document.getElementById("searchbox-project");
     return e.options[e.selectedIndex].value;

@@ -1891,6 +1891,21 @@ func SetEpisode(session *mgo.Session, project, id, episode string) error {
 	return nil
 }
 
+// SetOverscanRatio 함수는 item에 OverscanRatio 값을 셋팅한다.
+func SetOverscanRatio(session *mgo.Session, project, id string, ratio float64) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"overscanratio": ratio, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetPlatePath 함수는 item에 PlatePath값을 셋팅한다.
 func SetPlatePath(session *mgo.Session, project, id, path string) error {
 	session.SetMode(mgo.Monotonic, true)
