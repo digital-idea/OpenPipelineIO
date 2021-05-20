@@ -63,6 +63,13 @@
 					<div class="row" id="rendersize-{{.Name}}">
 						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 					</div>
+					<div class="row" id="overscanratio-{{.ID}}">
+						{{if .OverscanRatio}}
+							{{if ne .OverscanRatio 0.0}}
+								<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>Overscan: {{.OverscanRatio}}</span>
+							{{end}}
+						{{end}}
+					</div>
 				</div>
 				<div class="centered">
 					{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}

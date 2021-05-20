@@ -576,7 +576,6 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Shottype = "2d"
 		i.Season = season
 		i.Episode = episode
-		i.OverscanRatio = 1.0
 
 		// adminsetting에서 값을 가지고 와서 경로를 설정한다.
 		var thumbnailImagePath bytes.Buffer
