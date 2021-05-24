@@ -49,18 +49,18 @@
 					</div>
 					<div class="top-right">
 						<div class="row" id="platesize-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Platesize}}S: {{$.Item.Platesize}}{{else}}S:{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Platesize}}S:{{$.Item.Platesize}}{{else}}S:{{end}}</span>
 						</div>
 						<div class="row" id="undistortionsize-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Dsize}}U: {{$.Item.Dsize}}{{else}}U:{{end}}</span>
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>{{if $.Item.Dsize}}U:{{$.Item.Dsize}}{{else}}U:{{end}}</span>
 						</div>
-						<div class="row" id="rendersize-{{$.Item.Name}}">
-							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>R: {{if $.Item.Rendersize}}{{$.Item.Rendersize}}{{else}}{{$.Item.Dsize}}{{end}}</span>
+						<div class="row" id="rendersize-{{$.Item.ID}}">
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>R:{{if $.Item.Rendersize}}{{$.Item.Rendersize}}{{else}}{{$.Item.Dsize}}{{end}}</span>
 						</div>
 						<div class="row" id="overscanratio-{{$.Item.ID}}">
 							{{if $.Item.OverscanRatio}}
 								{{if ne $.Item.OverscanRatio 0.0}}
-									<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>Overscan: {{$.Item.OverscanRatio}}</span>
+									<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>OSR:{{$.Item.OverscanRatio}}</span>
 								{{end}}
 							{{end}}
 						</div>

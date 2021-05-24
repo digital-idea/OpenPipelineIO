@@ -55,18 +55,18 @@
 				</div>
 				<div class="top-right">
 					<div class="row" id="platesize-{{.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Platesize}}S: {{.Platesize}}{{else}}S:{{end}}</span>
+						<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Platesize}}S:{{.Platesize}}{{else}}S:{{end}}</span>
 					</div>
 					<div class="row" id="undistortionsize-{{.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Dsize}}U: {{.Dsize}}{{else}}U:{{end}}</span>
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Dsize}}U:{{.Dsize}}{{else}}U:{{end}}</span>
 					</div>
-					<div class="row" id="rendersize-{{.Name}}">
-						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>R: {{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+					<div class="row" id="rendersize-{{.ID}}">
+						<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>R:{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
 					</div>
 					<div class="row" id="overscanratio-{{.ID}}">
 						{{if .OverscanRatio}}
 							{{if ne .OverscanRatio 0.0}}
-								<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>Overscan: {{.OverscanRatio}}</span>
+								<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>OSR:{{.OverscanRatio}}</span>
 							{{end}}
 						{{end}}
 					</div>
