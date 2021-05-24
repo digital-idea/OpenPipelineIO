@@ -81,7 +81,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -X POST -d "project=TEMP&name=SS_0020&task=comp&level=1" https://csi.lazypic.org/api/settasklevel`|
 | /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setplatesize`|
 | /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setundistortionsize`|
-| /api/rendersize | Reder Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setrendersize`|
+| /api/setrendersize | Reder Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setrendersize`|
+| /api/setoverscanratio | Overscan Ratio 비율 설정 | project, id, ratio | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&ratio=1.1" https://csi.lazypic.org/api/setoverscanratio`|
 | /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" https://csi.lazypic.org/api/setobjectid`|
 | /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&path=/show/color.cc" https://csi.lazypic.org/api/setociocc`|
 | /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" https://csi.lazypic.org/api/setrollmedia`|
