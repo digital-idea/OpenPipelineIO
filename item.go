@@ -100,6 +100,7 @@ type Item struct {
 	Dsize            string          `json:"dsize"`            // 언디스토션 사이즈 legacy
 	Rendersize       string          `json:"rendersize"`       // 특수상황시 렌더사이즈. 예) 5k플레이트를 3D에서 2k영역만 잡아서 최종 아웃풋까지 이어질 때
 	Undistortionsize string          `json:"undistortionsize"` // 언디스토션 사이즈 legacy
+	OverscanRatio    float64         `json:"overscanratio"`    // 오버스캔 비율
 	Status           string          `json:"status"`           // 샷 상태. legacy
 	StatusV2         string          `json:"statusv2"`         // 샷 상태.
 	Updatetime       string          `json:"updatetime"`       // 업데이트 시간 RFC3339

@@ -1647,35 +1647,30 @@ func Type(session *mgo.Session, project, name string) (string, error) {
 	return items[0].Type, nil
 }
 
-// SetImageSize 함수는 해당 샷의 이미지 사이즈를 설정한다.
+// SetImageSizeVer2 함수는 해당 샷의 이미지 사이즈를 설정한다.
 // key 설정값 : platesize, undistortionsize, rendersize
-func SetImageSize(session *mgo.Session, project, name, key, size string) (string, error) {
+func SetImageSizeVer2(session *mgo.Session, project, id, key, size string) error {
 	if !(key == "platesize" || key == "dsize" || key == "undistortionsize" || key == "rendersize") {
-		return "", errors.New("잘못된 key값입니다")
+		return errors.New("잘못된 key값입니다")
 	}
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return "", err
+		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	id := name + "_" + typ
 	c := session.DB("project").C(project)
 	if key == "dsize" || key == "undistortionsize" {
 		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"dsize": size, "undistortionsize": size, "updatetime": time.Now().Format(time.RFC3339)}})
 		if err != nil {
-			return id, err
+			return err
 		}
 	} else {
 		err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{key: size, "updatetime": time.Now().Format(time.RFC3339)}})
 		if err != nil {
-			return id, err
+			return err
 		}
 	}
-	return id, nil
+	return nil
 }
 
 // SetTimecode 함수는 item에 Timecode를 설정한다.
@@ -1885,6 +1880,21 @@ func SetEpisode(session *mgo.Session, project, id, episode string) error {
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"episode": episode, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetOverscanRatio 함수는 item에 OverscanRatio 값을 셋팅한다.
+func SetOverscanRatio(session *mgo.Session, project, id string, ratio float64) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"overscanratio": ratio, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}

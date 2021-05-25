@@ -1194,16 +1194,20 @@
             <div class="modal-body">
                 <input type="hidden" class="form-control" id="modal-rendersize-project">
                 <input type="hidden" class="form-control" id="modal-rendersize-id">
-                
                 <div class="form-group">
                     <label>렌더사이즈</label>
                     <input type="text" id="modal-rendersize-size" size="10" maxlength="13" name="Rendersize" value="" placeholder="0000x0000" class="form-control">
-                    <small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5k로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
+                    <small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5K로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
+                </div>
+                <div class="form-group">
+                    <label>Overscan Ratio</label>
+                    <input type="number" class="form-control" id="modal-rendersize-overscanratio" name="modal-rendersize-overscanratio" step="0.01">
+                    <small class="form-text text-muted">Overscan 비율, 값이 0이면 표기되지 않습니다. 썸네일에는 OSR로 표기됩니다.</small>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-warning" onclick="setRendersize(document.getElementById('modal-rendersize-project').value, document.getElementById('modal-rendersize-id').value, document.getElementById('modal-rendersize-size').value)" data-dismiss="modal">EDIT</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setRendersize();setOverscanRatio()" data-dismiss="modal">EDIT</button>
             </div>
         </div>
         </div>

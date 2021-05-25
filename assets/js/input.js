@@ -3788,7 +3788,7 @@ function setPlatesize(project, id, size) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
+                    document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S:${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3811,7 +3811,7 @@ function setPlatesize(project, id, size) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S: ${data.size}</span>`;
+                document.getElementById("platesize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('${project}', '${data.id}')">S:${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3865,7 +3865,7 @@ function setUndistortionsize(project, id, size) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
+                    document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U:${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3888,7 +3888,7 @@ function setUndistortionsize(project, id, size) {
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U: ${data.size}</span>`;
+                document.getElementById("undistortionsize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('${project}', '${data.id}', '${data.size}')">U:${data.size}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3910,6 +3910,7 @@ function setRendersizeModal(project, id) {
         success: function(data) {
             document.getElementById('modal-rendersize-id').value = id;
             document.getElementById("modal-rendersize-size").value = data.rendersize;
+            document.getElementById("modal-rendersize-overscanratio").value = data.overscanratio;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3917,7 +3918,10 @@ function setRendersizeModal(project, id) {
     });
 }
 
-function setRendersize(project, id, size) {
+function setRendersize() {
+    let project = document.getElementById('modal-rendersize-project').value;
+    let id = document.getElementById('modal-rendersize-id').value;
+    let size = document.getElementById('modal-rendersize-size').value;
     let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
@@ -3928,21 +3932,20 @@ function setRendersize(project, id, size) {
             }
             let id = cboxes[i].getAttribute("id");
             $.ajax({
-                url: "/api/setrendersize",
+                url: "/api2/setrendersize",
                 type: "post",
                 
                 data: {
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     size: size,
-                    userid: userid,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
                 },
                 dataType: "json",
                 success: function(data) {
-                    document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
+                    document.getElementById("rendersize-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R:${data.size}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3951,21 +3954,77 @@ function setRendersize(project, id, size) {
         }
     } else {
         $.ajax({
-            url: "/api/setrendersize",
+            url: "/api2/setrendersize",
             type: "post",
             
             data: {
                 project: project,
-                name: id2name(id),
+                id: id,
                 size: size,
-                userid: userid,
             },
             headers: {
                 "Authorization": "Basic "+ token
             },
             dataType: "json",
             success: function(data) {
-                document.getElementById("rendersize-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R: ${data.size}</span>`;
+                document.getElementById("rendersize-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">R:${data.size}</span>`;
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setOverscanRatio() {
+    let project = document.getElementById('modal-rendersize-project').value;
+    let id = document.getElementById('modal-rendersize-id').value;
+    let ratio = document.getElementById('modal-rendersize-overscanratio').value;
+    let token = document.getElementById("token").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/setoverscanratio",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    id: id,
+                    ratio: ratio,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    document.getElementById("overscanratio-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">OSR:${data.overscanratio}</span>`;
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/setoverscanratio",
+            type: "post",
+            
+            data: {
+                project: project,
+                id: id,
+                ratio: ratio,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                document.getElementById("overscanratio-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('${project}', '${data.id}')">OSR:${data.overscanratio}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
