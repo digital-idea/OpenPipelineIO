@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -31,8 +33,13 @@ func ProcessMain() {
 
 // worker 합수는 Review 데이터를 jobs로 보낸다.
 func worker(jobs <-chan Review) {
-	for j := range jobs {
-		processingItem(j)
+	for job := range jobs {
+		// job은 리뷰타입이다.
+		if job.Type == "clip" {
+			processingReviewClipItem(job)
+		} else if job.Type == "image" {
+			processingReviewImageItem(job)
+		}
 	}
 }
 
@@ -62,7 +69,7 @@ func queueingItem(jobs chan<- Review) {
 	}
 }
 
-func processingItem(review Review) {
+func processingReviewClipItem(review Review) {
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		log.Println(err)
@@ -120,6 +127,71 @@ func processingItem(review Review) {
 		if err != nil {
 			log.Println(err)
 		}
+		return
+	}
+	// 연산이 끝나고 해당 파일을 삭제해야 한다면 삭제를 진행한다.
+	if review.RemoveAfterProcess {
+		err = os.Remove(review.Path)
+		if err != nil {
+			err = setErrReview(session, reviewID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
+	// 연산 상태를 done 으로 바꾼다.
+	err = setReviewProcessStatus(session, reviewID, "done")
+	if err != nil {
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	return
+}
+
+func processingReviewImageItem(review Review) {
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer session.Close()
+	reviewID := review.ID.Hex()
+	// 연산 상태를 queued 으로 바꾼다. 바꾸는 이유는 ffmpeg 연산이 10초이상 진행될 때 상태가 바뀌지 않아서 이전에 연산중인 데이터가 다시 연산될 수 있기 때문이다.
+	err = setReviewProcessStatus(session, reviewID, "processing")
+	if err != nil {
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	// ReviewDataPath가 존재하는지 경로를 체크한다.
+	if _, err := os.Stat(CachedAdminSetting.ReviewDataPath); os.IsNotExist(err) {
+		err = setErrReview(session, reviewID, "admin 셋팅에 ReviewDataPath가 존재하지 않습니다")
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+	// image를 리뷰폴더에 복사한다.
+	input, err := ioutil.ReadFile(review.Path)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	ext := filepath.Ext(review.Path)
+	per, err := strconv.ParseInt(CachedAdminSetting.ReviewDataPathPermission, 8, 64)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	err = ioutil.WriteFile(CachedAdminSetting.ReviewDataPath+"/"+reviewID+ext, input, os.FileMode(per))
+	if err != nil {
+		log.Println(err)
 		return
 	}
 	// 연산이 끝나고 해당 파일을 삭제해야 한다면 삭제를 진행한다.

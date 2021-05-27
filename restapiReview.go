@@ -69,6 +69,11 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Review.Task = task
+	typ := r.FormValue("type")
+	if typ == "" {
+		rcp.Review.Type = "clip"
+	}
+	rcp.Review.Type = typ
 	stage := r.FormValue("stage")
 	// stage가 빈문자열이라면 기본 설정을 적용한다.
 	if stage == "" {

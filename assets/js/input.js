@@ -4474,6 +4474,7 @@ function addReview() {
             name: document.getElementById("modal-addreview-name").value,
             stage: document.getElementById("modal-addreview-stage").value,
             task: document.getElementById("modal-addreview-task").value,
+            type: document.getElementById("modal-addreview-type").value,
             author: document.getElementById("modal-addreview-author").value,
             path: document.getElementById("modal-addreview-path").value,
             description: document.getElementById("modal-addreview-description").value,
