@@ -3542,6 +3542,7 @@ Dropzone.options.reviewFileDropzone = {
     });
     this.on("success", function(file, response) {
       document.getElementById("modal-addreview-path").value = response.path;
+      document.getElementById("modal-addreview-type").value = response.type;
       document.getElementById("modal-addreview-path").disabled = true;
       document.getElementById("modal-addreview-removeafterprocess").disabled = false;
       document.getElementById("modal-addreview-removeafterprocess").checked = true;

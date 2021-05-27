@@ -1611,6 +1611,16 @@
                     </div>
                     <div class="col pt-0 pb-0">
                         <div class="form-group">
+                            <label class="form-text">Type</label>
+                            <select class="form-control" id="modal-addreview-type">
+                                <option value="clip">Clip(동영상)</option>
+                                <option value="image">Image(이미지)</option>
+                            </select>
+                            <small>리뷰 Media Type</small>
+                        </div>
+                    </div>
+                    <div class="col pt-0 pb-0">
+                        <div class="form-group">
                             <label class="form-text">Author</label>
                             <input type="text" class="form-control" id="modal-addreview-author" value="{{.User.ID}}" disabled>
                             <small>사용자 ID</small>
