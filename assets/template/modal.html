@@ -1557,8 +1557,7 @@
             <div class="modal-body">
                 <div class="pb-4">
                     <small class="text-warning">
-                        리뷰를 추가할 때는 아래 양식을 채워서 전송할 수 있습니다.<br>
-                        만약 그래픽스 툴에서 자동 전송되기를 원한다면 RestAPI를 활용해주세요.
+                        리뷰는 하단 폼을 채워서 전송할 수 있습니다. 개발자라면 <a href="https://github.com/digital-idea/csi3/blob/master/documents/rest_review.md" class="text-warning">RestAPI</a>로 전송할 수도 있습니다.
                     </small>
                 </div>
 
@@ -1651,31 +1650,32 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-6 form-group">
+                    <div class="col form-group">
                         <label class="form-text">Main Version</label>
                         <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-addreview-mainversion">
-                        <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        <small class="form-text text-muted">메인버전</small>
                     </div>
-                    <div class="col-6 form-group">
+                    <div class="col form-group">
                         <label class="form-text">Sub Version</label>
                         <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-addreview-subversion">
-                        <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        <small class="form-text text-muted">서브버전</small>
+                    </div>
+                    <div class="col form-group">
+                        <label class="form-text">FPS</label>
+                        <select id="modal-addreview-fps" class="form-control">
+                            <option value="24">24</option>
+                            <option value="23.976">23.976</option>
+                            <option value="23.98">23.98</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="29.97">29.97</option>
+                            <option value="59.94">59.94</option>
+                            <option value="60">60</option>
+                        </select>
+                        <small>재생에 사용되는 FPS</small>
                     </div>
                 </div>
-                <div class="form-group p-0 m-0">
-                    <label class="form-text">FPS</label>
-                    <select id="modal-addreview-fps" class="form-control">
-                        <option value="24">24</option>
-                        <option value="23.976">23.976</option>
-                        <option value="23.98">23.98</option>
-                        <option value="25">25</option>
-                        <option value="30">30</option>
-                        <option value="29.97">29.97</option>
-                        <option value="59.94">59.94</option>
-                        <option value="60">60</option>
-                    </select>
-                    <small>리뷰 재생시 필요한 fps. 리뷰창에서 프레임을 앞뒤로 움직일때도 사용됩니다.</small>
-                </div>
+                
                 <div class="form-group">
                     <label for="modal-addreview-description" class="col-form-label">Description</label>
                     <textarea class="form-control" id="modal-addreview-description" rows="2"></textarea>
