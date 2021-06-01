@@ -143,7 +143,11 @@ func handleReviewData(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	id := q.Get("id")
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, id))
+	ext := q.Get("ext")
+	if ext == "" {
+		ext = ".mp4" // 확장자가 없다면 기본적으로 mp4를 불러온다.
+	}
+	http.ServeFile(w, r, fmt.Sprintf("%s/%s%s", CachedAdminSetting.ReviewDataPath, id, ext))
 }
 
 // handleReviewDrawingData 함수는 리뷰 드로잉 데이터를 전송한다.

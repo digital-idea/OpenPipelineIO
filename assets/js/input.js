@@ -5075,9 +5075,9 @@ function initCanvas() {
     screenshotCanvas.setAttribute("height", globalClientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
-function selectReviewItem(id, project, fps) {
-    // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
-    document.title = "Review: " + project;
+function selectReviewItem(id) {
+    let project
+    let fps
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
@@ -5093,6 +5093,34 @@ function selectReviewItem(id, project, fps) {
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCtx = screenshotCanvas.getContext("2d")
 
+    // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
+    let totalFrame = 0
+    let sketchesFrame = [];
+    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        async: false,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            project = data.project
+            fps = data.fps
+            for (let i = 0; i < data.sketches.length; i++) {
+                sketchesFrame.push(data.sketches[i].frame)
+            }
+        },
+        error: function(){
+            return
+        }
+    })
+    // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
+    document.title = "Review: " + project;
     // 브러쉬 설정
     drawCtx.lineWidth = 4; // 브러시 사이즈
     drawCtx.strokeStyle = "#EFEAD6" // 브러시 컬러
@@ -5256,31 +5284,6 @@ function selectReviewItem(id, project, fps) {
     // 플레이어창의 배경을 검정으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
-    
-    // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
-    let totalFrame = 0
-    let sketchesFrame = [];
-    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
-    $.ajax({
-        url: "/api/review",
-        type: "post",
-        data: {
-            id: id,
-        },
-        async: false,
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            for (let i = 0; i < data.sketches.length; i++) {
-                sketchesFrame.push(data.sketches[i].frame)
-            }
-        },
-        error: function(){
-            return
-        }
-    })
     
     // 비디오가 로딩되면 메타데이터로 처리할 수 있는 과정을 처리한다.
     video.onloadedmetadata = function() {
