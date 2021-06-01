@@ -72,6 +72,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 	typ := r.FormValue("type")
 	if typ == "" {
 		rcp.Review.Type = "clip"
+		rcp.Review.Ext = ".mp4"
 	}
 	rcp.Review.Type = typ
 	stage := r.FormValue("stage")
