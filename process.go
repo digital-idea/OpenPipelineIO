@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
 	"time"
 
@@ -183,13 +182,12 @@ func processingReviewImageItem(review Review) {
 		log.Println(err)
 		return
 	}
-	ext := filepath.Ext(review.Path)
 	per, err := strconv.ParseInt(CachedAdminSetting.ReviewDataPathPermission, 8, 64)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	err = ioutil.WriteFile(CachedAdminSetting.ReviewDataPath+"/"+reviewID+ext, input, os.FileMode(per))
+	err = ioutil.WriteFile(CachedAdminSetting.ReviewDataPath+"/"+reviewID+review.Ext, input, os.FileMode(per))
 	if err != nil {
 		log.Println(err)
 		return

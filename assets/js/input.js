@@ -5078,6 +5078,7 @@ function initCanvas() {
 function selectReviewItem(id) {
     let project
     let fps
+    let ext
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
@@ -5111,6 +5112,7 @@ function selectReviewItem(id) {
         success: function(data) {
             project = data.project
             fps = data.fps
+            ext = data.ext
             for (let i = 0; i < data.sketches.length; i++) {
                 sketchesFrame.push(data.sketches[i].frame)
             }
