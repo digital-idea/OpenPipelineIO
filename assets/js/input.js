@@ -5079,6 +5079,7 @@ function selectReviewItem(id) {
     let project
     let fps
     let ext
+    let type
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
@@ -5113,6 +5114,7 @@ function selectReviewItem(id) {
             project = data.project
             fps = data.fps
             ext = data.ext
+            type = data.type
             for (let i = 0; i < data.sketches.length; i++) {
                 sketchesFrame.push(data.sketches[i].frame)
             }
@@ -5278,11 +5280,20 @@ function selectReviewItem(id) {
 
     // video 객체를 생성한다.
     var video = document.createElement('video');
-    video.src = "/reviewdata?id=" + id;
+    video.src = `/reviewdata?id=${id}&ext=${ext}`;
     video.autoplay = true;
     video.loop = true;
     video.setAttribute("id", "currentvideo");
-    
+
+    // 이미지 객체를 생성한다.
+    if (type == "image") {
+        reviewImage = new Image();
+        reviewImage.src = `/reviewdata?id=${id}&ext=${ext}`;
+        reviewImage.onload = function(){
+            playerCtx.drawImage(reviewImage, 0, 0);
+        }
+    }
+        
     // 플레이어창의 배경을 검정색으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);

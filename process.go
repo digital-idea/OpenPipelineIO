@@ -187,6 +187,7 @@ func processingReviewImageItem(review Review) {
 		log.Println(err)
 		return
 	}
+	fmt.Println(review.Ext)
 	err = ioutil.WriteFile(CachedAdminSetting.ReviewDataPath+"/"+reviewID+review.Ext, input, os.FileMode(per))
 	if err != nil {
 		log.Println(err)
