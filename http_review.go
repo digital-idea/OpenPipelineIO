@@ -143,7 +143,7 @@ func handleReviewData(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	id := q.Get("id")
-	ext := q.Get("ext")
+	ext := q.Get("ext") // 확장자를 자동으로 가지고 오지 않는 이유는 DB에 접근하는것을 줄이기 위해서이다.
 	if ext == "" {
 		ext = ".mp4" // 확장자가 없다면 기본적으로 mp4를 불러온다.
 	}
