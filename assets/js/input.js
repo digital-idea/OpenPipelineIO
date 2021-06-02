@@ -5283,7 +5283,7 @@ function selectReviewItem(id) {
     video.loop = true;
     video.setAttribute("id", "currentvideo");
     
-    // 플레이어창의 배경을 검정으로 한번 채운다.
+    // 플레이어창의 배경을 검정색으로 한번 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
