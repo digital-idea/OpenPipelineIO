@@ -208,6 +208,7 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 		Month    string `json:"month"`
 		Day      string `json:"day"`
 		Type     string `json:"type"`
+		Ext      string `json:"ext"`
 	}
 	rcp := Recipe{}
 	rcp.Unixtime = fmt.Sprintf("%d", time.Now().Unix())
@@ -241,14 +242,23 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 			mimeType := f.Header.Get("Content-Type")
 			ext := strings.ToLower(filepath.Ext(f.Filename))
 			switch mimeType {
-			case "image/jpeg", "image/png":
+			case "image/jpeg":
 				rcp.Type = "image"
-				if !(ext == ".jpg" || ext == ".jpeg" || ext == ".png") { // .jpg, .png 외에는 허용하지 않는다.
-					http.Error(w, "jpg, png 이미지만 허용합니다", http.StatusBadRequest)
+				rcp.Ext = ".jpg"
+				if !(ext == ".jpg" || ext == ".jpeg") {
+					http.Error(w, ".jpg, .png 이미지만 허용합니다", http.StatusBadRequest)
+					return
+				}
+			case "image/png":
+				rcp.Type = "image"
+				rcp.Ext = ".png"
+				if !(ext == ".png") {
+					http.Error(w, ".jpg, .png 이미지만 허용합니다", http.StatusBadRequest)
 					return
 				}
 			case "video/quicktime", "video/mp4":
 				rcp.Type = "clip"
+				rcp.Ext = ".mp4"
 				if !(ext == ".mov" || ext == ".mp4") { // .mov, .mp4 외에는 허용하지 않는다.
 					http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 					return

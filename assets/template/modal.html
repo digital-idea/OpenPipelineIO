@@ -1608,14 +1608,25 @@
                             <small>리뷰 Stage 이름</small>
                         </div>
                     </div>
-                    <div class="col pt-0 pb-0">
+                    <div class="col pt-0 pb-0" hidden>
                         <div class="form-group">
                             <label class="form-text">Type</label>
                             <select class="form-control" id="modal-addreview-type">
-                                <option value="clip">Clip(동영상)</option>
-                                <option value="image">Image(이미지)</option>
+                                <option value="clip">Clip</option>
+                                <option value="image">Image</option>
                             </select>
                             <small>리뷰 Media Type</small>
+                        </div>
+                    </div>
+                    <div class="col pt-0 pb-0">
+                        <div class="form-group">
+                            <label class="form-text">Ext</label>
+                            <select class="form-control" id="modal-addreview-ext">
+                                <option value=".mp4">.mp4</option>
+                                <option value=".jpg">.jpg</option>
+                                <option value=".png">.png</option>
+                            </select>
+                            <small>변환 확장자</small>
                         </div>
                     </div>
                     <div class="col pt-0 pb-0">
