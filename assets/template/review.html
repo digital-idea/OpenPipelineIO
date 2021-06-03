@@ -182,9 +182,11 @@
             <span class="player-end" id="player-end" title="]"></span>
             <span class="player-loop" id="player-loopandloopoff" title="l"></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
-            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()"></span>
+            <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
+            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace">/</span>
-            <span class="monospace" id="totalframe"></span>
+            <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
+            <span class="monospace" id="totalframe">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace pl-4" id="currentfps">{{.CurrentReview.Fps}}</span>
             <span class="monospace">fps</span>
             <!--

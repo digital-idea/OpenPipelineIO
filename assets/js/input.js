@@ -5115,7 +5115,6 @@ function selectReviewItem(id) {
             project = data.project
             fps = data.fps
             ext = data.ext
-            console.log(data.ext)
             type = data.type
             for (let i = 0; i < data.sketches.length; i++) {
                 sketchesFrame.push(data.sketches[i].frame)
@@ -5125,7 +5124,6 @@ function selectReviewItem(id) {
             return
         }
     })
-    console.log(ext)
     // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
     document.title = "Review: " + project;
     // 브러쉬 설정
@@ -5311,9 +5309,32 @@ function selectReviewItem(id) {
                 playerCtx.drawImage(this, wOffset, 0, renderWidth, clientHeight);
             }
         }
+        // 기존 스케치가 있을 수 있다. 드로잉을 지운다.
+        removeDrawing()
+        
+        // 서버에 드로잉이 존재하면 fg 캔버스에 그린다.
+        let drawing = new Image()
+        let frame = document.getElementById("currentframe").innerHTML
+        let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
+        let http = new XMLHttpRequest();
+        http.open("HEAD", url, false)
+        http.send()
+        if (http.status === 200) {
+            let fg = document.getElementById("drawcanvas")
+            let fgctx = fg.getContext("2d")
+            drawing.src = url
+            drawing.onload = function() {
+                fgctx.drawImage(drawing,
+                    0, 0, drawing.width, drawing.height,
+                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
+                );
+            };
+        } else {
+            return
+        }
     }
         
-    // 플레이어창의 배경을 검정색으로 한번 채운다.
+    // 플레이창 배경을 검정색으로 채운다.
     playerCtx.fillStyle = "#000000";
     playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
@@ -5326,7 +5347,7 @@ function selectReviewItem(id) {
         // 프레임 표기바의 간격을 구하고 global 변수에 저장한다.
         framelineOffset = clientWidth / totalFrame
         
-        // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
+        // 프레임바를 드로잉 한다. 스케치가 있다면 노란색바를 드로잉한다.
         for (let i = 0; i < totalFrame; i++) {
             uxCtx.beginPath();
             if (sketchesFrame.includes(i+1)) {                
@@ -5424,7 +5445,6 @@ function selectReviewItem(id) {
             removeDrawing()
             // 드로잉이 존재하면 fg 캔버스에 그린다.
             let drawing = new Image()
-            let id = document.getElementById("current-review-id").value
             let frame = document.getElementById("currentframe").innerHTML
             let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
             let http = new XMLHttpRequest();
