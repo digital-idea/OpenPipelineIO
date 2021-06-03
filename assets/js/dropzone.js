@@ -3543,7 +3543,6 @@ Dropzone.options.reviewFileDropzone = {
     this.on("success", function(file, response) {
       document.getElementById("modal-addreview-path").value = response.path;
       document.getElementById("modal-addreview-type").value = response.type;
-      console.log(response.ext)
       switch(response.ext) {
         case ".jpg":
           document.getElementById("modal-addreview-ext").value = ".jpg";
