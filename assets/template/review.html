@@ -198,7 +198,11 @@
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="white-space: nowrap; height: 10vh; overflow-x: scroll; overflow-y: hidden; scrollbar-color: #6d6d6d #2d2d2d; scrollbar-color: dark;" id="reviewgroup">
             {{range .ReviewGroup}}
-                <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                {{if eq .Type "image" }}
+                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
+                {{else}}
+                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                {{end}}
             {{end}}
         </div>
     </div>
