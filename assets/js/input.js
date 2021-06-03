@@ -4475,6 +4475,7 @@ function addReview() {
             stage: document.getElementById("modal-addreview-stage").value,
             task: document.getElementById("modal-addreview-task").value,
             type: document.getElementById("modal-addreview-type").value,
+            ext: document.getElementById("modal-addreview-ext").value,
             author: document.getElementById("modal-addreview-author").value,
             path: document.getElementById("modal-addreview-path").value,
             description: document.getElementById("modal-addreview-description").value,
@@ -5114,6 +5115,7 @@ function selectReviewItem(id) {
             project = data.project
             fps = data.fps
             ext = data.ext
+            console.log(data.ext)
             type = data.type
             for (let i = 0; i < data.sketches.length; i++) {
                 sketchesFrame.push(data.sketches[i].frame)
@@ -5123,6 +5125,7 @@ function selectReviewItem(id) {
             return
         }
     })
+    console.log(ext)
     // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
     document.title = "Review: " + project;
     // 브러쉬 설정
@@ -5290,7 +5293,23 @@ function selectReviewItem(id) {
         reviewImage = new Image();
         reviewImage.src = `/reviewdata?id=${id}&ext=${ext}`;
         reviewImage.onload = function(){
-            playerCtx.drawImage(reviewImage, 0, 0);
+            renderWidth = (this.width * clientHeight) / this.height // 실제로 렌더링되는 너비
+            renderHeight = (this.height * clientWidth) / this.width // 실제로 렌더링되는 높이
+            if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+                // 가로형: 가로비율이 맞고, 높이가 적을 때
+                let hOffset = (clientHeight - renderHeight) / 2
+                globalReviewRenderWidth = clientWidth
+                globalReviewRenderHeight = renderHeight
+                globalReviewRenderHeightOffset = hOffset
+                playerCtx.drawImage(this, 0, hOffset, clientWidth, renderHeight);
+            } else {
+                // 세로형: 가로비율이 작고 높이가 맞을 때
+                let wOffset = (clientWidth - renderWidth) / 2
+                globalReviewRenderWidth = renderWidth
+                globalReviewRenderHeight = clientHeight
+                globalReviewRenderWidthOffset = wOffset
+                playerCtx.drawImage(this, wOffset, 0, renderWidth, clientHeight);
+            }
         }
     }
         
@@ -5367,7 +5386,6 @@ function selectReviewItem(id) {
 
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
-
             }
         })();
     }, 0);
