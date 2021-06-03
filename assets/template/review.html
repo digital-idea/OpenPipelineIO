@@ -170,25 +170,25 @@
             <span class="player-text" id="player-text"></span>
             <!--<span class="player-save" id="player-save" onclick="saveDrawing()" title="b"></span>-->
             <span class="player-screenshot" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')" title="c"></span>
-            <span class="drawing-prev" id="drawing-prev" title=","></span>
-            <span class="drawing-next mr-5" id="drawing-next" title="."></span>
+            <span class="drawing-prev" id="drawing-prev" title="," {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="drawing-next mr-5" id="drawing-next" title="." {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
 
-            <span class="player-start" id="player-start" title="["></span>
-            <span class="player-left" id="player-left" title="←"></span>
+            <span class="player-start" id="player-start" title="[" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-left" id="player-left" title="←" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <span class="player-pause" id="player-pause" title="s" hidden></span>
             <span class="player-play" id="player-play" title="p" hidden></span>
-            <span class="player-play" id="player-playandpause" title="spacebar"></span>
-            <span class="player-right" id="player-right" title="→"></span>
-            <span class="player-end" id="player-end" title="]"></span>
-            <span class="player-loop" id="player-loopandloopoff" title="l"></span>
+            <span class="player-play" id="player-playandpause" title="spacebar" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-right" id="player-right" title="→" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-end" id="player-end" title="]" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-loop" id="player-loopandloopoff" title="l" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
             <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace">/</span>
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
             <span class="monospace" id="totalframe">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
-            <span class="monospace pl-4" id="currentfps">{{.CurrentReview.Fps}}</span>
-            <span class="monospace">fps</span>
+            <span class="monospace pl-4" id="currentfps" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>{{.CurrentReview.Fps}}</span>
+            <span class="monospace" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>fps</span>
             <!--
                 <span class="player-mute" id="player-mute"></span>
                 <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
