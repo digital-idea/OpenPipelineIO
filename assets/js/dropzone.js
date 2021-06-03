@@ -3547,11 +3547,11 @@ Dropzone.options.reviewFileDropzone = {
         case ".jpg":
           document.getElementById("modal-addreview-ext").value = ".jpg";
           break;
-        case ".png":
-          document.getElementById("modal-addreview-ext").value = ".png";
-          break;
         case ".jpeg":
           document.getElementById("modal-addreview-ext").value = ".jpg";
+          break;
+        case ".png":
+          document.getElementById("modal-addreview-ext").value = ".png";
           break;
         case ".mov":
           document.getElementById("modal-addreview-ext").value = ".mp4";

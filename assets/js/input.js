@@ -5284,7 +5284,7 @@ function selectReviewItem(id) {
     video.setAttribute("id", "currentvideo");
 
     // 이미지 객체를 생성한다.
-    if (type == "image") {
+    if (type === "image") {
         reviewImage = new Image();
         reviewImage.src = `/reviewdata?id=${id}&ext=${ext}`;
         reviewImage.onload = function(){
