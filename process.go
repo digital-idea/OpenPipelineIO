@@ -34,10 +34,11 @@ func ProcessMain() {
 func worker(jobs <-chan Review) {
 	for job := range jobs {
 		// job은 리뷰타입이다.
-		if job.Type == "clip" {
-			processingReviewClipItem(job)
-		} else if job.Type == "image" {
+		switch job.Type {
+		case "image":
 			processingReviewImageItem(job)
+		default:
+			processingReviewClipItem(job)
 		}
 	}
 }
