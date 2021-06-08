@@ -170,23 +170,25 @@
             <span class="player-text" id="player-text"></span>
             <!--<span class="player-save" id="player-save" onclick="saveDrawing()" title="b"></span>-->
             <span class="player-screenshot" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')" title="c"></span>
-            <span class="drawing-prev" id="drawing-prev" title=","></span>
-            <span class="drawing-next mr-5" id="drawing-next" title="."></span>
+            <span class="drawing-prev" id="drawing-prev" title="," {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="drawing-next mr-5" id="drawing-next" title="." {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
 
-            <span class="player-start" id="player-start" title="["></span>
-            <span class="player-left" id="player-left" title="←"></span>
+            <span class="player-start" id="player-start" title="[" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-left" id="player-left" title="←" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <span class="player-pause" id="player-pause" title="s" hidden></span>
             <span class="player-play" id="player-play" title="p" hidden></span>
-            <span class="player-play" id="player-playandpause" title="spacebar"></span>
-            <span class="player-right" id="player-right" title="→"></span>
-            <span class="player-end" id="player-end" title="]"></span>
-            <span class="player-loop" id="player-loopandloopoff" title="l"></span>
+            <span class="player-play" id="player-playandpause" title="spacebar" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-right" id="player-right" title="→" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-end" id="player-end" title="]" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="player-loop" id="player-loopandloopoff" title="l" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
-            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()"></span>
+            <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
+            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace">/</span>
-            <span class="monospace" id="totalframe"></span>
-            <span class="monospace pl-4" id="currentfps">{{.CurrentReview.Fps}}</span>
-            <span class="monospace">fps</span>
+            <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
+            <span class="monospace" id="totalframe">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
+            <span class="monospace pl-4" id="currentfps" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>{{.CurrentReview.Fps}}</span>
+            <span class="monospace" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>fps</span>
             <!--
                 <span class="player-mute" id="player-mute"></span>
                 <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
@@ -196,7 +198,11 @@
     <div class="row ml-3 mr-3">
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="white-space: nowrap; height: 10vh; overflow-x: scroll; overflow-y: hidden; scrollbar-color: #6d6d6d #2d2d2d; scrollbar-color: dark;" id="reviewgroup">
             {{range .ReviewGroup}}
-                <video src="/reviewdata?id={{.ID.Hex}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                {{if eq .Type "image" }}
+                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
+                {{else}}
+                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                {{end}}
             {{end}}
         </div>
     </div>
@@ -207,7 +213,7 @@
 <script src="/assets/js/csi_v02.js"></script>
 <script src="/assets/js/dropzone.js"></script>
 <script type="text/javascript">
-    selectReviewItem('{{.CurrentReview.ID.Hex}}', '{{.CurrentReview.Project}}', '{{.CurrentReview.Fps}}')
+    selectReviewItem('{{.CurrentReview.ID.Hex}}')
 </script>
 </html>
 {{end}}

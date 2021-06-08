@@ -28,6 +28,8 @@ type Review struct {
 	SubVersion         int           `json:"subversion"`              // Sub Version
 	Stage              string        `json:"stage"`                   // 현재 리뷰 Stage 단계
 	RemoveAfterProcess bool          `json:"removeafterprocess"`      // 프로세스 처리후 제거하는 옵션
+	Type               string        `json:"type"`                    // review type: clip, image 가 존재한다. 추후 3D 데이터도 리뷰에 포함될 수 있다.
+	Ext                string        `json:"ext"`                     // 웹서버에서 보일 최종 reviewdata의 확장자
 }
 
 // Sketch 는 스케치 자료구조이다.

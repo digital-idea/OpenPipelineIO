@@ -3542,6 +3542,26 @@ Dropzone.options.reviewFileDropzone = {
     });
     this.on("success", function(file, response) {
       document.getElementById("modal-addreview-path").value = response.path;
+      document.getElementById("modal-addreview-type").value = response.type;
+      switch(response.ext) {
+        case ".jpg":
+          document.getElementById("modal-addreview-ext").value = ".jpg";
+          break;
+        case ".jpeg":
+          document.getElementById("modal-addreview-ext").value = ".jpg";
+          break;
+        case ".png":
+          document.getElementById("modal-addreview-ext").value = ".png";
+          break;
+        case ".mov":
+          document.getElementById("modal-addreview-ext").value = ".mp4";
+          break;
+        case ".mp4":
+          document.getElementById("modal-addreview-ext").value = ".mp4";
+          break;
+        default:
+          document.getElementById("modal-addreview-ext").value = ".mp4";
+      }
       document.getElementById("modal-addreview-path").disabled = true;
       document.getElementById("modal-addreview-removeafterprocess").disabled = false;
       document.getElementById("modal-addreview-removeafterprocess").checked = true;

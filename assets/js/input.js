@@ -4474,6 +4474,8 @@ function addReview() {
             name: document.getElementById("modal-addreview-name").value,
             stage: document.getElementById("modal-addreview-stage").value,
             task: document.getElementById("modal-addreview-task").value,
+            type: document.getElementById("modal-addreview-type").value,
+            ext: document.getElementById("modal-addreview-ext").value,
             author: document.getElementById("modal-addreview-author").value,
             path: document.getElementById("modal-addreview-path").value,
             description: document.getElementById("modal-addreview-description").value,
@@ -5074,9 +5076,8 @@ function initCanvas() {
     screenshotCanvas.setAttribute("height", globalClientHeight) // 스크린샷 캔버스 세로 사이즈를 설정한다.
 }
 
-function selectReviewItem(id, project, fps) {
-    // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
-    document.title = "Review: " + project;
+function selectReviewItem(id) {
+    let project, fps, ext, type;
     let playerbox = document.getElementById("playerbox"); // player 캔버스를담을 div를 가지고 온다.
     let clientWidth = playerbox.clientWidth // 클라이언트 사용자의 가로 사이즈를 구한다.
     let clientHeight = playerbox.clientHeight // 클라이언트 사용자의 세로 사이즈를 구한다.
@@ -5092,6 +5093,36 @@ function selectReviewItem(id, project, fps) {
     let screenshotCanvas = document.getElementById("screenshot");
     screenshotCtx = screenshotCanvas.getContext("2d")
 
+    // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
+    let totalFrame = 0
+    let sketchesFrame = [];
+    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
+    $.ajax({
+        url: "/api/review",
+        type: "post",
+        data: {
+            id: id,
+        },
+        async: false,
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function(data) {
+            project = data.project
+            fps = data.fps
+            ext = data.ext
+            type = data.type
+            for (let i = 0; i < data.sketches.length; i++) {
+                sketchesFrame.push(data.sketches[i].frame)
+            }
+        },
+        error: function(){
+            return
+        }
+    })
+    // 입력받은 프로젝트로 웹페이지의 Review Title을 변경한다.
+    document.title = "Review: " + project;
     // 브러쉬 설정
     drawCtx.lineWidth = 4; // 브러시 사이즈
     drawCtx.strokeStyle = "#EFEAD6" // 브러시 컬러
@@ -5247,39 +5278,62 @@ function selectReviewItem(id, project, fps) {
 
     // video 객체를 생성한다.
     var video = document.createElement('video');
-    video.src = "/reviewdata?id=" + id;
+    video.src = `/reviewdata?id=${id}&ext=${ext}`;
     video.autoplay = true;
     video.loop = true;
     video.setAttribute("id", "currentvideo");
-    
-    // 플레이어창의 배경을 검정으로 한번 채운다.
-    playerCtx.fillStyle = "#000000";
-    playerCtx.fillRect(0, 0, clientWidth, clientHeight);
-    
-    // 비디오객체의 메타데이터를 로딩하면 실행할 함수를 설정한다.
-    let totalFrame = 0
-    let sketchesFrame = [];
-    // 기존에 드로잉 되어 있는 데이터를 가지고 온다.
-    $.ajax({
-        url: "/api/review",
-        type: "post",
-        data: {
-            id: id,
-        },
-        async: false,
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            for (let i = 0; i < data.sketches.length; i++) {
-                sketchesFrame.push(data.sketches[i].frame)
+
+    // 이미지 객체를 생성한다.
+    if (type === "image") {
+        reviewImage = new Image();
+        reviewImage.src = `/reviewdata?id=${id}&ext=${ext}`;
+        reviewImage.onload = function(){
+            renderWidth = (this.width * clientHeight) / this.height // 실제로 렌더링되는 너비
+            renderHeight = (this.height * clientWidth) / this.width // 실제로 렌더링되는 높이
+            if (clientWidth <= renderWidth && renderHeight < clientHeight) {
+                // 가로형: 가로비율이 맞고, 높이가 적을 때
+                let hOffset = (clientHeight - renderHeight) / 2
+                globalReviewRenderWidth = clientWidth
+                globalReviewRenderHeight = renderHeight
+                globalReviewRenderHeightOffset = hOffset
+                playerCtx.drawImage(this, 0, hOffset, clientWidth, renderHeight);
+            } else {
+                // 세로형: 가로비율이 작고 높이가 맞을 때
+                let wOffset = (clientWidth - renderWidth) / 2
+                globalReviewRenderWidth = renderWidth
+                globalReviewRenderHeight = clientHeight
+                globalReviewRenderWidthOffset = wOffset
+                playerCtx.drawImage(this, wOffset, 0, renderWidth, clientHeight);
             }
-        },
-        error: function(){
+        }
+        // 기존 스케치가 있을 수 있다. 드로잉을 지운다.
+        removeDrawing()
+        
+        // 서버에 드로잉이 존재하면 fg 캔버스에 그린다.
+        let drawing = new Image()
+        let frame = document.getElementById("currentframe").innerHTML
+        let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
+        let http = new XMLHttpRequest();
+        http.open("HEAD", url, false)
+        http.send()
+        if (http.status === 200) {
+            let fg = document.getElementById("drawcanvas")
+            let fgctx = fg.getContext("2d")
+            drawing.src = url
+            drawing.onload = function() {
+                fgctx.drawImage(drawing,
+                    0, 0, drawing.width, drawing.height,
+                    globalReviewRenderWidthOffset, globalReviewRenderHeightOffset, globalReviewRenderWidth, globalReviewRenderHeight
+                );
+            };
+        } else {
             return
         }
-    })
+    }
+        
+    // 플레이창 배경을 검정색으로 채운다.
+    playerCtx.fillStyle = "#000000";
+    playerCtx.fillRect(0, 0, clientWidth, clientHeight);
     
     // 비디오가 로딩되면 메타데이터로 처리할 수 있는 과정을 처리한다.
     video.onloadedmetadata = function() {
@@ -5290,7 +5344,7 @@ function selectReviewItem(id, project, fps) {
         // 프레임 표기바의 간격을 구하고 global 변수에 저장한다.
         framelineOffset = clientWidth / totalFrame
         
-        // 프레임 위치에 해당하는 곳에 회색바로 박스를 그린다.
+        // 프레임바를 드로잉 한다. 스케치가 있다면 노란색바를 드로잉한다.
         for (let i = 0; i < totalFrame; i++) {
             uxCtx.beginPath();
             if (sketchesFrame.includes(i+1)) {                
@@ -5350,7 +5404,6 @@ function selectReviewItem(id, project, fps) {
 
                 // 다음화면 갱신
                 setTimeout(loop, 1000 / parseFloat(fps));
-
             }
         })();
     }, 0);
@@ -5389,7 +5442,6 @@ function selectReviewItem(id, project, fps) {
             removeDrawing()
             // 드로잉이 존재하면 fg 캔버스에 그린다.
             let drawing = new Image()
-            let id = document.getElementById("current-review-id").value
             let frame = document.getElementById("currentframe").innerHTML
             let url = `/reviewdrawingdata?id=${id}&frame=${frame}&time=${new Date().getTime()}`
             let http = new XMLHttpRequest();

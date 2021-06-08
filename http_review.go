@@ -143,7 +143,11 @@ func handleReviewData(w http.ResponseWriter, r *http.Request) {
 	}
 	q := r.URL.Query()
 	id := q.Get("id")
-	http.ServeFile(w, r, fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, id))
+	ext := q.Get("ext") // 확장자를 자동으로 가지고 오지 않는 이유는 DB에 접근하는것을 줄이기 위해서이다.
+	if ext == "" {
+		ext = ".mp4" // 확장자가 없다면 기본적으로 mp4를 불러온다.
+	}
+	http.ServeFile(w, r, fmt.Sprintf("%s/%s%s", CachedAdminSetting.ReviewDataPath, id, ext))
 }
 
 // handleReviewDrawingData 함수는 리뷰 드로잉 데이터를 전송한다.
@@ -203,6 +207,8 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 		Year     string `json:"year"`
 		Month    string `json:"month"`
 		Day      string `json:"day"`
+		Type     string `json:"type"`
+		Ext      string `json:"ext"`
 	}
 	rcp := Recipe{}
 	rcp.Unixtime = fmt.Sprintf("%d", time.Now().Unix())
@@ -234,79 +240,95 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 			}
 			defer file.Close()
 			mimeType := f.Header.Get("Content-Type")
+			ext := strings.ToLower(filepath.Ext(f.Filename))
 			switch mimeType {
+			case "image/jpeg":
+				rcp.Type = "image"
+				rcp.Ext = ".jpg"
+				if !(ext == ".jpg" || ext == ".jpeg") {
+					http.Error(w, ".jpg, .png 이미지만 허용합니다", http.StatusBadRequest)
+					return
+				}
+			case "image/png":
+				rcp.Type = "image"
+				rcp.Ext = ".png"
+				if !(ext == ".png") {
+					http.Error(w, ".jpg, .png 이미지만 허용합니다", http.StatusBadRequest)
+					return
+				}
 			case "video/quicktime", "video/mp4":
-				ext := strings.ToLower(filepath.Ext(f.Filename))
+				rcp.Type = "clip"
+				rcp.Ext = ".mp4"
 				if !(ext == ".mov" || ext == ".mp4") { // .mov, .mp4 외에는 허용하지 않는다.
 					http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 					return
 				}
-				data, err := ioutil.ReadAll(file)
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewUploadPathPermission, 8, 64)
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				var path string
-				if CachedAdminSetting.ReviewUploadPath == "" {
-					path, err = ioutil.TempDir("", "")
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-				} else {
-					// Review Upload Path를 파싱한다.
-					var reviewUploadPath bytes.Buffer
-					reviewUploadPathTmpl, err := template.New("reviewUploadPath").Parse(CachedAdminSetting.ReviewUploadPath)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-					err = reviewUploadPathTmpl.Execute(&reviewUploadPath, rcp)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-					path = reviewUploadPath.String()
-					// path가 존재하지 않으면 생성한다.
-					if _, err := os.Stat(path); os.IsNotExist(err) {
-						err = os.MkdirAll(path, os.FileMode(filePerm))
-						if err != nil {
-							http.Error(w, err.Error(), http.StatusInternalServerError)
-							return
-						}
-					}
-					uid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathUID)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-					gid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathGID)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-					err = os.Chown(path, uid, gid)
-					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
-						return
-					}
-				}
-				err = ioutil.WriteFile(path+"/"+f.Filename, data, os.FileMode(filePerm))
-				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
-					return
-				}
-				rcp.Path = path + "/" + f.Filename
 			default:
 				//허용하지 않는 파일 포맷입니다.
 				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 				return
 			}
+			data, err := ioutil.ReadAll(file)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewUploadPathPermission, 8, 64)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			var path string
+			if CachedAdminSetting.ReviewUploadPath == "" {
+				path, err = ioutil.TempDir("", "")
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			} else {
+				// Review Upload Path를 파싱한다.
+				var reviewUploadPath bytes.Buffer
+				reviewUploadPathTmpl, err := template.New("reviewUploadPath").Parse(CachedAdminSetting.ReviewUploadPath)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				err = reviewUploadPathTmpl.Execute(&reviewUploadPath, rcp)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				path = reviewUploadPath.String()
+				// path가 존재하지 않으면 생성한다.
+				if _, err := os.Stat(path); os.IsNotExist(err) {
+					err = os.MkdirAll(path, os.FileMode(filePerm))
+					if err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+				}
+				uid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathUID)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				gid, err := strconv.Atoi(CachedAdminSetting.ReviewUploadPathGID)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				err = os.Chown(path, uid, gid)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			}
+			err = ioutil.WriteFile(path+"/"+f.Filename, data, os.FileMode(filePerm))
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rcp.Path = path + "/" + f.Filename
 		}
 	}
 	// 업로드 경로를 리턴합니다. Dropzone에서 활용하기 위해 json으로 반환합니다.

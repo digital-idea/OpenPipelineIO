@@ -69,6 +69,17 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Review.Task = task
+	typ := r.FormValue("type")
+	if typ == "" {
+		rcp.Review.Type = "clip"
+
+	}
+	rcp.Review.Type = typ
+	ext := r.FormValue("ext")
+	if ext == "" {
+		rcp.Review.Ext = ".mp4"
+	}
+	rcp.Review.Ext = ext
 	stage := r.FormValue("stage")
 	// stage가 빈문자열이라면 기본 설정을 적용한다.
 	if stage == "" {
@@ -930,20 +941,19 @@ func handleAPIRmReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.ID = reviewID
+	review, err := getReview(session, reviewID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// 데이터 삭제
-	reviewfile := fmt.Sprintf("%s/%s.mp4", CachedAdminSetting.ReviewDataPath, rcp.ID)
+	reviewfile := fmt.Sprintf("%s/%s%s", CachedAdminSetting.ReviewDataPath, review.Ext, rcp.ID)
 	if _, err := os.Stat(reviewfile); err == nil {
 		err = os.Remove(reviewfile)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	}
-	// 로그를 남기기 위해서 기본 정보를 불러온다.
-	review, err := getReview(session, rcp.ID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Rm Review: %s", rcp.ID), review.Project, review.Name, "csi3", rcp.UserID, 180)
