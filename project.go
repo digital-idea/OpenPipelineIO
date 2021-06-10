@@ -65,6 +65,7 @@ type Project struct {
 	PlateInColorspace        string        `json:"plateincolorspace"`        // 아웃풋 플레이트 IN  컬러스페이스. 넘벳 프록시 이미지 렌더링시 사용된다.
 	PlateOutColorspace       string        `json:"plateoutcolorspace"`       // 아웃풋 플레이트 OUT 컬러스페이스
 	ProxyOutColorspace       string        `json:"proxyoutcolorspace"`       // 프록시 이미지 OUT 컬러스페이스(플레이트를 이용해서 프록시 이미지 생성시 사용할 Out 컬러스페이스)
+	Fps                      float64       `json:"fps"`                      // 프로젝트 FPS
 	OutputMov                Mov           `json:"outputmov"`                // 아웃풋 Mov 포멧
 	EditMov                  Mov           `json:"editmov"`                  // 편집실 Mov 포멧 - 레터박스 이슈로 아웃풋 Mov포멧과 다를때가 있다.
 	Milestones               []Milestone   `json:"milestones"`               // CrankIn, CrankUp, 심의일, 시작일, 마감일, 기술시사, 칸, 예고편, 촬영종료, 촬영시작등에 해당하는 일정리스트
