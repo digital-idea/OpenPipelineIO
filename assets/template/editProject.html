@@ -176,6 +176,23 @@
 					<input type="text" name="Daily" class="form-control" placeholder="데일리경로" value={{.Project.Daily}}>
 					<small class="form-text text-muted">편집본 영상 경로</small>
 					<input type="text" name="EditDir" class="form-control" placeholder="편집본경로" value={{.Project.EditDir}}>
+					<!--프로젝트 FPS-->
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">Fps</small>
+							<select name="Fps" class="form-control">
+								<option value="0" {{if eq .Project.Fps 0.0}}selected{{end}}>Unknown</option>
+								<option value="23.976" {{if eq .Project.Fps 23.976}}selected{{end}}>23.976</option>
+								<option value="23.98" {{if eq .Project.Fps 23.98}}selected{{end}}>23.98</option>
+								<option value="24" {{if eq .Project.Fps 24.0}}selected{{end}}>24</option>
+								<option value="25" {{if eq .Project.Fps 25.0}}selected{{end}}>25</option>
+								<option value="29.97" {{if eq .Project.Fps 29.97}}selected{{end}}>29.97</option>
+								<option value="30" {{if eq .Project.Fps 30.0}}selected{{end}}>30</option>
+								<option value="59.94" {{if eq .Project.Fps 59.94}}selected{{end}}>59.94</option>
+								<option value="60" {{if eq .Project.Fps 60.0}}selected{{end}}>60</option>
+							</select>
+						</div>
+					</div>
 				</div>
 				<div class="form-group pt-3">
 					<label>아웃풋 옵션</label>
@@ -362,7 +379,7 @@
 						<div class="col">
 							<small class="form-text text-muted">Fps</small>
 							<select name="OutputMov.Fps" class="form-control">
-								<option value="0" {{if eq .Project.OutputMov.Fps 0.0}}selected{{end}}>unknown</option>
+								<option value="0" {{if eq .Project.OutputMov.Fps 0.0}}selected{{end}}>Unknown</option>
 								<option value="23.976" {{if eq .Project.OutputMov.Fps 23.976}}selected{{end}}>23.976</option>
 								<option value="23.98" {{if eq .Project.OutputMov.Fps 23.98}}selected{{end}}>23.98</option>
 								<option value="24" {{if eq .Project.OutputMov.Fps 24.0}}selected{{end}}>24</option>
@@ -424,7 +441,7 @@
 								<option value="Apple_Prores_422Proxy" {{if eq .Project.EditMov.Codec "Apple_Prores_422Proxy" }}selected{{end}}>Apple_Prores_422Proxy</option>
 								<option value="H.264" {{if eq .Project.EditMov.Codec "H.264" }}selected{{end}}>H.264</option>
 								<option value="Avid_DNxHD_Codec" {{if eq .Project.EditMov.Codec "Avid_DNxHD_Codec" }}selected{{end}}>Avid_DNxHD_Codec</option>
-								<option value="" {{if eq .Project.EditMov.Codec "" }}selected{{end}}>unknown</option>
+								<option value="" {{if eq .Project.EditMov.Codec "" }}selected{{end}}>Unknown</option>
 							</select>
 						</div>
 					</div>
@@ -432,7 +449,7 @@
 						<div class="col">
 							<small class="form-text text-muted">Fps</small>
 							<select name="EditMov.Fps" class="form-control">
-								<option value="0" {{if eq .Project.EditMov.Fps 0.0}}selected{{end}}>unknown</option>
+								<option value="0" {{if eq .Project.EditMov.Fps 0.0}}selected{{end}}>Unknown</option>
 								<option value="23.976" {{if eq .Project.EditMov.Fps 23.976}}selected{{end}}>23.976</option>
 								<option value="23.98" {{if eq .Project.EditMov.Fps 23.98}}selected{{end}}>23.98</option>
 								<option value="24" {{if eq .Project.EditMov.Fps 24.0}}selected{{end}}>24</option>

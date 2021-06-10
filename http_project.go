@@ -252,6 +252,10 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal.Wiki = r.FormValue("Wiki")
 	renewal.Daily = r.FormValue("Daily")
 	renewal.EditDir = r.FormValue("EditDir")
+	fps, err := strconv.ParseFloat(r.FormValue("Fps"), 64)
+	if err == nil {
+		renewal.Fps = fps
+	}
 	aspectratio, err := strconv.ParseFloat(r.FormValue("AspectRatio"), 64)
 	if err == nil {
 		renewal.AspectRatio = aspectratio
