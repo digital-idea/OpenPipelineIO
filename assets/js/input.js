@@ -83,6 +83,22 @@ function id2name(id) {
     return l.join("_")
 }
 
+// addTagAtSearchbox 함수는 태그가 searchbox-searchbox 에 없다면 검색어로 추가한다.
+function addTagAtSearchbox(tag) {
+    let searchboxWord = document.getElementById("searchbox-searchword")
+    if (!searchboxWord.value.includes("tag:"+tag)) {
+        searchboxWord.value = searchboxWord.value + " tag:"+tag
+    }
+}
+
+// addAssetTagAtSearchbox 함수는 태그가 searchbox-searchbox 에 없다면 검색어로 추가한다.
+function addAssetTagAtSearchbox(assettag) {
+    let searchboxWord = document.getElementById("searchbox-searchword")
+    if (!searchboxWord.value.includes("assettag:"+assettag)) {
+        searchboxWord.value = searchboxWord.value + " assettag:"+assettag
+    }
+}
+
 // setModal 함수는 modalID와 value를 받아서 modal에 셋팅한다.
 function setModal(modalID, value) {
     document.getElementById(modalID).value = value;

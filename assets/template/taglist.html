@@ -3,22 +3,30 @@
 <div class="text-right mb-1 mr-3">
 	<span class="text-badge">Asset tags:</span>
 	{{range .Assettags}}
-		<a href="/inputmode?project={{$.SearchOption.Project}}&
-				searchword=assettags:{{.}}&
-				sortkey={{$.SearchOption.Sortkey}}&
-				sortkey={{$.SearchOption.Sortkey}}&
-				assign={{$.SearchOption.Assign}}&
-				ready={{$.SearchOption.Ready}}&
-				wip={{$.SearchOption.Wip}}&
-				confirm={{$.SearchOption.Confirm}}&
-				done={{$.SearchOption.Done}}&
-				omit={{$.SearchOption.Omit}}&
-				hold={{$.SearchOption.Hold}}&
-				out={{$.SearchOption.Out}}&
-				none={{$.SearchOption.None}}&
-				searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
-				truestatus={{Join $.AllStatusIDs "," }}&
-				task={{$.SearchOption.Task}}" class="badge badge-darkmode statusuri">{{.}}</a>
+		<div class="btn-group">
+			<button class="btn btn-darkmode btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				{{.}}
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&
+					searchword=assettags:{{.}}&
+					sortkey={{$.SearchOption.Sortkey}}&
+					sortkey={{$.SearchOption.Sortkey}}&
+					assign={{$.SearchOption.Assign}}&
+					ready={{$.SearchOption.Ready}}&
+					wip={{$.SearchOption.Wip}}&
+					confirm={{$.SearchOption.Confirm}}&
+					done={{$.SearchOption.Done}}&
+					omit={{$.SearchOption.Omit}}&
+					hold={{$.SearchOption.Hold}}&
+					out={{$.SearchOption.Out}}&
+					none={{$.SearchOption.None}}&
+					searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+					truestatus={{Join $.AllStatusIDs "," }}&
+					task={{$.SearchOption.Task}}">Goto Tag Page</a>
+				<a class="dropdown-item" href="#" onclick="addAssetTagAtSearchbox('{{.}}')">Add Searchbox</a>
+			</div>
+		</div>
 	{{end}}
 </div>
 
@@ -28,39 +36,29 @@
 		{{if eq . "" }}
 		{{else}}
 			{{$tag := AddTagColon .}}
-			{{if eq $tag $.SearchOption.Searchword}}
-				<a href="/inputmode?project={{$.SearchOption.Project}}&
-						searchword=tag:{{.}}&
-						sortkey={{$.SearchOption.Sortkey}}&
-						assign={{$.SearchOption.Assign}}&
-						ready={{$.SearchOption.Ready}}&
-						wip={{$.SearchOption.Wip}}&
-						confirm={{$.SearchOption.Confirm}}&
-						done={{$.SearchOption.Done}}&
-						omit={{$.SearchOption.Omit}}&
-						hold={{$.SearchOption.Hold}}&
-						out={{$.SearchOption.Out}}&
-						none={{$.SearchOption.None}}&
-						searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
-						truestatus={{Join $.SearchOption.TrueStatus "," }}&
-						task={{$.SearchOption.Task}}" class="btn btn-darkmode btn-sm m-1 statusuri">{{.}}</a>
-			{{else}}
-				<a href="/inputmode?project={{$.SearchOption.Project}}&
-						searchword=tag:{{.}}&
-						sortkey={{$.SearchOption.Sortkey}}&
-						assign={{$.SearchOption.Assign}}&
-						ready={{$.SearchOption.Ready}}&
-						wip={{$.SearchOption.Wip}}&
-						confirm={{$.SearchOption.Confirm}}&
-						done={{$.SearchOption.Done}}&
-						omit={{$.SearchOption.Omit}}&
-						hold={{$.SearchOption.Hold}}&
-						out={{$.SearchOption.Out}}&
-						none={{$.SearchOption.None}}&
-						searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
-						truestatus={{Join $.SearchOption.TrueStatus "," }}&
-						task={{$.SearchOption.Task}}" class="btn btn-outline-darkmode btn-sm m-1 statusuri">{{.}}</a>
-			{{end}}
+				<div class="btn-group">
+					<button class="btn {{if eq $tag $.SearchOption.Searchword}}btn-darkmode{{else}}btn-outline-darkmode{{end}} btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{{.}}
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/inputmode?project={{$.SearchOption.Project}}&
+							searchword=tag:{{.}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							assign={{$.SearchOption.Assign}}&
+							ready={{$.SearchOption.Ready}}&
+							wip={{$.SearchOption.Wip}}&
+							confirm={{$.SearchOption.Confirm}}&
+							done={{$.SearchOption.Done}}&
+							omit={{$.SearchOption.Omit}}&
+							hold={{$.SearchOption.Hold}}&
+							out={{$.SearchOption.Out}}&
+							none={{$.SearchOption.None}}&
+							searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+							truestatus={{Join $.SearchOption.TrueStatus "," }}&
+							task={{$.SearchOption.Task}}">Goto Tag Page</a>
+						<a class="dropdown-item" href="#" onclick="addTagAtSearchbox('{{.}}')">Add Searchbox</a>
+					</div>
+				</div>
 		{{end}}
 	{{end}}
 	{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
