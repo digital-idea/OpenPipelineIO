@@ -4,7 +4,7 @@ Status RestAPI 입니다.
 ## Get
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/status | status의 모든 정보를 가지고 온다. | . | `$ curl -X GET -H "Authorization: -H Basic {YourTokenKey}" https://csi.lazypic.org/api/status` |
+| /api/status | status의 모든 정보를 가지고 온다. | . | `$ curl -X GET -H "Authorization: Basic {YourTokenKey}" https://csi.lazypic.org/api/status` |
 
 ## POST
 | uri | description | attribute name | example |
