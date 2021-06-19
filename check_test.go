@@ -87,7 +87,7 @@ func TestVaildRnumTags(t *testing.T) {
 	}
 }
 
-func TestTaskname(t *testing.T) {
+func TestTaskName(t *testing.T) {
 	cases := []struct {
 		in   string
 		want bool
@@ -120,6 +120,40 @@ func TestTaskname(t *testing.T) {
 		got := regexpTask.MatchString(c.in)
 		if got != c.want {
 			t.Fatalf("TestShotname(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
+		}
+	}
+}
+
+func TestStatusName(t *testing.T) {
+	cases := []struct {
+		in   string
+		want bool
+	}{{
+		in:   "wip", //소문자
+		want: true,
+	}, {
+		in:   "pub1", //소문자, 숫자
+		want: true,
+	}, {
+		in:   "wip_test", //소문자, 언더바
+		want: false,
+	}, {
+		in:   "", //빈문자열
+		want: false,
+	}, {
+		in:   "Wip", //대문자 포함
+		want: true,
+	}, {
+		in:   "wip-1", //대쉬 포함
+		want: false,
+	}, {
+		in:   "Wip-1", // 대문자, 대쉬 포함
+		want: false,
+	}}
+	for _, c := range cases {
+		got := regexpStatus.MatchString(c.in)
+		if got != c.want {
+			t.Fatalf("TestStatusName(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
 		}
 	}
 }
