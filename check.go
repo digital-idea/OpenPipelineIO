@@ -35,6 +35,9 @@ var regexWebColor = regexp.MustCompile(`^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$`)
 // Task값 정규식: task
 var regexpTask = regexp.MustCompile(`^[a-z0-9\_]+$`)
 
+// Status값 정규식
+var regexpStatus = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+
 // 검색쿼리형식: tasks.ani.status:done
 var regexTaskStatusQuery = regexp.MustCompile(`^[tasks]+\.[a-z0-9]+\.[stau]+\:[a-z]+$`)
 

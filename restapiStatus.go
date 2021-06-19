@@ -60,12 +60,7 @@ func handleAPIAddStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	id := r.FormValue("id")
-	if id == "" {
-		http.Error(w, "itemtype을 설정해주세요", http.StatusBadRequest)
-		return
-	}
-	rcp.ID = id
+	rcp.ID = r.FormValue("id")
 	rcp.Description = r.FormValue("description")
 	orderString := r.FormValue("order")
 	if orderString == "" {
@@ -78,27 +73,16 @@ func handleAPIAddStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Order = order
-	textcolor := r.FormValue("textcolor")
-	if !regexWebColor.MatchString(textcolor) {
-		http.Error(w, "textcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-		return
-	}
-	rcp.TextColor = textcolor
-	bgcolor := r.FormValue("bgcolor")
-	if !regexWebColor.MatchString(bgcolor) {
-		http.Error(w, "bgcolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-		return
-	}
-	rcp.BGColor = bgcolor
-	bordercolor := r.FormValue("bordercolor")
-	if !regexWebColor.MatchString(bordercolor) {
-		http.Error(w, "bordercolor 값이 #FFFFFF 형태가 아닙니다", http.StatusBadRequest)
-		return
-	}
-	rcp.BorderColor = bordercolor
+	rcp.TextColor = r.FormValue("textcolor")
+	rcp.BGColor = r.FormValue("bgcolor")
+	rcp.BorderColor = r.FormValue("bordercolor")
 	rcp.DefaultOn = str2bool(r.FormValue("defaulton"))
 	rcp.InitStatus = str2bool(r.FormValue("initstatus"))
-
+	err = rcp.CheckError()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	err = AddStatus(session, rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
