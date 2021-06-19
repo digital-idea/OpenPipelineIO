@@ -19,14 +19,17 @@ func (s *Status) CheckError() error {
 	if s.ID == "" {
 		return errors.New("ID가 빈 문자열 입니다")
 	}
+	if !regexpStatus.MatchString(s.ID) {
+		return errors.New("status 이름은 영문 대,소문자 또는 숫자로만 이루어져야 합니다")
+	}
 	if !regexWebColor.MatchString(s.TextColor) {
-		return errors.New("웹컬러 문자열이 아닙니다")
+		return errors.New("Text 컬러가 웹컬러(#FFFFFF 형태) 문자열이 아닙니다")
 	}
 	if !regexWebColor.MatchString(s.BGColor) {
-		return errors.New("웹컬러 문자열이 아닙니다")
+		return errors.New("BG 컬러가 웹컬러(#FFFFFF 형태) 문자열이 아닙니다")
 	}
 	if !regexWebColor.MatchString(s.BorderColor) {
-		return errors.New("웹컬러 문자열이 아닙니다")
+		return errors.New("테두리 컬러가 웹컬러(#FFFFFF 형태) 문자열이 아닙니다")
 	}
 	return nil
 }
