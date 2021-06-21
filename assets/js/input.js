@@ -5821,24 +5821,33 @@ function selectUserID(id) {
 function initPasswordUsers() {
     // 선택된 사용자를 출력한다.
     let usercards = document.getElementsByClassName("usercard");
+    let users = new Array();
+    // 사용자가 선택되었다면 users Array에 넣는다.
     for (let i = 0; i < usercards.length; i++) {
-        let userID = usercards[i].id
-        if (document.getElementById(userID).style.borderColor !== SELECT_COLOR) {
-            continue
+        if (document.getElementById(usercards[i].id).style.borderColor === SELECT_COLOR) {
+            users.push(usercards[i].id);
         }
+    }
+    // 초기화할 사용자가 없다면 종료한다.
+    if (users.length === 0) {
+        alert(`패스워드를 초기화할 사용자를 선택해주세요.`);
+        return;
+    }
+    // 선택된 각각의 유저를 초기화 한다.
+    for (let i = 0; i < users.length; i++) {
         $.ajax({
             url: "/api/initpassword",
             type: "post",
             data: {
-                id: userID,
+                id: users[i],
             },
             headers: {
-                "Authorization": "Basic "+ document.getElementById("token").value
+                "Authorization": "Basic "+ document.getElementById("token").value;
             },
             dataType: "json",
             success: function(data) {
                 // 성공하면 원래 색상으로 돌린다.
-                document.getElementById(data.id).style.borderColor = NON_SELECT_COLOR
+                document.getElementById(data.id).style.borderColor = NON_SELECT_COLOR;
                 alert(`${data.id} 사용자의 패스워드가 초기화 되었습니다.`);
             },
             error: function(request,status,error){
