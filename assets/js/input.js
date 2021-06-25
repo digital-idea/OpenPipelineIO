@@ -5842,7 +5842,7 @@ function initPasswordUsers() {
                 id: users[i],
             },
             headers: {
-                "Authorization": "Basic "+ document.getElementById("token").value;
+                "Authorization": "Basic "+ document.getElementById("token").value
             },
             dataType: "json",
             success: function(data) {
