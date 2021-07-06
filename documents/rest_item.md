@@ -6,7 +6,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 이 문서는 기본 restAPI옵션을 설명하고 파이썬을 이용해서 RestAPI를 사용하는 방법을 다룹니다.
 파이프라인에 사용될 확률이 높은 코드라서, 일부 에러처리까지 코드로 다루었습니다.
 
-# RestAPI for Item
+# RestAPI for Item(Shot, Asset)
 
 ## Get
 
@@ -103,8 +103,8 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setepisode | episode를 설정한다. | project, id, episode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&episode=E01" https://csi.lazypic.org/api/setepisode`|
 
 #### URL Encode
-`/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야한다.
-`%` 문자는 `%25` 값에 해당한다. 일일이 변환할 수 없기 때문에 curl에서는 --data-urlencode 명령어를 사용하면 된다.
+`/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야합니다.
+`%` 문자는 `%25` 값에 해당한다. 일일이 변환할 수 없기 때문에 curl에서는 --data-urlencode 명령어를 사용하면 됩니다.
 
 ```bash
 $ curl -X POST \
@@ -131,8 +131,9 @@ https://csi.lazypic.org/api/publish
 import urllib2
 import json
 
-request = urllib2.Request("https://csi.lazypic.org/api/shot?project=TEMP&name=OPN_0010")
-request.add_header("Authorization", "Basic JDJhJDEwJHBBREluL0JuRTdNa3NSb3RKZERUbWVMd0V6OVB1TndnUGJzd2k0RlBZcmEzQTBSczkueHZH")
+endpoint = "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"
+request = urllib2.Request(endpoint)
+request.add_header("Authorization", "Basic <TOKEN-KEY>")
 result = urllib2.urlopen(request)
 data = json.load(result)
 print(data)
@@ -151,7 +152,8 @@ r = requests.get(url=endpoint, headers=auth)
 print(r.json())
 ```
 
-사용자 토큰기를 `~/.csi/token` 파일에 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
+홈디렉토리에 `~/.csi/token` 파일 내부에 CSI 토큰키를 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
+
 ```python
 #!/usr/bin/python
 #coding:utf8
@@ -177,7 +179,7 @@ print(r.json())
 #coding:utf8
 import json
 import urllib2
-endpoint = "https://csi.lazypic.org/api3/items?project=circle&searchword=SS&wip=true"
+endpoint = "https://csi.lazypic.org/api3/items?project=circle&searchword=SS&searchbartemplate=searchbarV2&truestatus=assign,wip"
 data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
@@ -193,7 +195,8 @@ import urllib2
 values = {}
 values["project"] = "TEMP"
 values["searchword"] = "SS"
-values["wip"] = "true"
+values["truestatus"] = "assign,wip"
+values["searchbartemplate"] = "searchbarV2"
 
 endpoint = "https://csi.lazypic.org/api3/items"
 query = urllib.urlencode(values)
@@ -205,7 +208,7 @@ print(data)
 - 서치키워드에 다중 문자열 검색시 공백이 들어가면 공백을 + 사용
 
 ```
-endpoint = "https://csi.lazypic.org/api3/items?project=TEMP&searchword=comp+배서영&wip=true"
+endpoint = "https://csi.lazypic.org/api3/items?project=TEMP&searchword=comp+배서영&searchbartemplate=searchbarV2&truestatus=wip"
 ```
 
 
@@ -345,7 +348,7 @@ print(json.load(f))
 ```
 
 #### Python3 에서 publish 삭제 예제
-- python 3.4 이후 버전부터는 requests가 자동 설치됨
+- python 3.4 이후 버전부터는 requests 모듈이 자동으로 내장되어 있습니다.
 - python 3.4 이전 버전은 requests 모듈을 수동으로 설치해주어야 함
 
 ```bash
