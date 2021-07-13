@@ -51,7 +51,7 @@
     <div class="row justify-content-center align-items-center ml-3 mr-3">
         <div class="pl-3 pr-3">
             <div class="col">
-				<span class="btn btn-sm mb-2 bg-assign">
+				<span class="btn btn-sm mb-2 bg-assign" data-toggle="tooltip" data-placement="bottom" title="아티스트 배정 필요">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-assign" status="assign" onchange="changeStatusURI('assign');" name="Assign" value="true"{{if $.SearchOption.Assign}} checked{{end}}>
 					<a class="text-assign statusuri" href="/inputmode?
 											project={{.SearchOption.Project}}&
@@ -72,7 +72,7 @@
 																
 					 <span class="badge badge-light">{{.Searchnum.Assign}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-ready">
+				<span class="btn btn-sm mb-2 bg-ready" data-toggle="tooltip" data-placement="bottom" title="아티스트 배정 완료. 준비단계">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-ready" status="ready" onchange="changeStatusURI('ready');" name="Ready" value="true"{{if $.SearchOption.Ready}} checked{{end}}>
 					<a class="text-ready statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -91,7 +91,7 @@
 										task={{.SearchOption.Task}}">ready</a>
 					<span class="badge badge-light">{{.Searchnum.Ready}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-wip">
+				<span class="btn btn-sm mb-2 bg-wip" data-toggle="tooltip" data-placement="bottom" title="작업중">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-wip" status="wip" onchange="changeStatusURI('wip');" name="Wip" value="true"{{if $.SearchOption.Wip}} checked{{end}}>
 					<a class="text-wip statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -110,7 +110,7 @@
 										task={{.SearchOption.Task}}">wip</a>
 					<span class="badge badge-light">{{.Searchnum.Wip}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-confirm">
+				<span class="btn btn-sm mb-2 bg-confirm" data-toggle="tooltip" data-placement="bottom" title="컨펌필요">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-confirm" status="confirm" onchange="changeStatusURI('confirm');" name="Confirm" value="true"{{if $.SearchOption.Confirm}} checked{{end}}>
 					<a class="text-confirm statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -129,7 +129,7 @@
 										task={{.SearchOption.Task}}">confirm</a>
 					<span class="badge badge-light">{{.Searchnum.Confirm}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-done">
+				<span class="btn btn-sm mb-2 bg-done" data-toggle="tooltip" data-placement="bottom" title="작업완료">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-done" status="done" onchange="changeStatusURI('done');" name="Done" value="true"{{if $.SearchOption.Done}} checked{{end}}>
 					<a class="text-done statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -148,7 +148,7 @@
 										task={{.SearchOption.Task}}">done</a>
 					<span class="badge badge-light">{{.Searchnum.Done}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-out">
+				<span class="btn btn-sm mb-2 bg-out" data-toggle="tooltip" data-placement="bottom" title="외주">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-out" status="out" onchange="changeStatusURI('out');" name="Out" value="true"{{if $.SearchOption.Out}} checked{{end}}>
 					<a class="text-out statusuri" href="/inputmode?
 											project={{.SearchOption.Project}}&
@@ -169,7 +169,7 @@
 																
 					 <span class="badge badge-light">{{.Searchnum.Out}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-omit">
+				<span class="btn btn-sm mb-2 bg-omit" data-toggle="tooltip" data-placement="bottom" title="작업취소">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-omit" status="omit" onchange="changeStatusURI('omit');" name="Omit" value="true"{{if $.SearchOption.Omit}} checked{{end}}>
 					<a class="text-omit statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -188,7 +188,7 @@
 										task={{.SearchOption.Task}}">omit</a>
 					<span class="badge badge-light">{{.Searchnum.Omit}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-hold">
+				<span class="btn btn-sm mb-2 bg-hold" data-toggle="tooltip" data-placement="bottom" title="작업중지">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-hold" status="hold" onchange="changeStatusURI('hold');" name="Hold" value="true"{{if $.SearchOption.Hold}} checked{{end}}>
 					<a class="text-hold statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&
@@ -207,7 +207,7 @@
 										task={{.SearchOption.Task}}">hold</a>
 					<span class="badge badge-light">{{.Searchnum.Hold}}</span>
 				</span>
-				<span class="btn btn-sm mb-2 bg-none">
+				<span class="btn btn-sm mb-2 bg-none" data-toggle="tooltip" data-placement="bottom" title="상태없음">
 					<input type="checkbox" class="mr-1 StatusCheckBox" id="searchbox-checkbox-none" status="none" onchange="changeStatusURI('none');" name="None" value="true"{{if $.SearchOption.None}} checked{{end}}>
 					<a class="text-none statusuri" href="/inputmode?
 										project={{.SearchOption.Project}}&

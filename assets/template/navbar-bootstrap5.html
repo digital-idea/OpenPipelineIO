@@ -1,0 +1,187 @@
+{{define "navbar-bootstrap5" }}
+<nav class="navbar navbar-expand-lg navbar-darkmode">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/" data-bs-toggle="tooltip" data-bs-placement="right" title="홈으로 이동합니다.">CSI</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-lg-0  container-fluid justify-content-start">
+        {{if eq .User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                File
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item text-muted" href="/scanplate">ScanPlate(준비중)</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/importexcel">Import .xlsx</a></li>
+                <li><a class="dropdown-item" href="/importjson">Import .json</a></li>
+                <li><a class="dropdown-item" href="/exportexcel">Export All .xlsx</a></li>
+                <li><a class="dropdown-item" href="/exportjson">Export All .json</a></li>
+                <li><span class="dropdown-item finger" onclick="exportExcelCurrentPage()">Export Current .xlsx</span></li>
+                <li><span class="dropdown-item finger" onclick="exportJsonCurrentPage()">Export Current .json</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-muted" href="/report">Report(준비중)</a></li>
+              </ul>
+          </li>
+        {{end}}
+        {{if eq .User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Review
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><span class="dropdown-item finger" data-toggle="modal" data-target="#modal-addreview">Add Review</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/daily">Daily</a></li>
+            <li><a class="dropdown-item" href="/daily" target="_blank">Daily(New Windows)</a></li>
+          </ul>
+        </li>
+        {{end}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            List
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/projectinfo">Projects</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {{if eq .User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+              {{if eq .User.ID "guest" "demo" }}
+                <li><span class="fade dropdown-item">Users</span></li>
+                <li><hr class="dropdown-divider"></li>
+              {{else}}
+                <li><a class="dropdown-item" href="/users">Users</a></li>
+                <li><hr class="dropdown-divider"></li>
+              {{end}}
+            {{end}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+              <li><a class="dropdown-item" href="/tasksettings">Task</a></li>
+              <li><a class="dropdown-item" href="/status">Status</a></li>
+              <li><a class="dropdown-item" href="/stage">Review Stage</a></li>
+              <li><a class="dropdown-item" href="/publishkey">Publish Key</a></li>
+              <li><hr class="dropdown-divider"></li>
+            {{end}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+              <li><a class="dropdown-item text-muted" href="/Partner">Partner(준비중)</a></li>
+              <li><hr class="dropdown-divider"></li>
+            {{end}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+              <li><a class="dropdown-item text-muted" href="/Statistics">Statistics(준비중)</a></li>
+              <li><hr class="dropdown-divider"></li>
+            {{end}}
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+              <li><a class="dropdown-item text-muted" href="/software">Software(준비중-프로토콜셋팅)</a></li>
+              <li><a class="dropdown-item text-muted" href="/environment">Environment(준비중-프로토콜셋팅)</a></li>
+              <li><hr class="dropdown-divider"></li>
+            {{end}}
+            <li><a class="dropdown-item" href="/divisions">Divisions(본부)</a></li>
+            <li><a class="dropdown-item" href="/departments">Departments(부서)</a></li>
+            <li><a class="dropdown-item" href="/teams">Teams(팀)</a></li>
+            <li><a class="dropdown-item" href="/roles">Roles(직책)</a></li>
+            <li><a class="dropdown-item" href="/positions">Positions(직급)</a></li>
+          </ul>
+        </li>
+        {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Add
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/uploadsetellite">Setellite</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/addproject">Project</a></li>
+              <li><a class="dropdown-item" href="/addshot">Shot</a></li>
+              <li><a class="dropdown-item" href="/addasset">Asset</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/addtasksetting">Task</a></li>
+              <li><a class="dropdown-item" href="/addstatus">Status</a></li>
+              <li><a class="dropdown-item" href="/addstage">Review Stage</a></li>
+              <li><a class="dropdown-item" href="/addpublishkey">Publish Key</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/adddivision">Division(본부)</a></li>
+              <li><a class="dropdown-item" href="/adddepartment">Department(부서)</a></li>
+              <li><a class="dropdown-item" href="/addteam">Team(팀)</a></li>
+              <li><a class="dropdown-item" href="/addrole">Role(직책)</a></li>
+              <li><a class="dropdown-item" href="/addposition">Position(직급)</a></li>
+            </ul>
+        </li>
+        {{end}}
+        {{if eq .User.AccessLevel 5 7 8 10 11}}
+          {{if eq .User.ID "guest" "demo" }}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Remove
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><span class="dropdown-item text-danger fade">Project</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><span class="dropdown-item text-danger fade">Item</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><span class="dropdown-item text-danger fade">Task</span></li>
+                <li><span class="dropdown-item text-danger fade">Status</span></li>
+                <li><span class="dropdown-item text-danger fade">Review Stage</span></li>
+                <li><span class="dropdown-item text-danger fade">Publish Key</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><span class="dropdown-item text-danger fade">Organization</span></li>
+              </ul>
+            </li>
+          {{else}}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Remove
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {{if eq .User.AccessLevel 11}}
+                  <li><a class="dropdown-item text-danger" href="/rmproject">Project</a></li>
+                {{end}}
+                {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><span class="dropdown-item finger text-danger" onclick="rmItem()">Item</span></li>
+                {{end}}
+                {{if eq .User.AccessLevel 5 6 8 9 10 11}}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="/rmtasksetting">Task</a></li>
+                  <li><a class="dropdown-item text-danger" href="/rmstatus">Status</a></li>
+                  <li><a class="dropdown-item text-danger" href="/rmstage">Review Stage</a></li>
+                  <li><a class="dropdown-item text-danger" href="/rmpublishkey">Publish Key</a></li>
+                {{end}}
+                {{if eq .User.AccessLevel 10 11}}
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="/rmorganization">Organization</a></li>
+                {{end}}
+              </ul>
+            </li>
+          {{end}}
+        {{end}}
+        <li class="nav-item">
+            <a class="nav-link" href="/help">Help</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               {{.User.ID}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a>
+              <a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a>
+              {{if eq .User.ID "guest" "demo" }}
+                <li><span class="dropdown-item text-danger fade">Update Password</span></li>
+              {{else}}
+                <li><a class="dropdown-item text-danger" href="/updatepassword?id={{.User.ID}}">Update Password</a></li>
+              {{end}}
+              {{if eq .User.AccessLevel 10 11}}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="/adminsetting">Admin Setting</a></li>
+              {{end}}
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/signout">SignOut</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+          <button id="foldoption" class="btn btn-sm btn-outline-success mt-1" onclick="foldingmenu();">Collapse Searchbox ▲</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{{end}}
