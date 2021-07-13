@@ -7096,12 +7096,11 @@ func handleAPITaskAndUserStatusNum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = user
-	statusnum, err := TotalTaskAndUserStatusnum(session, project, task, user)
+	rcp.Infobarnum, err = TotalTaskAndUserStatusnum(session, project, task, user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Infobarnum = statusnum
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

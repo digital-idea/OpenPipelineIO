@@ -13,89 +13,89 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api2/item | 아이템 가지고 오기 | project, name or id, (type) | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api2/item?project=TEMP&name=SS_0020&type=org"` |
-| /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태 | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assign,wip"` 또는 `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=task:mm+user:jason&searchbartemplate=searchbarV2&truestatus=assign,wip"` |
-| /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assign,wip"` |
-| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
-| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
-| /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/allshots?project=TEMP"` |
-| /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
-| /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl "https://csi.lazypic.org/api/assets?project=TEMP"` |
-| /api/usetypes | 샷의 usetype 리스트 가지고오기 | project, name | `$ curl "https://csi.lazypic.org/api/usetypes?project=TEMP&name=SS_0010"` |
+| /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태 | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&wip=true"` 또는 `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=task:mm+user:jason&assign=true&wip=true"` |
+| /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assing,wip"` |
+| /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
+| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
+| /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/allshots?project=TEMP"` |
+| /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
+| /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/assets?project=TEMP"` |
+| /api/usetypes | 샷의 usetype 리스트 가지고오기 | project, name | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/usetypes?project=TEMP&name=SS_0010"` |
 | /api/publishkeys | 존재하는 Publish Key 를 가지고 온다 | | `$ curl -X GET -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/publishkeys` |
 
 ## Post
 
 | URI | description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/search | 검색 | project, searchword, sortkey | `$ curl -X POST -d "project=TEMP&searchword=SS_0020&sortkey=id" https://csi.lazypic.org/api/search` |
-| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -X POST -d "project=TEMP" https://csi.lazypic.org/api/deadline2d` |
-| /api/deadline3d | 3D마감일 리스트 | project | `$ curl -X POST -d "project=TEMP" https://csi.lazypic.org/api/deadline3d` |
-| /api/rmitemid | 아이템 삭제 | project, id | `$ curl -X POST -d "project=circle&id=SS_0010_org" https://csi.lazypic.org/api/rmitemid` |
-| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/settaskstatus` |
-| /api2/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api2/settaskstatus` |
-| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -X POST -d "project=TEMP&name=mamma&task=light&user=김한웅" https://csi.lazypic.org/api/settaskuser` |
-| /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |
-| /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskpredate` |
-| /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskdate` |
-| /api2/settaskmov | mov등록 | project, name, task, mov | `$ curl -X POST -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api2/settaskmov` |
-| /api/setshottype | shottype 변경 | project, name, type | `$ curl -X POST -d "project=TEMP&name=SS_0030&shottype=3d" https://csi.lazypic.org/api/setshottype` |
-| /api/setusetype | usetype 변경 | project, id, type | `$ curl -X POST -d "project=TEMP&id=SS_0030_org&type=org1" https://csi.lazypic.org/api/setusetype` |
+| /api/search | 검색 | project, searchword, sortkey | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&searchword=SS_0020&sortkey=id" https://csi.lazypic.org/api/search` |
+| /api/deadline2d | 2D마감일 리스트 | project | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP" https://csi.lazypic.org/api/deadline2d` |
+| /api/deadline3d | 3D마감일 리스트 | project | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP" https://csi.lazypic.org/api/deadline3d` |
+| /api/rmitemid | 아이템 삭제 | project, id | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=circle&id=SS_0010_org" https://csi.lazypic.org/api/rmitemid` |
+| /api/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api/settaskstatus` |
+| /api2/settaskstatus | 상태수정 | project, name, task, status | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=circle&name=SS_0010&task=comp&status=wip" https://csi.lazypic.org/api2/settaskstatus` |
+| /api/settaskuser | 사용자수정 | project, name, task, user | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=mamma&task=light&user=김한웅" https://csi.lazypic.org/api/settaskuser` |
+| /api/settaskstartdate | 시작일 | project, name, task, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskstartdate` |
+| /api/settaskpredate | 1차마감일 | project, name, task, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskpredate` |
+| /api/settaskdate | 2차마감일 | project, name, task, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=RR_0010&task=comp&date=0506" https://csi.lazypic.org/api/settaskdate` |
+| /api2/settaskmov | mov등록 | project, name, task, mov | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=RR_0010&task=comp&mov=/show/test/test.mov" https://csi.lazypic.org/api2/settaskmov` |
+| /api/setshottype | shottype 변경 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0030&shottype=3d" https://csi.lazypic.org/api/setshottype` |
+| /api/setusetype | usetype 변경 | project, id, type | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0030_org&type=org1" https://csi.lazypic.org/api/setusetype` |
 | /api2/setthummov | 썸네일mov변경 | project, name, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0030&path=/show/thumbnail.mov" https://csi.lazypic.org/api2/setthummov` |
-| /api/setbeforemov | 썸네일 이전 mov 등록 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0030&path=/show/before.mov" https://csi.lazypic.org/api/setbeforemov` |
-| /api/setaftermov | 썸네일 이후 mov 등록 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0030&path=/show/after.mov" https://csi.lazypic.org/api/setaftermov` |
-| /api/seteditmov | 편집본 mov 등록 | project, id, path | `$ curl -X POST -d "project=TEMP&id=SS_0030_org&path=/show/edit.mov" https://csi.lazypic.org/api/seteditmov` |
-| /api/setassettype | assettype 변경 | project, name, type | `$ curl -X POST -d "project=TEMP&name=mamma&type=prop" https://csi.lazypic.org/api/setassettype` |
-| /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -X POST -d "project=TEMP&name=SS_0010&outputname=S101_010_010" https://csi.lazypic.org/api/setoutputname` |
-| /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -X POST -d "project=TEMP&name=SS_0010&rnum=A0001" https://csi.lazypic.org/api/setrnum` |
-| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -X POST -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline2d` |
-| /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -X POST -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline3d` |
-| /api/setscantimecodein | 스캔 타임코드IN 등록 | project, name, timecode | `$ curl -X POST -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodein` |
-| /api/setscantimecodeout | 스캔 타임코드OUT 등록 | project, name, timecode | `$ curl -X POST -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodeout` |
-| /api/setscanin | scan in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=654231" https://csi.lazypic.org/api/setscanin` |
-| /api/setscanout | scan out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=654331" https://csi.lazypic.org/api/setscanout` |
-| /api/setscanframe | scan frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=100" https://csi.lazypic.org/api/setscanframe` |
-| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -X POST -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodein`|
-| /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -X POST -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodeout` |
-| /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -X POST -d "project=TEMP&name=SS_0010&version=1" https://csi.lazypic.org/api/setfinver` |
-| /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -X POST -d "project=TEMP&name=SS_0010&date=0711" https://csi.lazypic.org/api/setfindate` |
-| /api/setplatein | plate in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1001" https://csi.lazypic.org/api/setplatein` |
-| /api/setplateout | plate out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setplateout` |
-| /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/setjustin` |
-| /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
-| /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
-| /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -X POST -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
+| /api/setbeforemov | 썸네일 이전 mov 등록 | project, name, path, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0030&path=/show/before.mov" https://csi.lazypic.org/api/setbeforemov` |
+| /api/setaftermov | 썸네일 이후 mov 등록 | project, name, path, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0030&path=/show/after.mov" https://csi.lazypic.org/api/setaftermov` |
+| /api/seteditmov | 편집본 mov 등록 | project, id, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0030_org&path=/show/edit.mov" https://csi.lazypic.org/api/seteditmov` |
+| /api/setassettype | assettype 변경 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=mamma&type=prop" https://csi.lazypic.org/api/setassettype` |
+| /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&outputname=S101_010_010" https://csi.lazypic.org/api/setoutputname` |
+| /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&rnum=A0001" https://csi.lazypic.org/api/setrnum` |
+| /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline2d` |
+| /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline3d` |
+| /api/setscantimecodein | 스캔 타임코드IN 등록 | project, name, timecode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodein` |
+| /api/setscantimecodeout | 스캔 타임코드OUT 등록 | project, name, timecode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodeout` |
+| /api/setscanin | scan in frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=654231" https://csi.lazypic.org/api/setscanin` |
+| /api/setscanout | scan out frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=654331" https://csi.lazypic.org/api/setscanout` |
+| /api/setscanframe | scan frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=100" https://csi.lazypic.org/api/setscanframe` |
+| /api/setjusttimecodein | JUST 타임코드IN 등록 | project, name, timecode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodein`|
+| /api/setjusttimecodeout | JUST 타임코드OUT 등록 | project, name, timecode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setjusttimecodeout` |
+| /api/setfinver | 최종데이터 버전 등록 | project, name, version | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&version=1" https://csi.lazypic.org/api/setfinver` |
+| /api/setfindate | 최종데이터 아웃풋 날짜 등록 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&date=0711" https://csi.lazypic.org/api/setfindate` |
+| /api/setplatein | plate in frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1001" https://csi.lazypic.org/api/setplatein` |
+| /api/setplateout | plate out frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setplateout` |
+| /api/setjustin | just in frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/setjustin` |
+| /api/setjustout | just out frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/setjustout` |
+| /api/sethandlein | handle in frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1003" https://csi.lazypic.org/api/sethandlein` |
+| /api/sethandleout | handle out frame 등록 | project, name, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&frame=1130" https://csi.lazypic.org/api/sethandleout` |
 | /api/addtag | tag 추가 | project, id, tag | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&tag=테스트" https://csi.lazypic.org/api/addtag` |
 | /api/rmtag | tags 삭제 | project, id, tag, (iscontain) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&tag=태그3&iscontain=true" https://csi.lazypic.org/api/rmtag` |
-| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://csi.lazypic.org/api/setnote` |
-| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://csi.lazypic.org/api/addcomment` |
+| /api/setnote | 작업내용 변경 | project, name, text, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&text=바람이 휘날린다" https://csi.lazypic.org/api/setnote` |
+| /api/addcomment | 수정사항 추가 | project, name, text, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&text=1003프레임 나무제거" https://csi.lazypic.org/api/addcomment` |
 | /api/rmcomment | 수정사항 삭제 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2021-01-26T11:38:53%2B09:00" https://csi.lazypic.org/api/rmcomment` |
-| /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" https://csi.lazypic.org/api/addsource` |
-| /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&title=sourcename" https://csi.lazypic.org/api/rmsource` |
-| /api/setcameraprojection | 카메라 프로젝션여부 | project, id, projection | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&projection=true" https://csi.lazypic.org/api/setcameraprojection` |
-| /api/setcamerapubtask | 카메라 Pub Task설정 | project, id, task | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&task=mm" https://csi.lazypic.org/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
-| /api/setcamerapubpath | 카메라 Pub Path설정 | project, id, path | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&path=/show/test/cam/pubpath" https://csi.lazypic.org/api/setcamerapubpath`|
-| /api/setcameralensmm | 카메라 렌즈mm 설정 | project, id, lensmm | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&lensmm=45" https://csi.lazypic.org/api/setcameralensmm`|
-| /api/setdeadline2d | 2D 마감일 설정 | project, name, date | `$ curl -X POST -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline2d`|
-| /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -X POST -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline3d`|
-| /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -X POST -d "project=TEMP&name=SS_0020&path=/show/retime" https://csi.lazypic.org/api/setretimeplate`|
-| /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -X POST -d "project=TEMP&name=SS_0020&task=comp&level=1" https://csi.lazypic.org/api/settasklevel`|
-| /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setplatesize`|
-| /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setundistortionsize`|
+| /api/addsource | 링크소스 추가 | project, name, title, path, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&title=source1&path=/show/src1/test.mov" https://csi.lazypic.org/api/addsource` |
+| /api/rmsource | 링크소스 삭제 | project, name, title, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&title=sourcename" https://csi.lazypic.org/api/rmsource` |
+| /api/setcameraprojection | 카메라 프로젝션여부 | project, id, projection | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&projection=true" https://csi.lazypic.org/api/setcameraprojection` |
+| /api/setcamerapubtask | 카메라 Pub Task설정 | project, id, task | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&task=mm" https://csi.lazypic.org/api/setcamerapubtask` mm,layout,ani 만 task 등록가능|
+| /api/setcamerapubpath | 카메라 Pub Path설정 | project, id, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&path=/show/test/cam/pubpath" https://csi.lazypic.org/api/setcamerapubpath`|
+| /api/setcameralensmm | 카메라 렌즈mm 설정 | project, id, lensmm | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&lensmm=45" https://csi.lazypic.org/api/setcameralensmm`|
+| /api/setdeadline2d | 2D 마감일 설정 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline2d`|
+| /api/setdeadline3d | 3D 마감일 설정 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&date=2019-09-05" https://csi.lazypic.org/api/setdeadline3d`|
+| /api/setretimeplate | Retime Plate 경로설정 | project, name, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&path=/show/retime" https://csi.lazypic.org/api/setretimeplate`|
+| /api/settasklevel | Task 레벨설정 | project, name, task, level | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&task=comp&level=1" https://csi.lazypic.org/api/settasklevel`|
+| /api/setplatesize | Plate Size 설정 | project, name, size, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setplatesize`|
+| /api/setundistortionsize | Undistortion Size 설정 | project, name, size, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&size=2048x1152" https://csi.lazypic.org/api/setundistortionsize`|
 | /api2/setrendersize | Reder Size 설정 | project, id, size | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&size=2048x1152" https://csi.lazypic.org/api2/setrendersize`|
 | /api/setoverscanratio | Overscan Ratio 비율 설정 | project, id, ratio | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&ratio=1.1" https://csi.lazypic.org/api/setoverscanratio`|
-| /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" https://csi.lazypic.org/api/setobjectid`|
-| /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&path=/show/color.cc" https://csi.lazypic.org/api/setociocc`|
-| /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -X POST -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" https://csi.lazypic.org/api/setrollmedia`|
-| /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -X POST -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" https://csi.lazypic.org/api/scanname`|
-| /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -X POST -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
-| /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -X POST -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
-| /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -X POST -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task, user | `$ curl -X POST -d "project=TEMP&task=comp&user=jason" https://csi.lazypic.org/api/taskstatusnum`|
-| /api/userstatusnum | user status 갯수를 가지고 온다. | project, user | `$ curl -X POST -d "project=TEMP&user=jason" https://csi.lazypic.org/api/userstatusnum`|
+| /api/setobjectid | ObjectID 설정 | project, name, in, out, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&in=100&out=200&userid=khw7096" https://csi.lazypic.org/api/setobjectid`|
+| /api/setociocc | OCIO .cc 경로설정 | project, name, path, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&path=/show/color.cc" https://csi.lazypic.org/api/setociocc`|
+| /api/setrollmedia | Settelite Rollmedia 설정 | project, name, rollmedia, (userid) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&rollmedia=A001_C0003_DFGE" https://csi.lazypic.org/api/setrollmedia`|
+| /api/setscanname | Scanname 설정 | project, id, scanname | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0020_org&scanname=A001_C0003_DFGE" https://csi.lazypic.org/api/scanname`|
+| /api/task | Task 정보를 가지고 온다. | project, name, task | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020&task=comp" https://csi.lazypic.org/api/task`|
+| /api/shottype | Shottype 정보를 가지고 온다. | project, name | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0020" https://csi.lazypic.org/api/shottype`|
+| /api/statusnum | project status 갯수를 가지고 온다. | project | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/taskstatusnum | task status 갯수를 가지고 온다. | project, task | `$ curl -H "Authorization: Basic <Token>" -d "project=TEMP&task=comp" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/taskanduserstatusnum | task, user status 갯수를 가지고 온다. | project, task, user | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&task=comp&user=jason" https://csi.lazypic.org/api/taskstatusnum`|
+| /api/userstatusnum | user status 갯수를 가지고 온다. | project, user | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&user=jason" https://csi.lazypic.org/api/userstatusnum`|
 | /api/addpublish | Publish를 추가한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, name, task, key, (secondarykey), path, status, (mainversion), (subversion), (subject), (filetype), (kindofusd), (createtime), (isoutput), (authornamekor) | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&task=comp&key=nuke&secondarykey=pub&path=/path/file.nk&mainversion=1&subversion=1&subject=roto&filetype=.usd&kindofusd=component&status=usethis&isoutput=true&authornamekor=김한웅" https://csi.lazypic.org/api/addpublish`|
-| /api/setpublishstatus | Publish status를 변경한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, id, task, key, path, status, createtime | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&path=/path/path&status=usethis&createtime=2020-05-21T09:00:00%2B09:00" https://csi.lazypic.org/api/setpublishstatus`|
-| /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
+| /api/setpublishstatus | Publish status를 변경한다. status는 usethis, working, notuse 로 설정할 수 있다. | project, id, task, key, path, status, createtime | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&path=/path/path&status=usethis&createtime=2020-05-21T09:00:00%2B09:00" https://csi.lazypic.org/api/setpublishstatus`|
+| /api/rmpublishkey | Publish Key를 삭제한다. | project, id, task, key | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&task=comp&key=pub" https://csi.lazypic.org/api/rmpublishkey`|
 | /api/rmpublish | Publish 를 삭제한다. | project, id, task, key, createtime, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&task=comp&key=pub&createtime=2020-05-21T09:00:00%2B09:00&path=/show/test" https://csi.lazypic.org/api/rmpublish`|
 | /api/uploadthumbnail | 썸네일 업로드 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -F  project=TEMP -F name=SS_0010 -F type=org -F "image=@/path/thumbnail.png" https://csi.lazypic.org/api/uploadthumbnail`|
 | /api/setseq | seq를 설정한다. | project, id, seq | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&seq=SS" https://csi.lazypic.org/api/setseq`|
