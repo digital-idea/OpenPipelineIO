@@ -1,0 +1,69 @@
+{{define "gencss"}}
+    <style>
+        /* 기존 레거시 Status: !important 옵션을 붙히지 않기 때문에 먼저 선언하고 Override 된다. */
+        .bg-none, .bg-none:hover, .badge-none {background-color: #3D3B3B;color: #FFFFFF;border: 1px solid #787474;}
+        .text-none, .text-none:hover {color: #FFFFFF;}
+        .border-none {border: 4px solid #787474;}
+        
+        .bg-hold, .bg-hold:hover, .badge-hold {background-color: #606161;color: #FFFFFF;border: 1px solid #606161;}
+        .text-hold, .text-hold:hover {color: #FFFFFF;}
+        .border-hold {border: 4px solid #606161;}
+
+        .bg-done, .bg-done:hover, .badge-done {background-color: #E4D2B7;color: #000000;border: 1px solid #E4D2B7;}
+        .text-done, .text-done:hover {color: #000000;}
+        .border-done {border: 4px solid #E4D2B7;}
+
+        .bg-out, .bg-out:hover, .badge-out {background-color: #EEA4F1;color: #000000;border: 1px solid #EEA4F1;}
+        .text-out, .text-out:hover {color: #000000;}
+        .border-out {border: 4px solid #EEA4F1;}
+
+        .bg-assign, .bg-assign:hover, .badge-assign {background-color: #FFF76B;color: #000000;border: 1px solid #FFF76B;}
+        .text-out, .text-out:hover {color: #000000;}
+        .border-out {border: 4px solid #FFF76B;}
+
+        .bg-ready, .bg-ready:hover, .badge-ready {background-color: #BEEF37;color: #000000;border: 1px solid #BEEF37;}
+        .text-ready, .text-ready:hover {color: #000000;}
+        .border-ready {border: 4px solid #BEEF37;}
+
+        .bg-wip, .bg-wip:hover, .badge-wip {background-color: #77BB40;color: #000000;border: 1px solid #77BB40;}
+        .text-wip, .text-wip:hover {color: #000000;}
+        .border-wip {border: 4px solid #77BB40;}
+
+        .bg-confirm, .bg-confirm:hover, .badge-confirm {background-color: #59C6FD;color: #000000;border: 1px solid #59C6FD;}
+        .text-confirm, .text-confirm:hover {color: #000000;}
+        .border-confirm {border: 4px solid #59C6FD;}
+
+        .bg-omit, .bg-omit:hover, .badge-omit {background-color: #FC9F55;color: #000000;border: 1px solid #FC9F55;}
+        .text-omit, .text-omit:hover {color: #000000;}
+        .border-omit {border: 4px solid #FC9F55;}
+
+        /* 프로젝트 상태 Status */
+        {{range .Status}}
+            .bg-{{.ID}}, .bg-{{.ID}}:hover, .badge-{{.ID}} {
+                background-color: {{.BGColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+                color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+                border: 1px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+            .text-{{.ID}}, .text-{{.ID}}:hover {
+                color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+            .border-{{.ID}} {
+                border: 4px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+        {{end}}
+        /* 리뷰 Stage */
+        {{range .Stages}}
+            .bg-stage-{{.ID}}, .bg-stage-{{.ID}}:hover, .badge-stage-{{.ID}} {
+                background-color: {{.BGColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+                color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+                border: 1px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+            .text-stage-{{.ID}}, .text-stage-{{.ID}}:hover {
+                color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+            .border-stage-{{.ID}} {
+                border: 4px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
+            }
+        {{end}}
+    </style>
+{{end}}
