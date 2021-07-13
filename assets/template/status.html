@@ -1,29 +1,28 @@
 {{define "status" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
-
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
+{{template "svg"}}
 <body>
-		
 <div class="p-2">
 	<div class="text-center mt-5 mb-3">
 		<span class="text-darkmode">
-			CSI에서 사용되는 Status 목록입니다.<br>
-			프로젝트에 필요한 Status가 없다면 <a href="/addstatus" class="add ml-1" title="Status 추가">＋</a> 버튼을 눌러주세요.
+			프로젝트 진행에 사용되는 상태(Status) 목록입니다.<br>
+			<a href="/addstatus" class="add text-decoration-none ml-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Status 추가">＋</a> 버튼을 눌러 상태(Status)를 추가할 수 있습니다.
 		</span>
 	</div>
 	{{if .Status}}
 		{{range .Status}}
 			<div class="text-darkmode p-2">
 				<div class="row">
-					<div class="col-12">
-					<a href="/editstatus?id={{.ID}}" class="btn w-100" style="color: {{.TextColor}};background-color: {{.BGColor}};border: 1px solid {{.BorderColor}};" title="{{.Description}}">
+					<div class="col-12" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{.Description}}">
+						<a href="/editstatus?id={{.ID}}" class="btn w-100" style="color: {{.TextColor}};background-color: {{.BGColor}};border: 1px solid {{.BorderColor}};">
 							{{if .DefaultOn}}
-								<span class="badge badge-primary text-light">✓</span>
+								<svg class="bi flex-shrink-0 me-2" style="color: {{.TextColor}};" width="20" height="20" role="img" aria-label=""><use xlink:href="#check-box"/></svg>
 							{{end}}
 							{{.ID}}
-							<span class="badge badge-light">{{.Order}}</span>
+							<span class="badge rounded-pill bg-light text-dark">{{.Order}}</span>
 							{{if .InitStatus}}
-								<span class="badge badge-danger">초기 상태값 / Default Status</span>
+								<span class="badge bg-danger">초기 상태값 / Default Status</span>
 							{{end}}
 						</a>
 					</div>
@@ -46,7 +45,12 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
+<script>
+	let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
+</script>
 </html>
 {{end}}
