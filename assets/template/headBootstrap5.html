@@ -1,43 +1,13 @@
 {{define "headBootstrap5"}}<!DOCTYPE html>
 <html>
 <head>
-<title>CSI{{if $.SearchOption.Project}}: {{$.SearchOption.Project}}{{end}}</title>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="icon" type="image/png" href="/assets/img/csi.png">
-<link rel="icon" href="/assets/img/webicon.png">
-<link rel="apple-touch-icon" href="/assets/img/webicon.png">
-<link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap.min.css">
-<link rel="stylesheet" href="/assets/css/dropzone.css">
-<link rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" type="text/css" href="/assets/font/NanumSquare/nanumsquare.css">
-<style>
-    {{range .Status}}
-        .bg-{{.ID}}, .bg-{{.ID}}:hover, .badge-{{.ID}} {
-            background-color: {{.BGColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
-            color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
-            border: 1px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-        .text-{{.ID}}, .text-{{.ID}}:hover {
-            color: {{.TextColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-        .border-{{.ID}} {
-            border: 4px solid {{.BorderColor}} !important; /* status color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-    {{end}}
-    {{range .Stages}}
-        .bg-stage-{{.ID}}, .bg-stage-{{.ID}}:hover, .badge-stage-{{.ID}} {
-            background-color: {{.BGColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
-            color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
-            border: 1px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-        .text-stage-{{.ID}}, .text-stage-{{.ID}}:hover {
-            color: {{.TextColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-        .border-stage-{{.ID}} {
-            border: 4px solid {{.BorderColor}} !important; /* stage color는 강제적용을 위해서 important 옵션을 사용합니다. */
-        }
-    {{end}}
-</style>
+    <title>CSI{{if $.SearchOption.Project}}: {{$.SearchOption.Project}}{{end}}</title>
+    {{template "metadata"}}
+    {{template "icon"}}
+    {{template "font"}}
+    <link rel="stylesheet" href="/assets/bootstrap-5.0.2/css/bootstrap.min.css"><!--순서가 중요하다.-->
+    <link rel="stylesheet" href="/assets/css/dropzone.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    {{template "gencss" .}}
 </head>
 {{end}}
