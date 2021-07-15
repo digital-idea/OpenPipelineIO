@@ -43,7 +43,7 @@
             <div class="overflow-auto" style="height: 76vh; overflow-y: scroll; scrollbar-color: #6d6d6d #2d2d2d;">
                 {{range .Reviews}}
                     <div class="row p-2 m-1 {{if eq .ID.Hex $.CurrentReview.ID.Hex}}selectreviewitem border border-warning{{else}}reviewitem{{end}} finger" name="reviewitem" id="review-{{.ID.Hex}}">
-                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}')">
+                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}&stage={{.Stage}}')">
                             <span class="text-muted" id="{{.ID.Hex}}-project">{{.Project}}</span>
                             <span class="text-darkmode" id="{{.ID.Hex}}-name">{{.Name}}</span>
                             <span class="ml-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>
