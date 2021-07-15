@@ -52,7 +52,7 @@
         <div class="pl-3 pr-3">
             <div class="col">
 				{{range .Status}}
-					<span class="btn btn-sm mb-2 bg-{{.ID}}" data-toggle="tooltip" data-placement="bottom" title="{{.Description}}">
+					<span class="btn btn-sm mb-2 bg-{{.ID}}" data-toggle="tooltip" data-placement="top" title="{{.Description}}">
 						<input type="checkbox" class="mr-1 StatusCheckBox{{if .DefaultOn}} DefaultStatusCheckBox{{end}}" id="searchbox-checkbox-{{.ID}}" status="{{.ID}}" onchange="changeStatusURI('{{.ID}}');" name="{{.ID}}" value="true"{{if hasStatus $.SearchOption.TrueStatus .ID}} checked{{end}}>
 						<a class="text-{{.ID}} statusuri" href="/inputmode?
 												project={{$.SearchOption.Project}}&

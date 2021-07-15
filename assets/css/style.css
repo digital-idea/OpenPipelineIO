@@ -190,7 +190,7 @@ body {
 	color: #A7A59C;
 }
 
-.nav-link:hover {
+.nav-link:hover, .nav-link:active, .nav-link:link, .nav-link:visited {
 	color: rgb(191, 188, 175);
 }
 
