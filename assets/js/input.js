@@ -4361,7 +4361,7 @@ function mailInfo(project, id) {
             if (data.cc) {
                 mailString += `cc=${data.cc.join(",")}`
             }
-            window.location.href = mailString;
+            window.open(mailString, "_blank");
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
