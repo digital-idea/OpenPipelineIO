@@ -193,6 +193,17 @@ func processingReviewImageItem(review Review) {
 		log.Println(err)
 		return
 	}
+
+	// 이미지 연산된 경로가 review 자료구조의 Path값에 들어가야 한다. 업로드된 이미지 경로는 삭제될 수 있기 때문이다.
+	err = setReviewPath(session, reviewID, CachedAdminSetting.ReviewDataPath+"/"+reviewID+review.Ext)
+	if err != nil {
+		err = setErrReview(session, reviewID, err.Error())
+		if err != nil {
+			log.Println(err)
+		}
+		return
+	}
+
 	// 연산이 끝나고 해당 파일을 삭제해야 한다면 삭제를 진행한다.
 	if review.RemoveAfterProcess {
 		err = os.Remove(review.Path)
@@ -204,6 +215,7 @@ func processingReviewImageItem(review Review) {
 			return
 		}
 	}
+
 	// 연산 상태를 done 으로 바꾼다.
 	err = setReviewProcessStatus(session, reviewID, "done")
 	if err != nil {
