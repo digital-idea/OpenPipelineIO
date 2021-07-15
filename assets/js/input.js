@@ -5813,8 +5813,10 @@ function redirectPage(page) {
 function selectUserID(id) {
     if (document.getElementById(id).style.borderColor === SELECT_COLOR) {
         document.getElementById(id).style.borderColor = NON_SELECT_COLOR
+        document.getElementById(id).style.backgroundColor = "rgba(0,0,0,0)";
     } else {
         document.getElementById(id).style.borderColor = SELECT_COLOR
+        document.getElementById(id).style.backgroundColor = "rgba(255, 200, 0, 0.1)";
     }
 }
 
@@ -5848,6 +5850,7 @@ function initPasswordUsers() {
             success: function(data) {
                 // 성공하면 원래 색상으로 돌린다.
                 document.getElementById(data.id).style.borderColor = NON_SELECT_COLOR;
+                document.getElementById(data.id).style.backgroundColor = "rgba(0,0,0,0)";
                 alert(`${data.id} 사용자의 패스워드가 초기화 되었습니다.`);
             },
             error: function(request,status,error){
