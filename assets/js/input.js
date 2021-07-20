@@ -5859,3 +5859,21 @@ function initPasswordUsers() {
         });
     }
 }
+
+function setReviewAgainForWaitStatusToday() {
+    $.ajax({
+        url: "/api/setreviewagainforwaitstatustoday",
+        type: "post",
+        data: {},
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            alert(`${data.userid}에 의해 ${data.num}개의 Wait 상태 리뷰데이터를 오늘 리뷰항목으로 설정했습니다.`);
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}

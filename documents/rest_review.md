@@ -24,3 +24,4 @@
 | /api/editreviewcomment | 리뷰 Comment 수정 | id, time, text | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&status=" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/editreviewcomment` |
 | /api/rmreviewcomment | 리뷰 Comment 삭제 | id, time | `$ curl -X POST -d "id=5f87f82641a789486f3970d1&time=2020-05-21T09:00:00%2B09:00" -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/rmreviewcomment` |
 | /api/uploadreviewdrawing | 리뷰 드로잉 이미지 업로드 | id, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -F  id=5f4edbe16e59c4695abb12d1 -F frame=101 -F "image=@/path/reviewdrawing.png" https://csi.lazypic.org/api/uploadreviewdrawing`|
+| /api/setreviewagainforwaitstatustoday | Wait 상태의 리뷰 데이터를 오늘 날짜로 다시 wait 시키기 | 없음 | `$ curl -X POST -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewagainforwaitstatustoday`|
