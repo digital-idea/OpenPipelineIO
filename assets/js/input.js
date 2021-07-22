@@ -4361,7 +4361,13 @@ function mailInfo(project, id) {
             if (data.cc) {
                 mailString += `cc=${data.cc.join(",")}`
             }
-            window.location.href = mailString;
+            // 브라우저가 크롬이라면 _blank로 열리게 하기
+            // https://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome/13348618
+            if (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
+                window.open(mailString, "_blank");
+            } else {
+                window.location.href = mailString;
+            }
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
