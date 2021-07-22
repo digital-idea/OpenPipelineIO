@@ -1899,3 +1899,57 @@ func handleAPIReviewDrawingFrame(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPISetReviewAgainForWaitStatusToday 함수는 Wait 상태의 리뷰 데이터를 오늘 리뷰할 수 있도록 날짜를 바꾼다.
+func handleAPISetReviewAgainForWaitStatusToday(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID string `json:"userid"`
+		Num    int    `json:"num"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	_, _, err = net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	// 리뷰 대기상태를 불러온다.
+	reviews, err := searchReview(session, "status:wait")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 오늘 리뷰 데이터로 변환할 갯수를 구한다.
+	rcp.Num = len(reviews)
+	// 리뷰 대기항목을 오늘 날짜로 변환한다.
+	today := time.Now().Format(time.RFC3339)
+	for _, review := range reviews {
+		err = SetReviewCreatetime(session, review.ID.Hex(), today)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}

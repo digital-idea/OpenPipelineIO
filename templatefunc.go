@@ -680,6 +680,7 @@ func AddProductionStartFrame(frame int) int {
 	return CachedAdminSetting.ProductionStartFrame + frame - 1
 }
 
+// ProductionVersionFormat 템플릿 함수는 숫자를 받아서 프로덕션 버전 자리수 만큼 "0"문자를 붙혀서 문자열로 반환한다.
 func ProductionVersionFormat(version int) string {
 	n := strconv.Itoa(version)
 	for len(n) < CachedAdminSetting.ProductionPaddingVersionNumber {
