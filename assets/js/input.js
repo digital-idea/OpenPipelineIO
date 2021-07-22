@@ -4361,7 +4361,7 @@ function mailInfo(project, id) {
             if (data.cc) {
                 mailString += `cc=${data.cc.join(",")}`
             }
-            // 브라우저가 크롬이라면 _blank로 열리게 하기
+            // 브라우저가 크롬이라면 _blank로 열리게 함. 크롬을 사용한다면 웹메일 클라이언트를 사용할 확률이 높기 때문에 현재 작업중인 창에서 메일 작성창이 열리면 안된다.
             // https://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome/13348618
             if (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
                 window.open(mailString, "_blank");
