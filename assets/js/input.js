@@ -4364,9 +4364,9 @@ function mailInfo(project, id) {
             // 브라우저가 크롬이라면 _blank로 열리게 함. 크롬을 사용한다면 웹메일 클라이언트를 사용할 확률이 높기 때문에 현재 작업중인 창에서 메일 작성창이 열리면 안된다.
             // https://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome/13348618
             if (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
-                window.open(mailString, "_blank");
+                window.open(unescape(mailString), "_blank"); // 16진수 문자열을 메일툴로 전달하기 위해서 unescape 한다.
             } else {
-                window.location.href = mailString;
+                window.location.href = unescape(mailString); // 16진수 문자열을 메일툴로 전달하기 위해서 unescape 한다.
             }
         },
         error: function(request,status,error){

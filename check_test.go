@@ -157,3 +157,28 @@ func TestStatusName(t *testing.T) {
 		}
 	}
 }
+
+func TestEmail(t *testing.T) {
+	cases := []struct {
+		in   string
+		want bool
+	}{{
+		in:   "hello@lazypic.org",
+		want: true,
+	}, {
+		in:   "hello@",
+		want: false,
+	}, {
+		in:   "pm1@idea.co.kr",
+		want: true,
+	}, {
+		in:   "d00000(test,test)",
+		want: false,
+	}}
+	for _, c := range cases {
+		got := regexpEmail.MatchString(c.in)
+		if got != c.want {
+			t.Fatalf("TestEmail(%v): 얻은 값 %v, 원하는 값 %v", c.in, got, c.want)
+		}
+	}
+}
