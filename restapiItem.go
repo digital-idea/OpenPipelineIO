@@ -6886,11 +6886,12 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	type Recipe struct {
 		Project string   `json:"project"`
-		ID      string   `json:"id"`
+		ID      string   `json:"id"` // SS_0010_org 형태
 		Title   string   `json:"title"`
 		Header  string   `json:"header"`
 		Mails   []string `json:"mails"`
 		Cc      []string `json:"cc"`
+		UserID  string   `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -6899,33 +6900,49 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		}
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
 	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+
 	p, err := getProject(session, rcp.Project)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// PM 이메일이 프로젝트 정보에 기입되어있다면 PM에 이메일을 보낼 때 참조한다.
 	if regexpEmail.MatchString(p.PmEmail) {
-		rcp.Cc = append(rcp.Cc, fmt.Sprintf("%s<%s>", p.Pm, p.PmEmail))
+		// 사용자가 아니라 그룹 메일이 설정되어 있을 수 있다.
+		rcp.Cc = append(rcp.Cc, p.PmEmail)
+	} else if regexpUserInfo.MatchString(p.PmEmail) {
+		// User가 설정되어 있을 수 있다.
+		id := strings.Split(p.PmEmail, "(")[0]
+		u, err := getUser(session, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if !regexpEmail.MatchString(u.Email) {
+			http.Error(w, fmt.Sprintf("%s 사용자는 Email 구조를 띄지 않습니다", u.ID), http.StatusBadRequest)
+			return
+		}
+		rcp.Cc = append(rcp.Mails, u.Email)
 	}
 	// 메일헤더가 빈 문자열이면 프로젝트 id를 메일해더로 사용한다.
 	if p.MailHead == "" {
@@ -6942,6 +6959,9 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 	for key := range i.Tasks {
 		if regexpUserInfo.MatchString(i.Tasks[key].User) { // "khw7096(김한웅,2D1)" 패턴이면... 앞 문자열이 ID이다.
 			id := strings.Split(i.Tasks[key].User, "(")[0]
+			if id == rcp.UserID { // 자기가 자기에게 이메일을 보내지 않는다.
+				continue
+			}
 			u, err := getUser(session, id)
 			if err != nil {
 				continue
@@ -6950,7 +6970,7 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// Task 아티스트의 메일을 메일리스트에 넣는다.
-			rcp.Mails = append(rcp.Mails, fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email))
+			rcp.Mails = append(rcp.Mails, u.Email)
 			// Task 아티스트의 팀명을 찾는다.
 			var teamName string
 			for _, o := range u.Organizations {
@@ -6983,11 +7003,13 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				if !has {
-					rcp.Cc = append(rcp.Cc, fmt.Sprintf("%s%s<%s>", leader.LastNameKor, leader.FirstNameKor, leader.Email))
+					rcp.Cc = append(rcp.Cc, leader.Email)
 				}
 			}
 		}
 	}
+	// Email에 자기 자신이 들어가있다면 제거한다.
+
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
 	if err != nil {
