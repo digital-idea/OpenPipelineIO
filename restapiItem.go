@@ -7008,8 +7008,6 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	// Email에 자기 자신이 들어가있다면 제거한다.
-
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
 	if err != nil {
