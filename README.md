@@ -138,7 +138,7 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - [Slack go webhook](https://github.com/ashwanthkumar/slack-go-webhook): Apache License, Version 2.0
 - [Captcha](https://github.com/dchest/captcha): Apache License, Version 2.0
 - [Mgo](https://github.com/go-mgo/mgo): https://github.com/go-mgo/mgo/blob/v2-unstable/LICENSE
-- [JWT go](https://github.com/dgrijalva/jwt-go): MIT license
+- [JWT go](https://github.com/golang-jwt/jwt): MIT license
 - [OpenColorIO](https://github.com/AcademySoftwareFoundation/OpenColorIO): BSD 3-Clause License
 - [alfg/mp4](https://github.com/alfg/mp4): MIT license
 - [amarburg/go-quicktime](https://github.com/amarburg/go-quicktime): MIT license
