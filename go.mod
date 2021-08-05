@@ -1,6 +1,6 @@
 module github.com/digital-idea/csi3
 
-go 1.13
+go 1.16
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.0.2
@@ -8,7 +8,6 @@ require (
 	github.com/amarburg/go-quicktime v0.0.0-20180102160802-53825554ea37
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20181208062437-4a19b1a876b7
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/digital-idea/dilog v1.0.4
 	github.com/digital-idea/dipath v0.0.0-20190606073246-5cc149f252b0
 	github.com/digital-idea/ditime v0.0.4
