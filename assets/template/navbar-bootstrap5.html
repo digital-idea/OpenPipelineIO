@@ -156,6 +156,17 @@
             </li>
           {{end}}
         {{end}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Link
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="https://contenthub.netflixstudios.com">Netflix Content Hub</a></li>
+            <li><a class="dropdown-item" href="https://portal.shield.ise.io/login">Disney Vendor Portal</a></li>
+            <li><a class="dropdown-item" href="https://account.shotgunsoftware.com/login">Shotgrid Account Center</a></li>
+            <li><a class="dropdown-item" href="https://studio.youtube.com">YouTube Studio</a></li>
+          </ul>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="/help">Help</a>
         </li>
@@ -164,8 +175,8 @@
                {{.User.ID}}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a>
-              <a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a>
+              <li><a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a></li>
+              <li><a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a></li>
               {{if eq .User.ID "guest" "demo" }}
                 <li><span class="dropdown-item text-danger fade">Update Password</span></li>
               {{else}}
