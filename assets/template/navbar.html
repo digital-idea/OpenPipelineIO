@@ -112,54 +112,65 @@
         </li>
         {{end}}
         {{if eq .User.AccessLevel 5 7 8 10 11}}
-        {{if eq .User.ID "guest" "demo" }}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Remove
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <span class="dropdown-item text-danger fade">Project</span>
-              <div class="dropdown-divider"></div>
-              <span class="dropdown-item text-danger fade">Item</span>
-              <div class="dropdown-divider"></div>
-              <span class="dropdown-item text-danger fade">Task</span>
-              <span class="dropdown-item text-danger fade">Status</span>
-              <span class="dropdown-item text-danger fade">Review Stage</span>
-              <span class="dropdown-item text-danger fade">Publish Key</span>
-              <div class="dropdown-divider"></div>
-              <span class="dropdown-item text-danger fade">Organization</span>
-            </div>
-          </li>
-        {{else}}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Remove
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {{if eq .User.AccessLevel 11}}
-                <a class="dropdown-item text-danger" href="/rmproject">Project</a>
-              {{end}}
-              {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
+          {{if eq .User.ID "guest" "demo" }}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Remove
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <span class="dropdown-item text-danger fade">Project</span>
                 <div class="dropdown-divider"></div>
-                <span class="dropdown-item finger text-danger" onclick="rmItem()">Item</span>
-              {{end}}
-              {{if eq .User.AccessLevel 5 6 8 9 10 11}}
+                <span class="dropdown-item text-danger fade">Item</span>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-danger" href="/rmtasksetting">Task</a>
-                <a class="dropdown-item text-danger" href="/rmstatus">Status</a>
-                <a class="dropdown-item text-danger" href="/rmstage">Review Stage</a>
-                <a class="dropdown-item text-danger" href="/rmpublishkey">Publish Key</a>
-              {{end}}
-              {{if eq .User.AccessLevel 10 11}}
+                <span class="dropdown-item text-danger fade">Task</span>
+                <span class="dropdown-item text-danger fade">Status</span>
+                <span class="dropdown-item text-danger fade">Review Stage</span>
+                <span class="dropdown-item text-danger fade">Publish Key</span>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-danger" href="/rmorganization">Organization</a>
-              {{end}}
-            </div>
-          </li>
+                <span class="dropdown-item text-danger fade">Organization</span>
+              </div>
+            </li>
+          {{else}}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Remove
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {{if eq .User.AccessLevel 11}}
+                  <a class="dropdown-item text-danger" href="/rmproject">Project</a>
+                {{end}}
+                {{if eq .User.AccessLevel 5 6 7 8 9 10 11}}
+                  <div class="dropdown-divider"></div>
+                  <span class="dropdown-item finger text-danger" onclick="rmItem()">Item</span>
+                {{end}}
+                {{if eq .User.AccessLevel 5 6 8 9 10 11}}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item text-danger" href="/rmtasksetting">Task</a>
+                  <a class="dropdown-item text-danger" href="/rmstatus">Status</a>
+                  <a class="dropdown-item text-danger" href="/rmstage">Review Stage</a>
+                  <a class="dropdown-item text-danger" href="/rmpublishkey">Publish Key</a>
+                {{end}}
+                {{if eq .User.AccessLevel 10 11}}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item text-danger" href="/rmorganization">Organization</a>
+                {{end}}
+              </div>
+            </li>
+          {{end}}
         {{end}}
-        {{end}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Link
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="https://contenthub.netflixstudios.com" target="_blank">Netflix Content Hub</a>
+            <a class="dropdown-item" href="https://portal.shield.ise.io/login" target="_blank">Disney Vendor Portal</a>
+            <a class="dropdown-item" href="https://account.shotgunsoftware.com/login" target="_blank">Shotgrid Account Center</a>
+            <a class="dropdown-item" href="https://studio.youtube.com" target="_blank">YouTube Studio</a>
+          </div>
+        </li>
         <li class="nav-item">
-            <a class="nav-link" href="/help">Help</a>
+          <a class="nav-link" href="/help">Help</a>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
