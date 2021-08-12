@@ -100,9 +100,17 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 		} else if strings.HasPrefix(word, "assettags:") {
 			query = append(query, bson.M{"assettags": strings.TrimPrefix(word, "assettags:")})
 		} else if strings.HasPrefix(word, "deadline2d:") {
-			query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline2d:"), Options: "i"}})
+			if word == "deadline2d:" {
+				query = append(query, bson.M{"ddline2d": ""}) // Deadline2D 마감일이 빈 문자열이라면 빈문자열인 데이터만 검색되어야 한다.
+			} else {
+				query = append(query, bson.M{"ddline2d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline2d:"), Options: "i"}})
+			}
 		} else if strings.HasPrefix(word, "deadline3d:") {
-			query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline3d:"), Options: "i"}})
+			if word == "deadline3d:" {
+				query = append(query, bson.M{"ddline3d": ""}) // Deadline3D 마감일이 빈 문자열이라면 빈문자열인 데이터만 검색되어야 한다.
+			} else {
+				query = append(query, bson.M{"ddline3d": &bson.RegEx{Pattern: strings.TrimPrefix(word, "deadline3d:"), Options: "i"}})
+			}
 		} else if strings.HasPrefix(word, "shottype:") {
 			query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: strings.TrimPrefix(word, "shottype:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "type:shot") {
