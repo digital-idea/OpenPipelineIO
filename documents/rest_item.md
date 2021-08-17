@@ -101,6 +101,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/setseq | seq를 설정한다. | project, id, seq | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&seq=SS" https://csi.lazypic.org/api/setseq`|
 | /api/setseason | season를 설정한다. | project, id, season | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&season=S01" https://csi.lazypic.org/api/setseason`|
 | /api/setepisode | episode를 설정한다. | project, id, episode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&episode=E01" https://csi.lazypic.org/api/setepisode`|
+| /api/setnetflixid | netflixid를 설정한다. | project, id, netflixid | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&netflixid=123456" https://csi.lazypic.org/api/setnetflixid`|
 
 #### URL Encode
 `/path/test.%04d.exr` 형태의 데이터를 보내고 싶다면 url-encode를 처리해야합니다.

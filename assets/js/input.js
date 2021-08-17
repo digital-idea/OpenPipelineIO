@@ -1978,6 +1978,7 @@ function setSeq(seq) {
     });
 }
 
+
 function setSeason(season) {
     $.ajax({
         url: "/api/setseason",
@@ -2290,6 +2291,7 @@ function setIteminfoModal(project, id) {
             document.getElementById('modal-iteminfo-ociocc').value = data.ociocc;
             document.getElementById('modal-iteminfo-rollmedia').value = data.rollmedia;
             document.getElementById('modal-iteminfo-scanname').value = data.scanname;
+            document.getElementById('modal-iteminfo-netflixid').value = data.netflixid;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5881,5 +5883,29 @@ function setReviewAgainForWaitStatusToday() {
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
+    });
+}
+
+// setNetflixID 는 shot, asset에 NetflixID를 설정합니다. 바닐라 JS로 작성합니다.
+function setNetflixID(netflixid) {
+    fetch('/api/setnetflixid', {
+        method: 'post',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
+            project: document.getElementById('modal-iteminfo-project').value,
+            id: document.getElementById('modal-iteminfo-id').value,
+            netflixid, netflixid
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        document.getElementById(`${data.project}-${data.id}-netflixid`).innerHTML = `<span class="text-badge netflix-red ml-1">NetflixID: ${data.netflixid}</span>`
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
