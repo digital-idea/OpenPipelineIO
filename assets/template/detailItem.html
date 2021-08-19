@@ -539,7 +539,11 @@
 						<span class="text-badge ml-1">{{$.Item.ScanTimecodeOut}}</span>
 					{{end}}
 				</div>
-				
+				<div id="{{$.Item.Project}}-{{$.Item.ID}}-netflixid">
+					{{if $.Item.NetflixID}}
+						<span class="text-badge netflix-red ml-1">NetflixID: {{$.Item.NetflixID}}</span>
+					{{end}}
+				</div>
 			</div>
 
 		</div>
