@@ -1,6 +1,6 @@
 {{define "addShot" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 <div class="container p-5">
@@ -10,7 +10,7 @@
             <h2 class="section-heading">Add Shot</h2>
         </div>
         <div class="form-group">
-            <label>Project</label>
+            <label><span class="text-danger">*</span>Project</label>
             <select name="Project" class="form-control">
               {{range .Projectlist}}
                 <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-sm">
                 <div class="form-group">
-                    <label>Name</label>
+                    <label><span class="text-danger">*</span>Name</label>
                     <input type="text" name="Name" class="form-control" placeholder="예) SS_0010">
                     <small class="form-text text-muted">샷 이름을 작성해주세요. 예) SS_0010</small>
                     <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러샷을 생성할 수 있습니다.</small>
@@ -33,61 +33,70 @@
         <div class="row">
             <div class="col-sm">
                 <div class="form-group">
-                    <label>Type</label>
+                    <label><span class="text-danger">*</span>Type</label>
                     <input type="text" id="addshot-type" name="Type" class="form-control" placeholder="org" value="org" readonly>
                     <small class="form-text text-muted">Type 이름을 설정해주세요.</small>
                 </div>
             </div>
         </div>
+        
         <div class="row">
-            <div class="col-sm">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-sm btn-darkmode active" onclick="setTypeAddShot('org',true)">
-                      <input type="radio" name="addshot-type" autocomplete="off" checked> Org ( Default )
-                    </label>
-                    <label class="btn btn-sm btn-darkmode" onclick="setTypeAddShot('',false)">
-                      <input type="radio" name="addshot-type" autocomplete="off"> Custom
-                    </label>
-                    <label class="btn btn-sm btn-darkmode" onclick="setTypeAddShot('left',true)">
-                      <input type="radio" name="addshot-type" autocomplete="off"> Stereo(입체)
-                    </label>
+            <div class="col">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="addshot-type" id="btnradio1" autocomplete="off" checked>
+                    <label class="btn btn-darkmode" for="btnradio1" onclick="setTypeAddShot('org',true)">Org ( Default )</label>
+                
+                    <input type="radio" class="btn-check" name="addshot-type" id="btnradio2" autocomplete="off">
+                    <label class="btn btn-darkmode" for="btnradio2" onclick="setTypeAddShot('',false)">Custom</label>
+                
+                    <input type="radio" class="btn-check" name="addshot-type" id="btnradio3" autocomplete="off">
+                    <label class="btn btn-darkmode" for="btnradio3" onclick="setTypeAddShot('left',true)">Stereo(입체)</label>
                 </div>
             </div>
         </div>
+
+
         <div class="row pt-4">
-            <div class="col-6">
+            <div class="col">
                 <div class="form-group">
-                    <label for="Season">Season(Option)</label>
+                    <label for="Season">Season</label>
                     <input type="text" class="form-control" id="Season" name="Season" placeholder="Season">
-                    <small class="form-text text-muted">넷플릭스 프로젝트에 활용할 때가 있습니다.</small>
+                    <small class="form-text text-muted">넷플릭스 프로젝트에 활용</small>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col">
                 <div class="form-group">
-                    <label for="Episode">Episode(Option)</label>
+                    <label for="Episode">Episode</label>
                     <input type="text" class="form-control" id="Episode" name="Episode" placeholder="Episode">
-                    <small class="form-text text-muted">넷플릭스 프로젝트에 활용할 때가 있습니다.</small>
+                    <small class="form-text text-muted">넷플릭스 프로젝트에 활용</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="netflixid">NetflixID</label>
+                    <input type="number" class="form-control" id="netflixid" name="NetflixID" placeholder="NetflixID">
+                    <small class="form-text text-muted">NetflixID</small>
                 </div>
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-sm">
-                <label class="pt-4">ETC Option</label>
-                <div class="form-check pt-2 pl-5">
-                    <input type="checkbox" id="SetRendersize" name="SetRendersize" class="form-check-input" value="true" checked>
-                    <label class="form-check-label" for="SetRendersize">자동으로 렌더사이즈 입력하기</label>
+        <div class="row pt-3">
+            <div class="col">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="SetRendersize" name="SetRendersize" value="true" checked>
+                        <label class="form-check-label" for="SetRendersize">자동으로 렌더사이즈 입력하기</label>
+                    </div>
+                </div>
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="Mkdir" name="Mkdir" value="true">
+                        <label class="form-check-label" for="Mkdir">샷 디렉토리 생성하기</label>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm">
-                <div class="form-check pt-3 pl-5">
-                    <input type="checkbox" id="Mkdir" name="Mkdir" class="form-check-input" value="true">
-                    <label class="form-check-label" for="Mkdir">샷 디렉토리 생성하기</label>
-                </div>
-            </div>
-        </div>
+
         <div class="text-center">
             <button type="submit" class="btn btn-darkmode mt-5">Add Shot</button>
         </div>
@@ -97,8 +106,7 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/input.js"></script>
 </html>
 {{end}}

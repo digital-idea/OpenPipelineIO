@@ -125,13 +125,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if *flagAdd == "project" && *flagName != "" { //프로젝트 추가
-		addProjectCmd(*flagName)
-		return
-	} else if *flagRm == "project" && *flagName != "" { //프로젝트 삭제
-		rmProjectCmd(*flagName)
-		return
-	} else if *flagAccessLevel != -1 && *flagID != "" {
+	if *flagAccessLevel != -1 && *flagID != "" {
 		if user.Username != "root" {
 			log.Fatal(errors.New("사용자의 레벨을 수정하기 위해서는 root 권한이 필요합니다"))
 		}
