@@ -1857,7 +1857,7 @@ func SetSeq(session *mgo.Session, project, id, seq string) error {
 }
 
 // SetNetflixID 함수는 item에 NetflixID 값을 셋팅한다.
-func SetNetflixID(session *mgo.Session, project, id string, netflixid uint32) error {
+func SetNetflixID(session *mgo.Session, project, id string, netflixid uint64) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {

@@ -60,7 +60,7 @@ type Version struct {
 type Item struct {
 	Project   string `json:"project"`   // 프로젝트명
 	ID        string `json:"id"`        // ID
-	NetflixID uint32 `json:"netflixid"` // NetflixID
+	NetflixID uint64 `json:"netflixid"` // NetflixID
 
 	// 현장정보
 	// 현장에서 사용하는 카메라 데이터 이름. 슈퍼바이저 툴과 연동하기 위해서 Key로 사용된다.

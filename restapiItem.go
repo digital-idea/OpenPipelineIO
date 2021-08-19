@@ -2653,7 +2653,7 @@ func handleAPISetNetflixID(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		ID        string `json:"id"`
-		NetflixID uint32 `json:"netflixid"`
+		NetflixID uint64 `json:"netflixid"`
 		UserID    string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -2687,12 +2687,12 @@ func handleAPISetNetflixID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.ID = id
-	netflixID, err := strconv.ParseUint(r.FormValue("netflixid"), 10, 32) // 문자를 10진수, uint32로 컨버팅한다.
+	netflixID, err := strconv.ParseUint(r.FormValue("netflixid"), 10, 64)
 	if err != nil {
 		http.Error(w, "netflixid가 0보다 큰 숫자가 아닙니다", http.StatusBadRequest)
 		return
 	}
-	rcp.NetflixID = uint32(netflixID)
+	rcp.NetflixID = netflixID
 	err = SetNetflixID(session, rcp.Project, rcp.ID, rcp.NetflixID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
