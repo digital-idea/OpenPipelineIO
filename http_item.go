@@ -520,11 +520,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	episode := r.FormValue("Episode")
 	mkdir := str2bool(r.FormValue("Mkdir"))
 	setRendersize := str2bool(r.FormValue("SetRendersize"))
-	netflixID, err := strconv.ParseUint(r.FormValue("NetflixID"), 10, 64)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	netflixID := r.FormValue("NetflixID")
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}
@@ -958,11 +954,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	construction := r.FormValue("Construction")
 	crowdAsset := str2bool(r.FormValue("CrowdAsset"))
 	mkdir := str2bool(r.FormValue("Mkdir"))
-	netflixID, err := strconv.ParseUint(r.FormValue("NetflixID"), 10, 64)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	netflixID := r.FormValue("NetflixID")
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
 	}

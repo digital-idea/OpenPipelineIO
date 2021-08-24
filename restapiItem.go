@@ -2653,7 +2653,7 @@ func handleAPISetNetflixID(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
 		ID        string `json:"id"`
-		NetflixID uint64 `json:"netflixid"`
+		NetflixID string `json:"netflixid"`
 		UserID    string `json:"userid"`
 	}
 	rcp := Recipe{}
@@ -2687,25 +2687,20 @@ func handleAPISetNetflixID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.ID = id
-	netflixID, err := strconv.ParseUint(r.FormValue("netflixid"), 10, 64)
-	if err != nil {
-		http.Error(w, "netflixid가 0보다 큰 숫자가 아닙니다", http.StatusBadRequest)
-		return
-	}
-	rcp.NetflixID = netflixID
+	rcp.NetflixID = r.FormValue("netflixid")
 	err = SetNetflixID(session, rcp.Project, rcp.ID, rcp.NetflixID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set NetflixID: %d", rcp.NetflixID), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set NetflixID: %s", rcp.NetflixID), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set NetflixID: %d\nProject: %s, ID: %s, Author: %s", rcp.NetflixID, rcp.Project, rcp.ID, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set NetflixID: %s\nProject: %s, ID: %s, Author: %s", rcp.NetflixID, rcp.Project, rcp.ID, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
