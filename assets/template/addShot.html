@@ -18,8 +18,8 @@
             </select>
             <small class="form-text text-muted">샷을 생성할 프로젝트를 선택해주세요.</small>
         </div>
-        <div class="row">
-            <div class="col-sm">
+        <div class="row pt-3">
+            <div class="col">
                 <div class="form-group">
                     <label><span class="text-danger">*</span>Name</label>
                     <input type="text" name="Name" class="form-control" placeholder="예) SS_0010">
@@ -30,33 +30,33 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm">
+        <div class="row pt-3">
+            <div class="col-12">
                 <div class="form-group">
                     <label><span class="text-danger">*</span>Type</label>
                     <input type="text" id="addshot-type" name="Type" class="form-control" placeholder="org" value="org" readonly>
-                    <small class="form-text text-muted">Type 이름을 설정해주세요.</small>
+                    
                 </div>
             </div>
-        </div>
-        
-        <div class="row">
-            <div class="col">
+            <div class="col-12 d-grid gap-2 pt-1">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                     <input type="radio" class="btn-check" name="addshot-type" id="btnradio1" autocomplete="off" checked>
                     <label class="btn btn-darkmode" for="btnradio1" onclick="setTypeAddShot('org',true)">Org ( Default )</label>
                 
                     <input type="radio" class="btn-check" name="addshot-type" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-darkmode" for="btnradio2" onclick="setTypeAddShot('',false)">Custom</label>
-                
+                    <label class="btn btn-darkmode" for="btnradio2" onclick="setTypeAddShot('left',true)">Stereo(입체)</label>
+
                     <input type="radio" class="btn-check" name="addshot-type" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-darkmode" for="btnradio3" onclick="setTypeAddShot('left',true)">Stereo(입체)</label>
+                    <label class="btn btn-darkmode" for="btnradio3" onclick="setTypeAddShot('',false)">Custom(직접입력)</label>
                 </div>
+            </div>
+            <div class="col-12">
+                <small class="form-text text-muted">Type 이름을 버튼을 눌러 설정하거나 직접 입력해주세요.</small>
             </div>
         </div>
 
 
-        <div class="row pt-4">
+        <div class="row pt-3">
             <div class="col">
                 <div class="form-group">
                     <label for="Season">Season</label>
