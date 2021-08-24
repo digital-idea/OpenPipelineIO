@@ -11,38 +11,6 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-func addProjectCmd(name string) {
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-	p := *NewProject(name)
-	err = addProject(session, p)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func rmProjectCmd(name string) {
-	user, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
-	if user.Username != "root" {
-		log.Fatal("루트계정이 아닙니다.")
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-	err = rmProject(session, name)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, scantimecodeout, justtimecodein, justtimecodeout string, scanframe, scanin, scanout, platein, plateout, justin, justout int) {
 	if !regexpShotname.MatchString(name) {
 		log.Fatal("샷 이름 규칙이 아닙니다.")
@@ -64,6 +32,7 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	i := Item{
 		Project:    project,
 		Name:       name,
+		NetflixID:  *flagNetflixID,
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN, // legacy
@@ -216,6 +185,7 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 	i := Item{
 		Project:    project,
 		Name:       name,
+		NetflixID:  *flagNetflixID,
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     ASSIGN, // legacy
@@ -279,6 +249,7 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 	i := Item{
 		Project:    project,
 		Name:       name,
+		NetflixID:  *flagNetflixID,
 		Type:       typ,
 		ID:         name + "_" + typ,
 		Status:     NONE,
@@ -399,7 +370,7 @@ func rmItemCmd(project, name, typ string) {
 		log.Fatal(err)
 	}
 	if user.Username != "root" {
-		log.Fatal("루트계정이 아닙니다.")
+		log.Fatal("root 계정이 아닙니다.")
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {

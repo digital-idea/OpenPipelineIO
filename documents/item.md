@@ -6,30 +6,32 @@ DB값만 생성되며, 샷 폴더가 생성되지는 않습니다.
 
 ```bash
 $ csi3 -add item -project [projectname] -name [SS_0010] -type [org]
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가하고 싶을 때
+$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가
+$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 -netflixid 123435 # 에피소드, 시즌, 넷플릭스ID를 같이 추가
 ```
 
-#### Plate 정보와 함께 샷 등록
-SS_0010 샷을 생성시 아래 정보를 함께 추가할 수 있습니다.
+#### Plate 정보와 함께 샷 등록하는 인수
+SS_0010 샷을 생성시 아래 인수를 이용해서 정보를 샷,에셋 생성시 함께 추가할 수 있습니다.
 
-- Project(프로젝트): circle
-- Name(샷이름): SS_0010
-- Type(타입): org
-- Platesize(플레이트 사이즈): 2048x1152
-- Scanname(데이터 네임): A007C006_160424_R28L
-- ScanTimecodeIn(스캔데이터 타임코드 In): 10:00:00:00
-- ScanTimecodeOut(스캔데이터 타임코드 Out): 10:00:04:04
-- ScanFrame(스캔 프레임수): 100
-- ScanIn(스캔 In 프레임, 보통 6자리를 가지고 있습니다 A007C006_160424_R28L.######.exr): 456812
-- ScanOut(스캔 Out 프레임, 보통 6자리를 가지고 있습니다 A007C006_160424_R28L.######.exr): 456912
-- PlateIn(플레이트 In 프레임): 1001
-- PlateOut(플레이트 Out 프레임): 1101
-- JustIn(Just구간 In 프레임): 1003
-- JustOut(Just구간 Out 프레임): 1098
-- JustTimecodeIn(Just구간 타임코드 In): 10:00:00:03
-- JustTimecodeOut(Just구간 타임코드 Out): 10:00:04:02
-- Episode: 에피소드명
-- Season: 시즌명
+- project: 프로젝트명 예)circle
+- name: 샷이름 예)SS_0010
+- type: 타입 예)org
+- platesize: 플레이트 사이즈 예)2048x1152
+- scanname: 데이터 네임 예)A007C006_160424_R28L
+- scantimecodein: 스캔데이터 타임코드 In 예)10:00:00:00
+- scantimecodeout: 스캔데이터 타임코드 Out 예)10:00:04:04
+- scanframe: 스캔 프레임수 예)100
+- scanin: 스캔 In프레임, 보통 6자리를 가지고 있습니다. 예)A007C006_160424_R28L.456812.exr 문자에서 456812 숫자
+- scanout: 스캔 Out프레임, 보통 6자리를 가지고 있습니다. 예)A007C006_160424_R28L.456915.exr 문자에서 456915 숫자
+- platein: 플레이트 In프레임 예)1001
+- plateout: 플레이트 Out프레임 예)1101
+- justin: Just구간 In프레임 예)1003
+- justout: Just구간 Out프레임 예)1098
+- justtimecodein: Just구간 타임코드 In 예)10:00:00:03
+- justtimecodeout: Just구간 타임코드 Out 예)10:00:04:02
+- episode: 에피소드명
+- season: 시즌명
+- netflixid: 넷플릭스ID
 
 ```bash
 $ csi3 -add item -project circle -name SS_0010 -type org -platesize 2048x1152 -scanname A007C006_160424_R28L -scantimecodein 10:00:00:00 -scantimecodeout 10:00:04:04 -scanframe 100 -scanin 456812 -scanout 456912 -platein 1001 -plateout 1101 -justin 1003 -justout 1098 -justtimecodein 10:00:00:03 -justtimecodeout 10:00:04:02
@@ -41,13 +43,14 @@ justin값은 platein, justout값은 plateout, justtimecodein값은 scantimecodei
 #### 샷,에셋 삭제
 circle 프로젝트 SS_0010 샷 삭제
 
-```
-# sudo csi3 -rm item -project circle -name SS_0010 -type org
+```bash
+$ sudo csi3 -rm item -project circle -name SS_0010 -type org
 ```
 
 circle 프로젝트 stone01 에셋 삭제
-```
-# sudo csi3 -rm item -project circle -name stone01 -type asset
+
+```bash
+$ sudo csi3 -rm item -project circle -name stone01 -type asset
 ```
 
 #### 에셋등록
@@ -64,4 +67,4 @@ $ csi3 -add item -type asset -project [projectname] -name [Assetname] -assettype
 csi3 -add item -name OPN_0010 -type src2 -project TEMP -platepath /source/path
 ```
 
-등록이 되면 자동으로 OPN_0010 샷에도 OPN_0010_org제목과 /source/path 경로로 소스가 등록됩니다.
+등록이 되면 자동으로 OPN_0010 샷에 OPN_0010_org 소스 제목으로 /source/path 경로가 자동 등록됩니다.

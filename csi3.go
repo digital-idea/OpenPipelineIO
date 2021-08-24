@@ -74,6 +74,7 @@ var (
 	flagName               = flag.String("name", "", "name")
 	flagSeason             = flag.String("season", "", "season")
 	flagEpisode            = flag.String("episode", "", "episode")
+	flagNetflixID          = flag.String("netflixid", "", "netflix id")
 	flagType               = flag.String("type", "", "type: org,left,asset,org1,src,src1,lsrc,rsrc")
 	flagAssettags          = flag.String("assettags", "", "asset tags, 입력예) prop,char,env,prop,comp,plant,vehicle,component,group,assembly 형태로 입력")
 	flagAssettype          = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
@@ -124,13 +125,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if *flagAdd == "project" && *flagName != "" { //프로젝트 추가
-		addProjectCmd(*flagName)
-		return
-	} else if *flagRm == "project" && *flagName != "" { //프로젝트 삭제
-		rmProjectCmd(*flagName)
-		return
-	} else if *flagAccessLevel != -1 && *flagID != "" {
+	if *flagAccessLevel != -1 && *flagID != "" {
 		if user.Username != "root" {
 			log.Fatal(errors.New("사용자의 레벨을 수정하기 위해서는 root 권한이 필요합니다"))
 		}

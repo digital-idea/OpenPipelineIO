@@ -1856,6 +1856,21 @@ func SetSeq(session *mgo.Session, project, id, seq string) error {
 	return nil
 }
 
+// SetNetflixID 함수는 item에 NetflixID 값을 셋팅한다.
+func SetNetflixID(session *mgo.Session, project, id, netflixid string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"netflixid": netflixid, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetSeason 함수는 item에 season 값을 셋팅한다.
 func SetSeason(session *mgo.Session, project, id, season string) error {
 	session.SetMode(mgo.Monotonic, true)
