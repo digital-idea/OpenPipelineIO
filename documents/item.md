@@ -6,7 +6,8 @@ DB값만 생성되며, 샷 폴더가 생성되지는 않습니다.
 
 ```bash
 $ csi3 -add item -project [projectname] -name [SS_0010] -type [org]
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가하고 싶을 때
+$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가
+$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 -netflixid 123435 # 에피소드, 시즌, 넷플릭스ID를 같이 추가
 ```
 
 #### Plate 정보와 함께 샷 등록
