@@ -10,6 +10,23 @@ function changeReportJSONURI() {
     document.getElementById("reportJSONURI").href = "/reportjson?project=" + project;
 }
 
+// include, exclude modal에서 드레그앤 드롭을 할 때 사용하는 코드
+Sortable.create(include, {
+    group: {
+        name: 'include',
+        put: 'exclude',
+    },
+    animation: 100
+});
+
+Sortable.create(exclude, {
+    group: {
+        name: 'exclude',
+        put: 'include',
+    },
+    animation: 100
+});
+
 // changeExportFormatType 함수는 ExportExcel의 포멧 옵션이 변경될 때 실행되는 함수이다.
 function changeExportFormatType() {
     let token = document.getElementById("token").value;
