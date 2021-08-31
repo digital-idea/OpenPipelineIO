@@ -3,6 +3,60 @@
     <!-- Modal: Preset value-->
     <input type="hidden" id="token" value="{{$.User.Token}}">
     <input type="hidden" id="userid" value="{{$.User.ID}}">
+
+    <!-- Modal: Export Current CSV-->
+    <div class="modal fade" id="modal-exportcurrentcsv" tabindex="-1" role="dialog" aria-labelledby="modal-exportcurrentcsv" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title">Export Current CSV</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <ul class="list-group">
+                                <li class="list-group-item btn-outline-darkmode">Name</li>
+                                <li class="list-group-item">Type</li>
+                                <li class="list-group-item">NetflixID</li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <ul class="list-group">
+                                <li class="list-group-item">An item</li>
+                                <li class="list-group-item">A second item</li>
+                                <li class="list-group-item">A third item</li>
+                                <li class="list-group-item">A fourth item</li>
+                                <li class="list-group-item">And a fifth one</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <label for="modal-addcomment-text" class="col-form-label">Comment:</label>
+                        <textarea class="form-control" id="modal-addcomment-text" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addcomment-mediatitle" class="col-form-label">Media Title</label>
+                        <input type="text" class="form-control" id="modal-addcomment-mediatitle">
+                        <small class="form-text text-muted">Media 제목, 용도를 입력해주세요</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addcomment-media" class="col-form-label">Media</label>
+                        <input type="text" class="form-control" id="modal-addcomment-media">
+                        <small class="form-text text-muted">스케치, 사진, 영상, 보이스파일, 촬영데이터가 있다면 경로를 입력해주세요.</small>
+                    </div>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="exportCsvCurrentPage()" data-dismiss="modal">Export Current CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Add Comment-->
     <div class="modal fade" id="modal-addcomment" tabindex="-1" role="dialog" aria-labelledby="modal-addcomment" aria-hidden="true">
         <div class="modal-dialog" role="document">

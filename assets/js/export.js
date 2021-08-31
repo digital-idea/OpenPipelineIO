@@ -208,7 +208,8 @@ function exportCsvCurrentPage() {
         out = document.getElementById("searchbox-checkbox-out").checked
         none = document.getElementById("searchbox-checkbox-none").checked
     }
+    let titles = "name,type"
     // 요청
-    let url = `/download-csv-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}`
+    let url = `/download-csv-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}&titles=${titles}`
     location.href = url
 }

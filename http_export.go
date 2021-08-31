@@ -2143,13 +2143,19 @@ func handleDownloadCsvFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	records := [][]string{}
-	titles := []string{"name", "type"} // 타이틀을 설정한다.
+	titles := strings.Split(q.Get("titles"), ",") // 타이틀을 설정한다.
 	records = append(records, titles)
 	// 데이터를 찾고 넣는다.
 	for _, i := range items {
 		datas := []string{}
-		datas = append(datas, i.Name)
-		datas = append(datas, i.Type)
+		for _, title := range titles {
+			if title == "name" {
+				datas = append(datas, i.Name)
+			}
+			if title == "type" {
+				datas = append(datas, i.Type)
+			}
+		}
 		records = append(records, datas)
 	}
 
