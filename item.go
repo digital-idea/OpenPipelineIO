@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -277,4 +278,28 @@ func (item *Item) SetCut() {
 			return
 		}
 	}
+}
+
+func (i *Item) GetFieldString(field string) string {
+	r := reflect.ValueOf(i)
+	f := reflect.Indirect(r).FieldByName(field)
+	return f.String()
+}
+
+func (i *Item) GetFieldInteger(field string) int {
+	r := reflect.ValueOf(i)
+	f := reflect.Indirect(r).FieldByName(field)
+	return int(f.Int())
+}
+
+func (i *Item) GetFieldFloat64(field string) float64 {
+	r := reflect.ValueOf(i)
+	f := reflect.Indirect(r).FieldByName(field)
+	return float64(f.Float())
+}
+
+func (i *Item) GetFieldBool(field string) bool {
+	r := reflect.ValueOf(i)
+	f := reflect.Indirect(r).FieldByName(field)
+	return f.Bool()
 }

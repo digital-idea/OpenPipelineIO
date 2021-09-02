@@ -225,8 +225,15 @@ function exportCsvCurrentPage() {
         out = document.getElementById("searchbox-checkbox-out").checked
         none = document.getElementById("searchbox-checkbox-none").checked
     }
-    let titles = "name,type"
+    // 사용자가 CSV를 뽑기 위해서 include 영역에 드레그한 아이템 가지고 오기.
+    let ul = document.getElementById("include")
+    let li = ul.getElementsByTagName("li")
+    let titles = []
+    for (let i = 0; i <= li.length -1; i++) {
+        titles.push(li[i].getAttribute("id"))
+    }
+    let titleString = titles.join(",")
     // 요청
-    let url = `/download-csv-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}&titles=${titles}`
+    let url = `/download-csv-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}&titles=${titleString}`
     location.href = url
 }

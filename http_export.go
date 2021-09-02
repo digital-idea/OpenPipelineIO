@@ -2149,11 +2149,22 @@ func handleDownloadCsvFile(w http.ResponseWriter, r *http.Request) {
 	for _, i := range items {
 		datas := []string{}
 		for _, title := range titles {
-			if title == "name" {
-				datas = append(datas, i.Name)
-			}
-			if title == "type" {
-				datas = append(datas, i.Type)
+			switch title {
+			// 혀용하지 않는 것(리스트형,맵등)
+			case "Tag", "Assettags", "Note", "Sources", "References", "Comments", "Tasks", "OnsetCam", "ProductionCam":
+				continue
+			case "CrowdAsset":
+				// bool형
+				datas = append(datas, strconv.FormatBool(i.GetFieldBool(title)))
+			case "ScanFrame", "ScanIn", "ScanOut", "HandleIn", "HandleOut", "JustIn", "JustOut", "PlateIn", "PlateOut", "ObjectidIn", "ObjectidOut":
+				// int형
+				datas = append(datas, fmt.Sprintf("%d", i.GetFieldInteger(title)))
+			case "OverscanRatio":
+				// float64 형태
+				datas = append(datas, fmt.Sprintf("%f", i.GetFieldFloat64(title)))
+			default:
+				// 기본적으로 문자열로 처리
+				datas = append(datas, i.GetFieldString(title))
 			}
 		}
 		records = append(records, datas)
