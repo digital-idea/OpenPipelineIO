@@ -1,98 +1,96 @@
 {{define "addAsset" }}
 {{template "headBootstrap5"}}
-{{template "navbar-bootstrap5" .}}
-
 <body>
-<div class="container p-5">
-    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-        <form action="/addasset_submit" method="POST">
-        <div class="pt-3 pb-5">
-            <h2 class="section-heading">Add Asset</h2>
-        </div>
-        <div class="form-group">
-            <label><span class="text-danger">*</span>Project</label>
-            <select name="Project" class="form-control">
-              {{range .Projectlist}}
-                <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
-              {{end}}
-            </select>
-            <small class="form-text text-muted">에셋을 생성할 프로젝트를 선택해주세요.</small>
-        </div>
-        <div class="row pt-3">
-            <div class="col">
-                <div class="form-group">
-                    <label><span class="text-danger">*</span>Asset Name</label>
-                    <input type="text" name="Name" class="form-control" placeholder="예) stone">
-                    <small class="form-text text-muted">에셋 이름을 작성해주세요. 예) stone</small>
-                    <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러 에셋을 생성할 수 있습니다.</small>
-                    <small class="form-text text-muted">&nbsp;&nbsp;예) stone leaf</small>
-                    <small class="form-text text-muted">MS Excel, Google Spreadsheet, Apple Numbers, LibreOffice Spreadsheet 의 Cell 데이터를 Copy & Paste 하여 사용가능합니다.</small>
+    {{template "navbar-bootstrap5" .}}
+    <div class="container p-5">
+        <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+            <form action="/addasset_submit" method="POST">
+            <div class="pt-3 pb-5">
+                <h2 class="section-heading">Add Asset</h2>
+            </div>
+            <div class="form-group">
+                <label><span class="text-danger">*</span>Project</label>
+                <select name="Project" class="form-control">
+                {{range .Projectlist}}
+                    <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
+                {{end}}
+                </select>
+                <small class="form-text text-muted">에셋을 생성할 프로젝트를 선택해주세요.</small>
+            </div>
+            <div class="row pt-3">
+                <div class="col">
+                    <div class="form-group">
+                        <label><span class="text-danger">*</span>Asset Name</label>
+                        <input type="text" name="Name" class="form-control" placeholder="예) stone">
+                        <small class="form-text text-muted">에셋 이름을 작성해주세요. 예) stone</small>
+                        <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러 에셋을 생성할 수 있습니다.</small>
+                        <small class="form-text text-muted">&nbsp;&nbsp;예) stone leaf</small>
+                        <small class="form-text text-muted">MS Excel, Google Spreadsheet, Apple Numbers, LibreOffice Spreadsheet 의 Cell 데이터를 Copy & Paste 하여 사용가능합니다.</small>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row pt-3">
-            <div class="col">
-                <div class="form-group">
-                    <label><span class="text-danger">*</span>Asset Type</label>
-                    <select name="Assettype" class="form-control">
-                        <option value="prop">Prop (소품)</option>
-                        <option value="char">Char (캐릭터, 크리쳐)</option>
-                        <option value="env">Env (환경에셋)</option>
-                        <option value="comp">Comp (합성 노드에셋)</option>
-                        <option value="plant">Plant (식물)</option>
-                        <option value="vehicle">Vehicle (탈것)</option>
-                    </select>
-                    <small class="form-text text-muted">에셋 타입을 선택해주세요.</small>
+            <div class="row pt-3">
+                <div class="col">
+                    <div class="form-group">
+                        <label><span class="text-danger">*</span>Asset Type</label>
+                        <select name="Assettype" class="form-control">
+                            <option value="prop">Prop (소품)</option>
+                            <option value="char">Char (캐릭터, 크리쳐)</option>
+                            <option value="env">Env (환경에셋)</option>
+                            <option value="comp">Comp (합성 노드에셋)</option>
+                            <option value="plant">Plant (식물)</option>
+                            <option value="vehicle">Vehicle (탈것)</option>
+                        </select>
+                        <small class="form-text text-muted">에셋 타입을 선택해주세요.</small>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Pixar USD kind setting</label>
+                        <select name="Construction" class="form-control">
+                            <option value="component">Component</option>
+                            <option value="group">Group</option>
+                            <option value="assembly">Assembly</option>
+                        </select>
+                        <small class="form-text text-muted">.usd 에셋 구성 형태를 선택해주세요.</small>
+                    </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Pixar USD kind setting</label>
-                    <select name="Construction" class="form-control">
-                        <option value="component">Component</option>
-                        <option value="group">Group</option>
-                        <option value="assembly">Assembly</option>
-                    </select>
-                    <small class="form-text text-muted">.usd 에셋 구성 형태를 선택해주세요.</small>
+            
+            <div class="row pt-3">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="netflixid">NetflixID</label>
+                        <input type="text" class="form-control" id="netflixid" name="NetflixID" placeholder="NetflixID">
+                        <small class="form-text text-muted">NetflixID</small>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="row pt-3">
+                <div class="col">
+                    <div class="from-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="CrowdAsset" name="CrowdAsset" value="true">
+                            <label class="form-check-label" for="CrowdAsset">군중샷에서 사용되는 Asset입니다.</label>
+                        </div>
+                    </div>
+                    <div class="from-group">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="Mkdir" name="Mkdir" value="true">
+                            <label class="form-check-label" for="Mkdir">에셋 디렉토리 생성하기</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
-        <div class="row pt-3">
-            <div class="col">
-                <div class="form-group">
-                    <label for="netflixid">NetflixID</label>
-                    <input type="text" class="form-control" id="netflixid" name="NetflixID" placeholder="NetflixID">
-                    <small class="form-text text-muted">NetflixID</small>
-                </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-darkmode mt-5">Add Asset</button>
             </div>
+            </form>
         </div>
-
-        <div class="row pt-3">
-            <div class="col">
-                <div class="from-group">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="CrowdAsset" name="CrowdAsset" value="true">
-                        <label class="form-check-label" for="CrowdAsset">군중샷에서 사용되는 Asset입니다.</label>
-                    </div>
-                </div>
-                <div class="from-group">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="Mkdir" name="Mkdir" value="true">
-                        <label class="form-check-label" for="Mkdir">에셋 디렉토리 생성하기</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div class="text-center">
-            <button type="submit" class="btn btn-darkmode mt-5">Add Asset</button>
-        </div>
-        </form>
     </div>
-</div>
-
-{{template "footerBootstrap"}}
+    {{template "footerBootstrap"}}
 </body>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
 </html>

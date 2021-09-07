@@ -16,11 +16,14 @@
                 <li><a class="dropdown-item text-muted" href="/scanplate">ScanPlate(준비중)</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/importexcel">Import .xlsx</a></li>
-                <li><a class="dropdown-item" href="/importjson">Import .json</a></li>
-                <li><a class="dropdown-item" href="/exportexcel">Export All .xlsx</a></li>
-                <li><a class="dropdown-item" href="/exportjson">Export All .json</a></li>
                 <li><span class="dropdown-item finger" onclick="exportExcelCurrentPage()">Export Current .xlsx</span></li>
+                <li><a class="dropdown-item" href="/exportexcel">Export All .xlsx</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><span class="dropdown-item finger" onclick="exportCsvCurrentPage()">Export Current .csv</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/importjson">Import .json</a></li>
                 <li><span class="dropdown-item finger" onclick="exportJsonCurrentPage()">Export Current .json</span></li>
+                <li><a class="dropdown-item" href="/exportjson">Export All .json</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item text-muted" href="/report">Report(준비중)</a></li>
               </ul>
@@ -32,7 +35,7 @@
             Review
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><span class="dropdown-item finger" data-toggle="modal" data-target="#modal-addreview">Add Review</span></li>
+            <li><span class="dropdown-item finger" data-bs-toggle="modal" data-bs-target="#modal-addreview">Add Review</span></li>
             <li><hr class="dropdown-divider"></li>
             <li><span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span></li>
             <li><hr class="dropdown-divider"></li>
