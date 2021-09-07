@@ -278,6 +278,9 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	for _, user := range users {
+		if user.IsLeave { // 퇴사자는 나오면 안된다.
+			continue
+		}
 		id := user.ID
 		name := user.LastNameKor + user.FirstNameKor
 		var team string
@@ -297,7 +300,10 @@ func handleAPIAutoCompliteUsers(w http.ResponseWriter, r *http.Request) {
 		rcp.Users = append(rcp.Users, u)
 	}
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
