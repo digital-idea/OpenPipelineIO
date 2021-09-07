@@ -16,10 +16,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col text-center text-warning">Include</div>
-                        <div class="col text-center text-darkmode">Exclude</div>
-                        <div class="col text-center text-darkmode">Exclude</div>
-                        <div class="col text-center text-darkmode">Exclude</div>
+                        <div class="col text-center text-warning">.csv File Struct</div>
+                        <div class="col text-center text-darkmode">Managing Info</div>
+                        <div class="col text-center text-darkmode">Data Info</div>
+                        <div class="col text-center text-darkmode">Time Info</div>
                     </div>
                     <div class="row">
                         <div class="col-3 p-1">
@@ -30,7 +30,7 @@
                             </ul>    
                         </div>
                         <div class="col-3 p-1">
-                            <ul id="exclude" class="list-group p-1">
+                            <ul id="exclude1" class="list-group p-1">
                                 <li class="list-group-item btn-outline-darkmode" id="Status">Status고정형(기존)</li>
                                 <li class="list-group-item btn-outline-darkmode" id="StatusV2">Status가변형</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Platesize">Platesize</li>
@@ -40,17 +40,22 @@
                                 <li class="list-group-item btn-outline-darkmode" id="Cut">Cut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Assettype">Assettype</li>
                                 <li class="list-group-item btn-outline-darkmode" id="UseType">UseType</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Scantime">Scantime</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Editmov">Editmov</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Retimeplate">Retimeplate</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Platepath">Platepath</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Shottype">Shottype</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Ddline3d">Deadline3D</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Ddline2d">Deadline2D</li>
+                                <!--<li class="list-group-item btn-outline-darkmode" id="Undistortionsize">Undistortion Size</li>-->
+                                <!--<li class="list-group-item btn-outline-darkmode" id="OverscanRatio">OverscanRatio</li>-->
+                                <li class="list-group-item btn-outline-darkmode" id="Focal">Focal</li>
+                                <li class="list-group-item btn-outline-darkmode" id="Stereotype">Stereotype</li>
+                                <li class="list-group-item btn-outline-darkmode" id="Stereoeye">Stereoeye</li>
                             </ul>
                         </div>
                         <div class="col-3 p-1">
                             <ul id="exclude2" class="list-group p-1">
+                                <li class="list-group-item btn-outline-darkmode" id="Editmov">Editmov</li>
+                                <li class="list-group-item btn-outline-darkmode" id="Retimeplate">Retimeplate</li>
+                                <li class="list-group-item btn-outline-darkmode" id="Platepath">Platepath</li>
+                                <li class="list-group-item btn-outline-darkmode" id="Scantime">Scantime</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Dataname">Dataname</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Scanname">Scanname</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Rnum">RollNumber</li>
@@ -59,31 +64,27 @@
                                 <li class="list-group-item btn-outline-darkmode" id="Finver">Final Version</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Findate">Final Date</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Clientver">Client Version</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Undistortionsize">Undistortion Size</li>
-                                <li class="list-group-item btn-outline-darkmode" id="OverscanRatio">OverscanRatio</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Focal">Focal</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Stereotype">Stereotype</li>
-                                <li class="list-group-item btn-outline-darkmode" id="Stereoeye">Stereoeye</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Outputname">Outputname</li>
                                 <li class="list-group-item btn-outline-darkmode" id="OCIOcc">OCIOcc</li>
                                 <li class="list-group-item btn-outline-darkmode" id="Soundfile">Soundfile</li>
+                                
                             </ul>
                         </div>
                         <div class="col-3 p-1">
-                            <ul id="exclude1" class="list-group p-1">
+                            <ul id="exclude3" class="list-group p-1">
                                 <li class="list-group-item btn-outline-darkmode" id="ScanFrame">ScanFrame</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ScanTimecodeIn">ScanTimecodeIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ScanTimecodeOut">ScanTimecodeOut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ScanIn">ScanIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ScanOut">ScanOut</li>
+                                <li class="list-group-item btn-outline-darkmode" id="PlateIn">PlateIn</li>
+                                <li class="list-group-item btn-outline-darkmode" id="PlateOut">PlateOut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="HandleIn">HandleIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="HandleOut">HandleOut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="JustIn">JustIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="JustOut">JustOut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="JustTimecodeIn">JustTimecodeIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="JustTimecodeOut">JustTimecodeOut</li>
-                                <li class="list-group-item btn-outline-darkmode" id="PlateIn">PlateIn</li>
-                                <li class="list-group-item btn-outline-darkmode" id="PlateOut">PlateOut</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ObjectIn">ObjectIn</li>
                                 <li class="list-group-item btn-outline-darkmode" id="ObjectOut">ObjectOut</li>
                             </ul>

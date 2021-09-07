@@ -14,15 +14,31 @@ function changeReportJSONURI() {
 Sortable.create(include, {
     group: {
         name: 'include',
-        put: 'exclude',
+        put: ['exclude1','exclude2','exclude3'],
     },
     animation: 100
 });
 
-Sortable.create(exclude, {
+Sortable.create(exclude1, {
     group: {
-        name: 'exclude',
-        put: 'include',
+        name: 'exclude1',
+        put: ['include','exclude2','exclude3'],
+    },
+    animation: 100
+});
+
+Sortable.create(exclude2, {
+    group: {
+        name: 'exclude2',
+        put: ['include','exclude1','exclude3'],
+    },
+    animation: 100
+});
+
+Sortable.create(exclude3, {
+    group: {
+        name: 'exclude3',
+        put: ['include','exclude1','exclude2'],
     },
     animation: 100
 });
