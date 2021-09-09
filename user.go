@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -106,4 +107,12 @@ func (u *User) SetTags() {
 	}
 	tags = append(tags, u.Tags...)
 	u.Tags = UniqueSlice(tags)
+}
+
+func (u *User) emailString() string {
+	if u.LastNameKor == "" && u.FirstNameKor == "" {
+		return fmt.Sprintf("%s<%s>", u.Email, u.Email)
+	} else {
+		return fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email)
+	}
 }

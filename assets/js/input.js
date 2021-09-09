@@ -4355,6 +4355,7 @@ function mailInfo(project, id) {
         dataType: "json",
         success: function(data) {
             let mailString = "mailto:"
+            // 메일 보낼 사람을 추가한다.
             if (data.mails) {
                 mailString += data.mails.join(",")
             }
@@ -4367,9 +4368,13 @@ function mailInfo(project, id) {
             // https://stackoverflow.com/questions/4565112/javascript-how-to-find-out-if-the-user-browser-is-chrome/13348618
             if (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) {
                 window.open(unescape(mailString), "_blank"); // 16진수 문자열을 메일툴로 전달하기 위해서 unescape 한다.
+            } else if (false) {
+                window.open("http://10.0.99.30/zimbra/?view=compose&to="+unescape(mailString), "_blank"); // Zimbra는 이렇게 보내야 한글이 깨지지 않는다.
             } else {
                 window.location.href = unescape(mailString); // 16진수 문자열을 메일툴로 전달하기 위해서 unescape 한다.
+                
             }
+            
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

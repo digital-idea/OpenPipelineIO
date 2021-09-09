@@ -7001,7 +7001,8 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 	// PM 이메일이 프로젝트 정보에 기입되어있다면 PM에 이메일을 보낼 때 참조한다.
 	if regexpEmail.MatchString(p.PmEmail) {
 		// 사용자가 아니라 그룹 메일이 설정되어 있을 수 있다.
-		rcp.Cc = append(rcp.Cc, p.PmEmail)
+		
+		rcp.Cc = append(rcp.Cc, fmt.Sprintf("%s<%s>", p.PmEmail, p.PmEmail)) // 한글이름
 	} else if regexpUserInfo.MatchString(p.PmEmail) {
 		// User가 설정되어 있을 수 있다.
 		id := strings.Split(p.PmEmail, "(")[0]
@@ -7011,10 +7012,10 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if !regexpEmail.MatchString(u.Email) {
-			http.Error(w, fmt.Sprintf("%s 사용자는 Email 구조를 띄지 않습니다", u.ID), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("%s 사용자는 E-mail 구조를 띄지 않습니다", u.ID), http.StatusBadRequest)
 			return
 		}
-		rcp.Cc = append(rcp.Mails, u.Email)
+		rcp.Cc = append(rcp.Cc, u.emailString())
 	}
 	// 메일헤더가 빈 문자열이면 프로젝트 id를 메일해더로 사용한다.
 	if p.MailHead == "" {
@@ -7029,9 +7030,9 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Title = i.Name
 	for key := range i.Tasks {
-		if regexpUserInfo.MatchString(i.Tasks[key].User) { // "khw7096(김한웅,2D1)" 패턴이면... 앞 문자열이 ID이다.
+		if regexpUserInfo.MatchString(i.Tasks[key].User) { // "khw7096(김한웅,2D1)" 패턴이라면, 앞 문자열이 ID이다.
 			id := strings.Split(i.Tasks[key].User, "(")[0]
-			if id == rcp.UserID { // 자기가 자기에게 이메일을 보내지 않는다.
+			if id == rcp.UserID { // 자기 자신에게 이메일을 보내지 않는다.
 				continue
 			}
 			u, err := getUser(session, id)
@@ -7042,7 +7043,7 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			// Task 아티스트의 메일을 메일리스트에 넣는다.
-			rcp.Mails = append(rcp.Mails, u.Email)
+			rcp.Mails = append(rcp.Mails, u.emailString())
 			// Task 아티스트의 팀명을 찾는다.
 			var teamName string
 			for _, o := range u.Organizations {
@@ -7075,11 +7076,14 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				if !has {
-					rcp.Cc = append(rcp.Cc, leader.Email)
+					rcp.Cc = append(rcp.Cc, leader.emailString())
 				}
 			}
 		}
 	}
+	// 혹시나 중복된 데이터가 있수 있다 중복을 제거한다.
+	rcp.Mails = UniqueSlice(rcp.Mails)
+	rcp.Cc = UniqueSlice(rcp.Cc)
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
 	if err != nil {
