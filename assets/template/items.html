@@ -18,7 +18,7 @@
 			{{if .Episode}}
 				<span class="text-white itemname">{{.Episode}}_</span>
 			{{end}}
-			<span class="text-white itemname finger" onclick="mailInfo('{{.Project}}','{{.ID}}')">{{.Name}}</span>
+			<span class="text-white itemname finger" onclick="mailInfo('{{.Project}}','{{.ID}}')" data-toggle="modal" data-target="#modal-sendemail">{{.Name}}</span>
 			{{if .Updatetime|CheckUpdate}}
 				<span class="badge badge-warning align-top mt-1 ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
 			{{end}}

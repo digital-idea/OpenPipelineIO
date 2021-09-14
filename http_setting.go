@@ -205,6 +205,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ProductionPaddingVersionNumber = productionPaddingVersionNumber
 	s.NetflixRegionCode = r.FormValue("NetflixRegionCode")
 	s.NetflixVendorID = r.FormValue("NetflixVendorID")
+	s.ZimbraWebmailEndpoint = r.FormValue("ZimbraWebmailEndpoint")
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

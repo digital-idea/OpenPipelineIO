@@ -109,10 +109,29 @@ func (u *User) SetTags() {
 	u.Tags = UniqueSlice(tags)
 }
 
-func (u *User) emailString() string {
-	if u.LastNameKor == "" && u.FirstNameKor == "" {
+func (u *User) emailString(lang string) string {
+	switch lang {
+	case "ko", "kor", "korean":
+		if u.LastNameKor == "" && u.FirstNameKor == "" {
+			return fmt.Sprintf("%s<%s>", u.Email, u.Email)
+		} else {
+			return fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email)
+		}
+	case "eg", "eng", "english":
+		if u.LastNameEng == "" && u.FirstNameEng == "" {
+			return fmt.Sprintf("%s<%s>", u.Email, u.Email)
+		} else {
+			return fmt.Sprintf("%s%s<%s>", u.FirstNameEng, u.LastNameEng, u.Email)
+		}
+	case "mailonly", "onlymail":
 		return fmt.Sprintf("%s<%s>", u.Email, u.Email)
-	} else {
-		return fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email)
+	default:
+		// 한국에서 자주 사용하는 툴이라서 한국어로 기본 설정한다.
+		if u.LastNameKor == "" && u.FirstNameKor == "" {
+			return fmt.Sprintf("%s<%s>", u.Email, u.Email)
+		} else {
+			return fmt.Sprintf("%s%s<%s>", u.LastNameKor, u.FirstNameKor, u.Email)
+		}
 	}
+
 }

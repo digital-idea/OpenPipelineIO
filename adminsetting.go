@@ -75,4 +75,5 @@ type Setting struct {
 	InitPassword                         string  `json:"initpassword"`                         // 사용자가 패스워드를 잃어버렸을 때 사용하는 패스워드
 	NetflixRegionCode                    string  `json:"netflixregioncode"`                    // 넷플릭스 지역코드
 	NetflixVendorID                      string  `json:"netflixvendorid"`                      // 넷플릭스 벤더ID
+	ZimbraWebmailEndpoint                string  `json:"zimbrawebmailendpoint"`                // Zimbra Webmail Endpoint
 }

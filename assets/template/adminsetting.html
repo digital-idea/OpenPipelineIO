@@ -423,13 +423,18 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="RunScriptAfterSignup">Run script after sign-up</label>
-                    <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="4" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterSignup}}</textarea>
+                    <textarea class="form-control" id="RunScriptAfterSignup" name="RunScriptAfterSignup" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterSignup}}</textarea>
                     <small class="form-text text-muted">사용자가 가입되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
                 </div>
                 <div class="form-group">
                     <label for="RunScriptAfterEditUserProfile">Run script after edit user profile</label>
-                    <textarea class="form-control" id="RunScriptAfterEditUserProfile" name="RunScriptAfterEditUserProfile" rows="4" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterEditUserProfile}}</textarea>
+                    <textarea class="form-control" id="RunScriptAfterEditUserProfile" name="RunScriptAfterEditUserProfile" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterEditUserProfile}}</textarea>
                     <small class="form-text text-muted">사용자의 정보가 수정되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
+                </div>
+                <div class="form-group">
+                    <label for="ZimbraWebmailEndpoint">Zimbra Webmail Endpoint</label>
+                    <input type="text" class="form-control" id="ZimbraWebmailEndpoint" name="ZimbraWebmailEndpoint" placeholder="https://zimbra.mail.server/zimbra/?view=compose&to=" value={{.Setting.ZimbraWebmailEndpoint}}>
+                    <small class="form-text text-muted">Zimbra Webmail Endpoint를 입력합니다.</small>
                 </div>
                 <div class="form-group">
                     <label for="InitPassword">Init Password</label>
