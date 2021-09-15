@@ -12,7 +12,7 @@
 				{{if $.Item.Episode}}
 					<span class="text-white itemname">{{$.Item.Episode}}_</span>
 				{{end}}
-				<span class="text-white itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')">{{$.Item.Name}}</span>
+				<span class="text-white itemname finger" onclick="mailInfo('{{$.Item.Project}}','{{$.Item.ID}}')" data-toggle="modal" data-target="#modal-sendemail">{{$.Item.Name}}</span>
 				{{if $.Item.Updatetime|CheckUpdate}}
 					<span class="badge badge-warning align-top mt-1 ml-1 mr-1">Update {{ToHumantime $.Item.Updatetime}}</span>
 				{{end}}
@@ -208,9 +208,6 @@
 							<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-iteminfo" onclick="setIteminfoModal('{{$.Item.Project}}', '{{$.Item.ID}}')"{{end}}>E</span>
 						</div>
 					{{end}}
-					<div id="button-detail-{{$.Item.Name}}">
-						<a href="/detail?project={{$.Item.Project}}&id={{$.Item.ID}}" class="badge badge-darkmode ml-1">D</a>
-					</div>
 					<div id="button-dir-{{$.Item.Name}}">
 						{{if eq $.Item.Type "asset" -}}	
 							<a href="dilink:///show/{{$.Item.Project}}/assets/{{$.Item.Assettype}}/{{$.Item.Name}}" class="badge badge-darkmode ml-1">F</a>
