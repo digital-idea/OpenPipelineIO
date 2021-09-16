@@ -11,6 +11,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/digital-idea/dilog"
@@ -61,7 +62,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
 		return
 	}
-	rcp.Review.Name = name
+	rcp.Review.Name = strings.TrimSpace(name) // 앞뒤로 사용자가 빈문자열을 넣을 수 있다. 제거한다.
 
 	task := r.FormValue("task")
 	if task == "" {
