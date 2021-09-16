@@ -274,6 +274,8 @@ func genMp4(admin Setting, item Review) error {
 		"libx264",
 		"-qscale:v",
 		"7",
+		"-vf",
+		"pad=ceil(iw/2)*2:ceil(ih/2)*2", // 영상의 세로 픽셀이 홀수일때 연산되지 않는다. 이 옵션이 필요하다.
 		"-an",
 		"-pix_fmt",
 		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
