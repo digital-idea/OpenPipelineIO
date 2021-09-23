@@ -7312,23 +7312,24 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project       string `json:"project"`
-		Name          string `json:"name"`
-		Task          string `json:"task"`
-		Key           string `json:"key"`          // Primary Key
-		SecondaryKey  string `json:"secondarykey"` // Secondary Key
-		Path          string `json:"path"`
-		MainVersion   string `json:"mainversion"`
-		SubVersion    string `json:"subversion"`
-		Subject       string `json:"subject"`
-		FileType      string `json:"filetype"`
-		KindOfUSD     string `json:"kindofusd"`
-		Status        string `json:"status"`
-		Createtime    string `json:"createtime"`
-		UserID        string `json:"userid"`
-		TaskToUse     string `json:"tasktouse"`
-		IsOutput      bool   `json:"isoutput"`
-		AuthorNameKor string `json:"authornamekor"`
+		Project        string `json:"project"`
+		Name           string `json:"name"`
+		Task           string `json:"task"`
+		Key            string `json:"key"`          // Primary Key
+		SecondaryKey   string `json:"secondarykey"` // Secondary Key
+		Path           string `json:"path"`
+		MainVersion    string `json:"mainversion"`
+		SubVersion     string `json:"subversion"`
+		Subject        string `json:"subject"`
+		FileType       string `json:"filetype"`
+		KindOfUSD      string `json:"kindofusd"`
+		Status         string `json:"status"`
+		Createtime     string `json:"createtime"`
+		UserID         string `json:"userid"`
+		TaskToUse      string `json:"tasktouse"`
+		IsOutput       bool   `json:"isoutput"`
+		OutputDataPath string `json:"outputdatapath"`
+		AuthorNameKor  string `json:"authornamekor"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -7414,20 +7415,21 @@ func handleAPIAddTaskPublish(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.TaskToUse = r.FormValue("tasktouse")
 	rcp.IsOutput = str2bool(r.FormValue("isoutput"))
-
+	rcp.OutputDataPath = r.FormValue("outputdatapath")
 	p := Publish{
-		SecondaryKey:  rcp.SecondaryKey,
-		MainVersion:   rcp.MainVersion,
-		SubVersion:    rcp.SubVersion,
-		Path:          rcp.Path,
-		Subject:       rcp.Subject,
-		FileType:      rcp.FileType,
-		KindOfUSD:     rcp.KindOfUSD,
-		Status:        rcp.Status,
-		Createtime:    rcp.Createtime,
-		TaskToUse:     rcp.TaskToUse,
-		IsOutput:      rcp.IsOutput,
-		AuthorNameKor: rcp.AuthorNameKor,
+		SecondaryKey:   rcp.SecondaryKey,
+		MainVersion:    rcp.MainVersion,
+		SubVersion:     rcp.SubVersion,
+		Path:           rcp.Path,
+		Subject:        rcp.Subject,
+		FileType:       rcp.FileType,
+		KindOfUSD:      rcp.KindOfUSD,
+		Status:         rcp.Status,
+		Createtime:     rcp.Createtime,
+		TaskToUse:      rcp.TaskToUse,
+		IsOutput:       rcp.IsOutput,
+		AuthorNameKor:  rcp.AuthorNameKor,
+		OutputDataPath: rcp.OutputDataPath,
 	}
 	err = addTaskPublish(session, project, name, task, key, p)
 	if err != nil {

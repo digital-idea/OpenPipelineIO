@@ -372,3 +372,14 @@ func SetReviewCameraInfo(session *mgo.Session, id string, camerainfo string) err
 	}
 	return nil
 }
+
+// SetReviewOutputDataPath 함수는 Review에 OutputDataPath를 설정한다.
+func SetReviewOutputDataPath(session *mgo.Session, id string, outputdatapath string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"outputdatapath": outputdatapath}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

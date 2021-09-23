@@ -30,6 +30,7 @@ type Review struct {
 	RemoveAfterProcess bool          `json:"removeafterprocess"`      // 프로세스 처리후 제거하는 옵션
 	Type               string        `json:"type"`                    // review type: clip, image 가 존재한다. 추후 3D 데이터도 리뷰에 포함될 수 있다.
 	Ext                string        `json:"ext"`                     // 웹서버에서 보일 최종 reviewdata의 확장자
+	OutputDataPath     string        `json:"outputdatapath"`          // Review OK 될 때 클라이언트에게 보낼 아웃풋 데이터 경로
 }
 
 // Sketch 는 스케치 자료구조이다.

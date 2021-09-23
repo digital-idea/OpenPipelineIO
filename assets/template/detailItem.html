@@ -612,8 +612,9 @@
 								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
 							{{end}}
 							{{if .IsOutput}}
-								<span class="badge badge-darkmode ml-1 mr-1">Output Data</span>
+								<a href="dilink://{{.OutputDataPath}}" class="badge badge-darkmode ml-1 mr-1">Output Data: {{.OutputDataPath}}</a>
 							{{end}}
+							
 							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 								<span class="edit" data-toggle="modal" data-target="#modal-editpublish" onclick="setEditPublishModal('{{$.Item.Project}}','{{$.Item.ID}}','{{$task}}', '{{.TaskToUse}}', '{{$key}}','{{.Createtime}}','{{.Path}}')">≡</span>
 							{{end}}

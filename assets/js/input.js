@@ -835,6 +835,7 @@ function initPublishModal() {
     document.getElementById("modal-addpublish-subversion").value= 0
     document.getElementById("modal-addpublish-filetype").value= ""
     document.getElementById("modal-addpublish-kindofusd").value= ""
+    document.getElementById("modal-addpublish-outputdatapath").value= ""
 }
 
 function setAddPublishModal(project, name, task) {
@@ -937,6 +938,7 @@ function setEditPublishModal(project, id, task, tasktouse, key, createtime, path
             document.getElementById('modal-editpublish-kindofusd').value = data.kindofusd;
             document.getElementById('modal-editpublish-createtime').value = data.createtime;
             document.getElementById('modal-editpublish-isoutput').checked = data.isoutput;
+            document.getElementById('modal-editpublish-outputdatapath').value = data.outputdatapath;
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -964,6 +966,7 @@ function editPublish() {
     if (document.getElementById('modal-editpublish-isoutput').checked) {
         isoutput = true
     }
+    let outputdatapath = document.getElementById('modal-editpublish-outputdatapath').value
     // 기존 데이터를 삭제한다.
     $.ajax({
         url: "/api/rmpublish",
@@ -1008,6 +1011,7 @@ function editPublish() {
             filetype: filetype,
             kindofusd: kindofusd,
             isoutput: isoutput,
+            outputdatapath: outputdatapath,
         },
         headers: {
             "Authorization": "Basic "+ token
@@ -1234,6 +1238,7 @@ function setEditReviewModal(id) {
             document.getElementById("modal-editreview-fps").value = data.fps;
             document.getElementById("modal-editreview-description").value = data.description;
             document.getElementById("modal-editreview-camerainfo").value = data.camerainfo;
+            document.getElementById("modal-editreview-outputdatapath").value = data.outputdatapath;
         },
         error: function(request,status,error){
             alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -4443,46 +4448,29 @@ function setPublish() {
 }
 
 function addPublish() {
-    let token = document.getElementById("token").value
-    let project = document.getElementById('modal-addpublish-project').value
-    let name = document.getElementById('modal-addpublish-name').value
-    let task = document.getElementById('modal-addpublish-task').value
-    let key = document.getElementById('modal-addpublish-key').value
-    let secondarykey = document.getElementById('modal-addpublish-secondarykey').value
-    let path = document.getElementById('modal-addpublish-path').value
-    let status = document.getElementById('modal-addpublish-status').value
-    let tasktouse = document.getElementById('modal-addpublish-tasktouse').value
-    let subject = document.getElementById('modal-addpublish-subject').value
-    let mainversion = document.getElementById('modal-addpublish-mainversion').value
-    let subversion = document.getElementById('modal-addpublish-subversion').value
-    let filetype = document.getElementById('modal-addpublish-filetype').value
-    let kindofusd = document.getElementById('modal-addpublish-kindofusd').value
-    let isoutput = false
-    if (document.getElementById('modal-addpublish-isoutput').checked) {
-        isoutput = true
-    }
     $.ajax({
         url: "/api/addpublish",
         type: "post",
         data: {
-            project: project,
-            name: name,
-            task: task,
-            key: key,
-            secondarykey: secondarykey,
-            path: path,
-            status: status,
-            tasktouse: tasktouse,
-            subject: subject,
-            mainversion: mainversion,
-            subversion: subversion,
-            filetype: filetype,
-            kindofusd: kindofusd,
+            project: document.getElementById('modal-addpublish-project').value,
+            name: document.getElementById('modal-addpublish-name').value,
+            task: document.getElementById('modal-addpublish-task').value,
+            key: document.getElementById('modal-addpublish-key').value,
+            secondarykey: document.getElementById('modal-addpublish-secondarykey').value,
+            path: document.getElementById('modal-addpublish-path').value,
+            status: document.getElementById('modal-addpublish-status').value,
+            tasktouse: document.getElementById('modal-addpublish-tasktouse').value,
+            subject: document.getElementById('modal-addpublish-subject').value,
+            mainversion: document.getElementById('modal-addpublish-mainversion').value,
+            subversion: document.getElementById('modal-addpublish-subversion').value,
+            filetype: document.getElementById('modal-addpublish-filetype').value,
+            kindofusd: document.getElementById('modal-addpublish-kindofusd').value,
             createtime: "",
-            isoutput: isoutput,
+            isoutput: document.getElementById('modal-addpublish-isoutput').checked,
+            outputdatapath: document.getElementById('modal-addpublish-outputdatapath').value,
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function() {
@@ -4514,6 +4502,7 @@ function addReview() {
             fps: reviewFps.options[reviewFps.selectedIndex].value,
             mainversion: document.getElementById("modal-addreview-mainversion").value,
             subversion: document.getElementById("modal-addreview-subversion").value,
+            outputdatapath: document.getElementById("modal-addreview-outputdatapath").value,
             removeafterprocess: document.getElementById("modal-addreview-removeafterprocess").checked,
         },
         headers: {
@@ -4920,6 +4909,29 @@ function setReviewCameraInfo() {
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
         }
+    });
+}
+
+// setReviewOutputDataPath 함수는 리뷰데이터의 OutputDataPath를 변경한다.
+function ReviewOutputDataPath() {
+    fetch('/api/reviewoutputdatapath', {
+        method: 'PATCH',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
+            id: document.getElementById("modal-editreview-id").value,
+            outputdatapath: document.getElementById("modal-editreview-outputdatapath").value,
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        //document.getElementById(`${data.project}-${data.id}-outputdatapath`).innerHTML = `<span class="text-badge netflix-red ml-1">NetflixID: ${data.outputdatapath}</span>`
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
 
