@@ -843,34 +843,30 @@ function setAddPublishModal(project, name, task) {
     document.getElementById("modal-addpublish-project").value = project
     document.getElementById("modal-addpublish-name").value = name
     document.getElementById("modal-addpublish-task").value = task
-    // publishkey를 셋팅한다.
-    let token = document.getElementById("token").value;
-    $.ajax({
-        url: "/api/publishkeys",
-        type: "get",
+    fetch("/api/publishkeys", {
+        methode: "GET",
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
-        dataType: "json",
-        success: function(datas) {
-            if (datas.length == 0) {
-                alert("PublishKey 등록이 필요합니다.");
-                document.getElementById('modal-addpublish-addbutton').disabled = true;
-                return
-            }
-            let keys = document.getElementById('modal-addpublish-key');
-            keys.innerHTML = "";
-            for (let i = 0; i < datas.length; i++){
-                let opt = document.createElement('option');
-                opt.value = datas[i].id;
-                opt.innerHTML = datas[i].id;
-                keys.appendChild(opt);
-            }
-        },
-        error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((datas) => {
+        if (datas.length == 0) {
+            alert("PublishKey 등록이 필요합니다.");
+            document.getElementById('modal-addpublish-addbutton').disabled = true;
+            return
         }
-    });
+        let keys = document.getElementById('modal-addpublish-key');
+        keys.innerHTML = "";
+        for (let i = 0; i < datas.length; i++){
+            let opt = document.createElement('option');
+            opt.value = datas[i].id;
+            opt.innerHTML = datas[i].id;
+            keys.appendChild(opt);
+        }
+    })
 }
 
 function setEditPublishModal(project, id, task, tasktouse, key, createtime, path) {
@@ -879,75 +875,75 @@ function setEditPublishModal(project, id, task, tasktouse, key, createtime, path
     document.getElementById("modal-editpublish-task").value = task
     document.getElementById("modal-editpublish-tasktouse").value = tasktouse
     document.getElementById("modal-editpublish-path").value = path
-    let token = document.getElementById("token").value;
     // publishkey를 셋팅한다.
-    $.ajax({
-        url: "/api/publishkeys",
-        type: "get",
+    fetch('/api/publishkeys', {
+        method: 'GET',
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic " + document.getElementById("token").value,
         },
-        dataType: "json",
-        success: function(datas) {
-            if (datas.length == 0) {
-                alert("PublishKey 등록이 필요합니다.");
-                document.getElementById('modal-editpublish-editbutton').disabled = true;
-                return
-            }
-            let keys = document.getElementById('modal-editpublish-key');
-            keys.innerHTML = "";
-            for (let i = 0; i < datas.length; i++){
-                let opt = document.createElement('option');
-                opt.value = datas[i].id;
-                opt.innerHTML = datas[i].id;
-                keys.appendChild(opt);
-            }
-        },
-        error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((datas) => {
+        if (datas.length == 0) {
+            alert("PublishKey 등록이 필요합니다.");
+            document.getElementById('modal-editpublish-editbutton').disabled = true;
+            return
         }
+        let keys = document.getElementById('modal-editpublish-key');
+        keys.innerHTML = "";
+        for (let i = 0; i < datas.length; i++){
+            let opt = document.createElement('option');
+            opt.value = datas[i].id;
+            opt.innerHTML = datas[i].id;
+            keys.appendChild(opt);
+        }
+    })
+    .catch((error) => {
+        alert(error)
     });
 
     // 아이템 정보를 가지고 와서 modal-editpublish를 채운다.
-    $.ajax({
-        url: "/api/getpublish",
-        type: "post",
-        data: {
+    fetch('/api/getpublish', {
+        method: 'post',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
             "project": project,
             "id": id,
             "task": task,
             "key": key,
             "path": path,
             "createtime": createtime,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            document.getElementById('modal-editpublish-key').value = key;
-            document.getElementById('modal-editpublish-secondarykey').value = data.secondarykey;
-            document.getElementById('modal-editpublish-path').value = data.path;
-            document.getElementById('modal-editpublish-status').value = data.status;
-            document.getElementById('modal-editpublish-tasktouse').value = data.tasktouse;
-            document.getElementById('modal-editpublish-subject').value = data.subject;
-            document.getElementById('modal-editpublish-mainversion').value = data.mainversion;
-            document.getElementById('modal-editpublish-subversion').value = data.subversion;
-            document.getElementById('modal-editpublish-filetype').value = data.filetype;
-            document.getElementById('modal-editpublish-filetype').value = data.filetype;
-            document.getElementById('modal-editpublish-kindofusd').value = data.kindofusd;
-            document.getElementById('modal-editpublish-createtime').value = data.createtime;
-            document.getElementById('modal-editpublish-isoutput').checked = data.isoutput;
-            document.getElementById('modal-editpublish-outputdatapath').value = data.outputdatapath;
-        },
-        error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        document.getElementById('modal-editpublish-key').value = key;
+        document.getElementById('modal-editpublish-secondarykey').value = data.secondarykey;
+        document.getElementById('modal-editpublish-path').value = data.path;
+        document.getElementById('modal-editpublish-status').value = data.status;
+        document.getElementById('modal-editpublish-tasktouse').value = data.tasktouse;
+        document.getElementById('modal-editpublish-subject').value = data.subject;
+        document.getElementById('modal-editpublish-mainversion').value = data.mainversion;
+        document.getElementById('modal-editpublish-subversion').value = data.subversion;
+        document.getElementById('modal-editpublish-filetype').value = data.filetype;
+        document.getElementById('modal-editpublish-filetype').value = data.filetype;
+        document.getElementById('modal-editpublish-kindofusd').value = data.kindofusd;
+        document.getElementById('modal-editpublish-createtime').value = data.createtime;
+        document.getElementById('modal-editpublish-isoutput').checked = data.isoutput;
+        document.getElementById('modal-editpublish-outputdatapath').value = data.outputdatapath;
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
 
 function editPublish() {
-    let token = document.getElementById("token").value
     let project = document.getElementById('modal-editpublish-project').value
     let id = document.getElementById('modal-editpublish-id').value
     let task = document.getElementById('modal-editpublish-task').value
@@ -968,34 +964,37 @@ function editPublish() {
     }
     let outputdatapath = document.getElementById('modal-editpublish-outputdatapath').value
     // 기존 데이터를 삭제한다.
-    $.ajax({
-        url: "/api/rmpublish",
-        type: "post",
-        data: {
+    fetch('/api/rmpublish', {
+        method: 'POST',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
             project: project,
             id: id,
             task: task,
             key: key,
             path: path,
             createtime: createtime,
-        },
-        headers: {
-            "Authorization": "Basic "+ document.getElementById("token").value
-        },
-        dataType: "json",
-        success: function() {
-            
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        return
+    })
+    .catch((error) => {
+        alert(error)
     });
 
     // 새로운 데이터를 추가한다.
-    $.ajax({
-        url: "/api/addpublish",
-        type: "post",
-        data: {
+    fetch('/api/addpublish', {
+        method: 'POST',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
             project: project,
             name: id2name(id),
             task: task,
@@ -1012,17 +1011,17 @@ function editPublish() {
             kindofusd: kindofusd,
             isoutput: isoutput,
             outputdatapath: outputdatapath,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            location.reload()
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        location.reload()
+        return
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
 
@@ -1216,34 +1215,35 @@ function setRmCommentModal(project, id, time, text) {
 function setEditReviewModal(id) {
     document.getElementById("modal-editreview-id").value = id;
     // review id의 데이터를 가지고 와서 모달을 설정한다.
-    $.ajax({
-        url: "/api/review",
-        type: "post",
-        data: {
-            id: id,
-        },
+    fetch('/api/review', {
+        method: 'POST',
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value,
         },
-        dataType: "json",
-        success: function(data) {
-            document.getElementById("modal-editreview-project").value = data.project;
-            document.getElementById("modal-editreview-task").value = data.task;
-            document.getElementById("modal-editreview-name").value = data.name;
-            document.getElementById("modal-editreview-stage").value = data.stage;
-            document.getElementById("modal-editreview-createtime").value = data.createtime;
-            document.getElementById("modal-editreview-path").value = data.path;
-            document.getElementById("modal-editreview-mainversion").value = data.mainversion;
-            document.getElementById("modal-editreview-subversion").value = data.subversion;
-            document.getElementById("modal-editreview-fps").value = data.fps;
-            document.getElementById("modal-editreview-description").value = data.description;
-            document.getElementById("modal-editreview-camerainfo").value = data.camerainfo;
-            document.getElementById("modal-editreview-outputdatapath").value = data.outputdatapath;
-        },
-        error: function(request,status,error){
-            alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        body: new URLSearchParams({
+            id: id,
+        })
     })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        document.getElementById("modal-editreview-project").value = data.project;
+        document.getElementById("modal-editreview-task").value = data.task;
+        document.getElementById("modal-editreview-name").value = data.name;
+        document.getElementById("modal-editreview-stage").value = data.stage;
+        document.getElementById("modal-editreview-createtime").value = data.createtime;
+        document.getElementById("modal-editreview-path").value = data.path;
+        document.getElementById("modal-editreview-mainversion").value = data.mainversion;
+        document.getElementById("modal-editreview-subversion").value = data.subversion;
+        document.getElementById("modal-editreview-fps").value = data.fps;
+        document.getElementById("modal-editreview-description").value = data.description;
+        document.getElementById("modal-editreview-camerainfo").value = data.camerainfo;
+        document.getElementById("modal-editreview-outputdatapath").value = data.outputdatapath;
+    })
+    .catch((error) => {
+        alert(error)
+    });
 }
 
 function setRmReviewCommentModal(id, time) {
@@ -4421,11 +4421,12 @@ function TopClick() {
 }
 
 function setPublish() {
-    let token = document.getElementById("token").value;
-    $.ajax({
-        url: "/api/setpublishstatus",
-        type: "post",
-        data: {
+    fetch('/api/setpublishstatus', {
+        method: 'POST',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
             project: document.getElementById('modal-setpublish-project').value,
             id: document.getElementById('modal-setpublish-id').value,
             task: document.getElementById('modal-setpublish-task').value,
@@ -4433,25 +4434,27 @@ function setPublish() {
             path: document.getElementById('modal-setpublish-path').value,
             createtime: document.getElementById('modal-setpublish-createtime').value,
             status: document.getElementById("modal-setpublish-status").value,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function() {
-            location.reload()
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        location.reload()
+        return
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
 
 function addPublish() {
-    $.ajax({
-        url: "/api/addpublish",
-        type: "post",
-        data: {
+    fetch('/api/addpublish', {
+        method: 'POST',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
             project: document.getElementById('modal-addpublish-project').value,
             name: document.getElementById('modal-addpublish-name').value,
             task: document.getElementById('modal-addpublish-task').value,
@@ -4468,17 +4471,17 @@ function addPublish() {
             createtime: "",
             isoutput: document.getElementById('modal-addpublish-isoutput').checked,
             outputdatapath: document.getElementById('modal-addpublish-outputdatapath').value,
-        },
-        headers: {
-            "Authorization": "Basic "+ document.getElementById("token").value
-        },
-        dataType: "json",
-        success: function() {
-            location.reload()
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        location.reload()
+        return
+    })
+    .catch((error) => {
+        alert(error)
     });
 }
 
