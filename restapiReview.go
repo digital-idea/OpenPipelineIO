@@ -1524,7 +1524,7 @@ func handleAPISetReviewCameraInfo(w http.ResponseWriter, r *http.Request) {
 // handleAPIReviewOutputDataPath 함수는 리뷰에서 OutputDataPath를 설정합니다.
 func handleAPIReviewOutputDataPath(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodPatch:
+	case http.MethodPatch: // 많은 값 중에서 하나의 값만 바꾸기 때문에 PATCH를 사용했다. 과거에는 GET, POST만 사용했다. 특이사항이지만 미래적으로 PATCH, PUT과 함께 사용할 예정이다.
 		type Recipe struct {
 			ID             string `json:"id"`
 			OutputDataPath string `json:"outputdatapath"`
@@ -1542,7 +1542,7 @@ func handleAPIReviewOutputDataPath(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
-		r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+		r.ParseForm()
 		reviewID := r.FormValue("id")
 		if reviewID == "" {
 			http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
@@ -1555,7 +1555,6 @@ func handleAPIReviewOutputDataPath(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// json 으로 결과 전송
 		data, err := json.Marshal(rcp)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
