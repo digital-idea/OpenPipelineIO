@@ -82,7 +82,7 @@
                             <option value="{{.ID}}" {{if eq .ID $.Stage.NextStage}}selected{{end}}>{{.ID}}</option>
                         {{end}}
                     </select>
-                    <small class="form-text text-muted">Approve 시 바뀔 Stage</small>
+                    <small class="form-text text-warning">Approve가 클릭되면 바뀌게 될 Stage</small>
                 </div>
             </div>
             <div class="col">
@@ -94,7 +94,7 @@
                         <option value="comment" {{if eq "comment" $.Stage.NextStatus}}selected{{end}}>comment</option>
                         <option value="approve" {{if eq "approve" $.Stage.NextStatus}}selected{{end}}>approve</option>
                     </select>
-                    <small class="form-text text-muted">Approve 시 바뀔 Status</small>
+                    <small class="form-text text-warning">Approve가 클릭되면 바뀌게 될 Status</small>
                 </div>
             </div>
         </div>

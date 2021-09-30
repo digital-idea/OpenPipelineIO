@@ -26,3 +26,25 @@
 | /api/uploadreviewdrawing | 리뷰 드로잉 이미지 업로드 | id, frame | `$ curl -X POST -H "Authorization: Basic <Token>" -F  id=5f4edbe16e59c4695abb12d1 -F frame=101 -F "image=@/path/reviewdrawing.png" https://csi.lazypic.org/api/uploadreviewdrawing`|
 | /api/setreviewagainforwaitstatustoday | Wait 상태의 리뷰 데이터를 오늘 날짜로 다시 wait 시키기 | 없음 | `$ curl -X POST -H "Authorization: Basic <Token>" https://csi.lazypic.org/api/setreviewagainforwaitstatustoday`|
 | /api/reviewoutputdatapath | Review에 Output 경로를 수정함 | id, outputdatapath | `$ curl --request PATCH --header "Authorization: Basic <Token>" -d "id=5f87f82641a789486f3970d1&outputdatapath=/review/output/data/path" https://csi.lazypic.org/api/reviewoutputdatapath` |
+
+
+#### 2021년 9월 30일 Review 데이터중 슈퍼바이저가 보는 데이터중에 approve된 리뷰의 아웃풋 데이터 가지고 오기
+```python
+#!/usr/bin/python
+#coding:utf8
+import urllib
+import urllib2
+import json
+
+request = urllib2.Request("https://csi.lazypic.org/api/searchreview")
+request.add_header("Authorization", "Basic <TOKEN>")
+values = {"searchword":"2021-09-30"}
+data = urllib.urlencode(values)
+request.add_data(data)
+result = urllib2.urlopen(request)
+datas = json.load(result)
+for i in datas:
+    if not(i["status"] == "approve" and i["stage"] == "supervisor"):
+        continue
+    print(i["outputdatapath"])
+```
