@@ -185,6 +185,7 @@ func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
+	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1518,6 +1519,54 @@ func handleAPISetReviewCameraInfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
+}
+
+// handleAPIReviewOutputDataPath 함수는 리뷰에서 OutputDataPath를 설정합니다.
+func handleAPIReviewOutputDataPath(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPatch: // 많은 값 중에서 하나의 값만 바꾸기 때문에 PATCH를 사용했다. 과거에는 GET, POST만 사용했다. 특이사항이지만 미래적으로 PATCH, PUT과 함께 사용할 예정이다.
+		type Recipe struct {
+			ID             string `json:"id"`
+			OutputDataPath string `json:"outputdatapath"`
+			UserID         string `json:"userid"`
+		}
+		rcp := Recipe{}
+		session, err := mgo.Dial(*flagDBIP)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer session.Close()
+		rcp.UserID, _, err = TokenHandler(r, session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		r.ParseForm()
+		reviewID := r.FormValue("id")
+		if reviewID == "" {
+			http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+			return
+		}
+		rcp.ID = reviewID
+		rcp.OutputDataPath = r.FormValue("outputdatapath")
+		err = SetReviewOutputDataPath(session, rcp.ID, rcp.OutputDataPath)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		data, err := json.Marshal(rcp)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data)
+	default:
+		http.Error(w, "Patch Only", http.StatusMethodNotAllowed)
+		return
+	}
 }
 
 // handleAPISetReviewProcessStatus 함수는 리뷰에서 ProcessStatus를 설정합니다.
