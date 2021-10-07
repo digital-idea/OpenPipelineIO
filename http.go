@@ -428,6 +428,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setleaveuser", handleAPISetLeaveUser)
 	http.HandleFunc("/api/autocompliteusers", handleAPIAutoCompliteUsers)
 	http.HandleFunc("/api/initpassword", handleAPIInitPassword)
+	http.HandleFunc("/api/ansiblehosts", handleAPIAnsibleHosts)
 
 	// restAPI Organization
 	http.HandleFunc("/api/teams", handleAPIAllTeams)
