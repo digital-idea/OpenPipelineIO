@@ -392,7 +392,7 @@ func handleAPIAnsibleHosts(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	_, _, err = TokenHandler(r, session)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	users, err := allUsers(session)
