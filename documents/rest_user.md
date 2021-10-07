@@ -34,6 +34,7 @@ CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한�
 | /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=합성팀,1팀,팀장` |
 | /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=개발팀,1팀` |
 | /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/autocompliteusers` |
+| /api/ansiblehosts | Ansible Hosts 텍스트 파일을 출력합니다. | . | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/ansiblehosts` |
 
 
 ## Post
@@ -119,4 +120,11 @@ try:
     print json.load(data)
 except:
     print("RestAPI 를 가지고 올 수 없습니다.")
+```
+
+#### Ansible Hosts 파일 생성
+사용자의 최근 접속IP를 이용해서 Ansible에서 활용 가능한 hosts 파일을 생성할 수 있습니다.
+
+```bash
+$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/ansiblehosts > userhosts.lst
 ```

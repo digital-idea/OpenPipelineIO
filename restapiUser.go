@@ -377,3 +377,37 @@ func handleAPIInitPassword(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIAnsibleHosts 함수는 ansible에서 사용하는 hosts 파일을 생성한다.
+func handleAPIAnsibleHosts(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	users, err := allUsers(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ansibleHosts := ""
+	for _, user := range users {
+		if user.IsLeave {
+			continue
+		}
+		ansibleHosts += fmt.Sprintf("%s #%s %s%s\n", user.LastIP, user.ID, user.LastNameKor, user.FirstNameKor)
+	}
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(ansibleHosts))
+}
