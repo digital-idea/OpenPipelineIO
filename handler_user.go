@@ -249,16 +249,13 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 	file, fileHandler, fileErr := r.FormFile("Photo")
 	if fileErr == nil {
 		if !(fileHandler.Header.Get("Content-Type") == "image/jpeg" || fileHandler.Header.Get("Content-Type") == "image/png") {
-			err := errors.New("업로드 파일이 jpeg 또는 png 파일이 아닙니다")
-			log.Println(err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, "업로드 파일이 jpeg 또는 png 파일이 아닙니다", http.StatusInternalServerError)
 			return
 		}
-		//파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
+		// 파일이 없다면 fileErr 값은 "http: no such file" 값이 된다.
 		// 썸네일 파일이 존재한다면 아래 프로세스를 거친다.
 		mediatype, fileParams, err := mime.ParseMediaType(fileHandler.Header.Get("Content-Disposition"))
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -271,7 +268,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		tempPath := os.TempDir() + fileHandler.Filename
 		tempFile, err := os.OpenFile(tempPath, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -279,14 +275,17 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		io.Copy(tempFile, io.LimitReader(file, MaxFileSize))
 		tempFile.Close()
 		defer os.Remove(tempPath)
-		thumbnailPath := fmt.Sprintf("%s/user/%s.jpg", *flagThumbnailRootPath, u.ID)
+		if CachedAdminSetting.ThumbnailRootPath == "" {
+			http.Error(w, "Admin 셋팅의 ThumbnailRootPath가 설정되어있지 않습니다", http.StatusInternalServerError)
+			return
+		}
+		thumbnailPath := fmt.Sprintf("%s/user/%s.jpg", CachedAdminSetting.ThumbnailRootPath, u.ID)
 		thumbnailDir := filepath.Dir(thumbnailPath)
-		// 썸네일을 생성할 경로가 존재하지 않는다면 생성한다.
+		// 썸네일을 생성할 user 경로가 존재하지 않는다면 생성한다.
 		_, err = os.Stat(thumbnailDir)
 		if os.IsNotExist(err) {
 			err := os.MkdirAll(thumbnailDir, 0775)
 			if err != nil {
-				log.Println(err)
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -294,7 +293,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		// 이미지변환
 		src, err := imaging.Open(tempPath)
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -302,7 +300,6 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		dst := imaging.Fill(src, 200, 280, imaging.Center, imaging.Lanczos)
 		err = imaging.Save(dst, thumbnailPath)
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -870,7 +867,7 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 
-// handleUsers 함수는 유저리스트를 검색하는 페이지이다. (기본 정렬은 사번순이다.)
+// handleUsers 함수는 유저리스트를 검색하는 페이지이다. (기본정렬: 사번순)
 func handleUsers(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {

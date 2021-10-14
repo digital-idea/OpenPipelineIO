@@ -144,9 +144,9 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 }
 
 // 전송되는 컨텐츠의 캐쉬 수명을 설정하는 핸들러입니다.
-func maxAgeHandler(seconds int, h http.Handler) http.Handler {
+func maxAgeHandler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%d, public, must-revalidate, proxy-revalidate", seconds))
+		w.Header().Add("Cache-Control", fmt.Sprintf("max-age=%d, public, must-revalidate, proxy-revalidate", *flagThumbnailAge))
 		h.ServeHTTP(w, r)
 	})
 }
@@ -154,7 +154,7 @@ func maxAgeHandler(seconds int, h http.Handler) http.Handler {
 // webserver함수는 웹서버의 URL을 선언하는 함수입니다.
 func webserver(port string) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(assets)))
-	http.Handle("/thumbnail/", maxAgeHandler(*flagThumbnailAge, http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(*flagThumbnailRootPath)))))
+	http.Handle("/thumbnail/", maxAgeHandler(http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(CachedAdminSetting.ThumbnailRootPath)))))
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
 	http.HandleFunc("/", handleIndex)

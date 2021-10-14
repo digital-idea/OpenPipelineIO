@@ -1359,7 +1359,7 @@ func handleExportExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbnailRootPath, project, i.ID)
+		imgPath := fmt.Sprintf("%s/%s/%s.jpg", CachedAdminSetting.ThumbnailRootPath, project, i.ID)
 		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// ShotType
 		pos, err = excelize.CoordinatesToCellName(5, n+2)
@@ -1806,7 +1806,7 @@ func handleDownloadExcelFile(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		imgPath := fmt.Sprintf("%s/%s/%s.jpg", *flagThumbnailRootPath, project, i.ID)
+		imgPath := fmt.Sprintf("%s/%s/%s.jpg", CachedAdminSetting.ThumbnailRootPath, project, i.ID)
 		f.AddPicture(sheet, pos, imgPath, `{"x_offset": 1, "y_offset": 1, "x_scale": 0.359, "y_scale": 0.359, "print_obj": true, "lock_aspect_ratio": true, "locked": true}`)
 		// ShotType
 		pos, err = excelize.CoordinatesToCellName(5, n+2)
