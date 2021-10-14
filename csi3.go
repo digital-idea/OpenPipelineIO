@@ -80,7 +80,6 @@ var (
 	flagAssettype          = flag.String("assettype", "", "assettype: char,env,global,prop,comp,plant,vehicle,group") // 추후 삭제예정.
 	flagHelp               = flag.Bool("help", false, "자세한 도움말을 봅니다.")
 	flagDate               = flag.String("date", "", "Date. ex) 2016-12-06")
-	flagThumbnailRootPath  = flag.String("thumbnailrootpath", "thumbnail", "thumbnail root path")
 	flagThumbnailImagePath = flag.String("thumbnailimagepath", "", "Thumbnail image 경로")
 	flagThumbnailMovPath   = flag.String("thumbnailmovpath", "", "Thumbnail mov 경로")
 	flagPlatePath          = flag.String("platepath", "", "Plate 경로")
@@ -353,15 +352,8 @@ func main() {
 		// 어드민설정을 한번 저장한다. CachedAdminSetting값은 매번 DB를 호출하면 안되는 작업에서 사용된다.
 		CachedAdminSetting = admin
 		// 만약 Admin설정에 ThumbnailRootPath가 잡혀있다면 그 값을 이용한다.
-		if admin.ThumbnailRootPath != "" {
-			*flagThumbnailRootPath = admin.ThumbnailRootPath
-		}
-		if _, err := os.Stat(*flagThumbnailRootPath); err != nil {
-			os.Stderr.WriteString("CSI에 사용되는 썸네일 경로가 존재하지 않습니다.\n")
-			os.Stderr.WriteString("csi에서 생성되는 이미지, 사용자 프로필사진을 저장할 thumbnail 경로가 필요합니다.\n")
-			os.Stderr.WriteString("명령어를 실행하는 곳에 thumbnail 폴더를 생성하거나,\n")
-			os.Stderr.WriteString("-thumbpath 옵션을 이용하여 thumbnail로 사용될 경로를 지정하여 csi를 실행해주세요.\n")
-			os.Exit(1)
+		if admin.ThumbnailRootPath == "" {
+			log.Println("csi에서 생성되는 이미지, 사용자 프로필사진을 저장할 thumbnail 경로가 필요합니다.")
 		}
 
 		plist, err := Projectlist(session)
