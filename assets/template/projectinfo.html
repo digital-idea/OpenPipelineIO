@@ -42,6 +42,7 @@
 					
 						<p class="card-text">
 							Issue: {{.Issue}}
+							{{if .FlexibleStatus}}<span class="text-warning">유연한 상태를 사용합니다.</span>{{end}}
 						<p>
 						<p class="card-text m-0 p-0">
 							Sup: {{.Super}}

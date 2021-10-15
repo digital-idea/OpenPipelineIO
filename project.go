@@ -98,6 +98,7 @@ type Project struct {
 	DiContact                string        `json:"dicontact"`                // DI실 연락처
 	Sound                    string        `json:"sound"`                    // Sound실이름, 담당자
 	SoundContact             string        `json:"soundcontact"`             // Sound실 연락처
+	FlexibleStatus           bool          `json:"flexiblestatus"`           // 유연한 상태 처리
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.
