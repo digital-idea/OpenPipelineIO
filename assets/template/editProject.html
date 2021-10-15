@@ -1,6 +1,6 @@
 {{define "editProject" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 <input type="hidden" id="token" value="{{$.User.Token}}">
 <div class="p-3">
@@ -75,10 +75,18 @@
 							<input type="text" name="Issue" class="form-control" placeholder="이슈" value={{.Project.Issue}}>
 						</div>		
 					</div>
-					<div class="row mx-auto pt-3">
-						<div class="form-check col">
-							<input type="checkbox" id="Stereo" name="Stereo" class="form-check-input" value="true" {{if eq .Project.Stereo true}}checked{{end}}>
-							<label class="form-check-label" for="Stereo">입체 / Stereo</label>
+					<div class="row pt-3">
+						<div class="from-group col">
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" id="Stereo" name="Stereo" value="true" {{if eq .Project.Stereo true}}checked{{end}}>
+								<label class="form-check-label" for="Stereo">입체(Stereo)</label>
+							</div>
+						</div>
+						<div class="from-group col">
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" id="FlexibleStatus" name="FlexibleStatus" value="true" {{if eq .Project.FlexibleStatus true}}checked{{end}}>
+								<label class="form-check-label" for="FlexibleStatus">유연한 Status를 사용합니다.</label>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -126,10 +134,10 @@
 						</div>
 					</div>
 					<div class="form-group pt-4">
-						<label>카메라정보</label>
+						<label class="pb-2">카메라정보</label>
 						<input type="text" name="Camera" class="form-control" placeholder="Camera" value={{.Project.Camera}}>
 					</div>
-					<label>협력사 정보</label>
+					<label class="pt-3">협력사 정보</label>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">DI회사/담당자</small>
@@ -164,8 +172,8 @@
 			</div>
 			<!--2번째열-->
         	<div class="col-lg-3 col-md-6 col-sm-12">
+				<label>공지사항 / 기본정보</label>
 				<div class="form-group">
-					<label>공지사항 / 기본정보</label>	
 					<small class="form-text text-muted">설명 / Description</small>
 					<input type="text" name="Description" class="form-control" placeholder="Description" value={{.Project.Description}}>
 					<small class="form-text text-muted">공지사항(CSI 상단에 표기됩니다.)</small>
@@ -195,18 +203,18 @@
 					</div>
 				</div>
 				<div class="form-group pt-3">
-					<label>아웃풋 옵션</label>
+					<label class="pt-3">아웃풋 옵션</label>
 					<div class="row">
 						<div class="col">
-							<small class="form-text text-muted">Pixel<br>Aspect Ratio</small>
+							<small class="form-text text-muted">Pixel Aspect Ratio</small>
 							<input type="text" name="AspectRatio" class="form-control" placeholder="Aspect Ratio" value={{.Project.AspectRatio}}>
 						</div>
 						<div class="col">
-							<small class="form-text text-muted">Crop<br>AspectRatio</small>
+							<small class="form-text text-muted">Crop AspectRatio</small>
 							<input type="text" name="CropAspectRatio" class="form-control" placeholder="Crop AspectRatio" value={{.Project.CropAspectRatio}}>
 						</div>
 						<div class="col">
-							<small class="form-text text-muted">Proxy<br>Codec</small>
+							<small class="form-text text-muted">Proxy Codec</small>
 							<select name="PostProductionProxyCodec" class="form-control">
 								<option value="Apple_Prores_422HQ" {{if eq .Project.PostProductionProxyCodec "Apple_Prores_422HQ"}}selected{{end}}>Apple_Prores_422HQ</option>
 								<option value="Apple_Prores_4444" {{if eq .Project.PostProductionProxyCodec "Apple_Prores_4444"}}selected{{end}}>Apple_Prores_4444</option>
@@ -319,7 +327,7 @@
 			<!--3번째열-->
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="form-group">
-					<label>LUT 경로</label>
+					<label class="pb-2">LUT 경로</label>
 					<!--lut In,Out 컬러스페이스는 default값이 없다. 뉴크에서 lut를 적용할 때 사용하는 Vectorfield 노드에 default 값이 없기 때문이다.-->
 					<input type="text" name="Lut" class="form-control" placeholder="Lut path" value={{.Project.Lut}}>
 					<div class="row">
@@ -349,9 +357,10 @@
 						</div>
 					</div>
 				</div>
+				
 				<div class="form-group pt-3">
-					<label>컨펌용 MOV 포멧</label>
-					<small class="form-text text-muted">컨펌, 감독이 보는 mov 포멧을 설정합니다.</small>
+					<label class="pt-3">컨펌용 MOV 포멧</label><br>
+					<small class="text-muted">컨펌, 감독이 보는 mov 포멧을 설정합니다.</small>
 					<div class="row">
 						<div class="col-3">
 							<small class="form-text text-muted">Width</small>
@@ -420,7 +429,7 @@
 				</div>
 
 				<div class="form-group pt-3">
-					<label>편집실로 보내는 MOV 포멧</label>
+					<label class="pt-3">편집실로 보내는 MOV 포멧</label><br>
 					<small class="form-text text-muted">일부 편집실은 방송용 포멧(1080p,720p) 형태로 모니터링 합니다.</small>
 					<div class="row">
 						<div class="col-3">
@@ -494,33 +503,34 @@
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="form-group">
 					<label>ScreenX 셋팅</label>
-					<div class="form-check">
-						<input type="checkbox" id="Screenx" name="Screenx" class="form-check-input" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" id="Screenx" name="Screenx" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
 						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
 					</div>
+
 					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
 					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
 				</div>
-				<div class="form-group pt-1">
-					<label>Nuke 셋팅</label>
+				<div class="form-group pt-3">
+					<label>Nuke 셋팅</label><br>
 					<small class="form-text text-muted">프로젝트에 사용하는 슬레이트 기즈모 ex) slate_default</small>
 					<input type="text" name="NukeGizmo" class="form-control" placeholder="gizmo name" value={{.Project.NukeGizmo}}>
 				</div>
-				<div class="form-group pt-1">
-					<label>Maya 셋팅</label>
+				<div class="form-group pt-3">
+					<label>Maya 셋팅</label><br>
 					<small class="form-text text-muted">마야 뷰포트 크롭마스크 플러그인 해상도 ex) 1920x1080, 2048x1152 ...</small>
 					<input type="text" name="MayaCropMaskSize" class="form-control" placeholder="maya cropmask size" value="{{.Project.MayaCropMaskSize}}" onkeyup="star2mult(event)">
 				</div>
-				<div class="form-group pt-1">
-					<label>FX 셋팅</label>
-					<small class="form-text text-muted">프로젝트에서 자주 사용하는 FX팀 후디니 테스크. ex) fire, water, splash ...</small>
+				<div class="form-group pt-3">
+					<label>FX 셋팅</label><br>
+					<small class="form-text text-muted">프로젝트에서 자주 사용하는 FX팀 후디니 테스크. ex) fire, water, splash ...</small><br>
 					<small class="form-text text-danger">이 옵션은 multitask가 추가되어 삭제될 예정입니다.</small>
 					<input type="text" name="FxElement" class="form-control" placeholder="maya cropmask size" value="{{.Project.FxElement}}">
 					<small class="form-text text-muted">Houdini Import Scale. 기본값 0.1</small>
 					<input type="text" name="HoudiniImportScale" class="form-control" placeholder="Houdini Import Scale" value="{{.Project.HoudiniImportScale}}">
 				</div>
-				<div class="form-group pt-1">
-					<label>AWS Setting</label>
+				<div class="form-group pt-3">
+					<label>AWS Setting</label><br>
 					<small class="form-text text-muted">AWS S3 Address</small>
 					<input type="text" name="AWSS3" class="form-control" placeholder="s3://project-bucketname" value="{{.Project.AWSS3}}">
 					<small class="form-text text-muted">AWS Profile</small>
@@ -528,9 +538,9 @@
 					<small class="form-text text-muted">Local Path</small>
 					<input type="text" name="AWSLocalpath" class="form-control" placeholder="~/project" value="{{.Project.AWSLocalpath}}">
 				</div>
-				<div class="form-group pt-1">
-					<label>Slack</label>
-					<small class="form-text text-muted"><a href="https://api.slack.com/apps/AEGKLE3T3/incoming-webhooks?">Slack Webhook URL</a></small>
+				<div class="form-group pt-3">
+					<label>Slack</label><br>
+					<small class="form-text text-muted"><a href="https://api.slack.com/apps/AEGKLE3T3/incoming-webhooks?" class="text-warning">Slack Webhook URL</a></small>
 					<input type="text" name="SlackWebhookURL" class="form-control" placeholder="https://hooks.slack.com/services/..." value="{{.Project.SlackWebhookURL}}">
 				</div>
 				

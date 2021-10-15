@@ -193,14 +193,12 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	current, err := getProject(session, r.FormValue("Id"))
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -219,6 +217,9 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	if current.Stereo != str2bool(r.FormValue("Stereo")) {
 		renewal.Stereo = str2bool(r.FormValue("Stereo"))
+	}
+	if current.FlexibleStatus != str2bool(r.FormValue("FlexibleStatus")) {
+		renewal.FlexibleStatus = str2bool(r.FormValue("FlexibleStatus"))
 	}
 	if current.Screenx != str2bool(r.FormValue("Screenx")) {
 		renewal.Screenx = str2bool(r.FormValue("Screenx"))
@@ -350,7 +351,6 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	// 새로 변경된 정보를 DB에 저장한다.
 	err = setProject(session, renewal)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

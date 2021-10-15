@@ -4,7 +4,7 @@
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-					<select name="Project" class="rounded-left custom-select" id="searchbox-project" onchange="changeTitle();">
+					<select name="Project" class="rounded-left custom-select" id="searchbox-project" onchange="changeProject();">
 						{{range .Projectlist}}
 							<option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 						{{end}}
