@@ -113,11 +113,20 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		BuildTime string
 		Status    []Status
 		Stages    []Stage
+		DBIP      string
+		DBVer     string
 	}
 
 	rcp := recipy{}
 	rcp.Sha1ver = SHA1VER
 	rcp.BuildTime = BUILDTIME
+	rcp.DBIP = *flagDBIP
+	info, err := session.BuildInfo()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.DBVer = info.Version
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
