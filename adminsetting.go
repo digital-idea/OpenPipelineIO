@@ -76,4 +76,5 @@ type Setting struct {
 	NetflixRegionCode                    string  `json:"netflixregioncode"`                    // 넷플릭스 지역코드
 	NetflixVendorID                      string  `json:"netflixvendorid"`                      // 넷플릭스 벤더ID
 	ZimbraWebmailEndpoint                string  `json:"zimbrawebmailendpoint"`                // Zimbra Webmail Endpoint
+	MongodumpPath                        string  `json:"mongodumppath"`                        // mongodump 경로
 }

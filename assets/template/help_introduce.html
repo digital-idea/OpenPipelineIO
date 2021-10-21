@@ -8,14 +8,16 @@
     <p>
 
     <p class="mt-2">
-        <small class="text-darkmode">
+        <span class="text-darkmode">
+            mongoDB Version: {{.DBVer}}<br>
+            mongoDB IP/Port: {{.DBIP}}<br>
             {{if .BuildTime}}
                 Build Time: {{.BuildTime}}<br>
             {{end}}
             {{if .Sha1ver}}
-                Git SHA1: <a href="https://github.com/digital-idea/csi3/commit/{{.Sha1ver}}" class="text-warning">{{.Sha1ver}}</a>
+                Git SHA1: <a href="https://github.com/digital-idea/csi3/commit/{{.Sha1ver}}" class="text-warning">{{.Sha1ver}}</a><br>
             {{end}}
-        </small>
+        </span>
     </p>
 </div>
 {{end}}
