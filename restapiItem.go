@@ -610,50 +610,48 @@ func handleAPIAssets(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPIShots 함수는 project, seq를 입력받아서 샷정보를 출력한다.
-func handleAPIShots(w http.ResponseWriter, r *http.Request) {
+// handleAPI2Shots 함수는 project, seq를 입력받아서 cut 이름을 출력합니다.
+func handleAPI2Shots(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	_, _, err = TokenHandler(r, session)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 	q := r.URL.Query()
 	project := q.Get("project")
 	if project == "" {
-		fmt.Fprintln(w, "{\"error\":\"project 정보가 없습니다.\"}")
+		http.Error(w, "project 정보가 없습니다", http.StatusBadRequest)
 		return
 	}
 	seq := q.Get("seq")
 	if seq == "" {
-		fmt.Fprintln(w, "{\"error\":\"seq 정보가 없습니다.\"}")
+		http.Error(w, "seq 정보가 없습니다", http.StatusBadRequest)
 		return
 	}
 	shots, err := Shots(session, project, seq)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	type recipe struct {
-		Data []string `json:"data"`
-	}
-	rcp := recipe{}
-	rcp.Data = shots
-	err = json.NewEncoder(w).Encode(rcp)
+	// json 으로 결과 전송
+	data, err := json.Marshal(shots)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPIAllShots 함수는 project를 받아서 모든 샷을 출력한다.

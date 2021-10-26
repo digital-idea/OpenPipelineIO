@@ -496,3 +496,49 @@ func handleAPISetRenderSize(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
+
+// handleAPIShots 함수는 project, seq를 입력받아서 샷정보를 출력한다.
+func handleAPIShots(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	defer session.Close()
+	_, _, err = TokenHandler(r, session)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	q := r.URL.Query()
+	project := q.Get("project")
+	if project == "" {
+		fmt.Fprintln(w, "{\"error\":\"project 정보가 없습니다.\"}")
+		return
+	}
+	seq := q.Get("seq")
+	if seq == "" {
+		fmt.Fprintln(w, "{\"error\":\"seq 정보가 없습니다.\"}")
+		return
+	}
+	shots, err := Shots(session, project, seq)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+	type recipe struct {
+		Data []string `json:"data"`
+	}
+	rcp := recipe{}
+	rcp.Data = shots
+	err = json.NewEncoder(w).Encode(rcp)
+	if err != nil {
+		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		return
+	}
+}
