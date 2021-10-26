@@ -157,7 +157,10 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 	if hasSetelliteItems(session, project, rollmedia) {
 		i.Rollmedia = rollmedia
 	}
-
+	err = i.CheckError()
+	if err != nil {
+		log.Fatal(err)
+	}
 	err = addItem(session, project, i)
 	if err != nil {
 		log.Fatal(err)
@@ -336,6 +339,10 @@ func addOtherItemCmd(project, name, typ, platesize, scanname, scantimecodein, sc
 		i.Rollmedia = rollmedia
 	}
 
+	err = i.CheckError()
+	if err != nil {
+		log.Fatal(err)
+	}
 	err = addItem(session, project, i)
 	if err != nil {
 		log.Fatal(err)
