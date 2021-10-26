@@ -659,7 +659,12 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 				i.Tasks[task.Name] = t
 			}
 		}
-
+		err = i.CheckError()
+		if err != nil {
+			s.Error = err.Error()
+			fails = append(fails, s)
+			continue
+		}
 		err = addItem(session, project, i)
 		if err != nil {
 			s.Error = err.Error()
