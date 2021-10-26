@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"sort"
@@ -303,4 +304,16 @@ func (i *Item) GetFieldBool(field string) bool {
 	r := reflect.ValueOf(i)
 	f := reflect.Indirect(r).FieldByName(field)
 	return f.Bool()
+}
+
+func (i *Item) CheckError() error {
+	switch i.Seq {
+	//윈도우 예약어
+	case "CON", "PRN", "AUX", "NUL",
+		"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8",
+		"COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9":
+		return errors.New("OS 예약어 입니다. 해당 문자열을 사용할 수 없습니다")
+	default:
+		return nil
+	}
 }
