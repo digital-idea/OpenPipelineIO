@@ -172,6 +172,9 @@ func Shots(session *mgo.Session, project string, seq string) ([]string, error) {
 	}
 	keys := make(map[string]bool)
 	for _, result := range results {
+		if !strings.Contains(result.Name, "_") {
+			continue
+		}
 		shot := strings.Split(result.Name, "_")[1]
 		keys[shot] = true
 	}
