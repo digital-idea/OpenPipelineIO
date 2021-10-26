@@ -16,7 +16,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api3/items | 아이템을 검색하고 가지고 오기 | project, searchword, status상태 | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&wip=true"` 또는 `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=task:mm+user:jason&assign=true&wip=true"` |
 | /api3/items | 아이템을 검색하고 가지고 오기(유연한 Status) | project, searchword, searchbartemplate, truestatus | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api3/items?project=TEMP&searchword=SS&searchbartemplate=searchbarV2&truestatus=assing,wip"` |
 | /api/shot | 샷 정보 가지고 오기 | project, name | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/shot?project=TEMP&name=SS_0010"` |
-| /api/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
+| /api2/shots | 샷 리스트를 가지고 오기 | project, seq | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/shots?project=TEMP&seq=SS"` |
 | /api/allshots | 전체 샷 리스트를 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/allshots?project=TEMP"` |
 | /api/asset | 에셋 정보 가지고 오기 | project, name | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/asset/asset?project=TEMP&name=stone01"` |
 | /api/assets | 에셋 리스트를 가지고 오기 | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/assets?project=TEMP"` |
@@ -250,7 +250,7 @@ print(data)
 import json
 import urllib2
 
-endpoint = "https://csi.lazypic.org/api/shots?project=mkk3&seq=BNS"
+endpoint = "https://csi.lazypic.org/api2/shots?project=mkk3&seq=BNS"
 data = json.load(urllib2.urlopen(endpoint))
 print(data)
 ```
