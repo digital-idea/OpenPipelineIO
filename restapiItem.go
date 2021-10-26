@@ -610,7 +610,7 @@ func handleAPIAssets(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPI2Shots 함수는 project, seq를 입력받아서 샷정보를 출력한다.
+// handleAPI2Shots 함수는 project, seq를 입력받아서 cut 이름을 출력합니다.
 func handleAPI2Shots(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
