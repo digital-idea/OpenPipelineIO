@@ -152,6 +152,15 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	err := TEMPLATES.ExecuteTemplate(w, "health", nil)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 // 전송되는 컨텐츠의 캐쉬 수명을 설정하는 핸들러입니다.
 func maxAgeHandler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -308,6 +317,9 @@ func webserver(port string) {
 
 	// Error
 	http.HandleFunc("/error-captcha", handleErrorCaptcha)
+
+	//Health
+	http.HandleFunc("/health", handleHealth)
 
 	// restAPI Project
 	http.HandleFunc("/api/project", handleAPIProject)
