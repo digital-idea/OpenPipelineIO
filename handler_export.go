@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -2256,4 +2257,60 @@ func handleDownloadExcelTemplate(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s", filename))
 	http.ServeFile(w, r, tempDir+"/"+filename)
+}
+
+// handleExportDumpProject 함수는 전송된 값을 이용해서 export json을 처리한다.
+func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
+		return
+	}
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel < LeadAccessLevel {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+
+	// Temp 경로를 만든다.
+	tempDir, err := ioutil.TempDir("", "")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer os.RemoveAll(tempDir)
+	dbName := "project"
+	// Temp경로에 DB를 dump한다.
+	args := []string{
+		"-d",
+		dbName,
+		"--out",
+		tempDir,
+	}
+	err = exec.Command(CachedAdminSetting.MongodumpPath, args...).Run()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 압축 Tempfile을 생성한다.
+	filename := "dbdump.zip"
+	zipDumpfile, err := ioutil.TempFile("", "")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	defer os.Remove(zipDumpfile.Name())
+	// Temp 경로를 압축한다.
+	err = ZipWriter(tempDir+"/"+dbName, zipDumpfile.Name())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 저장된 Json 파일을 다운로드 시킨다.
+	w.Header().Add("Content-Disposition", fmt.Sprintf("Attachment; filename=%s", filename))
+	http.ServeFile(w, r, zipDumpfile.Name())
 }

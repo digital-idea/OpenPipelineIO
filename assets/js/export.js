@@ -253,3 +253,11 @@ function exportCsvCurrentPage() {
     let url = `/download-csv-file?project=${project}&task=${task}&searchword=${searchword}&sortkey=${sortkey}&searchbartemplate=${searchbartemplate}&assign=${assign}&ready=${ready}&wip=${wip}&confirm=${confirm}&done=${done}&omit=${omit}&hold=${hold}&out=${out}&none=${none}&truestatus=${truestatus}&titles=${titleString}`
     location.href = url
 }
+
+
+
+// exportDumpProject는 프로젝트 정보 전체를 dump 뜬다.
+function exportDumpProject() {
+    let url = `/export-dump-project`
+    location.href = url
+}
