@@ -153,7 +153,17 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
-	err := TEMPLATES.ExecuteTemplate(w, "health", nil)
+	ip, err := serviceIP()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type recipe struct {
+		Ip string
+	}
+	rcp := recipe{}
+	rcp.Ip = ip
+	err = TEMPLATES.ExecuteTemplate(w, "health", rcp)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
