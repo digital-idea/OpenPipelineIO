@@ -158,17 +158,7 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	type recipe struct {
-		Ip string
-	}
-	rcp := recipe{}
-	rcp.Ip = ip
-	err = TEMPLATES.ExecuteTemplate(w, "health", rcp)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	w.Write([]byte(ip))
 }
 
 // 전송되는 컨텐츠의 캐쉬 수명을 설정하는 핸들러입니다.
