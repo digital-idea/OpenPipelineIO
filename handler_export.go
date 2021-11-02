@@ -2287,6 +2287,8 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 	args := []string{
 		"-d",
 		dbName,
+		"-h",
+		*flagDBIP,
 		"--quiet",
 		"--out",
 		tempDir,
