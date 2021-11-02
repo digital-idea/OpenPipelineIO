@@ -2270,7 +2270,7 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
-	if ssid.AccessLevel < LeadAccessLevel {
+	if ssid.AccessLevel < IoAccessLevel {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
@@ -2287,6 +2287,7 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 	args := []string{
 		"-d",
 		dbName,
+		"--quiet",
 		"--out",
 		tempDir,
 	}
@@ -2296,7 +2297,7 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 압축 Tempfile을 생성한다.
-	filename := "dbdump.zip"
+	filename := "csi-dbdump.zip"
 	zipDumpfile, err := ioutil.TempFile("", "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
