@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -153,12 +154,38 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
+	type recipe struct {
+		IP    string
+		Web   bool
+		DB    bool
+		Mount bool
+		All   bool
+	}
+	rcp := recipe{}
+	// IP구하기
 	ip, err := serviceIP()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.Write([]byte(ip))
+	rcp.IP = ip
+	// DB 채크
+
+	// 웹서버 체크
+	rcp.Web = true
+
+	// Mount 체크
+
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // 전송되는 컨텐츠의 캐쉬 수명을 설정하는 핸들러입니다.
