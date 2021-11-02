@@ -105,7 +105,7 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	type recipy struct {
+	type recipe struct {
 		Wfs     string
 		User    User
 		Devmode bool
@@ -116,9 +116,10 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		Stages    []Stage
 		DBIP      string
 		DBVer     string
+		ServerIP  string
 	}
 
-	rcp := recipy{}
+	rcp := recipe{}
 	rcp.Sha1ver = SHA1VER
 	rcp.BuildTime = BUILDTIME
 	rcp.DBIP = *flagDBIP
@@ -146,6 +147,12 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	ip, err := serviceIP()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.ServerIP = ip
 	err = t.ExecuteTemplate(w, "help", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
