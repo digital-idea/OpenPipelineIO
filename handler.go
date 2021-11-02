@@ -258,7 +258,7 @@ func webserver(port string) {
 	http.HandleFunc("/rmorganization", handleRmOrganization)
 	http.HandleFunc("/rmorganization-submit", handleRmOrganizationSubmit)
 
-	// Export: Excel, Json, Csv
+	// Export: Excel, Json, Csv, Dump
 	http.HandleFunc("/importexcel", handleImportExcel)
 	http.HandleFunc("/importjson", handleImportJSON)
 	http.HandleFunc("/exportexcel", handleExportExcel)
@@ -275,6 +275,7 @@ func webserver(port string) {
 	http.HandleFunc("/download-excel-file", handleDownloadExcelFile)
 	http.HandleFunc("/download-json-file", handleDownloadJSONFile)
 	http.HandleFunc("/download-csv-file", handleDownloadCsvFile)
+	http.HandleFunc("/export-dump-project", handleExportDumpProject)
 
 	// Task
 	http.HandleFunc("/tasksettings", handleTasksettings)
