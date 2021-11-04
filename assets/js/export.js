@@ -258,6 +258,20 @@ function exportCsvCurrentPage() {
 
 // exportDumpProject는 프로젝트 정보 전체를 dump 뜬다.
 function exportDumpProject() {
-    let url = `/export-dump-project`
-    location.href = url
+    fetch("/export-dump-project", {
+        method: 'GET',
+        headers: new Headers({
+            "Authorization": "Basic "+ document.getElementById("token").value
+        })
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = "dbdump.zip";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    });
 }
