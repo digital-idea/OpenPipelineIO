@@ -200,6 +200,13 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.MountPoint = true
 
+	// 모든 요소가 true인지 체크
+	isIPexist := false
+	if rcp.IP != "" {
+		isIPexist = true
+	}
+	rcp.All = isIPexist && rcp.Web && rcp.DB && rcp.MountPoint
+
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
 	if err != nil {
