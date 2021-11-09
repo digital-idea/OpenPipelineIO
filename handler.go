@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -162,18 +163,17 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
 	type recipe struct {
-		IP    string
-		Web   bool
-		DB    bool
-		Mount bool
-		All   bool
+		IP         string
+		Web        bool
+		DB         bool
+		MountPoint bool
+		All        bool
 	}
 	rcp := recipe{}
 	// IP구하기
 	ip, err := serviceIP()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		rcp.IP = ""
 	}
 	rcp.IP = ip
 	// DB 채크
@@ -181,7 +181,12 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 	// 웹서버 체크
 	rcp.Web = true
 
-	// Mount 체크
+	// Mount Point 경로 존재하는지 체크
+	_, err = os.Stat(CachedAdminSetting.RootPath)
+	if os.IsNotExist(err) {
+		rcp.MountPoint = false
+	}
+	rcp.MountPoint = true
 
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
