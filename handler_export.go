@@ -2265,13 +2265,19 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
 		return
 	}
-	ssid, err := GetSessionID(r)
+	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if ssid.AccessLevel < IoAccessLevel {
-		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+	defer session.Close()
+	_, accessLevel, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	if accessLevel < IoAccessLevel {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
