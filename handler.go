@@ -176,7 +176,19 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 		rcp.IP = ""
 	}
 	rcp.IP = ip
-	// DB 채크
+	// DB 체크
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+
+	err = session.Ping()
+	if err != nil {
+		rcp.DB = false
+	}
+	rcp.DB = true
 
 	// 웹서버 체크
 	rcp.Web = true
@@ -187,6 +199,13 @@ func handleHealth(w http.ResponseWriter, r *http.Request) {
 		rcp.MountPoint = false
 	}
 	rcp.MountPoint = true
+
+	// 모든 요소가 true인지 체크
+	isIPexist := false
+	if rcp.IP != "" {
+		isIPexist = true
+	}
+	rcp.All = isIPexist && rcp.Web && rcp.DB && rcp.MountPoint
 
 	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
