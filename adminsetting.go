@@ -77,4 +77,6 @@ type Setting struct {
 	NetflixVendorID                      string  `json:"netflixvendorid"`                      // 넷플릭스 벤더ID
 	ZimbraWebmailEndpoint                string  `json:"zimbrawebmailendpoint"`                // Zimbra Webmail Endpoint
 	MongodumpPath                        string  `json:"mongodumppath"`                        // mongodump 경로
+	ReviewStageMode                      bool    `json:"reviewstagemode"`                      // Review Stage 모드 활성화
+	ReviewStatusMode                     bool    `json:"reviewstatusmode"`                     // Review Status 모드 활성화
 }

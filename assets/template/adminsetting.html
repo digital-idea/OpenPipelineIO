@@ -1,6 +1,6 @@
 {{define "adminsetting" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
  
@@ -431,31 +431,41 @@
                     <textarea class="form-control" id="RunScriptAfterEditUserProfile" name="RunScriptAfterEditUserProfile" rows="3" placeholder="python /path/filename.py">{{.Setting.RunScriptAfterEditUserProfile}}</textarea>
                     <small class="form-text text-muted">사용자의 정보가 수정되었을 때 자동으로 실행되는 스크립트를 설정할 수 있습니다.</small>
                 </div>
-                <div class="form-group">
-                    <label for="ZimbraWebmailEndpoint">Zimbra Webmail Endpoint</label>
-                    <input type="text" class="form-control" id="ZimbraWebmailEndpoint" name="ZimbraWebmailEndpoint" placeholder="https://zimbra.mail.server/zimbra/?view=compose&to=" value={{.Setting.ZimbraWebmailEndpoint}}>
-                    <small class="form-text text-muted">Zimbra Webmail Endpoint를 입력합니다.</small>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="ZimbraWebmailEndpoint">Zimbra Webmail Endpoint</label>
+                        <input type="text" class="form-control" id="ZimbraWebmailEndpoint" name="ZimbraWebmailEndpoint" placeholder="https://zimbra.mail.server/zimbra/?view=compose&to=" value={{.Setting.ZimbraWebmailEndpoint}}>
+                        <small class="form-text text-muted">Zimbra Webmail Endpoint를 입력합니다.</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="RVPath">RV Path</label>
+                        <input type="text" class="form-control" id="RVPath" name="RVPath" placeholder="/opt/rv-Linux-x86-64-7.0.0/bin/rv" value={{.Setting.RVPath}}>
+                        <small class="form-text text-muted">RV Player Path를 설정합니다.</small>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="MongodumpPath">Mongodump Path</label>
-                    <input type="text" class="form-control" id="MongodumpPath" name="MongodumpPath" placeholder="/usr/bin/mongodump" value={{.Setting.MongodumpPath}}>
-                    <small class="form-text text-muted">MongoDB mongodump 명령어 경로</small>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="MongodumpPath">Mongodump Path</label>
+                        <input type="text" class="form-control" id="MongodumpPath" name="MongodumpPath" placeholder="/usr/bin/mongodump" value={{.Setting.MongodumpPath}}>
+                        <small class="form-text text-muted">MongoDB mongodump 명령어 경로</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="OCIOConfig">OpenColorIO Configs Path</label>
+                        <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
+                        <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="InitPassword">Init Password</label>
-                    <input type="password" class="form-control" id="InitPassword" name="InitPassword" placeholder="패스워드 초기값" value={{.Setting.InitPassword}}>
-                    <small class="form-text text-muted">사용자의 패스워드 초기화 값을 설정합니다.</small>
-                </div>
-                <div class="form-group">
-                    <label for="ExcludeProject">Exclude Project</label>
-                    <input type="text" class="form-control" id="ExcludeProject" name="ExcludeProject" placeholder="project,project" value={{.Setting.ExcludeProject}}>
-                    <small class="form-text text-muted">검색창에 제외될 프로젝트명을 ,문자를 이용해서 입력해주세요. 해당 프로젝트가 보이지 않습니다.</small>
-                    <small class="form-text text-muted">CSI를 마이그레이션할 때 사용합니다.</small>
-                </div>
-                <div class="form-group">
-                    <label for="OCIOConfig">OpenColorIO Configs Path</label>
-                    <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
-                    <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="InitPassword">Init Password</label>
+                        <input type="password" class="form-control" id="InitPassword" name="InitPassword" placeholder="패스워드 초기값" value={{.Setting.InitPassword}}>
+                        <small class="form-text text-muted">사용자의 패스워드 초기화 값을 설정합니다.</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="ExcludeProject">Exclude Project</label>
+                        <input type="text" class="form-control" id="ExcludeProject" name="ExcludeProject" placeholder="project,project" value={{.Setting.ExcludeProject}}>
+                        <small class="form-text text-muted">검색창에 제외될 프로젝트명(,로 구분) CSI를 마이그레이션할 때 사용합니다.</small>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
@@ -473,33 +483,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="RVPath">RV Path</label>
-                    <input type="text" class="form-control" id="RVPath" name="RVPath" placeholder="/opt/rv-Linux-x86-64-7.0.0/bin/rv" value={{.Setting.RVPath}}>
-                    <small class="form-text text-muted">RV Player Path를 설정합니다.</small>
-                </div>
+                
                 <div class="form-group">
                     <label for="DefaultScaleRatioOfUndistortionPlate">언디스토션 플레이트 기본 스케일 비율</label>
                     <input type="text" class="form-control" id="DefaultScaleRatioOfUndistortionPlate" name="DefaultScaleRatioOfUndistortionPlate" placeholder="1.1" value={{.Setting.DefaultScaleRatioOfUndistortionPlate}}>
                     <small class="form-text text-muted">언디스토션 플레이트의 기본 스케일 비율을 입력합니다.</small>
                 </div>
-                <div class="form-group">
-                    <label>페이지당 아이템갯수</label>
-                    <select name="ItemNumberOfPage" class="form-control">
-                        <option value="20" {{if eq .Setting.ItemNumberOfPage 0 20}}selected{{end}}>20</option>
-                        <option value="50" {{if eq .Setting.ItemNumberOfPage 50}}selected{{end}}>50</option>
-                        <option value="100" {{if eq .Setting.ItemNumberOfPage 100}}selected{{end}}>100</option>
-                        <option value="200" {{if eq .Setting.ItemNumberOfPage 200}}selected{{end}}>200</option>
-                        <option value="500" {{if eq .Setting.ItemNumberOfPage 500}}selected{{end}}>500</option>
-                        <option value="1000" {{if eq .Setting.ItemNumberOfPage 1000}}selected{{end}}>1000</option>
-                        <option value="2000" {{if eq .Setting.ItemNumberOfPage 2000}}selected{{end}}>2000</option>
-                    </select>
-                    <small class="form-text text-muted">한 페이지당 보이는 아이템 갯수를 설정합니다.</small>
-                </div>
-                <div class="form-group">
-                    <label for="MultipartFormBufferSize">MultipartFormBufferSize</label>
-                    <input type="text" class="form-control" id="MultipartFormBufferSize" name="MultipartFormBufferSize" placeholder="200000" value={{.Setting.MultipartFormBufferSize}}>
-                    <small class="form-text text-muted">MultipartFormBufferSize: 1048576 == 1메가</small>
+                <div class="row">
+                    <div class="col form-group">
+                        <label>페이지당 아이템갯수</label>
+                        <select name="ItemNumberOfPage" class="form-control">
+                            <option value="20" {{if eq .Setting.ItemNumberOfPage 0 20}}selected{{end}}>20</option>
+                            <option value="50" {{if eq .Setting.ItemNumberOfPage 50}}selected{{end}}>50</option>
+                            <option value="100" {{if eq .Setting.ItemNumberOfPage 100}}selected{{end}}>100</option>
+                            <option value="200" {{if eq .Setting.ItemNumberOfPage 200}}selected{{end}}>200</option>
+                            <option value="500" {{if eq .Setting.ItemNumberOfPage 500}}selected{{end}}>500</option>
+                            <option value="1000" {{if eq .Setting.ItemNumberOfPage 1000}}selected{{end}}>1000</option>
+                            <option value="2000" {{if eq .Setting.ItemNumberOfPage 2000}}selected{{end}}>2000</option>
+                        </select>
+                        <small class="form-text text-muted">한 페이지당 보이는 아이템 갯수를 설정합니다.</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="MultipartFormBufferSize">MultipartFormBufferSize</label>
+                        <input type="text" class="form-control" id="MultipartFormBufferSize" name="MultipartFormBufferSize" placeholder="200000" value={{.Setting.MultipartFormBufferSize}}>
+                        <small class="form-text text-muted">MultipartFormBufferSize: 1048576 == 1메가</small>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">
@@ -546,6 +554,22 @@
                             <label for="NetflixVendorID">Netflix Vendor ID</label>
                             <input type="text" class="form-control" id="NetflixVendorID" name="NetflixVendorID" placeholder="넷플릭스 벤더ID" value={{.Setting.NetflixVendorID}}>
                             <small class="form-text text-muted">넷플릭스 벤더 ID명</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="col">
+                        <div class="from-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="ReviewStageMode" name="ReviewStageMode" value="true" {{if .Setting.ReviewStageMode}}checked{{end}}>
+                                <label class="form-check-label" for="ReviewStageMode">리뷰 Stage 모드를 사용합니다</label>
+                            </div>
+                        </div>
+                        <div class="from-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="ReviewStatusMode" name="ReviewStatusMode" value="true" {{if .Setting.ReviewStatusMode}}checked{{end}}>
+                                <label class="form-check-label" for="ReviewStatusMode">리뷰 Status 모드를 사용합니다</label>
+                            </div>
                         </div>
                     </div>
                 </div>
