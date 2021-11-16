@@ -203,11 +203,15 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.NetflixVendorID = r.FormValue("NetflixVendorID")
 	s.ZimbraWebmailEndpoint = r.FormValue("ZimbraWebmailEndpoint")
 	s.MongodumpPath = r.FormValue("MongodumpPath")
+	s.ReviewStageMode = str2bool(r.FormValue("ReviewStageMode"))
+	s.ReviewStatusMode = str2bool(r.FormValue("ReviewStatusMode"))
+	// DB에 값을 저장합니다.
 	err = SetAdminSetting(session, s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	type recipe struct {
 		User    User
 		Devmode bool
