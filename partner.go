@@ -12,8 +12,8 @@ type Partner struct {
 	Description string `json:"description"` // 상세설명
 
 	// 계정 정보
-	Createtime string `json:"createtime"` // 파트너사 계정 생성시간
-	Updatetime string `json:"updatetime"` // 파트너사 계정 수정시간
+	CreateTime string `json:"createtime"` // 파트너사 계정 생성시간
+	UpdateTime string `json:"updatetime"` // 파트너사 계정 수정시간
 	Thumbnail  bool   `json:"thumbnail"`  // 썸네일 여부
 
 	// 담당자
