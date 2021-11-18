@@ -374,3 +374,27 @@ header = {"Authorization": "Basic <Token>"}
 result = requests.post(url=url, data=data, headers=header)
 print(result.json())
 ```
+
+# Python2.7에서 task publish key를 제거하는 코드
+```python
+#!/usr/bin/python
+#coding:utf8
+import urllib
+import urllib2
+import json
+
+url = 'https://csi.lazypic.com/api/rmpublish'
+data = { 'project' : 'TEMP',
+		'id' : 'SS_0010_org',
+		'task' : 'ani',
+		'key' : 'cam',
+		'createtime' : '2021-11-18T03:41:58Z',
+		'path' : '/path/cam.mb',
+		}
+data = urllib.urlencode(data)
+request = urllib2.Request(url)
+request.add_header("Authorization", "Basic <TOKEN>")
+request.add_data(data)
+response = urllib2.urlopen(request)
+print(response.read())
+```
