@@ -202,8 +202,10 @@ func handleRmTasksetting(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		AdminSetting Setting
 	}
 	rcp := recipe{}
+	rcp.AdminSetting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

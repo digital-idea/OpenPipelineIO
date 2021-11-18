@@ -41,8 +41,10 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
+		AdminSetting Setting
 	}
 	rcp := recipe{}
+	rcp.AdminSetting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -780,8 +782,10 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		User
 		Devmode bool
 		SearchOption
+		AdminSetting Setting
 	}
 	rcp := recipe{}
+	rcp.AdminSetting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {

@@ -40,9 +40,17 @@
             <li><span class="dropdown-item finger" data-bs-toggle="modal" data-bs-target="#modal-addreview">Add Review</span></li>
             <li><hr class="dropdown-divider"></li>
             <li><span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/daily">Daily</a></li>
-            <li><a class="dropdown-item" href="/daily" target="_blank">Daily(New Windows)</a></li>
+            
+            {{if .AdminSetting.ReviewStageMode}}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/daily">Daily - Stage Mode</a></li>
+              <li><a class="dropdown-item" href="/daily" target="_blank">Daily- Stage Mode(New Windows)</a></li>
+            {{end}}
+            {{if .AdminSetting.ReviewStatusMode}}
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/daily">Daily - Status Mode</a></li>
+              <li><a class="dropdown-item" href="/daily" target="_blank">Daily- Status Mode(New Windows)</a></li>
+            {{end}}
           </ul>
         </li>
         {{end}}
