@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -15,9 +14,6 @@ import (
 	"time"
 
 	"github.com/digital-idea/dilog"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"gopkg.in/mgo.v2"
 )
 
@@ -107,9 +103,6 @@ var (
 	flagPlatein         = flag.Int("platein", -1, "플레이트 In Frame")
 	flagPlateout        = flag.Int("plateout", -1, "플레이트 Out Frame")
 	flagUpdateParent    = flag.Bool("updateparent", false, "org1,org2 형태의 재스캔 항목이라면 원본 org 정보를 업데이트 한다.")
-
-	//Partner 테스트용 flag 변수
-	flagSetPartner = flag.Bool("setpartner", false, "set partner")
 )
 
 func main() {
@@ -486,37 +479,6 @@ func main() {
 		for _, mov := range playlist {
 			fmt.Println(mov)
 		}
-		return
-	} else if *flagSetPartner {
-		//mongoDB client 연결
-		client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-		if err != nil {
-			log.Fatal(err)
-		}
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		err = client.Connect(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer client.Disconnect(ctx)
-		err = client.Ping(ctx, readpref.Primary())
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// p, err := getPartner(client, "61932b5aef076d122e7e4d90")
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// log.Println(p)
-		// p.Name = "test name"
-		// log.Println(p)
-		// err = setPartner(client, p)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// log.Println(p)
 		return
 	}
 	if *flagHelp {

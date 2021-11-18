@@ -58,23 +58,23 @@ func rmPartner(client *mongo.Client, id string) error {
 }
 
 // setPartner 함수는 파트너사 정보를 수정하는 함수다.
-// func setPartner(client *mongo.Client, p Partner) error {
-// 	p.UpdateTime = time.Now().Format(time.RFC3339)
+func setPartner(client *mongo.Client, p Partner) error {
+	p.UpdateTime = time.Now().Format(time.RFC3339)
 
-// 	collection := client.Database("csi").Collection("partners")
-// 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-// 	defer cancel()
+	collection := client.Database("csi").Collection("partners")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
-// 	_, err := collection.UpdateOne(
-// 		ctx,
-// 		bson.M{"_id": p.ID},
-// 		bson.D{{Key: "$set", Value: p}},
-// 	)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	_, err := collection.UpdateOne(
+		ctx,
+		bson.M{"_id": p.ID},
+		bson.D{{Key: "$set", Value: p}},
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 // allPartners 함수는 모든 파트너사 정보를 가져오는 함수다.
 func allPartners(client *mongo.Client) ([]Partner, error) {
