@@ -371,6 +371,9 @@ func webserver(port string) {
 	http.HandleFunc("/rmpublishkey", handleRmPublishKey)
 	http.HandleFunc("/rmpublishkey-submit", handleRmPublishKeySubmit)
 
+	// Partner
+	http.HandleFunc("/partners", handlePartners)
+
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
 
