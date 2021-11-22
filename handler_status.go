@@ -29,8 +29,10 @@ func handleAddStatus(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -118,8 +120,10 @@ func handleStatus(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Status  []Status
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.Status, err = AllStatus(session)
 	if err != nil {
@@ -161,8 +165,10 @@ func handleRmStatus(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -231,8 +237,10 @@ func handleEditStatus(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Status
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -29,8 +29,10 @@ func handleAddTasksetting(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -72,8 +74,10 @@ func handleTasksettings(w http.ResponseWriter, r *http.Request) {
 		User         User
 		Devmode      bool
 		Tasksettings []Tasksetting
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.Tasksettings, err = AllTaskSettings(session)
 	if err != nil {
@@ -116,8 +120,10 @@ func handleEditTasksetting(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Tasksetting
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -202,10 +208,10 @@ func handleRmTasksetting(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
-		AdminSetting Setting
+		Setting
 	}
 	rcp := recipe{}
-	rcp.AdminSetting = CachedAdminSetting
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

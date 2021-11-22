@@ -33,8 +33,10 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -97,7 +99,6 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -108,8 +109,10 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -126,14 +129,12 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 	if status != "" {
 		rcp.Projects, err = getStatusProjects(session, ToProjectStatus(status))
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else {
 		rcp.Projects, err = getProjects(session)
 		if err != nil {
-			log.Println(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -154,7 +155,6 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 
 	err = TEMPLATES.ExecuteTemplate(w, "projectinfo", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -384,8 +384,10 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		SearchOption       `json:"searchoption"`
 		DefaultColorspaces []string `json:"defaultcolorspace"`
 		OCIOColorspaces    []string `json:"ociocolorspaces"`
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -442,10 +444,10 @@ func handleRmProject(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Devmode     bool
 		SearchOption
-		AdminSetting Setting
+		Setting
 	}
 	rcp := recipe{}
-	rcp.AdminSetting = CachedAdminSetting
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

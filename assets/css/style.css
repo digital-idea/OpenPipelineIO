@@ -4,6 +4,39 @@ body {
 	background-color: #2e2d2d;
 }
 
+.badge-warning {
+	color: #212529 !important;
+	background-color: #ffc107 !important;
+}
+
+.badge-warning[href]:hover, .badge-warning[href]:focus {
+	color: #212529 !important;
+	text-decoration: none;
+	background-color: #d39e00 !important;
+}
+
+.badge-danger {
+	color: #fff !important;
+	background-color: #dc3545 !important;
+}
+
+.badge-danger[href]:hover, .badge-danger[href]:focus {
+	color: #fff !important;
+	text-decoration: none;
+	background-color: #bd2130 !important;
+}
+
+.badge-info {
+	color: #fff !important;
+	background-color: #17a2b8 !important;
+  }
+  
+  .badge-info[href]:hover, .badge-info[href]:focus {
+	color: #fff !important;
+	text-decoration: none;
+	background-color: #117a8b !important;
+  }
+  
 /* width */
 ::-webkit-scrollbar {
 	width: 8px;

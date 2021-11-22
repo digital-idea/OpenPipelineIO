@@ -40,12 +40,12 @@
             <span class="dropdown-item finger" data-toggle="modal" data-target="#modal-addreview">Add Review</span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span>
-            {{if .AdminSetting.ReviewStageMode}}
+            {{if .Setting.ReviewStageMode}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/daily">Daily - Stage Mode</a>
               <a class="dropdown-item" href="/daily" target="_blank">Daily - Stage Mode (New Windows)</a>
             {{end}}
-            {{if .AdminSetting.ReviewStatusMode}}
+            {{if .Setting.ReviewStatusMode}}
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/daily">Daily - Status Mode</a>
               <a class="dropdown-item" href="/daily" target="_blank">Daily - Status Mode (New Windows)</a>

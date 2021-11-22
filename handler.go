@@ -111,17 +111,17 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
-		Sha1ver      string
-		BuildTime    string
-		Status       []Status
-		Stages       []Stage
-		DBIP         string
-		DBVer        string
-		ServerIP     string
-		AdminSetting Setting
+		Sha1ver   string
+		BuildTime string
+		Status    []Status
+		Stages    []Stage
+		DBIP      string
+		DBVer     string
+		ServerIP  string
+		Setting
 	}
 	rcp := recipe{}
-	rcp.AdminSetting = CachedAdminSetting
+	rcp.Setting = CachedAdminSetting
 	rcp.Sha1ver = SHA1VER
 	rcp.BuildTime = BUILDTIME
 	rcp.DBIP = *flagDBIP

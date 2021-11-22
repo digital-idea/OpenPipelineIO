@@ -41,12 +41,12 @@
             <li><hr class="dropdown-divider"></li>
             <li><span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span></li>
             
-            {{if .AdminSetting.ReviewStageMode}}
+            {{if .Setting.ReviewStageMode}}
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/daily">Daily - Stage Mode</a></li>
               <li><a class="dropdown-item" href="/daily" target="_blank">Daily- Stage Mode(New Windows)</a></li>
             {{end}}
-            {{if .AdminSetting.ReviewStatusMode}}
+            {{if .Setting.ReviewStatusMode}}
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/daily">Daily - Status Mode</a></li>
               <li><a class="dropdown-item" href="/daily" target="_blank">Daily- Status Mode(New Windows)</a></li>

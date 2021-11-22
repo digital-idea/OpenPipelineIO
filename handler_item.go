@@ -173,7 +173,6 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	searchbarTemplate := q.Get("searchbartemplate")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -192,8 +191,10 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		Status              []Status
 		AllStatusIDs        []string
 		Stages              []Stage
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Wfs = *flagWFS
 	rcp.Dilog = *flagDILOG
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -210,7 +211,6 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -278,7 +278,6 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	slug := q.Get("slug")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -290,8 +289,10 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		User
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.User, err = getUser(session, ssid.ID)
 	if err != nil {
@@ -301,19 +302,16 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 	rcp.SearchOption = handleRequestToSearchOption(r)
 	rcp.Project, err = getProject(session, project)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Item, err = getItem(session, project, slug)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "edititem", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -468,8 +466,10 @@ func handleAddShot(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Devmode     bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -847,8 +847,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		TrueStatus []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -905,8 +907,10 @@ func handleAddAsset(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Devmode     bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1198,8 +1202,10 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		TrueStatus []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
