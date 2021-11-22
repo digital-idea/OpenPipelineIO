@@ -1,45 +1,35 @@
 {{define "help_search"}}
 <div class="p-3 text-center text-darkmode">
 	<h3 class="pt-5">Search</h3>
-	
 
-	
 	<div class="row justify-content-center align-items-center m-3">
 		<div class="col-lg-7">
 			<div class="input-group mb-3">
-				<div class="input-group-prepend">
-					<select name="Project" class="custom-select rounded-left" id="Project">
-						<option value="project1">project1</option>
-						<option value="project2">project2</option>
-						<option value="project3">project3</option>
-					</select>
-				</div>
-				<div class="input-group-append">
-					<select name="Task" class="custom-select">
-						<option value="">All</option>
-						<option value="light">light</option>
-						<option value="comp">comp</option>
-					</select>
-				</div>
-				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="">
-				<div class="input-group-append">
-					<select name="Sortkey" class="custom-select">
-						<option value="id">정렬: 샷네임</option>
-						<option value="rnum">정렬: 롤넘버</option>
-						<option value="ddline3d">정렬: 3D마감</option>
-						<option value="ddline2d">정렬: 2D마감</option>
-						<option value="scanframe">정렬: 스캔길이</option>
-						<option value="scantime">정렬: 스캔날짜</option>
-						<option value="taskpredate">정렬: Task 1차마감</option>
-						<option value="taskdate">정렬: Task 2차마감</option>
-					</select>
-				</div>
-				<div class="input-group-append">
-					<button class="btn btn-darkmode" id="button">
-						Search
-						<span class="badge badge-darkmode">5</span>
-					</button>
-				</div>
+				<select name="Project" class="form-select custom-select rounded-start" id="Project">
+					<option value="project1">project1</option>
+					<option value="project2">project2</option>
+					<option value="project3">project3</option>
+				</select>
+				<select name="Task" class="form-select custom-select">
+					<option value="">All</option>
+					<option value="light">light</option>
+					<option value="comp">comp</option>
+				</select>
+				<input class="form-control" id="search" placeholder="Search word.." type="text" name="Searchword" value="" style="width:50%">
+				<select name="Sortkey" class="col-2 form-select custom-select">
+					<option value="id">정렬: 샷네임</option>
+					<option value="rnum">정렬: 롤넘버</option>
+					<option value="ddline3d">정렬: 3D마감</option>
+					<option value="ddline2d">정렬: 2D마감</option>
+					<option value="scanframe">정렬: 스캔길이</option>
+					<option value="scantime">정렬: 스캔날짜</option>
+					<option value="taskpredate">정렬: Task 1차마감</option>
+					<option value="taskdate">정렬: Task 2차마감</option>
+				</select>
+				<button class="btn btn-darkmode" type="button">
+					Search
+					<span class="badge badge-darkmode">5</span>
+				</button>
 			</div>
 		</div>
 	</div>

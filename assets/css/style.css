@@ -29,13 +29,25 @@ body {
 .badge-info {
 	color: #fff !important;
 	background-color: #17a2b8 !important;
-  }
-  
-  .badge-info[href]:hover, .badge-info[href]:focus {
+}
+
+.badge-info[href]:hover, .badge-info[href]:focus {
 	color: #fff !important;
 	text-decoration: none;
 	background-color: #117a8b !important;
-  }
+}
+
+
+.badge-light {
+	color: #212529 !important;
+	background-color: #f8f9fa !important;
+}
+
+.badge-light[href]:hover, .badge-light[href]:focus {
+	color: #212529 !important;
+	text-decoration: none;
+	background-color: #dae0e5 !important;
+}
   
 /* width */
 ::-webkit-scrollbar {
@@ -370,7 +382,7 @@ input[type=checkbox]:checked+div{
 .top-left {
 	position: absolute;
 	top: 4px;
-	left: 22px;
+	left: 20px;
 	font-size: 13px;
 }
 
@@ -434,7 +446,7 @@ input[type=checkbox]:checked+div{
 .centered-right {
 	position: absolute;
 	top: 50%;
-	right: 8px;
+	right: 20px;
 	transform: translate(0, -50%);
 }
 
