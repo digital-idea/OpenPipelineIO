@@ -97,7 +97,7 @@ func handlePublishKey(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
+
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -108,8 +108,10 @@ func handlePublishKey(w http.ResponseWriter, r *http.Request) {
 		User        User
 		Devmode     bool
 		PublishKeys []PublishKey
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.PublishKeys, err = AllPublishKeys(session)
 	if err != nil {
@@ -122,6 +124,7 @@ func handlePublishKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "publishkey", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -212,7 +215,6 @@ func handleEditPublishKey(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -224,8 +226,10 @@ func handleEditPublishKey(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		PublishKey
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -245,6 +249,7 @@ func handleEditPublishKey(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "editpublishkey", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

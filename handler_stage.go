@@ -30,8 +30,10 @@ func handleAddStage(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Stages []Stage
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
