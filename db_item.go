@@ -3145,7 +3145,12 @@ func rmTaskPublishKey(session *mgo.Session, project, id, taskname, key string) e
 	if err != nil {
 		return err
 	}
-	delete(item.Tasks[taskname].Publishes, key)
+	_, ok := item.Tasks[taskname].Publishes[key]
+	if ok {
+		delete(item.Tasks[taskname].Publishes, key)
+	} else {
+		return errors.New(fmt.Sprintf("no publish key: %s", key))
+	}
 	c := session.DB("project").C(project)
 	item.Updatetime = time.Now().Format(time.RFC3339)
 	err = c.Update(bson.M{"id": item.ID}, item)
