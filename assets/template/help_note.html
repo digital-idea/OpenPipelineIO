@@ -2,33 +2,27 @@
 <div class="p-5 text-center text-darkmode">
     <h3 class="p-2">Notes</h3>
     <div class="row pb-4">
-        <div class="mx-auto col-sm-12 col-md-12 col-lg-4">
+        <div class="mx-auto text-start col-sm-12 col-md-12 col-lg-4">
             <div class="">
                 <div class="row" title="설정된 태그를 관리합니다.">
-                    <div>
+                    <div class="col">
                         <span class="text-badge">Tags:</span>
-                    </div>
-                    <div class="row ml-3">
-                        <div class="ml-1">
-                            <span class="badge badge-outline-darkmode">태그1</span>
-                            <span class="badge badge-outline-darkmode">태그2</span>
-                        </div>
-                    </div>
-                    <div class="ml-3">
-                        <span class="add ml-1" title="태그 추가">＋</span>
-                        <span class="remove ml-0" title="태그 삭제">－</span>
+                        <span class="ms-1 badge badge-outline-darkmode">태그1</span>
+                        <span class="ms-1 badge badge-outline-darkmode">태그2</span>
+                        <span class="add ms-1" title="태그 추가">＋</span>
+                        <span class="remove ms-0" title="태그 삭제">－</span>
                     </div>
                 </div>
                 <!--작업내용-->
                 <div class="row" title="작업내용">
                     <span class="text-badge">Note:</span>
                 </div>
-                <div class="ml-1 text-light small">
-                    <div class="float-right">
+                <div class="ms-1 text-light small">
+                    <div class="text-end">
                         <span class="add" title="노트내용 추가/덮어쓰기">＋</span>
                         <span class="edit" title="노트내용 수정">≡</span>
                     </div>
-                    <div class="text-left">
+                    <div class="text-start">
                         작업내용과 관련된 내용을 작성하거나,<br>
                         프로젝트 진행을 위해 아티스트에게 필요한 정보를 작성합니다.
                     </div>
@@ -36,31 +30,21 @@
                 
                 <!--ObjectID-->
                 <div class="row" title="3D에셋에서 사용하는 오프젝트ID의 범위를 설정합니다. 카타나에서 활용됩니다.">
-                    <div>
+                    <div class="col">
                         <span class="finger no-decoration-text-button">ObjectID:</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">1-100</span>
+                        <span class="text-badge ms-1">1-100</span>
                     </div>
                 </div>
                 
                 <!--ProductionCam-->
                 <div class="row" title="카메라 퍼블리쉬 정보입니다.">
-                    <div>
-                        <span class="finger no-decoration-text-button">
-                            CamInfo:
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">Pub-mm</span>
-                    </div>
-                    <div>
+                    <div class="col">
+                        <span class="finger no-decoration-text-button">CamInfo:</span>
+                        <span class="text-badge ms-1">Pub-mm</span>
                         <span class="text-badge">,</span>
-                        <span class="text-badge ml-1">/show/project/cam/pub/path</span>
-                    </div>
-                    <div>
+                        <span class="text-badge ms-1">/show/project/cam/pub/path</span>
                         <span class="text-badge">,</span>
-                        <span class="text-badge ml-1">Projection</span>
+                        <span class="text-badge ms-1">Projection</span>
                     </div>
                 </div>
                 
@@ -68,16 +52,14 @@
                 <div class="row" title="작업에 필요한 소스를 연결합니다.">
                     <span class="text-badge">Sources:</span>
                 </div>
-                <div class="ml-2 row">
+                <div class="ms-2 row">
                     <div class="row">
-                        <div>
+                        <div class="col">
                             <span class="badge badge-outline-darkmode ml-1">참고소스1</span>
                             <span class="badge badge-outline-darkmode ml-1">참고소스2</span>
+                            <span class="add ms-3" title="소스추가">＋</span>
+                            <span class="remove ml-0" title="소스삭제">－</span>
                         </div>
-                    </div>
-                    <div class="ml-3">
-                        <span class="add ml-1" title="소스추가">＋</span>
-                        <span class="remove ml-0" title="소스삭제">－</span>
                     </div>
                 </div>
 
@@ -85,58 +67,34 @@
                 <div class="row" title="작업에 필요한 레퍼런스를 연결합니다.">
                     <span class="text-badge">References:</span>
                 </div>
-                <div class="ml-2 row">
+                <div class="ms-2 row">
                     <div class="row">
-                        <div>
+                        <div class="col">
                             <span class="badge badge-outline-darkmode ml-1">레퍼런스1</span>
                             <span class="badge badge-outline-darkmode ml-1">레퍼런스2</span>
+                            <span class="add ms-3" title="레퍼런스 추가">＋</span>
+                            <span class="remove ml-0" title="레퍼런스 삭제">－</span>
                         </div>
-                    </div>
-                    <div class="ml-3">
-                        <span class="add ml-1" title="레퍼런스 추가">＋</span>
-                        <span class="remove ml-0" title="레퍼런스 삭제">－</span>
                     </div>
                 </div>
                 
                 
                 <!--Scaninfo-->
                 <div class="row" title="스캔 데이터 정보가 기입되어 있습니다.">
-                    <div>
+                    <div class="col">
                         <span class="text-badge">ScanInfo:</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1" title="스캔시간">0120 /</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1" title="스캔이름">A007C006_160424_R28L</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">1001</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">-</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">1050</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1" title="스캔길이">(50)</span>
-                    </div>
-                    
-                    <div>
-                        <span class="text-badge ml-1">/</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">10:00:00:01</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">-</span>
-                    </div>
-                    <div>
-                        <span class="text-badge ml-1">10:00:02:02</span>
+                        <span class="text-badge ms-1" title="스캔시간">0120 /</span>
+                        <span class="text-badge ms-1" title="스캔이름">A007C006_160424_R28L</span>
+                        <span class="text-badge ms-1">1001</span>
+                        <span class="text-badge ms-1">-</span>
+                        <span class="text-badge ms-1">1050</span>
+                        <span class="text-badge ms-1" title="스캔길이">(50)</span>
+                        <span class="text-badge ms-1">/</span>
+                        <span class="text-badge ms-1">10:00:00:01</span>
+                        <span class="text-badge ms-1">-</span>
+                        <span class="text-badge ms-1">10:00:02:02</span>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

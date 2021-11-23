@@ -3,31 +3,31 @@
     <h3 class="p-2">Thumbnail</h3>
     <div class="text-center">
         <div class="mx-auto" style="width:400px">
-            <div class="thumbnailbox ml-1">
+            <div class="thumbnailbox">
                 <label class="p-0 m-0 thumbnail" for="EXP_0010_org">
                     <img src="/assets/img/help/EXP_0010.jpg" class="thumbnail border-wip">
                 </label>
                 <div class="top-left">
                     <div class="row" id="rnum-EXP_0010">
-                        <span class="black-opbg" title="롤넘버입니다.">A0001</span>
+                        <span class="black-opbg text-start" title="롤넘버입니다.">A0001</span>
                     </div>
                     <div class="row" id="deadline3d-EXP_0010">
-                        <span class="black-opbg" title="3D 예상 마감일 입니다.">3D:0109</span>
+                        <span class="black-opbg text-start" title="3D 예상 마감일 입니다.">3D:0109</span>
                     </div>
                     
                     <div class="row" id="deadline2d-EXP_0010">
-                        <span class="black-opbg" title="2D 예상 마감일 입니다.">2D:0120</span>
+                        <span class="black-opbg text-start" title="2D 예상 마감일 입니다.">2D:0120</span>
                     </div>
                 </div>
                 <div class="centered-top"><a href="mailto:?subject=[ExampleProject] EXP_0010" class="text-white black-opbg itemname" title="이름 입니다. 클릭하면 바로 메일을 보낼 수 있습니다.">EXP_0010</a></div>
                 <div class="top-right">
-                    <div class="row" id="platesize-EXP_0010">
+                    <div class="row">
                         <span class="black-opbg" title="플레이트 사이즈">S: 2048x1152</span>
                     </div>
-                    <div class="row" id="undistortionsize-EXP_0010">
+                    <div class="row">
                         <span class="black-opbg" title="렌즈 언디스토션 사이즈">U: 2248x1352</span>
                     </div>
-                    <div class="row" id="rendersize-EXP_0010">
+                    <div class="row">
                         <span class="black-opbg" title="렌더사이즈">R: 2248x1352</span>
                     </div>
                 </div>
@@ -36,11 +36,8 @@
                     Date: 2020-01-19
                 </div>
                 <div class="centered-bottom row">
-                    <div id="usetype-EXP_0010">
+                    <div class="col">
                         <span class="badge badge-warning" title="샷타입">org</span>
-                    </div>
-                    
-                    <div id="type-EXP_0010">
                         <span class="badge ml-1 badge-light" title="샷종류">2d</span>
                     </div>
                 </div>
@@ -61,18 +58,16 @@
                 </div>
                 <div class="bottom-left">
                     <div class="row" title="핸들 IN/OUT 정보">
-                        <span class="text-white black-opbg" id="handlein-EXP_0010">5</span>
-                        <span class="text-white black-opbg">/</span>
-                        <span class="text-white black-opbg" id="handleout-EXP_0010">5</span>
+                        <span class="text-white black-opbg text-start" id="handlein-EXP_0010">5/5</span>
                     </div>
-                    <div class="row" id="platein-EXP_0010" title="작업플레이트 IN 프레임">
-                        <span class="text-white black-opbg">1001</span>
+                    <div class="row" title="작업플레이트 IN 프레임">
+                        <span class="text-white black-opbg text-start">1001</span>
                     </div>
-                    <div class="row" id="justin-EXP_0010" title="작업구간 Just IN 프레임">
-                        <span class="text-warning black-opbg">1006</span>
+                    <div class="row" title="작업구간 Just IN 프레임">
+                        <span class="text-warning black-opbg text-start">1006</span>
                     </div>
-                    <div class="row" id="justtimecodein-EXP_0010" title="작업구간 Just TimecodeIn 정보">
-                        <span class="text-warning black-opbg">10:00:00:06</span>
+                    <div class="row" title="작업구간 Just TimecodeIn 정보">
+                        <span class="text-warning black-opbg text-start">10:00:00:06</span>
                     </div>
                 </div>
                 <div class="bottom-right">
@@ -91,28 +86,13 @@
 
         <div class="row">
             <div class="mx-auto pt-1 row">
-                <div>
+                <div class="col">
                     <span class="badge badge-warning ml-1 mr-1" title="최근 업데이트된 시간">UPDATE 2m10s</span>
-                </div>
-                <div>
                     <span class="play finger" title="썸네일 영상 재생, 웹프로토콜 설정이 필요합니다.">PLAY</span>
-                </div>
-                
-                <div>
-                    <span class="badge badge-darkmode ml-1 finger" title="썸네일 이미지를 변경합니다.(드레그앤드롭 형식으로 변경 예정입니다.)">Thumb</a>
-                </div>
-                <div>
+                    <span class="badge badge-darkmode ml-1 finger" title="썸네일 이미지를 변경합니다.(드레그앤드롭 형식으로 변경 예정입니다.)">Thumb</span>
                     <span class="badge badge-danger finger ml-1 finger" title="기본 샷정보 수정">E</span>
-                </div>
-                <div>
                     <span class="badge badge-darkmode finger ml-1 finger" title="디테일 정보">D</span>
-                </div>
-
-                <div>
                     <span class="badge badge-darkmode ml-1" title="샷,에셋 기본 폴더를 엽니다. 웹프로토콜 설정이 필요합니다.">F</span>
-                </div>
-                
-                <div>
                     <span class="badge badge-darkmode ml-1 finger" title="로그를 확인합니다. dilog 서버 설정이 필요합니다.">L</span>
                 </div>
             </div>

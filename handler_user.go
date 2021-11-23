@@ -41,8 +41,10 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -780,8 +782,10 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -884,8 +888,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	q := r.URL.Query()
-	var searchword string
-	searchword = q.Get("search")
+	searchword := q.Get("search")
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -901,8 +904,10 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		Usernum    int      // 검색된 인원수
 		Devmode    bool     // 개발모드
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

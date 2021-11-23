@@ -64,8 +64,10 @@ func handleReview(w http.ResponseWriter, r *http.Request) {
 		TasksettingNames []string
 		Project          string
 		Stage            string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Project = q.Get("project")
 	rcp.Stage = q.Get("stage")
 	rcp.Searchword = q.Get("searchword")

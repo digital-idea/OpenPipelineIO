@@ -1,11 +1,11 @@
 {{define "user" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 <div class="p-3">
     <div class="row">
-        <div class="card w-10 mx-auto m-3 bg-darkmode">
+        <div class="card mx-auto col-lg-2 col-md-3 col-sm-12 p-3 bg-darkmode">
             <img class="card-img-top" src="{{if .QueryUser.Thumbnail}}/thumbnail/user/{{.QueryUser.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.QueryUser.ID}}">
             <div class="card-body text-center">
                 <h4 class="card-title">{{.QueryUser.LastNameKor}}{{.QueryUser.FirstNameKor}}{{if .QueryUser.FirstNameChn}}({{.QueryUser.LastNameChn}}{{.QueryUser.FirstNameChn}}){{end}}</h4>
@@ -16,7 +16,7 @@
                     <a href="tel:{{.QueryUser.Hotline}}" class="text-darkmode">{{ShortPhoneNum .QueryUser.Hotline}}</a>{{if .QueryUser.Location}} / {{.QueryUser.Location}}{{end}}<br>
                     <a href="tel:{{.QueryUser.Phone}}" class="text-darkmode">{{.QueryUser.Phone}}</a><br>
                 </p>
-                <div class="col parts p-1">
+                <div class="col mx-auto parts p-1">
                     {{range .QueryUser.Tags}}
                         <a href="/users?search={{.}}" class="btn btn-outline-darkmode btn-sm p-1 mt-1">{{.}}</a>
                     {{end}}
@@ -43,8 +43,7 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
 <script src="/assets/js/input.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}

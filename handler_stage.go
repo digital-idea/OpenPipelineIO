@@ -30,8 +30,10 @@ func handleAddStage(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Stages []Stage
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -125,8 +127,10 @@ func handleStage(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		Stages  []Stage
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.Stages, err = AllStages(session)
 	if err != nil {
@@ -168,8 +172,10 @@ func handleRmStage(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -239,8 +245,10 @@ func handleEditStage(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Stage
 		Stages []Stage
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

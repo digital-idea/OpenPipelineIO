@@ -118,9 +118,10 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		DBIP      string
 		DBVer     string
 		ServerIP  string
+		Setting
 	}
-
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Sha1ver = SHA1VER
 	rcp.BuildTime = BUILDTIME
 	rcp.DBIP = *flagDBIP

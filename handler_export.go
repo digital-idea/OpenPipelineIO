@@ -37,8 +37,10 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 		SessionID   string
 		Devmode     bool
 		Projectlist []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -84,7 +86,6 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 
 	err = TEMPLATES.ExecuteTemplate(w, "importexcel", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -107,8 +108,10 @@ func handleImportJSON(w http.ResponseWriter, r *http.Request) {
 		SessionID   string
 		Devmode     bool
 		Projectlist []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -317,8 +320,10 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Errornum    int
 		Projectlist []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Sheet = "Sheet1"
 
 	rcp.SessionID = ssid.ID
@@ -1094,8 +1099,10 @@ func handleExportExcel(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		SessionID   string
 		Devmode     bool
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
@@ -1153,8 +1160,10 @@ func handleExportJSON(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		SessionID   string
 		Devmode     bool
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Devmode = *flagDevmode
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)

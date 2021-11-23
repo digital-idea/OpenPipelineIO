@@ -46,13 +46,16 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Stages              []Stage
 		AllStatusIDs        []string
 		TotalPageNum        int
+		Setting             Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
 	rcp.Dilog = *flagDILOG
 	rcp.Wfs = *flagWFS
+
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
