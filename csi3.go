@@ -42,8 +42,9 @@ var (
 	CachedAdminSetting = Setting{}
 
 	// 주요서비스 인수
-	flagDBIP    = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")
-	flagMailDNS = flag.String("maildns", MAILDNS, "mail DNS name")
+	flagDBIP       = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")                                                            // mgo용 인수
+	flagMongoDBURI = flag.String("mongodburi", fmt.Sprintf("mongodb://%s%s", DBIP, DBPORT), "mongoDB URI ex)mongodb://localhost:27017") //mongo-driver용 인수
+	flagMailDNS    = flag.String("maildns", MAILDNS, "mail DNS name")
 
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
 	flagDevmode        = flag.Bool("devmode", false, "dev mode")
