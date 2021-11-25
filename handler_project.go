@@ -498,8 +498,10 @@ func handleRmProjectSubmit(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Error   string
 		Project string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -586,8 +588,10 @@ func handleNoOnProject(w http.ResponseWriter, r *http.Request) {
 		User    User
 		Devmode bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -604,7 +608,6 @@ func handleNoOnProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "noonproject", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
