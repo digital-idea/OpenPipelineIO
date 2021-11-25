@@ -522,8 +522,10 @@ func handleReportJSON(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		SearchOption
 		Projectlist []string
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.Project = project
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
@@ -638,8 +640,10 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		SearchOption
 		ErrorItems []ErrorItem
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
 	rcp.SearchOption = handleRequestToSearchOption(r)
@@ -1039,8 +1043,10 @@ func handleJSONSubmit(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.SessionID = ssid.ID
 	rcp.Devmode = *flagDevmode
 	rcp.SearchOption = handleRequestToSearchOption(r)
@@ -1060,18 +1066,21 @@ func handleJSONSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, i := range rows {
 		if overwrite {
-			// 기존데이터를 삭제한다.
-			err = setItem(session, project, i)
-			if err == mgo.ErrNotFound {
+			err = setItem(session, project, i) // 기존데이터를 덮어쓰기 한다.
+			if err != nil && err == mgo.ErrNotFound {
 				// 새로운 데이터를 추가한다.
 				err = addItem(session, project, i)
 				if err != nil {
-					http.Error(w, err.Error(), http.StatusBadRequest)
-					return
+					log.Println(err)
 				}
 			} else {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
+				log.Println(err)
+			}
+		} else {
+			// 새로운 데이터를 추가한다.
+			err = addItem(session, project, i)
+			if err != nil {
+				log.Println(err)
 			}
 		}
 	}

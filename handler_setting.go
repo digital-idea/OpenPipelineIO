@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -76,7 +75,6 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -254,7 +252,6 @@ func handleSetAdminSetting(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -264,8 +261,10 @@ func handleSetAdminSetting(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		Devmode     bool
 		SearchOption
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -280,13 +279,11 @@ func handleSetAdminSetting(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	rcp.Projectlist, err = Projectlist(session)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "update_adminsetting", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

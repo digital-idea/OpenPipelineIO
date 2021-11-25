@@ -100,8 +100,10 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		Teams       []Team
 		Roles       []Role
 		Positions   []Position
+		Setting
 	}
 	rcp := recipe{}
+	rcp.Setting = CachedAdminSetting
 	rcp.MailDNS = *flagMailDNS
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -146,7 +148,6 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 	}
 	err = TEMPLATES.ExecuteTemplate(w, "edituser", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -407,7 +408,6 @@ func handleInvalidAccess(w http.ResponseWriter, r *http.Request) {
 	RmSessionID(w)
 	err := TEMPLATES.ExecuteTemplate(w, "invalidaccess", nil)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -840,7 +840,6 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 	newPw := r.FormValue("NewPassword")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -962,7 +961,6 @@ func handleReplaceTag(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
