@@ -374,24 +374,6 @@ func addPasswordAttempt(session *mgo.Session, id string) error {
 	return nil
 }
 
-// resetPasswordAttempt 함수는 사용자의 id를 받아서 패스워드 시도횟수를 초기화 한다.
-func resetPasswordAttempt(session *mgo.Session, id string) error {
-	session.SetMode(mgo.Monotonic, true)
-	c := session.DB("user").C("users")
-	num, err := c.Find(bson.M{"id": id}).Count()
-	if err != nil {
-		return err
-	}
-	if num != 1 {
-		return errors.New("해당 유저가 존재하지 않습니다")
-	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"passwordattempt": 0}})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 // setLeaveUser 함수는 사용자의 id와 bool 값을 받아서 사용자 퇴사여부를 체크한다.
 func setLeaveUser(session *mgo.Session, id string, leave bool) error {
 	session.SetMode(mgo.Monotonic, true)
