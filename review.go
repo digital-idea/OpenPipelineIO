@@ -14,6 +14,7 @@ type Review struct {
 	AuthorNameKor      string        `json:"authornamekor"`           // 작성자 한글 이름
 	Path               string        `json:"path"`                    // 리뷰경로
 	Status             string        `json:"status"`                  // 상태 approve, comment, waiting
+	ItemStatus         string        `json:"itemstatus"`              // Item(shot, asset) 상태
 	ProcessStatus      string        `json:"processstatus"`           // 연산상태. wait, error, done
 	Sketches           []Sketch      `json:"sketches"`                // 스케치 프레임
 	Playlist           []string      `json:"playlist"`                // 플레이리스트 목록
