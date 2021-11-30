@@ -384,6 +384,7 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		SearchOption       `json:"searchoption"`
 		DefaultColorspaces []string `json:"defaultcolorspace"`
 		OCIOColorspaces    []string `json:"ociocolorspaces"`
+		Users              []User   `json:"users"`
 		Setting
 	}
 	rcp := recipe{}
@@ -406,6 +407,12 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	users, err := allUsers(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Users = users
 	rcp.OCIOColorspaces, err = loadOCIOConfig(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -417,8 +424,6 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	return
-
 }
 
 // handleRmProject 함수는 project을 삭제하는 페이지이다.

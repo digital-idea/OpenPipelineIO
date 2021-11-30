@@ -2,6 +2,22 @@
 {{template "headBootstrap5"}}
 {{template "navbar-bootstrap5" .}}
 <body>
+
+<!--User Data List-->
+<datalist id="datalistOptions">
+	{{range .Users}}
+		{{if eq .IsLeave false}} <!--퇴사자는 처리하지 않는다.-->
+			{{$team := ""}}
+			{{range .Organizations}}
+				{{if .Primary}}
+					{{$team = .Team.Name}}
+				{{end}}
+			{{end}}
+			<option value="{{.ID}}({{.LastNameKor}}{{.FirstNameKor}},{{$team}})">
+		{{end}}
+	{{end}}
+</datalist>
+
 <input type="hidden" id="token" value="{{$.User.Token}}">
 <div class="p-3">
 	<form action="/editproject_submit" method="POST" enctype="multipart/form-data">
@@ -85,7 +101,7 @@
 						<div class="from-group col">
 							<div class="form-check form-switch">
 								<input class="form-check-input" type="checkbox" id="FlexibleStatus" name="FlexibleStatus" value="true" {{if eq .Project.FlexibleStatus true}}checked{{end}}>
-								<label class="form-check-label" for="FlexibleStatus">유연한 Status를 사용합니다.</label>
+								<label class="form-check-label" for="FlexibleStatus">유연한 Status 사용</label>
 							</div>
 						</div>
 					</div>
@@ -96,27 +112,27 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">감독</small>
-							<input type="text" name="Director" class="form-control searchuser" placeholder="감독" autocomplete="off" value={{.Project.Director}}>
+							<input type="text" list="datalistOptions" name="Director" class="form-control" placeholder="감독" autocomplete="off" value={{.Project.Director}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">슈퍼바이져</small>
-							<input type="text" name="Super" class="form-control searchuser" placeholder="슈퍼바이져" value={{.Project.Super}}>
+							<input type="text" list="datalistOptions" name="Super" class="form-control" placeholder="슈퍼바이져" value={{.Project.Super}}>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Onset 슈퍼바이져</small>
-							<input type="text" name="OnsetSuper" class="form-control searchuser" placeholder="Onset 슈퍼바이져" value={{.Project.OnsetSuper}}>
+							<input type="text" list="datalistOptions" name="OnsetSuper" class="form-control" placeholder="Onset 슈퍼바이져" value={{.Project.OnsetSuper}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">CG 슈퍼바이져</small>
-							<input type="text" name="CgSuper" class="form-control searchuser" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
+							<input type="text" list="datalistOptions" name="CgSuper" class="form-control" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">PM</small>
-							<input type="text" name="Pm" class="form-control searchuser" placeholder="PM" value={{.Project.Pm}}>
+							<input type="text" list="datalistOptions" name="Pm" class="form-control" placeholder="PM" value={{.Project.Pm}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">프로젝트 CC메일, 그룹메일</small>
@@ -126,11 +142,11 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">PD</small>
-							<input type="text" name="Pd" class="form-control searchuser" placeholder="PD" value={{.Project.Pd}}>
+							<input type="text" list="datalistOptions" name="Pd" class="form-control" placeholder="PD" value={{.Project.Pd}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">PA</small>
-							<input type="text" name="Pa" class="form-control searchuser" placeholder="PA" value={{.Project.Pa}}>
+							<input type="text" list="datalistOptions" name="Pa" class="form-control" placeholder="PA" value={{.Project.Pa}}>
 						</div>
 					</div>
 					<div class="form-group pt-4">
@@ -141,7 +157,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">DI회사/담당자</small>
-							<input type="text" name="Di" class="form-control searchuser" placeholder="DI회사, 담당자" value={{.Project.Di}}>
+							<input type="text" list="datalistOptions" name="Di" class="form-control" placeholder="DI회사, 담당자" value={{.Project.Di}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">DI실 연락처</small>
@@ -151,7 +167,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">편집실/담당자</small>
-							<input type="text" name="Edit" class="form-control searchuser" placeholder="Edit회사, 담당자" value={{.Project.Edit}}>
+							<input type="text" list="datalistOptions" name="Edit" class="form-control" placeholder="Edit회사, 담당자" value={{.Project.Edit}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">편집실 연락처</small>
@@ -161,7 +177,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">사운드실/담당자</small>
-							<input type="text" name="Sound" class="form-control searchuser" placeholder="Sound회사, 담당자" value={{.Project.Sound}}>
+							<input type="text" list="datalistOptions" name="Sound" class="form-control" placeholder="Sound회사, 담당자" value={{.Project.Sound}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">사운드실 연락처</small>
@@ -504,12 +520,11 @@
 				<div class="form-group">
 					<label>ScreenX 셋팅</label>
 					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" id="Screenx" name="Screenx" value="true" {{if eq .Project.Screenx true}}checked{{end}} onchange="checkScreenx(event)">
+						<input class="form-check-input" type="checkbox" id="Screenx" name="Screenx" value="true" {{if eq .Project.Screenx true}}checked{{end}}>
 						<label class="form-check-label" for="Screenx">ScreenX 여부</label>
 					</div>
-
 					<small class="form-text text-muted">ScreenX의 카메라 Overlay값. 기본값 1.0</small>
-					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}" {{if eq .Project.Screenx false}}readOnly{{end}}>
+					<input type="text" id='screenxoverlay' name="ScreenxOverlay" class="form-control" placeholder="ScreenX Overlay" value="{{.Project.ScreenxOverlay}}">
 				</div>
 				<div class="form-group pt-3">
 					<label>Nuke 셋팅</label><br>
@@ -546,20 +561,14 @@
 				
 			</div>
 		</div>
-
 		<div class="text-center p-3">
 			<button type="submit" class="btn btn-darkmode">UPDATE</button>
 		</div>
 	</form>
 </div>
 
-
-
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/js/csi.js"></script>
-<script src="/assets/js/input.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}
