@@ -6,13 +6,9 @@
 <!--User Data List-->
 <datalist id="datalistOptions">
 	{{range .Users}}
-		{{if eq .IsLeave false}} <!--퇴사자는 처리하지 않는다.-->
+		{{if eq .IsLeave false}}
 			{{$team := ""}}
-			{{range .Organizations}}
-				{{if .Primary}}
-					{{$team = .Team.Name}}
-				{{end}}
-			{{end}}
+			{{range .Organizations}}{{if .Primary}}{{$team = .Team.Name}}{{end}}{{end}}
 			<option value="{{.ID}}({{.LastNameKor}}{{.FirstNameKor}},{{$team}})">
 		{{end}}
 	{{end}}
