@@ -4,7 +4,7 @@
 <body>
 
 <!--User Data List-->
-<datalist id="datalistOptions">
+<datalist id="userlist">
 	{{range .Users}}
 		{{if eq .IsLeave false}}
 			{{$team := ""}}
@@ -108,27 +108,27 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">감독</small>
-							<input type="text" list="datalistOptions" name="Director" class="form-control" placeholder="감독" autocomplete="off" value={{.Project.Director}}>
+							<input type="text" list="userlist" name="Director" class="form-control" placeholder="감독" autocomplete="off" value={{.Project.Director}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">슈퍼바이져</small>
-							<input type="text" list="datalistOptions" name="Super" class="form-control" placeholder="슈퍼바이져" value={{.Project.Super}}>
+							<input type="text" list="userlist" name="Super" class="form-control" placeholder="슈퍼바이져" value={{.Project.Super}}>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Onset 슈퍼바이져</small>
-							<input type="text" list="datalistOptions" name="OnsetSuper" class="form-control" placeholder="Onset 슈퍼바이져" value={{.Project.OnsetSuper}}>
+							<input type="text" list="userlist" name="OnsetSuper" class="form-control" placeholder="Onset 슈퍼바이져" value={{.Project.OnsetSuper}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">CG 슈퍼바이져</small>
-							<input type="text" list="datalistOptions" name="CgSuper" class="form-control" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
+							<input type="text" list="userlist" name="CgSuper" class="form-control" placeholder="CG 슈퍼바이져" value={{.Project.CgSuper}}>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">PM</small>
-							<input type="text" list="datalistOptions" name="Pm" class="form-control" placeholder="PM" value={{.Project.Pm}}>
+							<input type="text" list="userlist" name="Pm" class="form-control" placeholder="PM" value={{.Project.Pm}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">프로젝트 CC메일, 그룹메일</small>
@@ -138,11 +138,11 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">PD</small>
-							<input type="text" list="datalistOptions" name="Pd" class="form-control" placeholder="PD" value={{.Project.Pd}}>
+							<input type="text" list="userlist" name="Pd" class="form-control" placeholder="PD" value={{.Project.Pd}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">PA</small>
-							<input type="text" list="datalistOptions" name="Pa" class="form-control" placeholder="PA" value={{.Project.Pa}}>
+							<input type="text" list="userlist" name="Pa" class="form-control" placeholder="PA" value={{.Project.Pa}}>
 						</div>
 					</div>
 					<div class="form-group pt-4">
@@ -153,7 +153,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">DI회사/담당자</small>
-							<input type="text" list="datalistOptions" name="Di" class="form-control" placeholder="DI회사, 담당자" value={{.Project.Di}}>
+							<input type="text" list="userlist" name="Di" class="form-control" placeholder="DI회사, 담당자" value={{.Project.Di}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">DI실 연락처</small>
@@ -163,7 +163,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">편집실/담당자</small>
-							<input type="text" list="datalistOptions" name="Edit" class="form-control" placeholder="Edit회사, 담당자" value={{.Project.Edit}}>
+							<input type="text" list="userlist" name="Edit" class="form-control" placeholder="Edit회사, 담당자" value={{.Project.Edit}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">편집실 연락처</small>
@@ -173,7 +173,7 @@
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">사운드실/담당자</small>
-							<input type="text" list="datalistOptions" name="Sound" class="form-control" placeholder="Sound회사, 담당자" value={{.Project.Sound}}>
+							<input type="text" list="userlist" name="Sound" class="form-control" placeholder="Sound회사, 담당자" value={{.Project.Sound}}>
 						</div>
 						<div class="col">
 							<small class="form-text text-muted">사운드실 연락처</small>
