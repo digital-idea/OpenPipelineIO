@@ -8,7 +8,14 @@
 	{{range .Users}}
 		{{if eq .IsLeave false}}
 			{{$team := ""}}
-			{{range .Organizations}}{{if .Primary}}{{$team = .Team.Name}}{{end}}{{end}}
+			{{range .Organizations}}				
+				{{$team = .Team.Name}}
+			{{end}}
+			{{range .Organizations}}
+				{{if .Primary}}
+					{{$team = .Team.Name}}
+				{{end}}
+			{{end}}
 			<option value="{{.ID}}({{.LastNameKor}}{{.FirstNameKor}},{{$team}})">
 		{{end}}
 	{{end}}
