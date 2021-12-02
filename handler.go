@@ -283,6 +283,10 @@ func webserver(port string) {
 	http.HandleFunc("/invalidpass", handleInvalidPass)
 	http.HandleFunc("/nouser", handleNoUser)
 
+	// Partner
+	http.HandleFunc("/partners", handlePartners)
+	http.HandleFunc("/addpartner", handleAddPartner)
+
 	// Admin Setting
 	http.HandleFunc("/adminsetting", handleAdminSetting)
 	http.HandleFunc("/adminsetting_submit", handleAdminSettingSubmit)
@@ -371,9 +375,6 @@ func webserver(port string) {
 	http.HandleFunc("/editpublishkey-submit", handleEditPublishKeySubmit)
 	http.HandleFunc("/rmpublishkey", handleRmPublishKey)
 	http.HandleFunc("/rmpublishkey-submit", handleRmPublishKeySubmit)
-
-	// Partner
-	http.HandleFunc("/partners", handlePartners)
 
 	// Input
 	http.HandleFunc("/inputmode", handleInputMode)
