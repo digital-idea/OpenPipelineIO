@@ -48,6 +48,17 @@ body {
 	text-decoration: none;
 	background-color: #dae0e5 !important;
 }
+
+.badge-secondary {
+	color: #fff;
+	background-color: #6c757d;
+}
+  
+.badge-secondary[href]:hover, .badge-secondary[href]:focus {
+	color: #fff;
+	text-decoration: none;
+	background-color: #545b62;
+}
   
 /* width */
 ::-webkit-scrollbar {

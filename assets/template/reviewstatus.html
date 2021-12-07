@@ -1,41 +1,33 @@
 {{define "reviewstatus" }}
-{{template "headBootstrap" .}}
+{{template "headBootstrap5" .}}
 <!--리뷰 데이터가 로딩되면 해당 리뷰아이템으로 focus후, 문서의 스크롤상태를 원점(0,0)으로 돌린다.-->
 <body style="overflow: hidden;">
     <input type="hidden" id="current-review-id" value="{{.CurrentReview.ID.Hex}}">
     <div id="floatingmenu">
-        {{template "navbar" .}}
+        {{template "navbar-bootstrap5" .}}
     </div>
     {{template "modal" .}}
     <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
-
-    <div class="row mt-3 ml-3 mr-3">
-        <div class="col-3 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
+    <div class="row mt-3 ms-2 me-2">
+        <div class="col-3 p-0 border-darkmode text-darkmode" style="height: 80vh;">
+            
             <form action="/review-submit" method="POST">
                 <div class="w-100">
                     <div class="input-group p-1">
-                        <div class="input-group-prepend">
-                            <select name="reviewproject" class="custom-select rounded-left" id="review-searchbox-project">
-                                <option value="">All</option>
-                                {{range .Projectlist}}
-						        	<option value="{{.}}" {{if eq . $.Project}}selected{{end}}>{{.}}</option>
-						        {{end}}
-                            </select>
-                        </div>
-                        <div class="input-group-append">
-                            <select name="reviewstage" class="custom-select" id="review-searchbox-stage">
-                                <option value="" {{if eq "" $.Stage}}selected{{end}}>All</option>
-                                {{range .Stages}}
-						        	<option value="{{.ID}}" {{if eq $.Stage .ID}}selected{{end}}>{{.ID}}</option>
-						        {{end}}
-                            </select>
-                        </div>
-                        <input type="text" name="searchword" class="input-group-append form-control form-control-sm" placeholder="검색어" value="{{.Searchword}}">
-                        <div class="input-group-btn input-group-append">
-                            <button class="btn btn-sm btn-darkmode" id="button">
-                                Search
-                            </button>
-                        </div>
+                        <select name="reviewproject" class="form-select custom-select rounded-start" id="review-searchbox-project">
+                            <option value="">All</option>
+                            {{range .Projectlist}}
+                                <option value="{{.}}" {{if eq . $.Project}}selected{{end}}>{{.}}</option>
+                            {{end}}
+                        </select>
+                        <select name="reviewstage" class="form-select custom-select" id="review-searchbox-stage">
+                            <option value="" {{if eq "" $.Stage}}selected{{end}}>All</option>
+                            {{range .Stages}}
+                                <option value="{{.ID}}" {{if eq $.Stage .ID}}selected{{end}}>{{.ID}}</option>
+                            {{end}}
+                        </select>                        
+                        <input type="text" name="searchword" class="input-group-append form-control" placeholder="검색어" value="{{.Searchword}}">
+                        <button class="btn btn-sm btn-darkmode" id="button">Search</button>
                     </div>
                 </div>
             </form>
@@ -46,26 +38,26 @@
                         <div class="col-11 p-0" onclick="window.location.replace('/reviewstatus?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}&stage={{.Stage}}')">
                             <span class="text-muted" id="{{.ID.Hex}}-project">{{.Project}}</span>
                             <span class="text-darkmode" id="{{.ID.Hex}}-name">{{.Name}}</span>
-                            <span class="ml-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>
-                            <span class="ml-1 badge badge-secondary">{{.AuthorNameKor}}</span>
+                            <span class="ms-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>
+                            <span class="ms-1 badge badge-secondary">{{.AuthorNameKor}}</span>
                             {{if gt .MainVersion 0 }} <!-- MainVersion 값이 0 이상이면 보인다.-->
-                                <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-mainversion">v{{ProductionVersionFormat .MainVersion}}</span>
+                                <span class="ms-1 badge badge-darkmode" id="{{.ID.Hex}}-mainversion">v{{ProductionVersionFormat .MainVersion}}</span>
                             {{end}}
                             {{if gt .SubVersion 0 }} <!-- SubVersion 값이 0 이상이면 보인다.-->
-                                <span class="ml-1 badge badge-darkmode" id="{{.ID.Hex}}-subversion">w{{ProductionVersionFormat .SubVersion}}</span>
+                                <span class="ms-1 badge badge-darkmode" id="{{.ID.Hex}}-subversion">w{{ProductionVersionFormat .SubVersion}}</span>
                             {{end}}
                             {{if eq .Status "comment" }}
-                                <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
-                                <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-warning">{{.Status}}</span>
+                                <span id="review-stage-{{.ID.Hex}}" class="ms-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
+                                <span id="reviewstatus-{{.ID.Hex}}" class="ms-1 badge badge-warning">{{.Status}}</span>
                             {{else if eq .Status "approve" }}
-                                <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
-                                <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-success">{{.Status}}</span>
+                                <span id="review-stage-{{.ID.Hex}}" class="ms-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
+                                <span id="reviewstatus-{{.ID.Hex}}" class="ms-1 badge badge-success">{{.Status}}</span>
                             {{else}}
                                 {{if eq .ProcessStatus "wait" "processing" }}
-                                    <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-danger">{{.ProcessStatus}}</span>
+                                    <span id="reviewstatus-{{.ID.Hex}}" class="ms-1 badge badge-danger">{{.ProcessStatus}}</span>
                                 {{else}}
-                                    <span id="review-stage-{{.ID.Hex}}" class="ml-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
-                                    <span id="reviewstatus-{{.ID.Hex}}" class="ml-1 badge badge-secondary">{{.Status}}</span>
+                                    <span id="review-stage-{{.ID.Hex}}" class="ms-1 badge badge-stage-{{.Stage}}">{{.Stage}}</span>
+                                    <span id="reviewstatus-{{.ID.Hex}}" class="ms-1 badge badge-secondary">{{.Status}}</span>
                                 {{end}}
                             {{end}}
                         </div>
@@ -86,7 +78,7 @@
             <canvas class="p-0" id="screenshot" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
             <canvas class="p-0" id="player" style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
         </div>
-        <div class="col-2 p-0 border-darkmode overflow-auto text-darkmode" style="height: 80vh;">
+        <div class="col-2 p-0 border-darkmode text-darkmode" style="height: 80vh;">
             <!--description-->
             <div style="height: 9vh; overflow-y: auto; overflow-x: hidden;" class="p-1">
                 <h5>Description</h5>
@@ -96,7 +88,7 @@
             </div>
             <hr class="my-1 p-0 m-0 divider"></hr>
             <!--comments-->
-            <div style="height: 58vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
+            <div style="height: 57vh; overflow-y: auto; overflow-x: hidden;" id="review-comments">
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{if .AuthorName}}{{.AuthorName}}{{else}}{{.Author}}{{end}}</a></span>
@@ -113,12 +105,12 @@
                         {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
                     </small>
                     {{if .Media}}
-                        <div class="row pl-3 pt-3 pb-1">
+                        <div class="row ps-3 pt-3 pb-1">
                             <a id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-media" href="{{Protocol .Media}}://{{RmProtocol .Media}}" onclick="copyClipboard('{{.Media}}')">
                                 <img src="/assets/img/link.svg" class="finger">
                             </a>
                             {{if .MediaTitle}}
-                                <span class="text-white pl-2">{{.MediaTitle}}</span>
+                                <span class="text-white ps-2">{{.MediaTitle}}</span>
                             {{end}}
                         </div>
                     {{end}}
@@ -126,13 +118,13 @@
                 {{end}}
             </div>
             <!--comment input-->
-            <div style="height: 32vh">
+            <div style="height: 33vh">
                 <textarea class="form-control form-control-sm no-resize" id="review-comment" rows="3" placeholder="리뷰내용을 작성해주세요."></textarea>
                 <div class="pt-1 row">
                     <div class="col-7">
                         <input type="text" class="form-control form-control-sm w-100" id="review-media" placeholder="첨부할 Media: dilink:// or rvlink://">
                     </div>
-                    <div class="col-5 pl-0">
+                    <div class="col-5 ps-0">
                         <div class="form-check">
                             <input type="checkbox" id="review-framecomment" class="form-check-input">
                             <label class="form-check-label" for="review-framecomment">Frame Comment</label>
@@ -141,27 +133,22 @@
                     
                 </div>
                 <div class="pt-1 row">
-                    <div class="col pr-0">
-                        <span class="btn btn-sm btn-outline-warning w-100" onclick="clickCommentButton()">comment</span>
-                    </div>
-                    <div class="col p-0">
-                        <span class="btn btn-sm btn-outline-success w-100" onclick="setReviewStatus('approve')">approve</span>
-                    </div>
-                    <div class="col p-0">
-                        <span class="btn btn-sm btn-outline-secondary w-100" onclick="setReviewStatus('wait')">wait</span>
-                    </div>
-                    <div class="col pl-0">
+                    <div class="col pe-0">
                         <select class="form-control form-control-sm" id="current-review-stage" onchange="setReviewStage(this.value)">
                             {{range .Stages}}
                                 <option value="{{.ID}}" {{if eq $.CurrentReview.Stage .ID}}selected{{end}}>{{.ID}}</option>
                             {{end}}
                         </select>
                     </div>
+                    <div class="col ps-0">
+                        <span class="btn btn-sm btn-outline-warning w-100" onclick="clickCommentButton()">Comment</span>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-    <div class="row ml-3 mr-3">
+    <div class="row ms-2 me-2">
         <div class="col-12 border-darkmode text-center text-darkmode no-selection" style="height: 3.6vh;">
             <span class="player-original" id="player-original" onclick="playOriginal('{{$.CurrentReview.Project}}', '{{$.CurrentReview.Name}}')"></span>
             <span class="player-rv" id="player-rv" onclick="rvplay('{{$.CurrentReview.ID.Hex}}')"></span>
@@ -171,7 +158,7 @@
             <!--<span class="player-save" id="player-save" onclick="saveDrawing()" title="b"></span>-->
             <span class="player-screenshot" id="player-screenshot" onclick="screenshot('{{.CurrentReview.Project}}_{{.CurrentReview.Name}}_{{.CurrentReview.Task}}')" title="c"></span>
             <span class="drawing-prev" id="drawing-prev" title="," {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
-            <span class="drawing-next mr-5" id="drawing-next" title="." {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
+            <span class="drawing-next me-5" id="drawing-next" title="." {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
 
             <span class="player-start" id="player-start" title="[" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <span class="player-left" id="player-left" title="←" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
@@ -183,11 +170,11 @@
             <span class="player-loop" id="player-loopandloopoff" title="l" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
-            <span class="monospace finger ml-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
+            <span class="monospace finger ms-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace">/</span>
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
             <span class="monospace" id="totalframe">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
-            <span class="monospace pl-4" id="currentfps" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>{{.CurrentReview.Fps}}</span>
+            <span class="monospace ps-4" id="currentfps" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>{{.CurrentReview.Fps}}</span>
             <span class="monospace" {{if eq .CurrentReview.Type "image" }}hidden{{end}}>fps</span>
             <!--
                 <span class="player-mute" id="player-mute"></span>
@@ -195,20 +182,20 @@
             -->
         </div>
     </div>
-    <div class="row ml-3 mr-3">
+    <div class="row ms-2 me-2">
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="white-space: nowrap; height: 10vh; overflow-x: scroll; overflow-y: hidden; scrollbar-color: #6d6d6d #2d2d2d; scrollbar-color: dark;" id="reviewgroup">
             {{range .ReviewGroup}}
                 {{if eq .Type "image" }}
-                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
+                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
                 {{else}}
-                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 mr-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
                 {{end}}
             {{end}}
         </div>
     </div>
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script src="/assets/js/input.js"></script>
 <script src="/assets/js/csi_v02.js"></script>
 <script src="/assets/js/dropzone.js"></script>
