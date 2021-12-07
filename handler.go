@@ -288,6 +288,7 @@ func webserver(port string) {
 	// Partner
 	http.HandleFunc("/partners", handlePartners)
 	http.HandleFunc("/addpartner", handleAddPartner)
+	http.HandleFunc("/addpartner_submit", handleAddPartnerSubmit)
 
 	// Admin Setting
 	http.HandleFunc("/adminsetting", handleAdminSetting)
