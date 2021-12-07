@@ -1,4 +1,4 @@
-{{define "review" }}
+{{define "reviewstatus" }}
 {{template "headBootstrap" .}}
 <!--리뷰 데이터가 로딩되면 해당 리뷰아이템으로 focus후, 문서의 스크롤상태를 원점(0,0)으로 돌린다.-->
 <body style="overflow: hidden;">
@@ -43,7 +43,7 @@
             <div class="overflow-auto" style="height: 76vh; overflow-y: scroll; scrollbar-color: #6d6d6d #2d2d2d;">
                 {{range .Reviews}}
                     <div class="row p-2 m-1 {{if eq .ID.Hex $.CurrentReview.ID.Hex}}selectreviewitem border border-warning{{else}}reviewitem{{end}} finger" name="reviewitem" id="review-{{.ID.Hex}}">
-                        <div class="col-11 p-0" onclick="window.location.replace('/review?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}&stage={{.Stage}}')">
+                        <div class="col-11 p-0" onclick="window.location.replace('/reviewstatus?searchword={{$.Searchword}}&id={{.ID.Hex}}&project={{.Project}}&stage={{.Stage}}')">
                             <span class="text-muted" id="{{.ID.Hex}}-project">{{.Project}}</span>
                             <span class="text-darkmode" id="{{.ID.Hex}}-name">{{.Name}}</span>
                             <span class="ml-1 badge badge-secondary" id="{{.ID.Hex}}-task">{{.Task}}</span>

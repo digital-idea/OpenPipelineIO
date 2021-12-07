@@ -247,8 +247,10 @@ func webserver(port string) {
 	http.HandleFunc("/detail", handleItemDetail)
 
 	// Review
-	http.HandleFunc("/daily", handleDaily)
-	http.HandleFunc("/review", handleReview)
+	http.HandleFunc("/daily-review-stage", handleDailyReviewStage)
+	http.HandleFunc("/daily-review-status", handleDailyReviewStatus)
+	http.HandleFunc("/reviewstage", handleReviewStage)
+	http.HandleFunc("/reviewstatus", handleReviewStatus)
 	http.HandleFunc("/reviewdata", handleReviewData)
 	http.HandleFunc("/reviewdrawingdata", handleReviewDrawingData)
 	http.HandleFunc("/review-submit", handleReviewSubmit)
