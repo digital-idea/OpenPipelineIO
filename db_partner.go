@@ -3,6 +3,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,12 +13,26 @@ import (
 )
 
 func addPartner(client *mongo.Client, p Partner) error {
-	p.CreateTime = time.Now().Format(time.RFC3339)
-	p.UpdateTime = p.CreateTime
+	if p.Name == "" {
+		return errors.New("빈 문자열입니다. 파트너를 생성할 수 없습니다")
+	}
 	collection := client.Database("csi").Collection("partners")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_, err := collection.InsertOne(ctx, p)
+
+	num, err := collection.CountDocuments(ctx, bson.M{"name": p.Name})
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	if num != 0 {
+		log.Println("같은 이름의 파트너사가 존재해서 파트너사를 추가할 수 없습니다.")
+		return errors.New("같은 이름의 파트너사가 존재해서 파트너사를 추가할 수 없습니다")
+	}
+
+	p.CreateTime = time.Now().Format(time.RFC3339)
+	p.UpdateTime = p.CreateTime
+	_, err = collection.InsertOne(ctx, p)
 	if err != nil {
 		return err
 	}
