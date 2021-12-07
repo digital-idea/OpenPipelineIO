@@ -2,8 +2,24 @@
 {{template "headBootstrap5"}}
 {{template "navbar-bootstrap5" .}}
 <body>
-    <div class="p-5">
-        <h2 class="section-heading">Add Partners</h2>
+    <div class="container p-5">
+        <form action="/addpartner_submit" method="POST">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading">Add Partner</h2>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="name">
+                    <small class="form-text text-muted">회사명을 입력해주세요.</small>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-darkmode mt-5">Add Partner</button>
+        </div>
+        </form>
     </div>
 {{template "footerBootstrap"}}
 </body>
