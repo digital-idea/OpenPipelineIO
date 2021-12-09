@@ -11,7 +11,7 @@
     <div class="row mt-3 ms-2 me-2">
         <div class="col-3 p-0 border-darkmode text-darkmode" style="height: 80vh;">
             
-            <form action="/review-submit" method="POST">
+            <form action="/review-status-submit" method="POST">
                 <div class="w-100">
                     <div class="input-group p-1">
                         <select name="reviewproject" class="form-select custom-select rounded-start" id="review-searchbox-project">
@@ -186,9 +186,9 @@
         <div class="col-12 border-darkmode text-darkmode p-0 m-0" style="white-space: nowrap; height: 10vh; overflow-x: scroll; overflow-y: hidden; scrollbar-color: #6d6d6d #2d2d2d; scrollbar-color: dark;" id="reviewgroup">
             {{range .ReviewGroup}}
                 {{if eq .Type "image" }}
-                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
+                    <img src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/reviewstatus?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')">
                 {{else}}
-                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/review?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
+                    <video src="/reviewdata?id={{.ID.Hex}}&ext={{.Ext}}" class="p-0 m-0 ms-1 finger border{{if eq .ID.Hex $.CurrentReview.ID.Hex}} border-warning{{else}} border-secondary{{end}}" style="height:98%;" onclick="window.location.replace('/reviewstatus?searchword={{$.CurrentReview.Name}}%20project:{{.Project}}&id={{.ID.Hex}}&project={{.Project}}')"></video>
                 {{end}}
             {{end}}
         </div>
