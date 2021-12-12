@@ -38,8 +38,10 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><span class="dropdown-item finger" data-bs-toggle="modal" data-bs-target="#modal-addreview">Add Review</span></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span></li>
+            {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
+              <li><hr class="dropdown-divider"></li>
+              <li><span class="dropdown-item finger" onclick="setReviewAgainForWaitStatusToday()">Review again for wait status</span></li>
+            {{end}}
             
             {{if .Setting.ReviewStageMode}}
               <li><hr class="dropdown-divider"></li>
