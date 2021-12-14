@@ -1,10 +1,51 @@
 {{define "partners" }}
 {{template "headBootstrap5"}}
-{{template "navbar-bootstrap5" .}}
 <body>
-    <div class="p-5">
-        <h2 class="section-heading">Partners</h2>
+{{template "navbar-bootstrap5" .}}
+<div class="p-3">
+    <div class="row">
+        {{range .Partners}}
+        <div class="card m-10 mx-auto bg-darkmode" style="width: 14rem;">
+            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280" onclick="selectUserID('{{.ID}}')">
+            <div class="card-body">
+                <h4 class="card-title">{{.Name}}</h4>
+                <h6 class="card-subtitle text-muted">{{.Domain}}</h6>
+                <p class="card-text m-0 p-0">
+                    Size: {{.Size}}
+                </p>
+                <p class="card-text">
+                    homepage: {{.Homepage}}
+                <p>
+                {{if eq $.User.AccessLevel 11}}
+                <a href="/edituser?id={{.ID}}" class="btn btn-outline-warning btn-sm p-1 mt-1">Edit</a>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
     </div>
+</div>
+    
+    <!--
+    <div class="p-3">
+        <div class="row">
+            {{range .Partners}}
+            <div class="card w-5 mx-auto m-3 bg-darkmode">
+                <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280" onclick="selectUserID('{{.ID}}')">
+                <div class="card-body">
+                    <h4 class="card-title">{{.Name}}</h4>
+                    <h6 class="card-subtitle text-muted">{{.Domain}}</h6>
+                    <p class="card-text m-0 p-0">
+                        Size: {{.Size}}
+                    </p>
+                    <p class="card-text">
+                        homepage: {{.Homepage}}
+                    <p>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    -->
 {{template "footerBootstrap"}}
 </body>
 <!--<script src="/assets/js/jquery-3.1.1.min.js"></script>-->
