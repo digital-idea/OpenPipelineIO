@@ -260,7 +260,7 @@ func ToShortTime(t string) string {
 	if MatchNormalTime.MatchString(t) {
 		return strings.Replace(t[5:10], "-", "", -1)
 	}
-	if MatchFullTime.MatchString(t) {
+	if MatchFullTime.MatchString(t) || MatchUTCFullTime.MatchString(t) {
 		zonetime, err := time.Parse(time.RFC3339, t) // 현지시간으로 바꾼다.
 		if err != nil {
 			return t
@@ -277,7 +277,7 @@ func ToNormalTime(t string) string {
 	if MatchNormalTime.MatchString(t) {
 		return t
 	}
-	if MatchFullTime.MatchString(t) {
+	if MatchFullTime.MatchString(t) || MatchUTCFullTime.MatchString(t) {
 		return t[0:10]
 	}
 	if MatchShortTime.MatchString(t) {
