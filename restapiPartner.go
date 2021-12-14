@@ -14,7 +14,7 @@ import (
 
 // handleAPIPartner 함수는 파트너 관련 API다.
 func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
-	// GET 메소드는 파트너의 id를 받아서 사용자 정보를 반환한다.
+	// GET 메소드는 파트너의 id를 받아서 파트너 정보를 반환한다.
 	if r.Method == http.MethodGet {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		//mongoDB client 연결
@@ -63,7 +63,7 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 		w.Write(data)
 		return
 	} else if r.Method == http.MethodPost {
-		// POST 메소드는 새로운 사용자 정보를 DB에 저장한다
+		// POST 메소드는 새로운 파트너 정보를 DB에 저장한다
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		//mongoDB client 연결
 		client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
