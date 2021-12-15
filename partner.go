@@ -6,6 +6,8 @@ type Partner struct {
 	// 회사 정보
 	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Name        string             `json:"name"`        // 파트너사 이름
+	Size        int                `json:"size"`        // 파트너사 규모
+	Domain      string             `json:"domain"`      // 파트너사 사업 영역
 	Homepage    string             `json:"homepage"`    // 파트너사 홈페이지 주소
 	Address     string             `json:"address"`     // 파트너사 위치 주소
 	Phone       string             `json:"phone"`       // 파트너사 전화번호
