@@ -25,13 +25,25 @@ func handlePartners(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	// mongoDB 연결
-	session, err := mgo.Dial(*flagDBIP)
+	//mongoDB client 연결
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer session.Close()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	type recipe struct {
 		User                 // 로그인한 사용자 정보
@@ -44,13 +56,19 @@ func handlePartners(w http.ResponseWriter, r *http.Request) {
 		Setting
 	}
 	rcp := recipe{}
-	rcp.User, err = getUser(session, ssid.ID)
+	rcp.User, err = getUserV2(client, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Partners, err = allPartners(client)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Setting = CachedAdminSetting
 	w.Header().Set("Content-Type", "text/html")
+
 	err = TEMPLATES.ExecuteTemplate(w, "partners", rcp)
 	if err != nil {
 		log.Println(err)
