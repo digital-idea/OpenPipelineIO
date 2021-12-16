@@ -1,0 +1,123 @@
+{{define "modal-comment"}}
+    <!-- Modal: Add Comment-->
+    <div class="modal fade" id="modal-addcomment" tabindex="-1" role="dialog" aria-labelledby="modal-addcomment" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addcomment-title">Add Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-addcomment-project">
+                    <input type="hidden" class="form-control" id="modal-addcomment-id">
+                    <div class="form-group">
+                        <label for="modal-addcomment-text" class="col-form-label">Comment:</label>
+                        <textarea class="form-control" id="modal-addcomment-text" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addcomment-mediatitle" class="col-form-label">Media Title</label>
+                        <input type="text" class="form-control" id="modal-addcomment-mediatitle">
+                        <small class="form-text text-muted">Media 제목, 용도를 입력해주세요</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addcomment-media" class="col-form-label">Media</label>
+                        <input type="text" class="form-control" id="modal-addcomment-media">
+                        <small class="form-text text-muted">스케치, 사진, 영상, 보이스파일, 촬영데이터가 있다면 경로를 입력해주세요.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-addcomment-addbutton" title="F8" class="btn btn-outline-warning" onclick="addComment()" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Detail Comments-->
+    <div class="modal fade" id="modal-detailcomments" tabindex="-1" role="dialog" aria-labelledby="modal-detailcomments" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-detailcomments-title">Detail Comments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-detailcomments-body" style="height: 720px; overflow-y: auto; scrollbar-color: rgb(109, 109, 109) rgb(45, 45, 45);"> <!--최신 핸드폰의 세로 높이-->
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Comment-->
+    <div class="modal fade" id="modal-rmcomment" tabindex="-1" role="dialog" aria-labelledby="modal-rmcomment" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmcomment-title">Rm Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmcomment-project">
+                    <input type="hidden" class="form-control" id="modal-rmcomment-id">
+                    <input type="hidden" class="form-control" id="modal-rmcomment-time">
+                    <div class="form-group">
+                        <label for="modal-rmcomment-text" class="col-form-label">아래 내용을 삭제하겠습니까?</label>
+                        <textarea class="form-control" id="modal-rmcomment-text" rows="4" disabled></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmComment(document.getElementById('modal-rmcomment-project').value, document.getElementById('modal-rmcomment-id').value, document.getElementById('modal-rmcomment-time').value)" data-dismiss="modal">DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Comment-->
+    <div class="modal fade" id="modal-editcomment" tabindex="-1" role="dialog" aria-labelledby="modal-editcomment" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-editcomment-title">Edit Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-editcomment-project">
+                    <input type="hidden" class="form-control" id="modal-editcomment-id">
+                    <input type="hidden" class="form-control" id="modal-editcomment-time">
+                    <div class="form-group">
+                        <label for="modal-editcomment-text" class="col-form-label">Comment:</label>
+                        <textarea class="form-control" id="modal-editcomment-text" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editcomment-mediatitle" class="col-form-label">Media Title</label>
+                        <input type="text" class="form-control" id="modal-editcomment-mediatitle">
+                        <small class="form-text text-muted">Media 제목, 용도를 입력해주세요.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editcomment-media" class="col-form-label">Media</label>
+                        <input type="text" class="form-control" id="modal-editcomment-media">
+                        <small class="form-text text-muted">스케치, 사진, 영상, 보이스파일, 촬영데이터가 있다면 경로를 입력해주세요.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" title="F8" id="modal-editcomment-editbutton" onclick="editComment(document.getElementById('modal-editcomment-project').value, document.getElementById('modal-editcomment-id').value, document.getElementById('modal-editcomment-time').value, document.getElementById('modal-editcomment-text').value, document.getElementById('modal-editcomment-media').value)" data-dismiss="modal">EDIT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

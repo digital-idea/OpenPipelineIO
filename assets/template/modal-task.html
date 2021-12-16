@@ -1,0 +1,172 @@
+{{define "modal-task"}}
+    <!-- Modal: Add Task-->
+    <div class="modal fade" id="modal-addtask" tabindex="-1" role="dialog" aria-labelledby="modal-addtask-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addtask-title">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">				
+                    <input type="hidden" class="form-control" id="modal-addtask-project">
+                    <input type="hidden" class="form-control" id="modal-addtask-id">
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm">Select Task</label>
+                        <select class="form-control form-control-sm" id="modal-addtask-taskname">
+                        </select>
+                    </div>
+                </div>			
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addTask(document.getElementById('modal-addtask-project').value, document.getElementById('modal-addtask-id').value, document.getElementById('modal-addtask-taskname').value)" data-dismiss="modal">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Task-->
+    <div class="modal fade" id="modal-rmtask" tabindex="-1" role="dialog" aria-labelledby="modal-rmtask" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmtask-title">Rm Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmtask-project">
+                    <input type="hidden" class="form-control" id="modal-rmtask-id">
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm">Select Task</label>
+                        <select class="form-control form-control-sm" id="modal-rmtask-taskname">
+                        </select>
+                    </div>
+                </div>			
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmTask(document.getElementById('modal-rmtask-project').value, document.getElementById('modal-rmtask-id').value, document.getElementById('modal-rmtask-taskname').value)" data-dismiss="modal">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Task-->
+    <div class="modal fade" id="modal-edittask" tabindex="-1" role="dialog" aria-labelledby="modal-edittask" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-edittask-title">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-darkmode">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mb-0 pb-0">
+                    <div class="row">
+                        <div class="col-8 form-group">
+                            <label class="col-form-label col-form-label-sm">User</label>
+                            <div class="row">
+                                <div class="col-8">
+                                    <input type="text" class="form-control form-control-sm searchuser" id="modal-edittask-user" autocomplete="off">
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser()">SET USER</button>
+                                </div>
+                            </div>
+                            <small class="form-text text-mute">사용자 이름만 입력해주세요.</small>
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">User Comment</label>
+                            <input type="text" class="form-control form-control-sm" id="modal-edittask-usercomment" placeholder="참고정보" onchange="setTaskUserComment()">
+                            <small class="form-text text-mute">아티스트명 뒷쪽 메모</small>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-edittask-project">
+                    <input type="hidden" class="form-control" id="modal-edittask-id">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label">Task:</label>
+                            <input type="text" class="form-control form-control-sm" id="modal-edittask-task" disabled>
+                        </div>
+                        {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+                            <div class="col-6 form-group">
+                                <label class="col-form-label">Status</label>
+                                <select class="form-control form-control-sm" id="modal-edittask-status" onchange="setTaskStatus(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-status').value)">
+                                    <option value="8">omit</option>
+                                    <option value="7">confirm</option>
+                                    <option value="6">wip</option>
+                                    <option value="5">ready</option>
+                                    <option value="4">assign</option>
+                                    <option value="3">out</option>
+                                    <option value="2">done</option>
+                                    <option value="1">hold</option>
+                                    <option value="0">none</option>
+                                </select>
+                            </div>
+                        {{else}}
+                            <!--Status v2-->
+                            <div class="col-6 form-group">
+                                <label class="col-form-label text-muted">Status</label>
+                                <select class="text-muted form-control form-control-sm" id="modal-edittask-statusv2" onchange="setTaskStatusV2(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-statusv2').value)">
+                                    {{range .Status}}
+                                        <option value="{{.ID}}">{{.ID}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        {{end}}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-form-label">Media Path:</label>
+                        <input type="text" class="form-control form-control-sm" id="modal-edittask-path" onchange="setTaskMov(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
+                    </div>
+                    <div class="row">
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">예상일수</label>
+                            <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-expectday" onchange="setTaskExpectDay(this.value)">
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">작업일수</label>
+                            <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-resultday" onchange="setTaskResultDay(this.value)">
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">Level</label>
+                            <input type="number" min="0" max="5" step="1" class="form-control form-control-sm" id="modal-edittask-level" onchange="setTaskLevel(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">시작일</label>
+                            <input type=date class="form-control form-control-sm" id="modal-edittask-startdate" value="" onchange="setTaskStartdate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
+                            <small class="form-text text-mute">작업 시작일</small>
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">1차마감</label>
+                            <input type=date class="form-control form-control-sm" id="modal-edittask-predate" value="" onchange="setTaskPredate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
+                            <small class="form-text text-mute">협업을 위한 중간 마감일</small>
+                        </div>
+                        <div class="col-4 form-group">
+                            <label class="col-form-label col-form-label-sm">2차마감</label>
+                            <input type=date class="form-control form-control-sm" id="modal-edittask-date" value="" onchange="setTaskDate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)" placeholder="YYYY-MM-DD">
+                            <small class="form-text text-mute">최종마감일</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="multi-input-link" class="col-form-label col-form-label-sm">공지사항</label>
+                        <input type="text" id="modal-edittask-usernote" class="form-control form-control-sm" value="" placeholder="공지사항" onchange="setTaskUserNote(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
+                        <small class="form-text text-mute">Task 작업에 참고할 공지사항</small>
+                    </div>
+                    
+                </div>			
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

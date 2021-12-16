@@ -1,0 +1,100 @@
+{{define "modal-source"}}
+    <!-- Modal: Add Source-->
+    <div class="modal fade" id="modal-addsource" tabindex="-1" role="dialog" aria-labelledby="modal-addsource" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addsource-title">Add Source</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-addsource-project">
+                    <input type="hidden" class="form-control" id="modal-addsource-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-addsource-subject" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" id="modal-addsource-subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="modal-addsource-path" class="col-form-label">Path or URL:</label>
+                            <input type="text" class="form-control" id="modal-addsource-path">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addSource(document.getElementById('modal-addsource-project').value, document.getElementById('modal-addsource-id').value, document.getElementById('modal-addsource-subject').value, document.getElementById('modal-addsource-path').value)" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Source-->
+    <div class="modal fade" id="modal-rmsource" tabindex="-1" role="dialog" aria-labelledby="modal-rmsource" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmsource-title">Rm Source</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmsource-project">
+                    <input type="hidden" class="form-control" id="modal-rmsource-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-rmsource-subject" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" id="modal-rmsource-subject">
+                            <small class="text-danger">삭제할 소스의 이름을 입력해주세요.</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmSource(document.getElementById('modal-rmsource-project').value, document.getElementById('modal-rmsource-id').value, document.getElementById('modal-rmsource-subject').value)" data-dismiss="modal">REMOVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Source-->
+    <div class="modal fade" id="modal-rmtag" tabindex="-1" role="dialog" aria-labelledby="modal-rmtag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmtag-title">Rm Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmtag-project">
+                    <input type="hidden" class="form-control" id="modal-rmtag-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-rmtag-tag" class="col-form-label">Tag:</label>
+                            <input type="text" class="form-control" id="modal-rmtag-tag">
+                            <small class="text-danger">삭제할 태그명을 입력해주세요.</small>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="modal-rmtag-iscontain" class="form-check-input">
+                                <label class="form-check-label" for="modal-rmtag-iscontain">해당 단어가 포함된 태그를 제거합니다.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmTag()" data-dismiss="modal">REMOVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
