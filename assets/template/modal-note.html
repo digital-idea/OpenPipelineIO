@@ -1,0 +1,138 @@
+{{define "modal-note"}}
+    <!-- Modal: Set Note-->
+    <div class="modal fade" id="modal-setnote" tabindex="-1" role="dialog" aria-labelledby="modal-setnote" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-setnote-title">Set Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-setnote-project">
+                    <input type="hidden" class="form-control" id="modal-setnote-id">
+                    <div class="form-group">
+                        <label for="modal-setnote-text" class="col-form-label">Note:</label>
+                        <textarea class="form-control" id="modal-setnote-text" rows="3"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="modal-setnote-overwrite" name="overwrite-note" class="form-check-input">
+                        <label class="form-check-label" for="modal-setnote-overwrite">Overwrite</label>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-setnote-editbutton" title="F8" class="btn btn-outline-warning" onclick="setNote(document.getElementById('modal-setnote-project').value, document.getElementById('modal-setnote-id').value, document.getElementById('modal-setnote-text').value)" data-dismiss="modal">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Note-->
+    <div class="modal fade" id="modal-editnote" tabindex="-1" role="dialog" aria-labelledby="modal-editnote" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-editnote-title">Edit Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-editnote-project">
+                    <input type="hidden" class="form-control" id="modal-editnote-id">
+                    <div class="form-group">
+                        <label for="modal-editnote-text" class="col-form-label">Note:</label>
+                        <textarea class="form-control" id="modal-editnote-text" rows="7"></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" id="modal-editnote-editbutton" title="F8" class="btn btn-outline-warning" onclick="editNote(document.getElementById('modal-editnote-project').value, document.getElementById('modal-editnote-id').value, document.getElementById('modal-editnote-text').value)" data-dismiss="modal">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Camera Option -->
+    <div class="modal fade" id="modal-cameraoption" tabindex="-1" role="dialog" aria-labelledby="modal-cameraoption" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-cameraoption-title">Camera Option</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-cameraoption-project">
+                <input type="hidden" class="form-control" id="modal-cameraoption-id">
+                <div class="row">
+                    <div class="col-6 form-group">
+                        <label>Camera PubTask</label>
+                        <select id="modal-cameraoption-pubtask" name="ProductionCamPubTask" class="form-control" onchange="setCameraPubTask()">
+                            <option value="">none</option>
+                            <option value="mm">mm</option>
+                            <option value="layout">layout</option>
+                            <option value="ani">ani</option>
+                        </select>
+                        <small class="form-text text-mute">카메라 Publish Task</small>
+                    </div>
+                    <div class="col-6 form-group">
+                        <label>Lens mm</label>
+                        <input type="text" id="modal-cameraoption-lensmm" class="form-control" onchange="setCameraLensmm()">
+                        <small class="form-text text-mute">카메라 렌즈미리수</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Camera Publish Path</label>
+                    <input type="text" id="modal-cameraoption-pubpath" value="" class="form-control" onchange="setCameraPubPath()">
+                    <small class="form-text text-muted">카메라 퍼블리쉬 경로</small>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" id="modal-cameraoption-projection" class="form-check-input" onchange="setCameraProjection()">
+                        <label class="form-check-label" for="modal-cameraoption-projection">프로젝션 카메라를 이용하는 샷 입니다.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: ObjectID -->
+    <div class="modal fade" id="modal-objectid" tabindex="-1" role="dialog" aria-labelledby="modal-objectid" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-objectid-title">Object ID</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-objectid-project">
+                <input type="hidden" class="form-control" id="modal-objectid-id">
+                <div class="form-group">
+                    <input type="text" maxlength="5" id="modal-objectid-in" value="" class="form-control">
+                    <small class="form-text text-mute">ObjectID IN</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" maxlength="5" id="modal-objectid-out" value="" class="form-control">
+                    <small class="form-text text-mute">ObjectID OUT</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setObjectID(document.getElementById('modal-objectid-project').value, document.getElementById('modal-objectid-id').value, document.getElementById('modal-objectid-in').value, document.getElementById('modal-objectid-out').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{{end}}

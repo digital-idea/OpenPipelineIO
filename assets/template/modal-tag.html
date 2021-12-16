@@ -1,0 +1,63 @@
+{{define "modal-tag"}}
+    <!-- Modal: Add Tag-->
+    <div class="modal fade" id="modal-addtag" tabindex="-1" role="dialog" aria-labelledby="modal-addtag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addtag-title">Add Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-addtag-project">
+                    <input type="hidden" class="form-control" id="modal-addtag-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="add-tag-text" class="col-form-label">Tag:</label>
+                            <input type="text" class="form-control" id="modal-addtag-text">
+                            <small class="text-darkmode">띄어쓰기(Space)를 입력하더라도 띄어쓰기가 제거됩니다.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addTag(document.getElementById('modal-addtag-project').value, document.getElementById('modal-addtag-id').value, document.getElementById('modal-addtag-text').value)" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Tag-->
+    <div class="modal fade" id="modal-renametag" tabindex="-1" role="dialog" aria-labelledby="modal-renametag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-renametag-title">Rename Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-renametag-project">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-renametag-beforetag" class="col-form-label">Before Tag:</label>
+                            <input type="text" class="form-control" id="modal-renametag-beforetag">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-renametag-aftertag" class="col-form-label">After Tag:</label>
+                            <input type="text" class="form-control" id="modal-renametag-aftertag">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="renameTag(document.getElementById('modal-renametag-project').value, document.getElementById('modal-renametag-beforetag').value, document.getElementById('modal-renametag-aftertag').value)" data-dismiss="modal">Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

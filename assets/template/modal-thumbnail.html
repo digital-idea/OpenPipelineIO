@@ -1,0 +1,366 @@
+{{define "modal-thumbnail"}}
+    <!-- Modal: Set Rnum-->
+    <div class="modal fade" id="modal-setrnum" tabindex="-1" role="dialog" aria-labelledby="modal-setrnum" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-setrnum-title">Set Roll Number</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="text-darkmode">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">				
+                    <input type="hidden" class="form-control" id="modal-setrnum-project">
+                    <input type="hidden" class="form-control" id="modal-setrnum-id">
+                    <div class="form-group">
+                        <label for="modal-setrnum-text" class="col-form-label">Roll Number:</label>
+                        <input type="text" class="form-control" id="modal-setrnum-text">
+                        <small class="form-text text-muted">A0001 형태로 각 권을 뜻하는 A,B,C,D,E,F 문자와 편집본 순서를 입력해주세요.</small>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="setRnum(document.getElementById('modal-setrnum-project').value, document.getElementById('modal-setrnum-id').value, document.getElementById('modal-setrnum-text').value)" data-dismiss="modal">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Deadline2D-->
+    <div class="modal fade" id="deadline2d" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-deadline2d-title">Deadline</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-deadline2d-project">
+                <input type="hidden" class="form-control" id="modal-deadline2d-id">
+                <div class="form-group">
+                    <label for="deadline2d-date" class="col-form-label">Deadline 2D:</label>
+                    <input type=date class="form-control" id="modal-deadline2d-date" placeholder="YYYY-MM-DD">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setDeadline2D(document.getElementById('modal-deadline2d-project').value, document.getElementById('modal-deadline2d-id').value, document.getElementById('modal-deadline2d-date').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: Deadline3D-->
+    <div class="modal fade" id="deadline3d" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-deadline3d-title">Deadline</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-deadline3d-project">
+                <input type="hidden" class="form-control" id="modal-deadline3d-id">
+                <div class="form-group">
+                    <label for="deadline3d-date" class="col-form-label">Deadline 3D:</label>
+                    <input type=date class="form-control" id="modal-deadline3d-date" placeholder="YYYY-MM-DD">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setDeadline3D(document.getElementById('modal-deadline3d-project').value, document.getElementById('modal-deadline3d-id').value, document.getElementById('modal-deadline3d-date').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: Shottype -->
+    <div class="modal fade" id="modal-shottype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-shottype-title">Shot Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-shottype-project">
+                <input type="hidden" class="form-control" id="modal-shottype-id">
+                <div class="form-group">
+                    <select id="modal-shottype-type" class="form-control">
+                        <option value="">None</option>
+                        <option value="2d">2D</option>
+                        <option value="3d">3D</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setShottype(document.getElementById('modal-shottype-project').value, document.getElementById('modal-shottype-id').value);" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: UseType -->
+    <div class="modal fade" id="modal-usetype" tabindex="-1" role="dialog" aria-labelledby="modal-usetype" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-usetype-title">Use Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-usetype-project">
+                <input type="hidden" class="form-control" id="modal-usetype-id">
+                <div class="form-group">
+                    <select id="modal-usetype-type" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setUsetype(document.getElementById('modal-usetype-project').value, document.getElementById('modal-usetype-id').value);" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: Assettype -->
+    <div class="modal fade" id="modal-assettype" tabindex="-1" role="dialog" aria-labelledby="modal-assettype-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-assettype-title">Asset Type</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-assettype-project">
+                <input type="hidden" class="form-control" id="modal-assettype-id">
+            
+                <div class="form-group">
+                    <select id="modal-assettype-type" class="form-control">
+                        <option value="prop">Prop (소품)</option>
+                        <option value="char">Char (캐릭터, 크리쳐)</option>
+                        <option value="env">Env (환경에셋)</option>
+                        <option value="comp">Comp (합성 노드에셋)</option>
+                        <option value="plant">Plant (식물)</option>
+                        <option value="vehicle">Vehicle (탈것)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setAssettype(document.getElementById('modal-assettype-project').value, document.getElementById('modal-assettype-id').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: PlateSize -->
+    <div class="modal fade" id="modal-platesize" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-platesize-title">Size Setting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-platesize-project">
+                <input type="hidden" class="form-control" id="modal-platesize-id">
+
+                <div class="form-group">
+                    <label>플레이트사이즈</label>
+                    <input type="text" id="modal-platesize-size" size="10" maxlength="13" name="Platesize" value="" placeholder="0000x0000" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setPlatesize(document.getElementById('modal-platesize-project').value, document.getElementById('modal-platesize-id').value, document.getElementById('modal-platesize-size').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: UndistortionSize -->
+    <div class="modal fade" id="modal-undistortionsize" tabindex="-1" role="dialog" aria-labelledby="modal-undistortionsize-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-undistortionsize-title">Size Setting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-undistortionsize-project">
+                <input type="hidden" class="form-control" id="modal-undistortionsize-id">
+                
+                <div class="form-group">
+                    <label>언디스토션</label>
+                    <input type="text" id="modal-undistortionsize-size" size="10" maxlength="13" value="" placeholder="0000x0000" class="form-control">
+                    <small class="form-text text-mute">매치무브 작업자가 설정합니다.</small>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setUndistortionsize(document.getElementById('modal-undistortionsize-project').value, document.getElementById('modal-undistortionsize-id').value, document.getElementById('modal-undistortionsize-size').value)" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: RenderSize -->
+    <div class="modal fade" id="modal-rendersize" tabindex="-1" role="dialog" aria-labelledby="modal-rendersize-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-rendersize-title">Size Setting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-rendersize-project">
+                <input type="hidden" class="form-control" id="modal-rendersize-id">
+                <div class="form-group">
+                    <label>렌더사이즈</label>
+                    <input type="text" id="modal-rendersize-size" size="10" maxlength="13" name="Rendersize" value="" placeholder="0000x0000" class="form-control">
+                    <small class="form-text text-mute">언디스토션 사이즈와 렌더사이즈가 다를때 사용합니다. 예) 5K로 프로젝션하고 2K 카메라로 프로젝션 화면 설정시</small>
+                </div>
+                <div class="form-group">
+                    <label>Overscan Ratio</label>
+                    <input type="number" class="form-control" id="modal-rendersize-overscanratio" name="modal-rendersize-overscanratio" step="0.01">
+                    <small class="form-text text-muted">Overscan 비율, 값이 0이면 표기되지 않습니다. 썸네일에는 OSR로 표기됩니다.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="setRendersize();setOverscanRatio()" data-dismiss="modal">EDIT</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: EditTime -->
+    <div class="modal fade" id="edittime" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-edittime-title">Edit Time</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-edittime-project">
+                <input type="hidden" class="form-control" id="modal-edittime-id">
+                <div class="row">
+                    <div class="col pl-1 pr-1 pt-0 pb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">ScanIn</small>
+                            <input type="text" class="form-control form-control-sm border-mute" placeholder="ScanIn" value="" id="scanin" onchange="setFrame('setscanin', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pt-0 pb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">ScanOut</small>
+                            <input type="text" class="form-control form-control-sm border-mute" placeholder="ScanOut" value="" id="scanout" onchange="setFrame('setscanout', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pt-0 pb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">ScanFrame</small>
+                            <input type="text" class="form-control form-control-sm border-mute" placeholder="ScanFrame" value="" id="scanframe" onchange="setFrame('setscanframe', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">ScanTimecodeIn</small>
+                            <input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeIn" value="" id="scantimecodein" onchange="setScanTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">ScanTimecodeOut</small>
+                            <input type="text" class="form-control form-control-sm border-mute" placeholder="ScanTimeOut" value="" id="scantimecodeout" onchange="setScanTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">PlateIn</small>
+                            <input type="text" class="form-control form-control-sm border-white" placeholder="PlateIn" value="" id="platein" onchange="setFrame('setplatein', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">HandleIn</small>
+                            <input type="text" class="form-control form-control-sm border-info" placeholder="HandleIn" value="" id="handlein" onchange="setFrame('sethandlein', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">JustIn</small>
+                            <input type="text" class="form-control form-control-sm border-warning" placeholder="JustIn" value="" id="justin" onchange="setFrame('setjustin', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">PlateOut</small>
+                            <input type="text" class="form-control form-control-sm border-white" placeholder="PlateOut" value="" id="plateout" onchange="setFrame('setplateout', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">HandleOut</small>
+                            <input type="text" class="form-control form-control-sm border-info" placeholder="HandleOut" value="" id="handleout" onchange="setFrame('sethandleout', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">JustOut</small>
+                            <input type="text" class="form-control form-control-sm border-warning" placeholder="JustOut" value="" id="justout" onchange="setFrame('setjustout', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">JustTimecodeIn</small>
+                            <input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeIn" value="" id="justtimecodein" onchange="setJustTimecodeIn('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>
+                    </div>
+                    <div class="col pl-1 pr-1 pb-0 mb-0">
+                        <div class="form-group p-0 m-0">
+                            <small class="form-text text-muted">JustTimecodeIn</small>
+                            <input type="text" class="form-control form-control-sm border-warning" placeholder="JustTimeOut" value="" id="justtimecodeout" onchange="setJustTimecodeOut('{{$.SearchOption.Project}}', document.getElementById('modal-edittime-id').value, this.value)">
+                        </div>			
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{{end}}

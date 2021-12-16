@@ -1,0 +1,297 @@
+{{define "modal-publish"}}
+    <!-- Modal: AddPublish-->
+    <div class="modal fade" id="modal-addpublish" tabindex="-1" role="dialog" aria-labelledby="modal-addpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addpublish-title">Add Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-addpublish-project">
+                    <input type="hidden" class="form-control" id="modal-addpublish-name">
+                    <input type="hidden" class="form-control" id="modal-addpublish-task">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="modal-addpublish-key" class="col-form-label">Primary Key</label>
+                            <select id="modal-addpublish-key" class="form-control">
+                                <option value="">PublishKey 등록필요</option>
+                            </select>
+                            <small class="form-text text-warning">Primary Key 이름을 입력해주세요.(필수)</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="modal-addpublish-secondarykey" class="col-form-label">Secondary Key</label>
+                            <input type="text" class="form-control" id="modal-addpublish-secondarykey">
+                            <small class="form-text text-muted">Secondary Key 이름을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addpublish-path" class="col-form-label">Path</label>
+                        <input type="text" class="form-control" id="modal-addpublish-path">
+                        <small class="form-text text-warning">Publish 파일 경로를 입력해주세요.(필수)</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label">Status</label>
+                            <select id="modal-addpublish-status" class="form-control">
+                                <option value="usethis">Use This(사용 버전)</option>
+                                <option value="working">Working(작업중인 버전)</option>
+                                <option value="notuse">Not Use(미사용 버전)</option>
+                            </select>
+                            <small class="form-text text-muted">Publish 상태를 선택해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="modal-addpublish-tasktouse" class="col-form-label">Task To Use</label>
+                            <select id="modal-addpublish-tasktouse" class="form-control">
+                                <option value="">Unknown</option>
+                                {{range .TasksettingNames}}
+							        <option value="{{.}}">{{.}}</option>
+						        {{end}}
+                            </select>
+                            <small class="form-text text-muted">Publish된 데이터를 사용하게 될 Task</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="modal-addpublish-subject" class="col-form-label">Subject</label>
+                        <input type="text" class="form-control" id="modal-addpublish-subject">
+                        <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Main Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-addpublish-mainversion">
+                            <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Sub Version</label>
+                            <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-addpublish-subversion">
+                            <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">File Type</label>
+                            <input type="text" placeholder=".ext" class="form-control" id="modal-addpublish-filetype">
+                            <small class="form-text text-muted">파일 타입을 입력해주세요. 확장자명</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label>Pixar USD Kind Type</label>
+                            <select id="modal-addpublish-kindofusd" class="form-control">
+                                <option value="">Pixar USD 아님</option>
+                                <option value="component">Component</option>
+                                <option value="group">Group</option>
+                                <option value="assembly">Assembly</option>
+                            </select>
+                            <small class="form-text text-muted">.usd 에셋 구조</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-addpublish-outputdatapath" class="col-form-label">Output Data Path</label>
+                        <input type="text" class="form-control" id="modal-addpublish-outputdatapath">
+                        <small class="form-text text-muted">Publish 되면 외부로 복사해야하는 데이터 경로(Plate, mov, 협업데이터 경로)</small>
+                        <div class="form-check">
+                            <input type="checkbox" id="modal-addpublish-isoutput" class="form-check-input">
+                            <label class="form-check-label" for="modal-addpublish-isoutput">외부로 아웃풋되는 Publish 입니다.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button id="modal-addpublish-addbutton" type="button" class="btn btn-outline-warning" onclick="addPublish()" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: EditPublish-->
+    <div class="modal fade" id="modal-editpublish" tabindex="-1" role="dialog" aria-labelledby="modal-editpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addpublish-title">Edit Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-editpublish-project">
+                    <input type="hidden" class="form-control" id="modal-editpublish-id">
+                    <input type="hidden" class="form-control" id="modal-editpublish-task">
+                    <input type="hidden" class="form-control" id="modal-editpublish-createtime">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label for="modal-editpublish-key" class="col-form-label">Primary Key</label>
+                            <select id="modal-editpublish-key" class="form-control">
+                                <option value="">PublishKey 등록필요</option>
+                            </select>
+                            <small class="form-text text-warning">Primary Key 이름을 입력해주세요.(필수)</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="modal-editpublish-secondarykey" class="col-form-label">Secondary Key</label>
+                            <input type="text" class="form-control" id="modal-editpublish-secondarykey">
+                            <small class="form-text text-muted">Secondary Key 이름을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editpublish-path" class="col-form-label">Path</label>
+                        <input type="text" class="form-control" id="modal-editpublish-path">
+                        <small class="form-text text-warning">만약 Publish 경로를 수정한다면, 새로운 Publish로 등록됩니다.</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label">Status</label>
+                            <select id="modal-editpublish-status" class="form-control">
+                                <option value="usethis">Use This(사용 버전)</option>
+                                <option value="working">Working(작업중인 버전)</option>
+                                <option value="notuse">Not Use(미사용 버전)</option>
+                            </select>
+                            <small class="form-text text-muted">Publish 상태를 선택해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label for="modal-editpublish-tasktouse" class="col-form-label">Task To Use</label>
+                            <select id="modal-editpublish-tasktouse" class="form-control">
+                                <option value="">Unknown</option>
+                                {{range .TasksettingNames}}
+							        <option value="{{.}}">{{.}}</option>
+						        {{end}}
+                            </select>
+                            <small class="form-text text-muted">Publish된 데이터를 사용하게 될 Task</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editpublish-subject" class="col-form-label">Subject</label>
+                        <input type="text" class="form-control" id="modal-editpublish-subject">
+                        <small class="form-text text-muted">Publish 참고사항: 예)중간Pub, 최종Pub</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Main Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-editpublish-mainversion">
+                            <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">Sub Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-editpublish-subversion">
+                            <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="col-form-label col-form-label-sm">File Type</label>
+                            <input type="text" placeholder=".ext" class="form-control" id="modal-editpublish-filetype">
+                            <small class="form-text text-muted">파일 타입을 입력해주세요. 확장자명</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label>Pixar USD Kind Type</label>
+                            <select id="modal-editpublish-kindofusd" class="form-control">
+                                <option value="">Pixar USD 아님</option>
+                                <option value="component">Component</option>
+                                <option value="group">Group</option>
+                                <option value="assembly">Assembly</option>
+                            </select>
+                            <small class="form-text text-muted">.usd 에셋 구조</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editpublish-outputdatapath" class="col-form-label">Output Data Path</label>
+                        <input type="text" class="form-control" id="modal-editpublish-outputdatapath">
+                        <small class="form-text text-muted">Publish 되면 외부로 복사해야하는 데이터 경로(Plate, mov, 협업데이터 경로)</small>
+                        <div class="form-check">
+                            <input type="checkbox" id="modal-editpublish-isoutput" class="form-check-input">
+                            <label class="form-check-label" for="modal-editpublish-isoutput">외부로 아웃풋하는 Publish 입니다.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button id="modal-editpublish-editbutton" type="button" class="btn btn-outline-warning" onclick="editPublish()" data-dismiss="modal">EDIT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: SetPublish-->
+    <div class="modal fade" id="modal-setpublish" tabindex="-1" role="dialog" aria-labelledby="modal-setpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmpublish-title">Set Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-setpublish-project">
+                    <input type="hidden" class="form-control" id="modal-setpublish-id">
+                    <input type="hidden" class="form-control" id="modal-setpublish-task">
+                    <input type="hidden" class="form-control" id="modal-setpublish-key">
+                    <input type="hidden" class="form-control" id="modal-setpublish-path">
+                    <input type="hidden" class="form-control" id="modal-setpublish-createtime">
+                    <label id="modal-setpublish-message" class="col-form-label">
+                        해당 Publish 데이터를 <span id="modal-setpublish-status"></span>로 설정하시겠습니까?
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="setPublish()" data-dismiss="modal">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Publish Key-->
+    <div class="modal fade" id="modal-rmpublishkey" tabindex="-1" role="dialog" aria-labelledby="modal-rmpublishkey" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmpublishkey-title">Rm Publish Key</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmpublishkey-project">
+                    <input type="hidden" class="form-control" id="modal-rmpublishkey-id">
+                    <input type="hidden" class="form-control" id="modal-rmpublishkey-task">
+                    <input type="hidden" class="form-control" id="modal-rmpublishkey-key">
+                    <label id="modal-rmpublishkey-text" class="col-form-label">해당 Publish Key를 삭제하겠습니까?</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmPublishKey()" data-dismiss="modal">DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Publish-->
+    <div class="modal fade" id="modal-rmpublish" tabindex="-1" role="dialog" aria-labelledby="modal-rmpublish" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmpublish-title">Rm Publish</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-project">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-id">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-task">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-key">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-createtime">
+                    <input type="hidden" class="form-control" id="modal-rmpublish-path">
+                    <label id="modal-rmpublish-text" class="col-form-label">해당 Publish 아이템을 삭제하겠습니까?</label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmPublish()" data-dismiss="modal">DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

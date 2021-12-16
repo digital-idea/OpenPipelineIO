@@ -1,0 +1,126 @@
+{{define "modal-iteminfo"}}
+    <!-- Modal: ItemInfo -->
+    <div class="modal fade" id="modal-iteminfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-iteminfo-title">Item Setting</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" class="form-control" id="modal-iteminfo-project">
+                <input type="hidden" class="form-control" id="modal-iteminfo-id">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Season</label>
+                            <input type="text" id="modal-iteminfo-season" value="" class="form-control form-control-sm" onchange="setSeason(this.value)">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Episode</label>
+                            <input type="text" id="modal-iteminfo-episode" value="" class="form-control form-control-sm" onchange="setEpisode(this.value)">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="modal-iteminfo-name" value="" class="form-control form-control-sm" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <input type="text" id="modal-iteminfo-type" value="" class="form-control form-control-sm" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Seq</label>
+                            <input type="text" id="modal-iteminfo-seq" value="" class="form-control form-control-sm" onchange="setSeq(this.value)">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Cut</label>
+                            <input type="text" id="modal-iteminfo-cut" value="" class="form-control form-control-sm" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="netflix-red">Netflix ID</label>
+                            <input type="text" id="modal-iteminfo-netflixid" value="" class="form-control form-control-sm" onchange="setNetflixID(this.value)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Plate Path</label>
+                    <input type="text" size="55" maxlength="" id="modal-iteminfo-platepath" value="" class="form-control form-control-sm" onchange="setPlatePath(this.value)">
+                    <small class="form-text text-muted">Plate Path를 업데이트 합니다.</small>
+                </div>
+                <div class="form-group">
+                    <label>Thumbnail MOV</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-thummov" value="" class="form-control form-control-sm" onchange="setThummov(this.value)">
+                    <small class="form-text text-muted">Thumbnail MOV를 업데이트 합니다.</small>
+                </div>
+                    
+                <div class="form-group">
+                    <label>앞쪽 연결 MOV</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-beforemov" value="" class="form-control form-control-sm" onchange="setBeforemov(this.value)">
+                    <small class="form-text text-muted">Thumbnail MOV 앞쪽에 플레이될 mov 설정.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>뒤쪽 연결 MOV</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-aftermov" value="" class="form-control form-control-sm" onchange="setAftermov(this.value)">
+                    <small class="form-text text-muted">Thumbnail MOV 뒷쪽에 플레이될 mov 설정.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>편집본 MOV</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-editmov" value="" class="form-control form-control-sm" onchange="setEditmov(this.value)">
+                    <small class="form-text text-muted">편집본 mov 설정</small>
+                </div>
+
+                <div class="form-group">
+                    <label>리타임 플레이트 위치</label>
+                    <input type="text" size="55" maxlength="256" id="modal-iteminfo-retimeplate" value="" class="form-control form-control-sm" onchange="setRetimeplate(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <small class="form-text text-muted">리타임된 플레이트 경로를 설정합니다.</small>
+                </div>
+                <div class="form-group">
+                    <label>OCIOcc</label>
+                    <input type="text" size="55" id="modal-iteminfo-ociocc" value="" class="form-control form-control-sm" onchange="setOCIOcc(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                    <small class="form-text text-muted">뉴트럴 그레이드에 사용하는 OCIO .cc 파일을 설정합니다.</small>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>현장툴 Rollmedia</label>
+                            <input type="text" maxlength="25" id="modal-iteminfo-rollmedia" value="" class="form-control form-control-sm" onchange="setRollmedia(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                            <small class="form-text text-muted">Setellite2 에서 사용된 Rollmedia 값</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Scanname</label>
+                            <input type="text" maxlength="25" id="modal-iteminfo-scanname" value="" class="form-control form-control-sm" onchange="setScanname(document.getElementById('modal-iteminfo-project').value, document.getElementById('modal-iteminfo-id').value, this.value)">
+                            <small class="form-text text-muted">Scanname 이름</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+{{end}}
