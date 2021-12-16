@@ -183,6 +183,10 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		id := r.FormValue("id")
+		if id == "" {
+			http.Error(w, "id 정보가 없습니다", http.StatusBadRequest)
+			return
+		}
 		p, err := getPartner(client, id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
