@@ -44,12 +44,15 @@ func handleAddProject(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Devmode = *flagDevmode
 	u, err := getUser(session, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.User = u
 
 	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "addProject", rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -109,7 +112,7 @@ func handleProjectinfo(w http.ResponseWriter, r *http.Request) {
 		User
 		Devmode bool
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

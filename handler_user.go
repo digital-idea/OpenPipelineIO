@@ -41,7 +41,7 @@ func handleUser(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -100,7 +100,7 @@ func handleEditUser(w http.ResponseWriter, r *http.Request) {
 		Teams       []Team
 		Roles       []Role
 		Positions   []Position
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -184,6 +184,10 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	u, err := getUser(session, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	u.EmployeeNumber = strings.TrimSpace(r.FormValue("EmployeeNumber"))
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
@@ -704,6 +708,10 @@ func handleSigninSubmit(w http.ResponseWriter, r *http.Request) {
 	u.LastPort = port
 	u.PasswordAttempt = 0 // 로그인에 성공하면 기존 시도한 패스워드 횟수를 초기화 한다.
 	err = setUser(session, u)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// session을 저장후 로그인 성공페이지로 이동한다.
 	err = SetSessionID(w, u.ID, u.AccessLevel, "")
 	if err != nil {
@@ -782,7 +790,7 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 		User
 		Devmode bool
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -903,7 +911,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		Usernum    int      // 검색된 인원수
 		Devmode    bool     // 개발모드
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

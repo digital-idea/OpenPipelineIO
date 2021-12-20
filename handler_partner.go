@@ -53,7 +53,7 @@ func handlePartners(w http.ResponseWriter, r *http.Request) {
 		Partnernum int       // 검색된 파트너사수
 		Devmode    bool      // 개발모드
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.User, err = getUserV2(client, ssid.ID)
@@ -98,8 +98,8 @@ func handleAddPartner(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 
 	type recipe struct {
-		User // 로그인한 사용자 정보
-		Setting
+		User    // 로그인한 사용자 정보
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.User, err = getUser(session, ssid.ID)

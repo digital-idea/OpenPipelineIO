@@ -289,7 +289,7 @@ func handleEditItem(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		User
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

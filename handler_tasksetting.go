@@ -120,7 +120,7 @@ func handleEditTasksetting(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Tasksetting
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

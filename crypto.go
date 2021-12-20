@@ -46,10 +46,7 @@ func Passcheck(pw string) bool {
 			condition++
 		}
 	}
-	if condition < 4 {
-		return false
-	}
-	return true
+	return condition >= 4
 }
 
 // Encrypt 함수는 문자를 받아서 해쉬문자로 변환한다.

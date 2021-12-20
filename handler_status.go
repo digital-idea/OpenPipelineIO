@@ -237,7 +237,7 @@ func handleEditStatus(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Status
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

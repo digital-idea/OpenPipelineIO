@@ -83,7 +83,7 @@ func SetelliteSearch(session *mgo.Session, project, word string) ([]Setellite, e
 	querys = append(querys, bson.M{"stereoconvergence": &bson.RegEx{Pattern: word}})
 	querys = append(querys, bson.M{"stereoia": &bson.RegEx{Pattern: word}})
 
-	queries := []bson.M{bson.M{"$or": querys}}
+	queries := []bson.M{{"$or": querys}}
 	q := bson.M{"$and": queries}
 	err := c.Find(q).Sort("timestamp").All(&results)
 	if err != nil {
