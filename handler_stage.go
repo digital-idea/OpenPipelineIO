@@ -244,8 +244,8 @@ func handleEditStage(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Stage
-		Stages []Stage
-		Setting
+		Stages  []Stage
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

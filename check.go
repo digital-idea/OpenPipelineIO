@@ -50,9 +50,6 @@ var regexpTimecode = regexp.MustCompile(`^\d{2}[:;.]\d{2}[:;.]\d{2}[:;.]\d{2}$`)
 // Rnum 정규식: A0001~Z9999
 var regexpRnum = regexp.MustCompile(`^[A-Z]\d{4}$`)
 
-// RnumKor 정규식: 1권~24권
-var regexpRnumKor = regexp.MustCompile(`^\d{1,2}권$`)
-
 // Handle 정규식: 5, 10
 var regexpHandle = regexp.MustCompile(`^\d{1,2}$`)
 
@@ -79,10 +76,7 @@ var regexpTag = regexp.MustCompile(`^[가-힣a-zA-Z0-9_]+$`)
 
 // str2bool은 받아들인 문자열이 "true","True" ... 라면 참을, 그 외에는 거짓을 반환한다.
 func str2bool(str string) bool {
-	if strings.ToLower(str) == "true" {
-		return true
-	}
-	return false
+	return strings.ToLower(str) == "true"
 }
 
 func bool2str(b bool) string {

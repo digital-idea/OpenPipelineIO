@@ -37,7 +37,7 @@ func handleImportExcel(w http.ResponseWriter, r *http.Request) {
 		SessionID   string
 		Devmode     bool
 		Projectlist []string
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -108,7 +108,7 @@ func handleImportJSON(w http.ResponseWriter, r *http.Request) {
 		SessionID   string
 		Devmode     bool
 		Projectlist []string
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -320,7 +320,7 @@ func handleReportExcel(w http.ResponseWriter, r *http.Request) {
 		SearchOption
 		Errornum    int
 		Projectlist []string
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -522,7 +522,7 @@ func handleReportJSON(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		SearchOption
 		Projectlist []string
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -640,7 +640,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 		Devmode   bool
 		SearchOption
 		ErrorItems []ErrorItem
-		Setting
+		Setting    Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -1043,7 +1043,7 @@ func handleJSONSubmit(w http.ResponseWriter, r *http.Request) {
 		SessionID string
 		Devmode   bool
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -1059,6 +1059,10 @@ func handleJSONSubmit(w http.ResponseWriter, r *http.Request) {
 	overwrite := str2bool(r.FormValue("overwrite"))
 	var rows []Item
 	err = json.Unmarshal(jsonFile, &rows)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	if len(rows) == 0 {
 		http.Error(w, "json 값이 비어있습니다.", http.StatusBadRequest)
@@ -1108,7 +1112,7 @@ func handleExportExcel(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		SessionID   string
 		Devmode     bool
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -1169,7 +1173,7 @@ func handleExportJSON(w http.ResponseWriter, r *http.Request) {
 		Projectlist []string
 		SessionID   string
 		Devmode     bool
-		Setting
+		Setting     Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -2199,11 +2203,11 @@ func handleDownloadCsvFile(w http.ResponseWriter, r *http.Request) {
 	filename := "currentPage.csv"
 
 	f, err := os.Create(tempDir + "/" + filename)
-	defer f.Close()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	defer f.Close()
 	d := csv.NewWriter(f)
 	err = d.WriteAll(records) // calls Flush internally
 	if err != nil {

@@ -226,7 +226,7 @@ func handleEditPublishKey(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		PublishKey
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting

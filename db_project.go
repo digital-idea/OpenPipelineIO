@@ -22,7 +22,7 @@ func Projectlist(session *mgo.Session) ([]string, error) {
 	for _, project := range Projectlist {
 		switch project {
 		case "system.indexes":
-			break //mongodb의 기본 컬렉션이다. 제외한다.
+			continue //mongodb의 기본 컬렉션이다. 제외한다.
 		default:
 			results = append(results, project)
 		}

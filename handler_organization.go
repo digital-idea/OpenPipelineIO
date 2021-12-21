@@ -184,7 +184,7 @@ func handleEditDepartment(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		Department
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -236,7 +236,7 @@ func handleEditTeam(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		Team
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -288,7 +288,7 @@ func handleEditRole(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		Role
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -340,7 +340,7 @@ func handleEditPosition(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		Position
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -574,7 +574,7 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 		User
 		MailDNS string
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -629,7 +629,7 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 		User
 		MailDNS string
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -683,7 +683,7 @@ func handleTeams(w http.ResponseWriter, r *http.Request) {
 		User
 		MailDNS string
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -736,7 +736,7 @@ func handleRoles(w http.ResponseWriter, r *http.Request) {
 		User
 		MailDNS string
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -789,7 +789,7 @@ func handlePositions(w http.ResponseWriter, r *http.Request) {
 		User
 		MailDNS string
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -843,7 +843,7 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		Division
 		SearchOption
-		Setting
+		Setting Setting
 	}
 	rcp := recipe{
 		Devmode: *flagDevmode,
@@ -866,11 +866,9 @@ func handleEditDivision(w http.ResponseWriter, r *http.Request) {
 	}
 	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	return
 }
 
 // handleEditDivisionSubmit 함수는 Division의 수정정보를 처리하는 페이지이다.

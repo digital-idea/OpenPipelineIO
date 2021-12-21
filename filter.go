@@ -21,16 +21,3 @@ func setSearchFilter(org, key, value string) string {
 	}
 	return strings.Join(newWords, " ")
 }
-
-// getFilterValue 함수는 문자에서 key가 존재하면 해당키의 value를 반환한다.
-func getFilterValue(org, key string) string {
-	if !strings.Contains(org, key+":") {
-		return ""
-	}
-	for _, word := range strings.Split(org, " ") {
-		if strings.HasPrefix(word, key+":") {
-			return strings.TrimPrefix(word, key+":")
-		}
-	}
-	return ""
-}

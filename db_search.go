@@ -114,7 +114,7 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 		} else if strings.HasPrefix(word, "shottype:") {
 			query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: strings.TrimPrefix(word, "shottype:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "type:shot") {
-			query = append(query, bson.M{"$or": []bson.M{bson.M{"type": "org"}, bson.M{"type": "left"}}})
+			query = append(query, bson.M{"$or": []bson.M{{"type": "org"}, {"type": "left"}}})
 		} else if strings.HasPrefix(word, "type:asset") {
 			query = append(query, bson.M{"type": "asset"})
 		} else if strings.HasPrefix(word, "episode:") {
@@ -368,7 +368,7 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 		}
 	}
 	queries := []bson.M{
-		bson.M{expression: wordQueries},
+		{expression: wordQueries},
 	}
 	// 상태 쿼리가 존재하면 상태에 대해서 or 처리한다.
 	if len(statusQueries) != 0 {
