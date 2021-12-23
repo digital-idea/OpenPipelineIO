@@ -6,7 +6,7 @@
     <div id="floatingmenu">
         {{template "navbar-bootstrap5" .}}
     </div>
-    {{template "modal" .}}
+    {{template "modal-bootstrap5" .}}
     <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
     <div class="row mt-3 ms-2 me-2">
         <div class="col-3 p-0 border-darkmode text-darkmode" style="height: 80vh;">
@@ -63,9 +63,9 @@
                         </div>
                         <div class="col-1 p-0">
                             <!-- 리뷰 수정버튼 -->
-                            <img src="/assets/img/edit.svg" class="finger" data-toggle="modal" data-target="#modal-editreview" onclick="setEditReviewModal('{{.ID.Hex}}')">
+                            <img src="/assets/img/edit.svg" class="finger" data-bs-toggle="modal" data-bs-target="#modal-editreview" onclick="setEditReviewModal('{{.ID.Hex}}')">
                             <!-- 리뷰 삭제버튼 -->
-                            <img src="/assets/img/delete.svg" class="finger" data-toggle="modal" data-target="#modal-rmreview" onclick="setRmReviewModal('{{.ID.Hex}}')">
+                            <img src="/assets/img/delete.svg" class="finger" data-bs-toggle="modal" data-bs-target="#modal-rmreview" onclick="setRmReviewModal('{{.ID.Hex}}')">
                         </div>                        
                     </div>
                 {{end}}
@@ -92,14 +92,14 @@
                 {{range ReverseCommentSlice .CurrentReview.Comments}}
                     <div id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}" class="p-1">
                     <span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{if .AuthorName}}{{.AuthorName}}{{else}}{{.Author}}{{end}}</a></span>
-                    <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">≡</span>
-                    <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
+                    <span class="edit" data-bs-toggle="modal" data-bs-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">≡</span>
+                    <span class="remove" data-bs-toggle="modal" data-bs-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
                     <br>
                     {{if .Stage}}
                         <span class="badge badge-stage-{{.Stage}}">{{.Stage}}</span>
                     {{end}}
                     {{if ne .Frame 0}}
-                        <span class="badge badge-secondary finger" id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{.Frame}}f / {{AddProductionStartFrame .Frame}}f</span>
+                        <span class="badge badge-secondary finger" id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-frame" data-bs-toggle="modal" data-bs-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{.Frame}}f / {{AddProductionStartFrame .Frame}}f</span>
                     {{end}}
                     <small id="reviewcomment-{{$.CurrentReview.ID.Hex}}-{{.Date}}-text" class="text-white">
                         {{range Split .Text "\n" -}}{{.}}<br>{{- end}}
@@ -170,7 +170,7 @@
             <span class="player-loop" id="player-loopandloopoff" title="l" {{if eq .CurrentReview.Type "image" }}hidden{{end}}></span>
             <!--<span class="player-expand" id="player-expand"></span>-->
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
-            <span class="monospace finger ms-5" id="currentframe" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
+            <span class="monospace finger ms-5" id="currentframe" data-bs-toggle="modal" data-bs-target="#modal-gotoframe" onclick="setModalGotoFrame()">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>
             <span class="monospace">/</span>
             <!--이미지라면 1장밖에 없다. 1프레임을 표기한다.-->
             <span class="monospace" id="totalframe">{{if eq .CurrentReview.Type "image"}}1{{end}}</span>

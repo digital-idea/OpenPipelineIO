@@ -1,18 +1,16 @@
 {{define "modal-bootstrap5"}}
-    <div class="">
-        <input type="hidden" id="token" value="{{$.User.Token}}">
-        <input type="hidden" id="userid" value="{{$.User.ID}}">
-        {{template "modal-review-bootstrap5" .}}
-        {{template "modal-export" .}}
-        {{template "modal-comment" .}}
-        {{template "modal-note" .}}
-        {{template "modal-task" .}}
-        {{template "modal-mail" .}}
-        {{template "modal-source" .}}
-        {{template "modal-reference" .}}
-        {{template "modal-tag" .}}
-        {{template "modal-publish" .}}
-        {{template "modal-iteminfo" .}}
-        {{template "modal-thumbnail" .}}
-    </div>
+    <input type="hidden" id="token" value="{{$.User.Token}}">
+    <input type="hidden" id="userid" value="{{$.User.ID}}">
+    {{template "modal-review-bootstrap5" .}}
+    {{template "modal-export" .}}
+    {{template "modal-comment" .}}
+    {{template "modal-note" .}}
+    {{template "modal-task" .}}
+    {{template "modal-mail" .}}
+    {{template "modal-source" .}}
+    {{template "modal-reference" .}}
+    {{template "modal-tag" .}}
+    {{template "modal-publish" .}}
+    {{template "modal-iteminfo" .}}
+    {{template "modal-thumbnail" .}}
 {{end}}

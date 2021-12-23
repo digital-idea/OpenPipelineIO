@@ -1,13 +1,11 @@
 {{define "modal-review-bootstrap5"}}
     <!-- Modal: Rm ReviewComment-->
-    <div class="modal fade" id="modal-rmreviewcomment" tabindex="-1" role="dialog" aria-labelledby="modal-rmreviewcomment" aria-hidden="true">
+    <div class="modal" id="modal-rmreviewcomment" tabindex="-1" role="dialog" aria-labelledby="modal-rmreviewcomment" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modal-rmreviewcomment-title">Rm Review Comment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" class="form-control" id="modal-rmreviewcomment-id">
@@ -20,22 +18,20 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-danger" onclick="rmReviewComment()" data-dismiss="modal">DELETE</button>
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmReviewComment()" data-bs-dismiss="modal">DELETE</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal: Edit ReviewComment-->
-    <div class="modal fade" id="modal-editreviewcomment" tabindex="-1" role="dialog" aria-labelledby="modal-editreviewcomment" aria-hidden="true">
+    <div class="modal" id="modal-editreviewcomment" tabindex="-1" role="dialog" aria-labelledby="modal-editreviewcomment" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modal-editreviewcomment-title">Edit Review Comment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" class="form-control" id="modal-editreviewcomment-id">
@@ -56,22 +52,20 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="editReviewComment()" data-dismiss="modal">Edit</button>
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="editReviewComment()" data-bs-dismiss="modal">Edit</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal: Rm Review-->
-    <div class="modal fade" id="modal-rmreview" tabindex="-1" role="dialog" aria-labelledby="modal-rmreview" aria-hidden="true">
+    <div class="modal" id="modal-rmreview" tabindex="-1" role="dialog" aria-labelledby="modal-rmreview" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modal-rmreview-title">Rm Review</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <span class="text-darkmode" id="modal-rmreview-id"></span><br>
@@ -80,26 +74,20 @@
                     <label for="modal-rmreview-text" class="col-form-label">해당 리뷰를 삭제하겠습니까?</label>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-danger" onclick="rmReview()" data-dismiss="modal">DELETE</button>
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmReview()" data-bs-dismiss="modal">DELETE</button>
                 </div>
             </div>
         </div>
     </div>
 
-    
-
-    
-
     <!-- Modal: Review Goto Frame-->
-    <div class="modal fade" id="modal-gotoframe" tabindex="-1" role="dialog" aria-labelledby="modal-gotoframe" aria-hidden="true">
+    <div class="modal" id="modal-gotoframe" tabindex="-1" role="dialog" aria-labelledby="modal-gotoframe" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modal-gotoframe-title">Go to frame</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -111,21 +99,19 @@
                     </div>
                 </div>                
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Go</button>
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Go</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal: Add Review -->
-    <div class="modal fade" id="modal-addreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="modal-addreview" tabindex="-1" role="dialog" aria-labelledby="add review" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content bg-darkmode">
             <div class="modal-header">
             <h5 class="modal-title" id="modal-addreview-title">Add Review</h5>
-            <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" class="text-darkmode">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -266,22 +252,20 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-warning" onclick="addReview()" data-dismiss="modal">ADD</button>
+                <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="addReview()" data-bs-dismiss="modal">ADD</button>
             </div>
         </div>
         </div>
     </div>
 
     <!-- Modal: Edit Review -->
-    <div class="modal fade" id="modal-editreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="modal-editreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                 <h5 class="modal-title" id="modal-editreview-title">Edit Review</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-darkmode">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" class="form-control" id="modal-editreview-id">
@@ -294,7 +278,7 @@
                                         <option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
                                     {{end}}
                                 </select>
-                                <small>프로젝트를 선택해주세요.</small>
+                                <small>프로젝트 선택</small>
                             </div>
                         </div>
                         <div class="col-8 pt-0 pb-0">
@@ -337,13 +321,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group pt-0 m-0 col-8">
+                        <div class="form-group">
                             <label class="form-text">Createtime</label>
-                            <input type="text" class="form-control" placeholder="0000-00-00T00:00:00+09:00" id="modal-editreview-createtime" onchange="setReviewCreatetime()">
-                        </div>
-                        <div class="form-group pt-0 m-0 col-4">
-                            <label class="form-text">&nbsp;</label>
-                            <button class="btn btn-darkmode btn-block" onclick="setReviewCreatetimeNow()">Set Now!</button>
+                            <div class="input-group pt-0 m-0 col-12">
+                                <input type="text" class="form-control" placeholder="0000-00-00T00:00:00+09:00" id="modal-editreview-createtime" onchange="setReviewCreatetime()">
+                                <button class="btn btn-darkmode btn-block" onclick="setReviewCreatetimeNow()">Set Now!</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group pt-0 m-0">
@@ -378,8 +361,8 @@
                     </div>
                     <div class="form-group">
                         <label for="modal-editreview-description" class="col-form-label">Description</label>
-                        <textarea class="form-control" id="modal-editreview-description" rows="2"></textarea>
-                        <div class="mt-2">
+                        <div class="input-group">
+                            <textarea class="form-control" id="modal-editreview-description" rows="2"></textarea>
                             <button id="modal-editreview-description-button" class="btn btn-sm btn-outline-warning btn-block" onclick="setReviewDescription()">Edit</button>
                         </div>
                     </div>
@@ -395,7 +378,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
