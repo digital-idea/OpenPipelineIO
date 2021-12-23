@@ -1,7 +1,7 @@
-{{define "modal"}}
+{{define "modal-bootstrap5"}}
     <input type="hidden" id="token" value="{{$.User.Token}}">
     <input type="hidden" id="userid" value="{{$.User.ID}}">
-    {{template "modal-review" .}}
+    {{template "modal-review-bootstrap5" .}}
     {{template "modal-export" .}}
     {{template "modal-comment" .}}
     {{template "modal-note" .}}
