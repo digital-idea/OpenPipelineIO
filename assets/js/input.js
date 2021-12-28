@@ -4485,28 +4485,28 @@ function addPublish() {
     });
 }
 
-function addReview() {
+function addReviewStageMode() {
     let token = document.getElementById("token").value
-    let reviewFps = document.getElementById("modal-addreview-fps")
+    let reviewFps = document.getElementById("modal-addreview-stagemode-fps")
     $.ajax({
         url: "/api/addreview",
         type: "post",
         data: {
-            project: document.getElementById("modal-addreview-project").value,
-            name: document.getElementById("modal-addreview-name").value,
-            stage: document.getElementById("modal-addreview-stage").value,
-            task: document.getElementById("modal-addreview-task").value,
-            type: document.getElementById("modal-addreview-type").value,
-            ext: document.getElementById("modal-addreview-ext").value,
-            author: document.getElementById("modal-addreview-author").value,
-            path: document.getElementById("modal-addreview-path").value,
-            description: document.getElementById("modal-addreview-description").value,
-            camerainfo: document.getElementById("modal-addreview-camerainfo").value,
+            project: document.getElementById("modal-addreview-stagemode-project").value,
+            name: document.getElementById("modal-addreview-stagemode-name").value,
+            stage: document.getElementById("modal-addreview-stagemode-stage").value,
+            task: document.getElementById("modal-addreview-stagemode-task").value,
+            type: document.getElementById("modal-addreview-stagemode-type").value,
+            ext: document.getElementById("modal-addreview-stagemode-ext").value,
+            author: document.getElementById("modal-addreview-stagemode-author").value,
+            path: document.getElementById("modal-addreview-stagemode-path").value,
+            description: document.getElementById("modal-addreview-stagemode-description").value,
+            camerainfo: document.getElementById("modal-addreview-stagemode-camerainfo").value,
             fps: reviewFps.options[reviewFps.selectedIndex].value,
-            mainversion: document.getElementById("modal-addreview-mainversion").value,
-            subversion: document.getElementById("modal-addreview-subversion").value,
-            outputdatapath: document.getElementById("modal-addreview-outputdatapath").value,
-            removeafterprocess: document.getElementById("modal-addreview-removeafterprocess").checked,
+            mainversion: document.getElementById("modal-addreview-stagemode-mainversion").value,
+            subversion: document.getElementById("modal-addreview-stagemode-subversion").value,
+            outputdatapath: document.getElementById("modal-addreview-stagemode-outputdatapath").value,
+            removeafterprocess: document.getElementById("modal-addreview-stagemode-removeafterprocess").checked,
         },
         headers: {
             "Authorization": "Basic "+ token
