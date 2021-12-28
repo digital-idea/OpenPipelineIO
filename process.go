@@ -142,6 +142,13 @@ func processingReviewClipItem(review Review) {
 	}
 	// 연산 상태를 done 으로 바꾼다.
 	err = setReviewProcessStatus(session, reviewID, "done")
+
+	// 리뷰 데이터를 추가하고 나서 "앗, 리뷰 잘못올렸네~ 취소해야지~하면서.." 서버에서 연산중인 리뷰데이터를 바로 삭제하는 아티스트가 있다.
+	// 이러한 상황에서는 삭제가 일어나면 상태를 바꿀 review 아이템이 DB에 없게 된다.
+	// 만약 상태를 바꾸어야 할 때 해당 리뷰아이템이 없다면 바로 return 하도록 하였다.
+	if err == mgo.ErrNotFound {
+		return
+	}
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
