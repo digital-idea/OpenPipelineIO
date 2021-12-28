@@ -392,7 +392,6 @@ func handleReviewStatus(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -413,13 +412,13 @@ func handleReviewStatus(w http.ResponseWriter, r *http.Request) {
 		ReviewGroup      []Review // 하단 Review 항목
 		TasksettingNames []string
 		Project          string
-		Stage            string
+		ItemStatus       string
 		Setting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
 	rcp.Project = q.Get("project")
-	rcp.Stage = q.Get("stage")
+	rcp.ItemStatus = q.Get("itemstage")
 	rcp.Searchword = q.Get("searchword")
 	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
@@ -444,18 +443,13 @@ func handleReviewStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Stages, err = AllStages(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.Status, err = AllStatus(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	rcp.Searchword = setSearchFilter(rcp.Searchword, "project", rcp.Project)
-	rcp.Searchword = setSearchFilter(rcp.Searchword, "stage", rcp.Stage)
+	rcp.Searchword = setSearchFilter(rcp.Searchword, "itemstatus", rcp.ItemStatus)
 
 	rcp.Reviews, err = searchReview(session, rcp.Searchword)
 	if err != nil {
@@ -475,6 +469,7 @@ func handleReviewStatus(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	w.Header().Set("Content-Type", "text/html")
 	err = TEMPLATES.ExecuteTemplate(w, "reviewstatus", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
