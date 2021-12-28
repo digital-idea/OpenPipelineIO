@@ -4521,6 +4521,42 @@ function addReviewStageMode() {
     });
 }
 
+function addReviewStatusMode() {
+    let token = document.getElementById("token").value
+    let reviewFps = document.getElementById("modal-addreview-statusmode-fps")
+    $.ajax({
+        url: "/api/addreviewstatusmode",
+        type: "post",
+        data: {
+            project: document.getElementById("modal-addreview-statusmode-project").value,
+            name: document.getElementById("modal-addreview-statusmode-name").value,
+            stage: document.getElementById("modal-addreview-statusmode-stage").value,
+            task: document.getElementById("modal-addreview-statusmode-task").value,
+            type: document.getElementById("modal-addreview-statusmode-type").value,
+            ext: document.getElementById("modal-addreview-statusmode-ext").value,
+            author: document.getElementById("modal-addreview-statusmode-author").value,
+            path: document.getElementById("modal-addreview-statusmode-path").value,
+            description: document.getElementById("modal-addreview-statusmode-description").value,
+            camerainfo: document.getElementById("modal-addreview-statusmode-camerainfo").value,
+            fps: reviewFps.options[reviewFps.selectedIndex].value,
+            mainversion: document.getElementById("modal-addreview-statusmode-mainversion").value,
+            subversion: document.getElementById("modal-addreview-statusmode-subversion").value,
+            outputdatapath: document.getElementById("modal-addreview-statusmode-outputdatapath").value,
+            removeafterprocess: document.getElementById("modal-addreview-statusmode-removeafterprocess").checked,
+        },
+        headers: {
+            "Authorization": "Basic "+ token
+        },
+        dataType: "json",
+        success: function() {
+            alert("리뷰가 정상적으로 등록되었습니다.");
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
 function clickCommentButton() {
     setReviewStatus('comment')
     addReviewComment()
