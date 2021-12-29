@@ -4489,7 +4489,7 @@ function addReviewStageMode() {
     let token = document.getElementById("token").value
     let reviewFps = document.getElementById("modal-addreview-stagemode-fps")
     $.ajax({
-        url: "/api/addreview",
+        url: "/api/addreviewstagemode",
         type: "post",
         data: {
             project: document.getElementById("modal-addreview-stagemode-project").value,
@@ -4530,7 +4530,6 @@ function addReviewStatusMode() {
         data: {
             project: document.getElementById("modal-addreview-statusmode-project").value,
             name: document.getElementById("modal-addreview-statusmode-name").value,
-            stage: document.getElementById("modal-addreview-statusmode-stage").value,
             task: document.getElementById("modal-addreview-statusmode-task").value,
             type: document.getElementById("modal-addreview-statusmode-type").value,
             ext: document.getElementById("modal-addreview-statusmode-ext").value,

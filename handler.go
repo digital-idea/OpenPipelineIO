@@ -538,7 +538,9 @@ func webserver(port string) {
 	http.HandleFunc("/api/getpublish", handleAPIGetPublish)
 
 	// restAPI Review
-	http.HandleFunc("/api/addreview", handleAPIAddReview)
+	http.HandleFunc("/api/addreview", handleAPIAddReviewStageMode) // legacy
+	http.HandleFunc("/api/addreviewstagemode", handleAPIAddReviewStageMode)
+	http.HandleFunc("/api/addreviewstatusmode", handleAPIAddReviewStatusMode)
 	http.HandleFunc("/api/review", handleAPIReview)
 	http.HandleFunc("/api/searchreview", handleAPISearchReview)
 	http.HandleFunc("/api/setreviewstatus", handleAPISetReviewStatus)

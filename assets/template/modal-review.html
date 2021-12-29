@@ -316,21 +316,6 @@
                             <small>Task를 선택해주세요.</small>
                         </div>
                     </div>
-                    <div class="col pt-0 pb-0">
-                        <div class="form-group">
-                            <label class="form-text">Stage</label>
-                            <select class="form-control" id="modal-addreview-statusmode-stage">
-                                {{if not .Stages}}
-                                    <option value="">Stage 등록필요</option>
-                                {{else}}
-                                    {{range .Stages}}
-                                        <option value="{{.ID}}" {{if .InitStage}}selected{{end}}>{{.ID}}</option>
-                                    {{end}}
-                                {{end}}
-                            </select>
-                            <small>리뷰 Stage 이름</small>
-                        </div>
-                    </div>
                     <div class="col pt-0 pb-0" hidden>
                         <div class="form-group">
                             <label class="form-text">Type</label>

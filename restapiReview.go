@@ -21,8 +21,203 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// handleAPIAddReview 함수는 review를 추가하는 핸들러이다.
-func handleAPIAddReview(w http.ResponseWriter, r *http.Request) {
+// handleAPIAddReviewStageMode 함수는 review를 추가하는 핸들러이다.
+func handleAPIAddReviewStageMode(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID string `json:"userid"`
+		Review
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Project = project
+
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Name = strings.TrimSpace(name) // 앞뒤로 사용자가 빈문자열을 넣을 수 있다. 제거한다.
+
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Task = task
+	typ := r.FormValue("type")
+	if typ == "" {
+		rcp.Review.Type = "clip"
+
+	}
+	rcp.Review.Type = typ
+	ext := r.FormValue("ext")
+	if ext == "" {
+		rcp.Review.Ext = ".mp4"
+	}
+	rcp.Review.Ext = ext
+	stage := r.FormValue("stage")
+	// stage가 빈문자열이라면 기본 설정을 적용한다.
+	if stage == "" {
+		rcp.Review.Stage, err = GetInitStageID(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		// 아니라면 해당 Stage가 존재하는지 체크하고 존재하면 적용한다.
+		hasStage := false
+		stages, err := AllStages(session)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if len(stages) == 0 {
+			http.Error(w, "Stage 설정이 필요합니다", http.StatusBadRequest)
+			return
+		}
+		for _, s := range stages {
+			if s.ID == stage {
+				hasStage = true
+				break
+			}
+		}
+		if !hasStage {
+			http.Error(w, stage+" Stage가 존재하지 않습니다", http.StatusBadRequest)
+			return
+		}
+		rcp.Review.Stage = stage
+	}
+	author := r.FormValue("author")
+	if author == "" {
+		rcp.Review.Author = rcp.UserID
+	}
+	rcp.Review.Author = author
+	rcp.Review.AuthorNameKor = r.FormValue("authornamekor")
+	if rcp.Review.AuthorNameKor == "" {
+		// authornamekor 값이 비어있다면, 사용자의 아이디를 이용해서 DB에 등록된 이름을 가지고 온다.
+		user, err := getUser(session, author)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Review.AuthorNameKor = user.LastNameKor + user.FirstNameKor
+	}
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "path를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		http.Error(w, path+"파일이 서버에 존재하지 않습니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Path = path
+	fpsString := r.FormValue("fps")
+	fps, err := strconv.ParseFloat(fpsString, 64)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("%s 는 fps로 사용할 수 없는 값 입니다", fpsString), http.StatusBadRequest)
+		return
+	}
+	rcp.Review.Fps = fps
+	rcp.Review.Status = "wait"
+	rcp.Review.Description = r.FormValue("description")
+	rcp.Review.CameraInfo = r.FormValue("camerainfo")
+	progress := r.FormValue("progress")
+	if progress != "" {
+		n, err := strconv.Atoi(progress)
+		if err != nil {
+			http.Error(w, "progress의 값이 숫자가 아닙니다.", http.StatusBadRequest)
+			return
+		}
+		if !(0 < n && n < 101) {
+			http.Error(w, "progress의 값은 1~100 사이의 수가 되어야 합니다.", http.StatusBadRequest)
+			return
+		}
+		rcp.Review.Progress = n
+	}
+	rcp.Review.Createtime = time.Now().Format(time.RFC3339)
+	rcp.Review.Updatetime = rcp.Review.Createtime
+	mainVer, err := strconv.Atoi(r.FormValue("mainversion"))
+	if err != nil {
+		http.Error(w, "mainversion은 숫자로 입력되어 합니다", http.StatusBadRequest)
+		return
+	}
+	rcp.MainVersion = mainVer
+	subVer, err := strconv.Atoi(r.FormValue("subversion"))
+	if err != nil {
+		rcp.SubVersion = 0 // 서브버전은 없을 수 있다. 설정되지 않는다면 0값을 기본으로 한다.
+	} else {
+		rcp.SubVersion = subVer
+	}
+	rcp.Review.ID = bson.NewObjectId()
+	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
+
+	// 최초 리뷰 등록시 기본 Stage를 설정한다.
+	rcp.Review.Stage, err = GetInitStageID(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
+	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
+	err = addReview(session, rcp.Review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("AddReview: %s, %s, %s", rcp.Review.Name, rcp.Review.Task, rcp.Review.Path), rcp.Review.Project, rcp.Review.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("AddReview: %s, %s\nProject: %s, Name: %s, Author: %s", rcp.Review.Task, rcp.Review.Path, rcp.Review.Project, rcp.Review.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data, err := json.Marshal(rcp.Review)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIAddReviewStatusMode 함수는 review status mode에 review를 추가하는 핸들러이다.
+func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
