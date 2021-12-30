@@ -276,38 +276,25 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 		rcp.Review.Ext = ".mp4"
 	}
 	rcp.Review.Ext = ext
-	stage := r.FormValue("stage")
-	// stage가 빈문자열이라면 기본 설정을 적용한다.
-	if stage == "" {
-		rcp.Review.Stage, err = GetInitStageID(session)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		// 아니라면 해당 Stage가 존재하는지 체크하고 존재하면 적용한다.
-		hasStage := false
-		stages, err := AllStages(session)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if len(stages) == 0 {
-			http.Error(w, "Stage 설정이 필요합니다", http.StatusBadRequest)
-			return
-		}
-		for _, s := range stages {
-			if s.ID == stage {
-				hasStage = true
-				break
-			}
-		}
-		if !hasStage {
-			http.Error(w, stage+" Stage가 존재하지 않습니다", http.StatusBadRequest)
-			return
-		}
-		rcp.Review.Stage = stage
+	// 리뷰 등록시 현재 Task status를 review itemStatus로 설정한다.
+	_, taskinfo, err := GetTask(session, rcp.Review.Project, rcp.Review.Name, rcp.Review.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
+	// project, name, task를 이용해서 current status를 가지고 온다.
+	// Review Item에 설정한다.
+	projectInfo, err := getProject(session, rcp.Review.Project)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if projectInfo.FlexibleStatus {
+		rcp.Review.ItemStatus = taskinfo.StatusV2
+	} else {
+		rcp.Review.ItemStatus = taskinfo.Status // legacy
+	}
+
 	author := r.FormValue("author")
 	if author == "" {
 		rcp.Review.Author = rcp.UserID
