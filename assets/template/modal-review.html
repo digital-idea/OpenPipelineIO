@@ -117,12 +117,12 @@
         </div>
     </div>
 
-    <!-- Modal: Add Review -->
-    <div class="modal fade" id="modal-addreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal: Add Review Stage Mode -->
+    <div class="modal fade" id="modal-addreview-stagemode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
         <div class="modal-content bg-darkmode">
             <div class="modal-header">
-            <h5 class="modal-title" id="modal-addreview-title">Add Review</h5>
+            <h5 class="modal-title" id="modal-addreview-stagemode-title">Add Review</h5>
             <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true" class="text-darkmode">&times;</span>
             </button>
@@ -132,7 +132,7 @@
                     <div class="col-4 pt-0 pb-0">
                         <div class="form-group">
                             <label class="form-text">Project</label>
-                            <select id="modal-addreview-project" class="form-control">
+                            <select id="modal-addreview-stagemode-project" class="form-control">
                                 {{range .Projectlist}}
 							        <option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
 					        	{{end}}
@@ -143,7 +143,7 @@
                     <div class="col-8 pt-0 pb-0">
                         <div class="form-group">
                             <label class="form-text">Name</label>
-                            <input type="text" class="form-control" id="modal-addreview-name" value="">
+                            <input type="text" class="form-control" id="modal-addreview-stagemode-name" value="">
                             <small>Shot, Asset 이름</small>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                     <div class="col pt-0 pb-0">
                         <div class="form-group">
                             <label class="form-text">Task</label>
-                            <select id="modal-addreview-task" class="form-control">
+                            <select id="modal-addreview-stagemode-task" class="form-control">
                                 {{range .TasksettingNames}}
                                     <option value="{{.}}" {{if eq $.SearchOption.Task . }}selected{{end}}>{{.}}</option>
                                 {{end}}
@@ -163,7 +163,7 @@
                     <div class="col pt-0 pb-0">
                         <div class="form-group">
                             <label class="form-text">Stage</label>
-                            <select class="form-control" id="modal-addreview-stage">
+                            <select class="form-control" id="modal-addreview-stagemode-stage">
                                 {{if not .Stages}}
                                     <option value="">Stage 등록필요</option>
                                 {{else}}
@@ -178,7 +178,7 @@
                     <div class="col pt-0 pb-0" hidden>
                         <div class="form-group">
                             <label class="form-text">Type</label>
-                            <select class="form-control" id="modal-addreview-type">
+                            <select class="form-control" id="modal-addreview-stagemode-type">
                                 <option value="clip">Clip</option>
                                 <option value="image">Image</option>
                             </select>
@@ -188,7 +188,7 @@
                     <div class="col pt-0 pb-0" hidden>
                         <div class="form-group">
                             <label class="form-text">Ext</label>
-                            <select class="form-control" id="modal-addreview-ext">
+                            <select class="form-control" id="modal-addreview-stagemode-ext">
                                 <option value=".mp4">.mp4</option>
                                 <option value=".jpg">.jpg</option>
                                 <option value=".png">.png</option>
@@ -199,13 +199,13 @@
                     <div class="col pt-0 pb-0" hidden>
                         <div class="form-group">
                             <label class="form-text">Author</label>
-                            <input type="text" class="form-control" id="modal-addreview-author" value="{{.User.ID}}" disabled>
+                            <input type="text" class="form-control" id="modal-addreview-stagemode-author" value="{{.User.ID}}" disabled>
                             <small>사용자 ID</small>
                         </div>
                     </div>
                     <div class="col form-group">
                         <label class="form-text">FPS</label>
-                        <select id="modal-addreview-fps" class="form-control">
+                        <select id="modal-addreview-stagemode-fps" class="form-control">
                             <option value="24">24</option>
                             <option value="23.976">23.976</option>
                             <option value="23.98">23.98</option>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="form-group pt-0 m-0">
                     <label class="form-text">Path</label>
-                    <input type="text" class="form-control" placeholder="review 데이터 경로" value="" id="modal-addreview-path">
+                    <input type="text" class="form-control" placeholder="review 데이터 경로" value="" id="modal-addreview-stagemode-path">
                 </div>
                 <div class="form-group pt-1 m-0">
                     <form id="reviewFileDropzone" action="/upload-reviewfile" method="post" class="dropzone" enctype="multipart/form-data">
@@ -233,41 +233,182 @@
                         <small class="form-text text-muted">업로드할 Review 파일을 Drag & Drop 해주세요.</small>
                     </div>
                     <div class="form-check">
-                        <input type="checkbox" id="modal-addreview-removeafterprocess" name="modal-addreview-removeafterprocess" class="form-check-input" disabled>
-                        <label class="form-check-label form-text text-muted" for="modal-addreview-removeafterprocess">영상 Converting이 끝나면 업로드한 영상을 삭제합니다.</label>
+                        <input type="checkbox" id="modal-addreview-stagemode-removeafterprocess" name="modal-addreview-stagemode-removeafterprocess" class="form-check-input" disabled>
+                        <label class="form-check-label form-text text-muted" for="modal-addreview-stagemode-removeafterprocess">영상 Converting이 끝나면 업로드한 영상을 삭제합니다.</label>
                     </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col form-group">
                         <label class="form-text">Main Version</label>
-                        <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-addreview-mainversion">
+                        <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-addreview-stagemode-mainversion">
                         <small class="form-text text-muted">메인버전</small>
                     </div>
                     <div class="col form-group">
                         <label class="form-text">Sub Version</label>
-                        <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-addreview-subversion">
+                        <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-addreview-stagemode-subversion">
                         <small class="form-text text-muted">서브버전</small>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="modal-addreview-description" class="col-form-label">Description</label>
-                    <textarea class="form-control" id="modal-addreview-description" rows="2"></textarea>
+                    <label for="modal-addreview-stagemode-description" class="col-form-label">Description</label>
+                    <textarea class="form-control" id="modal-addreview-stagemode-description" rows="2"></textarea>
                 </div>
                 <div class="form-group p-0 m-0">
                     <label class="form-text">Camera Info</label>
-                    <input type="text" class="form-control" placeholder="camera info" value="" id="modal-addreview-camerainfo">
+                    <input type="text" class="form-control" placeholder="camera info" value="" id="modal-addreview-stagemode-camerainfo">
                     <small>카메라 렌즈 미리수 정보처럼 리뷰어의 판단에 영향을 미치는 정보를 기록해 주세요.</small>
                 </div>
                 <div class="form-group p-0 m-0">
-                    <label for="modal-addreview-outputdatapath" class="col-form-label">Output Data Path</label>
-                    <input type="text" class="form-control" id="modal-addreview-outputdatapath">
+                    <label for="modal-addreview-stagemode-outputdatapath" class="col-form-label">Output Data Path</label>
+                    <input type="text" class="form-control" id="modal-addreview-stagemode-outputdatapath">
                     <small class="form-text text-muted">Review 완료되면 외부로 복사해야하는 데이터 경로(Plate, mov, 협업데이터 경로)</small>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-warning" onclick="addReview()" data-dismiss="modal">ADD</button>
+                <button type="button" class="btn btn-outline-warning" onclick="addReviewStageMode()" data-dismiss="modal">ADD</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Review Status Mode -->
+    <div class="modal fade" id="modal-addreview-statusmode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content bg-darkmode">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modal-addreview-statusmode-title">Add Review</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true" class="text-darkmode">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4 pt-0 pb-0">
+                        <div class="form-group">
+                            <label class="form-text">Project</label>
+                            <select id="modal-addreview-statusmode-project" class="form-control">
+                                {{range .Projectlist}}
+							        <option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
+					        	{{end}}
+                            </select>
+                            <small>프로젝트를 선택해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="col-8 pt-0 pb-0">
+                        <div class="form-group">
+                            <label class="form-text">Name</label>
+                            <input type="text" class="form-control" id="modal-addreview-statusmode-name" value="">
+                            <small>Shot, Asset 이름</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pt-0 pb-0">
+                        <div class="form-group">
+                            <label class="form-text">Task</label>
+                            <select id="modal-addreview-statusmode-task" class="form-control">
+                                {{range .TasksettingNames}}
+                                    <option value="{{.}}" {{if eq $.SearchOption.Task . }}selected{{end}}>{{.}}</option>
+                                {{end}}
+                            </select>
+                            <small>Task를 선택해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="col pt-0 pb-0" hidden>
+                        <div class="form-group">
+                            <label class="form-text">Type</label>
+                            <select class="form-control" id="modal-addreview-statusmode-type">
+                                <option value="clip">Clip</option>
+                                <option value="image">Image</option>
+                            </select>
+                            <small>리뷰 Media Type</small>
+                        </div>
+                    </div>
+                    <div class="col pt-0 pb-0" hidden>
+                        <div class="form-group">
+                            <label class="form-text">Ext</label>
+                            <select class="form-control" id="modal-addreview-statusmode-ext">
+                                <option value=".mp4">.mp4</option>
+                                <option value=".jpg">.jpg</option>
+                                <option value=".png">.png</option>
+                            </select>
+                            <small>변환 확장자</small>
+                        </div>
+                    </div>
+                    <div class="col pt-0 pb-0" hidden>
+                        <div class="form-group">
+                            <label class="form-text">Author</label>
+                            <input type="text" class="form-control" id="modal-addreview-statusmode-author" value="{{.User.ID}}" disabled>
+                            <small>사용자 ID</small>
+                        </div>
+                    </div>
+                    <div class="col form-group">
+                        <label class="form-text">FPS</label>
+                        <select id="modal-addreview-statusmode-fps" class="form-control">
+                            <option value="24">24</option>
+                            <option value="23.976">23.976</option>
+                            <option value="23.98">23.98</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="29.97">29.97</option>
+                            <option value="59.94">59.94</option>
+                            <option value="60">60</option>
+                        </select>
+                        <small>재생시 FPS</small>
+                    </div>
+                </div>
+                <div class="form-group pt-0 m-0">
+                    <label class="form-text">Path</label>
+                    <input type="text" class="form-control" placeholder="review 데이터 경로" value="" id="modal-addreview-statusmode-path">
+                </div>
+                <div class="form-group pt-1 m-0">
+                    <form id="reviewFileDropzone" action="/upload-reviewfile" method="post" class="dropzone" enctype="multipart/form-data">
+                        <div class="fallback">
+                            <input name="file" type="file"/>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-2">
+                        <small class="form-text text-muted">업로드할 Review 파일을 Drag & Drop 해주세요.</small>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="modal-addreview-statusmode-removeafterprocess" name="modal-addreview-statusmode-removeafterprocess" class="form-check-input" disabled>
+                        <label class="form-check-label form-text text-muted" for="modal-addreview-statusmode-removeafterprocess">영상 Converting이 끝나면 업로드한 영상을 삭제합니다.</label>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col form-group">
+                        <label class="form-text">Main Version</label>
+                        <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-addreview-statusmode-mainversion">
+                        <small class="form-text text-muted">메인버전</small>
+                    </div>
+                    <div class="col form-group">
+                        <label class="form-text">Sub Version</label>
+                        <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-addreview-statusmode-subversion">
+                        <small class="form-text text-muted">서브버전</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="modal-addreview-statusmode-description" class="col-form-label">Description</label>
+                    <textarea class="form-control" id="modal-addreview-statusmode-description" rows="2"></textarea>
+                </div>
+                <div class="form-group p-0 m-0">
+                    <label class="form-text">Camera Info</label>
+                    <input type="text" class="form-control" placeholder="camera info" value="" id="modal-addreview-statusmode-camerainfo">
+                    <small>카메라 렌즈 미리수 정보처럼 리뷰어의 판단에 영향을 미치는 정보를 기록해 주세요.</small>
+                </div>
+                <div class="form-group p-0 m-0">
+                    <label for="modal-addreview-statusmode-outputdatapath" class="col-form-label">Output Data Path</label>
+                    <input type="text" class="form-control" id="modal-addreview-statusmode-outputdatapath">
+                    <small class="form-text text-muted">Review 완료되면 외부로 복사해야하는 데이터 경로(Plate, mov, 협업데이터 경로)</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-warning" onclick="addReviewStatusMode()" data-dismiss="modal">ADD</button>
             </div>
         </div>
         </div>
