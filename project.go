@@ -116,5 +116,6 @@ func NewProject(name string) *Project {
 		FxElement:                "explosion,destruction,smoke,dust",
 		HoudiniImportScale:       0.1,
 		ScreenxOverlay:           1.0,
+		FlexibleStatus:           true,
 	}
 }

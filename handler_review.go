@@ -312,6 +312,10 @@ func handleUploadReviewFile(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
+			if CachedAdminSetting.ReviewUploadPathPermission == "" {
+				http.Error(w, "Need Upload path and file permission in adminsetting.", http.StatusBadRequest)
+				return
+			}
 			filePerm, err := strconv.ParseInt(CachedAdminSetting.ReviewUploadPathPermission, 8, 64)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)

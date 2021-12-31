@@ -361,8 +361,9 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		// 프로젝트가 존재하지 않는다면 test 프로젝트를 추가한다.
 		if len(plist) == 0 {
-			p := *NewProject("TEMP")
+			p := *NewProject("test")
 			err = addProject(session, p)
 			if err != nil {
 				log.Fatal(err)

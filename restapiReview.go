@@ -16,7 +16,6 @@ import (
 
 	"github.com/digital-idea/dilog"
 	"github.com/disintegration/imaging"
-	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -276,38 +275,14 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 		rcp.Review.Ext = ".mp4"
 	}
 	rcp.Review.Ext = ext
-	stage := r.FormValue("stage")
-	// stage가 빈문자열이라면 기본 설정을 적용한다.
-	if stage == "" {
-		rcp.Review.Stage, err = GetInitStageID(session)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		// 아니라면 해당 Stage가 존재하는지 체크하고 존재하면 적용한다.
-		hasStage := false
-		stages, err := AllStages(session)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		if len(stages) == 0 {
-			http.Error(w, "Stage 설정이 필요합니다", http.StatusBadRequest)
-			return
-		}
-		for _, s := range stages {
-			if s.ID == stage {
-				hasStage = true
-				break
-			}
-		}
-		if !hasStage {
-			http.Error(w, stage+" Stage가 존재하지 않습니다", http.StatusBadRequest)
-			return
-		}
-		rcp.Review.Stage = stage
+	// 리뷰 등록시 현재 Task status를 review itemStatus로 설정한다.
+	_, taskinfo, err := GetTask(session, rcp.Review.Project, rcp.Review.Name, rcp.Review.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
+	// project, name, task를 이용해서 current status를 가지고 온다.
+	rcp.Review.ItemStatus = taskinfo.StatusV2
 	author := r.FormValue("author")
 	if author == "" {
 		rcp.Review.Author = rcp.UserID
@@ -1822,7 +1797,6 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-
 	type Recipe struct {
 		Data   Review `json:"data"`
 		UserID string `json:"userid"`
@@ -1839,19 +1813,8 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	// 어드민 셋팅을 불러온다.
-	adminSetting, err := GetAdminSetting(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	umask, err := strconv.Atoi(adminSetting.Umask)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	// 폼을 분석한다.
-	err = r.ParseMultipartForm(int64(adminSetting.MultipartFormBufferSize))
+	err = r.ParseMultipartForm(int64(CachedAdminSetting.MultipartFormBufferSize))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -1906,7 +1869,6 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			defer file.Close()
-			unix.Umask(umask)
 			switch f.Header.Get("Content-Type") {
 			case "image/jpeg", "image/png":
 				data, err := ioutil.ReadAll(file)
@@ -1915,7 +1877,7 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
-				imgPath := fmt.Sprintf("%s/%s.%06d.png", adminSetting.ReviewDataPath, id, sktch.Frame)
+				imgPath := fmt.Sprintf("%s/%s.%06d.png", CachedAdminSetting.ReviewDataPath, id, sktch.Frame)
 				if _, err := os.Stat(imgPath); os.IsExist(err) {
 					err = os.Remove(imgPath)
 					if err != nil {
