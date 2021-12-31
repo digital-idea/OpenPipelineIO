@@ -16,7 +16,6 @@ import (
 
 	"github.com/digital-idea/dilog"
 	"github.com/disintegration/imaging"
-	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -283,18 +282,7 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// project, name, task를 이용해서 current status를 가지고 온다.
-	// Review Item에 설정한다.
-	projectInfo, err := getProject(session, rcp.Review.Project)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if projectInfo.FlexibleStatus {
-		rcp.Review.ItemStatus = taskinfo.StatusV2
-	} else {
-		rcp.Review.ItemStatus = taskinfo.Status // legacy
-	}
-
+	rcp.Review.ItemStatus = taskinfo.StatusV2
 	author := r.FormValue("author")
 	if author == "" {
 		rcp.Review.Author = rcp.UserID
@@ -1809,7 +1797,6 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
-
 	type Recipe struct {
 		Data   Review `json:"data"`
 		UserID string `json:"userid"`
@@ -1826,19 +1813,8 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	// 어드민 셋팅을 불러온다.
-	adminSetting, err := GetAdminSetting(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	umask, err := strconv.Atoi(adminSetting.Umask)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	// 폼을 분석한다.
-	err = r.ParseMultipartForm(int64(adminSetting.MultipartFormBufferSize))
+	err = r.ParseMultipartForm(int64(CachedAdminSetting.MultipartFormBufferSize))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -1893,7 +1869,6 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			defer file.Close()
-			unix.Umask(umask)
 			switch f.Header.Get("Content-Type") {
 			case "image/jpeg", "image/png":
 				data, err := ioutil.ReadAll(file)
@@ -1902,7 +1877,7 @@ func handleAPIUploadReviewDrawing(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
-				imgPath := fmt.Sprintf("%s/%s.%06d.png", adminSetting.ReviewDataPath, id, sktch.Frame)
+				imgPath := fmt.Sprintf("%s/%s.%06d.png", CachedAdminSetting.ReviewDataPath, id, sktch.Frame)
 				if _, err := os.Stat(imgPath); os.IsExist(err) {
 					err = os.Remove(imgPath)
 					if err != nil {
