@@ -1232,6 +1232,7 @@ function setEditReviewModal(id) {
         document.getElementById("modal-editreview-task").value = data.task;
         document.getElementById("modal-editreview-name").value = data.name;
         document.getElementById("modal-editreview-stage").value = data.stage;
+        document.getElementById("modal-editreview-itemstatus").value = data.itemstatus;
         document.getElementById("modal-editreview-createtime").value = data.createtime;
         document.getElementById("modal-editreview-path").value = data.path;
         document.getElementById("modal-editreview-mainversion").value = data.mainversion;
@@ -4670,6 +4671,32 @@ function setReviewStage(stage) {
             itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
             // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
             document.getElementById("current-review-stage").value = data.stage
+        },
+        error: function(request,status,error){
+            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        }
+    });
+}
+
+function setReviewItemStatus(itemstatus) {
+    $.ajax({
+        url: "/api/setreviewitemstatus",
+        type: "post",
+        data: {
+            itemstatus: itemstatus,
+            id: document.getElementById("current-review-id").value,
+        },
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value
+        },
+        dataType: "json",
+        success: function(data) {
+            // 해당 id의 stage 글씨와 색상을 바꾼다.
+            let itemStatus = document.getElementById("review-itemstatus-"+data.id)
+            itemStatus.innerHTML = data.itemstatus
+            itemStatus.setAttribute("class","ml-1 badge badge-status-"+data.itemstatus)
+            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            document.getElementById("current-review-itemstatus").value = data.itemstatus
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
