@@ -414,8 +414,8 @@
         </div>
     </div>
 
-    <!-- Modal: Edit Review -->
-    <div class="modal fade" id="modal-editreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Modal: Edit Review Stage Mode-->
+    <div class="modal" id="modal-editreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
@@ -467,6 +467,134 @@
                                     {{end}}
                                 </select>
                                 <small>리뷰 Stage 이름</small>
+                            </div>
+                        </div>
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Author</label>
+                                <input type="text" class="form-control" id="modal-editreview-author" value="{{.User.ID}}" disabled>
+                                <small>사용자 ID</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group pt-0 m-0 col-8">
+                            <label class="form-text">Createtime</label>
+                            <input type="text" class="form-control" placeholder="0000-00-00T00:00:00+09:00" id="modal-editreview-createtime" onchange="setReviewCreatetime()">
+                        </div>
+                        <div class="form-group pt-0 m-0 col-4">
+                            <label class="form-text">&nbsp;</label>
+                            <button class="btn btn-darkmode btn-block" onclick="setReviewCreatetimeNow()">Set Now!</button>
+                        </div>
+                    </div>
+                    <div class="form-group pt-0 m-0">
+                        <label class="form-text">Path</label>
+                        <input type="text" class="form-control" placeholder="데일리로 올릴 미디어 경로" value="" id="modal-editreview-path" onchange="setReviewPath()">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <label class="form-text">Main Version</label>
+                            <input type="number" value="1" min="1" max="1000" step="1" class="form-control" id="modal-editreview-mainversion" onchange="setReviewMainVersion()">
+                            <small class="form-text text-muted">메인버전을 입력해주세요.</small>
+                        </div>
+                        <div class="col-6 form-group">
+                            <label class="form-text">Sub Version</label>
+                            <input type="number" value="0" min="0" max="1000" step="1" class="form-control" id="modal-editreview-subversion" onchange="setReviewSubVersion()">
+                            <small class="form-text text-muted">서브버전을 입력해주세요.</small>
+                        </div>
+                    </div>
+                    <div class="form-group p-0 m-0">
+                        <label class="form-text">FPS</label>
+                        <select id="modal-editreview-fps" class="form-control" onchange="setReviewFps()">
+                            <option value="24">24</option>
+                            <option value="23.976">23.976</option>
+                            <option value="23.98">23.98</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="29.97">29.97</option>
+                            <option value="59.94">59.94</option>
+                            <option value="60">60</option>
+                        </select>
+                        <small>리뷰 재생시 필요한 fps. 리뷰창에서 프레임을 앞뒤로 움직일때도 사용됩니다.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-editreview-description" class="col-form-label">Description</label>
+                        <textarea class="form-control" id="modal-editreview-description" rows="2"></textarea>
+                        <div class="mt-2">
+                            <button id="modal-editreview-description-button" class="btn btn-sm btn-outline-warning btn-block" onclick="setReviewDescription()">Edit</button>
+                        </div>
+                    </div>
+                    <div class="form-group p-0 m-0">
+                        <label class="form-text">Camera Info</label>
+                        <input type="text" class="form-control" placeholder="camera info" value="" id="modal-editreview-camerainfo" onchange="setReviewCameraInfo()">
+                        <small>카메라 렌즈 미리수 정보처럼 리뷰어의 판단에 영향을 미치는 정보를 기록해 주세요.</small>
+                    </div>
+                    <div class="form-group p-0 m-0">
+                        <label for="modal-editreview-outputdatapath" class="col-form-label">Output Data Path</label>
+                        <input type="text" class="form-control" id="modal-editreview-outputdatapath"  onchange="ReviewOutputDataPath()">
+                        <small class="form-text text-muted">Review 완료되면 외부로 복사해야하는 데이터 경로(Plate, mov, 협업데이터 경로)</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Review Status Mode-->
+    <div class="modal" id="modal-editreview-statusmode" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-editreview-title">Edit Review</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-editreview-id">
+                    <div class="row">
+                        <div class="col-4 pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Project</label>
+                                <select id="modal-editreview-project" class="form-control" onchange="setReviewProject()">
+                                    {{range .Projectlist}}
+                                        <option value="{{.}}" {{if eq . $.SearchOption.Project}}selected{{end}}>{{.}}</option>
+                                    {{end}}
+                                </select>
+                                <small>프로젝트를 선택해주세요.</small>
+                            </div>
+                        </div>
+                        <div class="col-8 pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Name</label>
+                                <input type="text" class="form-control" id="modal-editreview-name" value="" onchange="setReviewName()">
+                                <small>Shot, Asset 이름</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Task</label>
+                                <select id="modal-editreview-task" class="form-control" onchange="setReviewTask()">
+                                    {{range .TasksettingNames}}
+                                        <option value="{{.}}" {{if eq $.SearchOption.Task . }}selected{{end}}>{{.}}</option>
+                                    {{end}}
+                                </select>
+                                <small>Task를 선택해주세요.</small>
+                            </div>
+                        </div>
+                        <div class="col pt-0 pb-0">
+                            <div class="form-group">
+                                <label class="form-text">Status</label>
+                                <select class="form-control" id="modal-editreview-itemstatus" onchange="setReviewItemStatus(this.value)">
+                                    {{range .Status}}
+                                        <option value="{{.ID}}">{{.ID}}</option>
+                                    {{end}}
+                                </select>
+                                <small>리뷰 ItemStatus</small>
                             </div>
                         </div>
                         <div class="col pt-0 pb-0">
