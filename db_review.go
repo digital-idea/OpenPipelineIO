@@ -99,6 +99,16 @@ func setReviewPath(session *mgo.Session, id, path string) error {
 	return nil
 }
 
+func setReviewItemStatus(session *mgo.Session, id, itemstatus string) error {
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("csi").C("review")
+	err := c.UpdateId(bson.ObjectIdHex(id), bson.M{"$set": bson.M{"itemstatus": itemstatus}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // setErrReview 함수는 id와 log를 입력받아서 에러상태 변경 및 로그를 기록한다.
 func setErrReview(session *mgo.Session, id, log string) error {
 	session.SetMode(mgo.Monotonic, true)

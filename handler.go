@@ -544,6 +544,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/review", handleAPIReview)
 	http.HandleFunc("/api/searchreview", handleAPISearchReview)
 	http.HandleFunc("/api/setreviewstatus", handleAPISetReviewStatus)
+	http.HandleFunc("/api/setreviewitemstatus", handleAPISetReviewItemStatus)
 	http.HandleFunc("/api/setreviewstage", handleAPISetReviewStage)
 	http.HandleFunc("/api/setreviewnextstatus", handleAPISetReviewNextStatus)
 	http.HandleFunc("/api/setreviewnextstage", handleAPISetReviewNextStage)
