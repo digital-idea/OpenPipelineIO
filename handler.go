@@ -458,7 +458,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/setusetype", handleAPISetUseType)
 	http.HandleFunc("/api/setassettype", handleAPISetAssetType)
 	http.HandleFunc("/api/setoutputname", handleAPISetOutputName)
-	http.HandleFunc("/api/setrnum", handleAPISetRnum)
+	http.HandleFunc("/api/setrnum", handleAPISetRnum)   // legacy
+	http.HandleFunc("/api2/setrnum", handleAPI2SetRnum)
 	http.HandleFunc("/api/setdeadline2d", handleAPISetDeadline2D)
 	http.HandleFunc("/api/setdeadline3d", handleAPISetDeadline3D)
 	http.HandleFunc("/api/setscantimecodein", handleAPISetScanTimecodeIn)
