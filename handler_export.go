@@ -695,7 +695,7 @@ func handleExcelSubmit(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if rnum != "" {
-			_, err := SetRnum(session, project, name, rnum)
+			err := SetRnum(session, project, name+"_"+typ, rnum)
 			if err != nil {
 				rcp.ErrorItems = append(rcp.ErrorItems, ErrorItem{Name: name, Error: err.Error()})
 				continue

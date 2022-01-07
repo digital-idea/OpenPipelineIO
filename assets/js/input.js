@@ -3337,33 +3337,65 @@ function setRnumModal(project, id) {
 }
 
 
-function setRnum(project, id, rnum) {
-    let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
-    $.ajax({
-        url: "/api/setrnum",
-        type: "post",
-        data: {
-            project: project,
-            name: id2name(id),
-            rnum: rnum,
-            userid: userid,
-        },
-        headers: {
-            "Authorization": "Basic "+ token
-        },
-        dataType: "json",
-        success: function(data) {
-            if (data.rnum !== "") {
-                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>${data.rnum}</span>`;
-            } else {
-                document.getElementById("rnum-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>no rnum</span>`;
+function setRnum() {
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
             }
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            let id = cboxes[i].getAttribute("id");
+            fetch('/api2/setrnum', {
+                method: 'post',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
+                    project: document.getElementById('modal-setrnum-project').value,
+                    id: id,
+                    rnum: document.getElementById('modal-setrnum-text').value,
+                })
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                if (data.rnum !== "") {
+                    document.getElementById("rnum-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>${data.rnum}</span>`;
+                } else {
+                    document.getElementById("rnum-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>no rnum</span>`;
+                }
+            })
+            .catch((error) => {
+                alert(error)
+            });
         }
-    });
+    } else {
+        fetch('/api2/setrnum', {
+            method: 'post',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+            body: new URLSearchParams({
+                project: document.getElementById('modal-setrnum-project').value,
+                id: document.getElementById('modal-setrnum-id').value,
+                rnum: document.getElementById('modal-setrnum-text').value,
+            })
+        })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            if (data.rnum !== "") {
+                document.getElementById("rnum-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>${data.rnum}</span>`;
+            } else {
+                document.getElementById("rnum-"+data.id).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#modal-setrnum" onclick="setModal('modal-setrnum-text', '${data.rnum}' );setModal('modal-setrnum-id', '${data.id}')"{{end}}>no rnum</span>`;
+            }
+        })
+        .catch((error) => {
+            alert(error)
+        });
+    }
 }
 
 function setAddTagModal(project, id) {

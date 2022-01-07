@@ -46,7 +46,7 @@ restAPI의 장점은 웹서비스의 URI를 이용하기 때문에 네트워크�
 | /api/seteditmov | 편집본 mov 등록 | project, id, path | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0030_org&path=/show/edit.mov" https://csi.lazypic.org/api/seteditmov` |
 | /api/setassettype | assettype 변경 | project, name, type | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=mamma&type=prop" https://csi.lazypic.org/api/setassettype` |
 | /api/setoutputname | 아웃풋이름 등록 | project, name, outputname | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&outputname=S101_010_010" https://csi.lazypic.org/api/setoutputname` |
-| /api/setrnum | 롤넘버 등록 | project, name, rnum | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&rnum=A0001" https://csi.lazypic.org/api/setrnum` |
+| /api2/setrnum | 롤넘버 등록 | project, id, rnum | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&id=SS_0010_org&rnum=A0001" https://csi.lazypic.org/api2/setrnum` |
 | /api/setdeadline2d | 2D마감일 등록 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline2d` |
 | /api/setdeadline3d | 3D마감일 등록 | project, name, date | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&date=0712" https://csi.lazypic.org/api/setdeadline3d` |
 | /api/setscantimecodein | 스캔 타임코드IN 등록 | project, name, timecode | `$ curl -X POST -H "Authorization: Basic <Token>" -d "project=TEMP&name=SS_0010&timecode=01:00:01:21" https://csi.lazypic.org/api/setscantimecodein` |

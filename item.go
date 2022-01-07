@@ -214,6 +214,15 @@ func (item *Item) updateStatusV2(globalStatus []Status) {
 // 예를 들어 "A0001" 이라는 롤넘버가 셋팅되면 태그리스트에 "1권" 이라는 단어를 넣어준다.
 func (item *Item) setRnumTag() {
 	if item.Rnum == "" {
+		// 권이 들어간 태그를 제거한다.
+		var newTags []string
+		for _, t := range item.Tag {
+			if !validRnumTag(t) {
+				newTags = append(newTags, t)
+			}
+		}
+		sort.Strings(newTags)
+		item.Tag = newTags
 		return
 	}
 	var rnumTag string

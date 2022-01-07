@@ -1,6 +1,6 @@
 {{define "modal-thumbnail"}}
     <!-- Modal: Set Rnum-->
-    <div class="modal fade" id="modal-setrnum" tabindex="-1" role="dialog" aria-labelledby="modal-setrnum" aria-hidden="true">
+    <div class="modal" id="modal-setrnum" tabindex="-1" role="dialog" aria-labelledby="modal-setrnum" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
@@ -16,12 +16,13 @@
                         <label for="modal-setrnum-text" class="col-form-label">Roll Number:</label>
                         <input type="text" class="form-control" id="modal-setrnum-text">
                         <small class="form-text text-muted">A0001 형태로 각 권을 뜻하는 A,B,C,D,E,F 문자와 편집본 순서를 입력해주세요.</small>
+                        <small class="form-text text-muted">빈 문자열을 입력하면 롤넘버가 제거됩니다.</small>
                     </div>
                 </div>
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="setRnum(document.getElementById('modal-setrnum-project').value, document.getElementById('modal-setrnum-id').value, document.getElementById('modal-setrnum-text').value)" data-dismiss="modal">Edit</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="setRnum()" data-dismiss="modal">Edit</button>
                 </div>
             </div>
         </div>

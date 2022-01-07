@@ -2464,30 +2464,22 @@ func SetScanname(session *mgo.Session, project, id, scanname string) error {
 }
 
 // SetRnum 함수는 샷에 롤넘버를 설정한다.
-func SetRnum(session *mgo.Session, project, name, rnum string) (string, error) {
+func SetRnum(session *mgo.Session, project, id, rnum string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return "", err
+		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	if typ == "asset" {
-		return "", fmt.Errorf("%s 는 %s type 입니다. 변경할 수 없습니다", name, typ)
-	}
-	id := name + "_" + typ
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return id, err
+		return err
 	}
 	item.Rnum = rnum
 	err = setItem(session, project, item)
 	if err != nil {
-		return id, err
+		return err
 	}
-	return id, nil
+	return nil
 }
 
 // SetAssetType 함수는 item에 assettype을 셋팅한다.
