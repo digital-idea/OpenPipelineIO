@@ -458,7 +458,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setusetype", handleAPISetUseType)
 	http.HandleFunc("/api/setassettype", handleAPISetAssetType)
 	http.HandleFunc("/api/setoutputname", handleAPISetOutputName)
-	http.HandleFunc("/api/setrnum", handleAPISetRnum)   // legacy
+	http.HandleFunc("/api/setrnum", handleAPISetRnum) // legacy
 	http.HandleFunc("/api2/setrnum", handleAPI2SetRnum)
 	http.HandleFunc("/api/setdeadline2d", handleAPISetDeadline2D)
 	http.HandleFunc("/api/setdeadline3d", handleAPISetDeadline3D)
@@ -550,6 +550,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/setreviewnextstatus", handleAPISetReviewNextStatus)
 	http.HandleFunc("/api/setreviewnextstage", handleAPISetReviewNextStage)
 	http.HandleFunc("/api/addreviewcomment", handleAPIAddReviewComment)
+	http.HandleFunc("/api/addreviewstatusmodecomment", handleAPIAddReviewStatusModeComment)
 	http.HandleFunc("/api/editreviewcomment", handleAPIEditReviewComment)
 	http.HandleFunc("/api/rmreviewcomment", handleAPIRmReviewComment)
 	http.HandleFunc("/api/rmreview", handleAPIRmReview)

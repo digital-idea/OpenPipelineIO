@@ -9,5 +9,6 @@ type Comment struct {
 	Media      string `json:"media"`      // media 경로
 	MediaTitle string `json:"mediatitle"` // media 제목
 	Stage      string `json:"stage"`      // 코멘트가 달린 리뷰 Stage
+	ItemStatus string `json:"itemstatus`  // 코멘트가 달렸던 ItemStatus
 	Frame      int    `json:"frame"`      // 코맨트 프레임수
 }
