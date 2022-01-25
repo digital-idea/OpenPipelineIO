@@ -556,6 +556,7 @@ func handleAPISetReviewItemStatus(w http.ResponseWriter, r *http.Request) {
 		UserID     string `json:"userid"`
 		ID         string `json:"id"`
 		ItemStatus string `json:"itemstatus"`
+		Status     string `json:"status"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -601,6 +602,13 @@ func handleAPISetReviewItemStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 리뷰 Status를 wait로 돌린다.
+	err = setReviewStatus(session, rcp.ID, "wait")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status = "wait"
 	// Type을 구한다.
 	typ, err := Type(session, review.Project, review.Name)
 	if err != nil {

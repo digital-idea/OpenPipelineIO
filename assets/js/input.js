@@ -4728,12 +4728,15 @@ function setReviewItemStatus(itemstatus) {
         },
         dataType: "json",
         success: function(data) {
-            // 해당 id의 stage 글씨와 색상을 바꾼다.
+            // 해당 id의 status 글씨와 색상을 바꾼다.
             let itemStatus = document.getElementById("review-itemstatus-"+data.id)
             itemStatus.innerHTML = data.itemstatus
             itemStatus.setAttribute("class","ml-1 badge badge-"+data.itemstatus)
-            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
+            // 현재 띄워진 화면의 좌측 Status 상태를 변경한다.
             document.getElementById("current-review-itemstatus").value = data.itemstatus
+            let status = document.getElementById("reviewstatus-"+data.id)
+            status.innerHTML = data.status
+            status.setAttribute("class","ml-1 badge badge-secondary")
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
