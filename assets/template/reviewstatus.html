@@ -95,7 +95,7 @@
                     <span class="edit" data-bs-toggle="modal" data-bs-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">≡</span>
                     <span class="remove" data-bs-toggle="modal" data-bs-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('{{$.CurrentReview.ID.Hex}}', '{{.Date}}')">×</span>
                     <br>
-                    {{if .Status}}
+                    {{if .ItemStatus}}
                         <span class="badge badge-{{.ItemStatus}}">{{.ItemStatus}}</span>
                     {{end}}
                     {{if ne .Frame 0}}
@@ -141,7 +141,7 @@
                         </select>
                     </div>
                     <div class="col ps-0">
-                        <span class="btn btn-sm btn-outline-warning w-100" onclick="clickCommentButton()">Comment</span>
+                        <span class="btn btn-sm btn-outline-warning w-100" onclick="clickReviewStatusModeCommentButton()">Comment</span>
                     </div>
                     
                 </div>

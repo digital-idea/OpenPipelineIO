@@ -556,6 +556,7 @@ func handleAPISetReviewItemStatus(w http.ResponseWriter, r *http.Request) {
 		UserID     string `json:"userid"`
 		ID         string `json:"id"`
 		ItemStatus string `json:"itemstatus"`
+		Status     string `json:"status"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -601,6 +602,13 @@ func handleAPISetReviewItemStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 리뷰 Status를 wait로 돌린다.
+	err = setReviewStatus(session, rcp.ID, "wait")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status = "wait"
 	// Type을 구한다.
 	typ, err := Type(session, review.Project, review.Name)
 	if err != nil {
@@ -993,6 +1001,132 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// slack log
+	err = slacklog(session, review.Project, fmt.Sprintf("Add Review Comment: %s, \nProject: %s, Name: %s, Author: %s", rcp.Text, review.Project, review.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIAddReviewStatusModeComment 함수는 review status mode에서 comment를 설정하는 RestAPI 이다.
+func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		UserID               string `json:"userid"`
+		ID                   string `json:"id"`
+		Text                 string `json:"text"`
+		Media                string `json:"media"`
+		MediaTitle           string `json:"mediatitle"`
+		Author               string `json:"author"`
+		AuthorName           string `json:"authorname"`
+		Date                 string `json:"date"`
+		ItemStatus           string `json:"itemstatus"`
+		Frame                int    `json:"frame"`
+		FrameComment         bool   `json:"framecomment"`
+		ProductionStartFrame int    `json:"productionstartframe"` // UX 를 그릴 때 필요하다.
+	}
+	rcp := Recipe{}
+	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	// 사용자의 이름을 구한다.
+	u, err := getUser(session, rcp.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized) // 사용자가 존재하지 않으면 당연히 Comment를 작성하면 안된다.
+		return
+	}
+	rcp.AuthorName = u.LastNameKor + u.FirstNameKor
+	r.ParseForm()
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	rcp.Text = r.FormValue("text")
+	rcp.Media = r.FormValue("media")
+	if rcp.Text == "" && rcp.Media == "" {
+		http.Error(w, "comment(text) 또는 첨부파일(media) 값 둘중 하나는 반드시 입력되어야 합니다", http.StatusBadRequest)
+		return
+	}
+	rcp.MediaTitle = r.FormValue("mediatitle")
+
+	review, err := getReview(session, rcp.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.ItemStatus = r.FormValue("itemstatus")
+	// Status가 존재하는지 체크하기
+	_, err = GetStatus(session, rcp.ItemStatus)
+	if err != nil {
+		if err == mgo.ErrNotFound {
+			http.Error(w, rcp.ItemStatus+" Status는 존재하지 않는 Status 입니다", http.StatusBadRequest)
+			return
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+	}
+	rcp.FrameComment = str2bool(r.FormValue("framecomment"))
+	frame, err := strconv.Atoi(r.FormValue("frame"))
+	if err != nil {
+		frame = 0
+	}
+	if rcp.FrameComment {
+		rcp.Frame = frame
+	}
+	cmt := Comment{}
+	cmt.Date = time.Now().Format(time.RFC3339)
+	rcp.Date = cmt.Date
+	cmt.Author = rcp.UserID
+	rcp.Author = rcp.UserID
+	cmt.AuthorName = rcp.AuthorName
+	cmt.Text = rcp.Text
+	cmt.Media = rcp.Media
+	cmt.MediaTitle = rcp.MediaTitle
+	cmt.ItemStatus = rcp.ItemStatus
+	cmt.Frame = rcp.Frame
+
+	err = addReviewComment(session, rcp.ID, cmt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Review Comment: %s, %s", rcp.ID, rcp.Text), review.Project, review.Name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// slack log
 	err = slacklog(session, review.Project, fmt.Sprintf("Add Review Comment: %s, \nProject: %s, Name: %s, Author: %s", rcp.Text, review.Project, review.Name, rcp.UserID))
 	if err != nil {

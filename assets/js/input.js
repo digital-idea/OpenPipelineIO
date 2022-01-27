@@ -4594,6 +4594,11 @@ function clickCommentButton() {
     addReviewComment()
 }
 
+function clickReviewStatusModeCommentButton() {
+    setReviewStatus('comment')
+    addReviewStatusModeComment()
+}
+
 function setReviewStatus(status) {
     $.ajax({
         url: "/api/setreviewstatus",
@@ -4703,32 +4708,6 @@ function setReviewStage(stage) {
             itemStage.setAttribute("class","ml-1 badge badge-stage-"+data.stage)
             // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
             document.getElementById("current-review-stage").value = data.stage
-        },
-        error: function(request,status,error){
-            alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-        }
-    });
-}
-
-function setReviewItemStatus(itemstatus) {
-    $.ajax({
-        url: "/api/setreviewitemstatus",
-        type: "post",
-        data: {
-            id: document.getElementById("current-review-id").value,
-            itemstatus: itemstatus,
-        },
-        headers: {
-            "Authorization": "Basic "+ document.getElementById("token").value
-        },
-        dataType: "json",
-        success: function(data) {
-            // 해당 id의 stage 글씨와 색상을 바꾼다.
-            let itemStatus = document.getElementById("review-itemstatus-"+data.id)
-            itemStatus.innerHTML = data.itemstatus
-            itemStatus.setAttribute("class","ml-1 badge badge-"+data.itemstatus)
-            // 현재 띄워진 화면의 우측하단의 Stage 상태를 변경한다.
-            document.getElementById("current-review-itemstatus").value = data.itemstatus
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -5113,6 +5092,9 @@ function addReviewComment() {
         }
     });
 }
+
+
+
 
 function addReviewCommentText(text) {
     $.ajax({
@@ -6020,6 +6002,96 @@ function setNetflixID(netflixid) {
     })
     .then((data) => {
         document.getElementById(`${data.project}-${data.id}-netflixid`).innerHTML = `<span class="text-badge netflix-red ml-1">NetflixID: ${data.netflixid}</span>`
+    })
+    .catch((error) => {
+        alert(error)
+    });
+}
+
+function setReviewItemStatus(itemstatus) {
+    fetch('/api/setreviewitemstatus', {
+        method: 'post',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
+            id: document.getElementById("current-review-id").value,
+            itemstatus: itemstatus,
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        // 해당 id의 status 글씨와 색상을 바꾼다.
+        let itemStatus = document.getElementById("review-itemstatus-"+data.id)
+        itemStatus.innerHTML = data.itemstatus
+        itemStatus.setAttribute("class","ml-1 badge badge-"+data.itemstatus)
+        // 현재 띄워진 화면의 좌측 Status 상태를 변경한다.
+        document.getElementById("current-review-itemstatus").value = data.itemstatus
+        let status = document.getElementById("reviewstatus-"+data.id)
+        status.innerHTML = data.status
+        status.setAttribute("class","ml-1 badge badge-secondary")
+    })
+    .catch((error) => {
+        alert(error)
+    });
+}
+
+function addReviewStatusModeComment() {
+    fetch('/api/addreviewstatusmodecomment', {
+        method: 'post',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+        body: new URLSearchParams({
+            id: document.getElementById("current-review-id").value,
+            text: document.getElementById("review-comment").value,
+            media: document.getElementById("review-media").value,
+            itemstatus: document.getElementById("current-review-itemstatus").value,
+            frame: document.getElementById("currentframe").innerHTML,
+            framecomment: document.getElementById("review-framecomment").checked,
+        })
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        // 데이터가 잘 들어가면 review-comments 에 들어간 데이터를 드로잉한다.
+        let body = data.text.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        let newComment = `<div id="reviewcomment-${data.id}-${data.date}" class="p-1">
+        <span class="text-badge">${data.date} / <a href="/user?id=${data.author}" class="text-darkmode">${data.authorname}</a></span>
+        <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
+        <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
+        <br>
+        <span class="badge badge-${data.itemstatus}">${data.itemstatus}</span>`
+        if (data.framecomment) {
+            newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f / ${data.frame+data.productionstartframe-1}f</span>`
+        }
+        newComment += `<small class="text-white">${body}</small>`
+        if (data.media != "") {
+            if (data.media.includes("http")) {
+                newComment += `<div class="row pl-3 pt-3 pb-1">
+                    <a href="${data.media}" onclick="copyClipboard('${data.media}')">
+                        <img src="/assets/img/link.svg" class="finger">
+                    </a>
+                    <span class="text-white pl-2 small">${data.mediatitle}</span>
+                </div>`
+            } else {
+                newComment += `<div class="row pl-3 pt-3 pb-1">
+                    <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+                        <img src="/assets/img/link.svg" class="finger">
+                    </a>
+                    <span class="text-white pl-2 small">${data.mediatitle}</span>
+                </div>`
+            }
+        }
+        newComment += `<hr class="my-1 p-0 m-0 divider"></hr></div>`
+        document.getElementById("review-comments").innerHTML = newComment + document.getElementById("review-comments").innerHTML;
+        // 입력한 값을 초기화 한다.
+        document.getElementById("review-comment").value = ""; 
+        document.getElementById("review-media").value = "";
+        document.getElementById("review-framecomment").checked = false;
     })
     .catch((error) => {
         alert(error)
