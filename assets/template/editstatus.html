@@ -1,6 +1,6 @@
 {{define "editstatus" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 <div class="container p-5">
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row pt-1">
             <div class="col">
                 <div class="form-group">
                     <div>
@@ -73,11 +73,29 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Order</label>
-            <input type="number" name="order" step="0.1" class="form-control" placeholder="0" value="{{.Status.Order}}">
-            <small class="form-text text-muted">Status 우선순위 순서</small>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Order</label>
+                    <input type="number" name="order" step="0.1" class="form-control" placeholder="0" value="{{.Status.Order}}">
+                    <small class="form-text text-muted">Status 우선순위 순서</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label class="form-text">Review Event</label>
+                    <select class="form-control" name="reviewstatusevent">
+                        <option value="wait" {{if eq .Status.ReviewStatusEvent "wait" }}selected{{end}}>wait</option>
+                        <option value="comment" {{if eq .Status.ReviewStatusEvent "comment" }}selected{{end}}>comment</option>
+                        <option value="approve" {{if eq .Status.ReviewStatusEvent "approve" }}selected{{end}}>approve</option>
+                        <option value="closed" {{if eq .Status.ReviewStatusEvent "closed" }}selected{{end}}>closed</option>
+                    </select>
+                    <small>리뷰 상태 변경시 이벤트</small>
+                </div>
+            </div>
         </div>
+        
+
         <div class="form-check">
             <input type="checkbox" id="defaulton" name="defaulton" class="form-check-input" value="true" {{if eq .Status.DefaultOn true}}checked{{end}}>
             <label class="form-check-label" for="defaulton">기본 검색시 Check 상태 여부</label>
@@ -96,8 +114,7 @@
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jscolor.js"></script>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}
 
