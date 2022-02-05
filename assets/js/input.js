@@ -6031,7 +6031,13 @@ function setReviewItemStatus(itemstatus) {
         document.getElementById("current-review-itemstatus").value = data.itemstatus
         let status = document.getElementById("reviewstatus-"+data.id)
         status.innerHTML = data.status
-        status.setAttribute("class","ml-1 badge badge-secondary")
+        if (data.status == "approve") {
+            status.setAttribute("class","ml-1 badge badge-success")
+        } else if (data.status == "comment") {
+            status.setAttribute("class","ml-1 badge badge-warning")
+        } else {
+            status.setAttribute("class","ml-1 badge badge-secondary")
+        }
     })
     .catch((error) => {
         alert(error)

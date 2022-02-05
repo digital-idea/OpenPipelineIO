@@ -60,6 +60,17 @@ body {
 	background-color: #545b62;
 }
   
+.badge-success {
+	color: #fff;
+	background-color: #28a745;
+}
+  
+.badge-success[href]:hover, .badge-success[href]:focus {
+	color: #fff;
+	text-decoration: none;
+	background-color: #1e7e34;
+}
+  
 /* width */
 ::-webkit-scrollbar {
 	width: 8px;

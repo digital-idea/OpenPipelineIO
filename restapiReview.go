@@ -602,13 +602,18 @@ func handleAPISetReviewItemStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// 리뷰 Status를 wait로 돌린다.
-	err = setReviewStatus(session, rcp.ID, "wait")
+	status, err := GetStatus(session, rcp.ItemStatus)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Status = "wait"
+	// 리뷰 Status를 설정된 이벤트 상태로 바끈다.
+	err = setReviewStatus(session, rcp.ID, status.ReviewStatusEvent)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status = status.ReviewStatusEvent
 	// Type을 구한다.
 	typ, err := Type(session, review.Project, review.Name)
 	if err != nil {
