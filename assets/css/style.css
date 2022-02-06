@@ -124,6 +124,13 @@ body {
 	-webkit-appearance:none;
 }
 
+.form-darkmode, .form-darkmode:valid {
+	background-color:  #1C1C1C;
+	border:1px solid #A7A59C;
+	color: #A7A59C;
+	-webkit-appearance:none;
+}
+
 .custom-select {
 	background-color:  rgb(41, 41, 41)!important;
 	color: #A7A59C;

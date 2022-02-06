@@ -10,7 +10,6 @@
     <div id="blinkspace" style="height:50px"></div><!--기본 50px 여유를 두고 navbar와의 간격을 조정한다.-->
     <div class="row mt-3 ms-2 me-2">
         <div class="col-3 p-0 border-darkmode text-darkmode" style="height: 80vh;">
-            
             <form action="/review-status-submit" method="POST">
                 <div class="w-100">
                     <div class="input-group p-1">
@@ -20,13 +19,13 @@
                                 <option value="{{.}}" {{if eq . $.Project}}selected{{end}}>{{.}}</option>
                             {{end}}
                         </select>
-                        <select name="reviewitemstatus" class="form-select custom-select" id="review-searchbox-itemstatus">
+                        <select name="itemstatus" class="form-select custom-select" id="review-searchbox-itemstatus">
                             <option value="" {{if eq "" $.ItemStatus}}selected{{end}}>All</option>
                             {{range .Status}}
                                 <option value="{{.ID}}" {{if eq $.ItemStatus .ID}}selected{{end}}>{{.ID}}</option>
                             {{end}}
                         </select>                        
-                        <input type="text" name="searchword" class="input-group-append form-control" placeholder="검색어" value="{{.Searchword}}">
+                        <input type="text" name="searchword" class="input-group-append form-darkmode" placeholder="검색어" value="{{.Searchword}}">
                         <button class="btn btn-sm btn-darkmode" id="button">Search</button>
                     </div>
                 </div>
