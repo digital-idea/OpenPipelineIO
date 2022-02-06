@@ -422,7 +422,7 @@ func handleReviewStatus(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
 	rcp.Project = q.Get("project")
-	rcp.ItemStatus = q.Get("itemstage")
+	rcp.ItemStatus = q.Get("itemstatus")
 	rcp.Searchword = q.Get("searchword")
 	id := q.Get("id")
 	err = rcp.SearchOption.LoadCookie(session, r)
