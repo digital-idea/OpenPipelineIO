@@ -117,6 +117,8 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 			query = append(query, bson.M{"$or": []bson.M{{"type": "org"}, {"type": "left"}}})
 		} else if strings.HasPrefix(word, "type:asset") {
 			query = append(query, bson.M{"type": "asset"})
+		} else if strings.HasPrefix(word, "name:") {
+			query = append(query, bson.M{"name": &bson.RegEx{Pattern: strings.TrimPrefix(word, "name:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "episode:") {
 			query = append(query, bson.M{"episode": &bson.RegEx{Pattern: strings.TrimPrefix(word, "episode:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "season:") {
