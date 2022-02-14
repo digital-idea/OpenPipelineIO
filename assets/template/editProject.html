@@ -309,7 +309,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
@@ -369,7 +369,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
@@ -426,7 +426,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
@@ -439,7 +439,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
@@ -496,7 +496,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
@@ -509,7 +509,7 @@
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-								<optgroup label="Default Colorspaces">
+								<optgroup label="Default Colorspaces(제거예정)">
 									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
