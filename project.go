@@ -26,12 +26,16 @@ type Milestone struct {
 
 // Mov 정보를 담는 자료구조
 type Mov struct {
-	Width         int     `json:"width"`
-	Height        int     `json:"height"`
-	Codec         string  `json:"codec"`
-	Fps           float64 `json:"fps"`
-	InColorspace  string  `json:"incolorspace"`
-	OutColorspace string  `json:"outcolorspace"`
+	Width             int     `json:"width"`
+	Height            int     `json:"height"`
+	Codec             string  `json:"codec"`
+	Fps               float64 `json:"fps"`
+	InColorspace      string  `json:"incolorspace"`
+	OutColorspace     string  `json:"outcolorspace"`
+	CropWidth         int     `json:"cropwidth"`
+	CropHeight        int     `json:"cropheight"`
+	LetterBox         bool    `json:"letterbox"`
+	LetterBoxOpercity float64 `json:"letterboxopercity"`
 }
 
 // Project 정보를 담는 자료구조
@@ -60,6 +64,10 @@ type Project struct {
 	Camera                   string        `json:"camera"`                   // 촬영에 사용된 카메라
 	PlateWidth               int           `json:"platewidth"`               // 아웃풋 플레이트 Width
 	PlateHeight              int           `json:"plateheight"`              // 아웃풋 플레이트 Height
+	PlateCropWidth           int           `json:"platecropwidth"`           // 아웃풋 플레이트 Crop Width
+	PlateCropHeight          int           `json:"platecropheight"`          // 아웃풋 플레이트 Crop Height
+	LetterBox                bool          `json:"letterbox"`                // 아웃풋 플레이트 레터박스 유무
+	LetterBoxOpercity        float64       `json:"letterboxopercity"`        // 아웃풋 플레이트 레터박스 투명도
 	ResizeType               string        `json:"resizetype"`               // 아웃풋 플레이트 레터박스 리사이즈타입.(fill:가로,세로자동판단, width:가로기준)
 	PlateExt                 string        `json:"plateext"`                 // 아웃풋 플레이트 확장자. 간혹 mov -> exr 로 나가는 프로젝트가 있다.
 	PlateInColorspace        string        `json:"plateincolorspace"`        // 아웃풋 플레이트 IN  컬러스페이스. 넘벳 프록시 이미지 렌더링시 사용된다.
@@ -73,6 +81,7 @@ type Project struct {
 	Lut                      string        `json:"lut"`                      // 프로젝트 메인 LUT파일
 	LutInColorspace          string        `json:"lutincolorspace"`          // 프로젝트 LUT IN  컬러스페이스
 	LutOutColorspace         string        `json:"lutoutcolorspace"`         // 프로젝트 LUT OUT 컬러스페이스
+	OCIOPath                 string        `json:"ociopath"`                 // 프로젝트 OCIO 경로
 	Description              string        `json:"description"`              // 필요한 자세한 설명
 	Updatetime               string        `json:"updatetime"`               // 업데이트 시간
 	StartFrame               int           `json:"startframe"`               // 시작프레임 회사는 1001로 시작함.
