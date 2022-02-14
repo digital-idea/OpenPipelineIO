@@ -306,11 +306,11 @@
 						<div class="col">
 							<small class="form-text text-muted">Plate IN Colorspace</small>
 							<select name="PlateInColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -319,24 +319,24 @@
 						<div class="col">
 							<small class="form-text text-muted">Plate OUT Colorspace</small>
 							<select name="PlateOutColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
-							</select>	
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.PlateOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+							</select>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Proxy OUT Colorspace</small>
 							<select name="ProxyOutColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.ProxyOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.ProxyOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.ProxyOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -353,11 +353,11 @@
 						<div class="col">
 							<small class="form-text text-muted">LUT IN Colorspace</small>
 							<select name="LutInColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.LutInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutInColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -366,11 +366,11 @@
 						<div class="col">
 							<small class="form-text text-muted">LUT OUT Colorspace</small>
 							<select name="LutOutColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.LutOutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -423,11 +423,11 @@
 						<div class="col">
 							<small class="form-text text-muted">InColorspace</small>
 							<select name="OutputMov.InColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -436,11 +436,11 @@
 						<div class="col">
 							<small class="form-text text-muted">OutColorspace</small>
 							<select name="OutputMov.OutColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.OutputMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -493,11 +493,11 @@
 						<div class="col">
 							<small class="form-text text-muted">InColorspace</small>
 							<select name="EditMov.InColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.InColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
@@ -506,11 +506,11 @@
 						<div class="col">
 							<small class="form-text text-muted">OutColorspace</small>
 							<select name="EditMov.OutColorspace" class="form-control">
-								<optgroup label="Default Colorspaces">
-									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
-								</optgroup>
 								<optgroup label="OCIO Colorspaces">
 									{{range .OCIOColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
+								</optgroup>
+								<optgroup label="Default Colorspaces">
+									{{range .DefaultColorspaces}}<option value="{{.}}" {{if eq $.Project.EditMov.OutColorspace .}}selected{{end}}>{{.}}</option>{{end}}
 								</optgroup>
 							</select>
 						</div>
