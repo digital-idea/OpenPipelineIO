@@ -35,7 +35,7 @@ type Mov struct {
 	CropWidth         int     `json:"cropwidth"`
 	CropHeight        int     `json:"cropheight"`
 	LetterBox         bool    `json:"letterbox"`
-	LetterBoxOpercity float64 `json:"letterboxopercity"`
+	LetterBoxOparcity float64 `json:"letterboxoparcity"`
 }
 
 // Project 정보를 담는 자료구조
@@ -67,7 +67,7 @@ type Project struct {
 	PlateCropWidth           int           `json:"platecropwidth"`           // 아웃풋 플레이트 Crop Width
 	PlateCropHeight          int           `json:"platecropheight"`          // 아웃풋 플레이트 Crop Height
 	LetterBox                bool          `json:"letterbox"`                // 아웃풋 플레이트 레터박스 유무
-	LetterBoxOpercity        float64       `json:"letterboxopercity"`        // 아웃풋 플레이트 레터박스 투명도
+	LetterBoxOparcity        float64       `json:"letterboxoparcity"`        // 아웃풋 플레이트 레터박스 투명도
 	ResizeType               string        `json:"resizetype"`               // 아웃풋 플레이트 레터박스 리사이즈타입.(fill:가로,세로자동판단, width:가로기준)
 	PlateExt                 string        `json:"plateext"`                 // 아웃풋 플레이트 확장자. 간혹 mov -> exr 로 나가는 프로젝트가 있다.
 	PlateInColorspace        string        `json:"plateincolorspace"`        // 아웃풋 플레이트 IN  컬러스페이스. 넘벳 프록시 이미지 렌더링시 사용된다.
