@@ -304,6 +304,32 @@
 					</div>
 					<div class="row">
 						<div class="col">
+							<small class="form-text text-muted">Crop Width</small>
+							<input type="text" name="PlateCropWidth" class="form-control" placeholder="Width" value={{.Project.PlateCropWidth}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Crop Height</small>
+							<input type="text" name="PlateCropHeight" class="form-control" placeholder="Height" value={{.Project.PlateCropHeight}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Oparcity</small>
+							<input type="number" step="0.1" name="LetterBoxOparcity" class="form-control" placeholder="0.5" value={{.Project.LetterBoxOparcity}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">LetterBox</small>
+							<select name="LetterBox" class="form-control">
+								{{if .Project.LetterBox}}
+									<option value="true" selected>on</option>
+									<option value="false">off</option>
+								{{else}}
+									<option value="true">on</option>
+									<option value="false" selected>off</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
 							<small class="form-text text-muted">Plate IN Colorspace</small>
 							<select name="PlateInColorspace" class="form-control">
 								<optgroup label="OCIO Colorspaces">
@@ -346,7 +372,9 @@
 			<!--3번째열-->
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="form-group">
-					<label class="pb-2">LUT 경로</label>
+					<label class="pb-2">OCIO Path</label> <!--프로젝트에서 사용하는 Custom OCIO Path를 설정한다.-->
+					<input type="text" name="OCIOPath" class="form-control" placeholder="OCIO PATH" value={{.Project.OCIOPath}}>
+					<label class="pt-2 pb-2">LUT 경로</label>
 					<!--lut In,Out 컬러스페이스는 default값이 없다. 뉴크에서 lut를 적용할 때 사용하는 Vectorfield 노드에 default 값이 없기 때문이다.-->
 					<input type="text" name="Lut" class="form-control" placeholder="Lut path" value={{.Project.Lut}}>
 					<div class="row">
@@ -402,7 +430,32 @@
 							</select>
 						</div>
 					</div>
-				
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">Crop Width</small>
+							<input type="text" name="OutputMov.CropWidth" class="form-control" placeholder="Width" value={{.Project.OutputMov.CropWidth}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Crop Height</small>
+							<input type="text" name="OutputMov.CropHeight" class="form-control" placeholder="Height" value={{.Project.OutputMov.CropHeight}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Oparcity</small>
+							<input type="number" step="0.1" name="OutputMov.LetterBoxOparcity" class="form-control" placeholder="0.5" value={{.Project.OutputMov.LetterBoxOparcity}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">LetterBox</small>
+							<select name="OutputMov.LetterBox" class="form-control">
+								{{if .OutputMov.LetterBox}}
+									<option value="true" selected>on</option>
+									<option value="false">off</option>
+								{{else}}
+									<option value="true">on</option>
+									<option value="false" selected>off</option>
+								{{end}}
+							</select>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col">
 							<small class="form-text text-muted">Fps</small>
@@ -470,6 +523,32 @@
 								<option value="H.264" {{if eq .Project.EditMov.Codec "H.264" }}selected{{end}}>H.264</option>
 								<option value="Avid_DNxHD_Codec" {{if eq .Project.EditMov.Codec "Avid_DNxHD_Codec" }}selected{{end}}>Avid_DNxHD_Codec</option>
 								<option value="" {{if eq .Project.EditMov.Codec "" }}selected{{end}}>Unknown</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<small class="form-text text-muted">Crop Width</small>
+							<input type="text" name="EditMov.CropWidth" class="form-control" placeholder="Width" value={{.Project.EditMov.CropWidth}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Crop Height</small>
+							<input type="text" name="EditMov.CropHeight" class="form-control" placeholder="Height" value={{.Project.EditMov.CropHeight}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">Oparcity</small>
+							<input type="number" step="0.1" name="EditMov.LetterBoxOparcity" class="form-control" placeholder="0.5" value={{.Project.EditMov.LetterBoxOparcity}}>
+						</div>
+						<div class="col">
+							<small class="form-text text-muted">LetterBox</small>
+							<select name="EditMov.LetterBox" class="form-control">
+								{{if .EditMov.LetterBox}}
+									<option value="true" selected>on</option>
+									<option value="false">off</option>
+								{{else}}
+									<option value="true">on</option>
+									<option value="false" selected>off</option>
+								{{end}}
 							</select>
 						</div>
 					</div>

@@ -285,6 +285,19 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		renewal.PlateHeight = plateheight
 	}
+	plateCropWidth, err := strconv.Atoi(r.FormValue("PlateCropWidth"))
+	if err == nil {
+		renewal.PlateCropWidth = plateCropWidth
+	}
+	plateCropHeight, err := strconv.Atoi(r.FormValue("PlateCropHeight"))
+	if err == nil {
+		renewal.PlateCropHeight = plateCropHeight
+	}
+	renewal.LetterBox = str2bool(r.FormValue("LetterBox"))
+	letterBoxOparcity, err := strconv.ParseFloat(r.FormValue("LetterBoxOparcity"), 64)
+	if err == nil {
+		renewal.LetterBoxOparcity = letterBoxOparcity
+	}
 	renewal.ResizeType = r.FormValue("ResizeType")
 	renewal.PlateExt = r.FormValue("PlateExt")
 	renewal.ExrCompression = r.FormValue("ExrCompression")
@@ -301,6 +314,19 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		renewal.OutputMov.Height = outputmovHeight
 	}
+	outputMovCropWidth, err := strconv.Atoi(r.FormValue("OutputMov.CropWidth"))
+	if err == nil {
+		renewal.OutputMov.CropWidth = outputMovCropWidth
+	}
+	outputMovCropHeight, err := strconv.Atoi(r.FormValue("OutputMov.CropHeight"))
+	if err == nil {
+		renewal.OutputMov.CropHeight = outputMovCropHeight
+	}
+	renewal.OutputMov.LetterBox = str2bool(r.FormValue("OutputMov.LetterBox"))
+	outputMovLetterBoxOparcity, err := strconv.ParseFloat(r.FormValue("OutputMov.LetterBoxOparcity"), 64)
+	if err == nil {
+		renewal.OutputMov.LetterBoxOparcity = outputMovLetterBoxOparcity
+	}
 	renewal.OutputMov.Codec = r.FormValue("OutputMov.Codec")
 	outputmovFps, err := strconv.ParseFloat(r.FormValue("OutputMov.Fps"), 64)
 	if err == nil {
@@ -316,6 +342,19 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		renewal.EditMov.Height = editmovHeight
 	}
+	editMovCropWidth, err := strconv.Atoi(r.FormValue("EditMov.CropWidth"))
+	if err == nil {
+		renewal.EditMov.CropWidth = editMovCropWidth
+	}
+	editMovCropHeight, err := strconv.Atoi(r.FormValue("EditMov.CropHeight"))
+	if err == nil {
+		renewal.EditMov.CropHeight = editMovCropHeight
+	}
+	renewal.EditMov.LetterBox = str2bool(r.FormValue("EditMov.LetterBox"))
+	editMovLetterBoxOparcity, err := strconv.ParseFloat(r.FormValue("EditMov.LetterBoxOparcity"), 64)
+	if err == nil {
+		renewal.EditMov.LetterBoxOparcity = editMovLetterBoxOparcity
+	}
 	renewal.EditMov.Codec = r.FormValue("EditMov.Codec")
 	editmovFps, err := strconv.ParseFloat(r.FormValue("EditMov.Fps"), 64)
 	if err == nil {
@@ -328,6 +367,7 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		renewal.Status = ProjectStatus(status)
 	}
+	renewal.OCIOPath = r.FormValue("OCIOPath")
 	renewal.Lut = r.FormValue("Lut")
 	renewal.LutInColorspace = r.FormValue("LutInColorspace")
 	renewal.LutOutColorspace = r.FormValue("LutOutColorspace")
