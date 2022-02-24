@@ -79,4 +79,6 @@ type Setting struct {
 	MongodumpPath                        string  `json:"mongodumppath"`                        // mongodump 경로
 	ReviewStageMode                      bool    `json:"reviewstagemode"`                      // Review Stage 모드 활성화
 	ReviewStatusMode                     bool    `json:"reviewstatusmode"`                     // Review Status 모드 활성화
+	RocketChatWebHookURL                 string  `json:"rocketchatwebhookurl"`                 // 로켓쳇 웹훅 URL
+	RocketChatToken                      string  `json:"rocketchattoken"`                      // 로켓쳇 토큰
 }
