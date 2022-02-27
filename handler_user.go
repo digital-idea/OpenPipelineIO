@@ -189,6 +189,7 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	u.EmployeeNumber = strings.TrimSpace(r.FormValue("EmployeeNumber"))
+	u.RocketChatID = strings.TrimSpace(r.FormValue("RocketChatID"))
 	u.FirstNameKor = r.FormValue("FirstNameKor")
 	u.LastNameKor = r.FormValue("LastNameKor")
 	u.FirstNameEng = strings.Title(strings.ToLower(r.FormValue("FirstNameEng")))

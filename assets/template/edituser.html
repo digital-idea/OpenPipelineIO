@@ -1,244 +1,271 @@
 {{define "edituser" }}
-{{template "headBootstrap"}}
+{{template "headBootstrap5"}}
 <body>
-
-<div class="container p-5">
-    <form action="/edituser-submit"  method="POST" enctype="multipart/form-data">
-    <div class="pt-3 pb-5">
-        <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
-        <input type="hidden" name="ID" id="ID" value="{{.User.ID}}">
-    </div>
-    <div class="row">
-        <div class="col-sm">
-            <div class="form-group">
-                <label>Upload Photo</label>
-                <input type="file" class="form-control-file" name="Photo">
-            </div>
-            <label>Name / 이름</label>
-            <div class="form-row">
-                <div class="col-4">
-                    <input type="text" name="LastNameKor" class="form-control" placeholder="성" value="{{.User.LastNameKor}}">
-                </div>
-                <div class="col-8">
-                    <input type="text" name="FirstNameKor" class="form-control" placeholder="이름" value="{{.User.FirstNameKor}}">
-                </div>
-            </div>
-            <small class="form-text text-muted pb-3">한글이름</small>
-            <div class="form-row">
-                <div class="col-8">
-                    <input type="text" name="FirstNameEng" class="form-control" placeholder="FirstName" value="{{.User.FirstNameEng}}">
-                </div>
-                <div class="col-4">
-                    <input type="text" name="LastNameEng" class="form-control" placeholder="LastName" value="{{.User.LastNameEng}}">
-                </div>
-            </div>
-            <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
-            <div class="form-row">
-                <div class="col-4">
-                    <input type="text" name="LastNameChn" class="form-control" placeholder="성(한자)" value="{{.User.LastNameChn}}">
-                </div>
-                <div class="col-8">
-                    <input type="text" name="FirstNameChn" class="form-control" placeholder="이름(한자)" value="{{.User.FirstNameChn}}">
-                </div>
-            </div>
-            <small class="form-text text-muted pb-3">중국 콘텐츠 크레딧 제작시 한자이름을 요구하는 경우가 있습니다.</small>
-
-            <div class="form-group">
-                <label>EmployeeNumber / 사번</label>
-                <input type="text" name="EmployeeNumber" class="form-control" placeholder="사번" value="{{.User.EmployeeNumber}}">
-                <small class="form-text text-muted">회사 내부에서 사용하는 사번을 적어주세요.</small>
-            </div>
-
-            <div class="form-group">
-                <label>E-mail / 사내 이메일</label>
-                <input type="email" name="Email" class="form-control" placeholder="사번@{{.MailDNS}}" value="{{.User.Email}}">
-                <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>
-            </div>
-
-            <div class="form-group">
-                <label >E-mail / 외부 이메일</label>
-                <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail" value="{{.User.EmailExternal}}">
-                <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Phone / 휴대폰 번호</label>
-                <input type="tel" name="Phone" id="Phone" class="form-control" placeholder="Phone number" value="{{.User.Phone}}">
-                <small class="form-text text-muted">휴대폰 번호를 입력해주세요.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Hotline / 사내 전화번호</label>
-                <input type="tel" name="Hotline" id="Hotline" class="form-control" placeholder="Hotline number" value="{{.User.Hotline}}">
-                <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
-            </div>
+    <div class="container p-5">
+        <form action="/edituser-submit"  method="POST" enctype="multipart/form-data">
+        <div class="pt-3 pb-5">
+            <h2 class="section-heading text-center">Edit User: {{.User.ID}}</h2>
+            <input type="hidden" name="ID" id="ID" value="{{.User.ID}}">
         </div>
-        <div class="col-sm-1"></div>
-
-        <div class="col-sm">
-            <div class="form-group">
-                <label class="mb-0">조직정보</label>
-            </div>
-            
-            <div class="row">
-                <div class="col-4 form-group">
-                    <small class="form-text text-muted">Division / 본부</small>    
-                    <select class="form-control" name="Division" id="Division">
-                        <option value="unknown">해당없음</option>
-                        {{range .Divisions}}
-                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
-                        {{end}}
-                    </select>
+        <div class="row">
+            <div class="col-sm">
+                <div class="row">
+                    <div class="form-group">
+                        <label>Upload Photo</label>
+                        <input type="file" class="form-control-file" name="Photo">
+                    </div>
                 </div>
 
-                <div class="col-4 form-group">
-                    <small class="form-text text-muted">Dept / 부서</small>    
-                    <select class="form-control" name="Department" id="Department">
-                        <option value="unknown">해당없음</option>
-                        {{range .Departments}}
-                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
-                        {{end}}
-                    </select>
+                <div class="row pt-3">
+                    <label>Name / 이름</label>
+                    <div class="col-4">
+                        <input type="text" name="LastNameKor" class="form-control" placeholder="성" value="{{.User.LastNameKor}}">
+                    </div>
+                    <div class="col-8">
+                        <input type="text" name="FirstNameKor" class="form-control" placeholder="이름" value="{{.User.FirstNameKor}}">
+                    </div>
+                    <small class="form-text text-muted pb-3">한글이름</small>    
                 </div>
+                
+                
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" name="FirstNameEng" class="form-control" placeholder="FirstName" value="{{.User.FirstNameEng}}">
+                    </div>
+                    <div class="col-4">
+                        <input type="text" name="LastNameEng" class="form-control" placeholder="LastName" value="{{.User.LastNameEng}}">
+                    </div>
+                    <small class="form-text text-muted pb-3">영문이름. 외국인은 이름이 길기 때문에 FirstName을 닉네임으로 사용합니다.</small>
+                </div>
+                
+                <div class="row">
+                    <div class="col-4">
+                        <input type="text" name="LastNameChn" class="form-control" placeholder="성(한자)" value="{{.User.LastNameChn}}">
+                    </div>
+                    <div class="col-8">
+                        <input type="text" name="FirstNameChn" class="form-control" placeholder="이름(한자)" value="{{.User.FirstNameChn}}">
+                    </div>
+                    <small class="form-text text-muted pb-3">한자이름. 중국 콘텐츠 크레딧 제작시 한자를 요구하는 경우가 있습니다.</small>
+                </div>
+                
 
-                <div class="col-4 form-group">
-                    <small class="form-text text-muted">Team / 팀</small>
-                    <select class="form-control" name="Team" id="Team">
-                        <option value="unknown">해당없음</option>
-                        {{range .Teams}}
-                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
-                        {{end}}
-                    </select>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-4 form-group">
-                    <small class="form-text text-muted">Role / 직책</small>
-                    <select class="form-control" name="Role" id="Role">
-                        <option value="unknown">해당없음</option>
-                        {{range .Roles}}
-                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                <div class="col-4 form-group">
-                    <small class="form-text text-muted">Position / 직급</small>
-                    <select class="form-control" name="Position" id="Position">
-                        <option value="unknown">해당없음</option>
-                        {{range .Positions}}
-                            <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
-                        {{end}}
-                    </select>
-                </div>
-                <div class="col-4 form-check mt-4">
-                    <input type="checkbox" id="Primary" name="Primary" class="form-check-input ml-0" value="true">
-                    <label class="form-check-label small ml-4" for="Primary">Primary<br>주 직책</label>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <span type="hidden" class="btn btn-darkmode w-100" id="addOrganization">조직정보 수정하기</span>
-                </div>
-            </div>
-            
-            <div class="form-group pt-3">
-                <small id="Warning" class="form-text text-warning">기존에 등록된 조직정보가 아래 출력됩니다.</small>
-                <div id="Organizations">
-                    {{range .Organizations}}
-                        {{if .Primary}}
-                            <div class="alert alert-success small" role="alert">
-                                {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>EmployeeNumber(사번)</label>
+                            <input type="text" name="EmployeeNumber" class="form-control" placeholder="사번" value="{{.User.EmployeeNumber}}">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>RocketChat ID</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="basic-addon1">@</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="RocketChat ID" name="RocketChatID" value="{{.User.RocketChatID}}">
                             </div>
-                        {{else}}
-                            <div class="alert alert-warning small" role="alert">
-                                {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="form-group">
+                    <label>E-mail / 사내 이메일</label>
+                    <input type="email" name="Email" class="form-control" placeholder="사번@{{.MailDNS}}" value="{{.User.Email}}">
+                    <small class="form-text text-muted">회사 내부에서 사용하는 이메일을 적어주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label >E-mail / 외부 이메일</label>
+                    <input type="email" name="EmailExternal" class="form-control" placeholder="E-mail" value="{{.User.EmailExternal}}">
+                    <small class="form-text text-muted">회사 외부에서 사용하는 이메일을 적어주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone / 휴대폰 번호</label>
+                    <input type="tel" name="Phone" id="Phone" class="form-control" placeholder="Phone number" value="{{.User.Phone}}">
+                    <small class="form-text text-muted">휴대폰 번호를 입력해주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Hotline / 사내 전화번호</label>
+                    <input type="tel" name="Hotline" id="Hotline" class="form-control" placeholder="Hotline number" value="{{.User.Hotline}}">
+                    <small class="form-text text-muted">사내 전화번호를 입력해주세요.</small>
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="mb-0">조직정보 설정</label>
+                </div>
+                
+                <div class="row">
+                    <div class="col-4 form-group">
+                        <small class="form-text text-muted">Division / 본부</small>    
+                        <select class="form-control" name="Division" id="Division">
+                            <option value="unknown">해당없음</option>
+                            {{range .Divisions}}
+                                <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <small class="form-text text-muted">Dept / 부서</small>    
+                        <select class="form-control" name="Department" id="Department">
+                            <option value="unknown">해당없음</option>
+                            {{range .Departments}}
+                                <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <small class="form-text text-muted">Team / 팀</small>
+                        <select class="form-control" name="Team" id="Team">
+                            <option value="unknown">해당없음</option>
+                            {{range .Teams}}
+                                <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-4 form-group">
+                        <small class="form-text text-muted">Role / 직책</small>
+                        <select class="form-control" name="Role" id="Role">
+                            <option value="unknown">해당없음</option>
+                            {{range .Roles}}
+                                <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                    <div class="col-4 form-group">
+                        <small class="form-text text-muted">Position / 직급</small>
+                        <select class="form-control" name="Position" id="Position">
+                            <option value="unknown">해당없음</option>
+                            {{range .Positions}}
+                                <option value="{{.ID}}">{{if .Name}}{{.Name}}{{else}}{{.ID}}{{end}}</option>
+                            {{end}}
+                        </select>
+                    </div>
+                    <div class="col-4 form-check mt-4">
+                        <div class="from-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input finger" type="checkbox" id="Primary" name="Primary" value="true">
+                                <label class="form-check-label unselectable finger small" for="Primary">Primary<br>주 직책</label>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <span type="hidden" class="btn btn-darkmode w-100" id="addOrganization">조직정보 설정</span>
+                    </div>
+                </div>
+                
+                <div class="form-group pt-3">
+                    <small id="Warning" class="form-text text-warning">설정된 조직정보는 아래와 같습니다.</small>
+                    <div id="Organizations">
+                        {{range .Organizations}}
+                            {{if .Primary}}
+                                <div class="alert alert-success small" role="alert">
+                                    {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                                </div>
+                            {{else}}
+                                <div class="alert alert-warning small" role="alert">
+                                    {{.Division.Name}}, {{.Department.Name}}, {{.Team.Name}}, {{.Role.Name}}, {{.Position.Name}}
+                                </div>
+                            {{end}}
+                            
                         {{end}}
+                    </div>
+                </div>
+
+                <div class="form-group pt-3">
+                    <label>Tags / 태그</label>
+                    <input type="hidden" name="OrganizationsForm" id="OrganizationsForm" value="{{.User.OrganizationsForm}}" class="form-control">
+                    <input type="text" name="Tags" id="Tags" class="form-control" placeholder="추가태그" value="{{List2str .User.Tags}}">
+                    <small class="form-text text-muted">사용자에게 설정된 Tag목록 입니다.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Location / 사내 위치정보</label>
+                    <input type="text" name="Location" class="form-control" placeholder="층수" value="{{.User.Location}}">
+                    <small class="form-text text-muted">층수, 블럭정보를 입력해주세요.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Timezone / 시간대</label>
+                    <select name="Timezone" class="form-control">
+                        <option value="Asia/Seoul" {{if eq .User.Timezone "Asia/Seoul" }}selected{{end}}>한국 Asia/Seoul</option>
+                        <option value="Asia/Beijing" {{if eq .User.Timezone "Asia/Beijing" }}selected{{end}}>중국 Asia/Beijing</option>
+                        <option value="US/Eastern" {{if eq .User.Timezone "US/Eastern" }}selected{{end}}>미국 US/Eastern</option>
+                        <option value="Asia/Tokyo" {{if eq .User.Timezone "Asia/Tokyo" }}selected{{end}}>일본 Asia/Japan</option>
+                        <option value="Asia/Ho_Chi_Minh" {{if eq .User.Timezone "Asia/Ho_Chi_Minh" }}selected{{end}}>베트남 Asia/Vietnam</option>
+                        <option value="Canada/Atlantic" {{if eq .User.Timezone "Canada/Atlantic" }}selected{{end}}>캐나다 Canada/Atlantic</option>
+                        <option value="Canada/Central" {{if eq .User.Timezone "Canada/Central" }}selected{{end}}>캐나다 Canada/Central</option>
+                        <option value="Canada/Eastern" {{if eq .User.Timezone "Canada/Eastern" }}selected{{end}}>캐나다 Canada/Eastern</option>
+                        <option value="Canada/Mountain" {{if eq .User.Timezone "Canada/Mountain" }}selected{{end}}>캐나다 Canada/Mountain</option>
+                        <option value="Canada/Newfoundland" {{if eq .User.Timezone "Canada/Newfoundland" }}selected{{end}}>캐나다 Canada/Newfoundland</option>
+                        <option value="Canada/Pacific" {{if eq .User.Timezone "Canada/Pacific" }}selected{{end}}>캐나다 Canada/Pacific</option>
+                        <option value="Canada/Saskatchewan" {{if eq .User.Timezone "Canada/Saskatchewan" }}selected{{end}}>캐나다 Canada/Saskatchewan</option>
+                        <option value="Canada/Yukon" {{if eq .User.Timezone "Canada/Yukon" }}selected{{end}}>캐나다 Canada/Yukon</option>
+                        <option value="America/Guatemala" {{if eq .User.Timezone "America/Guatemala" }}selected{{end}}>과테말라 America/Guatemala</option>
+                    </select>
+                    <small class="form-text text-muted">시간대를 선택합니다.</small>
+                </div>
+                {{if eq .SessionUser.AccessLevel 11}}
+                    <div class="mt-3 p-3 border border-3 border-danger rounded">
+                        <div class="form-group">
+                            <label class=>Access Projects</label>
+                            <input type="text" name="AccessProjects" class="form-control" placeholder="접근가능한 프로젝트 리스트" value="{{List2str .User.AccessProjects}}">
+                            <small class="form-text text-muted">프로젝트명, 프로젝트명 형태로 입력시 해당 프로젝트만 접근할 수 있습니다.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>AccessLevel</label>
+                            <select name="AccessLevel" class="form-control">
+                                <option value="0" {{if eq .User.AccessLevel 0}}selected{{end}}>0: Unknown</option>
+                                <option value="1" {{if eq .User.AccessLevel 1}}selected{{end}}>1: Guest</option>
+                                <option value="2" {{if eq .User.AccessLevel 2}}selected{{end}}>2: Client</option>
+                                <option value="3" {{if eq .User.AccessLevel 3}}selected{{end}}>3: Artist</option>
+                                <option value="4" {{if eq .User.AccessLevel 4}}selected{{end}}>4: Lead</option>
+                                <option value="5" {{if eq .User.AccessLevel 5}}selected{{end}}>5: Pm</option>
+                                <option value="6" {{if eq .User.AccessLevel 6}}selected{{end}}>6: Supervisor</option>
+                                <option value="7" {{if eq .User.AccessLevel 7}}selected{{end}}>7: IO</option>
+                                <option value="8" {{if eq .User.AccessLevel 8}}selected{{end}}>8: PD</option>
+                                <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: HQ(경영,인사,재무)</option>
+                                <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Developer</option>
+                                <option value="11" {{if eq .User.AccessLevel 11}}selected{{end}}>11: Admin</option>
+                            </select>
+                            <small class="form-text text-danger">사용자 Accesslevel을 선택합니다.</small>
+                        </div>
                         
-                    {{end}}
-                </div>
+                        <div class="from-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input finger" type="checkbox" id="IsLeave" name="IsLeave" value="true" {{if eq .User.IsLeave true}}checked{{end}}>
+                                <label class="form-check-label unselectable finger" for="IsLeave">퇴자자로 변경</label>
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
             </div>
-
-            <div class="form-group pt-3">
-                <label>Tags / 태그</label>
-                <input type="hidden" name="OrganizationsForm" id="OrganizationsForm" value="{{.User.OrganizationsForm}}" class="form-control">
-                <input type="text" name="Tags" id="Tags" class="form-control" placeholder="추가태그" value="{{List2str .User.Tags}}">
-                <small class="form-text text-muted">사용자에게 설정된 Tag목록 입니다.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Location / 사내 위치정보</label>
-                <input type="text" name="Location" class="form-control" placeholder="층수" value="{{.User.Location}}">
-                <small class="form-text text-muted">층수, 블럭정보를 입력해주세요.</small>
-            </div>
-
-            <div class="form-group">
-                <label>Timezone / 시간대</label>
-                <select name="Timezone" class="form-control">
-                    <option value="Asia/Seoul" {{if eq .User.Timezone "Asia/Seoul" }}selected{{end}}>한국 Asia/Seoul</option>
-                    <option value="Asia/Beijing" {{if eq .User.Timezone "Asia/Beijing" }}selected{{end}}>중국 Asia/Beijing</option>
-                    <option value="US/Eastern" {{if eq .User.Timezone "US/Eastern" }}selected{{end}}>미국 US/Eastern</option>
-                    <option value="Asia/Tokyo" {{if eq .User.Timezone "Asia/Tokyo" }}selected{{end}}>일본 Asia/Japan</option>
-                    <option value="Asia/Ho_Chi_Minh" {{if eq .User.Timezone "Asia/Ho_Chi_Minh" }}selected{{end}}>베트남 Asia/Vietnam</option>
-                    <option value="Canada/Atlantic" {{if eq .User.Timezone "Canada/Atlantic" }}selected{{end}}>캐나다 Canada/Atlantic</option>
-                    <option value="Canada/Central" {{if eq .User.Timezone "Canada/Central" }}selected{{end}}>캐나다 Canada/Central</option>
-                    <option value="Canada/Eastern" {{if eq .User.Timezone "Canada/Eastern" }}selected{{end}}>캐나다 Canada/Eastern</option>
-                    <option value="Canada/Mountain" {{if eq .User.Timezone "Canada/Mountain" }}selected{{end}}>캐나다 Canada/Mountain</option>
-                    <option value="Canada/Newfoundland" {{if eq .User.Timezone "Canada/Newfoundland" }}selected{{end}}>캐나다 Canada/Newfoundland</option>
-                    <option value="Canada/Pacific" {{if eq .User.Timezone "Canada/Pacific" }}selected{{end}}>캐나다 Canada/Pacific</option>
-                    <option value="Canada/Saskatchewan" {{if eq .User.Timezone "Canada/Saskatchewan" }}selected{{end}}>캐나다 Canada/Saskatchewan</option>
-                    <option value="Canada/Yukon" {{if eq .User.Timezone "Canada/Yukon" }}selected{{end}}>캐나다 Canada/Yukon</option>
-                </select>
-                <small class="form-text text-muted">회사 확장을 대비하여 시간대를 선택합니다.</small>
-            </div>
-            {{if eq .SessionUser.AccessLevel 11}}
-            <div class="form-group">
-                <label>Access Projects</label>
-                <input type="text" name="AccessProjects" class="form-control" placeholder="접근가능한 프로젝트 리스트" value="{{List2str .User.AccessProjects}}">
-                <small class="form-text text-muted">프로젝트명, 프로젝트명 형태로 입력시 해당 프로젝트만 접근할 수 있습니다.</small>
-            </div>
-            <div class="form-group">
-                <label>AccessLevel</label>
-                <select name="AccessLevel" class="form-control">
-                    <option value="0" {{if eq .User.AccessLevel 0}}selected{{end}}>0: Unknown</option>
-                    <option value="1" {{if eq .User.AccessLevel 1}}selected{{end}}>1: Guest</option>
-                    <option value="2" {{if eq .User.AccessLevel 2}}selected{{end}}>2: Client</option>
-                    <option value="3" {{if eq .User.AccessLevel 3}}selected{{end}}>3: Artist</option>
-                    <option value="4" {{if eq .User.AccessLevel 4}}selected{{end}}>4: Lead</option>
-                    <option value="5" {{if eq .User.AccessLevel 5}}selected{{end}}>5: Pm</option>
-                    <option value="6" {{if eq .User.AccessLevel 6}}selected{{end}}>6: Supervisor</option>
-                    <option value="7" {{if eq .User.AccessLevel 7}}selected{{end}}>7: IO</option>
-                    <option value="8" {{if eq .User.AccessLevel 8}}selected{{end}}>8: PD</option>
-                    <option value="9" {{if eq .User.AccessLevel 9}}selected{{end}}>9: HQ(경영,인사,재무)</option>
-                    <option value="10" {{if eq .User.AccessLevel 10}}selected{{end}}>10: Developer</option>
-                    <option value="11" {{if eq .User.AccessLevel 11}}selected{{end}}>11: Admin</option>
-                </select>
-                <small class="form-text text-danger">사용자 Accesslevel을 선택합니다.</small>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input type="checkbox" id="IsLeave" name="IsLeave" class="form-check-input" value="true" {{if eq .User.IsLeave true}}checked{{end}}>
-                    <label class="form-check-label" for="IsLeave">퇴사자로 변경</label>
-                </div>
-                <small class="form-text text-danger">사용자 퇴사여부를 설정합니다.</small>
-            </div>
-            {{end}}
+        </div>     
+        <div class="text-center">
+            <button type="submit" class="btn btn-darkmode mt-5">UPDATE</button>
         </div>
-    </div>     
-    <div class="text-center">
-        <button type="submit" class="btn btn-darkmode mt-5">UPDATE</button>
+        </form>
     </div>
-    </form>
-</div>
 
 
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script src="/assets/js/signup.js"></script>
 </html>
 {{end}}
