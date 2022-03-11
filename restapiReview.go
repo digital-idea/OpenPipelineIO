@@ -1012,6 +1012,20 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	// rocketchat
+	msg := HookMessage{}
+	msg.Text = rcp.Text
+	resp, err := msg.SendRocketChat()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if !resp.Success {
+		http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+		return
+	}
+
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1138,6 +1152,19 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// rocketchat
+	msg := HookMessage{}
+	msg.Text = rcp.Text
+	resp, err := msg.SendRocketChat()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if !resp.Success {
+		http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+		return
+	}
+
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

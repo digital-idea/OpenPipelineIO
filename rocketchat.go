@@ -1,0 +1,52 @@
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type HookMessage struct {
+	Text        string           `json:"text"`
+	Attachments []HookAttachment `json:"attachments"`
+}
+
+type HookAttachment struct {
+	Title     string `json:"title"`
+	TitleLink string `json:"title_link"`
+	Text      string `json:"text"`
+	ImageURL  string `json:"image_url"`
+	Color     string `json:"color"`
+}
+
+type HookResponse struct {
+	Success bool `json:"success"`
+}
+
+func (msg *HookMessage) SendRocketChat() (*HookResponse, error) {
+	opt, err := json.Marshal(msg)
+	if err != nil {
+		return nil, err
+	}
+	url := fmt.Sprintf("%s/hooks/%s", CachedAdminSetting.RocketChatWebHookURL, CachedAdminSetting.RocketChatToken)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(opt))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json; charset=utf-8")
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	res := HookResponse{}
+	if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
+		return nil, err
+	}
+	return &res, nil
+}
