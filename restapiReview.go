@@ -1837,7 +1837,7 @@ func handleAPISetReviewFps(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "fps가 빈 문자열입니다", http.StatusBadRequest)
 		return
 	}
-	rcp.Fps, err = strconv.ParseFloat(fps, 8)
+	rcp.Fps, err = strconv.ParseFloat(fps, 64)
 	if err != nil {
 		http.Error(w, "fps를 설정해주세요", http.StatusBadRequest)
 		return
