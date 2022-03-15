@@ -1042,6 +1042,7 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
+
 	type Recipe struct {
 		UserID               string `json:"userid"`
 		ID                   string `json:"id"`
@@ -1074,6 +1075,7 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
 	// 사용자의 이름을 구한다.
 	u, err := getUser(session, rcp.UserID)
 	if err != nil {
@@ -1114,6 +1116,7 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		}
 
 	}
+
 	rcp.FrameComment = str2bool(r.FormValue("framecomment"))
 	frame, err := strconv.Atoi(r.FormValue("frame"))
 	if err != nil {
@@ -1146,12 +1149,14 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// slack log
 	err = slacklog(session, review.Project, fmt.Sprintf("Add Review Comment: %s, \nProject: %s, Name: %s, Author: %s", rcp.Text, review.Project, review.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// rocketchat
 	msg := HookMessage{}
 	msg.Text = rcp.Text
