@@ -6075,7 +6075,7 @@ function addReviewStatusModeComment() {
         <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
         <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
         <br>
-        <span class="badge badge-${data.itemstatus}">${data.itemstatus}</span>`
+        <span class="badge badge-${data.itemstatus} me-1">${data.itemstatus}</span>`
         if (data.framecomment) {
             newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f / ${data.frame+data.productionstartframe-1}f</span>`
         }
