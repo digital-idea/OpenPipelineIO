@@ -1162,7 +1162,7 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
 		msg := HookMessage{}
-		msg.Text = fmt.Sprintf("[%s] %s task:%s status:%s): ", review.Project, review.Name, review.Task, rcp.ItemStatus) + rcp.Text
+		msg.Text = fmt.Sprintf("[%s] %s task:%s status:%s: ", review.Project, review.Name, review.Task, rcp.ItemStatus) + rcp.Text
 		resp, err := msg.SendRocketChat()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
