@@ -1014,16 +1014,18 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// rocketchat
-	msg := HookMessage{}
-	msg.Text = rcp.Text
-	resp, err := msg.SendRocketChat()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if !resp.Success {
-		http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
-		return
+	if CachedAdminSetting.TurnOnRocketChat {
+		msg := HookMessage{}
+		msg.Text = fmt.Sprintf("[%s]%s(%s): ", review.Project, review.Name, rcp.Stage) + rcp.Text
+		resp, err := msg.SendRocketChat()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if !resp.Success {
+			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	data, err := json.Marshal(rcp)
@@ -1158,16 +1160,18 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 	}
 
 	// rocketchat
-	msg := HookMessage{}
-	msg.Text = rcp.Text
-	resp, err := msg.SendRocketChat()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if !resp.Success {
-		http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
-		return
+	if CachedAdminSetting.TurnOnRocketChat {
+		msg := HookMessage{}
+		msg.Text = fmt.Sprintf("[%s]%s(%s): ", review.Project, review.Name, rcp.ItemStatus) + rcp.Text
+		resp, err := msg.SendRocketChat()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if !resp.Success {
+			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	data, err := json.Marshal(rcp)
