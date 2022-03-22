@@ -205,6 +205,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ReviewStatusMode = str2bool(r.FormValue("ReviewStatusMode"))
 	s.RocketChatWebHookURL = r.FormValue("RocketChatWebHookURL")
 	s.RocketChatToken = r.FormValue("RocketChatToken")
+	s.TurnOnRocketChat = str2bool(r.FormValue("TurnOnRocketChat"))
 	// DB에 값을 저장합니다.
 	err = SetAdminSetting(session, s)
 	if err != nil {

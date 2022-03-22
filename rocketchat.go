@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 type HookMessage struct {
@@ -25,6 +27,18 @@ type HookResponse struct {
 }
 
 func (msg *HookMessage) SendRocketChat() (*HookResponse, error) {
+
+	// Check URL Validate
+	_, err := url.ParseRequestURI(CachedAdminSetting.RocketChatWebHookURL)
+	if err != nil {
+		return nil, err
+	}
+
+	// Check Token Validate
+	if !regexpRocketChatToken.MatchString(CachedAdminSetting.RocketChatToken) {
+		return nil, errors.New("check rocketchat token string")
+	}
+
 	opt, err := json.Marshal(msg)
 	if err != nil {
 		return nil, err
@@ -33,6 +47,7 @@ func (msg *HookMessage) SendRocketChat() (*HookResponse, error) {
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(opt))
 	if err != nil {
+
 		return nil, err
 	}
 	req.Header.Set("Accept", "application/json; charset=utf-8")
@@ -41,7 +56,7 @@ func (msg *HookMessage) SendRocketChat() (*HookResponse, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("no such host " + url)
 	}
 	defer resp.Body.Close()
 	res := HookResponse{}

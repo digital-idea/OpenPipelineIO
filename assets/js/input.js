@@ -6020,6 +6020,11 @@ function setReviewItemStatus(itemstatus) {
         })
     })
     .then((response) => {
+        // 200번 정상으로 작동하는지 체크하고 에러가 발생하면 해당 내용을 catch err로 전송합니다.
+        if (!response.ok) {
+            throw Error(response.statusText + " - " + response.url);
+        }
+        // 에러가 발생하지 않으면 json으로 변환하고 data로 전송합니다.
         return response.json()
     })
     .then((data) => {
@@ -6039,8 +6044,8 @@ function setReviewItemStatus(itemstatus) {
             status.setAttribute("class","ml-1 badge badge-secondary")
         }
     })
-    .catch((error) => {
-        alert(error)
+    .catch((err) => {
+        alert(err)
     });
 }
 
@@ -6070,7 +6075,7 @@ function addReviewStatusModeComment() {
         <span class="edit" data-toggle="modal" data-target="#modal-editreviewcomment" onclick="setEditReviewCommentModal('${data.id}', '${data.date}')">≡</span>
         <span class="remove" data-toggle="modal" data-target="#modal-rmreviewcomment" onclick="setRmReviewCommentModal('${data.id}','${data.date}')">×</span>
         <br>
-        <span class="badge badge-${data.itemstatus}">${data.itemstatus}</span>`
+        <span class="badge badge-${data.itemstatus} me-1">${data.itemstatus}</span>`
         if (data.framecomment) {
             newComment += `<span class="badge badge-secondary m-1 finger" id="reviewcomment-${data.id}-${data.date}-frame" data-toggle="modal" data-target="#modal-gotoframe" onclick="setModalGotoFrame()">${data.frame}f / ${data.frame+data.productionstartframe-1}f</span>`
         }
