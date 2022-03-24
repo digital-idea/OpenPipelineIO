@@ -1016,7 +1016,11 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
 		msg := HookMessage{}
-		msg.Text = fmt.Sprintf("[%s] %s task:%s stage:%s : ", review.Project, review.Name, review.Task, rcp.Stage) + rcp.Text
+		title := fmt.Sprintf("[%sReview] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
 		resp, err := msg.SendRocketChat()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1162,7 +1166,11 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
 		msg := HookMessage{}
-		msg.Text = fmt.Sprintf("[%s] %s task:%s status:%s: ", review.Project, review.Name, review.Task, rcp.ItemStatus) + rcp.Text
+		title := fmt.Sprintf("[%s Status] %s %s_%s_v%02d", rcp.ItemStatus, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
 		resp, err := msg.SendRocketChat()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
