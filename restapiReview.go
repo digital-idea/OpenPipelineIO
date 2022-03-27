@@ -177,12 +177,6 @@ func handleAPIAddReviewStageMode(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 
-	// 최초 리뷰 등록시 기본 Stage를 설정한다.
-	rcp.Review.Stage, err = GetInitStageID(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
 	err = addReview(session, rcp.Review)
@@ -348,12 +342,6 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 
-	// 최초 리뷰 등록시 기본 Stage를 설정한다.
-	rcp.Review.Stage, err = GetInitStageID(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
 
