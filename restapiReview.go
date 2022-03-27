@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"image"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"os"
@@ -536,6 +537,24 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// rocketchat
+	if CachedAdminSetting.TurnOnRocketChat {
+		msg := HookMessage{}
+		title := fmt.Sprintf("[%s Review] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + fmt.Sprintf(" 항목이 %s 되었습니다.", status)
+		resp, err := msg.SendRocketChat()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if !resp.Success {
+			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+			return
+		}
+	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -663,6 +682,10 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
+		if *flagDebug {
+			log.Println(err)
+		}
+
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -686,20 +709,34 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 	rcp.ID = reviewID
 	review, err := getReview(session, rcp.ID)
 	if err != nil {
+		fmt.Println("tes")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	stage, err := GetStage(session, review.Stage)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if CachedAdminSetting.ReviewStageMode && review.Stage != "" {
+		stage, err := GetStage(session, review.Stage)
+		if err != nil {
+			fmt.Println("test")
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Status = stage.NextStatus // comment, approve, wait, close 상태를 설정한다.
 	}
-	rcp.Status = stage.NextStatus
+	if CachedAdminSetting.ReviewStatusMode && review.ItemStatus != "" {
+		status, err := GetStatus(session, review.ItemStatus)
+		if err != nil {
+			fmt.Println("test1")
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Status = status.ReviewStatusEvent // comment, approve, wait, close 상태를 설정한다.
+	}
 	err = setReviewStatus(session, rcp.ID, rcp.Status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Review Status: %s, %s", rcp.ID, rcp.Status), review.Project, review.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
