@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"image"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
 	"os"
@@ -357,6 +356,11 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
+
+	// status모드라도 간혹 사용자가 status모드와 stage모드를 전환기에 혼용해서 사용할 때가 있다.
+	// status모드에 있는 리뷰데이터를 stage 모드로 리뷰 하더라도 에러가 나지 않도록 기본 stage값이 존재한다면 기본설정한다.
+	rcp.Review.Stage, _ = GetInitStageID(session)
+
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -682,10 +686,6 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		if *flagDebug {
-			log.Println(err)
-		}
-
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

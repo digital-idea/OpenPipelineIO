@@ -47,7 +47,7 @@ func worker(jobs <-chan Review) {
 func queueingItem(jobs chan<- Review) {
 	for {
 		if *flagDebug {
-			fmt.Println("10 sec")
+			fmt.Println("wait 10 sec before review process")
 		}
 		time.Sleep(time.Second * 10)
 		// ProcessStatus가 wait인 item을 가져온다.
