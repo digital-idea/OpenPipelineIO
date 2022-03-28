@@ -700,14 +700,12 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 	rcp.ID = reviewID
 	review, err := getReview(session, rcp.ID)
 	if err != nil {
-		fmt.Println("tes")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	if CachedAdminSetting.ReviewStageMode && review.Stage != "" {
 		stage, err := GetStage(session, review.Stage)
 		if err != nil {
-			fmt.Println("test")
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -716,7 +714,6 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 	if CachedAdminSetting.ReviewStatusMode && review.ItemStatus != "" {
 		status, err := GetStatus(session, review.ItemStatus)
 		if err != nil {
-			fmt.Println("test1")
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
