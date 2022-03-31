@@ -177,12 +177,6 @@ func handleAPIAddReviewStageMode(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 
-	// 최초 리뷰 등록시 기본 Stage를 설정한다.
-	rcp.Review.Stage, err = GetInitStageID(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
 	err = addReview(session, rcp.Review)
@@ -348,14 +342,16 @@ func handleAPIAddReviewStatusMode(w http.ResponseWriter, r *http.Request) {
 	rcp.Review.ID = bson.NewObjectId()
 	rcp.Review.ProcessStatus = "wait" // ffmpeg 연산을 기다리는 상태로 등록한다.
 
-	// 최초 리뷰 등록시 기본 Stage를 설정한다.
-	rcp.Review.Stage, err = GetInitStageID(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	rcp.Review.RemoveAfterProcess = str2bool(r.FormValue("removeafterprocess"))
 	rcp.Review.OutputDataPath = r.FormValue("outputdatapath")
+
+	// status모드라도 간혹 사용자가 status모드와 stage모드를 전환기에 혼용해서 사용할 때가 있다.
+	// 만약 stage 모드가 활성화 되어있다면...
+	// status모드에 있는 리뷰데이터를 stage 모드로 리뷰 하더라도 에러가 나지 않도록 기본 stage값이 설정되어있으면 기본 초기값 설정한다.
+	if CachedAdminSetting.ReviewStageMode {
+		rcp.Review.Stage, _ = GetInitStageID(session)
+	}
+
 	err = addReview(session, rcp.Review)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -536,6 +532,24 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// rocketchat
+	if CachedAdminSetting.TurnOnRocketChat {
+		msg := HookMessage{}
+		title := fmt.Sprintf("[%s Review] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + fmt.Sprintf(" 항목이 %s 되었습니다.", status)
+		resp, err := msg.SendRocketChat()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if !resp.Success {
+			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+			return
+		}
+	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -689,17 +703,28 @@ func handleAPISetReviewNextStatus(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	stage, err := GetStage(session, review.Stage)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if CachedAdminSetting.ReviewStageMode && review.Stage != "" {
+		stage, err := GetStage(session, review.Stage)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Status = stage.NextStatus // comment, approve, wait, close 상태를 설정한다.
 	}
-	rcp.Status = stage.NextStatus
+	if CachedAdminSetting.ReviewStatusMode && review.ItemStatus != "" {
+		status, err := GetStatus(session, review.ItemStatus)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.Status = status.ReviewStatusEvent // comment, approve, wait, close 상태를 설정한다.
+	}
 	err = setReviewStatus(session, rcp.ID, rcp.Status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Review Status: %s, %s", rcp.ID, rcp.Status), review.Project, review.Name, "csi3", rcp.UserID, 180)
 	if err != nil {
@@ -1016,7 +1041,11 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
 		msg := HookMessage{}
-		msg.Text = fmt.Sprintf("[%s] %s task:%s stage:%s : ", review.Project, review.Name, review.Task, rcp.Stage) + rcp.Text
+		title := fmt.Sprintf("[%sReview] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
 		resp, err := msg.SendRocketChat()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1162,7 +1191,11 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
 		msg := HookMessage{}
-		msg.Text = fmt.Sprintf("[%s] %s task:%s status:%s: ", review.Project, review.Name, review.Task, rcp.ItemStatus) + rcp.Text
+		title := fmt.Sprintf("[%s Status] %s %s_%s_v%02d", rcp.ItemStatus, review.Project, review.Name, review.Task, review.MainVersion)
+		if review.SubVersion != 0 {
+			title += fmt.Sprintf("_w%02d", review.SubVersion)
+		}
+		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
 		resp, err := msg.SendRocketChat()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
