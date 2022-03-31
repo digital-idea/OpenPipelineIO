@@ -92,13 +92,6 @@ body {
 	background: #7e7e7e;
 }
 
-#floatingmenu {
-	position: fixed;
-	background-color: #2e2d2d;
-	z-index: 1000;
-	width: 100%;
-}
-
 #searchbox {
 	margin: 0 auto;
 	display: block;

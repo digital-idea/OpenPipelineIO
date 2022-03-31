@@ -34,6 +34,26 @@ $('#modal-deadline3d').on('shown.bs.modal', function () {
     $('#modal-deadline3d-date').trigger('focus')
 })
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function eraseCookie(name) {   
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 // Hotkey: http://gcctech.org/csc/javascript/javascript_keycodes.htm
 document.onkeyup = function(e) {
     if (e.ctrlKey && e.shiftKey && e.which == 65) {
@@ -4423,21 +4443,14 @@ function mailInfo(project, id) {
 }
 
 function foldingmenu() {
-    let searchbox = document.getElementById("searchbox")
     if(searchbox.style.display=="none") {
-        // 펼치기
-        searchbox.style.display='block';
-        // item 위에 빈영역을 만들어 주어야 한다.
-        document.getElementById("blinkspace").style.height = "550px";
-        // 메뉴글씨 바꾸기
-        document.getElementById("foldoption").innerText = "Collapse Searchbox ▲"
+        searchbox.style.display='block'; // 펼치기
+        document.getElementById("foldoption").innerText = "Collapse Searchbox ▲" // 글씨 변경
+        setCookie("searchboxVisable", "true")// 쿠키저장
     } else {
-        // 접기
-        searchbox.style.display='none';
-        // item 위에 빈영역을 만들어 주어야 한다.
-        document.getElementById("blinkspace").style.height = "100px";
-        // 메뉴글씨 바꾸기
-        document.getElementById("foldoption").innerText = "Expand Searchbox ▼"
+        searchbox.style.display='none'; // 접기
+        document.getElementById("foldoption").innerText = "Expand Searchbox ▼" // 글씨 변경
+        setCookie("searchboxVisable", "false")// 쿠키저장
     }
 }
 
