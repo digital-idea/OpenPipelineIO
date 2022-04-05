@@ -14,6 +14,21 @@ DB 복원하기
 mongorestore --drop /dbdump/path/20220405
 ```
 
+## mongomirror
+
+- mongomirror: https://www.mongodb.com/docs/atlas/import/mongomirror/
+
+```bash
+mongomirror --host "MySourceRS/host1.example.net:27017,host2.example.net:27017,host3.example.net:27017" \
+   --ssl \
+   --username "mySourceUser" \
+   --password "mySourceP@$$word" \
+   --authenticationDatabase "admin" \
+   --destination "myAtlasRS/00.foo.mongodb.net:27017,01.foo.mongodb.net:27017,02.foo.mongodb.net:27017" \
+   --destinationUsername "myAtlasAdminUser" \
+   --destinationPassword "atlasPassword"
+```
+
 ## DB체크 : DB 부하체크하기
 
 - http://127.0.0.1:28017
