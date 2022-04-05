@@ -833,3 +833,10 @@ span.player-trash {
     -ms-user-select: none;
     user-select: none;
 }
+
+#floatingmenu {
+	position: fixed;
+	background-color: #2e2d2d;
+	z-index: 1000;
+	width: 100%;
+}

@@ -4452,6 +4452,8 @@ function foldingmenu() {
         document.getElementById("foldoption").innerText = "Expand Searchbox ▼" // 글씨 변경
         setCookie("searchboxVisable", "false")// 쿠키저장
     }
+    let clientSearchboxHeight = document.getElementById('floatingmenu').clientHeight;
+    document.getElementById("blinkspace").style.height = clientSearchboxHeight + "px";
 }
 
 // TopClick 함수는 스크롤시 보여지는 Top 버튼을 누를 때 발생하는 이벤트이다.
