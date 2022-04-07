@@ -1,19 +1,22 @@
 {{define "index" }}
 {{template "headBootstrap" .}}
 <body>
-    {{template "navbar" .}}
-    <div id="searchbox">
-        {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}
-            {{template "searchbarV1" .}}
-        {{else}}
-            {{template "searchbarV2" .}}
-        {{end}}
-        {{template "deadlinelist" .}}
-        {{template "taglist" .}}
-        {{template "info2" .}}
+    <div id="floatingmenu">
+        {{template "navbar" .}}
+        <div id="searchbox">
+            {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}
+                {{template "searchbarV1" .}}
+            {{else}}
+                {{template "searchbarV2" .}}
+            {{end}}
+            {{template "deadlinelist" .}}
+            {{template "taglist" .}}
+            {{template "info2" .}}
+        </div>
     </div>
     
     {{template "modal" .}}
+    <div id="blinkspace"></div><!--기본 550px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
     <div class="pt-3"></div> <!--검색바가 가려지더라도 조금의 여백을 남기기위해 설정한 값-->
     {{template "items" .}}
     {{if ne .TotalPageNum 0}}<!--전체 페이지가 없다면 페이지 템플릿을 띄우지 않는다.-->
@@ -38,12 +41,14 @@
     // 쿠키에 저장된 SearchBox가 보일지 여부를 판단하고 화면에 표시한다.
     let searchbox = document.getElementById("searchbox")
     if (getCookie("searchboxVisable") == "false") {
-        searchbox.style.display='none'; // 접기
         document.getElementById("foldoption").innerText = "Expand Searchbox ▼" // 글씨 변경
+        searchbox.style.display='none'; // 접기
     } else {
         searchbox.style.display='block'; // 펼치기
         document.getElementById("foldoption").innerText = "Collapse Searchbox ▲" // 글씨 변경
     }
+    let clientSearchboxHeight = document.getElementById('floatingmenu').clientHeight;
+    document.getElementById("blinkspace").style.height = clientSearchboxHeight + "px";
 </script>
 </html>
 {{end}}
