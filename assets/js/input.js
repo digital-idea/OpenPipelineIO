@@ -3523,6 +3523,89 @@ function addTag(project, id, tag) {
     }
 }
 
+function addAssetTag(project, id, assettag) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            $.ajax({
+                url: "/api/addassettag",
+                type: "post",
+                
+                data: {
+                    project: project,
+                    id: id,
+                    assettag: assettag,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    // 기존 Tags에 추가된다.
+                    let url = `/inputmode?project=${data.project}&searchword=assettag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
+                    source = `<div id="assettag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1">${data.tag}</a></div>`;
+                    document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
+                    // 요소갯수에 따라 버튼을 설정한다.
+                    if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                        document.getElementById("assettag-button-"+data.id).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                        `
+                    } else {
+                        document.getElementById("assettag-button-"+data.id).innerHTML = `
+                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                        `
+                    }
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/addassettag",
+            type: "post",
+            
+            data: {
+                project: project,
+                id: id,
+                assettag: assettag,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                // 기존 Tags에 추가된다.
+                let url = `/inputmode?project=${data.project}&searchword=assettag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
+                let source = `<div id="assettag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                    document.getElementById("assettag-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                    `
+                } else {
+                    document.getElementById("assettag-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    `
+                }
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
 function renameTag(project, before, after) {
     let token = document.getElementById("token").value;
     $.ajax({

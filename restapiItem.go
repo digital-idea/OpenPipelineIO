@@ -5609,6 +5609,87 @@ func handleAPIAddTag(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPIAddAssetTag 함수는 아이템에 태그를 설정합니다.
+func handleAPIAddAssetTag(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project  string `json:"project"`
+		ID       string `json:"id"`
+		Assettag string `json:"assettag"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	assettag := r.FormValue("assettag")
+	if assettag == "" {
+		http.Error(w, "assettag를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	if !regexpTag.MatchString(assettag) {
+		http.Error(w, "assettag 규칙이 아닙니다", http.StatusBadRequest)
+		return
+	}
+	rcp.Assettag = assettag
+	err = AddAssetTag(session, rcp.Project, rcp.ID, rcp.Assettag)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Add Asset Tag: %s", rcp.Assettag), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Add Asset Tag: %s\nProject: %s, ID: %s, Author: %s", rcp.Assettag, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPIRenameTag 함수는 아이템의 태그를 변경합니다.
 func handleAPIRenameTag(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

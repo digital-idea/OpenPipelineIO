@@ -2714,6 +2714,32 @@ func AddTag(session *mgo.Session, project, id, inputTag string) (string, error) 
 	return i.Name, nil
 }
 
+// AddAssetTag 함수는 item에 tag를 셋팅한다.
+func AddAssetTag(session *mgo.Session, project, id, assettag string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	rmspaceTag := strings.Replace(assettag, " ", "", -1) // 태그는 공백을 제거한다.
+	for _, tag := range i.Assettags {
+		if rmspaceTag == tag {
+			return errors.New(assettag + "태그는 이미 존재하고 있습니다 추가할 수 없습니다")
+		}
+	}
+	newTags := append(i.Assettags, rmspaceTag)
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"assettags": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RenameTag 함수는 item의 Tag를 리네임한다.
 func RenameTag(session *mgo.Session, project, before, after string) error {
 	session.SetMode(mgo.Monotonic, true)
