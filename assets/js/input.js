@@ -3425,6 +3425,13 @@ function setAddTagModal(project, id) {
     document.getElementById("modal-addtag-title").innerHTML = "Add Tag" + multiInputTitle(id);
 }
 
+function setAddAssetTagModal(project, id) {
+    document.getElementById("modal-addassettag-project").value = project;
+    document.getElementById("modal-addassettag-id").value = id;
+    document.getElementById("modal-addassettag-text").value = "";
+    document.getElementById("modal-addassettag-title").innerHTML = "Add Asset Tag" + multiInputTitle(id);
+}
+
 function setRenameTagModal(project) {
     document.getElementById("modal-renametag-project").value = project;
     document.getElementById("modal-renametag-beforetag").value = "";
@@ -3546,6 +3553,14 @@ function setRmTagModal(project, id) {
     document.getElementById("modal-rmtag-tag").value = "";
     document.getElementById("modal-rmtag-title").innerHTML = "Rm Tag" + multiInputTitle(id);
     document.getElementById("modal-rmtag-iscontain").value = false;
+}
+
+function setRmAssetTagModal(project, id) {
+    document.getElementById("modal-rmassettag-project").value = project;
+    document.getElementById("modal-rmassettag-id").value = id;
+    document.getElementById("modal-rmassettag-tag").value = "";
+    document.getElementById("modal-rmassettag-title").innerHTML = "Rm Asset Tag" + multiInputTitle(id);
+    document.getElementById("modal-rmassettag-iscontain").value = false;
 }
 
 function rmTag() {
