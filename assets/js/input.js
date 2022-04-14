@@ -1,3 +1,28 @@
+/* RESTAPI Template
+fetch('/api/addassettag', {
+    method: 'POST',
+    headers: {
+        "Authorization": "Basic "+ document.getElementById("token").value,
+    },
+    body: new URLSearchParams({
+        project: project,
+        id: id,
+        assettag: assettag,
+    })
+})
+.then((response) => {
+    if (!response.ok) {
+        throw Error(response.statusText + " - " + response.url);
+    }
+    return response.json()
+})
+.then((data) => {
+    // process
+})
+.catch((err) => {
+    alert(err)
+});
+*/
 
 var SELECT_COLOR = "rgb(255, 196, 35)" // 선택된 색상
 var NON_SELECT_COLOR = "rgb(167, 165, 157)" // 기본 색상
@@ -3448,61 +3473,28 @@ function addTag(project, id, tag) {
                 continue
             }
             let id = cboxes[i].getAttribute("id");
-            $.ajax({
-                url: "/api/addtag",
-                type: "post",
-                
-                data: {
+            fetch('/api/addtag', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
                     project: project,
                     id: id,
                     tag: tag,
                     userid: userid,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    // 기존 Tags에 추가된다.
-                    let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
-                    source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
-                    document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
-                    // 요소갯수에 따라 버튼을 설정한다.
-                    if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
-                        document.getElementById("tag-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
-                        `
-                    } else {
-                        document.getElementById("tag-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
-                        `
-                    }
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
                 }
-            });
-        }
-    } else {
-        $.ajax({
-            url: "/api/addtag",
-            type: "post",
-            
-            data: {
-                project: project,
-                id: id,
-                tag: tag,
-                userid: userid,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
+                return response.json()
+            })
+            .then((data) => {
                 // 기존 Tags에 추가된다.
                 let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
-                let source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+                source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
                 document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
@@ -3515,93 +3507,54 @@ function addTag(project, id, tag) {
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `
                 }
+            })
+            .catch((err) => {
+                alert(err)
+            });
+        }
+    } else {
+        fetch('/api/addtag', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
             },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            body: new URLSearchParams({
+                project: project,
+                id: id,
+                tag: tag,
+                userid: userid,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            // 기존 Tags에 추가된다.
+            let url = `/inputmode?project=${data.project}&searchword=tag:${data.tag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
+            let source = `<div id="tag-${data.id}-${data.tag}"><a href="${url}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.tag}</a></div>`;
+            document.getElementById("tags-"+data.id).innerHTML = document.getElementById("tags-"+data.id).innerHTML + source;
+            // 요소갯수에 따라 버튼을 설정한다.
+            if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                document.getElementById("tag-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
+                `
+            } else {
+                document.getElementById("tag-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                `
+            }
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
 }
 
-function addAssetTag(project, id, assettag) {
-    let token = document.getElementById("token").value;
-    if (isMultiInput()) {
-        let cboxes = document.getElementsByName('selectID');
-        for (var i = 0; i < cboxes.length; ++i) {
-            if(cboxes[i].checked === false) {
-                continue
-            }
-            let id = cboxes[i].getAttribute("id");
-            $.ajax({
-                url: "/api/addassettag",
-                type: "post",
-                data: {
-                    project: project,
-                    id: id,
-                    assettag: assettag,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    // 기존 Tags에 추가된다.
-                    let url = `/inputmode?project=${data.project}&searchword=assettag:${data.assettag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
-                    source = `<div id="assettag-${data.id}-${data.assettag}"><a href="${url}" class="badge badge-outline-darkmode ml-1">${data.assettag}</a></div>`;
-                    document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
-                    // 요소갯수에 따라 버튼을 설정한다.
-                    if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
-                        document.getElementById("assettags-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
-                        `
-                    } else {
-                        document.getElementById("assettags-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
-                        `
-                    }
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-                }
-            });
-        }
-    } else {
-        $.ajax({
-            url: "/api/addassettag",
-            type: "post",
-            data: {
-                project: project,
-                id: id,
-                assettag: assettag,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                // 기존 Tags에 추가된다.
-                let url = `/inputmode?project=${data.project}&searchword=assettag:${data.assettag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
-                let source = `<div id="assettag-${data.id}-${data.assettag}"><a href="${url}" class="badge badge-outline-darkmode ml-1">${data.assettag}</a></div>`;
-                document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
-                // 요소갯수에 따라 버튼을 설정한다.
-                if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
-                    document.getElementById("assettags-button-"+data.id).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
-                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
-                    `
-                } else {
-                    document.getElementById("assettags-button-"+data.id).innerHTML = `
-                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
-                    `
-                }
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
-            }
-        });
-    }
-}
+
 
 function renameTag(project, before, after) {
     let token = document.getElementById("token").value;
@@ -6128,11 +6081,9 @@ function setReviewItemStatus(itemstatus) {
         })
     })
     .then((response) => {
-        // 200번 정상으로 작동하는지 체크하고 에러가 발생하면 해당 내용을 catch err로 전송합니다.
         if (!response.ok) {
             throw Error(response.statusText + " - " + response.url);
         }
-        // 에러가 발생하지 않으면 json으로 변환하고 data로 전송합니다.
         return response.json()
     })
     .then((data) => {
@@ -6173,6 +6124,9 @@ function addReviewStatusModeComment() {
         })
     })
     .then((response) => {
+        if (!response.ok) {
+            throw Error(response.statusText + " - " + response.url);
+        }
         return response.json()
     })
     .then((data) => {
@@ -6215,4 +6169,91 @@ function addReviewStatusModeComment() {
     .catch((error) => {
         alert(error)
     });
+}
+
+function addAssetTag(project, id, assettag) {
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            fetch('/api/addassettag', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
+                    project: project,
+                    id: id,
+                    assettag: assettag,
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
+                }
+                return response.json()
+            })
+            .then((data) => {
+                // 기존 Tags에 추가된다.
+                let url = `/inputmode?project=${data.project}&searchword=assettag:${data.assettag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
+                source = `<div id="assettag-${data.id}-${data.assettag}"><a href="${url}" class="badge badge-outline-darkmode ml-1">${data.assettag}</a></div>`;
+                document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                    document.getElementById("assettags-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                    `
+                } else {
+                    document.getElementById("assettags-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    `
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            });
+        }
+    } else {
+        fetch('/api/addassettag', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+            body: new URLSearchParams({
+                project: project,
+                id: id,
+                assettag: assettag,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
+            }
+            return response.json()
+        })
+        .then((data) => {
+            // 기존 Tags에 추가된다.
+            let url = `/inputmode?project=${data.project}&searchword=assettag:${data.assettag}&sortkey=slug&sortkey=slug&assign=true&ready=true&wip=true&confirm=true&done=false&omit=false&hold=false&out=false&none=false&task=`
+            let source = `<div id="assettag-${data.id}-${data.assettag}"><a href="${url}" class="badge badge-outline-darkmode ml-1">${data.assettag}</a></div>`;
+            document.getElementById("assettags-"+data.id).innerHTML = document.getElementById("assettags-"+data.id).innerHTML + source;
+            // 요소갯수에 따라 버튼을 설정한다.
+            if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                document.getElementById("assettags-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                `
+            } else {
+                document.getElementById("assettags-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                `
+            }
+        })
+        .catch((err) => {
+            alert(err)
+        });
+    }
 }
