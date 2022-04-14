@@ -472,6 +472,7 @@ func webserver(port string) {
 	http.HandleFunc("/api/addassettag", handleAPIAddAssetTag)
 	http.HandleFunc("/api/renametag", handleAPIRenameTag)
 	http.HandleFunc("/api/rmtag", handleAPIRmTag)
+	http.HandleFunc("/api/rmassettag", handleAPIRmAssetTag)
 	http.HandleFunc("/api/settags", handleAPISetTags)
 	http.HandleFunc("/api/setnote", handleAPISetNote)
 	http.HandleFunc("/api/addcomment", handleAPIAddComment)

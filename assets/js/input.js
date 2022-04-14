@@ -3464,7 +3464,6 @@ function setRenameTagModal(project) {
 }
 
 function addTag(project, id, tag) {
-    let token = document.getElementById("token").value;
     let userid = document.getElementById("userid").value;
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
@@ -3597,7 +3596,6 @@ function setRmAssetTagModal(project, id) {
 }
 
 function rmTag() {
-    let token = document.getElementById("token").value;
     let project = document.getElementById('modal-rmtag-project').value
     let id = document.getElementById('modal-rmtag-id').value
     let tag = document.getElementById('modal-rmtag-tag').value
@@ -3609,53 +3607,25 @@ function rmTag() {
                 continue
             }
             let id = cboxes[i].getAttribute("id");
-            $.ajax({
-                url: "/api/rmtag",
-                type: "post",
-                data: {
+            fetch('/api/rmtag', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
                     project: project,
                     id: id,
                     tag: tag,
                     iscontain: isContain,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    document.getElementById(`tag-${data.id}-${data.tag}`).remove();
-                    // 요소갯수에 따라 버튼을 설정한다.
-                    if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
-                        document.getElementById("tag-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
-                        <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
-                        `;
-                    } else {
-                        document.getElementById("tag-button-"+data.id).innerHTML = `
-                        <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
-                        `;
-                    }
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
                 }
-            });
-        }
-    } else {
-        $.ajax({
-            url: "/api/rmtag",
-            type: "post",
-            data: {
-                project: project,
-                id: id,
-                tag: tag,
-                iscontain: isContain,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
+                return response.json()
+            })
+            .then((data) => {
                 document.getElementById(`tag-${data.id}-${data.tag}`).remove();
                 // 요소갯수에 따라 버튼을 설정한다.
                 if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
@@ -3668,10 +3638,46 @@ function rmTag() {
                     <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
                     `;
                 }
+            })
+            .catch((err) => {
+                alert(err)
+            });
+        }
+    } else {
+        fetch('/api/rmtag', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
             },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            body: new URLSearchParams({
+                project: project,
+                id: id,
+                tag: tag,
+                iscontain: isContain,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            document.getElementById(`tag-${data.id}-${data.tag}`).remove();
+            // 요소갯수에 따라 버튼을 설정한다.
+            if (document.getElementById(`tags-${data.id}`).childElementCount > 0) {
+                document.getElementById("tag-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('${data.project}','${data.id}')">－</span>
+                `;
+            } else {
+                document.getElementById("tag-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('${data.project}','${data.id}')">＋</span>
+                `;
+            }
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
 }
@@ -6250,6 +6256,93 @@ function addAssetTag(project, id, assettag) {
                 document.getElementById("assettags-button-"+data.id).innerHTML = `
                 <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
                 `
+            }
+        })
+        .catch((err) => {
+            alert(err)
+        });
+    }
+}
+
+function rmAssetTag() {
+    let project = document.getElementById('modal-rmassettag-project').value
+    let id = document.getElementById('modal-rmassettag-id').value
+    let assettag = document.getElementById('modal-rmassettag-tag').value
+    let isContain = document.getElementById('modal-rmassettag-iscontain').checked
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            fetch('/api/rmassettag', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
+                    project: project,
+                    id: id,
+                    assettag: assettag,
+                    iscontain: isContain,
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
+                }
+                return response.json()
+            })
+            .then((data) => {
+                document.getElementById(`assettag-${data.id}-${data.assettag}`).remove();
+                // 요소갯수에 따라 버튼을 설정한다.
+                if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                    document.getElementById("assettags-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                    `;
+                } else {
+                    document.getElementById("assettags-button-"+data.id).innerHTML = `
+                    <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                    `;
+                }
+            })
+            .catch((err) => {
+                alert(err)
+            });
+        }
+    } else {
+        fetch('/api/rmassettag', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+            body: new URLSearchParams({
+                project: project,
+                id: id,
+                assettag: assettag,
+                iscontain: isContain,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
+            }
+            return response.json()
+        })
+        .then((data) => {
+            document.getElementById(`assettag-${data.id}-${data.assettag}`).remove();
+            // 요소갯수에 따라 버튼을 설정한다.
+            if (document.getElementById(`assettags-${data.id}`).childElementCount > 0) {
+                document.getElementById("assettags-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                <span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('${data.project}','${data.id}')">－</span>
+                `;
+            } else {
+                document.getElementById("assettags-button-"+data.id).innerHTML = `
+                <span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('${data.project}','${data.id}')">＋</span>
+                `;
             }
         })
         .catch((err) => {
