@@ -31,6 +31,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Ddline2d    []string
 		Tags        []string
 		Assettags   []string
+		AllAssets   []string
 		SearchOption
 		Searchnum           Infobarnum
 		Totalnum            Infobarnum
@@ -158,6 +159,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Assettags, err = Distinct(session, rcp.SearchOption.Project, "assettags")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.AllAssets, err = AllAssets(session, rcp.SearchOption.Project)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

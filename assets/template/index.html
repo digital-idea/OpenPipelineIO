@@ -1,6 +1,7 @@
 {{define "index" }}
 {{template "headBootstrap" .}}
 <body>
+    {{template "datalist" .}}
     {{template "navbar" .}}
     <div id="searchbox">
         {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}

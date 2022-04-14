@@ -110,6 +110,19 @@ func Asset(session *mgo.Session, project string, name string) (Item, error) {
 	return result, nil
 }
 
+// AllAsset 함수는 모든 에셋리스트를 가지고 옵니다.
+func AllAssets(session *mgo.Session, project string) ([]string, error) {
+	var result []string
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Find(bson.M{"type": "asset"}).Distinct("name", &result)
+	if err != nil {
+		return nil, err
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
 // SearchName 함수는 입력된 문자열이 'name'키 값에 포함되어 있다면 해당 아이템을 반환한다.
 func SearchName(session *mgo.Session, project string, name string) ([]Item, error) {
 	session.SetMode(mgo.Monotonic, true)

@@ -1,0 +1,7 @@
+{{define "datalist" }}
+    <datalist id="datalist-allassets">
+        {{range .AllAssets}}
+            <option value="{{.}}">
+        {{end}}
+    </datalist>
+{{end}}
