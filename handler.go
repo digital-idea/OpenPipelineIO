@@ -235,6 +235,7 @@ func webserver(port string) {
 	http.Handle("/captcha/", captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
 	// Item
 	http.HandleFunc("/", handleIndex)
+	http.HandleFunc("/inputmode", handleInputMode)
 	http.HandleFunc("/searchsubmit", handleSearchSubmit)
 	http.HandleFunc("/searchsubmitv2", handleSearchSubmitV2)
 	http.HandleFunc("/help", handleHelp)
@@ -380,9 +381,6 @@ func webserver(port string) {
 	http.HandleFunc("/rmpublishkey", handleRmPublishKey)
 	http.HandleFunc("/rmpublishkey-submit", handleRmPublishKeySubmit)
 
-	// Input
-	http.HandleFunc("/inputmode", handleInputMode)
-
 	// Error
 	http.HandleFunc("/error-captcha", handleErrorCaptcha)
 
@@ -469,8 +467,10 @@ func webserver(port string) {
 	http.HandleFunc("/api/setfinver", handleAPISetFinver)
 	http.HandleFunc("/api/setfindate", handleAPISetFindate)
 	http.HandleFunc("/api/addtag", handleAPIAddTag)
+	http.HandleFunc("/api/addassettag", handleAPIAddAssetTag)
 	http.HandleFunc("/api/renametag", handleAPIRenameTag)
 	http.HandleFunc("/api/rmtag", handleAPIRmTag)
+	http.HandleFunc("/api/rmassettag", handleAPIRmAssetTag)
 	http.HandleFunc("/api/settags", handleAPISetTags)
 	http.HandleFunc("/api/setnote", handleAPISetNote)
 	http.HandleFunc("/api/addcomment", handleAPIAddComment)
