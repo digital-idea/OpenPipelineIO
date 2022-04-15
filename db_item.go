@@ -110,6 +110,19 @@ func Asset(session *mgo.Session, project string, name string) (Item, error) {
 	return result, nil
 }
 
+// AllAsset 함수는 모든 에셋리스트를 가지고 옵니다.
+func AllAssets(session *mgo.Session, project string) ([]string, error) {
+	var result []string
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("project").C(project)
+	err := c.Find(bson.M{"type": "asset"}).Distinct("name", &result)
+	if err != nil {
+		return nil, err
+	}
+	sort.Strings(result)
+	return result, nil
+}
+
 // SearchName 함수는 입력된 문자열이 'name'키 값에 포함되어 있다면 해당 아이템을 반환한다.
 func SearchName(session *mgo.Session, project string, name string) ([]Item, error) {
 	session.SetMode(mgo.Monotonic, true)
@@ -2714,6 +2727,32 @@ func AddTag(session *mgo.Session, project, id, inputTag string) (string, error) 
 	return i.Name, nil
 }
 
+// AddAssetTag 함수는 item에 tag를 셋팅한다.
+func AddAssetTag(session *mgo.Session, project, id, assettag string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	rmspaceTag := strings.Replace(assettag, " ", "", -1) // 태그는 공백을 제거한다.
+	for _, tag := range i.Assettags {
+		if rmspaceTag == tag {
+			return errors.New(assettag + "태그는 이미 존재하고 있습니다 추가할 수 없습니다")
+		}
+	}
+	newTags := append(i.Assettags, rmspaceTag)
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"assettags": newTags, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RenameTag 함수는 item의 Tag를 리네임한다.
 func RenameTag(session *mgo.Session, project, before, after string) error {
 	session.SetMode(mgo.Monotonic, true)
@@ -2798,6 +2837,38 @@ func RmTag(session *mgo.Session, project, id, inputTag string, isContain bool) (
 		return i.Name, err
 	}
 	return i.Name, nil
+}
+
+// RmAssetTag 함수는 item에 assettag를 삭제한다.
+func RmAssetTag(session *mgo.Session, project, id, inputTag string, isContain bool) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	i, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	var newTags []string
+	for _, tag := range i.Assettags {
+		if isContain {
+			if strings.Contains(tag, inputTag) {
+				continue
+			}
+		}
+		if inputTag == tag {
+			continue
+		}
+		newTags = append(newTags, tag)
+	}
+	i.Assettags = newTags
+	// 만약 태그에 권정보가 없더라도 권관련 태그는 날아가면 안된다. setItem을 이용한다.
+	err = setItem(session, project, i)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // SetNote 함수는 item에 작업내용을 추가한다. Name,노트내용,에러를 반환한다.

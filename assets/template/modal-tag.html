@@ -60,4 +60,105 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal: Rm Tag-->
+    <div class="modal fade" id="modal-rmtag" tabindex="-1" role="dialog" aria-labelledby="modal-rmtag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmtag-title">Rm Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmtag-project">
+                    <input type="hidden" class="form-control" id="modal-rmtag-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-rmtag-tag" class="col-form-label">Tag:</label>
+                            <input type="text" class="form-control" id="modal-rmtag-tag">
+                            <small class="text-danger">삭제할 태그명을 입력해주세요.</small>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="modal-rmtag-iscontain" class="form-check-input">
+                                <label class="form-check-label" for="modal-rmtag-iscontain">해당 단어가 포함된 태그를 제거합니다.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmTag()" data-dismiss="modal">REMOVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add AssetTag-->
+    <div class="modal" id="modal-addassettag" tabindex="-1" role="dialog" aria-labelledby="modal-addassettag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-addassettag-title">Add Asset Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-addassettag-project">
+                    <input type="hidden" class="form-control" id="modal-addassettag-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="add-tag-text" class="col-form-label">AssetTag:</label>
+                            <input type="text" list="datalist-allassets" class="form-control" id="modal-addassettag-text">
+                            <small class="text-darkmode">띄어쓰기(Space)를 입력하더라도 띄어쓰기가 제거됩니다.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addAssetTag(document.getElementById('modal-addassettag-project').value, document.getElementById('modal-addassettag-id').value, document.getElementById('modal-addassettag-text').value)" data-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rm Asset Tag-->
+    <div class="modal" id="modal-rmassettag" tabindex="-1" role="dialog" aria-labelledby="modal-rmassettag" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-rmassettag-title">Rm Asset Tag</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-darkmode">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" class="form-control" id="modal-rmassettag-project">
+                    <input type="hidden" class="form-control" id="modal-rmassettag-id">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="modal-rmtag-tag" class="col-form-label">Asset Tag:</label>
+                            <input type="text" class="form-control" id="modal-rmassettag-tag">
+                            <small class="text-danger">삭제할 태그명을 입력해주세요.</small>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" id="modal-rmassettag-iscontain" class="form-check-input">
+                                <label class="form-check-label" for="modal-rmassettag-iscontain">해당 단어가 포함된 태그를 제거합니다.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-danger" onclick="rmAssetTag()" data-dismiss="modal">REMOVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {{end}}

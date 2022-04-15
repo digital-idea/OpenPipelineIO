@@ -319,41 +319,15 @@
 	</div>
 	<!--작업내용 & Source-->
 	<div class="col-sm-12 col-md-12 col-lg-4">
+
 		<!--Tags-->
 		<div class="row">
-			<div>
-				<span class="text-badge">Tags:</span>
-			</div>
-			
-			{{if eq .Type "asset"}}
-				<div id="assettags-{{.ID}}" class="row ml-1">
-					{{range .Assettags}}
-						<div id="assettag-{{$id}}-{{.}}" class="tag ml-1">
-							<a href="/inputmode?project={{$.SearchOption.Project}}&
-							searchword=assettags:{{.}}&
-							sortkey={{$.SearchOption.Sortkey}}&
-							sortkey={{$.SearchOption.Sortkey}}&
-							assign={{$.SearchOption.Assign}}&
-							ready={{$.SearchOption.Ready}}&
-							wip={{$.SearchOption.Wip}}&
-							confirm={{$.SearchOption.Confirm}}&
-							done={{$.SearchOption.Done}}&
-							omit={{$.SearchOption.Omit}}&
-							hold={{$.SearchOption.Hold}}&
-							out={{$.SearchOption.Out}}&
-							none={{$.SearchOption.None}}&
-							truestatus={{Join $.SearchOption.TrueStatus "," }}&
-							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
-						</div>
-					{{- end}}
-				</div>
-			{{end}}			
+			<div><span class="text-badge">Tags:</span></div>
 			<div id="tags-{{.ID}}" class="row ml-3">
 				{{range .Tag}}
 					<div id="tag-{{$id}}-{{.}}" class="ml-1">
 						<a href="/inputmode?project={{$.SearchOption.Project}}&
 						searchword=tag:{{.}}&
-						sortkey={{$.SearchOption.Sortkey}}&
 						sortkey={{$.SearchOption.Sortkey}}&
 						assign={{$.SearchOption.Assign}}&
 						ready={{$.SearchOption.Ready}}&
@@ -380,6 +354,7 @@
 				{{end}}
 			</div>
 		</div>
+
 		<!--작업내용-->
 		<div class="row">
 			<span class="text-badge">Note:</span>
@@ -393,6 +368,39 @@
 			{{end}}
 			<div id="note-{{.ID}}" onclick="selectCheckboxNone()">
 				{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}
+			</div>
+		</div>
+
+		<!--Asset Tags-->
+		<div class="row">
+			<div><span class="text-badge">Assets:</span></div>
+			<div id="assettags-{{.ID}}" class="row ml-1">
+				{{range .Assettags}}
+					<div id="assettag-{{$id}}-{{.}}" class="tag ml-1">
+						<a href="/inputmode?project={{$.SearchOption.Project}}&
+						searchword=assettags:{{.}}&
+						sortkey={{$.SearchOption.Sortkey}}&
+						assign={{$.SearchOption.Assign}}&
+						ready={{$.SearchOption.Ready}}&
+						wip={{$.SearchOption.Wip}}&
+						confirm={{$.SearchOption.Confirm}}&
+						done={{$.SearchOption.Done}}&
+						omit={{$.SearchOption.Omit}}&
+						hold={{$.SearchOption.Hold}}&
+						out={{$.SearchOption.Out}}&
+						none={{$.SearchOption.None}}&
+						truestatus={{Join $.SearchOption.TrueStatus "," }}&
+						task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
+					</div>
+				{{end}}
+			</div>
+			<div class="ml-3" id="assettags-button-{{.ID}}">
+				{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+					<span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('{{.Project}}', '{{.ID}}')">＋</span>
+					{{if .Tag}}	
+						<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('{{.Project}}', '{{.ID}}')">－</span>
+					{{end}}
+				{{end}}
 			</div>
 		</div>
 		
