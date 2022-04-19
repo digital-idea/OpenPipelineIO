@@ -2,17 +2,20 @@
 {{template "headBootstrap" .}}
 <body>
     {{template "datalist" .}}
-    {{template "navbar" .}}
-    <div id="searchbox">
-        {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}
-            {{template "searchbarV1" .}}
-        {{else}}
-            {{template "searchbarV2" .}}
-        {{end}}
-        {{template "deadlinelist" .}}
-        {{template "taglist" .}}
-        {{template "info2" .}}
+    <div id="floatingmenu">
+        {{template "navbar" .}}
+        <div id="searchbox">
+            {{if eq .SearchOption.SearchbarTemplate "searchbarV1" }}
+                {{template "searchbarV1" .}}
+            {{else}}
+                {{template "searchbarV2" .}}
+            {{end}}
+            {{template "deadlinelist" .}}
+            {{template "taglist" .}}
+            {{template "info2" .}}
+        </div>
     </div>
+    
     
     {{template "modal" .}}
     <div id="blinkspace"></div><!--기본 550px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
