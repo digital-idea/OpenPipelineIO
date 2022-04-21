@@ -441,7 +441,8 @@ func webserver(port string) {
 	http.HandleFunc("/api/statusnum", handleAPIStatusNum)
 	http.HandleFunc("/api/addtask", handleAPIAddTask)
 	http.HandleFunc("/api/rmtask", handleAPIRmTask)
-	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser)
+	http.HandleFunc("/api/settaskuser", handleAPISetTaskUser) // legacy
+	http.HandleFunc("/api2/settaskuser", handleAPI2SetTaskUser)
 	http.HandleFunc("/api/settaskusercomment", handleAPISetTaskUserComment)
 	http.HandleFunc("/api/setplatein", handleAPISetPlateIn)
 	http.HandleFunc("/api/setplateout", handleAPISetPlateOut)

@@ -534,21 +534,47 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
-		msg := HookMessage{}
-		title := fmt.Sprintf("[%s Review] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
-		if review.SubVersion != 0 {
-			title += fmt.Sprintf("_w%02d", review.SubVersion)
-		}
-		msg.Text = title + fmt.Sprintf(" 항목이 %s 되었습니다.", status)
-		resp, err := msg.SendRocketChat()
+		// 해당 샷의 정보를 가지고 온다.
+		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if !resp.Success {
-			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+		item, err := getItem(session, review.Project, review.Name+"_"+typ)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		// 아티스트를 추출한다.
+		var rocketChatIDs []string
+		for _, i := range item.Tasks {
+			user, err := getUser(session, i.UserID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rocketChatIDs = append(rocketChatIDs, user.RocketChatID)
+		}
+		// 해당 아티스트의 로켓쳇 아이디마다 메시지를 전송한다.
+		for _, rocketChatID := range rocketChatIDs {
+			msg := HookMessage{}
+			msg.Channel = "@" + rocketChatID
+			title := fmt.Sprintf("[%s Review] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+			if review.SubVersion != 0 {
+				title += fmt.Sprintf("_w%02d", review.SubVersion)
+			}
+			msg.Text = title + fmt.Sprintf(" 항목이 %s 되었습니다.", status)
+			resp, err := msg.SendRocketChat()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if !resp.Success {
+				http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+				return
+			}
+		}
+
 	}
 	data, err := json.Marshal(rcp)
 	if err != nil {
@@ -1040,20 +1066,48 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
-		msg := HookMessage{}
-		title := fmt.Sprintf("[%sReview] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
-		if review.SubVersion != 0 {
-			title += fmt.Sprintf("_w%02d", review.SubVersion)
-		}
-		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
-		resp, err := msg.SendRocketChat()
+		// 해당 샷의 정보를 가지고 온다.
+		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if !resp.Success {
-			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+		item, err := getItem(session, review.Project, review.Name+"_"+typ)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+		// 아티스트를 추출한다.
+		var rocketChatIDs []string
+		for _, i := range item.Tasks {
+			user, err := getUser(session, i.UserID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if user.RocketChatID == "" {
+				continue
+			}
+			rocketChatIDs = append(rocketChatIDs, user.RocketChatID)
+		}
+		// 해당 아티스트의 로켓쳇 아이디마다 메시지를 전송한다.
+		for _, rocketChatID := range rocketChatIDs {
+			msg := HookMessage{}
+			msg.Channel = "@" + rocketChatID
+			title := fmt.Sprintf("[%sReview] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+			if review.SubVersion != 0 {
+				title += fmt.Sprintf("_w%02d", review.SubVersion)
+			}
+			msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
+			resp, err := msg.SendRocketChat()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if !resp.Success {
+				http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 
@@ -1190,20 +1244,45 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 
 	// rocketchat
 	if CachedAdminSetting.TurnOnRocketChat {
-		msg := HookMessage{}
-		title := fmt.Sprintf("[%s Status] %s %s_%s_v%02d", rcp.ItemStatus, review.Project, review.Name, review.Task, review.MainVersion)
-		if review.SubVersion != 0 {
-			title += fmt.Sprintf("_w%02d", review.SubVersion)
-		}
-		msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
-		resp, err := msg.SendRocketChat()
+		// 해당 샷의 정보를 가지고 온다.
+		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if !resp.Success {
-			http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+		item, err := getItem(session, review.Project, review.Name+"_"+typ)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+		// 아티스트를 추출한다.
+		var rocketChatIDs []string
+		for _, i := range item.Tasks {
+			user, err := getUser(session, i.UserID)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rocketChatIDs = append(rocketChatIDs, user.RocketChatID)
+		}
+		// 해당 아티스트의 로켓쳇 아이디마다 메시지를 전송한다.
+		for _, rocketChatID := range rocketChatIDs {
+			msg := HookMessage{}
+			msg.Channel = "@" + rocketChatID
+			title := fmt.Sprintf("[%s Status] %s %s_%s_v%02d", rcp.ItemStatus, review.Project, review.Name, review.Task, review.MainVersion)
+			if review.SubVersion != 0 {
+				title += fmt.Sprintf("_w%02d", review.SubVersion)
+			}
+			msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
+			resp, err := msg.SendRocketChat()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			if !resp.Success {
+				http.Error(w, "not success rocketchat message", http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 

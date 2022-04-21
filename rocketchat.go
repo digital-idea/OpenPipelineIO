@@ -11,6 +11,7 @@ import (
 
 type HookMessage struct {
 	Text        string           `json:"text"`
+	Channel     string           `json:"channel"` // 로켓챗은 #Chennel, @UserID 를 사용할 수 있다.
 	Attachments []HookAttachment `json:"attachments"`
 }
 

@@ -3496,20 +3496,20 @@ func handleAPIAddTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetTaskUser 함수는 아이템의 task에 대한 유저를 설정한다.
-func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
+// handleAPI2SetTaskUser 함수는 아이템의 task에 대한 유저를 설정한다.
+func handleAPI2SetTaskUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
 		return
 	}
 	type Recipe struct {
-		Project  string `json:"project"`
-		ID       string `json:"id"`
-		Name     string `json:"name"`
-		Task     string `json:"task"`
-		Username string `json:"username"`
-		UserID   string `json:"userid"`
-		Error    string `json:"error"`
+		Project         string `json:"project"`
+		ID              string `json:"id"`
+		Task            string `json:"task"`
+		Username        string `json:"username"`
+		UsernameAndTeam string `json:"usernameandteam"`
+		UserID          string `json:"userid"`
+		Error           string `json:"error"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -3518,7 +3518,7 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer session.Close()
-	rcp.UserID, _, err = TokenHandler(r, session)
+	userID, _, err := TokenHandler(r, session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -3529,65 +3529,61 @@ func handleAPISetTaskUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		case "user":
-			if len(values) == 1 {
-				rcp.Username = values[0]
-			}
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "project를 설정해주세요", http.StatusBadRequest)
+		return
 	}
-	id, err := SetTaskUser(session, rcp.Project, rcp.Name, rcp.Task, rcp.Username)
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "task를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	user := r.FormValue("user")
+	if user == "" {
+		http.Error(w, "user 를 설정해주세요", http.StatusBadRequest)
+		return
+	}
+	rcp.Username = user
+	rcp.UserID = onlyID(rcp.Username)            // id(name,team) 문자열중 id만 추출한다.
+	rcp.UsernameAndTeam = userInfo(rcp.Username) // id(name,team) 문자열을 name,team으로 바꾼다. 웹에서 보기좋게 하기 위함.
+
+	err = SetTaskUserV2(session, rcp.Project, rcp.ID, rcp.Task, rcp.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.ID = id
+	err = SetTaskUserID(session, rcp.Project, rcp.ID, rcp.Task, rcp.UserID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	// log
-	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task User: %s %s", rcp.Task, rcp.Username), rcp.Project, rcp.Name, "csi3", rcp.UserID, 180)
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task User: %s %s", rcp.Task, rcp.Username), rcp.Project, rcp.ID, "csi3", userID, 180)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// slack log
-	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task User: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Username, rcp.Project, rcp.Name, rcp.UserID))
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task User: %s %s\nProject: %s, ID: %s, Author: %s", rcp.Task, rcp.Username, rcp.Project, rcp.ID, userID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	// json 으로 결과 전송
-	rcp.Username = userInfo(rcp.Username) // id(name,team) 문자열을 name,team으로 바꾼다. 웹에서 보기좋게 하기 위함.
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
