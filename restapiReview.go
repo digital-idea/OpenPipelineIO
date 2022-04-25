@@ -559,11 +559,11 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		for _, rocketChatID := range rocketChatIDs {
 			msg := HookMessage{}
 			msg.Channel = "@" + rocketChatID
-			title := fmt.Sprintf("[%s Review] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+			title := fmt.Sprintf("[%s Review] %s %s_%s_v%s", rcp.Stage, review.Project, review.Name, review.Task, ProductionVersionFormat(review.MainVersion))
 			if review.SubVersion != 0 {
-				title += fmt.Sprintf("_w%02d", review.SubVersion)
+				title += fmt.Sprintf("_w%s", ProductionVersionFormat(review.SubVersion))
 			}
-			msg.Text = title + fmt.Sprintf(" 항목이 %s 되었습니다.", status)
+			msg.Text = title + fmt.Sprintf(" 항목이 %s 상태로 변경되었습니다.", status)
 			resp, err := msg.SendRocketChat()
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1094,9 +1094,9 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		for _, rocketChatID := range rocketChatIDs {
 			msg := HookMessage{}
 			msg.Channel = "@" + rocketChatID
-			title := fmt.Sprintf("[%sReview] %s %s_%s_v%02d", rcp.Stage, review.Project, review.Name, review.Task, review.MainVersion)
+			title := fmt.Sprintf("[%s Review] %s %s_%s_v%s", rcp.Stage, review.Project, review.Name, review.Task, ProductionVersionFormat(review.MainVersion))
 			if review.SubVersion != 0 {
-				title += fmt.Sprintf("_w%02d", review.SubVersion)
+				title += fmt.Sprintf("_w%s", ProductionVersionFormat(review.SubVersion))
 			}
 			msg.Text = title + " 리뷰데이터에 코멘트가 작성되었습니다.: " + rcp.Text
 			resp, err := msg.SendRocketChat()
