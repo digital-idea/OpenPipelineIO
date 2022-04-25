@@ -2497,8 +2497,6 @@ function setTaskResultDay(resultday) {
 }
 
 function setTaskUser() {
-    let token = document.getElementById("token").value;
-    let userid = document.getElementById("userid").value;
     let project = document.getElementById('modal-edittask-project').value
     let id = document.getElementById('modal-edittask-id').value
     let task = document.getElementById('modal-edittask-task').value
@@ -2511,57 +2509,63 @@ function setTaskUser() {
             }
             let id = cboxes[i].getAttribute("id");
             sleep(200);
-            $.ajax({
-                url: "/api/settaskuser",
-                type: "post",
-                data: {
+            fetch('/api2/settaskuser', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
                     project: project,
-                    name: id2name(id),
+                    id: id,
                     task: task,
                     user: user,
-                    userid: userid,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    if (data.username === "") {
-                        document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
-                    } else {
-                        document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
-                    }
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
                 }
+                return response.json()
+            })
+            .then((data) => {
+                if (data.usernameandteam === "") {
+                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
+                } else {
+                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.usernameandteam}</span>`;
+                }
+            })
+            .catch((err) => {
+                alert(err)
             });
         }
     } else {
-        $.ajax({
-            url: "/api/settaskuser",
-            type: "post",
-            data: {
+        fetch('/api2/settaskuser', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+            body: new URLSearchParams({
                 project: project,
-                name: id2name(id),
+                id: id,
                 task: task,
                 user: user,
-                userid: userid,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                if (data.username === "") {
-                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
-                } else {
-                    document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.username}</span>`;
-                }
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            if (data.usernameandteam === "") {
+                document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = "";
+            } else {
+                document.getElementById(`${data.id}-task-${data.task}-user`).innerHTML = `<span class="mt-1 ml-1 badge badge-light">${data.usernameandteam}</span>`;
+            }
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
 }

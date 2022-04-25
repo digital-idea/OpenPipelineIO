@@ -160,6 +160,7 @@ type Publish struct {
 // Task 자료구조는 태크스 정보를 담는 자료구조이다.
 type Task struct {
 	Title        string               `json:"title"`        // 테스크 네임
+	UserID       string               `json:"userid"`       // 아티스트ID
 	User         string               `json:"user"`         // 아티스트명
 	UserComment  string               `json:"usercomment"`  // 아티스트 코멘트
 	Status       string               `json:"status"`       // 상태 legacy

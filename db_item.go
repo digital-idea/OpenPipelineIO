@@ -2181,32 +2181,50 @@ func RmTask(session *mgo.Session, project, id, taskname string) error {
 	return nil
 }
 
-// SetTaskUser 함수는 item에 task의 user 값을 셋팅한다.
-func SetTaskUser(session *mgo.Session, project, name, task, user string) (string, error) {
+// SetTaskUserV2 함수는 item에 task의 user 값을 셋팅한다.
+func SetTaskUserV2(session *mgo.Session, project, id, task, user string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
-		return "", err
+		return err
 	}
-	typ, err := Type(session, project, name)
-	if err != nil {
-		return "", err
-	}
-	id := name + "_" + typ
 	err = HasTask(session, project, id, task)
 	if err != nil {
-		return id, err
+		return err
 	}
 	item, err := getItem(session, project, id)
 	if err != nil {
-		return id, err
+		return err
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".user": user, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
-		return id, err
+		return err
 	}
-	return id, nil
+	return nil
+}
+
+// SetTaskUserID 함수는 item에 task의 userid 값을 셋팅한다.
+func SetTaskUserID(session *mgo.Session, project, id, task, userid string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = c.Update(bson.M{"id": item.ID}, bson.M{"$set": bson.M{"tasks." + task + ".userid": userid, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // SetTaskDate 함수는 item에 task에 마감일을 셋팅한다.
