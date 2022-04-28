@@ -30,7 +30,7 @@ func TokenHandler(r *http.Request, session *mgo.Session) (string, AccessLevel, e
 		return "unknown", UnknownAccessLevel, err
 	}
 	if token.AccessLevel < 2 {
-		return token.ID, token.AccessLevel, errors.New("Insufficient authority levels")
+		return token.ID, token.AccessLevel, errors.New("insufficient authority levels")
 	}
 	return token.ID, token.AccessLevel, nil
 }
