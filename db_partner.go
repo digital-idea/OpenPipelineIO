@@ -89,16 +89,14 @@ func allPartners(client *mongo.Client) ([]Partner, error) {
 	collection := client.Database("csi").Collection("partners")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	var result []Partner
-
+	var partners []Partner
 	cursor, err := collection.Find(ctx, bson.D{})
 	if err != nil {
-		return result, err
+		return partners, err
 	}
-	err = cursor.All(ctx, &result)
+	err = cursor.All(ctx, &partners)
 	if err != nil {
-		return result, err
+		return partners, err
 	}
-	return result, nil
+	return partners, nil
 }
