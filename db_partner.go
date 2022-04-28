@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,16 +21,11 @@ func addPartner(client *mongo.Client, p Partner) error {
 
 	num, err := collection.CountDocuments(ctx, bson.M{"name": p.Name})
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	if num != 0 {
-		log.Println("같은 이름의 파트너사가 존재해서 파트너사를 추가할 수 없습니다.")
 		return errors.New("같은 이름의 파트너사가 존재해서 파트너사를 추가할 수 없습니다")
 	}
-
-	p.CreateTime = time.Now().Format(time.RFC3339)
-	p.UpdateTime = p.CreateTime
 	_, err = collection.InsertOne(ctx, p)
 	if err != nil {
 		return err
@@ -75,8 +69,6 @@ func rmPartner(client *mongo.Client, id string) error {
 
 // setPartner 함수는 파트너사 정보를 수정하는 함수다.
 func setPartner(client *mongo.Client, p Partner) error {
-	p.UpdateTime = time.Now().Format(time.RFC3339)
-
 	collection := client.Database("csi").Collection("partners")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
