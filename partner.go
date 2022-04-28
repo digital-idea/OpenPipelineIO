@@ -20,4 +20,6 @@ type Partner struct {
 	FTP                        string             `json:"ftp"`                        // FTP 주소
 	FTPID                      string             `json:"ftpid"`                      // FTP ID
 	FTPPW                      string             `json:"ftppw"`                      // FTP PW
+	Opentime                   string             `json:"opentime"`                   // Open Time
+	Closedtime                 string             `json:"closedtime"`                 // Closed Time
 }
