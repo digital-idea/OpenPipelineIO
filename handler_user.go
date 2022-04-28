@@ -836,13 +836,11 @@ func handleUpdatePasswordSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.FormValue("NewPassword") == "" {
-		err := errors.New("Password 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusInternalServerError)
 		return
 	}
 	if r.FormValue("NewPassword") != r.FormValue("ConfirmNewPassword") {
-		err := errors.New("Password 값이 빈 문자열 입니다")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Password 값이 빈 문자열 입니다", http.StatusInternalServerError)
 		return
 	}
 	pw := r.FormValue("OldPassword")
