@@ -47,5 +47,5 @@ type Date struct {
 type Contract struct {
 	Title string `json:"title"` // 계약서 이름
 	Date  string `json:"date"`  // 등록일
-	Url   string `json:"url"`   // URL
+	Url   string `json:"url"`   // URL, 파일이 업로드된 url
 }
