@@ -3,9 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -16,8 +14,9 @@ import (
 
 // handleAPIPartner 함수는 파트너 관련 API다.
 func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
-	// GET 메소드는 파트너의 id를 받아서 파트너 정보를 반환한다.
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
+		// GET 메소드는 파트너의 id를 받아서 파트너 정보를 반환한다.
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		//mongoDB client 연결
 		client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
@@ -64,9 +63,7 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(data)
 		return
-	} else if r.Method == http.MethodPost {
-		// POST 메소드는 새로운 파트너 정보를 DB에 저장한다
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	case http.MethodPost:
 		//mongoDB client 연결
 		client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 		if err != nil {
@@ -92,55 +89,40 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// 파트너 생성
-		p := Partner{}
-		p.ID = primitive.NewObjectID()
-		// 파트너 정보 Parsing
+		// Parsing
 		err = r.ParseForm()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		name := r.FormValue("name")
-		if name == "" {
-			http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
-			return
-		}
-		sizeStr := r.FormValue("size")
-		size, err := strconv.Atoi(sizeStr)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("%s 는 size로 사용할 수 없는 값 입니다", sizeStr), http.StatusBadRequest)
-			return
-		}
-		domain := r.FormValue("domain")
-		homepage := r.FormValue("homepage")
-		address := r.FormValue("address")
-		phone := r.FormValue("phone")
-		email := r.FormValue("email")
-		timezone := r.FormValue("timezone")
-		description := r.FormValue("description")
-		p.Name = name
-		p.Size = size
-		p.Domain = domain
-		p.Homepage = homepage
-		p.Address = address
-		p.Phone = phone
-		p.Email = email
-		p.Timezone = timezone
-		p.Description = description
+		p := Partner{}
+		p.ID = primitive.NewObjectID()
+		p.Name = r.FormValue("name")
+		p.Domain = r.FormValue("domain")
+		p.Size = r.FormValue("size")
+		p.Homepage = r.FormValue("homepage")
+		p.Address = r.FormValue("address")
+		p.Phone = r.FormValue("phone")
+		p.Email = r.FormValue("email")
+		p.Timezone = r.FormValue("timezone")
+		p.Description = r.FormValue("description")
+		p.BusinessRegistrationNumber = r.FormValue("businessregistrationnumber")
+		p.Manager = r.FormValue("manager")
+		p.ManagerPhone = r.FormValue("managerphone")
+		p.ManagerEmail = r.FormValue("manageremail")
+		p.FTP = r.FormValue("ftp")
+		p.FTPID = r.FormValue("ftpid")
+		p.FTPPW = r.FormValue("ftppw")
+		p.Opentime = r.FormValue("opentime")
+		p.Closedtime = r.FormValue("closedtime")
+
 		// 파트너 추가
 		err = addPartner(client, p)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// Response
-		item, err := getPartner(client, p.ID.Hex())
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		data, err := json.Marshal(item)
+		data, err := json.Marshal(p)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -148,9 +130,7 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(data)
 		return
-	} else if r.Method == http.MethodPut {
-		// PUT 메소드는 수정된 파트너 정보를 DB에 저장한다
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	case http.MethodPut:
 		//mongoDB client 연결
 		client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 		if err != nil {
@@ -192,46 +172,31 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		name := r.FormValue("name")
-		if name == "" {
-			http.Error(w, "name을 설정해주세요", http.StatusBadRequest)
-			return
-		}
-		sizeStr := r.FormValue("size")
-		size, err := strconv.Atoi(sizeStr)
-		if err != nil {
-			http.Error(w, fmt.Sprintf("%s 는 size로 사용할 수 없는 값 입니다", sizeStr), http.StatusBadRequest)
-			return
-		}
-		domain := r.FormValue("domain")
-		homepage := r.FormValue("homepage")
-		address := r.FormValue("address")
-		phone := r.FormValue("phone")
-		email := r.FormValue("email")
-		timezone := r.FormValue("timezone")
-		description := r.FormValue("description")
-		p.Name = name
-		p.Size = size
-		p.Domain = domain
-		p.Homepage = homepage
-		p.Address = address
-		p.Phone = phone
-		p.Email = email
-		p.Timezone = timezone
-		p.Description = description
+		p.Name = r.FormValue("name")
+		p.Domain = r.FormValue("domain")
+		p.Size = r.FormValue("size")
+		p.Homepage = r.FormValue("homepage")
+		p.Address = r.FormValue("address")
+		p.Phone = r.FormValue("phone")
+		p.Email = r.FormValue("email")
+		p.Timezone = r.FormValue("timezone")
+		p.Description = r.FormValue("description")
+		p.BusinessRegistrationNumber = r.FormValue("businessregistrationnumber")
+		p.Manager = r.FormValue("manager")
+		p.ManagerPhone = r.FormValue("managerphone")
+		p.ManagerEmail = r.FormValue("manageremail")
+		p.FTP = r.FormValue("ftp")
+		p.FTPID = r.FormValue("ftpid")
+		p.FTPPW = r.FormValue("ftppw")
+		p.Opentime = r.FormValue("opentime")
+		p.Closedtime = r.FormValue("closedtime")
 		// 수정된 파트너 정보 DB에 저장
 		err = setPartner(client, p)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		// Response
-		item, err := getPartner(client, p.ID.Hex())
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		data, err := json.Marshal(item)
+		data, err := json.Marshal(p)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -239,7 +204,67 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write(data)
 		return
-	} else {
+	case http.MethodDelete:
+		//mongoDB client 연결
+		client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		err = client.Connect(ctx)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer client.Disconnect(ctx)
+		err = client.Ping(ctx, readpref.Primary())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		// token 체크
+		_, accessLevel, err := TokenHandlerV2(r, client)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if accessLevel != AdminAccessLevel {
+			http.Error(w, err.Error(), http.StatusUnauthorized)
+			return
+		}
+		// 파트너 정보 Parsing
+		err = r.ParseForm()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		id := r.FormValue("id")
+		if id == "" {
+			http.Error(w, "id 정보가 없습니다", http.StatusBadRequest)
+			return
+		}
+		// 어떠한 데이터가 삭제되었는지 확인하기 위해서 구한다.
+		p, err := getPartner(client, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		err = rmPartner(client, id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		data, err := json.Marshal(p)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(data)
+		return
+	default:
 		http.Error(w, "지원하지 않는 메소드입니다", http.StatusMethodNotAllowed)
 		return
 	}
