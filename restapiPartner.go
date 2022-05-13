@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -90,34 +91,30 @@ func handleAPIPartner(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Parsing
-		err = r.ParseForm()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+		/*
+			err = r.ParseForm()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		*/
 		p := Partner{}
-		p.ID = primitive.NewObjectID()
-		p.Name = r.FormValue("name")
-		p.Domain = r.FormValue("domain")
-		p.Size = r.FormValue("size")
-		p.Homepage = r.FormValue("homepage")
-		p.Address = r.FormValue("address")
-		p.Phone = r.FormValue("phone")
-		p.Email = r.FormValue("email")
-		p.Timezone = r.FormValue("timezone")
-		p.Description = r.FormValue("description")
-		p.BusinessRegistrationNumber = r.FormValue("businessregistrationnumber")
-		p.Manager = r.FormValue("manager")
-		p.ManagerPhone = r.FormValue("managerphone")
-		p.ManagerEmail = r.FormValue("manageremail")
-		p.FTP = r.FormValue("ftp")
-		p.FTPID = r.FormValue("ftpid")
-		p.FTPPW = r.FormValue("ftppw")
-		p.Opentime = r.FormValue("opentime")
-		p.Closedtime = r.FormValue("closedtime")
+		var unmarshalErr *json.UnmarshalTypeError
 
-		// 파트너 추가
-		err = addPartner(client, p)
+		decoder := json.NewDecoder(r.Body)
+		decoder.DisallowUnknownFields()
+		err = decoder.Decode(&p)
+		if err != nil {
+			if errors.As(err, &unmarshalErr) {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			} else {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+		}
+		p.ID = primitive.NewObjectID()
+		err = addPartner(client, p) // 파트너 추가
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

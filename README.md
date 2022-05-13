@@ -13,13 +13,12 @@ CSI(Creation Status Integrator)는 영상(영화,드라마), 게임, 에니메�
 - 내부, 외부 서버에 설치가 가능합니다.
 - 리뷰 시스템
 - 사용자별 토큰키, 암호화키, 직급별 접근권한 사용이 가능합니다.
-- [Download](https://github.com/digital-idea/csi3/releases)
 
 ## Roadmap
 
 브라우저 지원 우선순위: 크롬 > 사파리 > 파이어폭스
 
-1. 파트너 관리툴 추가. - 통계시 필요
+1. 파트너 관리툴 추가(진행중)
 1. 통계, 레포트(개인, 팀장, 실장 페이지)
 1. 간트챠트
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
@@ -55,7 +54,7 @@ CSI를 실행하기 전에 우선적으로 thumbnail 폴더가 필요합니다.
 
 ```bash
 sudo csi3 -http :80 # 웹서버를 실행합니다.
-sudo csi3 -http :80 -reviewrender # 웹서버 및 FFmpeg를 이용하여 리뷰를 렌더링하는 서버가 됩니다. 사양이 좀 더 좋아야해요.
+sudo csi3 -http :80 -reviewrender # 웹서버 및 FFmpeg를 이용하여 리뷰를 렌더링하는 서버
 sudo csi3 -http :80 &> csi.log& # csi.log 파일에 로그가 생성되면서 서비스 실행
 ```
 
