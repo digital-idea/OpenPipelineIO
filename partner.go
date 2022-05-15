@@ -45,16 +45,16 @@ type Partner struct {
 
 // Money 는 돈과 관련된 자료구조이다. 어떤 프로젝트에서 누가, 누구에게, 언제 얼마를 주는가에 대한 정보
 type Money struct {
-	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Project     string             `json:"project"`     // 프로젝트
-	From        string             `json:"from"`        // 누구로 부터
-	To          string             `json:"to"`          // 누구에게
-	Amount      float64            `json:"amount"`      // 액수
-	Date        string             `json:"date"`        // 전달 날짜
-	Unit        string             `json:"unit"`        // KRW, USD
-	Description string             `json:"description"` // 내용
-	Kind        string             `json:"kind"`        // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
-	Status      string             `json:"status"`      // 지급완료
+	ID           primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Project      string             `json:"project"`      // 프로젝트
+	Sender       string             `json:"sender"`       // 보내는이
+	Recipient    string             `json:"recipient"`    // 받는이
+	Amount       float64            `json:"amount"`       // 액수
+	Date         string             `json:"date"`         // 전달 날짜
+	MonetaryUnit string             `json:"monetaryunit"` // 단위 : KRW,USD,CNY,JPY,VND / policy : ISO4217
+	Description  string             `json:"description"`  // 내용
+	Typ          string             `json:"typ"`          // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
+	Status       string             `json:"status"`       // 지급완료
 }
 
 // ProjectForPartner 자료구조는 프로젝트와 파트너사이의 관계를 다루는 자료구조
