@@ -39,7 +39,7 @@ type Partner struct {
 	Contracts                  []Contract         `json:"contracts"`                  // 계약서 등록 삭제기능, 과정을 볼 수 있도록 하기.
 	Tags                       []string           `json:"tags"`                       // 태그
 	Type                       string             `json:"type"`                       // 법인, 개인, 프리렌서 인가?
-	// 컨택포인트(누구의 소개인지, 어디서 만났는지)
+	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
 
 }
 
@@ -51,7 +51,7 @@ type Money struct {
 	To          string             `json:"to"`          // 누구에게
 	Amount      float64            `json:"amount"`      // 액수
 	Date        string             `json:"date"`        // 전달 날짜
-	Unit        string             `json:"unit"`        // KRW
+	Unit        string             `json:"unit"`        // KRW, USD
 	Description string             `json:"description"` // 내용
 	Kind        string             `json:"kind"`        // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
 	Status      string             `json:"status"`      // 지급완료
