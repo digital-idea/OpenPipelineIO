@@ -109,6 +109,7 @@ type Project struct {
 	SoundContact             string        `json:"soundcontact"`             // Sound실 연락처
 	FlexibleStatus           bool          `json:"flexiblestatus"`           // 유연한 상태 처리
 	RocketChatChannel        string        `json:"rocketchatchannel"`        // 로켓쳇 채널
+	Budget                   float64       `json:"budget"`                   // 총예산
 }
 
 // NewProject 함수는 기본 설정된 프로젝트 자료구조를 반환한다.
