@@ -40,7 +40,6 @@ type Partner struct {
 	Tags                       []string           `json:"tags"`                       // 태그
 	Type                       string             `json:"type"`                       // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
-
 }
 
 // Money 는 돈과 관련된 자료구조이다. 어떤 프로젝트에서 누가, 누구에게, 언제 얼마를 주는가에 대한 정보
