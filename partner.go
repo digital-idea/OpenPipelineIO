@@ -40,21 +40,22 @@ type Partner struct {
 	Tags                       []string           `json:"tags"`                       // 태그
 	Type                       string             `json:"type"`                       // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
-
 }
 
 // Money 는 돈과 관련된 자료구조이다. 어떤 프로젝트에서 누가, 누구에게, 언제 얼마를 주는가에 대한 정보
 type Money struct {
-	ID           primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Project      string             `json:"project"`      // 프로젝트
-	Sender       string             `json:"sender"`       // 보내는이
-	Recipient    string             `json:"recipient"`    // 받는이
-	Amount       float64            `json:"amount"`       // 액수
-	Date         string             `json:"date"`         // 전달 날짜
-	MonetaryUnit string             `json:"monetaryunit"` // 단위 : KRW,USD,CNY,JPY,VND / policy : ISO4217
-	Description  string             `json:"description"`  // 내용
-	Typ          string             `json:"typ"`          // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
-	Status       string             `json:"status"`       // 지급완료
+	ID                           primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Project                      string             `json:"project"`                      // 프로젝트
+	Sender                       string             `json:"sender"`                       // 보내는이
+	Recipient                    string             `json:"recipient"`                    // 받는이
+	Amount                       float64            `json:"amount"`                       // 액수
+	Date                         string             `json:"date"`                         // 전달 날짜
+	MonetaryUnit                 string             `json:"monetaryunit"`                 // 단위 : KRW,USD,EUR,CNY,JPY,VND ... Policy : ISO4217
+	Description                  string             `json:"description"`                  // 내용
+	Typ                          string             `json:"typ"`                          // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
+	Status                       string             `json:"status"`                       // 절차검토, 품의...
+	IssuanceElectronicTaxInvoice bool               `json:"issuanceelectronictaxinvoice"` // 세금계산서 발행
+	IssuanceInvoice              bool               `json:"issuanceinvoice"`              // 인보이스 발행여부
 }
 
 // ProjectForPartner 자료구조는 프로젝트와 파트너사이의 관계를 다루는 자료구조
@@ -84,10 +85,13 @@ type ProjectForPartner struct {
 	PaymentDateForVender    string             `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
 	NeedIR                  bool               `json:"needir"`                  // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
 	Evaluation              Evaluation         `json:"evaluation"`              // 실무평가: 퀄리티, 스케줄, 커뮤니케이션, 종합, 총평 <- 실무자, 프렙의 경우 작업자, 프로젝트에 대한...
-	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어 <- partner
-	Messenger               string             `json:"messanger"`               // 사용 메신저 종류: <- partner
-	MessengerID             string             `json:"messengerid"`             // 메신저 ID: <- partner
-	Manday                  int                `json:"manday"`                  // 예상 맨데이(회계상필요) <- 감사시 필요
+	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
+	Messenger               string             `json:"messanger"`               // 사용 메신저 종류
+	MessengerID             string             `json:"messengerid"`             // 메신저 ID
+	Manday                  int                `json:"manday"`                  // 예상 맨데이, 회계 작성시 필요, 감사시 필요
+	OutShot                 int                `json:"outshot"`                 // 나간컷
+	LeftoverShot            int                `json:"leftovershot"`            // 남은컷
+	TotalShot               int                `json:"totalshot"`               // 총컷
 }
 
 type Event struct {
@@ -97,10 +101,12 @@ type Event struct {
 }
 
 type Contract struct {
-	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Title string             `json:"title"` // 계약서 이름
-	Date  string             `json:"date"`  // 등록일
-	Url   string             `json:"url"`   // URL, 파일이 업로드된 url
+	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Title  string             `json:"title"`  // 계약서 이름
+	Date   string             `json:"date"`   // 등록일
+	Url    string             `json:"url"`    // URL, pdf 일이 업로드된 url
+	Price  float64            `json:"price"`  // 가격
+	Amount string             `json:"amount"` // 분량, 컷수
 }
 
 // Evaluation 은 평가 자료구조이다.
@@ -110,7 +116,7 @@ type Evaluation struct {
 	Schedule      int                `json:"schedule"`      // 스케줄
 	Communication int                `json:"communication"` // 커뮤니케이션
 	Total         int                `json:"total"`         // 종합점수
-	GeneralReview string             `json:"generalreview"` // 총평
+	GeneralReview string             `json:"generalreview"` // 총평, 총평을 위주로 본다.
 }
 
 // RNR 자료구조는 R&R 과정에 대한 단계 시각화, 진행률 체크하기 위한 자료구조이다.
@@ -144,3 +150,5 @@ type RNR struct {
 	Title       string             `json:"title"`       // R&R 제목
 	Description string             `json:"description"` // 내용
 }
+
+// 내부는 어떻게 처리할지 고민하기

@@ -14,6 +14,7 @@ require (
 	github.com/disintegration/imaging v1.6.0
 	github.com/elazarl/goproxy v0.0.0-20210110162100-a92cc753f88e // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/gorilla/mux v1.8.0
 	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/shurcooL/httpfs v0.0.0-20190527155220-6a4d4a70508b
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
