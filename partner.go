@@ -84,10 +84,10 @@ type ProjectForPartner struct {
 	PaymentDateForVender    string             `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
 	NeedIR                  bool               `json:"needir"`                  // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
 	Evaluation              Evaluation         `json:"evaluation"`              // 실무평가: 퀄리티, 스케줄, 커뮤니케이션, 종합, 총평 <- 실무자, 프렙의 경우 작업자, 프로젝트에 대한...
-	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어 <- partner
-	Messenger               string             `json:"messanger"`               // 사용 메신저 종류: <- partner
-	MessengerID             string             `json:"messengerid"`             // 메신저 ID: <- partner
-	Manday                  int                `json:"manday"`                  // 예상 맨데이(회계상필요) <- 감사시 필요
+	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
+	Messenger               string             `json:"messanger"`               // 사용 메신저 종류
+	MessengerID             string             `json:"messengerid"`             // 메신저 ID
+	Manday                  int                `json:"manday"`                  // 예상 맨데이, 회계 작성시 필요, 감사시 필요
 }
 
 type Event struct {
