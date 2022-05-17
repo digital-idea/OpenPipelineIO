@@ -51,7 +51,7 @@ type Money struct {
 	Recipient                    string             `json:"recipient"`                    // 받는이
 	Amount                       float64            `json:"amount"`                       // 액수
 	Date                         string             `json:"date"`                         // 전달 날짜
-	MonetaryUnit                 string             `json:"monetaryunit"`                 // 단위 : KRW,USD,CNY,JPY,VND... / policy : ISO4217 / 유로화 추가
+	MonetaryUnit                 string             `json:"monetaryunit"`                 // 단위 : KRW,USD,EUR,CNY,JPY,VND ... Policy : ISO4217
 	Description                  string             `json:"description"`                  // 내용
 	Typ                          string             `json:"typ"`                          // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
 	Status                       string             `json:"status"`                       // 절차검토, 품의...
