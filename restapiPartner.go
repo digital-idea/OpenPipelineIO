@@ -22,7 +22,6 @@ func helpPartnerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getPartnerHandler(w http.ResponseWriter, r *http.Request) {
-	//mongoDB client 연결
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
