@@ -5,7 +5,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 type Partner struct {
 	ID                         primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Name                       string             `json:"name"`                       // 파트너사 이름
-	StockSymbol                string             `json:"stocksymbol"`                // 주식종목코드
+	Symbol                     string             `json:"symbol"`                     // 주식종목코드
 	Domain                     string             `json:"domain"`                     // 파트너사 사업 영역
 	Size                       string             `json:"size"`                       // 파트너사 규모 명수
 	Homepage                   string             `json:"homepage"`                   // 파트너사 홈페이지 주소
