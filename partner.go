@@ -35,8 +35,6 @@ type Partner struct {
 	IsAbroad                   bool               `json:"isabroad"`                   // 국내, 해외 체크
 	IsClient                   bool               `json:"isclient"`                   // 내 기준에서 갑(Clinet), 내 기준에서 을(Partner, Vender) 인지 체크
 	Progress                   string             `json:"progress"`                   // 상태: 외부진행상황. %
-	Events                     []Event            `json:"events"`                     // 딜리버리 일정 관리(매주, 매월 나가야하는 것) 프로젝트별로 저장되어야 한다.
-	Contracts                  []Contract         `json:"contracts"`                  // 계약서 등록 삭제기능, 과정을 볼 수 있도록 하기.
 	Tags                       []string           `json:"tags"`                       // 태그
 	Type                       string             `json:"type"`                       // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
@@ -52,7 +50,7 @@ type Money struct {
 	Date                         string             `json:"date"`                         // 전달 날짜
 	MonetaryUnit                 string             `json:"monetaryunit"`                 // 단위 : KRW,USD,EUR,CNY,JPY,VND ... Policy : ISO4217
 	Description                  string             `json:"description"`                  // 내용
-	Typ                          string             `json:"typ"`                          // 최초견적, 계약견적, 계약금, 중도금, 잔금1, 잔금2, 추가금
+	Typ                          string             `json:"typ"`                          // firstestimate 최초견적, contractestimate 계약견적, additionalestimate 추가견적, downpayment 계약금, interimpayment 중도금, balance 잔금, surchage 추가금
 	Status                       string             `json:"status"`                       // 절차검토, 품의...
 	IssuanceElectronicTaxInvoice bool               `json:"issuanceelectronictaxinvoice"` // 세금계산서 발행
 	IssuanceInvoice              bool               `json:"issuanceinvoice"`              // 인보이스 발행여부
@@ -67,24 +65,15 @@ type ProjectForPartner struct {
 	EndDate                 string             `json:"enddate"`                 // 프로젝트 완료일
 	AmountOfShot            int                `json:"amountofshot"`            // 파트너에게 가는 분량
 	PercentageOfTotalBudget float64            `json:"percentageoftotalbudget"` // 나가는 비용이 몇 퍼센트인가?
-	HistoryOfEstimate       []Money            `json:"historyofestimate"`       // 과거 견적내용, 액수
-	Status                  RNR                `json:"status"`                  // 계약,진행상태
+	RNR                     string             `json:"rnr"`                     // 계약,진행상태
 	Description             string             `json:"description"`             // 외주내용
-	FirstEstimate           Money              `json:"firstestimate"`           // 최초견적가
-	ContractEstimate        Money              `json:"contractestimate"`        // 계약견적가
-	AdditionalEstimate      Money              `json:"additionalestimate"`      // 추가견적가
 	PricePerShot            float64            `json:"pricepershot"`            // 컷당 가격
 	PricePerFrame           float64            `json:"priceperframe"`           // 프레임당 가격
-	VenderInternalManager   string             `venderinternalmanager`          // 벤더 내부관리자
-	DownPayment             Money              `json:"downpayment"`             // 계약금 가격, 지급일
-	InterimPayment          []Money            `json:"interimpayment"`          // 중도금 가격, 지급일
-	Balance                 Money              `json:"balance"`                 // 잔금 가격, 지급일
-	Surchage                Money              `json:"surchage"`                // 추가금 가격, 지급일
+	PartnerInternalManager  string             `partnerinternalmanager`         // 파트너 내부관리자
 	PaymentCycle            float64            `json:"paymentcycle"`            // 지급회차 1/2, 4/6: 현재 지급단계, 총 지급횟수
 	PaymentDateForClient    string             `json:"paymentdateforclient"`    // 클라이언트에게 돈을 받는날짜, 프로젝트(프로젝트 월별 지급일)
 	PaymentDateForVender    string             `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
 	NeedIR                  bool               `json:"needir"`                  // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
-	Evaluation              Evaluation         `json:"evaluation"`              // 실무평가: 퀄리티, 스케줄, 커뮤니케이션, 종합, 총평 <- 실무자, 프렙의 경우 작업자, 프로젝트에 대한...
 	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
 	Messenger               string             `json:"messanger"`               // 사용 메신저 종류
 	MessengerID             string             `json:"messengerid"`             // 메신저 ID
@@ -94,24 +83,27 @@ type ProjectForPartner struct {
 	TotalShot               int                `json:"totalshot"`               // 총컷
 }
 
-type Event struct {
-	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Date  string             `json:"date"`  // 이벤트 날짜
-	Title string             `json:"title"` // 이벤트 제목
+type PartnerEvent struct {
+	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Date    string             `json:"date"`    // 이벤트 날짜
+	Title   string             `json:"title"`   // 이벤트 제목
+	Partner string             `json:"partner"` // 관련 파트너사
 }
 
 type Contract struct {
-	ID     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Title  string             `json:"title"`  // 계약서 이름
-	Date   string             `json:"date"`   // 등록일
-	Url    string             `json:"url"`    // URL, pdf 일이 업로드된 url
-	Price  float64            `json:"price"`  // 가격
-	Amount string             `json:"amount"` // 분량, 컷수
+	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Partner string             `json:"partner"` // 계약된 파트너 이름
+	Title   string             `json:"title"`   // 계약서 이름
+	Date    string             `json:"date"`    // 등록일
+	Url     string             `json:"url"`     // URL, pdf 일이 업로드된 url
+	Price   float64            `json:"price"`   // 가격
+	Amount  string             `json:"amount"`  // 분량, 컷수
 }
 
 // Evaluation 은 평가 자료구조이다.
 type Evaluation struct {
 	ID            primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Partner       string             `json:"partner"`       // 파트너 이름
 	Quality       int                `json:"quality"`       // 퀄리티
 	Schedule      int                `json:"schedule"`      // 스케줄
 	Communication int                `json:"communication"` // 커뮤니케이션
