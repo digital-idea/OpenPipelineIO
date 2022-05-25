@@ -50,10 +50,17 @@ type Money struct {
 	Date                         string             `json:"date"`                         // 전달 날짜
 	MonetaryUnit                 string             `json:"monetaryunit"`                 // 단위 : KRW,USD,EUR,CNY,JPY,VND ... Policy : ISO4217
 	Description                  string             `json:"description"`                  // 내용
-	Typ                          string             `json:"typ"`                          // firstestimate 최초견적, contractestimate 계약견적, additionalestimate 추가견적, downpayment 계약금, interimpayment 중도금, balance 잔금, surchage 추가금
+	MoneytypeID                  string             `json:"moneytypeid"`                  // firstestimate 최초견적, contractestimate 계약견적, additionalestimate 추가견적, downpayment 계약금, interimpayment 중도금, balance 잔금, surchage 추가금
 	Status                       string             `json:"status"`                       // 절차검토, 품의...
 	IssuanceElectronicTaxInvoice bool               `json:"issuanceelectronictaxinvoice"` // 세금계산서 발행
 	IssuanceInvoice              bool               `json:"issuanceinvoice"`              // 인보이스 발행여부
+}
+
+type Moneytype struct {
+	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Order float64            `json:"order"` // 순서
+	Name  string             `json:"name"`  // 영문이름
+	// firstestimate 최초견적, contractestimate 계약견적, additionalestimate 추가견적, downpayment 계약금, interimpayment 중도금, balance 잔금, surchage 추가금
 }
 
 // ProjectForPartner 자료구조는 프로젝트와 파트너사이의 관계를 다루는 자료구조
@@ -65,15 +72,15 @@ type ProjectForPartner struct {
 	EndDate                 string             `json:"enddate"`                 // 프로젝트 완료일
 	AmountOfShot            int                `json:"amountofshot"`            // 파트너에게 가는 분량
 	PercentageOfTotalBudget float64            `json:"percentageoftotalbudget"` // 나가는 비용이 몇 퍼센트인가?
-	RNR                     string             `json:"rnr"`                     // 계약,진행상태
+	RnrID                   string             `json:"rnrid"`                   // 계약,진행상태
 	Description             string             `json:"description"`             // 외주내용
 	PricePerShot            float64            `json:"pricepershot"`            // 컷당 가격
 	PricePerFrame           float64            `json:"priceperframe"`           // 프레임당 가격
-	PartnerInternalManager  string             `partnerinternalmanager`         // 파트너 내부관리자
+	PartnerInternalManager  string             `json:"partnerinternalmanager"`  // 파트너 내부관리자
 	PaymentCycle            float64            `json:"paymentcycle"`            // 지급회차 1/2, 4/6: 현재 지급단계, 총 지급횟수
 	PaymentDateForClient    string             `json:"paymentdateforclient"`    // 클라이언트에게 돈을 받는날짜, 프로젝트(프로젝트 월별 지급일)
 	PaymentDateForVender    string             `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
-	NeedIR                  bool               `json:"needir"`                  // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
+	AnnounceIR              bool               `json:"announceir"`              // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
 	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
 	Messenger               string             `json:"messanger"`               // 사용 메신저 종류
 	MessengerID             string             `json:"messengerid"`             // 메신저 ID
