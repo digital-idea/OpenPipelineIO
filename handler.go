@@ -229,6 +229,13 @@ func maxAgeHandler(h http.Handler) http.Handler {
 	})
 }
 
+func helpMethodOptionsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	if r.Method == http.MethodOptions {
+		return
+	}
+}
+
 // webserver함수는 웹서버의 URL을 선언하는 함수입니다.
 func webserver(port string) {
 	r := mux.NewRouter()
@@ -386,8 +393,9 @@ func webserver(port string) {
 	// Error
 	r.HandleFunc("/error-captcha", handleErrorCaptcha)
 
-	//Health
+	//Health & Help
 	r.HandleFunc("/health", handleHealth)
+	r.HandleFunc("/api/statusinfo", handleAPIStatusInfo).Methods(http.MethodGet, http.MethodOptions)
 
 	// restAPI Project
 	r.HandleFunc("/api/project", handleAPIProject)
@@ -575,7 +583,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/reviewoutputdatapath", handleAPIReviewOutputDataPath)
 
 	// REST API Partner
-	r.HandleFunc("/api/partner", helpPartnerHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/partner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/partner", postPartnerHandler).Methods("POST")
 	r.HandleFunc("/api/partner/{id}", getPartnerHandler).Methods("GET")
 	r.HandleFunc("/api/partner/{id}", putPartnerHandler).Methods("PUT")

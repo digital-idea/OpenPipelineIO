@@ -14,13 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func helpPartnerHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Method == http.MethodOptions {
-		return
-	}
-}
-
 func getPartnerHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {

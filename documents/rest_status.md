@@ -1,17 +1,22 @@
 # Status RestAPI
-Status RestAPI 입니다.
+
+Status 정보 관련 RestAPI 입니다.
 
 ## Get
+
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/status | status의 모든 정보를 가지고 온다. | . | `$ curl -X GET -H "Authorization: Basic {YourTokenKey}" https://csi.lazypic.org/api/status` |
+| /api/statusinfo | legacy status의 상태 정보를 가지고 온다. | reverse | `$ curl -X GET https://csi.lazypic.org/api/statusinfo?reverse=true` |
 
 ## POST
+
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
 | /api/addstatus | status를 추가한다. | id,description,textcolor,bgcolor,bordercolor,order,defaulton,initstatus |`$ curl -X POST -H "Authorization: Basic {YourTokenKey}" -d "id=ready&description=ready&textcolor=#000000&bgcolor=#BEEF37&bordercolor=#BEEF37&order=3&defaulton=true&initstatus=false" "https://csi.lazypic.org/api/addstatus"` |
 
 # 파이썬 예제 Python2.7x
+
 모든 Status 정보를 가지고 오기.
 
 ```python
