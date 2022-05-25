@@ -36,7 +36,7 @@ type Partner struct {
 	IsClient                   bool               `json:"isclient"`                   // 내 기준에서 갑(Clinet), 내 기준에서 을(Partner, Vender) 인지 체크
 	Progress                   string             `json:"progress"`                   // 상태: 외부진행상황. %
 	Tags                       []string           `json:"tags"`                       // 태그
-	Type                       string             `json:"type"`                       // 법인, 개인, 프리렌서 인가?
+	Companytype                string             `json:"companytype"`                // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
 }
 
