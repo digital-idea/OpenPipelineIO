@@ -110,12 +110,13 @@ type Contract struct {
 // Evaluation 은 평가 자료구조이다.
 type Evaluation struct {
 	ID            primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	PartnerID     string             `json:"partnerid"`     // 파트너 이름
+	Partner       string             `json:"partner"`       // 파트너 이름
 	Quality       int                `json:"quality"`       // 퀄리티
 	Schedule      int                `json:"schedule"`      // 스케줄
 	Communication int                `json:"communication"` // 커뮤니케이션
 	Total         int                `json:"total"`         // 종합점수
 	GeneralReview string             `json:"generalreview"` // 총평, 총평을 위주로 본다.
+	CreateDate    string             `json:"createdate"`    // 평가일
 }
 
 // RNR 자료구조는 R&R 과정에 대한 단계 시각화, 진행률 체크하기 위한 자료구조이다.
