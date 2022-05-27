@@ -7,7 +7,8 @@
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api/statistics/projectnum | 프로젝트 갯수를 가지고 옵니다. | . | curl -X GET -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api/statistics/projectnum"
-| /api1/statistics/shot | status V1 shot의 샹태를 가지고옵니다. 프로젝트 옵션이 없다면 전체 프로젝트 갯수를 처리합니다. | (project) | curl -X GET -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/shot?project=TEMP"
+| /api1/statistics/shot | status V1 shot의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/shot"
+| /api1/statistics/shot | status V1 shot의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/shot?project=TEMP"
 
 
 ## Curl을 이용해서 DB dump 파일을 다운로드
