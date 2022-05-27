@@ -24,6 +24,6 @@ require (
 	golang.org/x/sys v0.0.0-20190614160838-b47fdc937951
 	golang.org/x/tools v0.0.0-20190614205625-5aca471b1d59 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	moul.io/http2curl v1.0.0 // indirect
 )

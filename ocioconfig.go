@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"gopkg.in/mgo.v2"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // Colorspace 자료구조는 OCIO Color 자료구조이다.
