@@ -39,10 +39,16 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	}
 	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	projects, err := client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	q := r.URL.Query()
+	project := q.Get("project")
+	var projects []string
+	if project != "" {
+		projects = append(projects, project)
+	} else {
+		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 	}
 	type Recipe struct {
 		None    int64 `json:"none"`
