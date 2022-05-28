@@ -400,6 +400,7 @@ func webserver(port string) {
 	// Statistics
 	r.HandleFunc("/api/statistics/projectnum", handleAPIStatisticsProjectnum).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/shot", handleAPI1StatisticsShot).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/api1/statistics/asset", handleAPI1StatisticsAsset).Methods(http.MethodGet, http.MethodOptions)
 
 	// restAPI Project
 	r.HandleFunc("/api/project", handleAPIProject)
