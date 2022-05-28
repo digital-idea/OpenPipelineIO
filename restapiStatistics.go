@@ -179,7 +179,7 @@ func handleAPI2StatisticsShot(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	// 모든 상태를 가지고 옵니다.
-	status, err := allStatusV2(client)
+	status, err := AllStatusV2(client)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
