@@ -13,6 +13,8 @@
 | /api2/statistics/shot | status V2 shot의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api2/statistics/shot?project=TEMP"
 | /api1/statistics/asset | status V1 asset의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/asset"
 | /api1/statistics/asset | status V1 asset의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/asset?project=TEMP"
+| /api2/statistics/asset | status V2 asset의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api2/statistics/asset"
+| /api2/statistics/asset | status V2 asset의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api2/statistics/asset?project=TEMP"
 
 
 ## Curl을 이용해서 DB dump 파일을 다운로드
