@@ -171,6 +171,13 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	project := q.Get("project")
 	task := q.Get("task")
 	typ := q.Get("type")
+	if typ == "" {
+		typ = "shot"
+	}
+	if !(typ == "shot" || typ == "asset") {
+		http.Error(w, "The type value must be either 'shot' or 'asset' value.", http.StatusBadRequest)
+		return
+	}
 	var projects []string
 	if project != "" {
 		projects = append(projects, project)
@@ -197,7 +204,6 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	if typ == "asset" {
 		typeFilter = bson.A{bson.D{{"type", "asset"}}}
 	}
-
 	noneFilter := bson.D{{"tasks." + task + ".status", NONE}, {"$or", typeFilter}}
 	holdFilter := bson.D{{"tasks." + task + ".status", HOLD}, {"$or", typeFilter}}
 	doneFilter := bson.D{{"tasks." + task + ".status", DONE}, {"$or", typeFilter}}
