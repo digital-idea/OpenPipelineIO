@@ -140,6 +140,140 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	q := r.URL.Query()
+	project := q.Get("project")
+	task := q.Get("task")
+	typ := q.Get("type")
+	var projects []string
+	if project != "" {
+		projects = append(projects, project)
+	} else {
+		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+	type Recipe struct {
+		None    int64 `json:"none"`
+		Hold    int64 `json:"hold"`
+		Done    int64 `json:"done"`
+		Out     int64 `json:"out"`
+		Assign  int64 `json:"assign"`
+		Ready   int64 `json:"ready"`
+		Wip     int64 `json:"wip"`
+		Confirm int64 `json:"confirm"`
+		Omit    int64 `json:"omit"`
+		Client  int64 `json:"client"`
+	}
+	rcp := Recipe{}
+	typeFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
+	if typ == "asset" {
+		typeFilter = bson.A{bson.D{{"type", "asset"}}}
+	}
+
+	noneFilter := bson.D{{"tasks." + task + ".status", NONE}, {"$or", typeFilter}}
+	holdFilter := bson.D{{"tasks." + task + ".status", HOLD}, {"$or", typeFilter}}
+	doneFilter := bson.D{{"tasks." + task + ".status", DONE}, {"$or", typeFilter}}
+	outFilter := bson.D{{"tasks." + task + ".status", OUT}, {"$or", typeFilter}}
+	assignFilter := bson.D{{"tasks." + task + ".status", ASSIGN}, {"$or", typeFilter}}
+	readyFilter := bson.D{{"tasks." + task + ".status", READY}, {"$or", typeFilter}}
+	wipFilter := bson.D{{"tasks." + task + ".status", WIP}, {"$or", typeFilter}}
+	confirmFilter := bson.D{{"tasks." + task + ".status", CONFIRM}, {"$or", typeFilter}}
+	omitFilter := bson.D{{"tasks." + task + ".status", OMIT}, {"$or", typeFilter}}
+	clientFilter := bson.D{{"tasks." + task + ".status", CLIENT}, {"$or", typeFilter}}
+
+	for _, project := range projects {
+		collection := client.Database("project").Collection(project)
+		noneCount, err := collection.CountDocuments(ctx, noneFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		holdCount, err := collection.CountDocuments(ctx, holdFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		doneCount, err := collection.CountDocuments(ctx, doneFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		outCount, err := collection.CountDocuments(ctx, outFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		assignCount, err := collection.CountDocuments(ctx, assignFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		readyCount, err := collection.CountDocuments(ctx, readyFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		wipCount, err := collection.CountDocuments(ctx, wipFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		confirmCount, err := collection.CountDocuments(ctx, confirmFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		omitCount, err := collection.CountDocuments(ctx, omitFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		clientCount, err := collection.CountDocuments(ctx, clientFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		rcp.None += noneCount
+		rcp.Hold += holdCount
+		rcp.Done += doneCount
+		rcp.Out += outCount
+		rcp.Assign += assignCount
+		rcp.Ready += readyCount
+		rcp.Wip += wipCount
+		rcp.Confirm += confirmCount
+		rcp.Omit += omitCount
+		rcp.Client += clientCount
+	}
+
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func handleAPI2StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
