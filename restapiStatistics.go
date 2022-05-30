@@ -846,6 +846,101 @@ func handleAPI2StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func handleAPI2StatisticsTag(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	q := r.URL.Query()
+	project := q.Get("project")
+	tagName := q.Get("name")
+	typ := q.Get("type")
+	if typ == "" {
+		typ = "shot"
+	}
+	if !(typ == "shot" || typ == "asset") {
+		http.Error(w, "The type value must be either 'shot' or 'asset' value.", http.StatusBadRequest)
+		return
+	}
+
+	var projects []string
+	if project != "" {
+		projects = append(projects, project)
+	} else {
+		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	// 모든 상태를 가지고 옵니다.
+	status, err := AllStatusV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type Recipe struct {
+		Status  map[string]int64  `json:"status"`
+		Filters map[string]bson.D `json:"-"` // 통계를 위한 필터저장에만 사용한다. 반환하지 않는다.
+	}
+	rcp := Recipe{}
+	typeFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
+	if typ == "asset" {
+		typeFilter = bson.A{bson.D{{"type", "asset"}}}
+	}
+	rcp.Status = make(map[string]int64)
+	rcp.Filters = make(map[string]bson.D)
+	// filter를 생성합니다.
+	for _, s := range status {
+		rcp.Filters[s.ID] = bson.D{{"statusv2", s.ID}, {"tag", tagName}, {"$or", typeFilter}}
+	}
+
+	for _, project := range projects {
+		collection := client.Database("project").Collection(project)
+		// filter를 for 문 돌면서 나오는 카운트를 검색하고 상태에 넣는다.
+		for status, filter := range rcp.Filters {
+			count, err := collection.CountDocuments(ctx, filter)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rcp.Status[status] += count
+		}
+	}
+
+	data, err := json.Marshal(rcp.Status)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func handleAPI1StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
