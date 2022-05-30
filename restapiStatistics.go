@@ -331,6 +331,7 @@ func handleAPI1StatisticsUser(w http.ResponseWriter, r *http.Request) {
 		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	type Recipe struct {
@@ -366,42 +367,52 @@ func handleAPI1StatisticsUser(w http.ResponseWriter, r *http.Request) {
 		noneCount, err := collection.CountDocuments(ctx, noneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		holdCount, err := collection.CountDocuments(ctx, holdFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		doneCount, err := collection.CountDocuments(ctx, doneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		outCount, err := collection.CountDocuments(ctx, outFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		assignCount, err := collection.CountDocuments(ctx, assignFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		readyCount, err := collection.CountDocuments(ctx, readyFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		wipCount, err := collection.CountDocuments(ctx, wipFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		confirmCount, err := collection.CountDocuments(ctx, confirmFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		omitCount, err := collection.CountDocuments(ctx, omitFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		clientCount, err := collection.CountDocuments(ctx, clientFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		rcp.None += noneCount
 		rcp.Hold += holdCount
@@ -471,6 +482,7 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	type Recipe struct {
@@ -506,42 +518,52 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 		noneCount, err := collection.CountDocuments(ctx, noneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		holdCount, err := collection.CountDocuments(ctx, holdFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		doneCount, err := collection.CountDocuments(ctx, doneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		outCount, err := collection.CountDocuments(ctx, outFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		assignCount, err := collection.CountDocuments(ctx, assignFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		readyCount, err := collection.CountDocuments(ctx, readyFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		wipCount, err := collection.CountDocuments(ctx, wipFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		confirmCount, err := collection.CountDocuments(ctx, confirmFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		omitCount, err := collection.CountDocuments(ctx, omitFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		clientCount, err := collection.CountDocuments(ctx, clientFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		rcp.None += noneCount
 		rcp.Hold += holdCount
@@ -602,12 +624,14 @@ func handleAPI2StatisticsShot(w http.ResponseWriter, r *http.Request) {
 		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	// 모든 상태를 가지고 옵니다.
 	status, err := AllStatusV2(client)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	type Recipe struct {
 		Status  map[string]int64  `json:"status"`
@@ -629,6 +653,7 @@ func handleAPI2StatisticsShot(w http.ResponseWriter, r *http.Request) {
 			count, err := collection.CountDocuments(ctx, filter)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 			rcp.Status[status] += count
 		}
@@ -681,12 +706,14 @@ func handleAPI2StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	// 모든 상태를 가지고 옵니다.
 	status, err := AllStatusV2(client)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	type Recipe struct {
 		Status  map[string]int64  `json:"status"`
@@ -707,6 +734,7 @@ func handleAPI2StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 			count, err := collection.CountDocuments(ctx, filter)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
 			}
 			rcp.Status[status] += count
 		}
@@ -759,6 +787,7 @@ func handleAPI1StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 	type Recipe struct {
@@ -790,42 +819,52 @@ func handleAPI1StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 		noneCount, err := collection.CountDocuments(ctx, noneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		holdCount, err := collection.CountDocuments(ctx, holdFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		doneCount, err := collection.CountDocuments(ctx, doneFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		outCount, err := collection.CountDocuments(ctx, outFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		assignCount, err := collection.CountDocuments(ctx, assignFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		readyCount, err := collection.CountDocuments(ctx, readyFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		wipCount, err := collection.CountDocuments(ctx, wipFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		confirmCount, err := collection.CountDocuments(ctx, confirmFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		omitCount, err := collection.CountDocuments(ctx, omitFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		clientCount, err := collection.CountDocuments(ctx, clientFilter)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		rcp.None += noneCount
 		rcp.Hold += holdCount
@@ -881,6 +920,7 @@ func handleAPIStatisticsProjectnum(w http.ResponseWriter, r *http.Request) {
 	projects, err := client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	type Recipe struct {
 		Count    int      `json:"count"`
