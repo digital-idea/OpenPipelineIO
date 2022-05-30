@@ -404,6 +404,7 @@ func webserver(port string) {
 	r.HandleFunc("/api1/statistics/asset", handleAPI1StatisticsAsset).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api2/statistics/asset", handleAPI2StatisticsAsset).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/task", handleAPI1StatisticsTask).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/api2/statistics/task", handleAPI2StatisticsTask).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/tag", handleAPI1StatisticsTag).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/user", handleAPI1StatisticsUser).Methods(http.MethodGet, http.MethodOptions)
 
