@@ -15,6 +15,8 @@
 | /api1/statistics/task | status V1 task의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | task,(project),type | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/task?project=TEMP&task=comp&type=shot"
 | /api1/statistics/tag | status V1 tag의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | tag,(project),type | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/tag?name=tagname&type=asset"
 | /api1/statistics/tag | status V1 tag의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | tag,(project),type | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/tag?project=TEMP&name=tagname&type=shot"
+| /api1/statistics/user | status V1 tag의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | name,task,(project),type | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/user?name=김한웅&type=asset&task=comp"
+| /api1/statistics/user | status V1 tag의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | name,task,(project),type | curl -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api1/statistics/user?project=TEMP&name=김한웅&task=comp&type=shot"
 
 ## GET(Status V2)
 
