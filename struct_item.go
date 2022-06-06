@@ -177,6 +177,7 @@ type Task struct {
 	UserNote     string               `json:"usernote"`     // 아티스트와 관련된 엘리먼트등의 정보를 입력하기 위해 사용.
 	TaskLevel    `json:"tasklevel"`   // 샷 레벨
 	Publishes    map[string][]Publish // 퍼블리쉬 정보, string값은 "Primary Key"가 된다.
+	Pipelinestep string               `json:"pipelinestep"` // pipelinestep 이름
 }
 
 // updateStatus는 각 팀의 상태를 조합해서 샷 상태를 업데이트하는 함수이다. // legacy
