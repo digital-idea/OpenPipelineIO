@@ -15,7 +15,7 @@ Partner Restapi 입니다.
 | --- | --- | --- | --- |
 |/api/partner|새로운 파트너 정보를 추가합니다| Option 참고 |curl -X POST -H 'Authorization: Basic <TOKEN>' -d '{"name":"lazypic","phone":"821094117096", "deliverydates":[{"title1":"df","date":"2021-12-13"}]}' "https://csi.lazypic.com/api/partner"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/partner.go
+- Option: https://github.com/digital-idea/csi3/blob/master/struct_partner.go
 
 ## PUT
 
