@@ -588,6 +588,161 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func handleAPI1StatisticsPipelinestep(w http.ResponseWriter, r *http.Request) {
+	// 나중에 Task 입력을 받지 않고 처리할 수 있도록 리펙토링 해야한다.
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	q := r.URL.Query()
+	project := q.Get("project")
+	task := q.Get("task")
+	pipelinestep := q.Get("pipelinestep")
+	typ := q.Get("type")
+	if typ == "" {
+		typ = "shot"
+	}
+	if !(typ == "shot" || typ == "asset") {
+		http.Error(w, "The type value must be either 'shot' or 'asset' value.", http.StatusBadRequest)
+		return
+	}
+	var projects []string
+	if project != "" {
+		projects = append(projects, project)
+	} else {
+		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	type Recipe struct {
+		None    int64 `json:"none"`
+		Hold    int64 `json:"hold"`
+		Done    int64 `json:"done"`
+		Out     int64 `json:"out"`
+		Assign  int64 `json:"assign"`
+		Ready   int64 `json:"ready"`
+		Wip     int64 `json:"wip"`
+		Confirm int64 `json:"confirm"`
+		Omit    int64 `json:"omit"`
+		Client  int64 `json:"client"`
+	}
+	rcp := Recipe{}
+	typeFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
+	if typ == "asset" {
+		typeFilter = bson.A{bson.D{{"type", "asset"}}}
+	}
+	// 파이프라인스탭에 등록된 이름을 가지고 온다.
+	// 해당 task 이름으로으로 array를 생성하고 등록한다.
+	noneFilter := bson.D{{"tasks." + task + ".status", NONE}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	holdFilter := bson.D{{"tasks." + task + ".status", HOLD}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	doneFilter := bson.D{{"tasks." + task + ".status", DONE}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	outFilter := bson.D{{"tasks." + task + ".status", OUT}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	assignFilter := bson.D{{"tasks." + task + ".status", ASSIGN}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	readyFilter := bson.D{{"tasks." + task + ".status", READY}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	wipFilter := bson.D{{"tasks." + task + ".status", WIP}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	confirmFilter := bson.D{{"tasks." + task + ".status", CONFIRM}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	omitFilter := bson.D{{"tasks." + task + ".status", OMIT}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	clientFilter := bson.D{{"tasks." + task + ".status", CLIENT}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+
+	for _, project := range projects {
+		collection := client.Database("project").Collection(project)
+		noneCount, err := collection.CountDocuments(ctx, noneFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		holdCount, err := collection.CountDocuments(ctx, holdFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		doneCount, err := collection.CountDocuments(ctx, doneFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		outCount, err := collection.CountDocuments(ctx, outFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		assignCount, err := collection.CountDocuments(ctx, assignFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		readyCount, err := collection.CountDocuments(ctx, readyFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		wipCount, err := collection.CountDocuments(ctx, wipFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		confirmCount, err := collection.CountDocuments(ctx, confirmFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		omitCount, err := collection.CountDocuments(ctx, omitFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		clientCount, err := collection.CountDocuments(ctx, clientFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rcp.None += noneCount
+		rcp.Hold += holdCount
+		rcp.Done += doneCount
+		rcp.Out += outCount
+		rcp.Assign += assignCount
+		rcp.Ready += readyCount
+		rcp.Wip += wipCount
+		rcp.Confirm += confirmCount
+		rcp.Omit += omitCount
+		rcp.Client += clientCount
+	}
+
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func handleAPI2StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
@@ -820,6 +975,103 @@ func handleAPI2StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	// filter를 생성합니다.
 	for _, s := range status {
 		rcp.Filters[s.ID] = bson.D{{"tasks." + task + ".statusv2", s.ID}, {"$or", typeFilter}}
+	}
+
+	for _, project := range projects {
+		collection := client.Database("project").Collection(project)
+		// filter를 for 문 돌면서 나오는 카운트를 검색하고 상태에 넣는다.
+		for status, filter := range rcp.Filters {
+			count, err := collection.CountDocuments(ctx, filter)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			rcp.Status[status] += count
+		}
+	}
+
+	data, err := json.Marshal(rcp.Status)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func handleAPI2StatisticsPipelinestep(w http.ResponseWriter, r *http.Request) {
+	// 나중에 Task 입력을 받지 않고 처리할 수 있도록 리펙토링 해야한다.
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	q := r.URL.Query()
+	project := q.Get("project")
+	task := q.Get("task")
+	pipelinestep := q.Get("pipelinestep")
+	typ := q.Get("type")
+	if typ == "" {
+		typ = "shot"
+	}
+	if !(typ == "shot" || typ == "asset") {
+		http.Error(w, "The type value must be either 'shot' or 'asset' value.", http.StatusBadRequest)
+		return
+	}
+
+	var projects []string
+	if project != "" {
+		projects = append(projects, project)
+	} else {
+		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	// 모든 상태를 가지고 옵니다.
+	status, err := AllStatusV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	type Recipe struct {
+		Status  map[string]int64  `json:"status"`
+		Filters map[string]bson.D `json:"-"` // 통계를 위한 필터저장에만 사용한다. 반환하지 않는다.
+	}
+	rcp := Recipe{}
+	typeFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
+	if typ == "asset" {
+		typeFilter = bson.A{bson.D{{"type", "asset"}}}
+	}
+	rcp.Status = make(map[string]int64)
+	rcp.Filters = make(map[string]bson.D)
+	// filter를 생성합니다.
+	for _, s := range status {
+		rcp.Filters[s.ID] = bson.D{{"tasks." + task + ".statusv2", s.ID}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
 	}
 
 	for _, project := range projects {
