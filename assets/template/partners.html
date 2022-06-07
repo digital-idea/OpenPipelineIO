@@ -2,7 +2,14 @@
 {{template "headBootstrap5"}}
 <body>
 {{template "navbar-bootstrap5" .}}
+{{template "modal-bootstrap5" .}}
 <div class="p-3">
+    <div class="text-center mt-5 mb-3">
+        <span class="text-darkmode">
+            Partner<br>
+            <span class="add text-decoration-none ml-1" data-bs-toggle="modal" data-bs-target="#modal-partner">＋</span>
+        </span>
+    </div>
     <div class="row">
         {{range .Partners}}
         <div class="card m-10 mx-auto bg-darkmode" style="width: 14rem;">
