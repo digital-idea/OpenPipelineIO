@@ -85,11 +85,11 @@
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <li><a class="dropdown-item text-muted" href="/partners">Partner(준비중)</a></li>
+              <li><a class="dropdown-item" href="/partners">Partner</a></li>
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <li><a class="dropdown-item text-muted" href="/Statistics">Statistics(준비중)</a></li>
+              <li><a class="dropdown-item" href="/Statistics">Statistics</a></li>
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -126,8 +126,6 @@
               <li><a class="dropdown-item" href="/addteam">Team(팀)</a></li>
               <li><a class="dropdown-item" href="/addrole">Role(직책)</a></li>
               <li><a class="dropdown-item" href="/addposition">Position(직급)</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/addpartner">Partner</a></li>
             </ul>
         </li>
         {{end}}
