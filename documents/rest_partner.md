@@ -27,7 +27,7 @@ Partner Restapi 입니다.
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-|/api/partner/|파트너 정보를 가져옵니다|id|curl -X DELETE -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api/partner/{id}"
+|/api/partner/{id}|값을 삭제합니다.|id|curl -X DELETE -H "Authorization: Basic <TOKEN>" "https://csi.lazypic.com/api/partner/{id}"
 
 ## Option 체크
 
