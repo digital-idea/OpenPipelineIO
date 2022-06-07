@@ -1,4 +1,3 @@
-// 이 코드는 파트너사와 관련된 DBapi가 모여있는 파일입니다.
 package main
 
 import (
@@ -15,7 +14,7 @@ func addPartner(client *mongo.Client, p Partner) error {
 	if p.Name == "" {
 		return errors.New("빈 문자열입니다. 파트너를 생성할 수 없습니다")
 	}
-	collection := client.Database("csi").Collection("partners")
+	collection := client.Database(*flagDBName).Collection("partner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -33,9 +32,8 @@ func addPartner(client *mongo.Client, p Partner) error {
 	return nil
 }
 
-// getPartner 함수는 사용자를 가지고오는 함수이다.
 func getPartner(client *mongo.Client, id string) (Partner, error) {
-	collection := client.Database("csi").Collection("partners")
+	collection := client.Database(*flagDBName).Collection("partner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	p := Partner{}
@@ -50,9 +48,8 @@ func getPartner(client *mongo.Client, id string) (Partner, error) {
 	return p, nil
 }
 
-// rmPartner 함수는 파트너사 정보를 삭제하는 함수다.
 func rmPartner(client *mongo.Client, id string) error {
-	collection := client.Database("csi").Collection("partners")
+	collection := client.Database(*flagDBName).Collection("partner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -67,9 +64,8 @@ func rmPartner(client *mongo.Client, id string) error {
 	return nil
 }
 
-// setPartner 함수는 파트너사 정보를 수정하는 함수다.
 func setPartner(client *mongo.Client, p Partner) error {
-	collection := client.Database("csi").Collection("partners")
+	collection := client.Database(*flagDBName).Collection("partner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -84,9 +80,8 @@ func setPartner(client *mongo.Client, p Partner) error {
 	return nil
 }
 
-// allPartners 함수는 모든 파트너사 정보를 가져오는 함수다.
 func allPartners(client *mongo.Client) ([]Partner, error) {
-	collection := client.Database("csi").Collection("partners")
+	collection := client.Database(*flagDBName).Collection("partner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	var partners []Partner
