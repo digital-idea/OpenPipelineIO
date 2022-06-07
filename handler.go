@@ -596,11 +596,18 @@ func webserver(port string) {
 	r.HandleFunc("/api/reviewoutputdatapath", handleAPIReviewOutputDataPath)
 
 	// REST API Partner
-	r.HandleFunc("/api/partner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/partner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/partner", postPartnerHandler).Methods("POST")
 	r.HandleFunc("/api/partner/{id}", getPartnerHandler).Methods("GET")
 	r.HandleFunc("/api/partner/{id}", putPartnerHandler).Methods("PUT")
 	r.HandleFunc("/api/partner/{id}", deletePartnerHandler).Methods("DELETE")
+
+	// REST API Pipelinestep
+	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/pipelinestep", postPipelinestepHandler).Methods("POST")
+	r.HandleFunc("/api/pipelinestep/{id}", getPipelinestepHandler).Methods("GET")
+	r.HandleFunc("/api/pipelinestep/{id}", putPipelinestepHandler).Methods("PUT")
+	r.HandleFunc("/api/pipelinestep/{id}", deletePipelinestepHandler).Methods("DELETE")
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	r.HandleFunc("/edititem", handleEditItem)                    // legacy

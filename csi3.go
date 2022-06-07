@@ -22,6 +22,8 @@ var (
 	DBIP = "127.0.0.1"
 	// DBPORT mongoDB 기본포트.
 	DBPORT = ":27017"
+	// DBNAME 값은 데이터베이스 이름이다.
+	DBNAME = "csi"
 	// WFS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	WFS = "http://127.0.0.1:8081"
 	// DILOG 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -42,8 +44,9 @@ var (
 	CachedAdminSetting = Setting{}
 
 	// 주요서비스 인수
-	flagDBIP       = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")                                                            // mgo용 인수
+	flagDBIP       = flag.String("dbip", DBIP+DBPORT, "mongodb ip and port")                                                            // mgo용 mongoDB 주소
 	flagMongoDBURI = flag.String("mongodburi", fmt.Sprintf("mongodb://%s%s", DBIP, DBPORT), "mongoDB URI ex)mongodb://localhost:27017") //mongo-driver용 인수
+	flagDBName     = flag.String("dbname", DBNAME, "mongodb db name")                                                                   // mongoDB DB이름
 	flagMailDNS    = flag.String("maildns", MAILDNS, "mail DNS name")
 
 	flagDebug          = flag.Bool("debug", false, "디버그모드 활성화")
