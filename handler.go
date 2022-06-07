@@ -604,10 +604,10 @@ func webserver(port string) {
 
 	// REST API Pipelinestep
 	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
-	r.HandleFunc("/api/pipelinestep", postPartnerHandler).Methods("POST")
-	r.HandleFunc("/api/pipelinestep/{id}", getPartnerHandler).Methods("GET")
-	r.HandleFunc("/api/pipelinestep/{id}", putPartnerHandler).Methods("PUT")
-	r.HandleFunc("/api/pipelinestep/{id}", deletePartnerHandler).Methods("DELETE")
+	r.HandleFunc("/api/pipelinestep", postPipelinestepHandler).Methods("POST")
+	r.HandleFunc("/api/pipelinestep/{id}", getPipelinestepHandler).Methods("GET")
+	r.HandleFunc("/api/pipelinestep/{id}", putPipelinestepHandler).Methods("PUT")
+	r.HandleFunc("/api/pipelinestep/{id}", deletePipelinestepHandler).Methods("DELETE")
 
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	r.HandleFunc("/edititem", handleEditItem)                    // legacy
