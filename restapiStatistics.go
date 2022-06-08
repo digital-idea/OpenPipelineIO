@@ -1046,7 +1046,7 @@ func handleAPI2StatisticsPipelinestep(w http.ResponseWriter, r *http.Request) {
 	if project != "" {
 		projects = append(projects, project)
 	} else {
-		projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+		projects, err = ProjectlistV2(client)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

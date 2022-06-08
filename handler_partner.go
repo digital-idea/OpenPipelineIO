@@ -49,9 +49,33 @@ func handlePartners(w http.ResponseWriter, r *http.Request) {
 		Partnernum int       // 검색된 파트너사수
 		Devmode    bool      // 개발모드
 		SearchOption
-		Setting Setting
+		Setting          Setting
+		Projectlist      []string
+		TasksettingNames []string
+		Stages           []Stage
+		Status           []Status
 	}
 	rcp := recipe{}
+	rcp.Projectlist, err = ProjectlistV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingNames, err = TaskSettingNamesV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status, err = AllStatusV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Stages, err = AllStagesV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	rcp.User, err = getUserV2(client, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

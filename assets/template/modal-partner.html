@@ -1,0 +1,263 @@
+{{define "modal-partner"}}
+    <!-- Modal: Partner-->
+    <div class="modal" id="modal-partner" tabindex="-1" role="dialog" aria-labelledby="modal-partner" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title">Partner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Name(파트너사 이름)</label>
+                                        <input type="text" class="form-control" id="partner-name" placeholder="Name" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">주식코드 Symbol</label>
+                                        <input type="text" class="form-control" id="partner-symbol" placeholder="Symbol" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Homepage</label>
+                                        <input type="text" class="form-control" id="partner-homepage" placeholder="Homepage" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">주소</label>
+                                        <input type="text" class="form-control" id="partner-address" placeholder="Address" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">전화</label>
+                                        <input type="text" class="form-control" id="partner-phone" placeholder="Phone" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">E-mail</label>
+                                        <input type="text" class="form-control" id="partner-email" placeholder="E-mail" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Codename(파트너사 코드명)</label>
+                                        <input type="text" class="form-control" id="partner-codename" placeholder="" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Contact Point</label>
+                                        <input type="text" class="form-control" id="partner-contactpoint" placeholder="" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Bank</label>
+                                        <input type="text" class="form-control" id="partner-bank" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">계좌번호</label>
+                                        <input type="text" class="form-control" id="partner-bankaccount" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">지급일</label>
+                                        <input type="text" class="form-control" id="partner-paymentdate" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">화폐단위</label>
+                                        <input type="text" class="form-control" id="partner-monetaryunit" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">프로젝트 History</label>
+                                        <input type="text" class="form-control" id="partner-projecthistory" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">평판</label>
+                                        <input type="text" class="form-control" id="partner-reputation" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">사업영역</label>
+                                        <input type="text" class="form-control" id="partner-domain" placeholder="사업영역" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">규모</label>
+                                        <input type="text" class="form-control" id="partner-size" placeholder="규모" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">지역</label>
+                                        <input type="text" class="form-control" id="partner-location" placeholder="지역" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">시간대</label>
+                                        <input type="text" class="form-control" id="partner-timezone" placeholder="시간대" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">설명</label>
+                                        <input type="text" class="form-control" id="partner-description" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">사업자등록번호</label>
+                                        <input type="text" class="form-control" id="partner-businessregistrationnumber" placeholder="사업자등록번호" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">담당자</label>
+                                        <input type="text" class="form-control" id="partner-manager" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">담당자 전화번호</label>
+                                        <input type="text" class="form-control" id="partner-managerphone" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">담당자 이메일</label>
+                                        <input type="text" class="form-control" id="partner-manageremail" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">상태</label>
+                                        <input type="text" class="form-control" id="partner-status" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Type</label>
+                                        <input type="text" class="form-control" id="partner-companytype" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Tag</label>
+                                        <input type="text" class="form-control" id="partner-tags" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">OpenTime</label>
+                                        <input type="text" class="form-control" id="partner-opentime" value="">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">ClosedTime</label>
+                                        <input type="text" class="form-control" id="partner-closedtime" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="pt-1">FTP</label>
+                                        <input type="text" class="form-control" id="partner-ftp" value="">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label class="pt-1">FTP ID</label>
+                                        <input type="text" class="form-control" id="partner-ftpid" value="">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label class="pt-1">FTP PW</label>
+                                        <input type="text" class="form-control" id="partner-ftppw" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="partner-isabroad" name="partner-isabroad" value="true">
+                                            <label class="form-check-label finger unselectable" for="partner-isabroad">해외회사입니다.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="partner-isclient" name="partner-isclient" value="true">
+                                            <label class="form-check-label finger unselectable" for="partner-isclient">"갑"입니다.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="PostPartner()" data-bs-dismiss="modal">ADD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
