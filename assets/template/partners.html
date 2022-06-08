@@ -4,37 +4,46 @@
 {{template "navbar-bootstrap5" .}}
 {{template "modal-bootstrap5" .}}
 <div class="p-3">
-    <div class="text-center mt-5 mb-3">
-        <span class="text-darkmode">
-            Partner<br>
-            <span class="add text-decoration-none ml-1" data-bs-toggle="modal" data-bs-target="#modal-partner">＋</span>
-        </span>
-    </div>
-    <div class="row">
+    <div class="row" id="partners">
         {{range .Partners}}
-        <div class="card m-10 mx-auto bg-darkmode" style="width: 14rem;">
-            <img class="card-img-top" src="{{if .Thumbnail}}/thumbnail/user/{{.ID}}.jpg{{else}}/assets/img/nophoto.svg{{end}}" alt="{{.ID}}" width="200" height="280" onclick="selectUserID('{{.ID}}')">
-            <div class="card-body">
-                <h4 class="card-title">{{.Name}}</h4>
-                <h6 class="card-subtitle text-muted">{{.Domain}}</h6>
-                <p class="card-text m-0 p-0">
-                    Size: {{.Size}}
-                </p>
-                <p class="card-text">
-                    homepage: {{.Homepage}}
-                <p>
-                {{if eq $.User.AccessLevel 11}}
-                <a href="/edituser?id={{.ID}}" class="btn btn-outline-warning btn-sm p-1 mt-1">Edit</a>
-                {{end}}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card m-2 bg-darkmode">
+                    <h6 class="card-header">
+                        {{.Name}}
+                    </h6>
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            은행: {{.Bank}}
+                        </h6>
+                        <p class="card-text">
+                            홈페이지: {{.Homepage}}
+                        <p>
+                    </div>
+                </div>
+            </div>
+        {{end}}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card m-2 bg-darkmode">
+                <h6 class="card-header">
+                    &nbsp;
+                </h6>
+                <div class="card-body">
+                    <h6 class="card-title text-center">
+                        <span class="add text-decoration-none" data-bs-toggle="modal" data-bs-target="#modal-partner">＋</span>
+                    </h6>
+                    <p class="card-text">
+                        &nbsp;
+                    <p>
+                </div>
             </div>
         </div>
-        {{end}}
     </div>
 </div>
     
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
-<script src="/assets/js/input.js"></script>
+<script src="/assets/tata/tata.js"></script>
+<script src="/assets/js/partner.js"></script>
 </html>
 {{end}}
