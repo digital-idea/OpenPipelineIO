@@ -46,7 +46,15 @@ function PostPartner() {
     partner.isabroad = document.getElementById('partner-isabroad').checked
     partner.isclient = document.getElementById('partner-isclient').checked
     partner.tags = string2array(document.getElementById('partner-tags').value)
-    console.log(partner)
+    
+    if (partner.name === "") {
+        tata.error('Error', "Need name.", {
+            position: 'tr',
+            duration: 5000,
+            onClose: null,
+        })
+        return
+    }
     fetch('/api/partner', {
         method: 'POST',
         headers: {
@@ -77,10 +85,10 @@ function PostPartner() {
                 </div>
             </div>
         </div>`
-        // process
+        // 요소를 추가함.
         document.getElementById('partners').innerHTML = html + document.getElementById('partners').innerHTML
 
-        // 메시지 띄우기
+        // 성공 메시지 띄우기
         tata.success('Add Partner', data.name + "가 추가되었습니다.", {
             position: 'tr',
             duration: 5000,
