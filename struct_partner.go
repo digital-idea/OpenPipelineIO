@@ -34,7 +34,6 @@ type Partner struct {
 	Codename                   string             `json:"codename"`                   // 벤더 코드명
 	IsAbroad                   bool               `json:"isabroad"`                   // 국내, 해외 체크
 	IsClient                   bool               `json:"isclient"`                   // 내 기준에서 갑(Clinet), 내 기준에서 을(Partner, Vender) 인지 체크
-	Progress                   string             `json:"progress"`                   // 상태: 외부진행상황. %
 	Tags                       []string           `json:"tags"`                       // 태그
 	Companytype                string             `json:"companytype"`                // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
@@ -88,6 +87,7 @@ type ProjectForPartner struct {
 	OutShot                 int                `json:"outshot"`                 // 나간컷
 	LeftoverShot            int                `json:"leftovershot"`            // 남은컷
 	TotalShot               int                `json:"totalshot"`               // 총컷
+	Progress                float64            `json:"progress"`                // 진행율
 }
 
 type PartnerEvent struct {
