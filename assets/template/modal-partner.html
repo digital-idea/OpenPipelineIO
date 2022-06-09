@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="pt-1">Name(파트너사 이름)</label>
+                                        <label class="pt-1">Name(파트너사 이름)<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="partner-name" placeholder="Name" value="">
                                     </div>
                                 </div>
@@ -95,7 +95,12 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label class="pt-1">화폐단위</label>
-                                        <input type="text" class="form-control" id="partner-monetaryunit" value="">
+                                        <select class="form-control" id="partner-monetaryunit">
+                                            <option value="KRW">원화 KRW</option>
+                                            <option value="USD">달러 USD</option>
+                                            <option value="CNY">위안 CNY</option>
+                                            <option value="EUR">유로 EUR</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -191,7 +196,11 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label class="pt-1">Type</label>
-                                        <input type="text" class="form-control" id="partner-companytype" value="">
+                                        <select class="form-control" id="partner-companytype">
+                                            <option value="법인">법인</option>
+                                            <option value="개인">개인</option>
+                                            <option value="프리랜서">프리랜서</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -205,13 +214,30 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label class="pt-1">OpenTime</label>
-                                        <input type="text" class="form-control" id="partner-opentime" value="">
+                                        <select class="form-control" id="partner-opentime">
+                                            <option value="08:00">08:00</option>
+                                            <option value="09:00">09:00</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="14:00">14:00</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label class="pt-1">ClosedTime</label>
-                                        <input type="text" class="form-control" id="partner-closedtime" value="">
+                                        <select class="form-control" id="partner-closedtime">
+                                            <option value="13:00">13:00</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="15:00">15:00</option>
+                                            <option value="16:00">16:00</option>
+                                            <option value="17:00">17:00</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="20:00">20:00</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
