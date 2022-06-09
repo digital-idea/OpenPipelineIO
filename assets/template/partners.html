@@ -8,7 +8,7 @@
         {{range .Partners}}
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card m-2 bg-darkmode">
-                    <h6 class="card-header finger" data-bs-toggle="modal" data-bs-target="#modal-partner">
+                    <h6 class="card-header finger" onclick="SetPartnerModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">
                         {{.Name}}
                         {{if .Codename}}
                             ({{.Codename}})
@@ -21,8 +21,8 @@
                         <p class="card-text">
                             홈페이지: {{.Homepage}}<br>
                             업무시간: {{.Opentime}}-{{.Closedtime}}<br>
-                            담당자: {{.Manager}} {{.ManagerPhone}}<br>
-                            담당자 이메일: {{.ManagerEmail}}
+                            담당자: {{.Manager}} <a href="tel:{{.ManagerPhone}}" class="text-warning">{{.ManagerPhone}}</a><br>
+                            담당자 이메일: <a href="mailto:{{.ManagerEmail}}" class="text-warning">{{.ManagerEmail}}</a>
                         <p>
                     </div>
                 </div>

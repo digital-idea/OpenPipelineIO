@@ -11,7 +11,108 @@ function string2array(str) {
     return newArr;
 }
 
+function InitPartnerModal() {
+    document.getElementById('partner-id').value = ""
+    document.getElementById('partner-name').value = ""
+    document.getElementById('partner-symbol').value = ""
+    document.getElementById('partner-domain').value = ""
+    document.getElementById('partner-size').value = ""
+    document.getElementById('partner-homepage').value = ""
+    document.getElementById('partner-address').value = ""
+    document.getElementById('partner-phone').value = ""
+    document.getElementById('partner-email').value = ""
+    document.getElementById('partner-location').value = ""
+    document.getElementById('partner-timezone').value = ""
+    document.getElementById('partner-description').value = ""
+    document.getElementById('partner-businessregistrationnumber').value = ""
+    document.getElementById('partner-manager').value = ""
+    document.getElementById('partner-managerphone').value = ""
+    document.getElementById('partner-manageremail').value = ""
+    document.getElementById('partner-ftp').value = ""
+    document.getElementById('partner-ftpid').value = ""
+    document.getElementById('partner-ftppw').value = ""
+    document.getElementById("partner-opentime").value = ""
+    document.getElementById("partner-closedtime").value = ""
+    document.getElementById('partner-paymentdate').value = ""
+    document.getElementById('partner-bank').value = ""
+    document.getElementById('partner-bankaccount').value = ""
+    document.getElementById("partner-monetaryunit").value = ""
+    document.getElementById('partner-projecthistory').value = ""
+    document.getElementById('partner-reputation').value = ""
+    document.getElementById('partner-status').value = ""
+    document.getElementById('partner-codename').value = ""
+    document.getElementById("partner-companytype").value = ""
+    document.getElementById('partner-contactpoint').value = ""
+    document.getElementById('partner-isabroad').checked = ""
+    document.getElementById('partner-isclient').checked = ""
+    document.getElementById('partner-tags').value = ""
+}
+
+function SetPartnerModal(id) {
+    fetch('/api/partner/'+id, {
+        method: 'GET',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+    })
+    //return res.text().then(text => { throw new Error(text) })
+    .then((response) => {
+        if (!response.ok) {
+            // response 값은 Promis 타입이다. then으로 처리한다.
+            response.text().then(function (text) {
+                tata.error('Error', text, {
+                    position: 'tr',
+                    duration: 5000,
+                    onClose: null,
+                })
+                return
+            });
+        }
+        return response.json()
+    })
+    .then((data) => {
+        document.getElementById('partner-id').value = id
+        document.getElementById('partner-name').value = data.name
+        document.getElementById('partner-symbol').value = data.symbol
+        document.getElementById('partner-domain').value = data.domain
+        document.getElementById('partner-size').value = data.size
+        document.getElementById('partner-homepage').value = data.homepage
+        document.getElementById('partner-address').value = data.address
+        document.getElementById('partner-phone').value = data.phone
+        document.getElementById('partner-email').value = data.email
+        document.getElementById('partner-location').value = data.location
+        document.getElementById('partner-timezone').value = data.timezone
+        document.getElementById('partner-description').value = data.description
+        document.getElementById('partner-businessregistrationnumber').value = data.businessregistrationnumber
+        document.getElementById('partner-manager').value = data.manager
+        document.getElementById('partner-managerphone').value = data.managerphone
+        document.getElementById('partner-manageremail').value = data.manageremail
+        document.getElementById('partner-ftp').value = data.ftp
+        document.getElementById('partner-ftpid').value = data.ftpid
+        document.getElementById('partner-ftppw').value = data.ftppw
+        document.getElementById("partner-opentime").value = data.opentime
+        document.getElementById("partner-closedtime").value = data.closedtime
+        document.getElementById('partner-paymentdate').value = data.paymentdate
+        document.getElementById('partner-bank').value = data.bank
+        document.getElementById('partner-bankaccount').value = data.bankaccount
+        document.getElementById("partner-monetaryunit").value = data.monetaryunit
+        document.getElementById('partner-projecthistory').value = data.projecthistory
+        document.getElementById('partner-reputation').value = data.reputation
+        document.getElementById('partner-status').value = data.status
+        document.getElementById('partner-codename').value = data.codename
+        document.getElementById("partner-companytype").value = data.companytype
+        document.getElementById('partner-contactpoint').value = data.contactpoint
+        document.getElementById('partner-isabroad').checked = data.isabroad
+        document.getElementById('partner-isclient').checked = ddata.isclient
+        document.getElementById('partner-tags').value = data.tags.join(",")
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+}
+
 function PostPartner() {
+    InitPartnerModal()
     let partner = new Object()
     partner.name = document.getElementById('partner-name').value
     partner.symbol = document.getElementById('partner-symbol').value
