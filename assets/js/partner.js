@@ -132,7 +132,6 @@ function DeletePartnerMode() {
 }
 
 function PostPartner() {
-    InitPartnerModal()
     let partner = new Object()
     partner.name = document.getElementById('partner-name').value
     partner.symbol = document.getElementById('partner-symbol').value
@@ -167,7 +166,6 @@ function PostPartner() {
     partner.isabroad = document.getElementById('partner-isabroad').checked
     partner.isclient = document.getElementById('partner-isclient').checked
     partner.tags = string2array(document.getElementById('partner-tags').value)
-    
     if (partner.name === "") {
         tata.error('Error', "Need name.", {
             position: 'tr',
