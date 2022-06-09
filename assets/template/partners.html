@@ -8,35 +8,26 @@
         {{range .Partners}}
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card m-2 bg-darkmode">
-                    <h6 class="card-header">
+                    <h6 class="card-header finger" data-bs-toggle="modal" data-bs-target="#modal-partner">
                         {{.Name}}
+                        {{if .Codename}}
+                            ({{.Codename}})
+                        {{end}}
                     </h6>
                     <div class="card-body">
                         <h6 class="card-title">
-                            은행: {{.Bank}}
+                            사업영역: {{.Domain}}, 지역: {{.Location}}
                         </h6>
                         <p class="card-text">
-                            홈페이지: {{.Homepage}}
+                            홈페이지: {{.Homepage}}<br>
+                            업무시간: {{.Opentime}}-{{.Closedtime}}<br>
+                            담당자: {{.Manager}} {{.ManagerPhone}}<br>
+                            담당자 이메일: {{.ManagerEmail}}
                         <p>
                     </div>
                 </div>
             </div>
         {{end}}
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card m-2 bg-darkmode">
-                <h6 class="card-header">
-                    &nbsp;
-                </h6>
-                <div class="card-body">
-                    <h6 class="card-title text-center">
-                        <span class="add text-decoration-none" data-bs-toggle="modal" data-bs-target="#modal-partner">＋</span>
-                    </h6>
-                    <p class="card-text">
-                        &nbsp;
-                    <p>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
     

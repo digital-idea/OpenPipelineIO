@@ -62,43 +62,35 @@ function PostPartner() {
         },
         body: JSON.stringify(partner),
     })
+    //return res.text().then(text => { throw new Error(text) })
     .then((response) => {
         if (!response.ok) {
-            throw Error(response.statusText + " - " + response.url);
+            // response 값은 Promis 타입이다. then으로 처리한다.
+            response.text().then(function (text) {
+                tata.error('Error', text, {
+                    position: 'tr',
+                    duration: 5000,
+                    onClose: null,
+                })
+                return
+            });
         }
         return response.json()
     })
     .then((data) => {
-        let html = `
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card m-2 bg-darkmode">
-                <h6 class="card-header">
-                    ${data.name}
-                </h6>
-                <div class="card-body">
-                    <h6 class="card-title">
-                        은행: ${data.bank}
-                    </h6>
-                    <p class="card-text">
-                        홈페이지: ${data.homepage}
-                    <p>
-                </div>
-            </div>
-        </div>`
-        // 요소를 추가함.
-        document.getElementById('partners').innerHTML = html + document.getElementById('partners').innerHTML
-
         // 성공 메시지 띄우기
         tata.success('Add Partner', data.name + "가 추가되었습니다.", {
             position: 'tr',
             duration: 5000,
+            onClick: goPartnerPage,
             onClose: null,
         })
     })
     .catch((err) => {
-        alert(err)
+        console.log(err)
     });
 }
 
-
-
+function goPartnerPage() {
+    window.location.replace("partners")
+}
