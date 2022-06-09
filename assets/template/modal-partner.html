@@ -96,6 +96,7 @@
                                     <div class="form-group">
                                         <label class="pt-1">화폐단위</label>
                                         <select class="form-control" id="partner-monetaryunit">
+                                            <option value="">UnKnown</option>
                                             <option value="KRW">원화 KRW</option>
                                             <option value="USD">달러 USD</option>
                                             <option value="CNY">위안 CNY</option>
@@ -197,6 +198,7 @@
                                     <div class="form-group">
                                         <label class="pt-1">Type</label>
                                         <select class="form-control" id="partner-companytype">
+                                            <option value="">UnKnown</option>
                                             <option value="법인">법인</option>
                                             <option value="개인">개인</option>
                                             <option value="프리랜서">프리랜서</option>
@@ -215,6 +217,7 @@
                                     <div class="form-group">
                                         <label class="pt-1">OpenTime</label>
                                         <select class="form-control" id="partner-opentime">
+                                            <option value="">UnKnown</option>
                                             <option value="08:00">08:00</option>
                                             <option value="09:00">09:00</option>
                                             <option value="10:00">10:00</option>
@@ -229,6 +232,7 @@
                                     <div class="form-group">
                                         <label class="pt-1">ClosedTime</label>
                                         <select class="form-control" id="partner-closedtime">
+                                            <option value="">UnKnown</option>
                                             <option value="13:00">13:00</option>
                                             <option value="14:00">14:00</option>
                                             <option value="15:00">15:00</option>
@@ -265,7 +269,7 @@
                                 <div class="col">
                                     <div class="from-group">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="partner-isabroad" name="partner-isabroad" value="true">
+                                            <input class="form-check-input" type="checkbox" id="partner-isabroad" name="partner-isabroad">
                                             <label class="form-check-label finger unselectable" for="partner-isabroad">해외에 있는 회사입니다.</label>
                                         </div>
                                     </div>
@@ -273,7 +277,7 @@
                                 <div class="col">
                                     <div class="from-group">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="partner-isclient" name="partner-isclient" value="true">
+                                            <input class="form-check-input" type="checkbox" id="partner-isclient" name="partner-isclient">
                                             <label class="form-check-label finger unselectable" for="partner-isclient">Client 입니다.</label>
                                         </div>
                                     </div>
@@ -284,9 +288,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-sm btn-outline-warning" id="postpartner-buttion" onclick="PostPartner()" data-bs-dismiss="modal">ADD</button>
-                    <button type="button" class="btn btn-sm btn-outline-warning" id="putpartner-buttion" onclick="PutPartner()" data-bs-dismiss="modal">EDIT</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" id="deletepartner-buttion" onclick="DeletePartner()" data-bs-dismiss="modal">DELETE</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="postpartner-button" onclick="PostPartner()" data-bs-dismiss="modal" hidden>ADD</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="putpartner-button" onclick="PutPartner()" data-bs-dismiss="modal" hidden>EDIT</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="deletepartner-button" onclick="DeletePartner()" data-bs-dismiss="modal" hidden>DELETE</button>
                 </div>
             </div>
         </div>
