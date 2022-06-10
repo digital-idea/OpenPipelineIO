@@ -1,4 +1,80 @@
 
+function UxToPartnerObject(data) {
+    data.name = document.getElementById('partner-name').value
+    data.symbol = document.getElementById('partner-symbol').value
+    data.domain = document.getElementById('partner-domain').value
+    data.size = document.getElementById('partner-size').value
+    data.homepage = document.getElementById('partner-homepage').value
+    data.address = document.getElementById('partner-address').value
+    data.phone = document.getElementById('partner-phone').value
+    data.email = document.getElementById('partner-email').value
+    data.location = document.getElementById('partner-location').value
+    data.timezone = document.getElementById('partner-timezone').value
+    data.description = document.getElementById('partner-description').value
+    data.businessregistrationnumber = document.getElementById('partner-businessregistrationnumber').value
+    data.manager = document.getElementById('partner-manager').value
+    data.managerphone = document.getElementById('partner-managerphone').value
+    data.manageremail = document.getElementById('partner-manageremail').value
+    data.ftp = document.getElementById('partner-ftp').value
+    data.ftpid = document.getElementById('partner-ftpid').value
+    data.ftppw = document.getElementById('partner-ftppw').value
+    data.opentime = document.getElementById("partner-opentime").options[document.getElementById("partner-opentime").selectedIndex].value,    
+    data.closedtime = document.getElementById("partner-closedtime").options[document.getElementById("partner-closedtime").selectedIndex].value,
+    data.paymentdate = document.getElementById('partner-paymentdate').value
+    data.bank = document.getElementById('partner-bank').value
+    data.bankaccount = document.getElementById('partner-bankaccount').value
+    data.monetaryunit = document.getElementById("partner-monetaryunit").options[document.getElementById("partner-monetaryunit").selectedIndex].value,
+    data.projecthistory = document.getElementById('partner-projecthistory').value
+    data.reputation = document.getElementById('partner-reputation').value
+    data.status = document.getElementById('partner-status').value
+    data.codename = document.getElementById('partner-codename').value
+    data.companytype = document.getElementById("partner-companytype").options[document.getElementById("partner-companytype").selectedIndex].value,
+    data.contactpoint = document.getElementById('partner-contactpoint').value
+    data.pmsurl = document.getElementById('partner-pmsurl').value
+    data.isabroad = document.getElementById('partner-isabroad').checked
+    data.isclient = document.getElementById('partner-isclient').checked
+    data.tags = string2array(document.getElementById('partner-tags').value)
+    return data
+}
+
+function partnerObjectToUx(data) {
+    document.getElementById('partner-id').value = data.id
+    document.getElementById('partner-name').value = data.name
+    document.getElementById('partner-symbol').value = data.symbol
+    document.getElementById('partner-domain').value = data.domain
+    document.getElementById('partner-size').value = data.size
+    document.getElementById('partner-homepage').value = data.homepage
+    document.getElementById('partner-address').value = data.address
+    document.getElementById('partner-phone').value = data.phone
+    document.getElementById('partner-email').value = data.email
+    document.getElementById('partner-location').value = data.location
+    document.getElementById('partner-timezone').value = data.timezone
+    document.getElementById('partner-description').value = data.description
+    document.getElementById('partner-businessregistrationnumber').value = data.businessregistrationnumber
+    document.getElementById('partner-manager').value = data.manager
+    document.getElementById('partner-managerphone').value = data.managerphone
+    document.getElementById('partner-manageremail').value = data.manageremail
+    document.getElementById('partner-ftp').value = data.ftp
+    document.getElementById('partner-ftpid').value = data.ftpid
+    document.getElementById('partner-ftppw').value = data.ftppw
+    document.getElementById("partner-opentime").value = data.opentime
+    document.getElementById("partner-closedtime").value = data.closedtime
+    document.getElementById('partner-paymentdate').value = data.paymentdate
+    document.getElementById('partner-bank').value = data.bank
+    document.getElementById('partner-bankaccount').value = data.bankaccount
+    document.getElementById("partner-monetaryunit").value = data.monetaryunit
+    document.getElementById('partner-projecthistory').value = data.projecthistory
+    document.getElementById('partner-reputation').value = data.reputation
+    document.getElementById('partner-status').value = data.status
+    document.getElementById('partner-codename').value = data.codename
+    document.getElementById("partner-companytype").value = data.companytype
+    document.getElementById('partner-contactpoint').value = data.contactpoint
+    document.getElementById('partner-pmsurl').value = data.pmsurl
+    document.getElementById('partner-isabroad').checked = data.isabroad
+    document.getElementById('partner-isclient').checked = data.isclient
+    document.getElementById('partner-tags').value = data.tags.join(",")
+}
+
 function string2array(str) {
     var newArr = [];
     if (str === "") {
@@ -12,41 +88,15 @@ function string2array(str) {
 }
 
 function InitPartnerModal() {
-    document.getElementById('partner-id').value = ""
-    document.getElementById('partner-name').value = ""
-    document.getElementById('partner-symbol').value = ""
-    document.getElementById('partner-domain').value = ""
-    document.getElementById('partner-size').value = ""
-    document.getElementById('partner-homepage').value = ""
-    document.getElementById('partner-address').value = ""
-    document.getElementById('partner-phone').value = ""
-    document.getElementById('partner-email').value = ""
-    document.getElementById('partner-location').value = ""
-    document.getElementById('partner-timezone').value = ""
-    document.getElementById('partner-description').value = ""
-    document.getElementById('partner-businessregistrationnumber').value = ""
-    document.getElementById('partner-manager').value = ""
-    document.getElementById('partner-managerphone').value = ""
-    document.getElementById('partner-manageremail').value = ""
-    document.getElementById('partner-ftp').value = ""
-    document.getElementById('partner-ftpid').value = ""
-    document.getElementById('partner-ftppw').value = ""
-    document.getElementById("partner-opentime").value = ""
-    document.getElementById("partner-closedtime").value = ""
-    document.getElementById('partner-paymentdate').value = ""
-    document.getElementById('partner-bank').value = ""
-    document.getElementById('partner-bankaccount').value = ""
-    document.getElementById("partner-monetaryunit").value = ""
-    document.getElementById('partner-projecthistory').value = ""
-    document.getElementById('partner-reputation').value = ""
-    document.getElementById('partner-status').value = ""
-    document.getElementById('partner-codename').value = ""
-    document.getElementById("partner-companytype").value = ""
-    document.getElementById('partner-contactpoint').value = ""
-    document.getElementById('partner-isabroad').checked = false
-    document.getElementById('partner-isclient').checked = false
-    document.getElementById('partner-tags').value = ""
-    document.getElementById('partner-pmsurl').value = ""
+    // id가 "partner-" 로 시작하는 input > text, input > checkbox, select를 초기화 한다.
+    let inputs = document.querySelectorAll("[id^='partner-']")
+    for (var i = 0; i < inputs.length; i += 1) {
+        if (inputs[i].type === "checkbox") {
+            inputs[i].checked = false
+        } else {
+            inputs[i].value = ""
+        }
+    }
 }
 
 function SetPartnerModal(id) {
@@ -73,41 +123,7 @@ function SetPartnerModal(id) {
         return response.json()
     })
     .then((data) => {
-        document.getElementById('partner-id').value = id
-        document.getElementById('partner-name').value = data.name
-        document.getElementById('partner-symbol').value = data.symbol
-        document.getElementById('partner-domain').value = data.domain
-        document.getElementById('partner-size').value = data.size
-        document.getElementById('partner-homepage').value = data.homepage
-        document.getElementById('partner-address').value = data.address
-        document.getElementById('partner-phone').value = data.phone
-        document.getElementById('partner-email').value = data.email
-        document.getElementById('partner-location').value = data.location
-        document.getElementById('partner-timezone').value = data.timezone
-        document.getElementById('partner-description').value = data.description
-        document.getElementById('partner-businessregistrationnumber').value = data.businessregistrationnumber
-        document.getElementById('partner-manager').value = data.manager
-        document.getElementById('partner-managerphone').value = data.managerphone
-        document.getElementById('partner-manageremail').value = data.manageremail
-        document.getElementById('partner-ftp').value = data.ftp
-        document.getElementById('partner-ftpid').value = data.ftpid
-        document.getElementById('partner-ftppw').value = data.ftppw
-        document.getElementById("partner-opentime").value = data.opentime
-        document.getElementById("partner-closedtime").value = data.closedtime
-        document.getElementById('partner-paymentdate').value = data.paymentdate
-        document.getElementById('partner-bank').value = data.bank
-        document.getElementById('partner-bankaccount').value = data.bankaccount
-        document.getElementById("partner-monetaryunit").value = data.monetaryunit
-        document.getElementById('partner-projecthistory').value = data.projecthistory
-        document.getElementById('partner-reputation').value = data.reputation
-        document.getElementById('partner-status').value = data.status
-        document.getElementById('partner-codename').value = data.codename
-        document.getElementById("partner-companytype").value = data.companytype
-        document.getElementById('partner-contactpoint').value = data.contactpoint
-        document.getElementById('partner-pmsurl').value = data.pmsurl
-        document.getElementById('partner-isabroad').checked = data.isabroad
-        document.getElementById('partner-isclient').checked = data.isclient
-        document.getElementById('partner-tags').value = data.tags.join(",")
+        partnerObjectToUx(data)
     })
     .catch((err) => {
         console.log(err)
@@ -135,40 +151,7 @@ function DeletePartnerMode() {
 
 function PostPartner() {
     let partner = new Object()
-    partner.name = document.getElementById('partner-name').value
-    partner.symbol = document.getElementById('partner-symbol').value
-    partner.domain = document.getElementById('partner-domain').value
-    partner.size = document.getElementById('partner-size').value
-    partner.homepage = document.getElementById('partner-homepage').value
-    partner.address = document.getElementById('partner-address').value
-    partner.phone = document.getElementById('partner-phone').value
-    partner.email = document.getElementById('partner-email').value
-    partner.location = document.getElementById('partner-location').value
-    partner.timezone = document.getElementById('partner-timezone').value
-    partner.description = document.getElementById('partner-description').value
-    partner.businessregistrationnumber = document.getElementById('partner-businessregistrationnumber').value
-    partner.manager = document.getElementById('partner-manager').value
-    partner.managerphone = document.getElementById('partner-managerphone').value
-    partner.manageremail = document.getElementById('partner-manageremail').value
-    partner.ftp = document.getElementById('partner-ftp').value
-    partner.ftpid = document.getElementById('partner-ftpid').value
-    partner.ftppw = document.getElementById('partner-ftppw').value
-    partner.opentime = document.getElementById("partner-opentime").options[document.getElementById("partner-opentime").selectedIndex].value,    
-    partner.closedtime = document.getElementById("partner-closedtime").options[document.getElementById("partner-closedtime").selectedIndex].value,
-    partner.paymentdate = document.getElementById('partner-paymentdate').value
-    partner.bank = document.getElementById('partner-bank').value
-    partner.bankaccount = document.getElementById('partner-bankaccount').value
-    partner.monetaryunit = document.getElementById("partner-monetaryunit").options[document.getElementById("partner-monetaryunit").selectedIndex].value,
-    partner.projecthistory = document.getElementById('partner-projecthistory').value
-    partner.reputation = document.getElementById('partner-reputation').value
-    partner.status = document.getElementById('partner-status').value
-    partner.codename = document.getElementById('partner-codename').value
-    partner.companytype = document.getElementById("partner-companytype").options[document.getElementById("partner-companytype").selectedIndex].value,
-    partner.contactpoint = document.getElementById('partner-contactpoint').value
-    partner.pmsurl = document.getElementById('partner-pmsurl').value
-    partner.isabroad = document.getElementById('partner-isabroad').checked
-    partner.isclient = document.getElementById('partner-isclient').checked
-    partner.tags = string2array(document.getElementById('partner-tags').value)
+    partner = UxToPartnerObject(partner)
     if (partner.name === "") {
         tata.error('Error', "Need name.", {
             position: 'tr',
@@ -201,7 +184,7 @@ function PostPartner() {
     })
     .then((data) => {
         // 성공 메시지 띄우기
-        tata.success('Add Partner', data.name + "가 추가되었습니다.", {
+        tata.success('Add', data.name + "가 추가되었습니다.", {
             position: 'tr',
             duration: 5000,
             onClick: goPartnerPage,
@@ -215,41 +198,7 @@ function PostPartner() {
 
 function PutPartner() {
     let partner = new Object()
-    partner.name = document.getElementById('partner-name').value
-    partner.symbol = document.getElementById('partner-symbol').value
-    partner.domain = document.getElementById('partner-domain').value
-    partner.size = document.getElementById('partner-size').value
-    partner.homepage = document.getElementById('partner-homepage').value
-    partner.address = document.getElementById('partner-address').value
-    partner.phone = document.getElementById('partner-phone').value
-    partner.email = document.getElementById('partner-email').value
-    partner.location = document.getElementById('partner-location').value
-    partner.timezone = document.getElementById('partner-timezone').value
-    partner.description = document.getElementById('partner-description').value
-    partner.businessregistrationnumber = document.getElementById('partner-businessregistrationnumber').value
-    partner.manager = document.getElementById('partner-manager').value
-    partner.managerphone = document.getElementById('partner-managerphone').value
-    partner.manageremail = document.getElementById('partner-manageremail').value
-    partner.ftp = document.getElementById('partner-ftp').value
-    partner.ftpid = document.getElementById('partner-ftpid').value
-    partner.ftppw = document.getElementById('partner-ftppw').value
-    partner.opentime = document.getElementById("partner-opentime").options[document.getElementById("partner-opentime").selectedIndex].value,    
-    partner.closedtime = document.getElementById("partner-closedtime").options[document.getElementById("partner-closedtime").selectedIndex].value,
-    partner.paymentdate = document.getElementById('partner-paymentdate').value
-    partner.bank = document.getElementById('partner-bank').value
-    partner.bankaccount = document.getElementById('partner-bankaccount').value
-    partner.monetaryunit = document.getElementById("partner-monetaryunit").options[document.getElementById("partner-monetaryunit").selectedIndex].value,
-    partner.projecthistory = document.getElementById('partner-projecthistory').value
-    partner.reputation = document.getElementById('partner-reputation').value
-    partner.status = document.getElementById('partner-status').value
-    partner.codename = document.getElementById('partner-codename').value
-    partner.companytype = document.getElementById("partner-companytype").options[document.getElementById("partner-companytype").selectedIndex].value,
-    partner.contactpoint = document.getElementById('partner-contactpoint').value
-    partner.pmsurl = document.getElementById('partner-pmsurl').value
-    partner.isabroad = document.getElementById('partner-isabroad').checked
-    partner.isclient = document.getElementById('partner-isclient').checked
-    partner.tags = string2array(document.getElementById('partner-tags').value)
-    
+    partner = UxToPartnerObject(partner)
     if (partner.name === "") {
         tata.error('Error', "Need name.", {
             position: 'tr',
@@ -282,7 +231,7 @@ function PutPartner() {
     })
     .then((data) => {
         // 성공 메시지 띄우기
-        tata.success('Add Partner', data.name + "가 편집되었습니다.", {
+        tata.success('Edit', data.name + "가 편집되었습니다.", {
             position: 'tr',
             duration: 5000,
             onClick: goPartnerPage,
@@ -317,7 +266,7 @@ function DeletePartner() {
     })
     .then((data) => {
         // 성공 메시지 띄우기
-        tata.success('Delete Partner', data.name + "가 삭제되었습니다.", {
+        tata.success('Delete', data.name + "가 삭제되었습니다.", {
             position: 'tr',
             duration: 5000,
             onClick: goPartnerPage,
