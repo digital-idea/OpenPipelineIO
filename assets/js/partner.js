@@ -46,6 +46,7 @@ function InitPartnerModal() {
     document.getElementById('partner-isabroad').checked = false
     document.getElementById('partner-isclient').checked = false
     document.getElementById('partner-tags').value = ""
+    document.getElementById('partner-pmsurl').value = ""
 }
 
 function SetPartnerModal(id) {
@@ -103,6 +104,7 @@ function SetPartnerModal(id) {
         document.getElementById('partner-codename').value = data.codename
         document.getElementById("partner-companytype").value = data.companytype
         document.getElementById('partner-contactpoint').value = data.contactpoint
+        document.getElementById('partner-pmsurl').value = data.pmsurl
         document.getElementById('partner-isabroad').checked = data.isabroad
         document.getElementById('partner-isclient').checked = data.isclient
         document.getElementById('partner-tags').value = data.tags.join(",")
@@ -163,6 +165,7 @@ function PostPartner() {
     partner.codename = document.getElementById('partner-codename').value
     partner.companytype = document.getElementById("partner-companytype").options[document.getElementById("partner-companytype").selectedIndex].value,
     partner.contactpoint = document.getElementById('partner-contactpoint').value
+    partner.pmsurl = document.getElementById('partner-pmsurl').value
     partner.isabroad = document.getElementById('partner-isabroad').checked
     partner.isclient = document.getElementById('partner-isclient').checked
     partner.tags = string2array(document.getElementById('partner-tags').value)
@@ -242,6 +245,7 @@ function PutPartner() {
     partner.codename = document.getElementById('partner-codename').value
     partner.companytype = document.getElementById("partner-companytype").options[document.getElementById("partner-companytype").selectedIndex].value,
     partner.contactpoint = document.getElementById('partner-contactpoint').value
+    partner.pmsurl = document.getElementById('partner-pmsurl').value
     partner.isabroad = document.getElementById('partner-isabroad').checked
     partner.isclient = document.getElementById('partner-isclient').checked
     partner.tags = string2array(document.getElementById('partner-tags').value)
