@@ -14,9 +14,9 @@
                         {{end}}
                         {{.Name}}
                         <div class="float-end">
-                            <span class="add" onclick="SetPartnerModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">≡</span>
+                            <span class="add" onclick="SetModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">≡</span>
                             {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-                                <span class="remove ml-0" onclick="SetPartnerModal('{{.ID.Hex}}');DeletePartnerMode();" data-bs-toggle="modal" data-bs-target="#modal-partner">×</span>
+                                <span class="remove ml-0" onclick="SetModal('{{.ID.Hex}}');DeleteMode();" data-bs-toggle="modal" data-bs-target="#modal-partner">×</span>
                             {{end}}
                         </div>
                     </h6>
