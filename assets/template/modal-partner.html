@@ -1,5 +1,4 @@
 {{define "modal-partner"}}
-    <!-- Modal: Partner-->
     <div class="modal" id="modal-partner" tabindex="-1" role="dialog" aria-labelledby="modal-partner" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content bg-darkmode">
@@ -118,6 +117,14 @@
                                     <div class="form-group">
                                         <label class="pt-1">평판</label>
                                         <input type="text" class="form-control" id="partner-reputation">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">프로젝트 관리툴 URL</label>
+                                        <input type="text" class="form-control" id="partner-pmsurl" placeholder="CSI,Shotgrid,Ftrack,Wormhole,Nim,Github,Jira...">
                                     </div>
                                 </div>
                             </div>
@@ -288,9 +295,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-sm btn-outline-warning" id="postpartner-button" onclick="PostPartner()" data-bs-dismiss="modal" hidden>ADD</button>
-                    <button type="button" class="btn btn-sm btn-outline-warning" id="putpartner-button" onclick="PutPartner()" data-bs-dismiss="modal" hidden>EDIT</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" id="deletepartner-button" onclick="DeletePartner()" data-bs-dismiss="modal" hidden>DELETE</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="partner-postbutton" onclick="Post()" data-bs-dismiss="modal" hidden>ADD</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="partner-putbutton" onclick="Put()" data-bs-dismiss="modal" hidden>EDIT</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="partner-deletebutton" onclick="Delete()" data-bs-dismiss="modal" hidden>DELETE</button>
                 </div>
             </div>
         </div>

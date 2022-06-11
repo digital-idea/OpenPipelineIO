@@ -6,7 +6,7 @@
 <div class="p-3">
     <div class="row" id="partners">
         {{range .Partners}}
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                 <div class="card m-2 bg-darkmode">
                     <h6 class="card-header">
                         {{if .Codename}}
@@ -14,9 +14,9 @@
                         {{end}}
                         {{.Name}}
                         <div class="float-end">
-                            <span class="add" onclick="SetPartnerModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">≡</span>
+                            <span class="add" onclick="SetModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">≡</span>
                             {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-                                <span class="remove ml-0" onclick="SetPartnerModal('{{.ID.Hex}}');DeletePartnerMode();" data-bs-toggle="modal" data-bs-target="#modal-partner">×</span>
+                                <span class="remove ml-0" onclick="SetModal('{{.ID.Hex}}');DeleteMode();" data-bs-toggle="modal" data-bs-target="#modal-partner">×</span>
                             {{end}}
                         </div>
                     </h6>
@@ -28,7 +28,8 @@
                             홈페이지: <a href="{{.Homepage}}" class="text-darkmode">{{.Homepage}}</a><br>
                             업무시간: {{.Opentime}}-{{.Closedtime}}<br>
                             담당자: {{.Manager}} <a href="tel:{{.ManagerPhone}}" class="text-darkmode">{{.ManagerPhone}}</a><br>
-                            담당자 이메일: <a href="mailto:{{.ManagerEmail}}" class="text-darkmode">{{.ManagerEmail}}</a>
+                            담당자 이메일: <a href="mailto:{{.ManagerEmail}}" class="text-darkmode">{{.ManagerEmail}}</a><br>
+                            PMS: <a href="{{.PmsURL}}" class="text-darkmode">{{.PmsURL}}</a>
                         <p>
                     </div>
                 </div>
