@@ -302,6 +302,9 @@ func webserver(port string) {
 	// Partner
 	r.HandleFunc("/partners", handlePartners)
 
+	// Endpoint
+	r.HandleFunc("/endpoints", handleEndpoints)
+
 	// Admin Setting
 	r.HandleFunc("/adminsetting", handleAdminSetting)
 	r.HandleFunc("/adminsetting_submit", handleAdminSettingSubmit)

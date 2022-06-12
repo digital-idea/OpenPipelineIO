@@ -81,7 +81,7 @@ func handleEndpoints(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Setting = CachedAdminSetting
-	err = TEMPLATES.ExecuteTemplate(w, "partners", rcp)
+	err = TEMPLATES.ExecuteTemplate(w, "endpoints", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -1,0 +1,51 @@
+{{define "modal-endpoint"}}
+    <div class="modal" id="modal-endpoint" tabindex="-1" role="dialog" aria-labelledby="modal-endpoint" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Endpoint
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" id="endpoint-id" hidden>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">DNS<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="endpoint-dns" placeholder="DNS">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Endpoint<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="endpoint-endpoint" placeholder="Endpoint">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">설명</label>
+                                        <input type="text" class="form-control" id="endpoint-description">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="endpoint-postbutton" onclick="Post()" data-bs-dismiss="modal" hidden>ADD</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="endpoint-putbutton" onclick="Put()" data-bs-dismiss="modal" hidden>EDIT</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="endpoint-deletebutton" onclick="Delete()" data-bs-dismiss="modal" hidden>DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
