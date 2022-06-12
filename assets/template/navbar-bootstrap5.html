@@ -82,6 +82,7 @@
               <li><a class="dropdown-item" href="/status">Status</a></li>
               <li><a class="dropdown-item" href="/stage">Review Stage</a></li>
               <li><a class="dropdown-item" href="/publishkey">Publish Key</a></li>
+              <li><a class="dropdown-item" href="/pipelinesteps">Pipelinestep</a></li>
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -120,6 +121,7 @@
               <li><a class="dropdown-item" href="/addstatus">Status</a></li>
               <li><a class="dropdown-item" href="/addstage">Review Stage</a></li>
               <li><a class="dropdown-item" href="/addpublishkey">Publish Key</a></li>
+              <li><span class="dropdown-item finger" onclick="AddMode()" data-bs-toggle="modal" data-bs-target="#modal-pipelinestep">Pipelinestep</span></li>
               <li><hr class="dropdown-divider"></li>
               <li><span class="dropdown-item finger" onclick="AddMode()" data-bs-toggle="modal" data-bs-target="#modal-partner">Partner</span></li>
               <li><hr class="dropdown-divider"></li>

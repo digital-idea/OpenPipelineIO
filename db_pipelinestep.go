@@ -10,22 +10,22 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func addPipelinestep(client *mongo.Client, p Pipelinestep) error {
-	if p.Name == "" {
-		return errors.New("빈 문자열입니다. Pipelinestep을 생성할 수 없습니다")
+func addPipelinestep(client *mongo.Client, s Pipelinestep) error {
+	if s.Name == "" {
+		return errors.New("빈 문자열입니다. 생성할 수 없습니다")
 	}
 	collection := client.Database(*flagDBName).Collection("pipelinestep")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	num, err := collection.CountDocuments(ctx, bson.M{"name": p.Name})
+	num, err := collection.CountDocuments(ctx, bson.M{"name": s.Name})
 	if err != nil {
 		return err
 	}
 	if num != 0 {
-		return errors.New("같은 이름의 Pipelinestep이 존재해서 추가할 수 없습니다")
+		return errors.New("같은 이름이 존재해서 추가할 수 없습니다")
 	}
-	_, err = collection.InsertOne(ctx, p)
+	_, err = collection.InsertOne(ctx, s)
 	if err != nil {
 		return err
 	}
@@ -36,23 +36,22 @@ func getPipelinestep(client *mongo.Client, id string) (Pipelinestep, error) {
 	collection := client.Database(*flagDBName).Collection("pipelinestep")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	p := Pipelinestep{}
+	s := Pipelinestep{}
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return p, err
+		return s, err
 	}
-	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&p)
+	err = collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&s)
 	if err != nil {
-		return p, err
+		return s, err
 	}
-	return p, nil
+	return s, nil
 }
 
 func rmPipelinestep(client *mongo.Client, id string) error {
 	collection := client.Database(*flagDBName).Collection("pipelinestep")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -64,15 +63,14 @@ func rmPipelinestep(client *mongo.Client, id string) error {
 	return nil
 }
 
-func setPipelinestep(client *mongo.Client, p Pipelinestep) error {
+func setPipelinestep(client *mongo.Client, s Pipelinestep) error {
 	collection := client.Database(*flagDBName).Collection("pipelinestep")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
 	_, err := collection.UpdateOne(
 		ctx,
-		bson.M{"_id": p.ID},
-		bson.D{{Key: "$set", Value: p}},
+		bson.M{"_id": s.ID},
+		bson.D{{Key: "$set", Value: s}},
 	)
 	if err != nil {
 		return err
@@ -80,18 +78,18 @@ func setPipelinestep(client *mongo.Client, p Pipelinestep) error {
 	return nil
 }
 
-func allPipelinestep(client *mongo.Client) ([]Pipelinestep, error) {
+func allPipelinesteps(client *mongo.Client) ([]Pipelinestep, error) {
 	collection := client.Database(*flagDBName).Collection("pipelinestep")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	var pipelinesteps []Pipelinestep
+	var results []Pipelinestep
 	cursor, err := collection.Find(ctx, bson.D{})
 	if err != nil {
-		return pipelinesteps, err
+		return results, err
 	}
-	err = cursor.All(ctx, &pipelinesteps)
+	err = cursor.All(ctx, &results)
 	if err != nil {
-		return pipelinesteps, err
+		return results, err
 	}
-	return pipelinesteps, nil
+	return results, nil
 }

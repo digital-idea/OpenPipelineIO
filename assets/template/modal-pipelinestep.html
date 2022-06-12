@@ -1,0 +1,110 @@
+{{define "modal-pipelinestep"}}
+    <div class="modal" id="modal-pipelinestep" tabindex="-1" role="dialog" aria-labelledby="modal-pipelinestep" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Pipelinestep
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" id="pipelinestep-id" hidden>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Name<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="pipelinestep-name" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Shortcode</label>
+                                        <input type="text" class="form-control" id="pipelinestep-shortcode" placeholder="Shortcode">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">설명</label>
+                                        <input type="text" class="form-control" id="pipelinestep-description" placeholder="설명">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <label>Text</label>
+                                    </div>
+                                    <div>
+                                        <input class="jscolor{valueElement:'pipelinestep-textcolor'} btn border border-light w-100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <label>BG</label>
+                                    </div>
+                                    <div>
+                                        <input class="jscolor{valueElement:'pipelinestep-bgcolor'} btn border border-light w-100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <label>Border</label>
+                                    </div>
+                                    <div>
+                                        <input class="jscolor{valueElement:'pipelinestep-bordercolor'} btn border border-light w-100">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <input id="pipelinestep-textcolor" name="textcolor" type="text" class="form-control" value="">
+                                    </div>
+                                    <small class="form-text text-muted">글자색</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <input id="pipelinestep-bgcolor" name="bgcolor" type="text" class="form-control" value="">
+                                    </div>
+                                    <small class="form-text text-muted">배경색</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div>
+                                        <input id="pipelinestep-bordercolor" name="bordercolor" type="text" class="form-control" value="">
+                                    </div>
+                                    <small class="form-text text-muted">테두리색</small>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="pipelinestep-postbutton" onclick="Post()" data-bs-dismiss="modal" hidden>ADD</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="pipelinestep-putbutton" onclick="Put()" data-bs-dismiss="modal" hidden>EDIT</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="pipelinestep-deletebutton" onclick="Delete()" data-bs-dismiss="modal" hidden>DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
