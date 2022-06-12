@@ -296,6 +296,9 @@ func webserver(port string) {
 	r.HandleFunc("/invalidpass", handleInvalidPass)
 	r.HandleFunc("/nouser", handleNoUser)
 
+	// Pipelinestep
+	r.HandleFunc("/pipelinesteps", handlePipelinesteps)
+
 	// Partner
 	r.HandleFunc("/partners", handlePartners)
 

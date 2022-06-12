@@ -1,0 +1,42 @@
+{{define "pipelinesteps" }}
+{{template "headBootstrap5"}}
+<body>
+{{template "navbar-bootstrap5" .}}
+{{template "modal-bootstrap5" .}}
+<div class="p-3">
+    <div class="row" id="pipelinesteps">
+        {{range .Pipelinesteps}}
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                <div class="card m-2 bg-darkmode">
+                    <h6 class="card-header">
+                        {{.Name}}
+                        {{if .Shortcode}}
+                             - {{.Shortcode}}
+                        {{end}}
+                        <div class="float-end">
+                            <span class="add" onclick="SetModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-pipelinestep">≡</span>
+                            {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+                                <span class="remove ml-0" onclick="SetModal('{{.ID.Hex}}');DeleteMode();" data-bs-toggle="modal" data-bs-target="#modal-pipelinestep">×</span>
+                            {{end}}
+                        </div>
+                    </h6>
+                    <div class="card-body pb-0">
+                        <h6 class="card-title">
+                        </h6>
+                        <p class="card-text">
+                            설명: {{.Description}}
+                        <p>
+                    </div>
+                </div>
+            </div>
+        {{end}}
+    </div>
+</div>
+    
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
+<script src="/assets/tata/tata.js"></script>
+<script src="/assets/js/pipelinestep.js"></script>
+</html>
+{{end}}
