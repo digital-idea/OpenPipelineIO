@@ -126,8 +126,8 @@ function SetModal(id) {
 function Post() {
     let obj = new Object()
     obj = UxToObject(obj)
-    if (obj.name === "") {
-        tata.error('Error', "Need name.",{position: 'tr',duration: 5000,onClose: null})
+    if (obj.endpoint === "") {
+        tata.error('Error', "Need endpoint.",{position: 'tr',duration: 5000,onClose: null})
         return
     }
     fetch(endpoint, {
@@ -147,7 +147,7 @@ function Post() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Add', obj.name + "가 추가되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Add', obj.endpoint + "가 추가되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)
@@ -157,8 +157,8 @@ function Post() {
 function Put() {
     let obj = new Object()
     obj = UxToObject(obj)
-    if (obj.name === "") {
-        tata.error('Error',"Need name.",{position: 'tr',duration: 5000,onClose: null})
+    if (obj.endpoint === "") {
+        tata.error('Error',"Need endpoint.",{position: 'tr',duration: 5000,onClose: null})
         return
     }
     fetch(endpoint+'/'+document.getElementById(uxprefix+'id').value, {
@@ -178,7 +178,7 @@ function Put() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Edit', obj.name + "가 편집되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Edit', obj.endpoint + "가 편집되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)
@@ -202,7 +202,7 @@ function Delete() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Delete', obj.name + "가 삭제되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Delete', obj.endpoint + "가 삭제되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)
