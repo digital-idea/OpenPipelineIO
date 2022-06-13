@@ -14,10 +14,10 @@ type Endpoint struct {
 	DB            string             `json:"db"`            // Endpoint의 특성과 잘 맞는 DB 예) hBase, mongoDB, mysql, dynamodb, redis
 	Description   string             `json:"description"`   // 설명
 	IsServerless  bool               `json:"isserverless"`  // 이 기능을 수행함에 따라 서버를 사용하는지 서버리스를 사용하는지 여부, 예) AWS Lambda
-	User          bool               `json:"user"`          // 사용자 공개
-	Developer     bool               `json:"developer"`     // 개발자 공개
-	Admin         bool               `json:"admin"`         // 관리자 공개
-	Security      bool               `json:"security"`      // 보안이 필요한가
+	IsUser        bool               `json:"isuser"`        // 사용자 공개
+	IsDeveloper   bool               `json:"isdeveloper"`   // 개발자 공개
+	IsAdmin       bool               `json:"isadmin"`       // 관리자 공개
+	IsSecurity    bool               `json:"issecurity"`    // 보안이 필요한가
 	IsAsset       bool               `json:"isasset"`       // 회사의 자산이 될 수 있는 Endpoint 인가?
 	IsPatent      bool               `json:"ispatent"`      // 특허와 관련된 기술이 처리되는 Endpoint 인가?
 	IsUpload      bool               `json:"isupload"`      // 업로드가 되는 Endpoint인가?
