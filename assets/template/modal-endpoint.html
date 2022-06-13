@@ -1,0 +1,286 @@
+{{define "modal-endpoint"}}
+    <div class="modal" id="modal-endpoint" tabindex="-1" role="dialog" aria-labelledby="modal-endpoint" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content bg-darkmode">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Endpoint
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" id="endpoint-id" hidden>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">DNS<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="endpoint-dns" placeholder="DNS">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Endpoint<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="endpoint-endpoint" placeholder="Endpoint">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">CORS</label>
+                                        <select class="form-control" id="endpoint-cors">
+                                            <option value="">UnKnown</option>
+                                            <option value="origin">origin</option>
+                                            <option value="*">*</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Type</label>
+                                        <select class="form-control" id="endpoint-type">
+                                            <option value="">UnKnown</option>
+                                            <option value="resource">Resource</option>
+                                            <option value="webpage">Webpage</option>
+                                            <option value="restapi">RestAPI</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Storage Type</label>
+                                        <select class="form-control" id="endpoint-storagetype">
+                                            <option value="">UnKnown</option>
+                                            <option value="AWS S3">AWS S3</option>
+                                            <option value="자체서버">자체서버</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">DB</label>
+                                        <select class="form-control" id="endpoint-db">
+                                            <option value="">UnKnown</option>
+                                            <option value="mongoDB">mongoDB</option>
+                                            <option value="mysql">MySQL</option>
+                                            <option value="redis">Redis</option>
+                                            <option value="aws dynamodb">AWS DynamoDB</option>
+                                            <option value="hbase">hBase</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Method</label>
+                                        <input type="text" class="form-control" id="endpoint-method" placeholder="GET,PUT,POST,DELETE,OPTIONS">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Parameter</label>
+                                        <input type="text" class="form-control" id="endpoint-parameter" placeholder="Parameter">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">SupportFormat</label>
+                                        <input type="text" class="form-control" id="endpoint-supportformat" placeholder="json, graphQL, form, xml, binary">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Token</label>
+                                        <input type="text" class="form-control" id="endpoint-token" placeholder="Token">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Curl</label>
+                                        <input type="text" class="form-control" id="endpoint-curl" placeholder="Curl">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Category</label>
+                                        <select class="form-control" id="endpoint-category">
+                                            <option value="">UnKnown</option>
+                                            <option value="유저">유저</option>
+                                            <option value="결제">결제</option>
+                                            <option value="관리">관리</option>
+                                            <option value="CS(고객대응)">CS(고객대응)</option>
+                                            <option value="메일">메일</option>
+                                            <option value="알림">알림</option>
+                                            <option value="메시징">메시징</option>
+                                            <option value="내 저징데이터">내 저징데이터</option>
+                                            <option value="정산">정산</option>
+                                            <option value="검색">검색</option>
+                                            <option value="통계">통계</option>
+                                            <option value="마이페이지">마이페이지</option>
+                                            <option value="공통사항">공통사항</option>
+                                            <option value="인증">인증</option>
+                                            <option value="웹소캣">웹소캣</option>
+                                            <option value="공지사항">공지사항</option>
+                                            <option value="시스템 관리">시스템 관리</option>
+                                            <option value="메인페이지">메인페이지</option>
+                                            <option value="모바일지원">모바일지원</option>
+                                            <option value="광고">광고</option>
+                                            <option value="혜택">혜택</option>
+                                            <option value="이벤트">이벤트</option>
+                                            <option value="친구관리">친구관리</option>
+                                            <option value="찜">찜</option>
+                                            <option value="장바구니">장바구니</option>
+                                            <option value="공유">공유</option>
+                                            <option value="채팅">채팅</option>
+                                            <option value="기기관리">기기관리</option>
+                                            <option value="통화">통화</option>
+                                            <option value="음성">음성</option>
+                                            <option value="카메라">카메라</option>
+                                            <option value="구매">구매</option>
+                                            <option value="보안">보안</option>
+                                            <option value="선물">선물</option>
+                                            <option value="뉴스">뉴스</option>
+                                            <option value="모니터링">모니터링</option>
+                                            <option value="구독">구독</option>
+                                            <option value="데이터분석">데이터분석</option>
+                                            <option value="머신러닝">머신러닝</option>
+                                            <option value="번역">번역</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Partner</label>
+                                        <input type="text" class="form-control" id="endpoint-partner" placeholder="Partner">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Progress</label>
+                                        <input type="text" class="form-control" id="endpoint-progress" placeholder="Progress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">Tags</label>
+                                        <input type="text" class="form-control" id="endpoint-tags" placeholder="Tags">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="pt-1">설명</label>
+                                        <input type="text" class="form-control" id="endpoint-description">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isserverless" name="endpoint-isserverless">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isserverless">Severless</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isuser" name="endpoint-isuser">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isuser">User</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isdeveloper" name="endpoint-isdeveloper">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isdeveloper">Developer</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isadmin" name="endpoint-isadmin">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isadmin">Admin</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-issecurity" name="endpoint-issecurity">
+                                            <label class="form-check-label finger unselectable" for="endpoint-issecurity">Security</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isasset" name="endpoint-isasset">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isasset">Asset</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-4">
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-ispatent" name="endpoint-ispatent">
+                                            <label class="form-check-label finger unselectable" for="endpoint-ispatent">Patent</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="from-group">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="endpoint-isupload" name="endpoint-isupload">
+                                            <label class="form-check-label finger unselectable" for="endpoint-isupload">Upload</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="endpoint-postbutton" onclick="Post()" data-bs-dismiss="modal" hidden>ADD</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning" id="endpoint-putbutton" onclick="Put()" data-bs-dismiss="modal" hidden>EDIT</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="endpoint-deletebutton" onclick="Delete()" data-bs-dismiss="modal" hidden>DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
+	

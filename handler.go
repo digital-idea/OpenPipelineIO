@@ -302,6 +302,9 @@ func webserver(port string) {
 	// Partner
 	r.HandleFunc("/partners", handlePartners)
 
+	// Endpoint
+	r.HandleFunc("/endpoints", handleEndpoints)
+
 	// Admin Setting
 	r.HandleFunc("/adminsetting", handleAdminSetting)
 	r.HandleFunc("/adminsetting_submit", handleAdminSettingSubmit)
@@ -604,6 +607,13 @@ func webserver(port string) {
 	r.HandleFunc("/api/partner/{id}", getPartnerHandler).Methods("GET")
 	r.HandleFunc("/api/partner/{id}", putPartnerHandler).Methods("PUT")
 	r.HandleFunc("/api/partner/{id}", deletePartnerHandler).Methods("DELETE")
+
+	// REST API Partner
+	r.HandleFunc("/api/endpoint", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/endpoint", postEndpointHandler).Methods("POST")
+	r.HandleFunc("/api/endpoint/{id}", getEndpointHandler).Methods("GET")
+	r.HandleFunc("/api/endpoint/{id}", putEndpointHandler).Methods("PUT")
+	r.HandleFunc("/api/endpoint/{id}", deleteEndpointHandler).Methods("DELETE")
 
 	// REST API Pipelinestep
 	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
