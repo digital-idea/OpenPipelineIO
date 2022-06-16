@@ -90,7 +90,9 @@
               <div class="dropdown-divider"></div>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <a class="dropdown-item" href="/Statistics">Statistics</a>
+              <a class="dropdown-item" href="/statistics">Statistics(본부장)</a>
+              <a class="dropdown-item" href="/statistics/pipelinestep">Statistics(팀장)</a>
+              <a class="dropdown-item" href="/statistics/user">Statistics(아티스트)</a>
               <div class="dropdown-divider"></div>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}

@@ -402,6 +402,11 @@ func webserver(port string) {
 	r.HandleFunc("/api/statusinfo", handleAPIStatusInfo).Methods(http.MethodGet, http.MethodOptions)
 
 	// Statistics
+	r.HandleFunc("/statistics", handleStatistics).Methods(http.MethodGet, http.MethodOptions)                          // 본부장, 실장
+	r.HandleFunc("/statistics/pipelinestep", handleStatisticsPipelinestep).Methods(http.MethodGet, http.MethodOptions) // 팀장
+	r.HandleFunc("/statistics/user", handleStatisticsUser).Methods(http.MethodGet, http.MethodOptions)                 // 아티스트
+
+	// Statistics API
 	r.HandleFunc("/api/statistics/projectnum", handleAPIStatisticsProjectnum).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/shot", handleAPI1StatisticsShot).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api2/statistics/shot", handleAPI2StatisticsShot).Methods(http.MethodGet, http.MethodOptions)

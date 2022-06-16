@@ -1,0 +1,23 @@
+{{define "statistics" }}
+{{template "headBootstrap5"}}
+<body>
+{{template "navbar-bootstrap5" .}}
+
+<div class="p-3 text-darkmode">
+    이번달에 처리해야하는 샷: 800개<br>
+    다음달에 처리해야하는 샷: 1,200개<br>
+    총 200,000샷 남음<br>
+    A프로젝트: 110,000샷 남음<br>
+    B프로젝트: 10,000샷 남음<br>
+    A팀 A프로젝트: %<br>
+    A팀 B프로젝트: %<br>
+    A팀 총 % 진행중<br>
+</div>
+    
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
+<script src="/assets/tata/tata.js"></script>
+<script src="/assets/js/statistics.js"></script>
+</html>
+{{end}}
