@@ -2,7 +2,7 @@ package main
 
 // Tasksetting 자료구조이다
 type Tasksetting struct {
-	ID           string            `json:"id"`           // Task ID. name + type 이다. shot 태스크와 asset 태스크 모두 같다.
+	ID           string            `json:"id"`           // Task ID
 	Name         string            `json:"name"`         // Task 표기명
 	Type         string            `json:"type"`         // Type: Asset, Shot, R&D, Development
 	LinuxPath    string            `json:"linuxpath"`    // Task 클릭시 dilink에서 열리는 리눅스 경로
@@ -14,4 +14,5 @@ type Tasksetting struct {
 	ExcelOrder   float64           `json:"excelorder"`   // Excel 문서에서 Task 순서. 낮을수록 앞쪽
 	Category     string            `json:"category"`     // Fx Task중 water, fire, smoke 같은 테스크가 존재할 때 각 Task가 하나의 카테고리로 묶어야 하는 상황이 생긴다. 예) FX 관련 Task를 구할 때
 	InitGenerate bool              `json:"initgenerate"` // Item이 만들어질 때 해당 테스크 생성여부
+	Pipelinestep string            `json:"pipelinestep"` // 파이프라인스탭 이름
 }
