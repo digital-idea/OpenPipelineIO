@@ -77,7 +77,6 @@
             <small class="form-text text-muted">&#123;&#123;.Type&#125;&#125;: 타입: shot, asset</small><br>
             <small class="form-text text-muted">&#123;&#123;.Assettype&#125;&#125;: 에셋타입</small><br>
         </div>
-        
         <div class="text-center">
             <button type="submit" class="btn btn-outline-warning mt-5">Update Task</button>
         </div>
@@ -106,7 +105,7 @@
     .then((obj) => {
         select = document.getElementById('pipelinestep');
         for (let i = 0; obj.length; i++){
-            if (select.value !== obj[i].name) {
+            if (select.value !== obj[i].name) { // 기존에 등록되지 않은 Pipelinestep만 등록한다.
                 var opt = document.createElement('option');
                 opt.value = obj[i].name;
                 opt.innerHTML = obj[i].name;
@@ -118,8 +117,6 @@
     .catch((err) => {
         console.log(err)
     });
-
-    // 현재 Task의 Pipelinestep을 선택한다.
 </script>
 </html>
 {{end}}
