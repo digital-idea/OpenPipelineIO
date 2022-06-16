@@ -50,7 +50,10 @@
         
         <div class="form-group">
             <label>Pipelinestep</label>
-            <select class="form-control" id="pipelinestep" name="pipelinestep">                
+            <select class="form-control" id="pipelinestep" name="pipelinestep">
+                {{if .Tasksetting.Pipelinestep}}
+                    <option value="{{.Tasksetting.Pipelinestep}}" selected>{{.Tasksetting.Pipelinestep}}</option>
+                {{end}}
             </select>
             <small class="form-text text-muted">Pipelinestep을 설정합니다.</small>
         </div>
@@ -84,13 +87,12 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/cookie.js"></script>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script>
     // Pipelinestep 옵션을 설정한다.
     fetch('/api/pipelinesteps', {
         method: 'GET',
-        headers: {"Authorization": "Basic "+ getCookie("TOKEN")},
+        headers: {"Authorization": "Basic "+ document.getElementById("token").value},
     })
     .then((response) => {
         if (!response.ok) {
@@ -104,10 +106,12 @@
     .then((obj) => {
         select = document.getElementById('pipelinestep');
         for (let i = 0; obj.length; i++){
-            var opt = document.createElement('option');
-            opt.value = obj[i].name;
-            opt.innerHTML = obj[i].name;
-            select.appendChild(opt);
+            if (select.value !== obj[i].name) {
+                var opt = document.createElement('option');
+                opt.value = obj[i].name;
+                opt.innerHTML = obj[i].name;
+                select.appendChild(opt);
+            }
         }
         console.log(obj)
     })
