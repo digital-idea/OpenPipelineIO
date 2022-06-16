@@ -1,0 +1,18 @@
+{{define "statistics-user" }}
+{{template "headBootstrap5"}}
+<body>
+{{template "navbar-bootstrap5" .}}
+
+<div class="p-3 text-darkmode">
+    테스크별 갯수<br>
+    프로젝트별 자신의 테스크 갯수<br>
+    상태별 갯수<br>
+</div>
+    
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
+<script src="/assets/tata/tata.js"></script>
+<script src="/assets/js/statistics.js"></script>
+</html>
+{{end}}
