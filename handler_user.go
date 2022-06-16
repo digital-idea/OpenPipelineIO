@@ -755,6 +755,13 @@ func handleSigninSuccess(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 토큰을 저장한다.
+	http.SetCookie(w, &http.Cookie{
+		Name:   "TOKEN",
+		Value:  rcp.User.Token,
+		MaxAge: int(*flagCookieAge),
+	})
+
 	err = TEMPLATES.ExecuteTemplate(w, "signin_success", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

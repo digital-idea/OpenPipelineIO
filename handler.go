@@ -618,6 +618,7 @@ func webserver(port string) {
 	// REST API Pipelinestep
 	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/pipelinestep", postPipelinestepHandler).Methods("POST")
+	r.HandleFunc("/api/pipelinesteps", getPipelinestepsHandler).Methods("GET")
 	r.HandleFunc("/api/pipelinestep/{id}", getPipelinestepHandler).Methods("GET")
 	r.HandleFunc("/api/pipelinestep/{id}", putPipelinestepHandler).Methods("PUT")
 	r.HandleFunc("/api/pipelinestep/{id}", deletePipelinestepHandler).Methods("DELETE")

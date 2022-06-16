@@ -108,7 +108,6 @@ func handleEditTasksetting(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -120,7 +119,8 @@ func handleEditTasksetting(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Tasksetting
-		Setting Setting
+		Setting       Setting
+		Pipelinesteps []Pipelinestep
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -286,6 +286,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	wfsPath := r.FormValue("wfspath")
 	order := r.FormValue("order")
 	excelorder := r.FormValue("excelorder")
+	pipelinestep := r.FormValue("pipelinestep")
 	category := r.FormValue("category")
 	initGenerate := str2bool(r.FormValue("initgenerate"))
 	t, err := getTaskSetting(session, id)
@@ -309,6 +310,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	t.ExcelOrder = floatExcelOrder
+	t.Pipelinestep = pipelinestep
 	t.Category = category
 	t.InitGenerate = initGenerate
 	err = SetTaskSetting(session, t)

@@ -1,6 +1,6 @@
 {{define "edittasksetting" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 <div class="container p-5">
@@ -30,20 +30,34 @@
             <input type="text" name="wfspath" class="form-control" placeholder="//10.0.1.2/show/&#123;&#123;.Project&#125;&#125;/seq/&#123;&#123;.Seq&#125;&#125;/&#123;&#123;.Seq&#125;&#125;_&#123;&#123;.Cut&#125;&#125;" value={{.Tasksetting.WFSPath}}>
             <small class="form-text text-muted">wfs 클릭시 열리는 경로.</small>
         </div>
-        <div class="form-group">
-            <label>Task Order</label>
-            <input type="number" name="order" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.Order}}>
-            <small class="form-text text-muted">Task 정렬시 사용되는 값. 낮을수록 위에 위치함</small>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Task Order</label>
+                    <input type="number" name="order" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.Order}}>
+                    <small class="form-text text-muted">Task 정렬시 사용되는 값. 낮을수록 위쪽</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Excel Order</label>
+                    <input type="number" name="excelorder" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.ExcelOrder}}>
+                    <small class="form-text text-muted">Excel 출력시 Task 정렬 값. 낮을수록 앞쪽</small>
+                </div>
+            </div>
         </div>
+        
+        
         <div class="form-group">
-            <label>Excel Order</label>
-            <input type="number" name="excelorder" step="0.01" class="form-control" placeholder="0.1" value={{.Tasksetting.ExcelOrder}}>
-            <small class="form-text text-muted">Excel Export 할 때 Task 정렬시 사용되는 값. 낮을수록 앞쪽에 위치함</small>
+            <label>Pipelinestep</label>
+            <select class="form-control" id="pipelinestep" name="pipelinestep">                
+            </select>
+            <small class="form-text text-muted">Pipelinestep을 설정합니다.</small>
         </div>
         <div class="form-group">
             <label>Category</label>
             <input type="text" name="category" class="form-control" placeholder="fx" value={{.Tasksetting.Category}}>
-            <small class="form-text text-muted">Task 카테고리를 지정합니다. 예) smoke, fire, water는 FX 카테고리</small>
+            <small class="form-text text-muted">Task 카테고리를 지정합니다. 예) smoke,fire..->FX</small>
         </div>
         <div class="form-check">
             <input type="checkbox" id="initgenerate" name="initgenerate" class="form-check-input" value="true"{{if .Tasksetting.InitGenerate}} checked{{end}}>
@@ -51,15 +65,14 @@
         </div>
 
         <div class="form-group pt-5">
-            <label>경로 설정에 사용할 수 있는 변수</label>
-            <small class="form-text text-muted">&#123;&#123;.Project&#125;&#125;: 프로젝트 코드</small>
-            <small class="form-text text-muted">&#123;&#123;.Task&#125;&#125;: 태스크</small>
-            <small class="form-text text-muted">&#123;&#123;.Name&#125;&#125;: 샷이름(SS_0010), 에셋이름</small>
-            <small class="form-text text-muted">&#123;&#123;.Seq&#125;&#125;: 시퀀스 SS</small>
-            <small class="form-text text-muted">&#123;&#123;.Cut&#125;&#125;: 컷 0010</small>
-            <small class="form-text text-muted">&#123;&#123;.Type&#125;&#125;: 타입: shot, asset</small>
-            <small class="form-text text-muted">&#123;&#123;.Assettype&#125;&#125;: 에셋타입</small>
-            
+            <label>경로 설정에 사용할 수 있는 변수</label><br>
+            <small class="form-text text-muted">&#123;&#123;.Project&#125;&#125;: 프로젝트 코드</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Task&#125;&#125;: 태스크</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Name&#125;&#125;: 샷이름(SS_0010), 에셋이름</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Seq&#125;&#125;: 시퀀스 SS</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Cut&#125;&#125;: 컷 0010</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Type&#125;&#125;: 타입: shot, asset</small><br>
+            <small class="form-text text-muted">&#123;&#123;.Assettype&#125;&#125;: 에셋타입</small><br>
         </div>
         
         <div class="text-center">
@@ -71,8 +84,39 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/js/cookie.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
+<script>
+    // Pipelinestep 옵션을 설정한다.
+    fetch('/api/pipelinesteps', {
+        method: 'GET',
+        headers: {"Authorization": "Basic "+ getCookie("TOKEN")},
+    })
+    .then((response) => {
+        if (!response.ok) {
+            response.text().then(function (text) {
+                alert(text)
+                return
+            });
+        }
+        return response.json()
+    })
+    .then((obj) => {
+        select = document.getElementById('pipelinestep');
+        for (let i = 0; obj.length; i++){
+            var opt = document.createElement('option');
+            opt.value = obj[i].name;
+            opt.innerHTML = obj[i].name;
+            select.appendChild(opt);
+        }
+        console.log(obj)
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+
+    // 현재 Task의 Pipelinestep을 선택한다.
+</script>
 </html>
 {{end}}
 

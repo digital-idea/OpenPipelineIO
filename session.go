@@ -81,10 +81,14 @@ func GetSessionID(r *http.Request) (JwtToken, error) {
 
 // RmSessionID 는 SessionID를 제거한다.
 func RmSessionID(w http.ResponseWriter) {
-	c := http.Cookie{
+	http.SetCookie(w, &http.Cookie{
 		Name:   "SSID",
 		Value:  "",
 		MaxAge: -1,
-	}
-	http.SetCookie(w, &c)
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:   "TOKEN",
+		Value:  "",
+		MaxAge: -1,
+	})
 }
