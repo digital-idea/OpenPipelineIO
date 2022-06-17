@@ -409,6 +409,7 @@ func webserver(port string) {
 	// Statistics API
 	r.HandleFunc("/api/statistics/projectnum", handleAPIStatisticsProjectnum).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api/statistics/deadlinenum", handleAPIStatisticsDeadlineNum).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/api/statistics/needdeadlinenum", handleAPIStatisticsNeedDeadlineNum).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/shot", handleAPI1StatisticsShot).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api2/statistics/shot", handleAPI2StatisticsShot).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/api1/statistics/asset", handleAPI1StatisticsAsset).Methods(http.MethodGet, http.MethodOptions)

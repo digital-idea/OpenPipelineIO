@@ -64,3 +64,25 @@ function DeadlinenumNextmonth() {
     });
 }
 
+function NeedDeadlinenum() {
+    fetch("/api/statistics/needdeadlinenum", {
+        method: 'GET',
+        headers: {"Authorization": "Basic "+ document.getElementById("token").value},
+    })
+    .then((response) => {
+        if (!response.ok) {
+            response.text().then(function (text) {
+                alert(text)
+                return
+            });
+        }
+        return response.json()
+    })
+    .then((obj) => {
+        document.getElementById("need-deadline").innerHTML = obj.total
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+}
+

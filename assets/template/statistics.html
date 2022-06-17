@@ -4,6 +4,7 @@
 {{template "navbar-bootstrap5" .}}
 
 <div class="p-3 text-darkmode">
+    마감일 설정이 필요한 샷: <span id="need-deadline">0</span>개<br> 
     이번달 처리해야하는 샷: <span id="this-month">0</span>개<br>
     다음달 처리해야하는 샷: <span id="next-month">0</span>개<br>
     총 200,000샷 남음<br>
@@ -20,6 +21,7 @@
 <script src="/assets/tata/tata.js"></script>
 <script src="/assets/js/statistics.js"></script>
 <script>
+    NeedDeadlinenum() // 데드라인이 설정되지 않은 샷 갯수
     DeadlinenumThismonth() // 이번달 마감샷 갯수
     DeadlinenumNextmonth() // 다음달 마감샷 갯수
 </script>
