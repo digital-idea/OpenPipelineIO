@@ -4,8 +4,9 @@
 {{template "navbar-bootstrap5" .}}
 
 <div class="p-3 text-darkmode">
-    이번달에 처리해야하는 샷: 800개<br>
-    다음달에 처리해야하는 샷: 1,200개<br>
+    마감일 설정이 필요한 샷: <span id="need-deadline">0</span>개<br> 
+    이번달 처리해야하는 샷: <span id="this-month">0</span>개<br>
+    다음달 처리해야하는 샷: <span id="next-month">0</span>개<br>
     총 200,000샷 남음<br>
     A프로젝트: 110,000샷 남음<br>
     B프로젝트: 10,000샷 남음<br>
@@ -19,5 +20,10 @@
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script src="/assets/tata/tata.js"></script>
 <script src="/assets/js/statistics.js"></script>
+<script>
+    NeedDeadlinenum() // 데드라인이 설정되지 않은 샷 갯수
+    DeadlinenumThismonth() // 이번달 마감샷 갯수
+    DeadlinenumNextmonth() // 다음달 마감샷 갯수
+</script>
 </html>
 {{end}}

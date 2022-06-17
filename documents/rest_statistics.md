@@ -2,11 +2,18 @@
 
 통계 관련된 RestAPI를 다룹니다.
 
-## GET(Status V1)
+## GET(공통)
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 | /api/statistics/projectnum | 프로젝트 갯수를 가지고 옵니다. | . | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/projectnum"
+| /api/statistics/deadlinenum | 해당 월의 마감갯수를 출력합니다. | date | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/deadlinenum?date=2022-06"
+| /api/statistics/needdeadlinenum | 마감일 설정이 필요한 샷 갯수를 출력합니다. | date | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/needdeadlinenum"
+
+## GET(Status V1)
+
+| URI | Description | Attributes | Curl Example |
+| --- | --- | --- | --- |
 | /api1/statistics/shot | status V1 shot의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api1/statistics/shot"
 | /api1/statistics/shot | status V1 shot의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api1/statistics/shot?project=TEMP"
 | /api1/statistics/asset | status V1 asset의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api1/statistics/asset"
@@ -23,7 +30,6 @@
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/statistics/projectnum | 프로젝트 갯수를 가지고 옵니다. | . | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/projectnum"
 | /api2/statistics/shot | status V2 shot의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api2/statistics/shot"
 | /api2/statistics/shot | status V2 shot의 샹태를 가지고옵니다. 프로젝트 옵션이 있다면 해당 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api2/statistics/shot?project=TEMP"
 | /api2/statistics/asset | status V2 asset의 샹태를 가지고옵니다. 전체 프로젝트 갯수를 처리합니다. | (project) | curl -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api2/statistics/asset"
