@@ -470,6 +470,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/setaftermov", handleAPISetAftermov)
 	r.HandleFunc("/api/seteditmov", handleAPISetEditmov)
 	r.HandleFunc("/api/settaskstatus", handleAPISetTaskStatus) // legacy
+	r.HandleFunc("/api/settaskpipelinestep", handleAPISetTaskPipelinestep)
 	r.HandleFunc("/api2/settaskstatus", handleAPI2SetTaskStatus)
 	r.HandleFunc("/api/taskstatusnum", handleAPITaskStatusNum)
 	r.HandleFunc("/api/taskanduserstatusnum", handleAPITaskAndUserStatusNum)

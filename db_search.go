@@ -215,6 +215,26 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 					}
 				}
 			}
+		} else if strings.HasPrefix(word, "pipelinestep:") {
+			if len(selectTasks) == 0 {
+				if strings.TrimPrefix(word, "pipelinestep:") == "" {
+					for _, task := range allTasks {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".pipelinestep": ""})
+					}
+				} else {
+					for _, task := range allTasks {
+						query = append(query, bson.M{"tasks." + strings.ToLower(task) + ".pipelinestep": strings.TrimPrefix(word, "pipelinestep:")})
+					}
+				}
+			} else {
+				for _, task := range selectTasks {
+					if strings.TrimPrefix(word, "user:") == "notassign" {
+						query = append(query, bson.M{"tasks." + task + ".user": ""})
+					} else {
+						query = append(query, bson.M{"tasks." + task + ".user": &bson.RegEx{Pattern: strings.TrimPrefix(word, "user:")}})
+					}
+				}
+			}
 		} else if strings.HasPrefix(word, "usercomment:") {
 			userComment := strings.TrimPrefix(word, "usercomment:")
 			if len(selectTasks) == 0 {
