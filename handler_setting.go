@@ -81,6 +81,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	s := Setting{}
 	s.ID = "admin"
+	s.AppName = r.FormValue("AppName")
 	s.Umask = r.FormValue("Umask")
 	s.RootPath = r.FormValue("RootPath")
 	s.ProjectPath = r.FormValue("ProjectPath")
