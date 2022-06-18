@@ -1,6 +1,6 @@
 {{define "rmtasksetting" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 <div class="container p-5">
@@ -12,8 +12,12 @@
             
         <div class="form-group">
             <label>Task Name</label>
-            <input type="text" name="name" class="form-control" placeholder="taskname">
-            <small class="form-text text-muted">삭제할 Task 이름을 입력해주세요. comp, light</small>
+            <select class="form-control" id="name" name="name">
+                {{range .Tasksettings}}
+                    <option value="{{.Name}}">{{.Name}}({{.Type}})</option>
+                {{end}}
+            </select>
+            <small class="form-text text-muted">삭제할 Task 이름을 선택해주세요.</small>
         </div>
         
         <div class="form-group">
@@ -34,8 +38,7 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}
 

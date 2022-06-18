@@ -209,6 +209,7 @@ func handleRmTasksetting(w http.ResponseWriter, r *http.Request) {
 		Devmode bool
 		SearchOption
 		Setting
+		Tasksettings []Tasksetting
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -224,6 +225,11 @@ func handleRmTasksetting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.User = u
+	rcp.Tasksettings, err = AllTaskSettings(session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	err = TEMPLATES.ExecuteTemplate(w, "rmtasksetting", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
