@@ -906,7 +906,6 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query()
 	searchword := q.Get("search")
 	isLeave := str2bool(q.Get("isleave"))
-	fmt.Println(isLeave)
 
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
