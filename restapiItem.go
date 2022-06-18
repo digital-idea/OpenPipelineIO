@@ -3224,6 +3224,106 @@ func handleAPISetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetTaskPipelinestep 함수는 아이템의 task에 pipelinestep 을 설정한다.
+func handleAPISetTaskPipelinestep(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project      string `json:"project"`
+		ID           string `json:"id"`
+		Name         string `json:"name"`
+		Task         string `json:"task"`
+		Pipelinestep string `json:"pipelinestep"`
+		UserID       string `json:"userid"`
+		Error        string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	rcp.Project = r.FormValue("project")
+	if rcp.Project == "" {
+		if err != nil {
+			http.Error(w, "프로젝트가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Name = r.FormValue("name")
+	if rcp.Name == "" {
+		if err != nil {
+			http.Error(w, "name이 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Task = r.FormValue("task")
+	if rcp.Task == "" {
+		if err != nil {
+			http.Error(w, "task가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Pipelinestep = r.FormValue("pipelinestep")
+
+	rcp.ID = r.FormValue("id")
+	if rcp.ID == "" {
+		typ, err := Type(session, rcp.Project, rcp.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rcp.ID = rcp.Name + "_" + typ
+	}
+
+	// task가 존재하는지 체크한다.
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = SetTaskPipelinestep(session, rcp.Project, rcp.ID, rcp.Task, rcp.Pipelinestep)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task Pipelinestep: %s %s", rcp.Task, rcp.Pipelinestep), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set Task Pipelinestep: %s %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Pipelinestep, rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPI2SetTaskStatus 함수는 아이템의 task에 대한 상태를 설정한다.
 func handleAPI2SetTaskStatus(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -3416,11 +3516,12 @@ func handleAPIAddTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		ID      string `json:"id"`
-		Task    string `json:"task"`
-		Status  string `json:"status"`
-		UserID  string `json:"userid"`
+		Project      string `json:"project"`
+		ID           string `json:"id"`
+		Task         string `json:"task"`
+		Pipelinestep string `json:"pipelinestep"`
+		Status       string `json:"status"`
+		UserID       string `json:"userid"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -3458,6 +3559,7 @@ func handleAPIAddTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Task = task
+	rcp.Pipelinestep = r.FormValue("pipelinestep")
 	status, err := AllStatus(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -3468,7 +3570,7 @@ func handleAPIAddTask(w http.ResponseWriter, r *http.Request) {
 			rcp.Status = s.ID
 		}
 	}
-	err = AddTask(session, rcp.Project, rcp.ID, rcp.Task, rcp.Status)
+	err = AddTask(session, rcp.Project, rcp.ID, rcp.Task, rcp.Status, rcp.Pipelinestep)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

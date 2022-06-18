@@ -149,12 +149,49 @@ function setModal(modalID, value) {
     document.getElementById(modalID).value = value;
 }
 
+// initModalPipelinestep 함수는 modal에서 pipelinestep 값이 들어가는 부분을 일괄 옵션을 추가한다.
+function initModalPipelinestep() {
+    fetch('/api/pipelinesteps', {
+        method: 'GET',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw Error(response.statusText + " - " + response.url);
+        }
+        return response.json()
+    })
+    .then((data) => {
+        let selectAddtask = document.getElementById('modal-addtask-pipelinestep');
+        selectAddtask.innerHTML = "";
+        for (let j = 0; j < data.length; j++){
+            let opt = document.createElement('option');
+            opt.value = data[j].name;
+            opt.innerHTML = data[j].name;
+            selectAddtask.appendChild(opt);
+        }
+        let selectEdittask = document.getElementById('modal-edittask-pipelinestep');
+        selectEdittask.innerHTML = "";
+        for (let i = 0; i < data.length; i++){
+            let opt = document.createElement('option');
+            opt.value = data[i].name;
+            opt.innerHTML = data[i].name;
+            selectEdittask.appendChild(opt);
+        }
+    })
+    .catch((err) => {
+        alert(err)
+    });
+}
+initModalPipelinestep() // 페이지가 로딩되면 먼저 실행한다.
+
 // setEditTaskModal 함수는 project, name, task 정보를 가지고 와서 Edit Task Modal에 값을 채운다.
 function setEditTaskModal(project, id, task) {
     document.getElementById("modal-edittask-project").value = project;
     document.getElementById("modal-edittask-id").value = id;
     document.getElementById("modal-edittask-title").innerHTML = "Edit Task" + multiInputTitle(id);
-    let token = document.getElementById("token").value;
     $.ajax({
         url: "/api/task",
         type: "post",
@@ -164,10 +201,11 @@ function setEditTaskModal(project, id, task) {
             task: task,
         },
         headers: {
-            "Authorization": "Basic "+ token
+            "Authorization": "Basic "+ document.getElementById("token").value
         },
         dataType: "json",
         success: function(data) {
+            
             document.getElementById('modal-edittask-startdate').value=data.task.startdate;
             document.getElementById('modal-edittask-predate').value=data.task.predate;
             document.getElementById('modal-edittask-date').value=data.task.date;
@@ -175,6 +213,7 @@ function setEditTaskModal(project, id, task) {
             document.getElementById('modal-edittask-resultday').value=data.task.resultday;
             document.getElementById('modal-edittask-level').value=data.task.tasklevel;
             document.getElementById('modal-edittask-task').value=data.task.title;
+            document.getElementById('modal-edittask-pipelinestep').value=data.task.pipelinestep;
             document.getElementById('modal-edittask-path').value=data.task.mov;
             document.getElementById('modal-edittask-usernote').value=data.task.usernote;
             document.getElementById('modal-edittask-user').value=data.task.user;
@@ -258,8 +297,6 @@ function setShottypeModal(project, id) {
     });
 }
 
-
-
 // setUsetypeModal 함수는 project, name을 받아서 Usetype Modal을 설정한다.
 function setUsetypeModal(project, id, selectedType) {
     let token = document.getElementById("token").value;
@@ -340,9 +377,62 @@ function multiInputTitle(id) {
     }
 }
 
+function setDefaultPipelinestep() {
+    let type = document.getElementById("modal-addtask-type").value
+    let task = document.getElementById('modal-addtask-taskname').value
+    // 현재 태스크의 값을 가지고 온다.
+    if (type == "org" || type == "left") {
+        // 현재 태스크의 디폴트 값을 가지고 온다.
+        fetch('/api/shottasksetting', {
+            method: 'GET',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
+            }
+            return response.json()
+        })
+        .then((data) => {
+            let tasks = data["tasksettings"];
+            for (let i = 0; i < tasks.length; i++){
+                if (tasks[i].name === task) {
+                    document.getElementById('modal-addtask-pipelinestep').value = tasks[i].pipelinestep
+                }
+            }
+        })
+    } else if (type == "asset") {
+        fetch('/api/assettasksetting', {
+            method: 'GET',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
+            }
+            return response.json()
+        })
+        .then((data) => {
+            let tasks = data["tasksettings"];
+            for (let i = 0; i < tasks.length; i++){
+                if (tasks[i].name === task) {
+                    document.getElementById('modal-addtask-pipelinestep').value = tasks[i].pipelinestep
+                }
+            }
+        })
+    }
+}
 
-function addTask(project, id, task) {
+function addTask() {
     let token = document.getElementById("token").value;
+    let project = document.getElementById('modal-addtask-project').value
+    let id = document.getElementById('modal-addtask-id').value
+    let task = document.getElementById('modal-addtask-taskname').value
+    let pipelinestep = document.getElementById('modal-addtask-pipelinestep').value
     if (isMultiInput()) {
         let cboxes = document.getElementsByName('selectID');
         for (var i = 0; i < cboxes.length; ++i) {
@@ -358,6 +448,7 @@ function addTask(project, id, task) {
                     project: project,
                     id: id,
                     task: task,
+                    pipelinestep: pipelinestep,
                 },
                 headers: {
                     "Authorization": "Basic "+ token
@@ -393,6 +484,7 @@ function addTask(project, id, task) {
                 project: project,
                 id: id,
                 task: task,
+                pipelinestep: pipelinestep,
             },
             headers: {
                 "Authorization": "Basic "+ token
@@ -2695,6 +2787,59 @@ function setTaskStatus(project, id, task, status) { // legacy
     }
 }
 
+function setTaskPipelinestep(project, id, task, pipelinestep) {
+    let token = document.getElementById("token").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (let i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            let id = cboxes[i].getAttribute("id");
+            sleep(200);
+            $.ajax({
+                url: "/api/settaskpipelinestep",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    task: task,
+                    pipelinestep: pipelinestep,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskpipelinestep",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                task: task,
+                pipelinestep: pipelinestep,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
 function setTaskStatusV2(project, id, task, status) {
     let token = document.getElementById("token").value;
     if (isMultiInput()) {
@@ -4337,54 +4482,64 @@ for (var i = 0; i < input.length; i++) {
 function setAddTaskModal(project, id, type) {
     document.getElementById("modal-addtask-project").value = project;
     document.getElementById("modal-addtask-id").value = id;
+    document.getElementById("modal-addtask-type").value = type;
     document.getElementById("modal-addtask-title").innerHTML = "Add Task" + multiInputTitle(id);
-    let token = document.getElementById("token").value;
     if (type === "org" || type === "left") {
-        $.ajax({
-            url: "/api/shottasksetting",
-            type: "get",
+        // Task 셋팅
+        fetch('/api/shottasksetting', {
+            method: 'GET',
             headers: {
-                "Authorization": "Basic "+ token
+                "Authorization": "Basic "+ document.getElementById("token").value,
             },
-            dataType: "json",
-            success: function(data) {
-                let tasks = data["tasksettings"];
-                let addtasks = document.getElementById('modal-addtask-taskname');
-                addtasks.innerHTML = "";
-                for (let i = 0; i < tasks.length; i++){
-                    let opt = document.createElement('option');
-                    opt.value = tasks[i].name;
-                    opt.innerHTML = tasks[i].name;
-                    addtasks.appendChild(opt);
-                }
-            },
-            error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            let tasks = data["tasksettings"];
+            let addtasks = document.getElementById('modal-addtask-taskname');
+            addtasks.innerHTML = "";
+            for (let i = 0; i < tasks.length; i++){
+                let opt = document.createElement('option');
+                opt.value = tasks[i].name;
+                opt.innerHTML = tasks[i].name;
+                addtasks.appendChild(opt);
+            }
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
     if (type === "asset") {
-        $.ajax({
-            url: "/api/assettasksetting",
-            type: "get",
+        // Task 셋팅
+        fetch('/api/assettasksetting', {
+            method: 'GET',
             headers: {
-                "Authorization": "Basic "+ token
+                "Authorization": "Basic "+ document.getElementById("token").value,
             },
-            dataType: "json",
-            success: function(data) {
-                let tasks = data["tasksettings"]
-                let addtasks = document.getElementById('modal-addtask-taskname');
-                addtasks.innerHTML = "";
-                for (let i = 0; i < tasks.length; i++){
-                    let opt = document.createElement('option');
-                    opt.value = tasks[i].name;
-                    opt.innerHTML = tasks[i].name;
-                    addtasks.appendChild(opt);
-                }
-            },
-            error: function(request,status,error){
-                alert("status:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            let tasks = data["tasksettings"]
+            let addtasks = document.getElementById('modal-addtask-taskname');
+            addtasks.innerHTML = "";
+            for (let i = 0; i < tasks.length; i++){
+                let opt = document.createElement('option');
+                opt.value = tasks[i].name;
+                opt.innerHTML = tasks[i].name;
+                addtasks.appendChild(opt);
+            }
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
 }

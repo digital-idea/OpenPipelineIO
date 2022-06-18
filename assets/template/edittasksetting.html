@@ -49,13 +49,13 @@
         
         
         <div class="form-group">
-            <label>Pipelinestep</label>
+            <label>Default Pipelinestep</label>
             <select class="form-control" id="pipelinestep" name="pipelinestep">
                 {{if .Tasksetting.Pipelinestep}}
                     <option value="{{.Tasksetting.Pipelinestep}}" selected>{{.Tasksetting.Pipelinestep}}</option>
                 {{end}}
             </select>
-            <small class="form-text text-muted">Pipelinestep을 설정합니다.</small>
+            <small class="form-text text-muted">기본 Pipelinestep을 설정합니다.</small>
         </div>
         <div class="form-group">
             <label>Category</label>

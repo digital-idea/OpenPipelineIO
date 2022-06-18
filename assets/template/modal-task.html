@@ -12,15 +12,27 @@
                 <div class="modal-body">				
                     <input type="hidden" class="form-control" id="modal-addtask-project">
                     <input type="hidden" class="form-control" id="modal-addtask-id">
-                    <div class="form-group">
-                        <label class="col-form-label col-form-label-sm">Select Task</label>
-                        <select class="form-control form-control-sm" id="modal-addtask-taskname">
-                        </select>
+                    <input type="hidden" class="form-control" id="modal-addtask-type">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="col-form-label col-form-label-sm">Select Task</label>
+                                <select class="form-control form-control-sm" id="modal-addtask-taskname" onchange="setDefaultPipelinestep()">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="col-form-label col-form-label-sm">Select Pipelinestep</label>
+                                <select class="form-control form-control-sm" id="modal-addtask-pipelinestep">
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>			
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-darkmode" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-outline-warning" onclick="addTask(document.getElementById('modal-addtask-project').value, document.getElementById('modal-addtask-id').value, document.getElementById('modal-addtask-taskname').value)" data-dismiss="modal">Add</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="addTask()" data-dismiss="modal">Add</button>
                 </div>
             </div>
         </div>
@@ -89,12 +101,17 @@
                     <input type="hidden" class="form-control" id="modal-edittask-project">
                     <input type="hidden" class="form-control" id="modal-edittask-id">
                     <div class="row">
-                        <div class="col-6 form-group">
+                        <div class="col form-group">
                             <label class="col-form-label">Task:</label>
                             <input type="text" class="form-control form-control-sm" id="modal-edittask-task" disabled>
                         </div>
+                        <div class="col form-group">
+                            <label class="col-form-label">Pipelinestep</label>
+                            <select class="form-control form-control-sm" id="modal-edittask-pipelinestep" onchange="setTaskPipelinestep(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-pipelinestep').value)">
+                            </select>
+                        </div>
                         {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
-                            <div class="col-6 form-group">
+                            <div class="col form-group">
                                 <label class="col-form-label">Status</label>
                                 <select class="form-control form-control-sm" id="modal-edittask-status" onchange="setTaskStatus(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-status').value)">
                                     <option value="8">omit</option>
@@ -110,7 +127,7 @@
                             </div>
                         {{else}}
                             <!--Status v2-->
-                            <div class="col-6 form-group">
+                            <div class="col form-group">
                                 <label class="col-form-label text-muted">Status</label>
                                 <select class="text-muted form-control form-control-sm" id="modal-edittask-statusv2" onchange="setTaskStatusV2(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-statusv2').value)">
                                     {{range .Status}}

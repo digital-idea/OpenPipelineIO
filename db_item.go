@@ -2058,6 +2058,29 @@ func SetTaskStatus(session *mgo.Session, project, id, task, status string) error
 	return nil
 }
 
+// SetTaskPipelinestep 함수는 item에 task의 pipelinestep 값을 셋팅한다.
+func SetTaskPipelinestep(session *mgo.Session, project, id, task, pipelinestep string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	item, err := getItem(session, project, id)
+	if err != nil {
+		return err
+	}
+	t := item.Tasks[task]
+	t.Pipelinestep = pipelinestep
+	item.Tasks[task] = t
+	c := session.DB("project").C(project)
+	item.Updatetime = time.Now().Format(time.RFC3339)
+	err = c.Update(bson.M{"id": item.ID}, item)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetTaskStatusV2 함수는 item에 task의 status 값을 셋팅한다.
 func SetTaskStatusV2(session *mgo.Session, project, id, task, status string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)
@@ -2122,7 +2145,7 @@ func HasTask(session *mgo.Session, project, id, task string) error {
 }
 
 // AddTask 함수는 item에 task를 추가한다.
-func AddTask(session *mgo.Session, project, id, task, status string) error {
+func AddTask(session *mgo.Session, project, id, task, status, pipelinestep string) error {
 	session.SetMode(mgo.Monotonic, true)
 	err := HasProject(session, project)
 	if err != nil {
@@ -2139,6 +2162,7 @@ func AddTask(session *mgo.Session, project, id, task, status string) error {
 		t.Title = taskname
 		t.Status = ASSIGN // legacy
 		t.StatusV2 = status
+		t.Pipelinestep = pipelinestep
 		item.Tasks[task] = t
 	} else {
 		return fmt.Errorf("이미 %s 에 %s Task가 존재합니다", id, taskname)
