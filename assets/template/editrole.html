@@ -1,6 +1,6 @@
 {{define "editrole" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 <body>
 
 
@@ -20,6 +20,11 @@
                 <input type="text" name="Name" class="form-control" placeholder="표기명" value="{{.Role.Name}}">
                 <small class="form-text text-muted">직책 이름</small>
             </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" name="Email" class="form-control" placeholder="Email" value="{{.Role.Email}}">
+                <small class="form-text text-muted">Group Email</small>
+            </div>
         </div>
     </div>     
     <div class="text-center">
@@ -30,8 +35,7 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}
 
