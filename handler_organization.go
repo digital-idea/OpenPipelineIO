@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
 	"gopkg.in/mgo.v2"
 )
 
-// handleAddOrganization 함수는 team를 추가하는 페이지이다.
+// handleAddOrganization 함수는 조직구조를 추가하는 페이지이다.
 func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -49,7 +48,6 @@ func handleAddOrganization(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -417,7 +415,6 @@ func handleAddDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -453,7 +450,6 @@ func handleAddTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -490,7 +486,6 @@ func handleAddRoleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -526,7 +521,6 @@ func handleAddPositionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -563,7 +557,6 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -598,7 +591,6 @@ func handleDivisions(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -618,7 +610,6 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -653,7 +644,6 @@ func handleDepartments(w http.ResponseWriter, r *http.Request) {
 	rcp.User = u
 	err = TEMPLATES.ExecuteTemplate(w, strings.Trim(r.URL.Path, "/"), rcp)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -884,20 +874,21 @@ func handleEditDivisionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
 	current, err := getDivision(session, r.FormValue("ID"))
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	renewal := current
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
+	}
+	if current.Email != r.FormValue("Email") {
+		renewal.Email = r.FormValue("Email")
 	}
 	err = setDivision(session, renewal)
 	if err != nil {
@@ -920,7 +911,6 @@ func handleEditDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -933,6 +923,9 @@ func handleEditDepartmentSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal := current
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
+	}
+	if current.Email != r.FormValue("Email") {
+		renewal.Email = r.FormValue("Email")
 	}
 	err = setDepartment(session, renewal)
 	if err != nil {
@@ -955,7 +948,6 @@ func handleEditTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -968,6 +960,9 @@ func handleEditTeamSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal := current
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
+	}
+	if current.Email != r.FormValue("Email") {
+		renewal.Email = r.FormValue("Email")
 	}
 	err = setTeam(session, renewal)
 	if err != nil {
@@ -990,7 +985,6 @@ func handleEditRoleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1003,6 +997,9 @@ func handleEditRoleSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal := current
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
+	}
+	if current.Email != r.FormValue("Email") {
+		renewal.Email = r.FormValue("Email")
 	}
 	err = setRole(session, renewal)
 	if err != nil {
@@ -1025,7 +1022,6 @@ func handleEditPositionSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -1038,6 +1034,9 @@ func handleEditPositionSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal := current
 	if current.Name != r.FormValue("Name") {
 		renewal.Name = r.FormValue("Name")
+	}
+	if current.Email != r.FormValue("Email") {
+		renewal.Email = r.FormValue("Email")
 	}
 	err = setPosition(session, renewal)
 	if err != nil {

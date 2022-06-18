@@ -1,6 +1,6 @@
 {{define "divisions" }}
-{{template "headBootstrap"}}
-{{template "navbar" .}}
+{{template "headBootstrap5"}}
+{{template "navbar-bootstrap5" .}}
 
 <body>
 
@@ -14,7 +14,7 @@
 					</h6>
 					<div class="card-body">
 						<h6 class="card-title">
-							<a href="mailto:{{.ID}}@{{$.MailDNS}}" class="btn btn-outline-darkmode btn-sm">E-mail</a>
+							<a href="mailto:{{.Email}}" class="btn btn-outline-darkmode btn-sm">E-mail</a>
 							{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
 							<a href="/editdivision?id={{.ID}}" class="btn btn-danger btn-sm">Edit</a>
 							{{end}}
@@ -31,7 +31,6 @@
 
 {{template "footerBootstrap"}}
 </body>
-<script src="/assets/js/jquery-3.1.1.min.js"></script>
-<script src="/assets/bootstrap-4/js/bootstrap.min.js"></script>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 </html>
 {{end}}
