@@ -165,20 +165,25 @@ function initModalPipelinestep() {
     })
     .then((data) => {
         let selectAddtask = document.getElementById('modal-addtask-pipelinestep');
-        selectAddtask.innerHTML = "";
-        for (let j = 0; j < data.length; j++){
-            let opt = document.createElement('option');
-            opt.value = data[j].name;
-            opt.innerHTML = data[j].name;
-            selectAddtask.appendChild(opt);
+        if (selectAddtask) {
+            selectAddtask.innerHTML = "";
+            for (let j = 0; j < data.length; j++){
+                let opt = document.createElement('option');
+                opt.value = data[j].name;
+                opt.innerHTML = data[j].name;
+                selectAddtask.appendChild(opt);
+            }
         }
+        
         let selectEdittask = document.getElementById('modal-edittask-pipelinestep');
-        selectEdittask.innerHTML = "";
-        for (let i = 0; i < data.length; i++){
-            let opt = document.createElement('option');
-            opt.value = data[i].name;
-            opt.innerHTML = data[i].name;
-            selectEdittask.appendChild(opt);
+        if (selectEdittask) {
+            selectEdittask.innerHTML = "";
+            for (let i = 0; i < data.length; i++){
+                let opt = document.createElement('option');
+                opt.value = data[i].name;
+                opt.innerHTML = data[i].name;
+                selectEdittask.appendChild(opt);
+            }
         }
     })
     .catch((err) => {
