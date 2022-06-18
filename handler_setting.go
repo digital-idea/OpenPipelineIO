@@ -82,6 +82,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s := Setting{}
 	s.ID = "admin"
 	s.AppName = r.FormValue("AppName")
+	s.EmailDNS = r.FormValue("EmailDNS")
 	s.Umask = r.FormValue("Umask")
 	s.RootPath = r.FormValue("RootPath")
 	s.ProjectPath = r.FormValue("ProjectPath")
