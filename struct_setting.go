@@ -4,6 +4,7 @@ package main
 type Setting struct {
 	ID                             string `json:"id"`                             // 셋팅ID
 	AppName                        string `json:"appname"`                        // App 이름
+	EmailDNS                       string `json:"emaildns"`                       // Email DNS 서버이름
 	RunScriptAfterSignup           string `json:"runscriptaftersignup"`           // 사용자 가입이후 실행될 쉘스크립트
 	RunScriptAfterEditUserProfile  string `json:"runscriptafteredituserprofile"`  // 사용자 정보 수정후 실행될 쉘스크립트
 	ExcludeProject                 string `json:"excludeproject"`                 // Search옵션에 제외할 프로젝트명, 마이그레이션 시 사용한다.

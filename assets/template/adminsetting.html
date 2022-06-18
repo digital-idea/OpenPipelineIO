@@ -12,9 +12,16 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
-                            <label for="RootPath">Appname</label>
+                            <label for="AppName">Appname</label>
                             <input type="text" class="form-control" id="AppName" name="AppName" placeholder="Appname" value={{.Setting.AppName}}>
-                            <small class="form-text text-warning">서버 Root 프로젝트 경로</small>
+                            <small class="form-text text-warning">상단에 표기되는 App 이름</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="EmailDNS">Email DNS</label>
+                            <input type="text" class="form-control" id="EmailDNS" name="EmailDNS" placeholder="Email DNS" value={{.Setting.EmailDNS}}>
+                            <small class="form-text text-muted">Email DNS 주소</small>
                         </div>
                     </div>
                 </div>
