@@ -617,6 +617,13 @@ func webserver(port string) {
 	r.HandleFunc("/api/partner/{id}", deletePartnerHandler).Methods("DELETE")
 
 	// REST API Partner
+	r.HandleFunc("/api/projectforpartner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/projectforpartner", postProjectForPartnerHandler).Methods("POST")
+	r.HandleFunc("/api/projectforpartner/{id}", getProjectForPartnerHandler).Methods("GET")
+	r.HandleFunc("/api/projectforpartner/{id}", putProjectForPartnerHandler).Methods("PUT")
+	r.HandleFunc("/api/projectforpartner/{id}", deleteProjectForPartnerHandler).Methods("DELETE")
+
+	// REST API Partner
 	r.HandleFunc("/api/endpoint", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/endpoint", postEndpointHandler).Methods("POST")
 	r.HandleFunc("/api/endpoint/{id}", getEndpointHandler).Methods("GET")
