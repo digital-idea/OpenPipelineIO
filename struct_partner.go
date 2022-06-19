@@ -66,7 +66,9 @@ type Moneytype struct {
 // ProjectForPartner 자료구조는 프로젝트와 파트너사이의 관계를 다루는 자료구조
 type ProjectForPartner struct {
 	ID                      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	RnrID                   string             `json:"rnrid"`                   // 계약,진행상태
+	ProjectName             string             `json:"projectname"`             // 프로젝트 이름
+	PartnerName             string             `json:"partnername"`             // 파트너이름
+	RNR                     string             `json:"rnr"`                     // 계약,진행상태
 	ProjectBudget           float64            `json:"projectbudget"`           // 프로젝트 비용
 	ProjectType             string             `json:"projecttype"`             // 프로젝트 타입, 타입설정, "A","B","C"
 	StartDate               string             `json:"startdate"`               // 프로젝트 시작일
