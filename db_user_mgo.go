@@ -295,8 +295,6 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 	}
 	for _, word := range searchwords {
 		orQueries := []bson.M{}
-		andQueries := []bson.M{}
-		andQueries = append(andQueries, bson.M{"isleave": false})
 		if strings.HasPrefix(word, "tag:") {
 			orQueries = append(orQueries, bson.M{"tags": strings.TrimPrefix(word, "tag:")})
 		} else if strings.HasPrefix(word, "id:") {
@@ -319,7 +317,6 @@ func searchUsers(session *mgo.Session, words []string) ([]User, error) {
 			orQueries = append(orQueries, bson.M{"lastip": &bson.RegEx{Pattern: word}})
 		}
 		allQueries = append(allQueries, bson.M{"$or": orQueries})
-		allQueries = append(allQueries, bson.M{"$and": andQueries})
 	}
 
 	q := bson.M{"$and": allQueries}

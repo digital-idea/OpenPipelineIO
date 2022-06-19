@@ -241,6 +241,8 @@ func handleEditUserSubmit(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	} else {
+		u.IsLeave = false
 	}
 
 	// Oraganization 정보를 분석해서 사용자에 Organization 정보를 등록한다.
@@ -897,12 +899,14 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method == http.MethodPost {
 		searchword := r.FormValue("searchword")
-		http.Redirect(w, r, "/users?search="+searchword, http.StatusSeeOther)
+		isLeave := r.FormValue("isleave")
+		http.Redirect(w, r, fmt.Sprintf("/users?search=%s&isleave=%s", searchword, isLeave), http.StatusSeeOther)
 		return
 	}
 	q := r.URL.Query()
 	searchword := q.Get("search")
-	w.Header().Set("Content-Type", "text/html")
+	isLeave := str2bool(q.Get("isleave"))
+
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -911,6 +915,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	type recipe struct {
 		User                // 로그인한 사용자 정보
+		IsLeave    bool     // 퇴사자 포함, 비포함.
 		Users      []User   // 검색된 사용자를 담는 리스트
 		Tags       []string // 부서,파트 태그
 		Searchword string   // searchform에 들어가는 문자
@@ -920,6 +925,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		Setting Setting
 	}
 	rcp := recipe{}
+	rcp.IsLeave = isLeave
 	rcp.Setting = CachedAdminSetting
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
