@@ -3,18 +3,27 @@
 <body>
 {{template "navbar-bootstrap5" .}}
 
-<div class="p-3 text-darkmode">
+
+
+<div class="ps-3 pt-3 text-darkmode">
+    <span class="unselectable" data-bs-toggle="collapse" href="#thisMonthDeadlineDetail" role="button" aria-expanded="false" aria-controls="thisMonthDeadlineDetail">
+        이번달 마감해야하는 샷: <span id="this-month-deadline">0</span>개<br>
+    </span>
+    <div class="collapse ps-4" id="thisMonthDeadlineDetail"></div>
+</div>
+<div class="ps-3 pt-2 text-darkmode">
+    <span class="unselectable" data-bs-toggle="collapse" href="#nextMonthDeadlineDetail" role="button" aria-expanded="false" aria-controls="nextMonthDeadlineDetail">
+        다음달 마감해야하는 샷: <span id="next-month-deadline">0</span>개<br>
+    </span>
+    <div class="collapse ps-4" id="nextMonthDeadlineDetail"></div>
+</div>
+<div class="ps-3 pt-2 text-darkmode">
     <span class="unselectable" data-bs-toggle="collapse" href="#needDeadlineDetail" role="button" aria-expanded="false" aria-controls="needDeadlineDetail">
         마감일 설정이 필요한 샷: <span id="need-deadline">0</span>개<br>
     </span>
-    <div class="collapse ps-3" id="needDeadlineDetail">
-        A프로젝트: 개<br>
-        B프로젝트: 개<br>
-        C프로젝트: 개<br>
-    </div>
-    이번달 처리해야하는 샷: <span id="this-month">0</span>개<br>
-    다음달 처리해야하는 샷: <span id="next-month">0</span>개<br>
+    <div class="collapse ps-4" id="needDeadlineDetail"></div>
 </div>
+
 <div class="p-2 text-darkmode">
     전체프로젝트<br>
     <div class="progress" style="height:50px">

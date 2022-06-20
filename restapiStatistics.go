@@ -52,9 +52,11 @@ func handleAPIStatisticsDeadlineNum(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type Recipe struct {
-		Total int64 `json:"total"`
+		Projects map[string]int64 `json:"projects"`
+		Total    int64            `json:"total"`
 	}
 	rcp := Recipe{}
+	rcp.Projects = make(map[string]int64)
 	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}                               // 타입이 샷이면서(일반샷,입체샷)
 	dateFilter := bson.D{{"ddline2d", primitive.Regex{Pattern: date, Options: "i"}}, {"$or", shotFilter}} // 날짜가 포함된 아이템 검색
 	for _, project := range projects {
@@ -63,6 +65,7 @@ func handleAPIStatisticsDeadlineNum(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+		rcp.Projects[project] = count
 		rcp.Total += count
 	}
 	data, err := json.Marshal(rcp)
@@ -112,9 +115,11 @@ func handleAPIStatisticsNeedDeadlineNum(w http.ResponseWriter, r *http.Request) 
 	}
 
 	type Recipe struct {
-		Total int64 `json:"total"`
+		Projects map[string]int64 `json:"projects"`
+		Total    int64            `json:"total"`
 	}
 	rcp := Recipe{}
+	rcp.Projects = make(map[string]int64)
 	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}} // 타입이 샷이면서(일반샷,입체샷)
 	dateFilter := bson.D{{"ddline2d", ""}, {"$or", shotFilter}}             // 날짜가 포함된 아이템 검색
 	for _, project := range projects {
@@ -123,6 +128,7 @@ func handleAPIStatisticsNeedDeadlineNum(w http.ResponseWriter, r *http.Request) 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+		rcp.Projects[project] = count
 		rcp.Total += count
 	}
 	data, err := json.Marshal(rcp)
