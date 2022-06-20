@@ -840,3 +840,10 @@ span.player-trash {
 	z-index: 1000;
 	width: 100%;
 }
+
+/* 프로그래스바의 배경을 어둡게한다. */
+.progress {
+	background-color: rgb(37, 37, 37);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
