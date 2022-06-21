@@ -180,7 +180,7 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
-	type Recipe struct {
+	type Statusnum struct {
 		None    int64 `json:"none"`
 		Hold    int64 `json:"hold"`
 		Done    int64 `json:"done"`
@@ -192,7 +192,12 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 		Omit    int64 `json:"omit"`
 		Client  int64 `json:"client"`
 	}
+	type Recipe struct {
+		Projects map[string]Statusnum `json:"projects"`
+		Total    Statusnum            `json:"total"`
+	}
 	rcp := Recipe{}
+	rcp.Projects = make(map[string]Statusnum)
 	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
 	noneFilter := bson.D{{"status", NONE}, {"$or", shotFilter}}
 	holdFilter := bson.D{{"status", HOLD}, {"$or", shotFilter}}
@@ -247,16 +252,30 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-		rcp.None += noneCount
-		rcp.Hold += holdCount
-		rcp.Done += doneCount
-		rcp.Out += outCount
-		rcp.Assign += assignCount
-		rcp.Ready += readyCount
-		rcp.Wip += wipCount
-		rcp.Confirm += confirmCount
-		rcp.Omit += omitCount
-		rcp.Client += clientCount
+		// 전체 누적하기
+		rcp.Total.None += noneCount
+		rcp.Total.Hold += holdCount
+		rcp.Total.Done += doneCount
+		rcp.Total.Out += outCount
+		rcp.Total.Assign += assignCount
+		rcp.Total.Ready += readyCount
+		rcp.Total.Wip += wipCount
+		rcp.Total.Confirm += confirmCount
+		rcp.Total.Omit += omitCount
+		rcp.Total.Client += clientCount
+		// 프로젝트별로 설정하기.
+		currentProjectNum := Statusnum{}
+		currentProjectNum.None += noneCount
+		currentProjectNum.Hold += holdCount
+		currentProjectNum.Done += doneCount
+		currentProjectNum.Out += outCount
+		currentProjectNum.Assign += assignCount
+		currentProjectNum.Ready += readyCount
+		currentProjectNum.Wip += wipCount
+		currentProjectNum.Confirm += confirmCount
+		currentProjectNum.Omit += omitCount
+		currentProjectNum.Client += clientCount
+		rcp.Projects[project] = currentProjectNum
 	}
 
 	data, err := json.Marshal(rcp)
