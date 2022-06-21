@@ -16,14 +16,15 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label class="col-form-label col-form-label-sm">Select Task</label>
+                                <label class="col-form-label col-form-label-sm">Task</label>
                                 <select class="form-control form-control-sm" id="modal-addtask-taskname" onchange="setDefaultPipelinestep()">
                                 </select>
+                                <small class="form-text text-mute">Task를 선택해주세요.</small>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label class="col-form-label col-form-label-sm">Select Pipelinestep</label>
+                                <label class="col-form-label col-form-label-sm">Pipelinestep</label>
                                 <select class="form-control form-control-sm" id="modal-addtask-pipelinestep">
                                 </select>
                             </div>
@@ -104,6 +105,7 @@
                         <div class="col form-group">
                             <label class="col-form-label">Task:</label>
                             <input type="text" class="form-control form-control-sm" id="modal-edittask-task" disabled>
+                            <small class="form-text text-mute">Task 이름</small>
                         </div>
                         <div class="col form-group">
                             <label class="col-form-label">Pipelinestep</label>
@@ -124,6 +126,7 @@
                                     <option value="1">hold</option>
                                     <option value="0">none</option>
                                 </select>
+                                <small class="form-text text-mute">상태를 설정합니다.</small>
                             </div>
                         {{else}}
                             <!--Status v2-->
@@ -134,6 +137,7 @@
                                         <option value="{{.ID}}">{{.ID}}</option>
                                     {{end}}
                                 </select>
+                                <small class="form-text text-mute">상태를 설정합니다.</small>
                             </div>
                         {{end}}
                     </div>
