@@ -586,12 +586,13 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="row">
                     <div class="col">
                         <div class="from-group">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="TurnOnRocketChat" name="TurnOnRocketChat" value="true" {{if .Setting.TurnOnRocketChat}}checked{{end}}>
-                                <label class="form-check-label" for="TurnOnRocketChat">로켓쳇 전송 활성화</label>
+                                <input class="form-check-input" type="checkbox" id="EnableRocketChat" name="EnableRocketChat" value="true" {{if .Setting.EnableRocketChat}}checked{{end}}>
+                                <label class="form-check-label" for="EnableRocketChat">로켓쳇 전송 활성화</label>
                             </div>
                         </div>
                     </div>
@@ -608,6 +609,16 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="ReviewStatusMode" name="ReviewStatusMode" value="true" {{if .Setting.ReviewStatusMode}}checked{{end}}>
                                 <label class="form-check-label" for="ReviewStatusMode">리뷰 Status 모드를 사용합니다</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="from-group">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="EnableEndpoint" name="EnableEndpoint" value="true" {{if .Setting.EnableEndpoint}}checked{{end}}>
+                                <label class="form-check-label" for="EnableEndpoint">Endpoint 메뉴 활성화</label>
                             </div>
                         </div>
                     </div>

@@ -533,7 +533,7 @@ func handleAPISetReviewStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// rocketchat
-	if CachedAdminSetting.TurnOnRocketChat {
+	if CachedAdminSetting.EnableRocketChat {
 		// 해당 샷의 정보를 가지고 온다.
 		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
@@ -1065,7 +1065,7 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// rocketchat
-	if CachedAdminSetting.TurnOnRocketChat {
+	if CachedAdminSetting.EnableRocketChat {
 		// 해당 샷의 정보를 가지고 온다.
 		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
@@ -1243,7 +1243,7 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 	}
 
 	// rocketchat
-	if CachedAdminSetting.TurnOnRocketChat {
+	if CachedAdminSetting.EnableRocketChat {
 		// 해당 샷의 정보를 가지고 온다.
 		typ, err := Type(session, review.Project, review.Name)
 		if err != nil {
