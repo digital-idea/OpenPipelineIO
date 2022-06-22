@@ -4485,6 +4485,9 @@ for (var i = 0; i < input.length; i++) {
 }
 
 function setAddTaskModal(project, id, type) {
+    // AddTaskModal창이 뜨면 맨처음 Pipelinestep의 초기값을 설정한다.
+    setDefaultPipelinestep()
+    // 모달을 설정한다.
     document.getElementById("modal-addtask-project").value = project;
     document.getElementById("modal-addtask-id").value = id;
     document.getElementById("modal-addtask-type").value = type;
