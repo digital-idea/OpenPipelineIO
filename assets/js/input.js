@@ -164,6 +164,10 @@ function initModalPipelinestep() {
         return response.json()
     })
     .then((data) => {
+        // 파이프라인 스텝이 등록되지 않을 때 data가 없을 수 있다.
+        if (data === null) {
+            return
+        }
         let selectAddtask = document.getElementById('modal-addtask-pipelinestep');
         if (selectAddtask) {
             selectAddtask.innerHTML = "";
