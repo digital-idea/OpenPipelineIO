@@ -83,5 +83,6 @@ type Setting struct {
 	ReviewStatusMode                     bool    `json:"reviewstatusmode"`                     // Review Status 모드 활성화
 	RocketChatWebHookURL                 string  `json:"rocketchatwebhookurl"`                 // 로켓쳇 웹훅 URL
 	RocketChatToken                      string  `json:"rocketchattoken"`                      // 로켓쳇 토큰
-	TurnOnRocketChat                     bool    `json:"turnonrocketchat"`                     // 로켓쳇 활성화
+	EnableRocketChat                     bool    `json:"enablerocketchat"`                     // 로켓쳇 활성화
+	EnableEndpoint                       bool    `json:"enableendpoint"`                       // Endpoint 활성화
 }
