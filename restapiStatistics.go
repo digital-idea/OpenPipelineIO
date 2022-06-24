@@ -199,7 +199,8 @@ func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	rcp := Recipe{}
 	rcp.Projects = make(map[string]Statusnum)
 	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}
-	noneFilter := bson.D{{"status", NONE}, {"$or", shotFilter}}
+	noneStatusFilter := bson.A{bson.D{{"status", NONE}}, bson.D{{"status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"$or", shotFilter}}
 	holdFilter := bson.D{{"status", HOLD}, {"$or", shotFilter}}
 	doneFilter := bson.D{{"status", DONE}, {"$or", shotFilter}}
 	outFilter := bson.D{{"status", OUT}, {"$or", shotFilter}}
@@ -353,7 +354,8 @@ func handleAPI1StatisticsTag(w http.ResponseWriter, r *http.Request) {
 	if typ == "asset" {
 		typeFilter = bson.A{bson.D{{"type", "asset"}}}
 	}
-	noneFilter := bson.D{{"status", NONE}, {"tag", tagName}, {"$or", typeFilter}}
+	noneStatusFilter := bson.A{bson.D{{"status", NONE}}, bson.D{{"status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"tag", tagName}, {"$or", typeFilter}}
 	holdFilter := bson.D{{"status", HOLD}, {"tag", tagName}, {"$or", typeFilter}}
 	doneFilter := bson.D{{"status", DONE}, {"tag", tagName}, {"$or", typeFilter}}
 	outFilter := bson.D{{"status", OUT}, {"tag", tagName}, {"$or", typeFilter}}
@@ -499,7 +501,8 @@ func handleAPI1StatisticsUser(w http.ResponseWriter, r *http.Request) {
 	if typ == "asset" {
 		typeFilter = bson.A{bson.D{{"type", "asset"}}}
 	}
-	noneFilter := bson.D{{"status", NONE}, {"tasks." + task + ".user", primitive.Regex{Pattern: name, Options: "i"}}, {"$or", typeFilter}}
+	noneStatusFilter := bson.A{bson.D{{"status", NONE}}, bson.D{{"status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"tasks." + task + ".user", primitive.Regex{Pattern: name, Options: "i"}}, {"$or", typeFilter}}
 	holdFilter := bson.D{{"status", HOLD}, {"tasks." + task + ".user", primitive.Regex{Pattern: name, Options: "i"}}, {"$or", typeFilter}}
 	doneFilter := bson.D{{"status", DONE}, {"tasks." + task + ".user", primitive.Regex{Pattern: name, Options: "i"}}, {"$or", typeFilter}}
 	outFilter := bson.D{{"status", OUT}, {"tasks." + task + ".user", primitive.Regex{Pattern: name, Options: "i"}}, {"$or", typeFilter}}
@@ -650,7 +653,8 @@ func handleAPI1StatisticsTask(w http.ResponseWriter, r *http.Request) {
 	if typ == "asset" {
 		typeFilter = bson.A{bson.D{{"type", "asset"}}}
 	}
-	noneFilter := bson.D{{"tasks." + task + ".status", NONE}, {"$or", typeFilter}}
+	noneStatusFilter := bson.A{bson.D{{"tasks." + task + ".status", NONE}}, bson.D{{"tasks." + task + ".status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"$or", typeFilter}}
 	holdFilter := bson.D{{"tasks." + task + ".status", HOLD}, {"$or", typeFilter}}
 	doneFilter := bson.D{{"tasks." + task + ".status", DONE}, {"$or", typeFilter}}
 	outFilter := bson.D{{"tasks." + task + ".status", OUT}, {"$or", typeFilter}}
@@ -805,7 +809,8 @@ func handleAPI1StatisticsPipelinestep(w http.ResponseWriter, r *http.Request) {
 	}
 	// 파이프라인스탭에 등록된 이름을 가지고 온다.
 	// 해당 task 이름으로으로 array를 생성하고 등록한다.
-	noneFilter := bson.D{{"tasks." + task + ".status", NONE}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
+	noneStatusFilter := bson.A{bson.D{{"tasks." + task + ".status", NONE}}, bson.D{{"tasks." + task + ".status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
 	holdFilter := bson.D{{"tasks." + task + ".status", HOLD}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
 	doneFilter := bson.D{{"tasks." + task + ".status", DONE}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
 	outFilter := bson.D{{"tasks." + task + ".status", OUT}, {"tasks." + task + ".pipelinestep", pipelinestep}, {"$or", typeFilter}}
@@ -1493,7 +1498,8 @@ func handleAPI1StatisticsAsset(w http.ResponseWriter, r *http.Request) {
 		Client  int64 `json:"client"`
 	}
 	rcp := Recipe{}
-	noneFilter := bson.D{{"status", NONE}, {"type", "asset"}}
+	noneStatusFilter := bson.A{bson.D{{"status", NONE}}, bson.D{{"status", ""}}}
+	noneFilter := bson.D{{"$or", noneStatusFilter}, {"type", "asset"}}
 	holdFilter := bson.D{{"status", HOLD}, {"type", "asset"}}
 	doneFilter := bson.D{{"status", DONE}, {"type", "asset"}}
 	outFilter := bson.D{{"status", OUT}, {"type", "asset"}}
