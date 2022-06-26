@@ -22,14 +22,9 @@ function DeadlinenumThismonth() {
         return response.json()
     })
     .then((obj) => {
-        document.getElementById("this-month-deadline").innerHTML = obj.total
-        let detail = document.getElementById("thisMonthDeadlineDetail")
-        // 프로젝트별 정보 전달
-        for (let [key, value] of Object.entries(obj.projects)) {
-            let opt = document.createElement('div');
-            opt.innerHTML = `${key} 프로젝트: ${value}개`
-            detail.appendChild(opt);
-        }
+        let e = document.getElementById("this-month-deadline")
+        e.innerHTML = `이번달 ${obj.total}개`
+        e.style.width = (obj.total * 100) + "%"
     })
     .catch((err) => {
         console.log(err)
@@ -64,14 +59,9 @@ function DeadlinenumNextmonth() {
         return response.json()
     })
     .then((obj) => {
-        document.getElementById("next-month-deadline").innerHTML = obj.total
-        let detail = document.getElementById("nextMonthDeadlineDetail")
-        // 프로젝트별 정보 전달
-        for (let [key, value] of Object.entries(obj.projects)) {
-            let opt = document.createElement('div');
-            opt.innerHTML = `${key} 프로젝트: ${value}개`
-            detail.appendChild(opt);
-        }
+        let e = document.getElementById("next-month-deadline")
+        e.innerHTML = `다음달 ${obj.total}개`
+        e.style.width = (obj.total * 100) + "%"
     })
     .catch((err) => {
         console.log(err)
