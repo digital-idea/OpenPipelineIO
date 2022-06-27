@@ -3,100 +3,155 @@
 <body>
 {{template "navbar-bootstrap5" .}}
 
-
-
-<div class="ps-3 pt-3 text-darkmode">
-    <span class="unselectable" data-bs-toggle="collapse" href="#thisMonthDeadlineDetail" role="button" aria-expanded="false" aria-controls="thisMonthDeadlineDetail">
-        이번달 마감해야하는 샷: <span id="this-month-deadline">0</span>개<br>
-    </span>
-    <div class="collapse ps-4" id="thisMonthDeadlineDetail"></div>
-</div>
-<div class="ps-3 pt-2 text-darkmode">
-    <span class="unselectable" data-bs-toggle="collapse" href="#nextMonthDeadlineDetail" role="button" aria-expanded="false" aria-controls="nextMonthDeadlineDetail">
-        다음달 마감해야하는 샷: <span id="next-month-deadline">0</span>개<br>
-    </span>
-    <div class="collapse ps-4" id="nextMonthDeadlineDetail"></div>
-</div>
-<div class="ps-3 pt-2 text-darkmode">
-    <span class="unselectable" data-bs-toggle="collapse" href="#needDeadlineDetail" role="button" aria-expanded="false" aria-controls="needDeadlineDetail">
-        마감일 설정이 필요한 샷: <span id="need-deadline">0</span>개<br>
-    </span>
-    <div class="collapse ps-4" id="needDeadlineDetail"></div>
-</div>
-
 <div class="p-2 text-darkmode">
     전체 프로젝트 Shot<br>
-    <div class="progress" style="height:50px" id="total-shot-progress">
+    <div class="progress mt-2" style="height:30px">
+        <div class="progress-bar bg-inprogress" role="progressbar" style="width: 60%" aria-valuenow="600" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="In Progress">In Progress 600개</div>
+        <div class="progress-bar bg-finalapproved" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Final Approved">Final Approved 300개</div>
+        <div class="progress-bar bg-onhold" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="On Hold">On Hold 100개</div>
     </div>
-</div>
-
-<div class="p-2 text-darkmode">
-    전체 프로젝트 Shot 샘플<br>
-    <div class="progress" style="height:50px">
-        <div class="progress-bar bg-assign" role="progressbar" style="width: 10%" aria-valuenow="1000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="assign:1000">assign<br>1000</div>
-        <div class="progress-bar bg-ready" role="progressbar" style="width: 2%" aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="ready:200">ready<br>200</div>
-        <div class="progress-bar bg-wip" role="progressbar" style="width: 4%" aria-valuenow="400" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="wip:400">wip<br>400</div>
-        <div class="progress-bar bg-confirm" role="progressbar" style="width: 3%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="confirm:300">confirm<br>300</div>
-        <div class="progress-bar bg-done" role="progressbar" style="width: 20%" aria-valuenow="2000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="done:2000">done<br>2000</div>
-        <div class="progress-bar bg-out" role="progressbar" style="width: 20%" aria-valuenow="2000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="out:2000">out<br>2000</div>
-        <div class="progress-bar bg-omit" role="progressbar" style="width: 1%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="omit:100">omit<br>100</div>
-        <div class="progress-bar bg-hold" role="progressbar" style="width: 2%" aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="hold:200">hold<br>200</div>
-        <div class="progress-bar bg-none" role="progressbar" style="width: 38%" aria-valuenow="3800" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="none:3800">none<br>3800</div>
+    <div class="progress mt-2" style="height:50px" id="total-shot-progress">
     </div>
-</div>
-
-
-<div class="p-2 text-darkmode">
-    A프로젝트<br>
-    <div class="progress" style="height:14px">
-        <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">wip</div>
-        <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">done</div>
-        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">ready</div>
-    </div>
-</div>
-<div class="p-2 text-darkmode">
-    B프로젝트<br>
-    <div class="progress" style="height:14px">
-        <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">wip</div>
-        <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">done</div>
-        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">ready</div>
-    </div>
-</div>
-
-
-
-
-
-<div class="p-3 text-darkmode">
-    <!--정리가 필요한 것-->
-    총 200,000샷 남음(남았다는 것은 애매한 개념이다. -> 상태바로 바꾸기)<br>
-    A프로젝트: 110,000샷 남음(각 프로젝트 별로도 상태바로 하는게 좋아보여요.)<br>
-    B프로젝트: 10,000샷 남음<br>
-</div>
-
-<div class="p-3 text-darkmode">
-    A팀 A프로젝트: %<br>
-    A팀 B프로젝트: %<br>
-    A팀 총 % 진행중<br>
-</div>
-<div class="p-2 text-darkmode">
-    합성1팀<br>
-    <div class="progress" style="height:28px">
-        <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">wip</div>
-        <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">done</div>
-        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">ready</div>
-    </div>
-</div>
-
-<div class="p-2 text-darkmode">
-    합성1팀 A프로젝트<br>
-    <div class="progress" style="height:14px">
-        <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">wip</div>
-        <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">done</div>
-        <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">ready</div>
-    </div>
+    <small>none 갯수</small>
 </div>
     
+<div class="p-2 text-darkmode">
+    Task별 비율<br>
+    <div class="progress mt-2" style="height:30px">
+        <div class="progress-bar"  role="progressbar" style="background-color:#6d5151; width: 50%" aria-valuenow="500" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="comp">Comp 500개</div>
+        <div class="progress-bar"  role="progressbar" style="background-color:#489855; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="fx">Fx 100개</div>
+        <div class="progress-bar"  role="progressbar" style="background-color:#3abc7f; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="matte">Matte 100개</div>
+        <div class="progress-bar"  role="progressbar" style="background-color:#5a478e; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="ani">Ani 100개</div>
+        <div class="progress-bar"  role="progressbar" style="background-color:#8e4c8e; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="model">Model 100개</div>
+        <div class="progress-bar"  role="progressbar" style="background-color:#96884c; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="light">Light 100개</div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="text-darkmode">
+            이번달 / 다음달 마감샷수<br>
+            <div class="progress" style="height:30px">
+                <div class="progress-bar bg-inside" role="progressbar"   data-bs-toggle="tooltip" data-bs-placement="top" title="이번달" id="this-month-deadline"></div>
+                <div class="progress-bar bg-outside" role="progressbar"  data-bs-toggle="tooltip" data-bs-placement="top" title="다음달" id="next-month-deadline"></div>
+            </div>
+            <small>마감일이 설정되지 않은 샷: <span id="need-deadline">0</span>개</small>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="text-darkmode">
+            내부와 외부의 샷 비율<br>
+            <div class="progress" style="height:30px">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="6000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="내부">내부 6000샷</div>
+                <div class="progress-bar bg-outside" role="progressbar" style="width: 40%" aria-valuenow="4000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="외부">외부 4000샷</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="text-darkmode">
+            2D / 3D의 비율<br>
+            <div class="progress" style="height:30px">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="7000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="2D">2D 7000샷</div>
+                <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="3000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="3D">3D 3000샷</div>
+            </div>
+        </div>        
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="text-darkmode">
+            Shot / Asset의 비율<br>
+            <div class="progress" style="height:30px">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="700" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Shot">샷 700개</div>
+                <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Asset">에셋 300개</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pt-5"></div>
+<hr class="p-0 m-0">
+<div class="p-2 text-darkmode">
+    <div class="row">
+        <div class="col-1 text-center">
+            <span class="align-middle">구 분</span>
+        </div>
+        <div class="col-5 text-center">
+            <span class="align-middle">진 행 률</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">다가오는 마감일</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">다가오는 마감일</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">다가오는 마감일</span>
+        </div>
+    </div>
+</div>
+<hr class="p-0 m-0">
+
+<div class="p-2 text-darkmode">
+    <div class="row">
+        <div class="col-1 text-center">
+            <span class="align-middle">합성1팀</span>
+        </div>
+        <div class="col-5">
+            <div class="progress">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar bg-assign" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15</div>
+                <div class="progress-bar bg-wip" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30</div>
+                <div class="progress-bar bg-confirm" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20</div>
+                <div class="progress-bar bg-done" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20</div>
+            </div>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-06-15</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-07-15</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-08-15</span>
+        </div>
+    </div>
+</div>
+
+<hr class="p-0 m-0">
+
+<div class="p-2 text-darkmode">
+    <div class="row">
+        <div class="col-1 text-center">
+            <span class="align-middle">합성2팀</span>
+        </div>
+        <div class="col-5">
+            <div class="progress">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar bg-assign" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15</div>
+                <div class="progress-bar bg-wip" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30</div>
+                <div class="progress-bar bg-confirm" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20</div>
+                <div class="progress-bar bg-done" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20</div>
+            </div>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-06-15</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-07-15</span>
+        </div>
+        <div class="col-2 text-center">
+            <span class="align-middle">2022-08-15</span>
+        </div>
+    </div>
+</div>
+
+<hr class="p-0 m-0">
     
 {{template "footerBootstrap"}}
 </body>

@@ -102,6 +102,32 @@ body {
 	font-weight: 300;
 }
 
+.bg-inside {
+	background-color: rgb(34,134,109);
+	color:#ffffff;
+}
+
+.bg-outside {
+	background-color: rgb(20,100,130);
+	color:#ffffff;
+}
+
+.bg-inprogress {
+	background-color: rgb(183,206,73);
+	color:#000000;
+}
+
+.bg-finalapproved {
+	background-color: rgb(34,134,109);
+	color:#ffffff;
+}
+
+.bg-onhold {
+	background-color: rgb(37, 37, 37);
+	color:#ffffff;
+}
+
+
 .bg-darklight {
 	background-color: #353333;
 }
@@ -846,4 +872,8 @@ span.player-trash {
 	background-color: rgb(37, 37, 37);
 	-webkit-box-shadow: none;
 	box-shadow: none;
+}
+
+hr {
+	border-top: 1px solid rgb(168, 168, 168);
 }
