@@ -116,11 +116,12 @@ function TotalShotProgress() {
     .then((obj) => {
         let progress = document.getElementById("total-shot-progress")
         let total = 0
+        let none = 0
         for (let [key, value] of Object.entries(obj.total)) {
             total += value
         }
-        let order = ["assign","ready","wip","confirm","done","out","omit","hold","none"]
-        for (let i = 0; i < order.length; i++) { 
+        let order = ["none","assign","ready","wip","confirm","done","out","omit","hold"]
+        for (let i = 0; i < order.length; i++) {
             for (let [key, value] of Object.entries(obj.total)) {
                 if (value === 0) {
                     continue
@@ -128,18 +129,26 @@ function TotalShotProgress() {
                 if (!(order[i] == key)) {
                     continue
                 }
+                if (key === "none") {
+                    // none status는 그래프를 그리지 않는다.
+                    none = value
+                    document.getElementById("NoneStatusNum").innerHTML = value
+                    continue
+                }
+                
                 let opt = document.createElement('div');
                 opt.classList.add("progress-bar")
                 opt.classList.add("bg-"+key)
                 opt.role = "progressbar"
-                opt.style = "width: " + (value / total) * 100 + "%"
+                let percent = (value / (total - none)) * 100
+                opt.style = "width: " + percent.toFixed(1) + "%"
                 opt.setAttribute("aria-valuenow",value)
                 opt.setAttribute("aria-valuemin","0")
-                opt.setAttribute("aria-valuemax",total)
+                opt.setAttribute("aria-valuemax",(total - none))
                 opt.setAttribute("data-bs-toggle","tooltip")
                 opt.setAttribute("data-bs-placement","top")
                 opt.setAttribute("title", key + ":" + value)
-                opt.innerHTML = key + "<br>" + value
+                opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
                 progress.appendChild(opt);
             }
         }
