@@ -4,25 +4,22 @@
 {{template "navbar-bootstrap5" .}}
 
 <div class="p-2 text-darkmode">
-    전체 프로젝트 Shot
-    <span class="badge finger badge-outline-darkmode">Project</span>
-    <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
-    <br>
-    <div class="progress mt-2" style="height:30px">
-        <div class="progress-bar bg-inprogress" role="progressbar" style="width: 60%" aria-valuenow="600" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="In Progress">In Progress 600개</div>
-        <div class="progress-bar bg-finalapproved" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Final Approved">Final Approved 300개</div>
-        <div class="progress-bar bg-onhold" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="On Hold">On Hold 100개</div>
+    <div class="">
+        <span class="align-middle">전체 프로젝트 Shot</span>
+        <span class="badge finger badge-outline-darkmode">Project</span>
+        <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
     </div>
-    <div class="progress mt-2" style="height:50px" id="total-shot-progress">
-    </div>
-    <small>none 갯수</small>
+    <div class="progress mt-2" style="height:30px" id="total-shot-progress"></div>
+    <div class="progress mt-2" style="height:50px" id="total-shot-status-progress"></div>
+    <small>None Status 갯수: <span id="NoneStatusNum"></span></small>
 </div>
     
 <div class="p-2 text-darkmode">
-    Task별 비율
-    <span class="badge finger badge-outline-darkmode">Project</span>
-    <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
-    <br>
+    <div class="">
+        <span class="align-middle">Task별 비율</span>
+        <span class="badge finger badge-outline-darkmode">Project</span>
+        <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+    </div>
     <div class="progress mt-2" style="height:30px">
         <div class="progress-bar"  role="progressbar" style="background-color:#6d5151; width: 50%" aria-valuenow="500" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="comp">Comp 500개</div>
         <div class="progress-bar"  role="progressbar" style="background-color:#489855; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="fx">Fx 100개</div>
@@ -193,12 +190,6 @@
     DeadlinenumThismonth() // 이번달 마감샷 갯수
     DeadlinenumNextmonth() // 다음달 마감샷 갯수
     TotalShotProgress() // 전체 샷 진행바
-</script>
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
 </script>
 </html>
 {{end}}
