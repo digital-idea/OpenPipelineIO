@@ -85,13 +85,6 @@ function NeedDeadlinenum() {
     .then((obj) => {
         // 전체 갯수 전달
         document.getElementById("need-deadline").innerHTML = obj.total
-        let detail = document.getElementById("needDeadlineDetail")
-        // 프로젝트별 정보 전달
-        for (let [key, value] of Object.entries(obj.projects)) {
-            let opt = document.createElement('div');
-            opt.innerHTML = `${key} 프로젝트: ${value}개`
-            detail.appendChild(opt);
-        }
     })
     .catch((err) => {
         console.log(err)
@@ -114,9 +107,14 @@ function TotalShotProgress() {
         return response.json()
     })
     .then((obj) => {
-        let progress = document.getElementById("total-shot-progress")
         let total = 0
         let none = 0
+        let onHold = 0
+        let inProgress = 0
+        let finalApproved = 0
+
+        // 전체 샷 진행챠트 그리기
+        let statusProgress = document.getElementById("total-shot-status-progress")
         for (let [key, value] of Object.entries(obj.total)) {
             total += value
         }
@@ -135,7 +133,15 @@ function TotalShotProgress() {
                     document.getElementById("NoneStatusNum").innerHTML = value
                     continue
                 }
-                
+                if (key === "assign" || key === "ready" || key === "wip" || key === "confirm" || key === "out") {
+                    inProgress += value
+                }
+                if (key === "done") {
+                    finalApproved += value
+                }
+                if (key === "omit" || key === "hold") {
+                    onHold += value
+                }
                 let opt = document.createElement('div');
                 opt.classList.add("progress-bar")
                 opt.classList.add("bg-"+key)
@@ -149,8 +155,32 @@ function TotalShotProgress() {
                 opt.setAttribute("data-bs-placement","top")
                 opt.setAttribute("title", key + ":" + value)
                 opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
-                progress.appendChild(opt);
+                statusProgress.appendChild(opt);
             }
+        }
+        // 진행률 챠트 그리기
+        let progress = document.getElementById("total-shot-progress")
+        progresslist = [
+            {"title":"In Progress", "style":"inprogress", "num":inProgress},
+            {"title":"Final Approved", "style":"finalapproved", "num":finalApproved},
+            {"title":"On Hold", "style":"onhold", "num":onHold},
+        ]
+        for (let i in progresslist) {
+            let opt = document.createElement('div');
+            opt.classList.add("progress-bar")
+            opt.classList.add("bg-"+progresslist[i].style)
+            opt.role = "progressbar"
+            let percent = (progresslist[i].num / (inProgress + finalApproved + onHold)) * 100
+            opt.style = "width: " + percent.toFixed(1) + "%"
+            opt.setAttribute("aria-valuenow",progresslist[i].num)
+            opt.setAttribute("aria-valuemin","0")
+            opt.setAttribute("aria-valuemax",(inProgress + finalApproved + onHold))
+            opt.setAttribute("data-bs-toggle","tooltip")
+            opt.setAttribute("data-bs-placement","top")
+            let text = `${progresslist[i].title} ${percent.toFixed(1)}%(${progresslist[i].num})`
+            opt.setAttribute("title", text)
+            opt.innerHTML = text
+            progress.appendChild(opt);
         }
     })
     .catch((err) => {
