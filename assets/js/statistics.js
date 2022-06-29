@@ -153,7 +153,7 @@ function TotalShotProgress() {
                 opt.setAttribute("aria-valuemax",(total - none))
                 opt.setAttribute("data-bs-toggle","tooltip")
                 opt.setAttribute("data-bs-placement","top")
-                opt.setAttribute("title", key + ":" + value)
+                opt.setAttribute("title", `${key} ${percent.toFixed(1)}%(${value})`)
                 opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
                 statusProgress.appendChild(opt);
             }
@@ -177,13 +177,21 @@ function TotalShotProgress() {
             opt.setAttribute("aria-valuemax",(inProgress + finalApproved + onHold))
             opt.setAttribute("data-bs-toggle","tooltip")
             opt.setAttribute("data-bs-placement","top")
-            let text = `${progresslist[i].title} ${percent.toFixed(1)}%(${progresslist[i].num})`
-            opt.setAttribute("title", text)
-            opt.innerHTML = text
+            let title = `${progresslist[i].title} ${percent.toFixed(1)}%(${progresslist[i].num})`
+            opt.setAttribute("title", title)
+            opt.innerHTML = title
             progress.appendChild(opt);
         }
+        initTooltip()
     })
     .catch((err) => {
         console.log(err)
     });
+}
+
+function initTooltip() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 }
