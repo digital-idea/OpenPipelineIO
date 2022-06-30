@@ -82,7 +82,7 @@ type ProjectForPartner struct {
 	PaymentCycle            float64            `json:"paymentcycle"`            // 지급회차 1/2, 4/6: 현재 지급단계, 총 지급횟수
 	PaymentDateForClient    string             `json:"paymentdateforclient"`    // 클라이언트에게 돈을 받는날짜, 프로젝트(프로젝트 월별 지급일)
 	PaymentDateForVender    string             `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
-	AnnounceIR              bool               `json:"announceir"`              // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다.
+	AnnounceIR              bool               `json:"announceir"`              // 프로젝트의 매출이 작년매출액 기준 10%를 넘으면 IR공시를 진행해야한다. <- 이 부분은 이곳에 있으면 안된다.
 	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
 	Messenger               string             `json:"messanger"`               // 사용 메신저 종류
 	MessengerID             string             `json:"messengerid"`             // 메신저 ID
