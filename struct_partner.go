@@ -74,7 +74,7 @@ type ProjectForPartner struct {
 	StartDate               string             `json:"startdate"`               // 프로젝트 시작일
 	EndDate                 string             `json:"enddate"`                 // 프로젝트 완료일
 	AmountOfShot            int                `json:"amountofshot"`            // 파트너에게 가는 분량
-	PercentageOfTotalBudget float64            `json:"percentageoftotalbudget"` // 나가는 비용이 몇 퍼센트인가?
+	PercentageOfTotalBudget float64            `json:"percentageoftotalbudget"` // 나가는 비용이 프로젝트 총 비용의 몇 퍼센트인가?
 	Description             string             `json:"description"`             // 외주내용
 	PricePerShot            float64            `json:"pricepershot"`            // 컷당 가격
 	PricePerFrame           float64            `json:"priceperframe"`           // 프레임당 가격
