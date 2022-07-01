@@ -7317,6 +7317,9 @@ func handleAPIMailInfo(w http.ResponseWriter, r *http.Request) {
 			}
 			// 팀장의 이메일을 참조에 추가한다. 만약 기존 메일리스트에 메일값이 중복되어 있다면, 제거한다.
 			for _, leader := range append(leaderlist1, leaderlist2...) {
+				if leader.IsLeave { // 퇴사자는 제거한다.
+					continue
+				}
 				has := false
 				for _, email := range append(rcp.Mails, rcp.Cc...) {
 					if email == leader.Email {
