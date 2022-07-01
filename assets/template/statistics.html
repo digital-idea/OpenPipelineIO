@@ -4,19 +4,22 @@
 {{template "navbar-bootstrap5" .}}
 
 <div class="p-2 text-darkmode">
-    전체 프로젝트 Shot<br>
-    <div class="progress mt-2" style="height:30px">
-        <div class="progress-bar bg-inprogress" role="progressbar" style="width: 60%" aria-valuenow="600" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="In Progress">In Progress 600개</div>
-        <div class="progress-bar bg-finalapproved" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Final Approved">Final Approved 300개</div>
-        <div class="progress-bar bg-onhold" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="On Hold">On Hold 100개</div>
+    <div class="">
+        <span class="align-middle">전체 프로젝트 Shot</span>
+        <span class="badge finger badge-outline-darkmode">Project</span>
+        <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
     </div>
-    <div class="progress mt-2" style="height:50px" id="total-shot-progress">
-    </div>
-    <small>none 갯수</small>
+    <div class="progress mt-2" style="height:30px" id="total-shot-progress"></div>
+    <div class="progress mt-2" style="height:50px" id="total-shot-status-progress"></div>
+    <small>None Status 갯수: <span id="NoneStatusNum"></span></small>
 </div>
     
 <div class="p-2 text-darkmode">
-    Task별 비율<br>
+    <div class="">
+        <span class="align-middle">Task별 비율</span>
+        <span class="badge finger badge-outline-darkmode">Project</span>
+        <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+    </div>
     <div class="progress mt-2" style="height:30px">
         <div class="progress-bar"  role="progressbar" style="background-color:#6d5151; width: 50%" aria-valuenow="500" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="comp">Comp 500개</div>
         <div class="progress-bar"  role="progressbar" style="background-color:#489855; width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="fx">Fx 100개</div>
@@ -30,8 +33,12 @@
 <div class="row p-2">
     <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="text-darkmode">
-            이번달 / 다음달 마감샷수<br>
-            <div class="progress" style="height:30px">
+            <div clsas="row">
+                <span class="align-middle">이번달 / 다음달 마감샷수</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+            </div>
+            <div class="progress mt-1" style="height:30px">
                 <div class="progress-bar bg-inside" role="progressbar"   data-bs-toggle="tooltip" data-bs-placement="top" title="이번달" id="this-month-deadline"></div>
                 <div class="progress-bar bg-outside" role="progressbar"  data-bs-toggle="tooltip" data-bs-placement="top" title="다음달" id="next-month-deadline"></div>
             </div>
@@ -40,8 +47,12 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="text-darkmode">
-            내부와 외부의 샷 비율<br>
-            <div class="progress" style="height:30px">
+            <div clsas="row">
+                <span class="align-middle">내부와 외부의 샷 비율</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+            </div>
+            <div class="progress mt-1" style="height:30px">
                 <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="6000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="내부">내부 6000샷</div>
                 <div class="progress-bar bg-outside" role="progressbar" style="width: 40%" aria-valuenow="4000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="외부">외부 4000샷</div>
             </div>
@@ -52,8 +63,12 @@
 <div class="row p-2">
     <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="text-darkmode">
-            2D / 3D의 비율<br>
-            <div class="progress" style="height:30px">
+            <div clsas="row">
+                <span class="align-middle">2D / 3D의 비율</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+            </div>
+            <div class="progress mt-1" style="height:30px">
                 <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="7000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="2D">2D 7000샷</div>
                 <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="3000" aria-valuemin="0" aria-valuemax="10000" data-bs-toggle="tooltip" data-bs-placement="top" title="3D">3D 3000샷</div>
             </div>
@@ -61,8 +76,12 @@
     </div>
     <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="text-darkmode">
-            Shot / Asset의 비율<br>
-            <div class="progress" style="height:30px">
+            <div clsas="row">
+                <span class="align-middle">Shot / Asset의 비율</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
+            </div>
+            <div class="progress mt-1" style="height:30px">
                 <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="700" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Shot">샷 700개</div>
                 <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Asset">에셋 300개</div>
             </div>
@@ -74,10 +93,10 @@
 <hr class="p-0 m-0">
 <div class="p-2 text-darkmode">
     <div class="row">
-        <div class="col-1 text-center">
+        <div class="col-2 text-center">
             <span class="align-middle">구 분</span>
         </div>
-        <div class="col-5 text-center">
+        <div class="col-4 text-center">
             <span class="align-middle">진 행 률</span>
         </div>
         <div class="col-2 text-center">
@@ -95,10 +114,14 @@
 
 <div class="p-2 text-darkmode">
     <div class="row">
-        <div class="col-1 text-center">
-            <span class="align-middle">합성1팀</span>
+        <div class="col-2 text-center">
+            <div class="">
+                <span class="align-middle">합성1팀</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Artist</span>
+            </div>
         </div>
-        <div class="col-5">
+        <div class="col-4">
             <div class="progress">
                 <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
             </div>
@@ -125,10 +148,14 @@
 
 <div class="p-2 text-darkmode">
     <div class="row">
-        <div class="col-1 text-center">
-            <span class="align-middle">합성2팀</span>
+        <div class="col-2 text-center">
+            <div class="">
+                <span class="align-middle">합성2팀</span>
+                <span class="badge finger badge-outline-darkmode">Project</span>
+                <span class="badge finger badge-outline-darkmode">Artist</span>
+            </div>
         </div>
-        <div class="col-5">
+        <div class="col-4">
             <div class="progress">
                 <div class="progress-bar bg-inside" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
             </div>
@@ -156,7 +183,6 @@
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/tata/tata.js"></script>
 <script src="/assets/js/statistics.js"></script>
 
 <script>
@@ -164,12 +190,6 @@
     DeadlinenumThismonth() // 이번달 마감샷 갯수
     DeadlinenumNextmonth() // 다음달 마감샷 갯수
     TotalShotProgress() // 전체 샷 진행바
-</script>
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
 </script>
 </html>
 {{end}}

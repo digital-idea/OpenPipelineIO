@@ -24,6 +24,7 @@ CSI(Creation Status Integrator)는 영상(영화,드라마), 게임, 에니메�
 1. 장비관리 툴
 1. 웹 스캔 툴: 도토리의 multi clip, multi footage 연동
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
+1. 샷 파일 브라우져
 
 ### 데이터베이스(mongoDB) 설치 및 서비스 실행
 
