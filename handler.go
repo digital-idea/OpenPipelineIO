@@ -75,6 +75,7 @@ var funcMap = template.FuncMap{
 	"mapToSlice":                   mapToSlice,
 	"hasStatus":                    hasStatus,
 	"GenPageNums":                  GenPageNums,
+	"floatToString": floatToString,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
@@ -301,6 +302,7 @@ func webserver(port string) {
 
 	// Partner
 	r.HandleFunc("/partners", handlePartners)
+	r.HandleFunc("/projectsforpartner", handleProjectsForPartner)
 
 	// Endpoint
 	r.HandleFunc("/endpoints", handleEndpoints)
@@ -425,7 +427,8 @@ func webserver(port string) {
 
 	// restAPI Project
 	r.HandleFunc("/api/project", handleAPIProject)
-	r.HandleFunc("/api/projects", handleAPIProjects)
+	r.HandleFunc("/api/projects", handleAPIProjects) // legacy
+	r.HandleFunc("/api2/projects", handleAPI2Projects).Methods("GET")
 	r.HandleFunc("/api/addproject", handleAPIAddproject)
 	r.HandleFunc("/api/projecttags", handleAPIProjectTags)
 	r.HandleFunc("/api/projectassettags", handleAPIProjectAssetTags)
@@ -615,6 +618,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/partner/{id}", getPartnerHandler).Methods("GET")
 	r.HandleFunc("/api/partner/{id}", putPartnerHandler).Methods("PUT")
 	r.HandleFunc("/api/partner/{id}", deletePartnerHandler).Methods("DELETE")
+	r.HandleFunc("/api/partners", getPartnersHandler).Methods("GET")
 
 	// REST API Partner
 	r.HandleFunc("/api/projectforpartner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)

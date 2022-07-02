@@ -66,7 +66,7 @@ func setProjectForPartner(client *mongo.Client, s ProjectForPartner) error {
 	return nil
 }
 
-func allProjectForPartners(client *mongo.Client) ([]ProjectForPartner, error) {
+func allProjectForPartner(client *mongo.Client) ([]ProjectForPartner, error) {
 	collection := client.Database(*flagDBName).Collection("projectforpartner")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

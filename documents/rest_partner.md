@@ -7,6 +7,7 @@ Partner Restapi 입니다.
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
 |/api/partner/{id}|파트너 정보를 가져옵니다|id|curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/partner/{id}"
+|/api/partners|모든 파트너 정보를 가져옵니다|id|curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/partners"
 
 ## POST
 

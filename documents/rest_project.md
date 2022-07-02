@@ -15,6 +15,7 @@ Python, Go, Java, C++, node.JS 언어를 이용해서 restAPI를 사용할 수 �
 | --- | --- | --- | --- |
 | /api/project | 프로젝트 정보를 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/project?id=TEMP"` |
 | /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 옵니다. | status | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projects?status=post"` |
+| /api2/projects | 프로젝트의 모든 정보를 가지고 옵니다. | . | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api2/projects"` |
 | /api/projecttags | 프로젝트에 사용중인 tags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projecttags?project=TEMP"` |
 | /api/projectassettags | 프로젝트에 사용중인 asssettags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projectassettags?project=TEMP"` |
 

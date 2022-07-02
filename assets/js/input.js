@@ -149,6 +149,9 @@ function setModal(modalID, value) {
     document.getElementById(modalID).value = value;
 }
 
+
+
+
 // initModalPipelinestep 함수는 modal에서 pipelinestep 값이 들어가는 부분을 일괄 옵션을 추가한다.
 function initModalPipelinestep() {
     fetch('/api/pipelinesteps', {

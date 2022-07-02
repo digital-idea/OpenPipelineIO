@@ -1,4 +1,7 @@
 {{define "navbar" }}
+<input type="hidden" id="token" value="{{$.User.Token}}">
+<input type="hidden" id="userid" value="{{$.User.ID}}">
+
 <nav class="navbar navbar-expand-lg navbar-darkmode">
     <a class="navbar-brand" href="/">{{.Setting.AppName}}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +89,7 @@
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
               <a class="dropdown-item" href="/partners">Partner</a>
+              <a class="dropdown-item" href="/projectsforpartner">Projects For Partner</a>
               {{if .Setting.EnableEndpoint}}
                 <a class="dropdown-item" href="/endpoints">Endpoint</a>
               {{end}}
