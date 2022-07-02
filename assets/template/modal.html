@@ -1,6 +1,4 @@
 {{define "modal"}}
-    <input type="hidden" id="token" value="{{$.User.Token}}">
-    <input type="hidden" id="userid" value="{{$.User.ID}}">
     {{template "modal-review" .}}
     {{template "modal-export" .}}
     {{template "modal-comment" .}}

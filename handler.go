@@ -426,7 +426,8 @@ func webserver(port string) {
 
 	// restAPI Project
 	r.HandleFunc("/api/project", handleAPIProject)
-	r.HandleFunc("/api/projects", handleAPIProjects)
+	r.HandleFunc("/api/projects", handleAPIProjects) // legacy
+	r.HandleFunc("/api2/projects", handleAPI2Projects).Methods("GET")
 	r.HandleFunc("/api/addproject", handleAPIAddproject)
 	r.HandleFunc("/api/projecttags", handleAPIProjectTags)
 	r.HandleFunc("/api/projectassettags", handleAPIProjectAssetTags)

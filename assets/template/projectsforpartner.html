@@ -2,7 +2,8 @@
 {{template "headBootstrap5"}}
 <body>
 {{template "navbar-bootstrap5" .}}
-{{template "modal-bootstrap5" .}}
+{{template "modal-projectforpartner" .}}
+
 <div class="p-3">
     <div class="row" id="projectforpartner">
         {{range .ProjectsForPartner}}
@@ -37,5 +38,6 @@
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script src="/assets/tata/tata.js"></script>
 <script src="/assets/js/projectforpartner.js"></script>
+<script src="/assets/js/initproject.js"></script>
 </html>
 {{end}}

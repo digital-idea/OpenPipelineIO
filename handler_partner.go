@@ -118,36 +118,12 @@ func handleProjectsForPartner(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type recipe struct {
+		Setting Setting
 		User
-		SearchOption
-		Setting            Setting
 		ProjectsForPartner []ProjectForPartner
-		Projectlist        []string
-		TasksettingNames   []string
-		Stages             []Stage
-		Status             []Status
 	}
 	rcp := recipe{}
-	rcp.Projectlist, err = ProjectlistV2(client)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.TasksettingNames, err = TaskSettingNamesV2(client)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Status, err = AllStatusV2(client)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	rcp.Stages, err = AllStagesV2(client)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	rcp.Setting = CachedAdminSetting
 	rcp.User, err = getUserV2(client, ssid.ID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -158,7 +134,6 @@ func handleProjectsForPartner(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	rcp.Setting = CachedAdminSetting
 	err = TEMPLATES.ExecuteTemplate(w, "projectsforpartner", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
