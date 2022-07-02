@@ -300,6 +300,7 @@ func handleEditStatusSubmit(w http.ResponseWriter, r *http.Request) {
 		DefaultOn:         str2bool(r.FormValue("defaulton")),
 		InitStatus:        str2bool(r.FormValue("initstatus")),
 		ReviewStatusEvent: r.FormValue("reviewstatusevent"),
+		ProgressCategory:  r.FormValue("progresscategory"),
 	}
 	err = s.CheckError()
 	if err != nil {

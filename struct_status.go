@@ -13,6 +13,7 @@ type Status struct {
 	DefaultOn         bool    `json:"defaulton"`         // 검색바 기본선택 여부
 	InitStatus        bool    `json:"initstatus"`        // 아이템 생성시 최초 설정되는 Status 설정값
 	ReviewStatusEvent string  `json:"reviewstatusevent"` // 리뷰상태 변경시 발생하는 이벤트
+	ProgressCategory  string  `json:"progresscategory"`  // 상태에 대한 큰 카테고리, In Progress, Final Approved, On Hold 같은 개념정의
 }
 
 // CheckError 메소드는 Status 자료구조의 에러를 체크한다.
