@@ -16,14 +16,15 @@ function initModalProjects() {
             return
         }
         let selectProject = document.getElementById('projectforpartner-projectname');
-        if (selectProject) { // 해당 elements가 존재한다면 값을 추가한다.
-            selectProject.innerHTML = "";
-            for (let j = 0; j < data.length; j++){
-                let opt = document.createElement('option');
-                opt.value = data[j].id;
-                opt.innerHTML = data[j].id;
-                selectProject.appendChild(opt);
-            }
+        if (selectProject === null) {
+            return
+        }
+        selectProject.innerHTML = "";
+        for (let j = 0; j < data.length; j++){
+            let opt = document.createElement('option');
+            opt.value = data[j].id;
+            opt.innerHTML = data[j].id;
+            selectProject.appendChild(opt);
         }
     })
     .catch((err) => {
