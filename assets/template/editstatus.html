@@ -83,7 +83,7 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label class="form-text">Review Event</label>
+                    <label>Review Event</label>
                     <select class="form-control" name="reviewstatusevent">
                         <option value="wait" {{if eq .Status.ReviewStatusEvent "wait" }}selected{{end}}>wait</option>
                         <option value="comment" {{if eq .Status.ReviewStatusEvent "comment" }}selected{{end}}>comment</option>
@@ -91,6 +91,20 @@
                         <option value="closed" {{if eq .Status.ReviewStatusEvent "closed" }}selected{{end}}>closed</option>
                     </select>
                     <small>리뷰 상태 변경시 이벤트</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Progress Category</label>
+                    <select class="form-control" name="progresscategory">
+                        <option value="inprogress" {{if eq .Status.ProgressCategory "" "inprogress" }}selected{{end}}>In Progress</option>
+                        <option value="finalapproved" {{if eq .Status.ProgressCategory "finalapproved" }}selected{{end}}>Final Approved</option>
+                        <option value="onhold" {{if eq .Status.ProgressCategory "onhold" }}selected{{end}}>On Hold</option>
+                    </select>
+                    <small>통계 처리시 카테고리</small>
                 </div>
             </div>
         </div>

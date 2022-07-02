@@ -20,6 +20,9 @@
 								<svg class="bi flex-shrink-0 me-2" style="color: {{.TextColor}};" width="20" height="20" role="img" aria-label=""><use xlink:href="#check-box"/></svg>
 							{{end}}
 							{{.ID}}
+							{{if .ProgressCategory}}
+							 - {{.ProgressCategory}}
+							{{end}}
 							<span class="badge rounded-pill bg-light text-dark">{{.Order}}</span>
 							{{if .InitStatus}}
 								<span class="badge bg-danger">초기 상태값 / Default Status</span>
