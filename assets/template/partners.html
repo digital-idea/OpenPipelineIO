@@ -3,6 +3,21 @@
 <body>
 {{template "navbar-bootstrap5" .}}
 {{template "modal-bootstrap5" .}}
+
+<!--searchbox-->
+<div class="container">
+    <div class="row justify-content-center align-items-center p-3">
+        <form action="/partners" method="POST" class="editform text-center">
+            <div class="input-group">
+                <input class="form-control" id="search" placeholder="Search word.." type="text" maxlength="50" size=50 name="searchword" autofocus="autofocus" value="">
+                <div class="input-group-append">
+                    <button class="btn btn-darkmode">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="p-3">
     <div class="row" id="partners">
         {{range .Partners}}
