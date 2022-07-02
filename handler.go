@@ -75,6 +75,7 @@ var funcMap = template.FuncMap{
 	"mapToSlice":                   mapToSlice,
 	"hasStatus":                    hasStatus,
 	"GenPageNums":                  GenPageNums,
+	"floatToString": floatToString,
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
@@ -617,6 +618,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/partner/{id}", getPartnerHandler).Methods("GET")
 	r.HandleFunc("/api/partner/{id}", putPartnerHandler).Methods("PUT")
 	r.HandleFunc("/api/partner/{id}", deletePartnerHandler).Methods("DELETE")
+	r.HandleFunc("/api/partners", getPartnersHandler).Methods("GET")
 
 	// REST API Partner
 	r.HandleFunc("/api/projectforpartner", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)

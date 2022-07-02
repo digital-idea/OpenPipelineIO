@@ -639,6 +639,10 @@ func onlyID(userInfo string) string {
 	return userInfo
 }
 
+func floatToString(value float64) string {
+	return fmt.Sprintf("%.1f", value)
+}
+
 func mapToSlice(tasks map[string]Task, ordermap map[string]float64) []Task {
 	var results []Task
 	for _, value := range tasks {

@@ -12,7 +12,9 @@
                         {{if .Codename}}
                             {{.Codename}} -
                         {{end}}
-                        {{.Name}}
+                        <a href="{{.Homepage}}" class="text-darkmode">
+                            {{.Name}}
+                        </a>
                         <div class="float-end">
                             <span class="add" onclick="SetModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-partner">≡</span>
                             {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
@@ -25,7 +27,7 @@
                             사업영역: {{.Domain}}, 지역: {{.Location}}
                         </h6>
                         <p class="card-text">
-                            홈페이지: <a href="{{.Homepage}}" class="text-darkmode">{{.Homepage}}</a><br>
+                            히스토리: {{.ProjectHistory}}<br>
                             업무시간: {{.Opentime}}-{{.Closedtime}}<br>
                             담당자: {{.Manager}} <a href="tel:{{.ManagerPhone}}" class="text-darkmode">{{.ManagerPhone}}</a><br>
                             담당자 이메일: <a href="mailto:{{.ManagerEmail}}" class="text-darkmode">{{.ManagerEmail}}</a><br>

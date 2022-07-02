@@ -3,40 +3,28 @@ var endpoint = "/api/projectforpartner" // restAPI Endpoint
 var uxprefix = "projectforpartner-" // UX prefix string
 
 function UxToObject(obj) {
-    obj.projectname = document.getElementById(uxprefix+'projectname').value
-    obj.partnername = document.getElementById(uxprefix+'partnername').value
-    obj.domain = document.getElementById(uxprefix+'domain').value
-    obj.size = document.getElementById(uxprefix+'size').value
-    obj.homepage = document.getElementById(uxprefix+'homepage').value
-    obj.address = document.getElementById(uxprefix+'address').value
-    obj.phone = document.getElementById(uxprefix+'phone').value
-    obj.email = document.getElementById(uxprefix+'email').value
-    obj.location = document.getElementById(uxprefix+'location').value
-    obj.timezone = document.getElementById(uxprefix+'timezone').value
-    obj.description = document.getElementById(uxprefix+'description').value
-    obj.businessregistrationnumber = document.getElementById(uxprefix+'businessregistrationnumber').value
-    obj.manager = document.getElementById(uxprefix+'manager').value
-    obj.managerphone = document.getElementById(uxprefix+'managerphone').value
+    obj.projectname = document.getElementById(uxprefix+'projectname').options[document.getElementById(uxprefix+"projectname").selectedIndex].value
+    obj.partnername = document.getElementById(uxprefix+'partnername').options[document.getElementById(uxprefix+"partnername").selectedIndex].value
+    obj.rnr = document.getElementById(uxprefix+'rnr').value
+    obj.projecttype = document.getElementById(uxprefix+'projecttype').options[document.getElementById(uxprefix+"projecttype").selectedIndex].value
+    obj.language = document.getElementById(uxprefix+'language').value
+    obj.partnerinternalmanager = document.getElementById(uxprefix+'partnerinternalmanager').value
     obj.manageremail = document.getElementById(uxprefix+'manageremail').value
-    obj.ftp = document.getElementById(uxprefix+'ftp').value
-    obj.ftpid = document.getElementById(uxprefix+'ftpid').value
-    obj.ftppw = document.getElementById(uxprefix+'ftppw').value
-    obj.opentime = document.getElementById(uxprefix+"opentime").options[document.getElementById(uxprefix+"opentime").selectedIndex].value,    
-    obj.closedtime = document.getElementById(uxprefix+"closedtime").options[document.getElementById(uxprefix+"closedtime").selectedIndex].value,
-    obj.paymentdate = document.getElementById(uxprefix+'paymentdate').value
-    obj.bank = document.getElementById(uxprefix+'bank').value
-    obj.bankaccount = document.getElementById(uxprefix+'bankaccount').value
-    obj.monetaryunit = document.getElementById(uxprefix+"monetaryunit").options[document.getElementById(uxprefix+"monetaryunit").selectedIndex].value,
-    obj.projecthistory = document.getElementById(uxprefix+'projecthistory').value
-    obj.reputation = document.getElementById(uxprefix+'reputation').value
-    obj.status = document.getElementById(uxprefix+'status').value
-    obj.codename = document.getElementById(uxprefix+'codename').value
-    obj.companytype = document.getElementById(uxprefix+"companytype").options[document.getElementById(uxprefix+"companytype").selectedIndex].value,
-    obj.contactpoint = document.getElementById(uxprefix+'contactpoint').value
-    obj.pmsurl = document.getElementById(uxprefix+'pmsurl').value
-    obj.isabroad = document.getElementById(uxprefix+'isabroad').checked
-    obj.isclient = document.getElementById(uxprefix+'isclient').checked
-    obj.tags = string2array(document.getElementById(uxprefix+'tags').value)
+    obj.messenger = document.getElementById(uxprefix+'messenger').value
+    obj.messengerid = document.getElementById(uxprefix+'messengerid').value
+    obj.startdate = document.getElementById(uxprefix+'startdate').value
+    obj.enddate = document.getElementById(uxprefix+'enddate').value
+    obj.leftovershot = parseInt(document.getElementById(uxprefix+'leftovershot').value)
+    obj.totalshot = parseInt(document.getElementById(uxprefix+'totalshot').value)
+    obj.projectbudget = parseFloat(document.getElementById(uxprefix+'projectbudget').value)
+    obj.percentageoftotalbudget = parseFloat(document.getElementById(uxprefix+'percentageoftotalbudget').value)
+    obj.priceperframe = parseFloat(document.getElementById(uxprefix+'priceperframe').value)
+    obj.paymentdateforvender = parseInt(document.getElementById(uxprefix+'paymentdateforvender').value)
+    obj.paymentdateforclient = parseInt(document.getElementById(uxprefix+'paymentdateforclient').value)
+    obj.pricepershot = parseFloat(document.getElementById(uxprefix+'pricepershot').value)
+    obj.paymentcycle = document.getElementById(uxprefix+'paymentcycle').value
+    obj.manday = parseInt(document.getElementById(uxprefix+"manday").value)
+    obj.description = document.getElementById(uxprefix+"description").value
     return obj
 }
 
@@ -44,38 +32,26 @@ function ObjectToUx(obj) {
     document.getElementById(uxprefix+'id').value = obj.id
     document.getElementById(uxprefix+'projectname').value = obj.projectname
     document.getElementById(uxprefix+'partnername').value = obj.partnername
-    document.getElementById(uxprefix+'domain').value = obj.domain
-    document.getElementById(uxprefix+'size').value = obj.size
-    document.getElementById(uxprefix+'homepage').value = obj.homepage
-    document.getElementById(uxprefix+'address').value = obj.address
-    document.getElementById(uxprefix+'phone').value = obj.phone
-    document.getElementById(uxprefix+'email').value = obj.email
-    document.getElementById(uxprefix+'location').value = obj.location
-    document.getElementById(uxprefix+'timezone').value = obj.timezone
-    document.getElementById(uxprefix+'description').value = obj.description
-    document.getElementById(uxprefix+'businessregistrationnumber').value = obj.businessregistrationnumber
-    document.getElementById(uxprefix+'manager').value = obj.manager
-    document.getElementById(uxprefix+'managerphone').value = obj.managerphone
+    document.getElementById(uxprefix+'rnr').value = obj.rnr
+    document.getElementById(uxprefix+'projecttype').value = obj.projecttype
+    document.getElementById(uxprefix+'language').value = obj.language
+    document.getElementById(uxprefix+'partnerinternalmanager').value = obj.partnerinternalmanager
     document.getElementById(uxprefix+'manageremail').value = obj.manageremail
-    document.getElementById(uxprefix+'ftp').value = obj.ftp
-    document.getElementById(uxprefix+'ftpid').value = obj.ftpid
-    document.getElementById(uxprefix+'ftppw').value = obj.ftppw
-    document.getElementById(uxprefix+"opentime").value = obj.opentime
-    document.getElementById(uxprefix+"closedtime").value = obj.closedtime
-    document.getElementById(uxprefix+'paymentdate').value = obj.paymentdate
-    document.getElementById(uxprefix+'bank').value = obj.bank
-    document.getElementById(uxprefix+'bankaccount').value = obj.bankaccount
-    document.getElementById(uxprefix+"monetaryunit").value = obj.monetaryunit
-    document.getElementById(uxprefix+'projecthistory').value = obj.projecthistory
-    document.getElementById(uxprefix+'reputation').value = obj.reputation
-    document.getElementById(uxprefix+'status').value = obj.status
-    document.getElementById(uxprefix+'codename').value = obj.codename
-    document.getElementById(uxprefix+"companytype").value = obj.companytype
-    document.getElementById(uxprefix+'contactpoint').value = obj.contactpoint
-    document.getElementById(uxprefix+'pmsurl').value = obj.pmsurl
-    document.getElementById(uxprefix+'isabroad').checked = obj.isabroad
-    document.getElementById(uxprefix+'isclient').checked = obj.isclient
-    document.getElementById(uxprefix+'tags').value = obj.tags.join(",")
+    document.getElementById(uxprefix+'messenger').value = obj.messenger
+    document.getElementById(uxprefix+'messengerid').value = obj.messengerid
+    document.getElementById(uxprefix+'startdate').value = obj.startdate
+    document.getElementById(uxprefix+'enddate').value = obj.enddate
+    document.getElementById(uxprefix+'leftovershot').value = obj.leftovershot
+    document.getElementById(uxprefix+'totalshot').value = obj.totalshot
+    document.getElementById(uxprefix+'projectbudget').value = obj.projectbudget
+    document.getElementById(uxprefix+'percentageoftotalbudget').value = obj.percentageoftotalbudget
+    document.getElementById(uxprefix+'priceperframe').value = obj.priceperframe
+    document.getElementById(uxprefix+'paymentdateforvender').value = obj.paymentdateforvender
+    document.getElementById(uxprefix+'paymentdateforclient').value = obj.paymentdateforclient
+    document.getElementById(uxprefix+'pricepershot').value = obj.pricepershot
+    document.getElementById(uxprefix+'paymentcycle').value = obj.paymentcycle
+    document.getElementById(uxprefix+'manday').value = obj.manday
+    document.getElementById(uxprefix+'description').value = obj.description
 }
 
 function AddMode() {
@@ -167,7 +143,7 @@ function Post() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Add', obj.name + "가 추가되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Add', `${obj.projectname}에 ${obj.partnername} 값이 추가되었습니다.`, {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)
@@ -177,8 +153,12 @@ function Post() {
 function Put() {
     let obj = new Object()
     obj = UxToObject(obj)
-    if (obj.name === "") {
-        tata.error('Error',"Need name.",{position: 'tr',duration: 5000,onClose: null})
+    if (obj.projectname === "") {
+        tata.error('Error',"Need ProjectName.",{position: 'tr',duration: 5000,onClose: null})
+        return
+    }
+    if (obj.partnername === "") {
+        tata.error('Error',"Need PartnerName.",{position: 'tr',duration: 5000,onClose: null})
         return
     }
     fetch(endpoint+'/'+document.getElementById(uxprefix+'id').value, {
@@ -198,7 +178,7 @@ function Put() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Edit', obj.name + "가 편집되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Edit', `${obj.projectname}에 ${obj.partnername} 값이 수정되었습니다.`, {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)
@@ -222,7 +202,7 @@ function Delete() {
         return response.json()
     })
     .then((obj) => {
-        tata.success('Delete', obj.name + "가 삭제되었습니다.", {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
+        tata.success('Delete', `${obj.projectname}에 ${obj.partnername} 값이 삭제되었습니다.`, {position: 'tr',duration: 5000,onClick: tataLink,onClose: null})
     })
     .catch((err) => {
         console.log(err)

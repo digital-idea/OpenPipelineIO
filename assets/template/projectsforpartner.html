@@ -14,7 +14,7 @@
                         <div class="float-end">
                             <span class="add" onclick="SetModal('{{.ID.Hex}}')" data-bs-toggle="modal" data-bs-target="#modal-projectforpartner">≡</span>
                             {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
-                                <span class="remove ml-0" onclick="SetModal('{{.ID.Hex}}');DeleteMode();" data-bs-toggle="modal" data-bs-target="#modal-projectsforpartner">×</span>
+                                <span class="remove ml-0" onclick="SetModal('{{.ID.Hex}}');DeleteMode();" data-bs-toggle="modal" data-bs-target="#modal-projectforpartner">×</span>
                             {{end}}
                         </div>
                     </h6>
@@ -23,7 +23,8 @@
                             RNR: {{.RNR}}
                         </h6>
                         <p class="card-text">
-                            프로젝트 비용: {{.ProjectBudget}}<br>
+                            타입: {{.ProjectType}}<br>
+                            프로젝트 비용: {{floatToString .ProjectBudget}}({{floatToString .PercentageOfTotalBudget}}%)<br>
                             진행률:
                         <p>
                     </div>
@@ -39,5 +40,6 @@
 <script src="/assets/tata/tata.js"></script>
 <script src="/assets/js/projectforpartner.js"></script>
 <script src="/assets/js/initproject.js"></script>
+<script src="/assets/js/initpartner.js"></script>
 </html>
 {{end}}
