@@ -41,17 +41,17 @@
                         <h6 class="card-title">
                             사업영역: {{.Domain}}, 지역: {{.Location}}
                         </h6>
-                        <p class="card-text">
+                        <p class="card-text mb-2">
                             히스토리: {{.ProjectHistory}}<br>
                             업무시간: {{.Opentime}}-{{.Closedtime}}<br>
                             담당자: {{.Manager}} <a href="tel:{{.ManagerPhone}}" class="text-darkmode">{{.ManagerPhone}}</a><br>
                             담당자 이메일: <a href="mailto:{{.ManagerEmail}}" class="text-darkmode">{{.ManagerEmail}}</a><br>
                             PMS: <a href="{{.PmsURL}}" class="text-darkmode">{{.PmsURL}}</a>
                             <div>
-                                <span class="badge badge-darkmode finger">프로젝트</span>
-                                <span class="badge badge-darkmode finger">예산</span>
-                                <span class="badge badge-darkmode finger">계약서</span>
-                                <span class="badge badge-darkmode finger">평가</span>
+                                <a href="/projectsforpartner?search={{.Name}}" class="badge badge-darkmode finger">프로젝트</a>
+                                <a href="/budgets?search={{.Name}}" class="badge badge-darkmode finger">예산</a>
+                                <a href="/contracts?search={{.Name}}" class="badge badge-darkmode finger">계약서</a>
+                                <a href="/evaluation?search={{.Name}}" class="badge badge-darkmode finger">평가</a>
                             </div>
                         <p>
                     </div>
