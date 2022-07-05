@@ -221,6 +221,9 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	if current.Stereo != str2bool(r.FormValue("Stereo")) {
 		renewal.Stereo = str2bool(r.FormValue("Stereo"))
 	}
+	if current.AnnounceIR != str2bool(r.FormValue("AnnounceIR")) {
+		renewal.AnnounceIR = str2bool(r.FormValue("AnnounceIR"))
+	}
 	if current.FlexibleStatus != str2bool(r.FormValue("FlexibleStatus")) {
 		renewal.FlexibleStatus = str2bool(r.FormValue("FlexibleStatus"))
 	}
