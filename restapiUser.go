@@ -129,6 +129,9 @@ func handleAPISearchUser(w http.ResponseWriter, r *http.Request) {
 	rcp := recipe{}
 	// 불필요한 정보는 초기화 시킨다.
 	for _, user := range users {
+		if user.IsLeave == true { //퇴사자는 제외
+			continue
+		}
 		user.Password = ""
 		user.Token = ""
 		rcp.Data = append(rcp.Data, user)
