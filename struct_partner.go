@@ -65,29 +65,29 @@ type Moneytype struct {
 
 // ProjectForPartner 자료구조는 프로젝트와 파트너사이의 관계를 다루는 자료구조
 type ProjectForPartner struct {
-	ID                      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	ProjectName             string             `json:"projectname"`             // 프로젝트 이름
-	PartnerName             string             `json:"partnername"`             // 파트너이름
-	RNR                     string             `json:"rnr"`                     // 계약,진행상태
-	ProjectBudget           float64            `json:"projectbudget"`           // 프로젝트 비용
-	ProjectType             string             `json:"projecttype"`             // 프로젝트 타입, 타입설정, "A","B","C"
-	StartDate               string             `json:"startdate"`               // 프로젝트 시작일
-	EndDate                 string             `json:"enddate"`                 // 프로젝트 완료일
-	PercentageOfTotalBudget float64            `json:"percentageoftotalbudget"` // 나가는 비용이 프로젝트 총 비용의 몇 퍼센트인가?
-	Description             string             `json:"description"`             // 외주내용
-	PricePerShot            float64            `json:"pricepershot"`            // 컷당 가격
-	PricePerFrame           float64            `json:"priceperframe"`           // 프레임당 가격
-	PartnerInternalManager  string             `json:"partnerinternalmanager"`  // 파트너 내부관리자
-	ManagerEmail            string             `json:"manageremail"`            // 파트너 내부관리자 메일
-	PaymentCycle            string             `json:"paymentcycle"`            // 지급회차 1/2, 4/6: 현재 지급단계, 총 지급횟수
-	PaymentDateForClient    int                `json:"paymentdateforclient"`    // 클라이언트에게 돈을 받는날짜, 프로젝트(프로젝트 월별 지급일)
-	PaymentDateForVender    int                `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
-	Language                string             `json:"language"`                // 사용언어: 커뮤니케이션 언어
-	Messenger               string             `json:"messenger"`               // 사용 메신저 종류
-	MessengerID             string             `json:"messengerid"`             // 메신저 ID
-	Manday                  int                `json:"manday"`                  // 예상 맨데이, 회계 작성시 필요, 감사시 필요
-	LeftoverShot            int                `json:"leftovershot"`            // 남은컷
-	TotalShot               int                `json:"totalshot"`               // 총컷
+	ID            primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	ProjectName   string             `json:"projectname"`   // 프로젝트 이름
+	PartnerName   string             `json:"partnername"`   // 파트너이름
+	RNR           string             `json:"rnr"`           // 계약,진행상태
+	ProjectBudget float64            `json:"projectbudget"` // 프로젝트 비용
+
+	StartDate               string  `json:"startdate"`               // 프로젝트 시작일
+	EndDate                 string  `json:"enddate"`                 // 프로젝트 완료일
+	PercentageOfTotalBudget float64 `json:"percentageoftotalbudget"` // 나가는 비용이 프로젝트 총 비용의 몇 퍼센트인가?
+	Description             string  `json:"description"`             // 외주내용
+	PricePerShot            float64 `json:"pricepershot"`            // 컷당 가격
+	PricePerFrame           float64 `json:"priceperframe"`           // 프레임당 가격
+	PartnerInternalManager  string  `json:"partnerinternalmanager"`  // 파트너 내부관리자
+	ManagerEmail            string  `json:"manageremail"`            // 파트너 내부관리자 메일
+	PaymentCycle            string  `json:"paymentcycle"`            // 지급회차 1/2, 4/6: 현재 지급단계, 총 지급횟수
+	PaymentDateForClient    int     `json:"paymentdateforclient"`    // 클라이언트에게 돈을 받는날짜, 프로젝트(프로젝트 월별 지급일)
+	PaymentDateForVender    int     `json:"paymentdateforvender"`    // 벤더에게 주는 날짜, 프로젝트 진행시 벤더에게 돈을 주는 날짜
+	Language                string  `json:"language"`                // 사용언어: 커뮤니케이션 언어
+	Messenger               string  `json:"messenger"`               // 사용 메신저 종류
+	MessengerID             string  `json:"messengerid"`             // 메신저 ID
+	Manday                  int     `json:"manday"`                  // 예상 맨데이, 회계 작성시 필요, 감사시 필요
+	LeftoverShot            int     `json:"leftovershot"`            // 남은컷
+	TotalShot               int     `json:"totalshot"`               // 총컷
 }
 
 type PartnerEvent struct {
