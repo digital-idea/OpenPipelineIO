@@ -234,6 +234,44 @@ function Shottype() {
     });
 }
 
+function Itemtype() {
+    fetch("/api/statistics/itemtype", {
+        method: 'GET',
+        headers: {"Authorization": "Basic "+ document.getElementById("token").value},
+    })
+    .then((response) => {
+        if (!response.ok) {
+            response.text().then(function (text) {
+                alert(text)
+                return
+            });
+        }
+        return response.json()
+    })
+    .then((obj) => {
+        let total = obj.totalnum.shot + obj.totalnum.asset
+        let percentshot = (obj.totalnum.shot / total) * 100
+        let percentasset = (obj.totalnum.asset / total) * 100
+        // Shot 갯수 셋팅
+        let e1 = document.getElementById("itemtype-shot")
+        let titleshot = `Shot ${percentshot.toFixed(1)}% (${obj.totalnum.shot})`
+        e1.innerHTML = titleshot
+        e1.setAttribute("title", titleshot)
+        e1.style.width = percentshot + "%"
+        // Asset 갯수 셋팅
+        let e2 = document.getElementById("itemtype-asset")
+        let titleasset = `Asset ${percentasset.toFixed(1)}% (${obj.totalnum.asset})`
+        e2.innerHTML = titleasset
+        e2.setAttribute("title", titleasset)
+        e2.style.width = percentasset + "%"
+        // 툴팁 요소가 추가되었다. 툴팁셋팅을 초기화 한다.
+        initTooltip()
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+}
+
 function initTooltip() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

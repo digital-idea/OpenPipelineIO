@@ -9,7 +9,8 @@
 | /api/statistics/projectnum | 프로젝트 갯수를 가지고 옵니다. | . | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/projectnum"
 | /api/statistics/deadlinenum | 해당 월의 마감갯수를 출력합니다. | date | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/deadlinenum?date=2022-06"
 | /api/statistics/needdeadlinenum | 마감일 설정이 필요한 샷 갯수를 출력합니다. | date | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/needdeadlinenum"
-| /api/statistics/shottype | 샷 타입별 갯수를 출력합니다. | date | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/shottype"
+| /api/statistics/shottype | 샷 타입별(2d,3d) 갯수를 출력합니다. | . | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/shottype"
+| /api/statistics/itemtype | 아이템 타입별(shot,asset) 갯수를 출력합니다. | . | curl -X GET -H "Authorization: Basic {TOKEN}" "https://csi.lazypic.com/api/statistics/itemtype"
 
 ## GET(Status V1)
 
