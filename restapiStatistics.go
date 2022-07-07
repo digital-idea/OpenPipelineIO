@@ -142,6 +142,89 @@ func handleAPIStatisticsNeedDeadlineNum(w http.ResponseWriter, r *http.Request) 
 	w.Write(data)
 }
 
+func handleAPIStatisticsShottype(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// 전체 프로젝트 리스트를 구한다.
+	var projects []string
+	projects, err = client.Database("projectinfo").ListCollectionNames(ctx, bson.D{{}})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	type TypeNum struct {
+		Type2D   int64 `json:"type2d"`
+		Type3D   int64 `json:"type3d"`
+		TypeNone int64 `json:"typenone"`
+	}
+	type Recipe struct {
+		Projects map[string]TypeNum `json:"projects"`
+		TotalNum TypeNum            `json:"totalnum"`
+	}
+	rcp := Recipe{}
+	rcp.Projects = make(map[string]TypeNum)
+	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}} // 타입이 샷이면서(일반샷,입체샷)
+	type2DFilter := bson.D{{"shottype", "2d"}, {"$or", shotFilter}}         // shottype이 2d 샷 검색
+	type3DFilter := bson.D{{"shottype", "3d"}, {"$or", shotFilter}}         // shottype이 3d 샷 검색
+	typeNoneFilter := bson.D{{"shottype", ""}, {"$or", shotFilter}}         // shottype이 "" 샷 검색
+	for _, project := range projects {
+		collection := client.Database("project").Collection(project)
+		type2dNum, err := collection.CountDocuments(ctx, type2DFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		type3dNum, err := collection.CountDocuments(ctx, type3DFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		typeNoneNum, err := collection.CountDocuments(ctx, typeNoneFilter)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		typeNum := TypeNum{}
+		typeNum.Type2D = type2dNum
+		typeNum.Type3D = type3dNum
+		typeNum.TypeNone = typeNoneNum
+		rcp.Projects[project] = typeNum
+		rcp.TotalNum.Type2D += type2dNum
+		rcp.TotalNum.Type3D += type3dNum
+		rcp.TotalNum.TypeNone += typeNoneNum
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func handleAPI1StatisticsShot(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
