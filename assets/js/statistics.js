@@ -213,19 +213,19 @@ function Shottype() {
         let title2d = `2D ${percent2d.toFixed(1)}% (${obj.totalnum.type2d})`
         e1.innerHTML = title2d
         e1.setAttribute("title", title2d)
-        e1.style.width = (obj.totalnum.type2d * 100) + "%"
+        e1.style.width = percent2d + "%"
         // 3D갯수 셋팅
         let e2 = document.getElementById("shottype-3d")
         let title3d = `3D ${percent3d.toFixed(1)}% (${obj.totalnum.type3d})`
         e2.innerHTML = title3d
         e2.setAttribute("title", title3d)
-        e2.style.width = (obj.totalnum.type3d * 100) + "%"
+        e2.style.width = percent3d + "%"
         // None 갯수 셋팅
         let e3 = document.getElementById("shottype-none")
         let titlenone = `None ${percentnone.toFixed(1)}% (${obj.totalnum.typenone})`
         e3.innerHTML = titlenone
         e3.setAttribute("title", titlenone)
-        e3.style.width = (obj.totalnum.typenone * 100) + "%"
+        e3.style.width = percentnone + "%"
         // 툴팁 요소가 추가되었다. 툴팁셋팅을 초기화 한다.
         initTooltip()
     })
