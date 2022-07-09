@@ -81,9 +81,9 @@
                 <span class="badge finger badge-outline-darkmode">Project</span>
                 <span class="badge finger badge-outline-darkmode">Pipelinestep</span>
             </div>
-            <div class="progress mt-1" style="height:30px">
-                <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="700" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Shot">샷 700개</div>
-                <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Asset">에셋 300개</div>
+            <div class="progress mt-1" style="height:30px" id="itemtype">
+                <div class="progress-bar bg-inside" role="progressbar" style="width: 70%" aria-valuenow="700" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Shot" id="itemtype-shot">샷 700개</div>
+                <div class="progress-bar bg-outside" role="progressbar" style="width: 30%" aria-valuenow="300" aria-valuemin="0" aria-valuemax="1000" data-bs-toggle="tooltip" data-bs-placement="top" title="Asset" id="itemtype-asset">에셋 300개</div>
             </div>
         </div>
     </div>
@@ -191,6 +191,7 @@
     DeadlinenumNextmonth() // 다음달 마감샷 갯수
     TotalShotProgress() // 전체 샷 진행바
     Shottype() // 샷타입
+    Itemtype() // 샷타입
 </script>
 </html>
 {{end}}
