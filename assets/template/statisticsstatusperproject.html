@@ -1,0 +1,27 @@
+{{define "statisticsstatusperproject" }}
+{{template "headBootstrap5"}}
+<body>
+{{template "navbar-bootstrap5" .}}
+
+<div class="p-2 text-darkmode">
+    <div>
+        <span class="align-middle">전체 프로젝트</span>
+    </div>
+    <div class="progress mt-2" style="height:30px" id="total-shot-progress"></div>
+    <div class="progress mt-2" style="height:50px" id="total-shot-status-progress"></div>
+    <small>None Status 갯수: <span id="NoneStatusNum"></span></small>
+</div>
+
+<div class="p-2 text-darkmode" id="statusperprojects">
+</div>
+    
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/statistics.js"></script>
+
+<script>
+    StatusPerProject() // 샷 진행바
+</script>
+</html>
+{{end}}
