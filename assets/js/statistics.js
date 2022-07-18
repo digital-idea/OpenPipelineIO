@@ -304,6 +304,9 @@ function StatusPerProject() {
                 {"title":"On Hold", "style":"onhold", "num":currentOnHold},
             ]
             for (let i in currentProgresslist) {
+                if (currentProgresslist[i].num === 0) {
+                    continue
+                }
                 let opt = document.createElement('div');
                 opt.classList.add("progress-bar")
                 opt.classList.add("bg-"+currentProgresslist[i].style)
