@@ -12,16 +12,27 @@
     <small>None Status 갯수: <span id="NoneStatusNum"></span></small>
 </div>
 
-<div class="p-2 text-darkmode" id="statusperprojects">
+<!--프로젝트 태그 버튼-->
+<div class="p-2 text-darkmode text-end" id="projectstags">
+    <!-- 가이드 코드
+        <span class="btn btn-sm btn-outline-darkmode">
+            <input type="checkbox" class="me-1" id="test">
+            <span class="text-white">test</span>
+        </span>
+    -->
 </div>
+
+<!--프로젝트 챠트 그리기-->
+<div class="p-2 text-darkmode" id="statusperprojects"></div>
     
 {{template "footerBootstrap"}}
 </body>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/statistics.js"></script>
+<script src="/assets/js/statisticsstatusperproject.js"></script>
 
 <script>
-    StatusPerProject() // 샷 진행바
+    SetProjectsTags() // 프로젝트 태그 렌더링
+    StatusPerProject() // 샷 진행바 렌더링
 </script>
 </html>
 {{end}}
