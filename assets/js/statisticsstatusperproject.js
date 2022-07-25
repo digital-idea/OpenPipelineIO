@@ -13,7 +13,6 @@ function SetProjectsTags() {
         return response.json()
     })
     .then((obj) => {
-        console.log(obj)
         let projectstags = document.getElementById("projectstags")
         
         for (let i = 0; i < obj.length; i++) {
@@ -25,8 +24,11 @@ function SetProjectsTags() {
             button.classList.add("m-1")
             // 체크박스 옵션
             let checkoption = document.createElement("input")
+            let project = obj[i].id
             checkoption.classList.add("me-1")
-            checkoption.id = obj[i].id
+            checkoption.id = "toggle-" + project
+            checkoption.value = "chart-" + project
+            checkoption.addEventListener("click", toggleCharts);
             checkoption.type = "checkbox"
             button.appendChild(checkoption)
             // 프로젝트 제목
@@ -42,6 +44,21 @@ function SetProjectsTags() {
     .catch((err) => {
         console.log(err)
     });
+}
+
+function toggleCharts() {
+    // 켜져있는 프로젝트를 구한다.
+    let inputs = document.querySelectorAll('input[id^="toggle-"]')
+    for (let i = 0; i < inputs.length; i++) {
+        let e = document.getElementById(inputs[i].value)
+        if (inputs[i].checked === true) {
+            e.style.display = "block" // 켜져있다면 해당 프로젝트를 켠다.
+        } else {
+            e.style.display = "none" // 꺼져있다면 해당 프로젝트를 끈다.
+        }
+    }
+    
+    
 }
 
 function projectStatusToText(num) {
@@ -87,13 +104,17 @@ function StatusPerProject() {
         let finalApproved = 0
     
         let projectList = document.getElementById("statusperprojects")
+        
         for (let [key, value] of Object.entries(obj.projects)) {
+            let chart = document.createElement("div");
+            chart.id = "chart-" + key
+
             // 줄긋기
             let line = document.createElement("hr")
             line.classList.add("p-0")
             line.classList.add("m-0")
             line.classList.add("my-2")
-            projectList.appendChild(line)
+            chart.appendChild(line)
 
             // 프로젝트별 제목 그리기
             let projectRoot = document.createElement("div");
@@ -101,7 +122,7 @@ function StatusPerProject() {
             title.classList.add('align-middle');
             title.innerText = key
             projectRoot.appendChild(title);
-            projectList.appendChild(projectRoot)
+            chart.appendChild(projectRoot)
 
             // Progress바 추가
             let progressBar = document.createElement("div")
@@ -109,7 +130,7 @@ function StatusPerProject() {
             progressBar.classList.add("mt-2")
             progressBar.id = key + "-shot-progress"
             progressBar.style.height = "30px"
-            projectList.appendChild(progressBar)
+            chart.appendChild(progressBar)
             
             // Status바 추가
             let statusBar = document.createElement("div")
@@ -117,7 +138,7 @@ function StatusPerProject() {
             statusBar.classList.add("mt-2")
             statusBar.id = key + "-shot-status-progress"
             statusBar.style.height = "50px"
-            projectList.appendChild(statusBar)
+            chart.appendChild(statusBar)
 
             // Status바에 데이터 넣기
             let currentTotal = 0
@@ -173,7 +194,6 @@ function StatusPerProject() {
             }
 
             // 진행률 챠트 그리기
-            
             currentProgresslist = [
                 {"title":"In Progress", "style":"inprogress", "num":currentInProgress},
                 {"title":"Final Approved", "style":"finalapproved", "num":currentFinalApproved},
@@ -204,9 +224,11 @@ function StatusPerProject() {
             // None 갯수 추가
             let noneInfo = document.createElement("small")
             noneInfo.innerText = "None Status 갯수: " + value["none"]
-            projectList.appendChild(noneInfo)
-            
-            
+            chart.appendChild(noneInfo)
+
+            // 완성된 챠트 1개를 추가한다.
+            chart.style.display = "none"
+            projectList.appendChild(chart)
         }
 
         // 전체 샷 진행챠트 그리기
@@ -255,7 +277,7 @@ function StatusPerProject() {
                 statusProgress.appendChild(opt);
             }
         }
-        // 진행률 챠트 그리기
+        // 전체 진행률 챠트 그리기
         let progress = document.getElementById("total-shot-progress")
         progresslist = [
             {"title":"In Progress", "style":"inprogress", "num":inProgress},
