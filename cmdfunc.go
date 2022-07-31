@@ -109,9 +109,10 @@ func addShotItemCmd(project, name, typ, platesize, scanname, scantimecodein, sca
 			continue
 		}
 		t := Task{
-			Title:    task.Name,
-			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
-			StatusV2: initStatusID,
+			Title:        task.Name,
+			Status:       ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			StatusV2:     initStatusID,
+			Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 		}
 		i.Tasks[task.Name] = t
 	}
@@ -213,9 +214,10 @@ func addAssetItemCmd(project, name, typ, assettype, assettags string) {
 			continue
 		}
 		t := Task{
-			Title:    task.Name,
-			Status:   ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
-			StatusV2: initStatusID,
+			Title:        task.Name,
+			Status:       ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			StatusV2:     initStatusID,
+			Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 		}
 		i.Tasks[task.Name] = t
 	}

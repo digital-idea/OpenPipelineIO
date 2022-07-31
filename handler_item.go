@@ -652,9 +652,10 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 				t := Task{
-					Title:    task.Name,
-					Status:   ASSIGN, // legacy
-					StatusV2: initStatus,
+					Title:        task.Name,
+					Status:       ASSIGN, // legacy
+					StatusV2:     initStatus,
+					Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 				}
 				i.Tasks[task.Name] = t
 			}
@@ -1014,9 +1015,10 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 			t := Task{
-				Title:    task.Name,
-				Status:   ASSIGN, // legacy
-				StatusV2: initStatusID,
+				Title:        task.Name,
+				Status:       ASSIGN, // legacy
+				StatusV2:     initStatusID,
+				Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 			}
 			i.Tasks[task.Name] = t
 		}
