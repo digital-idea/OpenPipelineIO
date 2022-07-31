@@ -369,7 +369,7 @@ func handleSignup(w http.ResponseWriter, r *http.Request) {
 		Positions   []Position
 	}
 	rcp := recipe{}
-	rcp.Company = strings.Title(*flagCompany)
+	rcp.Company = *flagCompany
 	rcp.MailDNS = *flagMailDNS
 	rcp.CaptchaID = captcha.New()
 	session, err := mgo.Dial(*flagDBIP)
@@ -637,7 +637,7 @@ func handleSignin(w http.ResponseWriter, r *http.Request) {
 			rcp.Message = "패스워드를 틀렸습니다. 다시 로그인 해주세요."
 		}
 	}
-	rcp.Company = strings.Title(*flagCompany)
+	rcp.Company = *flagCompany
 	if rcp.ID == "" {
 		// ID가 없다면 저장된 쿠키 ID를 가지고 온다.
 		c, err := r.Cookie("CookieUserID")

@@ -33,7 +33,7 @@ var (
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MAILDNS = "lazypic.org"
 	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	COMPANY = "lazypic"
+	COMPANY = "Lazypic"
 	// TEMPLATES 값은 웹서버 실행전 사용할 템플릿이다.
 	TEMPLATES = template.New("")
 	// SHA1VER  은 Git SHA1 값이다.
