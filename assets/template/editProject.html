@@ -83,12 +83,12 @@
 						</div>
 						<div class="col">
 							<div class="form-group">
-								<label class="pt-1">ProjectType</label>
-								<select class="form-control" id="projectforpartner-projecttype">
-									<option value="" selected>Unknown</option>
-									<option value="A">A</option>
-									<option value="B">B</option>
-									<option value="C">C</option>
+								<small class="form-text text-muted">ProjectType</small>
+								<select class="form-control" name="ProjectType">
+									<option value="" {{ if eq .ProjectType "" }}selected{{end}}>Unknown</option>
+									<option value="A" {{ if eq .ProjectType "A" }}selected{{end}}>A</option>
+									<option value="B" {{ if eq .ProjectType "B" }}selected{{end}}>B</option>
+									<option value="C" {{ if eq .ProjectType "C" }}selected{{end}}>C</option>
 								</select>
 							</div>
 						</div>
