@@ -57,9 +57,10 @@ type Money struct {
 }
 
 type Moneytype struct {
-	ID    primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Order float64            `json:"order"` // 순서
-	Name  string             `json:"name"`  // 영문이름
+	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Order       float64            `json:"order"`       // 순서
+	Name        string             `json:"name"`        // 영문이름
+	Description string             `json:"description"` // 설명
 	// firstestimate 최초견적, contractestimate 계약견적, additionalestimate 추가견적, downpayment 계약금, interimpayment 중도금, balance 잔금, surchage 추가금
 }
 

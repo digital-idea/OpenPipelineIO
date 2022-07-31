@@ -645,6 +645,13 @@ func webserver(port string) {
 	r.HandleFunc("/api/money/{id}", putMoneyHandler).Methods("PUT")
 	r.HandleFunc("/api/money/{id}", deleteMoneyHandler).Methods("DELETE")
 
+	// REST API Moneytype
+	r.HandleFunc("/api/moneytype", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/moneytype", postMoneytypeHandler).Methods("POST")
+	r.HandleFunc("/api/moneytype/{id}", getMoneytypeHandler).Methods("GET")
+	r.HandleFunc("/api/moneytype/{id}", putMoneytypeHandler).Methods("PUT")
+	r.HandleFunc("/api/moneytype/{id}", deleteMoneytypeHandler).Methods("DELETE")
+
 	// REST API Pipelinestep
 	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/pipelinestep", postPipelinestepHandler).Methods("POST")
