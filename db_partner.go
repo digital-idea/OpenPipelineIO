@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
+	"sort"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -91,5 +93,24 @@ func allPartners(client *mongo.Client) ([]Partner, error) {
 	if err != nil {
 		return results, err
 	}
+	return results, nil
+}
+
+func allPartnersCodename(client *mongo.Client) ([]string, error) {
+	collection := client.Database(*flagDBName).Collection("partner")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	var results []string
+	values, err := collection.Distinct(ctx, "codename", bson.D{})
+	if err != nil {
+		return results, err
+	}
+	for _, value := range values {
+		if fmt.Sprintf("%v", value) == "" {
+			continue
+		}
+		results = append(results, fmt.Sprintf("%v", value))
+	}
+	sort.Strings(results)
 	return results, nil
 }
