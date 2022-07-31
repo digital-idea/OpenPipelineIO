@@ -103,6 +103,7 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 - [Statistics](documents/rest_statistics.md)
 - [Partner](documents/rest_partner.md)
 - [ProjectForPartner](documents/rest_projectforpartner.md)
+- [Money](documents/rest_money.md)
 - [Pipelinestep](documents/rest_pipelinestep.md)
 
 ### 썸네일 경로

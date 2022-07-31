@@ -631,12 +631,19 @@ func webserver(port string) {
 	r.HandleFunc("/api/projectforpartner/{id}", putProjectForPartnerHandler).Methods("PUT")
 	r.HandleFunc("/api/projectforpartner/{id}", deleteProjectForPartnerHandler).Methods("DELETE")
 
-	// REST API Partner
+	// REST API Endpoint
 	r.HandleFunc("/api/endpoint", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
 	r.HandleFunc("/api/endpoint", postEndpointHandler).Methods("POST")
 	r.HandleFunc("/api/endpoint/{id}", getEndpointHandler).Methods("GET")
 	r.HandleFunc("/api/endpoint/{id}", putEndpointHandler).Methods("PUT")
 	r.HandleFunc("/api/endpoint/{id}", deleteEndpointHandler).Methods("DELETE")
+
+	// REST API Money
+	r.HandleFunc("/api/money", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/money", postMoneyHandler).Methods("POST")
+	r.HandleFunc("/api/money/{id}", getMoneyHandler).Methods("GET")
+	r.HandleFunc("/api/money/{id}", putMoneyHandler).Methods("PUT")
+	r.HandleFunc("/api/money/{id}", deleteMoneyHandler).Methods("DELETE")
 
 	// REST API Pipelinestep
 	r.HandleFunc("/api/pipelinestep", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
