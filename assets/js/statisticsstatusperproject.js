@@ -28,6 +28,7 @@ function SetProjectsTags() {
             checkoption.classList.add("me-1")
             checkoption.id = "toggle-" + project
             checkoption.value = "chart-" + project
+            checkoption.setAttribute("status", projectStatusToText(obj[i].status))
             checkoption.addEventListener("click", toggleCharts);
             checkoption.type = "checkbox"
             button.appendChild(checkoption)
@@ -315,3 +316,68 @@ function initTooltip() {
     })
 }
 
+//전체 프리셋 버튼
+function projectpresetAll(){
+    // 전체를 선택하면 모든 프리셋버튼이 선택된다.
+    // 전체선택을 해제하면 모든 프리셋버튼이 해제된다.
+    console.log("test")
+}
+
+// 진행중 프리셋 버튼
+function projectpresetPostProject(){
+    // 진행중 프리셋 버튼이 선택되면 진행중인 프로젝트 태그를 선택한다.
+    let postproject = document.getElementById("preset-postproject")
+    let inputs = document.querySelectorAll('input[status^="진행중"]')
+    console.log(postproject)
+    console.log(inputs)
+    
+    if (postproject.checked === true) { //진행중 프리셋 버튼을 켠다
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = true
+        }
+    
+    } else { //진행중 프리셋 버튼을 끈다
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false
+        }
+    }
+    toggleCharts()
+    console.log("진행중")
+}
+
+// 준비중 프리셋 버튼
+function projectpresetPreProject(){
+    // 준비중을 선택하면 진행중인 프로젝트 태그를 선택한다
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
+
+// 테스트 프리셋 버튼
+function projectpresetTest(){
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
+
+// 중단 프리셋 버튼
+function projectpresetLayover(){
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
+
+// 백업중 프리셋 버튼
+function projectpresetBackup(){
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
+
+// 백업완료 프리셋 버튼
+function projectpresetArchived(){
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
+
+// 소송중 프리셋 버튼
+function projectpresetLawsuit(){
+    // 선택을 해제하면 전체도 해제한다.
+    console.log("test")
+}
