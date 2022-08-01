@@ -11,7 +11,17 @@
     <div class="progress mt-2" style="height:50px" id="total-shot-status-progress"></div>
     <small>None Status 갯수: <span id="NoneStatusNum"></span></small>
 </div>
-
+<!--프로젝트 프리셋 버튼-->
+<div class="p-2 text-darkmode text-end" id="projectpresets">
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-all" onclick="projectpresetAll()">전체</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-postproject" onclick="projectpresetPostProject()">진행중</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-preproject" onclick="projectpresetPreProject()">준비중</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-test" onclick="projectpresetTest()">테스트</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-layover" onclick="projectpresetLayover()">중단</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-backup" onclick="projectpresetBackup()">백업중</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-archive" onclick="projectpresetArchived()">백업완료</span>
+    <span class="btn btn-sm btn-outline-darkmode m-1"><input class="me-1" type="checkbox" id="preset-lawsuit" onclick="projectpresetLawsuit()">소송중</span>
+</div>
 <!--프로젝트 태그 버튼-->
 <div class="p-2 text-darkmode text-end" id="projectstags"></div>
 
