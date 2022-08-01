@@ -318,20 +318,31 @@ function initTooltip() {
 
 //전체 프리셋 버튼
 function projectpresetAll(){
-    // 전체를 선택하면 모든 프리셋버튼이 선택된다.
-    // 전체선택을 해제하면 모든 프리셋버튼이 해제된다.
-    console.log("test")
+     // 전체 프리셋 버튼이 선택되면 전체 프로젝트 태그를 선택한다.
+     let preset = document.getElementById("preset-all")
+     let inputs = document.querySelectorAll('input')
+     console.log("전체")
+     console.log(inputs)
+     if (preset.checked === true) { //전체 프리셋 버튼을 켠다
+         for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = true
+         }
+     
+     } else { //전체 프리셋 버튼을 끈다
+         for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false
+         }
+     }
+     toggleCharts()
 }
 
 // 진행중 프리셋 버튼
 function projectpresetPostProject(){
     // 진행중 프리셋 버튼이 선택되면 진행중인 프로젝트 태그를 선택한다.
-    let postproject = document.getElementById("preset-postproject")
+    let preset = document.getElementById("preset-postproject")
     let inputs = document.querySelectorAll('input[status^="진행중"]')
-    console.log(postproject)
-    console.log(inputs)
     
-    if (postproject.checked === true) { //진행중 프리셋 버튼을 켠다
+    if (preset.checked === true) { //진행중 프리셋 버튼을 켠다
         for (let i = 0; i < inputs.length; i++) {
             inputs[i].checked = true
         }
@@ -342,42 +353,118 @@ function projectpresetPostProject(){
         }
     }
     toggleCharts()
-    console.log("진행중")
 }
 
 // 준비중 프리셋 버튼
 function projectpresetPreProject(){
-    // 준비중을 선택하면 진행중인 프로젝트 태그를 선택한다
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+      // 준비중 프리셋 버튼이 선택되면 준비중인 프로젝트 태그를 선택한다.
+      let preset = document.getElementById("preset-preproject")
+      let inputs = document.querySelectorAll('input[status^="준비중"]')
+      
+      if (preset.checked === true) { //준비중 프리셋 버튼을 켠다
+          for (let i = 0; i < inputs.length; i++) {
+              inputs[i].checked = true
+          }
+      
+      } else { //준비중 프리셋 버튼을 끈다
+          for (let i = 0; i < inputs.length; i++) {
+              inputs[i].checked = false
+          }
+      }
+      toggleCharts()
 }
 
 // 테스트 프리셋 버튼
 function projectpresetTest(){
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+    // 테스트 프리셋 버튼이 선택되면 테스트인 프로젝트 태그를 선택한다.
+    let preset = document.getElementById("preset-test")
+    let inputs = document.querySelectorAll('input[status^="테스트"]')
+    
+    if (preset.checked === true) { //테스트 프리셋 버튼을 켠다
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = true
+        }
+    
+    } else { //테스트 프리셋 버튼을 끈다
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false
+        }
+    }
+    toggleCharts()
 }
 
 // 중단 프리셋 버튼
 function projectpresetLayover(){
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+       // 중단 프리셋 버튼이 선택되면 중단인 프로젝트 태그를 선택한다.
+       let preset = document.getElementById("preset-layover")
+       let inputs = document.querySelectorAll('input[status^="중단"]')
+       
+       if (preset.checked === true) { //중단 프리셋 버튼을 켠다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = true
+           }
+       
+       } else { //중단 프리셋 버튼을 끈다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = false
+           }
+       }
+       toggleCharts()
 }
 
 // 백업중 프리셋 버튼
 function projectpresetBackup(){
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+       // 백업중 프리셋 버튼이 선택되면 백업중인 프로젝트 태그를 선택한다.
+       let preset = document.getElementById("preset-backup")
+       let inputs = document.querySelectorAll('input[status^="백업중"]')
+       
+       if (preset.checked === true) { //백업중 프리셋 버튼을 켠다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = true
+           }
+       
+       } else { //백업중 프리셋 버튼을 끈다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = false
+           }
+       }
+       toggleCharts()
 }
 
 // 백업완료 프리셋 버튼
 function projectpresetArchived(){
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+       // 백업완료 프리셋 버튼이 선택되면 백업완료인 프로젝트 태그를 선택한다.
+       let preset = document.getElementById("preset-archive")
+       let inputs = document.querySelectorAll('input[status^="백업완료"]')
+       
+       if (preset.checked === true) { //백업완료 프리셋 버튼을 켠다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = true
+           }
+       
+       } else { //백업완료 프리셋 버튼을 끈다
+           for (let i = 0; i < inputs.length; i++) {
+               inputs[i].checked = false
+           }
+       }
+       toggleCharts()
 }
 
 // 소송중 프리셋 버튼
 function projectpresetLawsuit(){
-    // 선택을 해제하면 전체도 해제한다.
-    console.log("test")
+   // 소송중 프리셋 버튼이 선택되면 소송중인 프로젝트 태그를 선택한다.
+   let preset = document.getElementById("preset-lawsuit")
+   let inputs = document.querySelectorAll('input[status^="소송중"]')
+   
+   if (preset.checked === true) { //소송중 프리셋 버튼을 켠다
+       for (let i = 0; i < inputs.length; i++) {
+           inputs[i].checked = true
+       }
+   
+   } else { //소송중 프리셋 버튼을 끈다
+       for (let i = 0; i < inputs.length; i++) {
+           inputs[i].checked = false
+       }
+   }
+   toggleCharts()
 }
