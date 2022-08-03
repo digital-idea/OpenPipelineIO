@@ -91,11 +91,12 @@ type ProjectForPartner struct {
 	TotalShot               int     `json:"totalshot"`               // 총컷
 }
 
-type PartnerEvent struct {
+type Event struct {
 	ID      primitive.ObjectID `bson:"_id" json:"id,omitempty"`
-	Date    string             `json:"date"`    // 이벤트 날짜
-	Title   string             `json:"title"`   // 이벤트 제목
-	Partner string             `json:"partner"` // 관련 파트너사
+	Date    string             `json:"date"`    // 이벤트 날짜(필수)
+	Title   string             `json:"title"`   // 이벤트 제목(필수)
+	Partner string             `json:"partner"` // 관련 파트너사가 있다면 입력한다.
+	Project string             `json:"project"` // 관련 프로젝트가 있다면 입력한다.
 }
 
 type Contract struct {
@@ -148,8 +149,6 @@ type Evaluation struct {
 type RNR struct {
 	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Order       float64            `json:"order"`       // 순서
-	Title       string             `json:"title"`       // R&R 제목
+	Name        string             `json:"name"`        // R&R 이름
 	Description string             `json:"description"` // 내용
 }
-
-// 내부는 어떻게 처리할지 고민하기

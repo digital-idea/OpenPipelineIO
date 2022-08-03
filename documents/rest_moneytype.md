@@ -14,7 +14,7 @@ Moneytype Restapi 입니다.
 | --- | --- | --- | --- |
 |/api/moneytype|자금타입 정보를 추가합니다| Option 참고 |curl -X POST -H 'Authorization: Basic {TOKEN}' -d '{"order":1,"name":"firstestimate", "description":"최초견적"}' "https://csi.lazypic.com/api/moneytype"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/struct_partner.go
+- Option: https://github.com/digital-idea/csi3/blob/master/struct_moneytype.go
 
 ## PUT
 
@@ -36,7 +36,7 @@ curl https://csi.lazypic.com/api/moneytype -v
 
 ```bash
 HTTP/1.1 200 OK
-< Access-Control-Allow-Methods: GET,PUT,DELETE,OPTIONS,POST
+< Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS
 < Access-Control-Allow-Origin: *
 < Date: Tue, 17 May 2022 02:10:41 GMT
 < Content-Length: 0
