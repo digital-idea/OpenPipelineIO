@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func addRNR(client *mongo.Client, s RNR) error {
-	collection := client.Database(*flagDBName).Collection("rnr")
+func addStep(client *mongo.Client, s Step) error {
+	collection := client.Database(*flagDBName).Collection("step")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	_, err := collection.InsertOne(ctx, s)
@@ -20,11 +20,11 @@ func addRNR(client *mongo.Client, s RNR) error {
 	return nil
 }
 
-func getRNR(client *mongo.Client, id string) (RNR, error) {
-	collection := client.Database(*flagDBName).Collection("rnr")
+func getStep(client *mongo.Client, id string) (Step, error) {
+	collection := client.Database(*flagDBName).Collection("step")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	s := RNR{}
+	s := Step{}
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return s, err
@@ -36,8 +36,8 @@ func getRNR(client *mongo.Client, id string) (RNR, error) {
 	return s, nil
 }
 
-func rmRNR(client *mongo.Client, id string) error {
-	collection := client.Database(*flagDBName).Collection("rnr")
+func rmStep(client *mongo.Client, id string) error {
+	collection := client.Database(*flagDBName).Collection("step")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	objID, err := primitive.ObjectIDFromHex(id)
@@ -51,8 +51,8 @@ func rmRNR(client *mongo.Client, id string) error {
 	return nil
 }
 
-func setRNR(client *mongo.Client, s RNR) error {
-	collection := client.Database(*flagDBName).Collection("rnr")
+func setStep(client *mongo.Client, s Step) error {
+	collection := client.Database(*flagDBName).Collection("step")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	_, err := collection.UpdateOne(

@@ -121,12 +121,12 @@ type Evaluation struct {
 	CreateDate    string             `json:"createdate"`    // 평가일
 }
 
-// RNR 자료구조는 R&R 과정에 대한 단계 시각화, 진행률 체크하기 위한 자료구조이다.
+// Step 자료구조는 워크플로우 또는 R&R 과정에 대한 단계 시각화, 진행률 체크하기 위한 자료구조이다.
 // 아래는 예시이다.
-// - 컨텍중(소개), 미팅접점
-// - 상호 스케줄 체크
-// - NDA발송
-// - 날인된 NDA 받기
+// - 컨텍중(소개), 미팅접점 <- 경영지원, 마케팅팀
+// - 상호 스케줄 체크 <- PD
+// - NDA발송 <- PM
+// - 날인된 NDA 받기 <- 경재실
 // - 관련자료전달, 프로젝트 이름을 밝히지 않는다.
 // - 데이터 아웃, 프로젝트 이름을 밝히지 않는다.
 // - 견적받기
@@ -146,7 +146,7 @@ type Evaluation struct {
 // - 결제완료된 계약서와 합의된 견적서를 회계팀에 전달하기
 // - 날인후 회계팀이 투자 회사에 전달
 // - 최종 계약서 스캔본 공유
-type RNR struct {
+type Step struct {
 	ID          primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	Order       float64            `json:"order"`       // 순서
 	Name        string             `json:"name"`        // R&R 이름

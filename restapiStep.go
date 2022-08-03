@@ -14,7 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func getRNRHandler(w http.ResponseWriter, r *http.Request) {
+func getStepHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -45,7 +45,7 @@ func getRNRHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "id를 설정해주세요", http.StatusBadRequest)
 		return
 	}
-	money, err := getRNR(client, id)
+	money, err := getStep(client, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,7 +61,7 @@ func getRNRHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func postRNRHandler(w http.ResponseWriter, r *http.Request) {
+func postStepHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -86,7 +86,7 @@ func postRNRHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	p := RNR{}
+	p := Step{}
 	var unmarshalErr *json.UnmarshalTypeError
 
 	decoder := json.NewDecoder(r.Body)
@@ -102,7 +102,7 @@ func postRNRHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	p.ID = primitive.NewObjectID()
-	err = addRNR(client, p)
+	err = addStep(client, p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -116,7 +116,7 @@ func postRNRHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func deleteRNRHandler(w http.ResponseWriter, r *http.Request) {
+func deleteStepHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -153,12 +153,12 @@ func deleteRNRHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 어떠한 데이터가 삭제되었는지 확인하기 위해서 구한다.
-	p, err := getRNR(client, id)
+	p, err := getStep(client, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	err = rmRNR(client, id)
+	err = rmStep(client, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -172,7 +172,7 @@ func deleteRNRHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func putRNRHandler(w http.ResponseWriter, r *http.Request) {
+func putStepHandler(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -204,13 +204,13 @@ func putRNRHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p, err := getRNR(client, id)
+	p, err := getStep(client, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	updateP := RNR{}
+	updateP := Step{}
 	var unmarshalErr *json.UnmarshalTypeError
 
 	decoder := json.NewDecoder(r.Body)
@@ -226,7 +226,7 @@ func putRNRHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	updateP.ID = p.ID
-	err = setRNR(client, updateP)
+	err = setStep(client, updateP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
