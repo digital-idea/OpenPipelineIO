@@ -51,7 +51,7 @@ function SetProjectsTags() {
 }
 
 function RenderPerChart() {
-    data.checked = [] // 체크된 리스트 초기화
+    data.checked = [] // 체크된 프로젝트 리스트 초기화
     
     // 켜져있는 프로젝트를 구한다.
     let inputs = document.querySelectorAll('input[id^="toggle-"]')
@@ -319,10 +319,6 @@ function StatusPerProject() {
 }
 
 function RenderSumChart() {
-    let onHold = 0
-    let inProgress = 0
-    let finalApproved = 0    
-
     // 초기화
     data.sum = new Object()
     data.sum.none = 0
@@ -335,11 +331,13 @@ function RenderSumChart() {
     data.sum.omit = 0
     data.sum.hold = 0
     data.sum.total = 0
-    // 선택된 프로젝트의 샷 진행챠트 그리기
+    data.sum.onhold = 0
+    data.sum.inprogress = 0
+    data.sum.finalapproved = 0
     
     // 그래프를 그리기 전에 선택된 프로젝트의 더한 샷 갯수를 구해야 한다.
     for (let n = 0; n < data.checked.length; n++) {
-        let p = data.checked[n] // 프로젝트 이름을 구한다.
+        let p = data.checked[n] // 선택된 프로젝트 이름을 구한다.
         // 상태 챠트를 그릴 때 사용할 값
         data.sum.none += data.projects[p].none
         data.sum.assign += data.projects[p].assign
@@ -350,56 +348,21 @@ function RenderSumChart() {
         data.sum.out += data.projects[p].out
         data.sum.omit += data.projects[p].omit
         data.sum.hold += data.projects[p].hold
+        // Total값 추후 연산에 편하게 쓸 수 있다.
         data.sum.total += data.projects[p].none + data.projects[p].assign + data.projects[p].ready + data.projects[p].wip + data.projects[p].confirm + data.projects[p].done + data.projects[p].out + data.projects[p].omit + data.projects[p].hold
-        // 프로그래스 챠트를 그릴 때 사용할 값
-        inProgress += data.projects[p].assign + data.projects[p].ready + data.projects[p].wip + data.projects[p].confirm + data.projects[p].out
-        finalApproved += data.projects[p].done
-        onHold += data.projects[p].omit + data.projects[p].hold
+        // Progress 챠트 준비물
+        data.sum.inprogress += data.projects[p].assign + data.projects[p].ready + data.projects[p].wip + data.projects[p].confirm + data.projects[p].out
+        data.sum.finalapproved += data.projects[p].done
+        data.sum.onhold += data.projects[p].omit + data.projects[p].hold
     }
-    document.getElementById("SumNoneStatusNum").innerHTML = data.sum.none
     
-    // 합에 대한 샷 진행챠트 그리기
-    let statusProgress = document.getElementById("sum-shot-status-progress")
-    statusProgress.innerHTML = "" // 초기화
-    let order = ["none","assign","ready","wip","confirm","done","out","omit","hold"]
-    for (let i = 0; i < order.length; i++) {
-        for (let [key, value] of Object.entries(data.sum)) {
-            if (value === 0) { // 값이 0 이면 그리지 않는다.
-                continue
-            }
-            if (!(order[i] == key)) {
-                continue
-            }
-            if (key === "total") {
-                continue
-            }
-            if (key === "none") {
-                continue
-            }
-            let opt = document.createElement('div');
-            opt.classList.add("progress-bar")
-            opt.classList.add("bg-"+key)
-            opt.role = "progressbar"
-            let percent = (value / (data.sum.total - data.sum.none)) * 100
-            opt.style = "width: " + percent.toFixed(1) + "%"
-            opt.setAttribute("aria-valuenow",value)
-            opt.setAttribute("aria-valuemin","0")
-            opt.setAttribute("aria-valuemax",(data.sum.total - data.sum.none))
-            opt.setAttribute("data-bs-toggle","tooltip")
-            opt.setAttribute("data-bs-placement","top")
-            opt.setAttribute("title", `${key} ${percent.toFixed(1)}%(${value})`)
-            opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
-            statusProgress.appendChild(opt);
-        }
-    }
-
-    // 합에 대한 진행률 챠트 그리기
+    // Progress 합 챠트
     let progress = document.getElementById("sum-shot-progress")
-    progress.innerHTML = "" // 초기화
+    progress.innerHTML = "" // 기존 챠트를 초기화 한다.
     progresslist = [
-        {"title":"In Progress", "style":"inprogress", "num":inProgress},
-        {"title":"Final Approved", "style":"finalapproved", "num":finalApproved},
-        {"title":"On Hold", "style":"onhold", "num":onHold},
+        {"title":"In Progress", "style":"inprogress", "num":data.sum.inprogress},
+        {"title":"Final Approved", "style":"finalapproved", "num":data.sum.finalapproved},
+        {"title":"On Hold", "style":"onhold", "num":data.sum.onhold},
     ]
     for (let i in progresslist) {
         if (progresslist[i].num === 0) {
@@ -409,11 +372,11 @@ function RenderSumChart() {
         opt.classList.add("progress-bar")
         opt.classList.add("bg-"+progresslist[i].style)
         opt.role = "progressbar"
-        let percent = (progresslist[i].num / (inProgress + finalApproved + onHold)) * 100
+        let percent = (progresslist[i].num / (data.sum.total - data.sum.none)) * 100
         opt.style = "width: " + percent.toFixed(1) + "%"
         opt.setAttribute("aria-valuenow",progresslist[i].num)
         opt.setAttribute("aria-valuemin","0")
-        opt.setAttribute("aria-valuemax",(inProgress + finalApproved + onHold))
+        opt.setAttribute("aria-valuemax",(data.sum.total - data.sum.none))
         opt.setAttribute("data-bs-toggle","tooltip")
         opt.setAttribute("data-bs-placement","top")
         let title = `${progresslist[i].title} ${percent.toFixed(1)}%(${progresslist[i].num})`
@@ -421,14 +384,44 @@ function RenderSumChart() {
         opt.innerHTML = title
         progress.appendChild(opt);
     }
+
+    // Status 합 챠트
+    let statusProgress = document.getElementById("sum-shot-status-progress")
+    statusProgress.innerHTML = "" // 기존 챠트를 초기화 한다.
+    
+    for (let [key, value] of Object.entries(data.sum)) {
+        if (value === 0 || key === "total" || key === "none"){ // 값이 0 이면 그리지 않는다.
+            continue
+        }
+        if (key === "inprogress" || key === "onhold" || key === "finalapproved") {
+            continue
+        }
+        let opt = document.createElement('div');
+        opt.classList.add("progress-bar")
+        opt.classList.add("bg-"+key)
+        opt.role = "progressbar"
+        let percent = (value / (data.sum.total - data.sum.none)) * 100
+        opt.style = "width: " + percent.toFixed(1) + "%"
+        opt.setAttribute("aria-valuenow",value)
+        opt.setAttribute("aria-valuemin","0")
+        opt.setAttribute("aria-valuemax",(data.sum.total - data.sum.none))
+        opt.setAttribute("data-bs-toggle","tooltip")
+        opt.setAttribute("data-bs-placement","top")
+        opt.setAttribute("title", `${key} ${percent.toFixed(1)}%(${value})`)
+        opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
+        statusProgress.appendChild(opt);
+    }
+
+    //  None 값 설정
+    document.getElementById("SumNoneStatusNum").innerHTML = data.sum.none
     
     initTooltip()
 }
 
 function initTooltip() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 }
 
