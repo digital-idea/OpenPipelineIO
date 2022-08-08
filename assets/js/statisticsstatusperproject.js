@@ -1,3 +1,5 @@
+var data = new Object() // 프로젝트 통계를 넣는다.
+
 function SetProjectsTags() {
     fetch("/api2/projects", {
         method: 'GET',
@@ -29,7 +31,8 @@ function SetProjectsTags() {
             checkoption.id = "toggle-" + project
             checkoption.value = "chart-" + project
             checkoption.setAttribute("status", projectStatusToText(obj[i].status))
-            checkoption.addEventListener("click", toggleCharts);
+            checkoption.setAttribute("project", project)
+            checkoption.addEventListener("click", RenderPerChart);
             checkoption.type = "checkbox"
             button.appendChild(checkoption)
             // 프로젝트 제목
@@ -47,19 +50,24 @@ function SetProjectsTags() {
     });
 }
 
-function toggleCharts() {
+function RenderPerChart() {
+    data.checked = [] // 체크된 프로젝트 리스트 초기화
+    
     // 켜져있는 프로젝트를 구한다.
     let inputs = document.querySelectorAll('input[id^="toggle-"]')
+    
     for (let i = 0; i < inputs.length; i++) {
         let e = document.getElementById(inputs[i].value)
         if (inputs[i].checked === true) {
+            data.checked.push(inputs[i].getAttribute("project")) // data에 체크된 프로젝트를 저장한다.
             e.style.display = "block" // 켜져있다면 해당 프로젝트를 켠다.
         } else {
             e.style.display = "none" // 꺼져있다면 해당 프로젝트를 끈다.
         }
     }
-    
-    
+
+    // 선택된 프로젝트만 챠트를 렌더링한다.
+    RenderSumChart()
 }
 
 function projectStatusToText(num) {
@@ -98,6 +106,7 @@ function StatusPerProject() {
         return response.json()
     })
     .then((obj) => {
+        data = obj // data 글로벌 변수에 데이터에 넣습니다.
         let total = 0
         let none = 0
         let onHold = 0
@@ -250,7 +259,7 @@ function StatusPerProject() {
                 if (key === "none") {
                     // none status는 그래프를 그리지 않는다.
                     none = value
-                    document.getElementById("NoneStatusNum").innerHTML = value
+                    document.getElementById("TotalNoneStatusNum").innerHTML = value
                     continue
                 }
                 if (key === "assign" || key === "ready" || key === "wip" || key === "confirm" || key === "out") {
@@ -309,10 +318,110 @@ function StatusPerProject() {
     });
 }
 
+function RenderSumChart() {
+    // 초기화
+    data.sum = new Object()
+    data.sum.none = 0
+    data.sum.assign = 0
+    data.sum.ready = 0
+    data.sum.wip = 0
+    data.sum.confirm = 0
+    data.sum.done = 0
+    data.sum.out = 0
+    data.sum.omit = 0
+    data.sum.hold = 0
+    data.sum.total = 0
+    data.sum.onhold = 0
+    data.sum.inprogress = 0
+    data.sum.finalapproved = 0
+    
+    // 그래프를 그리기 전에 선택된 프로젝트의 더한 샷 갯수를 구해야 한다.
+    for (let n = 0; n < data.checked.length; n++) {
+        let p = data.checked[n] // 선택된 프로젝트 이름을 구한다.
+        // 상태 챠트를 그릴 때 사용할 값
+        data.sum.none += data.projects[p].none
+        data.sum.assign += data.projects[p].assign
+        data.sum.ready += data.projects[p].ready
+        data.sum.wip += data.projects[p].wip
+        data.sum.confirm += data.projects[p].confirm
+        data.sum.done += data.projects[p].done
+        data.sum.out += data.projects[p].out
+        data.sum.omit += data.projects[p].omit
+        data.sum.hold += data.projects[p].hold
+        // Total값 추후 연산에 편하게 쓸 수 있다.
+        data.sum.total += data.projects[p].none + data.projects[p].assign + data.projects[p].ready + data.projects[p].wip + data.projects[p].confirm + data.projects[p].done + data.projects[p].out + data.projects[p].omit + data.projects[p].hold
+        // Progress 챠트 준비물
+        data.sum.inprogress += data.projects[p].assign + data.projects[p].ready + data.projects[p].wip + data.projects[p].confirm + data.projects[p].out
+        data.sum.finalapproved += data.projects[p].done
+        data.sum.onhold += data.projects[p].omit + data.projects[p].hold
+    }
+    
+    // Progress 합 챠트
+    let progress = document.getElementById("sum-shot-progress")
+    progress.innerHTML = "" // 기존 챠트를 초기화 한다.
+    progresslist = [
+        {"title":"In Progress", "style":"inprogress", "num":data.sum.inprogress},
+        {"title":"Final Approved", "style":"finalapproved", "num":data.sum.finalapproved},
+        {"title":"On Hold", "style":"onhold", "num":data.sum.onhold},
+    ]
+    for (let i in progresslist) {
+        if (progresslist[i].num === 0) {
+            continue
+        }
+        let opt = document.createElement('div');
+        opt.classList.add("progress-bar")
+        opt.classList.add("bg-"+progresslist[i].style)
+        opt.role = "progressbar"
+        let percent = (progresslist[i].num / (data.sum.total - data.sum.none)) * 100
+        opt.style = "width: " + percent.toFixed(1) + "%"
+        opt.setAttribute("aria-valuenow",progresslist[i].num)
+        opt.setAttribute("aria-valuemin","0")
+        opt.setAttribute("aria-valuemax",(data.sum.total - data.sum.none))
+        opt.setAttribute("data-bs-toggle","tooltip")
+        opt.setAttribute("data-bs-placement","top")
+        let title = `${progresslist[i].title} ${percent.toFixed(1)}%(${progresslist[i].num})`
+        opt.setAttribute("title", title)
+        opt.innerHTML = title
+        progress.appendChild(opt);
+    }
+
+    // Status 합 챠트
+    let statusProgress = document.getElementById("sum-shot-status-progress")
+    statusProgress.innerHTML = "" // 기존 챠트를 초기화 한다.
+    
+    for (let [key, value] of Object.entries(data.sum)) {
+        if (value === 0 || key === "total" || key === "none"){ // 값이 0 이면 그리지 않는다.
+            continue
+        }
+        if (key === "inprogress" || key === "onhold" || key === "finalapproved") {
+            continue
+        }
+        let opt = document.createElement('div');
+        opt.classList.add("progress-bar")
+        opt.classList.add("bg-"+key)
+        opt.role = "progressbar"
+        let percent = (value / (data.sum.total - data.sum.none)) * 100
+        opt.style = "width: " + percent.toFixed(1) + "%"
+        opt.setAttribute("aria-valuenow",value)
+        opt.setAttribute("aria-valuemin","0")
+        opt.setAttribute("aria-valuemax",(data.sum.total - data.sum.none))
+        opt.setAttribute("data-bs-toggle","tooltip")
+        opt.setAttribute("data-bs-placement","top")
+        opt.setAttribute("title", `${key} ${percent.toFixed(1)}%(${value})`)
+        opt.innerHTML = `${key}<br>${percent.toFixed(1)}%(${value})`
+        statusProgress.appendChild(opt);
+    }
+
+    //  None 값 설정
+    document.getElementById("SumNoneStatusNum").innerHTML = data.sum.none
+    
+    initTooltip()
+}
+
 function initTooltip() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 }
 
@@ -321,8 +430,6 @@ function projectpresetAll(){
      // 전체 프리셋 버튼이 선택되면 전체 프로젝트 태그를 선택한다.
      let preset = document.getElementById("preset-all")
      let inputs = document.querySelectorAll('input')
-     console.log("전체")
-     console.log(inputs)
      if (preset.checked === true) { //전체 프리셋 버튼을 켠다
          for (let i = 0; i < inputs.length; i++) {
             inputs[i].checked = true
@@ -333,7 +440,7 @@ function projectpresetAll(){
             inputs[i].checked = false
          }
      }
-     toggleCharts()
+     RenderPerChart()
 }
 
 // 진행중 프리셋 버튼
@@ -352,7 +459,7 @@ function projectpresetPostProject(){
             inputs[i].checked = false
         }
     }
-    toggleCharts()
+    RenderPerChart()
 }
 
 // 준비중 프리셋 버튼
@@ -371,7 +478,7 @@ function projectpresetPreProject(){
               inputs[i].checked = false
           }
       }
-      toggleCharts()
+      RenderPerChart()
 }
 
 // 테스트 프리셋 버튼
@@ -390,7 +497,7 @@ function projectpresetTest(){
             inputs[i].checked = false
         }
     }
-    toggleCharts()
+    RenderPerChart()
 }
 
 // 중단 프리셋 버튼
@@ -409,7 +516,7 @@ function projectpresetLayover(){
                inputs[i].checked = false
            }
        }
-       toggleCharts()
+       RenderPerChart()
 }
 
 // 백업중 프리셋 버튼
@@ -428,7 +535,7 @@ function projectpresetBackup(){
                inputs[i].checked = false
            }
        }
-       toggleCharts()
+       RenderPerChart()
 }
 
 // 백업완료 프리셋 버튼
@@ -447,7 +554,7 @@ function projectpresetArchived(){
                inputs[i].checked = false
            }
        }
-       toggleCharts()
+       RenderPerChart()
 }
 
 // 소송중 프리셋 버튼
@@ -466,5 +573,5 @@ function projectpresetLawsuit(){
            inputs[i].checked = false
        }
    }
-   toggleCharts()
+   RenderPerChart()
 }
