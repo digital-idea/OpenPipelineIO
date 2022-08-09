@@ -633,6 +633,9 @@ func userInfo(userInfo string) string {
 }
 
 func onlyID(userInfo string) string {
+	if userInfo == "" {
+		return ""
+	}
 	if regexpUserInfo.MatchString(userInfo) {
 		return strings.Split(userInfo, "(")[0]
 	}
