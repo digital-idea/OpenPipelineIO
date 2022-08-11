@@ -3649,25 +3649,22 @@ func handleAPI2SetTaskUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Task = task
-	user := r.FormValue("user")
-	if user == "" {
-		http.Error(w, "user 를 설정해주세요", http.StatusBadRequest)
-		return
+	rcp.Username = r.FormValue("user")
+	if rcp.Username != "" {
+		rcp.UserID = onlyID(rcp.Username)            // id(name,team) 문자열중 id만 추출한다.
+		rcp.UsernameAndTeam = userInfo(rcp.Username) // id(name,team) 문자열을 name,team으로 바꾼다. 웹에서 보기좋게 하기 위함.
+		err = SetTaskUserID(session, rcp.Project, rcp.ID, rcp.Task, rcp.UserID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
-	rcp.Username = user
-	rcp.UserID = onlyID(rcp.Username)            // id(name,team) 문자열중 id만 추출한다.
-	rcp.UsernameAndTeam = userInfo(rcp.Username) // id(name,team) 문자열을 name,team으로 바꾼다. 웹에서 보기좋게 하기 위함.
-
 	err = SetTaskUserV2(session, rcp.Project, rcp.ID, rcp.Task, rcp.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = SetTaskUserID(session, rcp.Project, rcp.ID, rcp.Task, rcp.UserID)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+
 	// log
 	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set Task User: %s %s", rcp.Task, rcp.Username), rcp.Project, rcp.ID, "csi3", userID, 180)
 	if err != nil {
