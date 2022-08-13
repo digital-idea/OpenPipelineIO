@@ -101,7 +101,7 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		for _, f := range files {
-			rcp.UploadFilename = f.Filename
+			rcp.UploadFilename = f.Filename // 파일명을 추출한다. 추후 파일명으로 연산을 하고 싶은 상황이 된다면 진행할 것
 			if f.Size == 0 {
 				http.Error(w, "file size is 0 bytes", http.StatusBadRequest)
 				return
