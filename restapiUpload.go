@@ -19,10 +19,11 @@ import (
 // handleAPIUploadThumbnail 함수는 thumbnail 이미지를 업로드 하는 RestAPI 이다.
 func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		Type    string `json:"type"`
-		Path    string `json:"path"`
+		Project        string `json:"project"`
+		Name           string `json:"name"`
+		Type           string `json:"type"`
+		Path           string `json:"path"`
+		UploadFilename string `json:"uploadfilename"`
 	}
 	rcp := Recipe{}
 	session, err := mgo.Dial(*flagDBIP)
@@ -87,17 +88,20 @@ func handleAPIUploadThumbnail(w http.ResponseWriter, r *http.Request) {
 	} else {
 		rcp.Type = typ
 	}
+
 	if len(r.MultipartForm.File) == 0 { // 파일이 없다면 에러처리한다.
 		http.Error(w, "need thumbnail image path", http.StatusBadRequest)
 		return
 	}
-	if len(r.MultipartForm.File) != 1 { // 파일이 복수일 때
-		http.Error(w, "multiple files cannot be set", http.StatusBadRequest)
-		return
-	}
+
 	// 썸네일이 존재한다면 썸네일을 처리한다.
 	for _, files := range r.MultipartForm.File {
+		if len(files) != 1 { // 파일이 복수일 때
+			http.Error(w, "multiple files cannot be set", http.StatusBadRequest)
+			return
+		}
 		for _, f := range files {
+			rcp.UploadFilename = f.Filename
 			if f.Size == 0 {
 				http.Error(w, "file size is 0 bytes", http.StatusBadRequest)
 				return
