@@ -552,7 +552,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/setpublishstatus", handleAPISetTaskPublishStatus)
 	r.HandleFunc("/api/rmpublish", handleAPIRmTaskPublish)
 	r.HandleFunc("/api/rmpublishkey", handleAPIRmTaskPublishKey)
-	r.HandleFunc("/api/uploadthumbnail", handleAPIUploadThumbnail)
+	r.HandleFunc("/api/uploadthumbnail", handleAPIUploadThumbnail).Methods("POST")
 	r.HandleFunc("/api/setnetflixid", handleAPISetNetflixID)
 
 	// restAPI USER
