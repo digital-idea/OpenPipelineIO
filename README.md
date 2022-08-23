@@ -1,11 +1,12 @@
 # OpenPipelineIO
-
-![travisCI](https://secure.travis-ci.org/digital-idea/OpenPipelineIO.svg)
+![example workflow](https://github.com/digital-idea/OpenPipelineIO/actions/workflows/go.yml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/digital-idea/OpenPipelineIO)](https://goreportcard.com/report/github.com/digital-idea/OpenPipelineIO)
 
 ![screenshot](figures/screenshot.png)
 
 ![review](figures/review.png)
+
+![statistics](figures/statistics.png)
 
 OpenPipelineIO는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션, DATA IO 솔루션 입니다.
 
