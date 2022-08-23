@@ -23,13 +23,13 @@ var (
 	// DBPORT mongoDB 기본포트.
 	DBPORT = ":27017"
 	// DBNAME 값은 데이터베이스 이름이다.
-	DBNAME = "csi"
+	DBNAME = "csi" // legacy
 	// WFS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	WFS = "http://127.0.0.1:8081"
 	// DILOG 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	DILOG = "http://127.0.0.1:8080"
 	// DNS 값은 서비스 DNS 값입니다.
-	DNS = "csi.lazypic.org"
+	DNS = "openpipeline.io"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
 	MAILDNS = "lazypic.org"
 	// COMPANY 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -111,7 +111,7 @@ var (
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.SetPrefix("csi: ")
+	log.SetPrefix("OpenPipelineIO: ")
 	flag.Usage = usage
 	flag.Parse()
 	if *flagVersion {
@@ -357,7 +357,7 @@ func main() {
 		CachedAdminSetting = admin
 		// 만약 Admin설정에 ThumbnailRootPath가 잡혀있다면 그 값을 이용한다.
 		if admin.ThumbnailRootPath == "" {
-			log.Println("csi에서 생성되는 이미지, 사용자 프로필사진을 저장할 thumbnail 경로가 필요합니다.")
+			log.Println("admin 설정창의 thumbnail 경로지정이 필요합니다.")
 		}
 
 		plist, err := Projectlist(session)
@@ -391,7 +391,7 @@ func main() {
 		webserver(*flagHTTPPort)
 	} else if MatchNormalTime.MatchString(*flagDate) {
 		// date 값이 데일리 형식이면 해당 날짜에 업로드된 mov를 RV를 통해 플레이한다.
-		// 예: $ csi3 -date 2020-03-19 -play
+		// 예: $ openpipelineio -date 2020-03-19 -play
 		session, err := mgo.Dial(*flagDBIP)
 		if err != nil {
 			log.Fatal(err)

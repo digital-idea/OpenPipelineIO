@@ -1,13 +1,13 @@
-# CSI
+# OpenPipelineIO
 
-![travisCI](https://secure.travis-ci.org/digital-idea/csi3.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/digital-idea/csi3)](https://goreportcard.com/report/github.com/digital-idea/csi3)
+![travisCI](https://secure.travis-ci.org/digital-idea/OpenPipelineIO.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/digital-idea/OpenPipelineIO)](https://goreportcard.com/report/github.com/digital-idea/OpenPipelineIO)
 
 ![screenshot](figures/screenshot.png)
 
 ![review](figures/review.png)
 
-CSI(Creation Status Integrator)는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션 입니다.
+OpenPipelineIO는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션, DATA IO 솔루션 입니다.
 
 - 속도, 검색어 방식, 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
 - 내부, 외부 서버에 설치가 가능합니다.
@@ -19,8 +19,8 @@ CSI(Creation Status Integrator)는 영상(영화,드라마), 게임, 에니메�
 브라우저 지원 우선순위: 크롬 > 사파리 > 파이어폭스
 
 1. 파트너 관리툴 추가 - 진행중
-1. 통계, 레포트(개인, 팀장, 실장 페이지) - 진행중
-1. 달력, 간트챠트
+1. 통계, 레포트 - 진행중
+1. 달력, 간트챠트 - 리서치중
 1. 장비관리 툴
 1. 웹 스캔 툴: 도토리의 multi clip, multi footage 연동
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
@@ -49,19 +49,15 @@ Windows
 
 ### 실행하기
 
-CSI를 실행하기 전에 우선적으로 thumbnail 폴더가 필요합니다.
-이 경로는 CSI를 운용하면서 생성되는 썸네일 이미지, 사용자 프로필 사진이 저장되는 경로로 사용됩니다.
-썸네일 경로가 이미 존재한다면, 해당경로를 서비스 시작시 `-thumbpath` 인수를 이용해서 설정할 수 있습니다.
-
 ```bash
-sudo csi3 -http :80 # 웹서버를 실행합니다.
-sudo csi3 -http :80 -reviewrender # 웹서버 및 FFmpeg를 이용하여 리뷰를 렌더링하는 서버
-sudo csi3 -http :80 &> csi.log& # csi.log 파일에 로그가 생성되면서 서비스 실행
+sudo openpipelineio -http :80 # 웹서버를 실행합니다.
+sudo openpipelineio -http :80 -reviewrender # 웹서버 및 FFmpeg를 이용하여 리뷰를 렌더링하는 서버
+sudo openpipelineio -http :80 &> openpipelineio.log& # openpipelineio.log 파일에 로그가 생성되면서 서비스 실행
 ```
 
 > 여러분이 macOS를 사용한다면 기본적으로 80포트는 아파치 서버가 사용중일 수 있습니다. 80포트에 실행되는 아파치 서버를 종료하기 위해서 `$ sudo apachectl stop` 를 터미널에 입력해주세요.
 
-CSI는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [dilink-웹프로토콜](https://github.com/digital-idea/dilink)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 강력한 CSI를 사용할 수 있습니다.
+OpenPipelineIO는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [dilink-웹프로토콜](https://github.com/digital-idea/dilink)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 편리한 OpenPipelineIO를 활용할 수 있습니다.
 
 ```bash
 dilog -http :8080
@@ -78,10 +74,9 @@ success
 sudo firewall-cmd --reload
 ```
 
-### 터미널 명령어 / CommandLine
+### CommandLine
 
-CSI는 터미널에서 간단하게 관리를 할 수 있습니다.
-관리를 위해 필요한 명령어 메뉴얼입니다.
+터미널에서 간단하게 명령어를 통해 관리를 할 수 있습니다.
 
 - [Item](documents/item.md): Asset, Shot
 - [User](documents/user.md)
@@ -90,8 +85,8 @@ CSI는 터미널에서 간단하게 관리를 할 수 있습니다.
 
 ### RestAPI
 
-CSI는 RestAPI가 설계되어 있습니다.
-Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI의 상태를 변경할 수 있습니다.
+OpenPipelineIO는 RestAPI가 설계되어 있습니다.
+Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어를 활용하여 OpenPipelineIO를 제어할 수 있습니다.
 
 - [Project](documents/rest_project.md)
 - [Item](documents/rest_item.md): Asset, Shot
@@ -125,9 +120,9 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 
 ### Developer
 
-- CSI서버: <https://csi.lazypic.com>
-- Log서버: <https://csi.lazypic.com:8080>
-- WFS서버: <https://csi.lazypic.com:8081>
+- OpenPipelineIO: <https://openpipeline.io>
+- Log서버: <https://openpipeline.io:8080>
+- WFS서버: <https://openpipeline.io:8081>
 - 회사 전용 빌드문의: hello@lazypic.org
 - Maintainer: Jason / jason@lazypic.org
 - Committer: Alex / alex@lazypic.org
@@ -139,12 +134,12 @@ Python, Go, Java, Javascript, node.JS, C++, C, C# 등 수많은 언어에서 CSI
 
 ### Infomation
 
-- [CSI의 역사](documents/history.md)
+- [OpenPipelineIO의 역사](documents/history.md)
 - License: BSD 3-Clause License
 
 ### License
 
-- CSI: BSD 3-Clause License
+- OpenPipelineIO: BSD 3-Clause License
 - [JScolor](http://jscolor.com/download/): GNU GPL license v3
 - [Dropzone](https://www.dropzonejs.com): MIT License
 - [JQuery](https://jquery.org/license/): MIT license

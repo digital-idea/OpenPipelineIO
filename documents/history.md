@@ -1,5 +1,6 @@
 # History
 
+- '22. 8. 20: CSI -> OpenPipelineIO 로 이름변경
 - '22. 2. 19: 기존 (주)투썬디지털아이디어 -> (주)바른손디지털아이디어 로 변경
 - '20. 11: 사내 Review Process Test, 기능 업데이트
 - '20. 7: [(주)투썬디지털아이디어](http://www.digitalidea.co.kr) + [Lazypic,LLC.(유한책임회사 레이지픽)](https://lazypic.org) 공동개발 시작

@@ -1,5 +1,5 @@
 #!/bin/sh
-APP="csi3"
+APP="openpipelineio"
 
 # assets 폴더의 모든 에셋을 빌드전에 assets_vfsdata.go 파일로 생성한다.
 go run assets/asset_generate.go
