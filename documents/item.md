@@ -5,9 +5,9 @@
 DB값만 생성되며, 샷 폴더가 생성되지는 않습니다.
 
 ```bash
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org]
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 에피소드와 시즌을 추가
-$ csi3 -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 -netflixid 123435 # 에피소드, 시즌, 넷플릭스ID를 같이 추가
+openpipelineio -add item -project [projectname] -name [SS_0010] -type [org]
+openpipelineio -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 # 샷등록시 에피소드와 시즌을 추가
+openpipelineio -add item -project [projectname] -name [SS_0010] -type [org] -eposide e01 -season 1 -netflixid 123435 # 샷 등록시 에피소드, 시즌, 넷플릭스ID를 같이 추가
 ```
 
 #### Plate 정보와 함께 샷 등록하는 인수
@@ -34,7 +34,7 @@ SS_0010 샷을 생성시 아래 인수를 이용해서 정보를 샷,에셋 생�
 - netflixid: 넷플릭스ID
 
 ```bash
-$ csi3 -add item -project circle -name SS_0010 -type org -platesize 2048x1152 -scanname A007C006_160424_R28L -scantimecodein 10:00:00:00 -scantimecodeout 10:00:04:04 -scanframe 100 -scanin 456812 -scanout 456912 -platein 1001 -plateout 1101 -justin 1003 -justout 1098 -justtimecodein 10:00:00:03 -justtimecodeout 10:00:04:02
+openpipelineio -add item -project circle -name SS_0010 -type org -platesize 2048x1152 -scanname A007C006_160424_R28L -scantimecodein 10:00:00:00 -scantimecodeout 10:00:04:04 -scanframe 100 -scanin 456812 -scanout 456912 -platein 1001 -plateout 1101 -justin 1003 -justout 1098 -justtimecodein 10:00:00:03 -justtimecodeout 10:00:04:02
 ```
 
 만약 justin, justout, justtimecodein, justtimecodeout 값이 비어있다면,
@@ -44,13 +44,13 @@ justin값은 platein, justout값은 plateout, justtimecodein값은 scantimecodei
 circle 프로젝트 SS_0010 샷 삭제
 
 ```bash
-$ sudo csi3 -rm item -project circle -name SS_0010 -type org
+sudo openpipelineio -rm item -project circle -name SS_0010 -type org
 ```
 
 circle 프로젝트 stone01 에셋 삭제
 
 ```bash
-$ sudo csi3 -rm item -project circle -name stone01 -type asset
+sudo openpipelineio -rm item -project circle -name stone01 -type asset
 ```
 
 #### 에셋등록
@@ -58,13 +58,13 @@ $ sudo csi3 -rm item -project circle -name stone01 -type asset
 에셋이 prop 타입이고 component 형태일 때
 
 ```bash
-$ csi3 -add item -type asset -project [projectname] -name [Assetname] -assettype prop -assettags prop,component
+openpipelineio -add item -type asset -project [projectname] -name [Assetname] -assettype prop -assettags prop,component
 ```
 
 #### 소스등록
 
 ```bash
-csi3 -add item -name OPN_0010 -type src2 -project TEMP -platepath /source/path
+openpipelineio -add item -name OPN_0010 -type src2 -project TEMP -platepath /source/path
 ```
 
 등록이 되면 자동으로 OPN_0010 샷에 OPN_0010_org 소스 제목으로 /source/path 경로가 자동 등록됩니다.
