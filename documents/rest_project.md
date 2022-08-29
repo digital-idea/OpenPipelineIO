@@ -13,17 +13,17 @@ Python, Go, Java, C++, node.JS 언어를 이용해서 restAPI를 사용할 수 �
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/project | 프로젝트 정보를 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/project?id=TEMP"` |
-| /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 옵니다. | status | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projects?status=post"` |
-| /api2/projects | 프로젝트의 모든 정보를 가지고 옵니다. | . | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api2/projects"` |
-| /api/projecttags | 프로젝트에 사용중인 tags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projecttags?project=TEMP"` |
-| /api/projectassettags | 프로젝트에 사용중인 asssettags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/projectassettags?project=TEMP"` |
+| /api/project | 프로젝트 정보를 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://openpipeline.io/api/project?id=TEMP"` |
+| /api/projects | 프로젝트 상태를 입력하고 프로젝트 정보를 가지고 옵니다. | status | `$ curl -H "Authorization: Basic <Token>" "https://openpipeline.io/api/projects?status=post"` |
+| /api2/projects | 프로젝트의 모든 정보를 가지고 옵니다. | . | `$ curl -H "Authorization: Basic <Token>" "https://openpipeline.io/api2/projects"` |
+| /api/projecttags | 프로젝트에 사용중인 tags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://openpipeline.io/api/projecttags?project=TEMP"` |
+| /api/projectassettags | 프로젝트에 사용중인 asssettags 가지고 옵니다. | project | `$ curl -H "Authorization: Basic <Token>" "https://openpipeline.io/api/projectassettags?project=TEMP"` |
 
 ## Post
 
 | URI | Description | Attributes | Curl Example |
 | --- | --- | --- | --- |
-| /api/addproject | 프로젝트를 생성합니다. | id | `$ curl -X POST -d "id=TEMP" -H "Authorization: Basic <Token>" "https://csi.lazypic.org/api/addproject"` |
+| /api/addproject | 프로젝트를 생성합니다. | id | `$ curl -X POST -d "id=TEMP" -H "Authorization: Basic <Token>" "https://openpipeline.io/api/addproject"` |
 
 #### 프로젝트리스트 가지고오기
 - 작업중인 프로젝트 리스트가지고오기
@@ -61,7 +61,7 @@ print(data)
 import urllib2
 import json
 
-request = urllib2.Request("https://csi.lazypic.org/api/project?id=TEMP") # TEMP 프로젝트 자료구조를 가지고 옵니다.
+request = urllib2.Request("https://openpipeline.io/api/project?id=TEMP") # TEMP 프로젝트 자료구조를 가지고 옵니다.
 request.add_header("Authorization", "Basic <Token>")
 result = urllib2.urlopen(request)
 data = json.load(result)
@@ -81,7 +81,7 @@ print(data["pa"])      # PA
 import urllib2
 import json
 
-request = urllib2.Request("https://csi.lazypic.org/api/projectassettags?project=TEMP")
+request = urllib2.Request("https://openpipeline.io/api/projectassettags?project=TEMP")
 request.add_header("Authorization", "Basic <Token>")
 result = urllib2.urlopen(request)
 data = json.load(result)

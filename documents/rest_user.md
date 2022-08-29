@@ -29,25 +29,25 @@ CSI는 사용자 권한에 따라 접근할 수 있는 기능별 제어 권한�
 ## Get
 | Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/user | 유저정보를 가지고 오기 | id | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/user?id=woong` |
-| /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=팀장` |
-| /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=합성팀,1팀,팀장` |
-| /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/users?searchword=개발팀,1팀` |
-| /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/autocompliteusers` |
-| /api/ansiblehosts | Ansible Hosts 텍스트 파일을 출력합니다. | . | `$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/ansiblehosts` |
+| /api/user | 유저정보를 가지고 오기 | id | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/user?id=woong` |
+| /api/users | 팀장 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/users?searchword=팀장` |
+| /api/users | 팀, 세부팀, 팀장의 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/users?searchword=합성팀,1팀,팀장` |
+| /api/users | 개발팀, 1팀 정보를 가지고 오기 | 검색어 | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/users?searchword=개발팀,1팀` |
+| /api/autocompliteusers | input form Autocomplite용 유저리스트 가지고 오기 | . | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/autocompliteusers` |
+| /api/ansiblehosts | Ansible Hosts 텍스트 파일을 출력합니다. | . | `$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/ansiblehosts` |
 
 
 ## Post
 | Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/validuser | 사용자의 ID,Password가 유효한지 체크 | id, pw | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&pw=password" https://csi.lazypic.org/api/validuser` |
-| /api/setleaveuser | 사용자의 퇴사 상태 설정(권한은 Unknown으로 변경)| id, leave | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&leave=true" https://csi.lazypic.org/api/setleaveuser` |
-| /api/initpassword | 사용자의 패스워드를 리셋한다.| id | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=userid" https://csi.lazypic.org/api/initpassword` |
+| /api/validuser | 사용자의 ID,Password가 유효한지 체크 | id, pw | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&pw=password" https://openpipeline.io/api/validuser` |
+| /api/setleaveuser | 사용자의 퇴사 상태 설정(권한은 Unknown으로 변경)| id, leave | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=id&leave=true" https://openpipeline.io/api/setleaveuser` |
+| /api/initpassword | 사용자의 패스워드를 리셋한다.| id | `$ curl -H "Authorization: Basic <TOKEN>" -d "id=userid" https://openpipeline.io/api/initpassword` |
 
 ## Delete
 | Endpoint | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api2/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://csi.lazypic.org/api2/user?id=woong` |
+| /api2/user | 유저정보 삭제하기 | id | `$ curl -H "Authorization: Basic <TOKEN>" -X DELETE https://openpipeline.io/api2/user?id=woong` |
 
 ## 인증을 통한 restAPI 사용방법
 
@@ -112,7 +112,7 @@ import json
 
 try:
     id = "userid"
-    endpoint = "https://csi.lazypic.org/api/user?id=%s" % (id)
+    endpoint = "https://openpipeline.io/api/user?id=%s" % (id)
     request = urllib2.Request(endpoint)
     key = "<Token>"
     request.add_header("Authorization", "Basic %s" % key)
@@ -126,5 +126,5 @@ except:
 사용자의 최근 접속IP를 이용해서 Ansible에서 활용 가능한 hosts 파일을 생성할 수 있습니다.
 
 ```bash
-$ curl -H "Authorization: Basic <TOKEN>" https://csi.lazypic.org/api/ansiblehosts > userhosts.lst
+$ curl -H "Authorization: Basic <TOKEN>" https://openpipeline.io/api/ansiblehosts > userhosts.lst
 ```

@@ -388,7 +388,7 @@ import urllib
 import urllib2
 import json
 
-url = 'https://csi.lazypic.com/api/rmpublish'
+url = 'https://openpipeline.io/api/rmpublish'
 data = { 'project' : 'TEMP',
 	'id' : 'SS_0010_org',
 	'task' : 'ani',
