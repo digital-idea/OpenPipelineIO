@@ -318,6 +318,15 @@ func (i *Item) GetFieldBool(field string) bool {
 }
 
 func (i *Item) CheckError() error {
+	if i.Project == "" {
+		return errors.New("need project")
+	}
+	if i.Name == "" {
+		return errors.New("need name")
+	}
+	if i.Type == "" {
+		return errors.New("need type")
+	}
 	switch i.Seq {
 	//윈도우 예약어
 	case "CON", "PRN", "AUX", "NUL",
