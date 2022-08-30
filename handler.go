@@ -443,7 +443,7 @@ func webserver(port string) {
 	// restAPI Item
 	r.HandleFunc("/api/timeinfo", handleAPITimeinfo)
 	r.HandleFunc("/api/item", handleAPIItem) // legacy
-	r.HandleFunc("/api2/item", handleAPI2Item)
+	r.HandleFunc("/api2/item", handleAPI2GetItem).Methods("GET")
 	r.HandleFunc("/api/rmitem", handleAPIRmItem) // legacy
 	r.HandleFunc("/api/rmitemid", handleAPIRmItemID)
 	r.HandleFunc("/api/items", handleAPI2Items)  // legacy
@@ -454,8 +454,9 @@ func webserver(port string) {
 	r.HandleFunc("/api/allshots", handleAPIAllShots)
 	r.HandleFunc("/api/shots", handleAPIShots) // legacy
 	r.HandleFunc("/api2/shots", handleAPI2Shots)
-	r.HandleFunc("/api/shot", handleAPIShot)
-	r.HandleFunc("/api/asset", handleAPIAsset)
+	r.HandleFunc("/api/shot", handleAPIGetShot).Methods("GET")
+	r.HandleFunc("/api/item", postHandleAPIItem).Methods("POST")
+	r.HandleFunc("/api/asset", handleAPIGetAsset).Methods("GET")
 	r.HandleFunc("/api/assets", handleAPIAssets)
 	r.HandleFunc("/api/setplatesize", handleAPISetPlateSize)
 	r.HandleFunc("/api/setundistortionsize", handleAPISetUnDistortionSize)
