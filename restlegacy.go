@@ -267,10 +267,6 @@ func handleAPIUser(w http.ResponseWriter, r *http.Request) {
 
 // handleAPIItem 함수는 아이템 자료구조를 불러온다. // legacy
 func handleAPIItem(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Get Only", http.StatusMethodNotAllowed)
-		return
-	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
