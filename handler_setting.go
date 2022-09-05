@@ -209,6 +209,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.RocketChatToken = r.FormValue("RocketChatToken")
 	s.EnableRocketChat = str2bool(r.FormValue("EnableRocketChat"))
 	s.EnableEndpoint = str2bool(r.FormValue("EnableEndpoint"))
+	s.FullcalendarSchedulerLicenseKey = r.FormValue("FullcalendarSchedulerLicenseKey")
 	// DB에 값을 저장합니다.
 	err = SetAdminSetting(session, s)
 	if err != nil {
