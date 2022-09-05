@@ -8,7 +8,7 @@
 
 ![statistics](figures/statistics.png)
 
-OpenPipelineIO는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션, DATA IO 솔루션 입니다.
+OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 콘텐츠 제작을 위한 프로젝트 매니징 솔루션, DATA IO 솔루션 입니다.
 
 - 속도, 검색어 방식, 교육의 최소화, 단일파일 배포를 중점으로 개발되고 있습니다.
 - 내부, 외부 서버에 설치가 가능합니다.
@@ -21,12 +21,15 @@ OpenPipelineIO는 영상(영화,드라마), 게임, 에니메이션등 콘텐츠
 
 1. 파트너 관리툴 추가 - 진행중
 1. 통계, 레포트 - 진행중
-1. 달력, 간트챠트 - 리서치중
-1. InBox 구조: 메시지, 팔로우 기능
+1. 달력, 간트챠트 <https://fullcalendar.io> - 진행중
+1. InBox 구조: 메시지, 팔로우 기능: <https://github.com/gorilla/websocket>
 1. 장비관리 툴
 1. 웹 스캔 툴: 도토리의 multi clip, multi footage 연동
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
 1. 샷 파일 브라우져
+1. Big Data
+1. AI
+1. Collaborate with other open sources: <https://landscape.aswf.io/?category=aswf-member-company&grouping=category&fullscreen=yes>
 
 ### 데이터베이스(mongoDB) 설치 및 서비스 실행
 
