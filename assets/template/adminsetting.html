@@ -496,11 +496,21 @@
                         </div>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="DefaultScaleRatioOfUndistortionPlate">언디스토션 플레이트 기본 스케일 비율</label>
-                    <input type="text" class="form-control" id="DefaultScaleRatioOfUndistortionPlate" name="DefaultScaleRatioOfUndistortionPlate" placeholder="1.1" value={{.Setting.DefaultScaleRatioOfUndistortionPlate}}>
-                    <small class="form-text text-muted">언디스토션 플레이트의 기본 스케일 비율을 입력합니다.</small>
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="FullcalendarSchedulerLicenseKey">FullCalendar License Key</label>
+                        <input type="text" class="form-control" id="FullcalendarSchedulerLicenseKey" name="FullcalendarSchedulerLicenseKey" placeholder="XXXXXXXXXX-XXX-XXXXXXXXXX" value={{.Setting.FullcalendarSchedulerLicenseKey}}>
+                        <small class="form-text text-muted"><a href="https://fullcalendar.io" class="text-muted text-decoration-none">https://fullcalendar.io</a> License Key</small>
+                        <small>, </small>
+                        <small class="text-warning finger" onclick="document.getElementById('FullcalendarSchedulerLicenseKey').value='CC-Attribution-NonCommercial-NoDerivatives'">Non-Commercial</small>
+                        <small>, </small>
+                        <small class="text-warning finger" onclick="document.getElementById('FullcalendarSchedulerLicenseKey').value='GPL-My-Project-Is-Open-Source'">GPLv3</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="DefaultScaleRatioOfUndistortionPlate">언디스토션 플레이트 기본 스케일 비율</label>
+                        <input type="text" class="form-control" id="DefaultScaleRatioOfUndistortionPlate" name="DefaultScaleRatioOfUndistortionPlate" placeholder="1.1" value={{.Setting.DefaultScaleRatioOfUndistortionPlate}}>
+                        <small class="form-text text-muted">언디스토션 플레이트의 기본 스케일 비율을 입력합니다.</small>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col form-group">

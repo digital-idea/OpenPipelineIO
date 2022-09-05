@@ -85,4 +85,5 @@ type Setting struct {
 	RocketChatToken                      string  `json:"rocketchattoken"`                      // 로켓쳇 토큰
 	EnableRocketChat                     bool    `json:"enablerocketchat"`                     // 로켓쳇 활성화
 	EnableEndpoint                       bool    `json:"enableendpoint"`                       // Endpoint 활성화
+	FullcalendarSchedulerLicenseKey      string  `json:"fullcalendarschedulerlicensekey"`      // Fullcalendar License Key
 }
