@@ -126,7 +126,7 @@ func GenQuery(session *mgo.Session, op SearchOption) (SearchOption, bson.M) {
 		} else if strings.HasPrefix(word, "netflixid:") {
 			query = append(query, bson.M{"netflixid": &bson.RegEx{Pattern: strings.TrimPrefix(word, "netflixid:"), Options: "i"}})
 		} else if strings.HasPrefix(word, "status:") {
-			status := strings.ToLower(strings.TrimPrefix(word, "status:"))
+			status := strings.TrimPrefix(word, "status:")
 			// 검색바에서 task를 선택했다면,
 			if len(selectTasks) != 0 {
 				// 유연한 status

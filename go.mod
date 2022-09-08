@@ -1,4 +1,4 @@
-module github.com/digital-idea/csi3
+module github.com/digital-idea/OpenPipelineIO
 
 go 1.16
 

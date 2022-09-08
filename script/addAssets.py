@@ -1,7 +1,7 @@
 #!/usr/bin/env python                                                       
 #coding:utf-8
 
-# 엑셀의 어셋들을 자동으로 csi에 등록하는 툴
+# 엑셀의 어셋들을 자동으로 OpenPipelineIO에 등록하는 툴
 # 입력 정보: 타입,에셋명,설명
 
 import sys, os
@@ -18,7 +18,7 @@ def checkProjectNameFromFileName(path):
 	for f in os.listdir(path):
 		fileProject = f.split(".")[0].split("_")[0] # 파일명에서 프로젝트명을 구함
 
-	# csi 프로젝트 리스트
+	# OpenPipelineIO 프로젝트 리스트
 	restURL = "http://10.0.90.251/api/projects" # 기본적으로 현재 작업중인 프로젝트를 가지고옵니다.(pre + post + backup상태)
 	try:
 		projects = json.load(urllib2.urlopen(restURL))
@@ -28,7 +28,7 @@ def checkProjectNameFromFileName(path):
 	if projects["error"]:
 		print(projects["error"])
 
-	if fileProject not in projects["data"]: # csi프로젝트 리스트에서 확인
+	if fileProject not in projects["data"]: # 프로젝트 리스트에서 확인
 		err = "\n - %s 는 등록되지 않은 프로젝트명입니다.\n - 파일명의 프로젝트명을 확인해주세요.\n"%fileProject
 
 	return fileProject,err
@@ -114,9 +114,9 @@ def addAssets(proj,name,typ,component):
 	asset을 등록한다. component,assembly정보에 맞춰 각각 등록한다.
 	"""
 	if component == "assembly":
-		os.system("/lustre/INHouse/CentOS/bin/csi3 -add item -project %s -name %s -type asset -assettype %s -assettags %s,assembly" % (proj, name, typ, typ))
+		os.system("/lustre/INHouse/CentOS/bin/openpipelineio -add item -project %s -name %s -type asset -assettype %s -assettags %s,assembly" % (proj, name, typ, typ))
 	elif component == "component":
-		os.system("/lustre/INHouse/CentOS/bin/csi3 -add item -project %s -name %s -type asset -assettype %s -assettags %s,component" % (proj, name, typ, typ))
+		os.system("/lustre/INHouse/CentOS/bin/openpipelineio -add item -project %s -name %s -type asset -assettype %s -assettags %s,component" % (proj, name, typ, typ))
 
 	result = "AssetName : %s\nAssetType : %s\nComponent : %s\n"%(name,typ,component)
 

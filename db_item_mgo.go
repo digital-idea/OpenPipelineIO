@@ -284,7 +284,7 @@ func DistinctDdline(session *mgo.Session, project string, key string) ([]string,
 			before = date
 		}
 	}
-	sort.Strings(datelist) //기존 CSI2의 4자리 수를 위하여 정렬한다. 추후 이 줄은 사라진다.
+	sort.Strings(datelist) //기존 OpenPipelineIO 2.0의 4자리 수를 위하여 정렬한다. 추후 이 줄은 사라진다.
 	if *flagDebug {
 		fmt.Println("마감일을 Tag형태로 바꾼 리스트")
 		fmt.Println(datelist)
@@ -339,7 +339,7 @@ func SearchAll(session *mgo.Session, project, sortkey string) ([]Item, error) {
 }
 
 // SearchTag 함수는 태그를 검색할때 사용한다.
-// SearchTags라고 이름을 붙히지 않은 이유는 CSI 자료구조의 필드명이 Tag이기 때문이다.
+// SearchTags라고 이름을 붙히지 않은 이유는 OpenPiplineIO 자료구조의 필드명이 Tag이기 때문이다.
 // 미래에 Tag필드를  Tags 필드로 바꾼후 이 함수의 이름을 SearchTags로 바꿀 예정이다.
 func SearchTag(session *mgo.Session, op SearchOption) ([]Item, error) {
 	return SearchKey(session, op, "tag")
@@ -407,7 +407,7 @@ func SearchKey(session *mgo.Session, op SearchOption, key string) ([]Item, error
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(op.Project)
 	query := []bson.M{}
-	// 아래 단어는 CSI에 버튼으로 되어있는 태그단어를 클릭시 작동되는 예약어이다.
+	// 아래 단어는 OpenPipelineIO에 버튼으로 되어있는 태그단어를 클릭시 작동되는 예약어이다.
 	switch op.Searchword {
 	case "2d", "2D":
 		query = append(query, bson.M{"shottype": &bson.RegEx{Pattern: "2d", Options: "i"}})
@@ -3269,7 +3269,7 @@ func rmTaskPublish(session *mgo.Session, project, id, taskname, key, createtime,
 	return nil
 }
 
-// HasItem 함수는 입력받은 project에 해당 id를 가진 item이 존재하는지 체크한다. mongoDB의 objectID가 아닌 csi내에서 정의된 id를 사용한다.
+// HasItem 함수는 입력받은 project에 해당 id를 가진 item이 존재하는지 체크한다. mongoDB의 objectID가 아닌 OpenPipelineIO 내에서 정의된 id를 사용한다.
 func HasItem(session *mgo.Session, project, id string) error {
 	session.SetMode(mgo.Monotonic, true)
 	c := session.DB("project").C(project)

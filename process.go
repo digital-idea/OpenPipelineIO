@@ -15,7 +15,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// ProcessMain 함수는 CSI가 실행되면서 처리될 프로세싱을 진행한다.
+// ProcessMain 함수는 OpenPipelineIO 가 실행되면서 처리될 프로세싱을 진행한다.
 func ProcessMain() {
 	// 버퍼 채널을 만든다.
 	jobs := make(chan Review, *flagProcessBufferSize) // 작업을 대기할 버퍼를 만든다.

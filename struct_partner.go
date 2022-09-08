@@ -37,7 +37,7 @@ type Partner struct {
 	Tags                       []string           `json:"tags"`                       // 태그
 	Companytype                string             `json:"companytype"`                // 법인, 개인, 프리렌서 인가?
 	ContactPoint               string             `json:"contactpoint"`               // 컨택포인트(누구의 소개인지, 어디서 만났는지)
-	PmsURL                     string             `json:"pmsurl"`                     // 샷그리드, Ftrack, 윕홀, CSI 등 파이프라인툴 URL추가
+	PmsURL                     string             `json:"pmsurl"`                     // 샷그리드, Ftrack, 윕홀, OpenPiplineIO 등 파이프라인툴 URL추가
 }
 
 // Money 는 돈과 관련된 자료구조이다. 어떤 프로젝트에서 누가, 누구에게, 언제 얼마를 주는가에 대한 정보
