@@ -10,7 +10,7 @@ def Project(name):
 	프로젝트 정보를 가지고 오는 함수.
 	(딕셔너리, err) 값을 반환한다.
 	"""
-	restURL = "http://10.0.90.251/api/project?id=%s" %  name
+	restURL = "https://openpipeline.io/api/project?id=%s" %  name
 	try:
 		data = json.load(urllib2.urlopen(restURL))
 	except:
@@ -24,7 +24,7 @@ def Shot(project, name):
 	샷 정보를 가지고 오는 함수.
 	(딕셔너리, err)값을 반환한다.
 	"""
-	restURL = "http://10.0.90.251/api/shot?project=%s&name=%s" % (project, name)
+	restURL = "https://openpipeline.io/api/shot?project=%s&name=%s" % (project, name)
 	try:
 		data = json.load(urllib2.urlopen(restURL))
 	except:
@@ -35,12 +35,12 @@ def Shot(project, name):
 
 def Setmov(project, name, task, mov):
 	"""
-	CSI에 mov를 등록한다.
+	mov를 등록한다.
 	에러문자열을 반환한다. 에러가 없다면 ""문자를 반환한다.
 	"""
 	data = "project=%s&name=%s&task=%s&mov=%s" % (project, name, task, mov)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setmov", data)
+		request = urllib2.Request("https://openpipeline.io/api/setmov", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -53,7 +53,7 @@ def SetPlateSize(project, name, size):
 	"""
 	data = "project=%s&name=%s&size=%s" % (project, name, size)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setplatesize", data)
+		request = urllib2.Request("https://openpipeline.io/api/setplatesize", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -66,7 +66,7 @@ def SetDistortionSize(project, name, size):
 	"""
 	data = "project=%s&name=%s&size=%s" % (project, name, size)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setdistortionsize", data)
+		request = urllib2.Request("https://openpipeline.io/api/setdistortionsize", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -79,7 +79,7 @@ def SetRenderSize(project, name, size):
 	"""
 	data = "project=%s&name=%s&size=%s" % (project, name, size)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setrendersize", data)
+		request = urllib2.Request("https://openpipeline.io/api/setrendersize", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -92,7 +92,7 @@ def SetJustIn(project, name, frame):
 	"""
 	data = "project=%s&name=%s&frame=%s" % (project, name, frame)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setjustin", data)
+		request = urllib2.Request("https://openpipeline.io/api/setjustin", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -105,7 +105,7 @@ def SetJustOut(project, name, frame):
 	"""
 	data = "project=%s&name=%s&frame=%s" % (project, name, frame)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setjustout", data)
+		request = urllib2.Request("https://openpipeline.io/api/setjustout", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -118,7 +118,7 @@ def SetCameraPubPath(project, name, path):
 	"""
 	data = "project=%s&name=%s&path=%s" % (project, name, path)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setcamerapubpath", data)
+		request = urllib2.Request("https://openpipeline.io/api/setcamerapubpath", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -131,7 +131,7 @@ def SetCameraPubTask(project, name, task):
 	"""
 	data = "project=%s&name=%s&task=%s" % (project, name, task)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setcamerapubtask", data)
+		request = urllib2.Request("https://openpipeline.io/api/setcamerapubtask", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -146,7 +146,7 @@ def SetCameraProjection(project, name, status):
 		status = "true"
 	data = "project=%s&name=%s&projection=%s" % (project, name, status)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setcameraprojection", data)
+		request = urllib2.Request("https://openpipeline.io/api/setcameraprojection", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -159,7 +159,7 @@ def SetThummov(project, name, movpath):
 	"""
 	data = "project=%s&name=%s&path=%s" % (project, name, movpath)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setthummov", data)
+		request = urllib2.Request("https://openpipeline.io/api/setthummov", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -170,7 +170,7 @@ def Projects(status=None):
 	프로젝트 리스트 정보를 가지고 오는 함수.
 	(리스트, err) 값을 반환한다.
 	"""
-	restURL = "http://10.0.90.251/api/projects"
+	restURL = "https://openpipeline.io/api/projects"
 	if status:
 		restURL += "?status=%s" % status
 	try:
@@ -188,7 +188,7 @@ def Seqs(project):
 	"""
 	if not project:
 		return [], "프로젝트 정보가 없습니다."
-	restURL = "http://10.0.90.251/api/seqs?project={0}".format(project)
+	restURL = "https://openpipeline.io/api/seqs?project={0}".format(project)
 	try:
 		seqs = json.load(urllib2.urlopen(restURL))
 	except:
@@ -206,7 +206,7 @@ def Shots(project, seq):
 		return [], "프로젝트 정보가 없습니다."
 	if not seq:
 		return [], "시퀀스 정보가 없습니다."
-	restURL = "http://10.0.90.251/api/shots?project={0}&seq={1}".format(project, seq)
+	restURL = "https://openpipeline.io/api/shots?project={0}&seq={1}".format(project, seq)
 	try:
 		shots = json.load(urllib2.urlopen(restURL))
 	except:
@@ -222,7 +222,7 @@ def SetStatus(project, name, task, status):
 	"""
 	data = "project=%s&name=%s&task=%s&status=%s" % (project, name, task, status)
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setstatus", data)
+		request = urllib2.Request("https://openpipeline.io/api/setstatus", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -235,7 +235,7 @@ def SetStartdate(project, name, task, startdate):
 	"""
 	data = "project=%s&name=%s&task=%s&startdate=%s" % (project, name, task, urllib2.quote(startdate))
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setstartdate", data)
+		request = urllib2.Request("https://openpipeline.io/api/setstartdate", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -248,7 +248,7 @@ def SetPredate(project, name, task, predate):
 	"""
 	data = "project=%s&name=%s&task=%s&predate=%s" % (project, name, task, urllib2.quote(predate))
 	try:
-		request = urllib2.Request("http://10.0.90.251/api/setpredate", data)
+		request = urllib2.Request("https://openpipeline.io/api/setpredate", data)
 		err = urllib2.urlopen(request).read()
 	except:
 		err = "restAPI에 접근할 수 없습니다."
@@ -275,7 +275,7 @@ def searchwordItems(project, searchword, status=[]):
 			if i not in ["assign", "ready", "wip", "confirm", "done", "omit", "hold", "out", "none"]:
 				continue
 			values[i] = "true"
-	url = "http://10.0.90.251/api2/items"
+	url = "https://openpipeline.io/api2/items"
 	query = urllib.urlencode(values)
 	restURL = url + "?" + query
 	try:

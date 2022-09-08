@@ -1,6 +1,7 @@
 # RestAPI Project
+
 restAPI의 장점은 URL을 이용해서 정보를 처리할 수 있습니다.
-CSI 접속시 IP를 이용하면 VPN환경에서도 restAPI를 사용할 수 있습니다.
+OpenPipelineIO 접속시 IP를 이용하면 VPN환경에서도 restAPI를 사용할 수 있습니다.
 
 Python, Go, Java, C++, node.JS 언어를 이용해서 restAPI를 사용할 수 있습니다.
 

@@ -4,14 +4,14 @@ Tasksetting Restapi 입니다.
 ## Get
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/shottasksetting | shot tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/shottasksetting` |
-| /api/assettasksetting | asset tasksetting 정보를 가지고 온다. | `$ curl http://csi.lazypic.org/api/assettasksetting` |
+| /api/shottasksetting | shot tasksetting 정보를 가지고 온다. | `$ curl http://openpipeline.io/api/shottasksetting` |
+| /api/assettasksetting | asset tasksetting 정보를 가지고 온다. | `$ curl http://openpipeline.io/api/assettasksetting` |
 
 ## POST
 | uri | description | attribute name | example |
 | --- | --- | --- | --- |
-| /api/tasksetting | 인수를 입력받고 task에서 사용하는 경로를 반환한다. | project, name, task, type, assettype, os, seq, cut, userid | `$ curl -X POST -d "project=TEMP&seq=SS&cut=0010&task=comp" http://csi.lazypic.org/api/tasksetting` |
-| /api/categorytasksettings | 카테고리를 입력받아 해당 task를 반환한다. | category | `$ curl -X POST -d "category=fx" http://csi.lazypic.org/api/categorytasksettings` |
+| /api/tasksetting | 인수를 입력받고 task에서 사용하는 경로를 반환한다. | project, name, task, type, assettype, os, seq, cut, userid | `$ curl -X POST -d "project=TEMP&seq=SS&cut=0010&task=comp" http://openpipeline.io/api/tasksetting` |
+| /api/categorytasksettings | 카테고리를 입력받아 해당 task를 반환한다. | category | `$ curl -X POST -d "category=fx" http://openpipeline.io/api/categorytasksettings` |
 
 # 파이썬 예제 Python2.7x
 fx 카테고리를 가지고 있는 Task 가지고 오기

@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// JwtToken 은 CSI에서 사용하는 토큰 구조입니다.
+// JwtToken 은 OpenPipelineIO에서 사용하는 토큰 구조입니다.
 type JwtToken struct {
 	jwt.StandardClaims        // 기본 Claims 구조 + 내가 필요한 Claim을 선언해서 사용한다.
 	ID                 string `json:"id"`
@@ -25,8 +25,8 @@ func CreateTokenString(id string, accessLevel AccessLevel, lastProject string) (
 		"LastProject": lastProject,
 		"AccessLevel": accessLevel,
 	})
-	// 토큰에 CSI_JWT_SIGN_KEY를 가지고 서명키로 사용합니다. 환경변수가 잡혀있지 않다면 빈 문자열로 싸인합니다. 보안을 위해서 서명키 환경변수를 꼭 잡아주세요.
-	tokenstring, err := token.SignedString([]byte(os.Getenv("CSI_JWT_SIGN_KEY")))
+	// 토큰에 OPIO_JWT_SIGN_KEY를 가지고 서명키로 사용합니다. 환경변수가 잡혀있지 않다면 빈 문자열로 싸인합니다. 보안을 위해서 서명키 환경변수를 꼭 잡아주세요.
+	tokenstring, err := token.SignedString([]byte(os.Getenv("OPIO_JWT_SIGN_KEY")))
 	if err != nil {
 		return "", err
 	}

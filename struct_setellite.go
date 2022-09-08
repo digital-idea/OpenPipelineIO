@@ -16,7 +16,7 @@ import (
 // 자료구조의 key는 Setellite의 " ",'/','[',']','-'를 제외한 영문명을 그대로 적용했다.
 // CSV내부에 Notes값은 여러곳에 분포되어있고 Table Key가 중복된다. Notes는 자료구조에서는 다른 자료와 같은방식의 ";"로 구분된 string으로 표현한다.
 // 데이터의 중복을 막기위해 ID를 사용한다. 조합방법: ShootDay + SlateNumber + TakeNumber + RollMedia
-// 데이터가 크기때문에 CSI 샷정보에 링크하고, CSI아이템 자료구조에 바로넣지 않는다.
+// 데이터가 크기때문에 OpenPipelineIO 샷정보에 링크하고, OpenPipelineIO 아이템 자료구조에 바로넣지 않는다.
 type Setellite struct {
 	ID                    string `json:"id"`                    // DB에 존재하는지 체크값으로 사용한다. ShootDay+SlateNumber + TakeNumber +  RollMedia
 	Project               string `json:"project"`               // 프로젝트명

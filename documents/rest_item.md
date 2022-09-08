@@ -158,7 +158,7 @@ r = requests.get(url=endpoint, headers=auth)
 print(r.json())
 ```
 
-홈디렉토리에 `~/.csi/token` 파일 내부에 CSI 토큰키를 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
+홈디렉토리에 `~/.openpipelineio/token` 파일 내부에 OpenPipelineIO 토큰키를 저장해 두었다면 아래 형태로 코드를 작성, POST 할 수 있습니다.
 
 ```python
 #!/usr/bin/python
@@ -168,7 +168,7 @@ import os
 import requests
 from pathlib import Path
 home = str(Path.home())
-f = open(os.path.join(home, ".csi", "token"), "r")
+f = open(os.path.join(home, ".openpipelineio", "token"), "r")
 token = f.read(80)
 data = {'project':'TEMP', 'name':'SS_0010', 'text':'test'}
 endpoint = "https://openpipeline.io/api/setoutputname"
@@ -178,6 +178,7 @@ print(r.json())
 ```
 
 #### 샷,에셋(Item) 검색하기
+
 - gunhamdo 프로젝트에서 "SS"문자열이 들어간 아이템을 검색하는 예제이다.
 - 상태는 작업중인 아이템을 대상으로 한다.
 

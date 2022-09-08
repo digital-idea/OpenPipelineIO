@@ -62,5 +62,5 @@ crontab에 백업스크립트를 등록합니다.
 
 ```bash
 $ crontab -e
-* 3 * * * sh /Users/woong/csi3/script/backup_aws.sh >> /tmp/cron.out 2>&1
+* 3 * * * sh ~/OpenPipelineIO/script/backup_aws.sh >> /tmp/cron.out 2>&1
 ```

@@ -14,7 +14,7 @@ Step Restapi 입니다.
 | --- | --- | --- | --- |
 | /api/step | R&R 정보를 추가합니다 | Option 참고 | curl -X POST -H 'Authorization: Basic {TOKEN}' -d '{"order":1,"name":"견적받기","description":"견젹서를 받는 단계"}' "https://openpipeline.io/api/step"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/struct_step.go
+- Option: https://github.com/digital-idea/OpenPipelineIO/blob/master/struct_step.go
 
 ## PUT
 

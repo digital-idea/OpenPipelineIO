@@ -7,7 +7,7 @@ if (navigator.appVersion.indexOf("Linux") != -1) OSName="Linux";
 // changeProject 함수는 검색바의 프로젝트가 바뀔 때 발생하는 이벤트를 처리한다.
 function changeProject() {
 	// 제목설정
-	let pretitle = "CSI: "
+	let pretitle = "OPIP: "
 	let e = document.getElementById("searchbox-project");
 	let project = e.options[e.selectedIndex].value;
 	document.title = pretitle + project;

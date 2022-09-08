@@ -2327,7 +2327,7 @@ func handleExportDumpProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// 압축 Tempfile을 생성한다.
-	filename := "csi-dbdump.zip"
+	filename := "openpipelineio-dbdump.zip"
 	zipDumpfile, err := ioutil.TempFile("", "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -14,7 +14,7 @@ Money Restapi 입니다.
 | --- | --- | --- | --- |
 |/api/money|자금 정보를 추가합니다| Option 참고 |curl -X POST -H 'Authorization: Basic {TOKEN}' -d '{"moneytypeid":"firstestimate","project":"test", "sender":"lazypic","recipient":"client","amount":30000000,"date":"2022-07-07","monetaryunit":"KRW","issuanceelectronictaxinvoice":false}' "https://openpipeline.io/api/money"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/struct_money.go
+- Option: https://github.com/digital-idea/OpenPipelineIO/blob/master/struct_money.go
 
 ## PUT
 

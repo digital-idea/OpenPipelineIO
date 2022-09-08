@@ -14,7 +14,7 @@ Moneytype Restapi 입니다.
 | --- | --- | --- | --- |
 |/api/moneytype|자금타입 정보를 추가합니다| Option 참고 |curl -X POST -H 'Authorization: Basic {TOKEN}' -d '{"order":1,"name":"firstestimate", "description":"최초견적"}' "https://openpipeline.io/api/moneytype"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/struct_moneytype.go
+- Option: https://github.com/digital-idea/OpenPipelineIO/blob/master/struct_moneytype.go
 
 ## PUT
 

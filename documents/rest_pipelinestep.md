@@ -14,7 +14,7 @@ Pipelinestep Restapi 입니다.
 | --- | --- | --- | --- |
 |/api/pipelinestep|새로운 Pipelienstep 정보를 추가합니다| Option 참고 |curl -X POST -H 'Authorization: Basic {TOKEN}' -d '{"name":"fx","description":"FX팀"}' "https://openpipeline.io/api/pipelinestep"
 
-- Option: https://github.com/digital-idea/csi3/blob/master/struct_pipelinestep.go
+- Option: https://github.com/digital-idea/OpenPipelineIO/blob/master/struct_pipelinestep.go
 
 ## PUT
 
