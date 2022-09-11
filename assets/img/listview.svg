@@ -1,39 +1,8 @@
-<svg width="448" height="512" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
  <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
 
  <g>
   <title>Layer 1</title>
-  <g id="svg_33">
-   <g id="svg_7">
-    <rect stroke="null" id="svg_2" height="82" width="137" y="50" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_4" height="81" width="231" y="50.5" x="187" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_5" height="82" width="137" y="50" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_6" height="81" width="231" y="50.5" x="187" fill="#7f7f7f"/>
-   </g>
-   <g id="svg_12">
-    <rect stroke="null" id="svg_8" height="82" width="137" y="50" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_9" height="81" width="231" y="50.5" x="187" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_10" height="82" width="137" y="50" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_11" height="81" width="231" y="50.5" x="187" fill="#7f7f7f"/>
-   </g>
-   <g id="svg_22">
-    <rect stroke="null" id="svg_18" height="82" width="137" y="283" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_19" height="81" width="231" y="283.5" x="187" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_20" height="82" width="137" y="283" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_21" height="81" width="231" y="283.5" x="187" fill="#7f7f7f"/>
-   </g>
-   <g id="svg_27">
-    <rect stroke="null" id="svg_23" height="82" width="137" y="400" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_24" height="81" width="231" y="400.5" x="187" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_25" height="82" width="137" y="400" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_26" height="81" width="231" y="400.5" x="187" fill="#7f7f7f"/>
-   </g>
-   <g id="svg_32">
-    <rect stroke="null" id="svg_28" height="82" width="137" y="163" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_29" height="81" width="231" y="163.5" x="187" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_30" height="82" width="137" y="163" x="30" fill="#7f7f7f"/>
-    <rect stroke="null" id="svg_31" height="81" width="231" y="163.5" x="187" fill="#7f7f7f"/>
-   </g>
-  </g>
+  <path fill="#7f7f7f" id="svg_1" d="m40,48c-13.3,0 -24,10.7 -24,24l0,48c0,13.3 10.7,24 24,24l48,0c13.3,0 24,-10.7 24,-24l0,-48c0,-13.3 -10.7,-24 -24,-24l-48,0zm152,16c-17.7,0 -32,14.3 -32,32s14.3,32 32,32l288,0c17.7,0 32,-14.3 32,-32s-14.3,-32 -32,-32l-288,0zm0,160c-17.7,0 -32,14.3 -32,32s14.3,32 32,32l288,0c17.7,0 32,-14.3 32,-32s-14.3,-32 -32,-32l-288,0zm0,160c-17.7,0 -32,14.3 -32,32s14.3,32 32,32l288,0c17.7,0 32,-14.3 32,-32s-14.3,-32 -32,-32l-288,0zm-176,-152l0,48c0,13.3 10.7,24 24,24l48,0c13.3,0 24,-10.7 24,-24l0,-48c0,-13.3 -10.7,-24 -24,-24l-48,0c-13.3,0 -24,10.7 -24,24zm24,136c-13.3,0 -24,10.7 -24,24l0,48c0,13.3 10.7,24 24,24l48,0c13.3,0 24,-10.7 24,-24l0,-48c0,-13.3 -10.7,-24 -24,-24l-48,0z"/>
  </g>
 </svg>

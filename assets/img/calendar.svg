@@ -3,32 +3,6 @@
 
  <g>
   <title>Layer 1</title>
-  <g stroke="null" id="svg_83">
-   <rect stroke="null" id="svg_45" height="79.1585" width="79.1585" y="400.62392" x="8.01297" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_46" height="79.1585" width="79.1585" y="400.62392" x="97.22334" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_48" height="79.1585" width="79.1585" y="400.62392" x="186.43372" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_49" height="79.1585" width="79.1585" y="399.36744" x="274.38761" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_50" height="79.1585" width="79.1585" y="400.62392" x="362.3415" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_53" height="79.1585" width="79.1585" y="129.22334" x="5.5" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_54" height="79.1585" width="79.1585" y="129.22334" x="94.71037" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_56" height="79.1585" width="79.1585" y="129.22334" x="183.92075" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_57" height="79.1585" width="79.1585" y="127.96686" x="271.87464" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_58" height="79.1585" width="79.1585" y="129.22334" x="359.82853" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_60" height="79.1585" width="79.1585" y="38.75648" x="5.5" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_61" height="79.1585" width="79.1585" y="38.75648" x="94.71037" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_63" height="79.1585" width="79.1585" y="38.75648" x="183.92075" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_64" height="79.1585" width="79.1585" y="37.5" x="271.87464" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_65" height="79.1585" width="79.1585" y="38.75648" x="359.82853" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_68" height="79.1585" width="79.1585" y="310.15706" x="6.75648" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_69" height="79.1585" width="79.1585" y="310.15706" x="95.96686" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_71" height="79.1585" width="79.1585" y="310.15706" x="185.17723" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_72" height="79.1585" width="79.1585" y="308.90058" x="273.13112" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_73" height="79.1585" width="79.1585" y="310.15706" x="361.08501" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_75" height="79.1585" width="79.1585" y="218.43372" x="6.75648" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_76" height="79.1585" width="79.1585" y="218.43372" x="95.96686" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_78" height="79.1585" width="79.1585" y="218.43372" x="185.17723" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_79" height="79.1585" width="79.1585" y="217.17723" x="273.13112" fill="#7f7f7f"/>
-   <rect stroke="null" id="svg_80" height="79.1585" width="79.1585" y="218.43372" x="361.08501" fill="#7f7f7f"/>
-  </g>
+  <path fill="#7f7f7f" id="svg_1" d="m152,64l144,0l0,-40c0,-13.25 10.7,-24 24,-24c13.3,0 24,10.75 24,24l0,40l40,0c35.3,0 64,28.65 64,64l0,320c0,35.3 -28.7,64 -64,64l-320,0c-35.35,0 -64,-28.7 -64,-64l0,-320c0,-35.35 28.65,-64 64,-64l40,0l0,-40c0,-13.25 10.7,-24 24,-24c13.3,0 24,10.75 24,24l0,40zm-104,384c0,8.8 7.16,16 16,16l320,0c8.8,0 16,-7.2 16,-16l0,-256l-352,0l0,256z"/>
  </g>
 </svg>
