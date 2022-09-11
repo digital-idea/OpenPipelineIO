@@ -24,10 +24,13 @@
     {{if ne .TotalPageNum 0}}<!--전체 페이지가 없다면 페이지 템플릿을 띄우지 않는다.-->
         {{template "page" .}}
     {{end}}
+    {{template "calendarview" .}}
     {{template "footerBootstrap"}}
 </body>
 <script src="/assets/js/jquery-3.1.1.min.js"></script>
+
 <script src="/assets/bootstrap-4/js/bootstrap.bundle.min.js"></script>
+<script src='/assets/fullcalendar-scheduler-5/lib/main.min.js'></script>
 <script src="/assets/js/input.js"></script>
 <script src="/assets/js/Sortable.js"></script>
 <script src="/assets/js/export.js"></script>

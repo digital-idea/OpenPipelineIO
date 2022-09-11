@@ -889,3 +889,42 @@ span.player-trash {
 hr {
 	border-top: 1px solid rgb(168, 168, 168);
 }
+
+/* full calendar*/
+.fc-toolbar-title {
+	color: #9e9e9e!important;
+}
+
+.fc-col-header-cell {
+	color: #9e9e9e!important;
+}
+
+.fc-daygrid-day-number {
+	color: #9e9e9e!important;
+}
+
+.fc-scrollgrid-sync-inner {
+	color: #9e9e9e!important;
+}
+
+.fc-list-event-title {
+	color: #9e9e9e!important;
+}
+
+.fc-list-event-time {
+	color: #9e9e9e!important;
+}
+
+.fc-day-today {
+	background-color: #424040!important;
+}
+
+.fc-cell-shaded {
+	color: #b3aeae!important;
+	background-color: #424040!important;
+}
+
+.fc-button-primary {
+	background-color: #232222!important;
+	border-color: #383636!important;
+}
