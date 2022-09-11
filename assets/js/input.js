@@ -4670,6 +4670,20 @@ function mailInfo(project, id) {
     });
 }
 
+/** enable listview */
+function listview() {
+    document.getElementById("listview").style.display="block";
+    document.getElementById("page").style.display="block";
+    document.getElementById("calendarview").style.display="none";
+}
+
+/** enable calendarview */
+function calendarview() {
+    document.getElementById("listview").style.display="none";
+    document.getElementById("page").style.display="none";
+    document.getElementById("calendarview").style.display="block";
+}
+
 function foldingmenu() {
     if(searchbox.style.display=="none") {
         searchbox.style.display='block'; // 펼치기

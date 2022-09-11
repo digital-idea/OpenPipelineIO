@@ -20,7 +20,7 @@
     {{template "modal" .}}
     <div id="blinkspace"></div><!--기본 550px 여유를 두고 검색바가 펼쳐지면 items가 밀려서 출력되어야 한다.-->
     <div class="pt-3"></div> <!--검색바가 가려지더라도 조금의 여백을 남기기위해 설정한 값-->
-    {{template "items" .}}
+    {{template "listview" .}}
     {{if ne .TotalPageNum 0}}<!--전체 페이지가 없다면 페이지 템플릿을 띄우지 않는다.-->
         {{template "page" .}}
     {{end}}
