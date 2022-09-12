@@ -895,15 +895,28 @@ hr {
 	color: #9e9e9e!important;
 }
 
-.fc-col-header-cell {
+.fc-day {
 	color: #9e9e9e!important;
+}
+
+.fc-day-sun {
+	color: #ff5252!important;
+}
+
+.fc-day-sat {
+	color: #ff4f4f!important;
+}
+
+.fc-day-today {
+	background-color: #424040!important;
 }
 
 .fc-daygrid-day-number {
 	color: #9e9e9e!important;
 }
 
-.fc-scrollgrid-sync-inner {
+
+.fc-datagrid-cell-main {
 	color: #9e9e9e!important;
 }
 
@@ -915,9 +928,7 @@ hr {
 	color: #9e9e9e!important;
 }
 
-.fc-day-today {
-	background-color: #424040!important;
-}
+
 
 .fc-cell-shaded {
 	color: #b3aeae!important;
