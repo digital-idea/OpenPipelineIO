@@ -29,7 +29,7 @@ OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 �
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
 1. 샷 파일 브라우져
 1. Data Mining: Machine learning을 위한 데이터 수집
-1. Machine learning(AI) 보안을 위해 각 조직의 프라이버시를 위해 데이터를 섞어서 학습시키지 말것.
+1. Machine learning(AI) 조직의 보안 및 프라이버시를 위해 데이터를 섞어서 학습시키지 말것.
 1. [Collaborate with other open sources](https://landscape.aswf.io/?category=aswf-member-company&grouping=category&fullscreen=yes)
 
 ### 데이터베이스(mongoDB) 설치 및 서비스 실행
