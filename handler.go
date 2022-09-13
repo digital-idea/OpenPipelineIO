@@ -403,6 +403,9 @@ func webserver(port string) {
 	r.HandleFunc("/health", handleHealth)
 	r.HandleFunc("/api/statusinfo", handleAPIStatusInfo).Methods(http.MethodGet, http.MethodOptions)
 
+	// Calendar
+	r.HandleFunc("/calendartest", handleCalendarTest)
+
 	// Statistics
 	r.HandleFunc("/statistics", handleStatistics).Methods(http.MethodGet, http.MethodOptions)                                  // 본부장, 실장
 	r.HandleFunc("/statistics/statusperproject", handleStatisticsStatusPerProject).Methods(http.MethodGet, http.MethodOptions) // 프로젝트별 상태 통계

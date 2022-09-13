@@ -230,9 +230,10 @@
         </div>
         <div class="pl-3 pr-3">
             <div class="col">
-				<span class="btn btn-sm btn-outline-darkmode mb-2" onclick="selectmode()" title="Ctrl + Alt + Shift + m">
-					선택모드
-				</span>
+				<img src="/assets/img/arrows-spin-solid.svg" width="24" height="24" class="finger mb-2" onclick="selectmodeV2()" data-toggle="tooltip" data-placement="bottom" title="SelectMode Ctrl+Alt+Shift+m">
+				<img src="/assets/img/listview.svg" width="24" height="24" class="finger mb-2" onclick="listview()" data-toggle="tooltip" data-placement="bottom" title="ListView">
+				<img src="/assets/img/calendar.svg" width="24" height="24" class="finger mb-2 mr-3" onclick="calendarview()" data-toggle="tooltip" data-placement="bottom" title="CalendarView">
+				
 				<a class="btn btn-sm btn-outline-darkmode mb-2 statusuri" href="/inputmode?
 																	project={{.SearchOption.Project}}&
 																	searchword=shottype:2d&

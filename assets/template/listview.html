@@ -1,0 +1,614 @@
+{{define "listview" }}
+
+<!--Go to top-->
+<button onclick="TopClick()" id="topbtn" title="Go to top">Top</button>
+
+<div id="listview">
+{{range .Items}}
+	{{$name := .Name}}
+	{{$project := .Project}}
+	{{$id := .ID}}
+	<div id="item-{{.ID}}">
+	<div class="row ml-1 mr-1 pt-1 pl-3 pr-3" >
+		<div class="col-sm-12 col-md-6 col-lg-2">
+			<div>
+				{{if .Season}}
+					<span class="text-white itemname">{{.Season}}_</span>
+				{{end}}
+				{{if .Episode}}
+					<span class="text-white itemname">{{.Episode}}_</span>
+				{{end}}
+				<span class="text-white itemname finger" onclick="mailInfo('{{.Project}}','{{.ID}}')" data-toggle="modal" data-target="#modal-sendemail">{{.Name}}</span>
+				{{if .Updatetime|CheckUpdate}}
+					<span class="badge badge-warning align-top mt-1 ml-1 mr-1">Update {{ToHumantime .Updatetime}}</span>
+				{{end}}
+			</div>
+			<!--Thumbnail-->
+			<div class="row">
+				<input type="checkbox" class="form-check-input" id="{{.ID}}" name="selectID" style="opacity:0; position:absolute;">
+				<div class="thumbnailbox ml-1">
+					<!--org,left,asset 만 선택할 수 있어야 한다.-->
+					<label class="p-0 m-0 thumbnail" for="{{.ID}}" onclick="selectCheckbox('{{.ID}}')">
+						{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+							<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{Status2string .Status}}">
+						{{else}}
+							<img src="/thumbnail/{{.Project}}/{{.Name}}_{{if .UseType}}{{.UseType}}{{else}}{{.Type}}{{end}}.jpg" onerror="this.src='/assets/img/none.jpg'" class="thumbnail border-{{.StatusV2}}">
+						{{end}}
+					</label>
+					<div class="top-left">
+						{{if eq .Type "org" "left"}}
+							<div class="row" id="rnum-{{.ID}}">
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}onclick="setRnumModal('{{.Project}}', '{{.ID}}')" data-toggle="modal" data-target="#modal-setrnum"{{end}}>{{if .Rnum}}{{.Rnum}}{{else}}no rnum{{end}}</span>
+							</div>
+						{{end}}
+						{{if eq .Type "org" "left" "asset"}}
+							<div class="row" id="deadline3d-{{.Name}}">
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline3d" onclick="setDeadline3dModal('{{.Project}}', '{{.ID}}', '{{ToNormalTime .Ddline3d}}')"{{end}}>{{if .Ddline3d}}3D:{{ToShortTime .Ddline3d}}{{else}}3D:{{end}}</span>
+							</div>
+						{{end}}
+						
+						{{if eq .Type "org" "left" "asset"}}
+							<div class="row" id="deadline2d-{{.Name}}">
+								<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('{{.Project}}', '{{.ID}}', '{{ToNormalTime .Ddline2d}}')"{{end}}>{{if .Ddline2d}}2D:{{ToShortTime .Ddline2d}}{{else}}2D:{{end}}</span>
+							</div>
+						{{end}}
+					</div>
+					<div class="top-right">
+						<div class="row" id="platesize-{{.Name}}">
+							<span class="black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-platesize" onclick="setPlatesizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Platesize}}S:{{.Platesize}}{{else}}S:{{end}}</span>
+						</div>
+						<div class="row" id="undistortionsize-{{.Name}}">
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-undistortionsize" onclick="setUndistortionsizeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{if .Dsize}}U:{{.Dsize}}{{else}}U:{{end}}</span>
+						</div>
+						<div class="row" id="rendersize-{{.ID}}">
+							<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>R:{{if .Rendersize}}{{.Rendersize}}{{else}}{{.Dsize}}{{end}}</span>
+						</div>
+						<div class="row" id="overscanratio-{{.ID}}">
+							{{if .OverscanRatio}}
+								{{if ne .OverscanRatio 0.0}}
+									<span class="black-opbg" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-rendersize" onclick="setRendersizeModal('{{.Project}}', '{{.ID}}')"{{end}}>OSR:{{.OverscanRatio}}</span>
+								{{end}}
+							{{end}}
+						</div>
+					</div>
+					<div class="centered">
+						{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+							{{if eq .Status "2"}}
+								{{if .Finver}}
+									Finver: {{.Finver}}
+								{{end}}
+								{{if .Findate}}
+									<br>
+									Date: {{ToNormalTime .Findate}}
+								{{end}}
+							{{end}}
+						{{else}}
+							{{if eq .StatusV2 "done"}}
+								{{if .Finver}}
+									Finver: {{.Finver}}
+								{{end}}
+								{{if .Findate}}
+									<br>
+									Date: {{ToNormalTime .Findate}}
+								{{end}}
+							{{end}}
+						{{end}}
+					</div>
+					<div class="centered-bottom row">
+						{{if eq .Type "asset"}}
+							<div id="assettype-{{.Name}}">
+								<span class="badge badge-light finger" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-assettype" onclick="setAssettypeModal('{{.Project}}', '{{.ID}}')"{{end}}>{{.Assettype}}</span>
+							</div>
+							
+							<div id="crowdasset-{{.ID}}" class="ml-1">
+								{{if .CrowdAsset}}
+									<span class="badge badge-warning finger"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+								{{else}}
+									<span class="badge badge-light finger fade"{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} onclick="setCrowdAsset('{{.Project}}', '{{.ID}}')"{{end}}>Crowd</span>
+								{{end}}
+							</div>
+						{{else}}
+							<!--재스캔 사용 플레이트 표기-->
+							{{if eq .Type "org" "left"}}
+								<div id="{{.Project}}-{{.ID}}-usetype">
+									{{if .UseType}}
+										<span class="finger badge badge-warning" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{.Project}}','{{.ID}}','{{.UseType}}')"{{end}}>{{.UseType}}</span>
+									{{else}}
+										<span class="finger badge badge-light" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-usetype" onclick="setUsetypeModal('{{.Project}}','{{.ID}}','{{.Type}}')"{{end}}>{{.Type}}</span>
+									{{end}}
+								</div>
+							{{else}}
+								<!--기타 소스, 레퍼런스등-->
+								<div id="type-{{.Name}}">
+									<span class="badge badge-light ml-1">{{.Type}}</span>
+								</div>
+							{{end}}
+							<div id="shottype-{{.Name}}">
+								<span class="finger badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{.Project}}','{{.ID}}')"{{end}}>{{if .Shottype}}{{.Shottype}}{{else}}none{{end}}</span>
+							</div>
+						{{end}}
+					</div>
+					<div class="centered-left"></div>
+					<div class="centered-right">
+						<!--Retime-->
+						<div class="row" id="button-retime-{{.Name}}">
+							{{if .Retimeplate}}
+								<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
+							{{end}}
+						</div>
+						<!--Just Mark-->
+						<div class="row" id="button-just-{{.Name}}">
+							{{if and .JustIn .JustOut}}
+								<span class="badge badge-warning mt-1">J</span>
+							{{end}}
+						</div>
+						<!--OCIOcc-->
+						<div class="row" id="button-ociocc-{{.Name}}">
+							{{if .OCIOcc}}
+								<span class="badge badge-info mt-1">N</span>
+							{{end}}
+						</div>
+					</div>
+					<div class="bottom-left">
+						<div class="row">
+							<span class="text-white black-opbg" id="handlein-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.HandleIn}}</span>
+							<span class="text-white black-opbg">/</span>
+							<span class="text-white black-opbg" id="handleout-{{.Name}}" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.HandleOut}}</span>						
+						</div>
+						<div class="row" id="platein-{{.Name}}">
+							{{if .PlateIn}}
+								<span class="text-white black-opbg" title="platein" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.PlateIn}}</span>
+							{{end}}
+						</div>
+						<div class="row" id="justin-{{.Name}}">
+							{{if .JustIn}}
+								<span class="text-warning black-opbg" title="justin" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustIn}}</span>
+							{{end}}
+						</div>
+						<div class="row" id="justtimecodein-{{.Name}}">
+							{{if .JustTimecodeIn}}
+								<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustTimecodeIn}}</span>
+							{{end}}
+						</div>
+					</div>
+					<div class="bottom-right">
+						<div class="row" id="plateout-{{.Name}}">
+							{{if .PlateOut}}
+								<span class="text-white black-opbg" title="plateout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>
+									{{.PlateOut}}
+									{{if and .PlateIn .PlateOut}}
+										({{Framecal .PlateIn .PlateOut}})
+									{{end}}
+								</span>
+							{{end}}
+						</div>
+						<div class="row" id="justout-{{.Name}}">
+							{{if .JustOut}}
+								<span class="text-warning black-opbg" title="justout" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>
+									{{.JustOut}}
+									{{if and .JustIn .JustOut}}
+										({{Framecal .JustIn .JustOut}})
+									{{end}}
+								</span>
+							{{end}}
+						</div>
+						<div class="row" id="justtimecodeout-{{.Name}}" >
+							{{if .JustTimecodeOut}}
+								<span class="text-warning black-opbg" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#edittime" onclick="setTimeModal('{{.Project}}', '{{.ID}}');"{{end}}>{{.JustTimecodeOut}}</span>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="mx-auto pt-1 row">
+					<div id="button-thumbplay-{{.Name}}">
+						<a href="dilink://{{.Thummov}}" class="play">PLAY</a>
+					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+						<div id="button-thumb-{{.Name}}">
+							<a href="/edititem?type=item&project={{$.SearchOption.Project}}&slug={{.ID}}" class="badge badge-darkmode ml-1">Thumb</a>
+						</div>
+						<div id="button-edit-{{.Name}}">
+							<span class="badge badge-danger finger ml-1" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-iteminfo" onclick="setIteminfoModal('{{.Project}}', '{{.ID}}')"{{end}}>E</span>
+						</div>
+					{{end}}
+					<div id="button-detail-{{.Name}}">
+						<a href="/detail?project={{.Project}}&id={{.ID}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}" class="badge badge-darkmode ml-1">D</a>
+					</div>
+					<div id="button-dir-{{.Name}}">
+						{{if eq .Type "asset" -}}	
+							<a href="dilink:///show/{{.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+						{{- else -}}
+							<a href="dilink://{{Parentpath .Platepath}}" class="badge badge-darkmode ml-1">F</a>
+						{{- end}}
+					</div>
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+						<div id="button-log-{{.Name}}">
+							<a href="{{$.Dilog}}/search?tool=csi&project={{$.SearchOption.Project}}&slug={{.Name}}" class="badge badge-darkmode ml-1">L</a>				
+						</div>
+					{{end}}
+				</div>
+			</div>
+		</div>
+
+
+		<!--Task-->
+		<div class="col-sm-12 col-md-6 col-lg-3">
+			{{if eq .Type "org" "left" "asset"}}
+				<div class="" id="{{.Name}}-add-taskbutton}}">
+					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+						<span class="add" data-toggle="modal" data-target="#modal-addtask" onclick="setAddTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">＋</span>
+						<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtask" onclick="setRmTaskModal('{{.Project}}', '{{.ID}}', '{{.Type}}')">－</span>
+					{{else}}
+						<span class="add" onclick="alert('Task를 추가할 수 있는 권한이 없습니다.')">＋</span>
+						<span class="remove ml-0" onclick="alert('Task를 삭제할 수 있는 권한이 없습니다.')">－</span>
+					{{end}}
+				</div>
+			{{end}}
+			<div class="mt-1 ml-2 mb-3" id="{{.Name}}-tasks">
+				
+				<!--onset Setellite-->
+				<div class="row" id="{{.Name}}-onsetbutton">
+					{{if .Rollmedia}}
+						<a href="/setellite?project={{.Project}}&searchword={{.Rollmedia}}" class="mt-1 badge badge-done statusbox text-dark" target="_blink">onset</a>
+					{{end}}
+				</div>
+				<!--task-->
+				{{$type := .Type}}
+				{{$assettype := .Assettype}}
+				{{$seq := .Seq}}
+				{{$cut := .Cut}}
+				{{$beforemov := .Beforemov}}
+				{{$aftermov := .Aftermov}}
+				<div id="{{$id}}-tasks">
+					{{range mapToSlice .Tasks $.TasksettingOrderMap}}
+						<div class="row" id="{{$id}}-task-{{.Title}}">
+							<div id="{{$id}}-task-{{.Title}}-status">
+								{{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
+									<span class="finger mt-1 badge badge-{{Status2string .Status}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" data-toggle="tooltip" data-placement="left" title="{{Status2string .Status}}"
+									onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
+									>{{.Title}}</span>
+								{{else}}
+									<span class="finger mt-1 badge badge-{{.StatusV2}} statusbox{{CheckDate .Predate .Date .Mdate $.SearchOption.Searchword}}" data-toggle="tooltip" data-placement="left" title="{{.StatusV2}}"
+									onclick="wfs('{{$.Wfs}}', '{{.Title}}', '{{$type}}', '{{$assettype}}', '{{$.SearchOption.Project}}', '{{$name}}', '{{$seq}}', '{{$cut}}', '{{$.User.Token}}');"
+									>{{.Title}}</span>
+								{{end}}
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-predate">
+								<span class="mt-1 ml-1 badge badge-{{CheckDdlinev2 .Predate}}" title="1차마감">{{ToShortTime .Predate}}</span>
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-date">
+								<span class="mt-1 ml-1 badge badge-{{CheckDdlinev2 .Date}}" title="2차마감">{{ToShortTime .Date}}</span>
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-user">
+								<a href="/user?id={{onlyID .User}}" class="mt-1 ml-1 badge badge-light">{{userInfo .User }}</a>
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-usercomment">
+								{{if .UserComment}}
+									<span class="mt-1 ml-0 badge badge-darkmode">{{.UserComment}}</span>
+								{{end}}
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-playbutton">
+								{{if .Mov }}
+									<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
+								{{end}}
+							</div>
+							<div id="{{$id}}-task-{{.Title}}-publish">
+								{{if .Publishes }}
+									<a href="/detail?project={{$project}}&id={{$id}}&searchbartemplate={{$.SearchOption.SearchbarTemplate}}#publish-{{.Title}}" class="ml-1 publish">Pub</a>
+								{{end}}
+							</div>
+							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+								<div class="ml-1">
+									<span class="add" data-toggle="modal" data-target="#modal-edittask" onclick="
+										setEditTaskModal('{{$project}}', '{{$id}}', '{{.Title}}');
+									">≡</span>
+								</div>
+							{{end}}
+							<div id="{{$id}}-task-{{.Title}}-usernote">
+								{{if .UserNote }}
+									<img src="/assets/img/bullhorn.svg" title="{{.UserNote}}" class="finger" onclick='alert("{{.UserNote}}");'>
+								{{end}}
+							</div>
+						</div>
+					{{end}}
+				</div>
+			</div>
+		</div>
+		<!--작업내용 & Source-->
+		<div class="col-sm-12 col-md-12 col-lg-4">
+
+			<!--Tags-->
+			<div class="row">
+				<div><span class="text-badge">Tags:</span></div>
+				<div id="tags-{{.ID}}" class="row ml-3">
+					{{range .Tag}}
+						<div id="tag-{{$id}}-{{.}}" class="ml-1">
+							<a href="/inputmode?project={{$.SearchOption.Project}}&
+							searchword=tag:{{.}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							assign={{$.SearchOption.Assign}}&
+							ready={{$.SearchOption.Ready}}&
+							wip={{$.SearchOption.Wip}}&
+							confirm={{$.SearchOption.Confirm}}&
+							done={{$.SearchOption.Done}}&
+							omit={{$.SearchOption.Omit}}&
+							hold={{$.SearchOption.Hold}}&
+							out={{$.SearchOption.Out}}&
+							none={{$.SearchOption.None}}&
+							searchbartemplate={{$.SearchOption.SearchbarTemplate}}&
+							truestatus={{Join $.SearchOption.TrueStatus "," }}&
+							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
+						</div>
+					{{end}}
+				</div>
+				
+				<div class="ml-3" id="tag-button-{{.ID}}">
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+						<span class="add ml-1" data-toggle="modal" data-target="#modal-addtag" onclick="setAddTagModal('{{.Project}}', '{{.ID}}')">＋</span>
+						{{if .Tag}}	
+							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmtag" onclick="setRmTagModal('{{.Project}}', '{{.ID}}')">－</span>
+						{{end}}
+					{{end}}
+				</div>
+			</div>
+
+			<!--작업내용-->
+			<div class="row">
+				<span class="text-badge">Note:</span>
+			</div>
+			<div class="ml-1 text-light small">
+				{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+					<div class="float-right" id="note-{{.Name}}-addbutton">
+						<span class="add" data-toggle="modal" data-target="#modal-setnote" onclick="setNoteModal('{{.Project}}','{{.ID}}')">＋</span>
+						<span class="edit" data-toggle="modal" data-target="#modal-editnote" onclick="editNoteModal('{{.Project}}','{{.ID}}')">≡</span>
+					</div>
+				{{end}}
+				<div id="note-{{.ID}}" onclick="selectCheckboxNone()">
+					{{range Split .Note.Text "\n" -}}{{.}}<br>{{- end}}
+				</div>
+			</div>
+
+			<!--Asset Tags-->
+			<div class="row">
+				<div><span class="text-badge">Assets:</span></div>
+				<div id="assettags-{{.ID}}" class="row ml-1">
+					{{range .Assettags}}
+						<div id="assettag-{{$id}}-{{.}}" class="tag ml-1">
+							<a href="/inputmode?project={{$.SearchOption.Project}}&
+							searchword=assettags:{{.}}&
+							sortkey={{$.SearchOption.Sortkey}}&
+							assign={{$.SearchOption.Assign}}&
+							ready={{$.SearchOption.Ready}}&
+							wip={{$.SearchOption.Wip}}&
+							confirm={{$.SearchOption.Confirm}}&
+							done={{$.SearchOption.Done}}&
+							omit={{$.SearchOption.Omit}}&
+							hold={{$.SearchOption.Hold}}&
+							out={{$.SearchOption.Out}}&
+							none={{$.SearchOption.None}}&
+							truestatus={{Join $.SearchOption.TrueStatus "," }}&
+							task={{$.SearchOption.Task}}" class="badge badge-outline-darkmode">{{.}}</a>
+						</div>
+					{{end}}
+				</div>
+				<div class="ml-3" id="assettags-button-{{.ID}}">
+					{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+						<span class="add ml-1" data-toggle="modal" data-target="#modal-addassettag" onclick="setAddAssetTagModal('{{.Project}}', '{{.ID}}')">＋</span>
+						{{if .Tag}}	
+							<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmassettag" onclick="setRmAssetTagModal('{{.Project}}', '{{.ID}}')">－</span>
+						{{end}}
+					{{end}}
+				</div>
+			</div>
+			
+			<!--ObjectID-->
+			{{if eq .Type "asset"}}
+				{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
+					<div class="row">
+						<div id="objectid-{{.Name}}">
+							<span class="finger no-decoration-text-button" data-toggle="modal" data-target="#modal-objectid" onclick="setObjectIDModal('{{.Project}}', '{{.ID}}')">ObjectID:</span>
+						</div>
+						<div id="objectidnum-{{.Name}}">
+							<span class="text-badge ml-1">{{.ObjectidIn}}-{{.ObjectidOut}}</span>
+						</div>
+					</div>
+				{{end}}
+			{{end}}
+			
+			<!--ProductionCam-->
+			{{if eq .Type "org" "left"}}
+			<div class="row">
+				<div id="caminfo-{{.ID}}">
+					<span class="finger no-decoration-text-button" {{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}data-toggle="modal" data-target="#modal-cameraoption" onclick="setCameraOptionModal('{{$project}}', '{{$id}}')"{{end}}>
+						CamInfo:
+					</span>
+				</div>
+				<div id="campubtask-{{.ID}}">
+					{{if .ProductionCam.PubTask}}
+						<span class="text-badge ml-1">{{.ProductionCam.PubTask}}</span>
+					{{end}}
+				</div>
+				<div id="camlensmm-{{.ID}}">
+					{{if .ProductionCam.Lensmm}}
+						<span class="text-badge ml-1">{{.ProductionCam.Lensmm}}mm</span>
+					{{end}}
+				</div>
+				<div id="campubpath-{{.ID}}">
+					{{if .ProductionCam.PubPath}}
+						<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
+					{{end}}
+				</div>
+				<div id="camprojection-{{.ID}}">
+					{{if .ProductionCam.Projection}}
+						<span class="text-badge ml-1">ProjectionCam</span>
+					{{end}}
+				</div>
+			</div>
+			{{end}}
+			
+			<!--연결소스-->
+			{{if eq .Type "org" "left" "asset" }}
+				<div class="row">
+					<span class="text-badge">Sources:</span>
+				</div>
+				
+				<div class="ml-2 row">
+					<div id="sources-{{.Name}}" class="row">
+						{{range .Sources -}}
+							<div id="source-{{$name}}-{{.Title}}">
+								<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}" onclick="copyClipboard('{{.Path}}')">{{.Title}}</a>
+							</div>
+						{{- end}}
+					</div>
+					<div class="ml-3" id="source-button-{{.Name}}">
+						{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+							<span class="add ml-1" data-toggle="modal" data-target="#modal-addsource" onclick="setAddSourceModal('{{.Project}}', '{{.ID}}')">＋</span>
+							{{if .Sources}}	
+								<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmsource" onclick="setRmSourceModal('{{.Project}}', '{{.ID}}')">－</span>
+							{{end}}
+						{{end}}
+					</div>
+				</div>
+			{{end}}
+
+			<!--Reference-->
+			{{if eq .Type "org" "left" "asset" }}
+				<div class="row">
+					<span class="text-badge">References:</span>
+				</div>
+				<div class="ml-2 row">
+					<div id="references-{{.Name}}" class="row">
+						{{range .References -}}
+							<div id="reference-{{$name}}-{{.Title}}">
+								<a href="{{Protocol .Path}}://{{RmProtocol .Path}}" class="badge badge-outline-darkmode ml-1" alt="{{.Author}},{{.Date}}" title="{{.Author}},{{.Date}}" target="{{ProtocolTarget .Path}}" onclick="copyClipboard('{{.Path}}')">{{.Title}}</a>
+							</div>
+						{{- end}}
+					</div>
+					<div class="ml-3" id="reference-button-{{.Name}}">
+						{{if eq $.User.AccessLevel 4 5 6 7 8 9 10 11}}
+							<span class="add ml-1" data-toggle="modal" data-target="#modal-addreference" onclick="setAddReferenceModal('{{.Project}}','{{.ID}}')">＋</span>
+							{{if .References}}
+								<span class="remove ml-0" data-toggle="modal" data-target="#modal-rmreference" onclick="setRmReferenceModal('{{.Project}}','{{.ID}}')">－</span>
+							{{end}}
+						{{end}}
+					</div>
+				</div>
+			{{end}}
+			
+			
+			<!--Scaninfo-->
+			<div class="row">
+				<div id="scaninfo-{{.Name}}">
+					<span class="text-badge">ScanInfo:</span>
+				</div>
+				<div id="scantime-{{.Name}}">
+					{{if .Scantime}}
+						<span class="text-badge ml-1">{{ToShortTime .Scantime}} /</span>
+					{{end}}
+				</div>
+				<div>
+					{{if .Scanname}}
+						<span id="{{.Project}}-{{.ID}}-scanname" class="text-badge ml-1" title="scanname">{{.Scanname}}</span>
+					{{end}}
+				</div>
+				<div id="scanin-{{.Name}}">
+					{{if .ScanIn}}
+						<span class="text-badge ml-1">{{.ScanIn}}</span>
+					{{end}}
+				</div>
+				{{if and .ScanIn .ScanOut}}
+					<div>
+						<span class="text-badge ml-1">-</span>
+					</div>
+				{{end}}
+				<div id="scanout-{{.Name}}">
+					{{if .ScanOut}}
+						<span class="text-badge ml-1">{{.ScanOut}}</span>
+					{{end}}
+				</div>
+				<div id="scanframe-{{.Name}}">
+					{{if .ScanFrame}}
+						<span class="text-badge ml-1">({{.ScanFrame}})</span>
+					{{end}}
+				</div>
+				{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+					<div>
+						<span class="text-badge ml-1">/</span>
+					</div>
+				{{end}}
+				<div id="scantimecodein-{{.Name}}">
+					{{if .ScanTimecodeIn}}
+						<span class="text-badge ml-1">{{.ScanTimecodeIn}}</span>
+					{{end}}
+				</div>
+				{{if and .ScanTimecodeIn .ScanTimecodeOut}}
+					<div>
+						<span class="text-badge ml-1">-</span>
+					</div>
+				{{end}}
+				<div id="scantimecodeout-{{.Name}}">
+					{{if .ScanTimecodeOut}}
+						<span class="text-badge ml-1">{{.ScanTimecodeOut}}</span>
+					{{end}}
+				</div>
+				<div id="{{.Project}}-{{.ID}}-netflixid">
+					{{if .NetflixID}}
+						<span class="text-badge netflix-red ml-1">NetflixID: {{.NetflixID}}</span>
+					{{end}}
+				</div>
+			</div>
+
+		</div>
+
+		<!--Comments-->
+		<div class="col-sm-12 col-md-12 col-lg-3">
+			
+			{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+				<div class="float-right">
+					<span class="add" data-toggle="modal" data-target="#modal-addcomment" onclick="setAddCommentModal('{{.Project}}', '{{.ID}}')">＋</span>
+				</div>
+			{{end}}
+			<div id="comments-{{.ID}}" onclick="selectCheckboxNone()">
+				{{$first := true}}
+				{{range ReverseCommentSlice .Comments | CutCommentSlice}}
+					<div id="comment-{{$id}}-{{.Date}}">
+						<span class="text-badge">{{.Date}} / <a href="/user?id={{.Author}}" class="text-darkmode">{{if .AuthorName}}{{.AuthorName}}{{else}}{{.Author}}{{end}}</a></span>
+						{{if eq $.User.AccessLevel 5 6 7 8 9 10 11}}
+							<span class="edit" data-toggle="modal" data-target="#modal-editcomment" onclick="setEditCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}','{{.MediaTitle}}','{{.Media}}')">≡</span>
+							<span class="remove" data-toggle="modal" data-target="#modal-rmcomment" onclick="setRmCommentModal('{{$project}}','{{$id}}','{{.Date}}','{{.Text}}')">×</span>
+						{{end}}
+						<br>
+						<div class="text-{{if $first}}warning{{else}}white{{end}} small">
+							{{range Split .Text "\n"}}
+								{{.}}<br>
+							{{end}}
+							{{if .Media}}
+								<div class="row pl-3 pt-3 pb-1">
+									<a href="{{Protocol .Media}}://{{RmProtocol .Media}}" onclick="copyClipboard('{{.Media}}')">
+										<img src="/assets/img/link.svg" class="finger">
+									</a>
+									<span class="text-white pl-2">{{.MediaTitle}}</span>
+								</div>
+							{{end}}
+						</div>
+						<hr class="my-1 p-0 m-0 divider">
+					</div>
+					{{$first = false}}
+				{{end}}
+				{{$length := len .Comments }} {{ if gt $length 3 }}
+					<div class="text-right">
+						<span class="finger small text-darkmode" data-toggle="modal" data-target="#modal-detailcomments" onclick="setDetailCommentsModal('{{$project}}','{{$id}}')">더보기</span>
+					</div>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<hr class="item-divider my-4">
+	</div>
+{{end}}
+</div>
+
+{{end}}

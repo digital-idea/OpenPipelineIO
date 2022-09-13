@@ -1,0 +1,109 @@
+{{define "calendartest" }}
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <!--
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <script src='https://cdn.jsdelivr.net/npm/moment@2/min/moment.min.js'></script>-->
+    
+    <link href='/assets/fullcalendar-scheduler-5/lib/main.min.css' rel='stylesheet' />
+    <script src='/assets/fullcalendar-scheduler-5/lib/main.min.js'></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
+            console.log('Event: ' + info.event.title);
+            console.log('Event: ' + info.event.start);
+            console.log('Event: ' + info.event.end);
+            console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            console.log('View: ' + info.view.type);
+          },
+          eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+            console.log('Event: ' + info.event.title);
+            console.log('Event: ' + info.event.resourceId);
+            console.log(info.event)
+            console.log('Event: ' + info.event.start);
+            console.log('Event: ' + info.event.end);
+            console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            console.log('View: ' + info.view.type);
+          },
+          eventResize: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+            console.log('Event: ' + info.event.title);
+            console.log('Event: ' + info.event.start);
+            console.log('Event: ' + info.event.end);
+            console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            console.log('View: ' + info.view.type);
+          },
+          dateClick: function(info) {
+            console.log('Clicked on: ' + info.dateStr);
+            console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+            console.log('Current view: ' + info.view.type);
+          },
+
+          customButtons: {
+            addEventButton: {
+              text: '+',
+              click: function() {
+                var title = prompt('Enter title');
+                var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+                var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+                if (!isNaN(date.valueOf())) { // valid?
+                  calendar.addEvent({
+                    title: title,
+                    start: date,
+                    allDay: true
+                  });
+                  alert('Great. Now, update your database...');
+                } else {
+                  alert('Invalid date.');
+                }
+              }
+            }
+          },
+          initialView: 'dayGridMonth',
+          
+          //initialView: 'resourceTimelineMonth',
+          //themeSystem: 'bootstrap5',
+          
+          schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+          //timeZone: 'UTC',
+          timeZone: 'local',
+          selectable: true,
+          aspectRatio: 1.5,
+          headerToolbar: {
+            left: 'prevYear,prev,next,nextYear today addEventButton',
+            center: 'title',
+            right: 'dayGridMonth,dayGridDay,resourceTimelineWeek,resourceTimelineMonth,listWeek'
+          },
+          editable: true,
+          resourceAreaHeaderContent: 'Shot List',
+          //resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
+          resources: [
+            {"id":"a","title":"TEMP,SS_0010","eventColor":"red"},
+            {"id":"b","title":"TEMP,SS_0020","eventColor":"green"},
+            {"id":"c","title":"TEMP,SS_0030","eventColor":"orange"},
+            {"id":"d","title":"TEMP,SS_0040","eventColor":"blue"},
+          ],
+          //events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
+          events: [
+            {"id":"1","title":"TEMP,SS_0010","start":"2022-09-04","end":"2022-09-07","resourceId":"a","url":"https://lazypic.org"},
+            {"id":"2","title":"TEMP,SS_0020","start":"2022-09-05","end":"2022-09-07","resourceId":"b"},
+            {"id":"3","title":"TEMP,SS_0030","start":"2022-09-09","resourceId":"c","groupId":"test"},
+            {"id":"4","title":"TEMP,SS_0040","start":"2022-09-10","resourceId":"d","groupId":"test"},
+          ],
+        });
+        
+        calendar.render();
+      });
+    </script>
+  </head>
+  <body>
+    
+    <div id='calendar' class="p-5"></div>
+  </body>
+</html>
+{{end}}
