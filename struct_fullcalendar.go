@@ -7,8 +7,8 @@ type FullCalendarEvent struct {
 	AllDay           bool              `json:"allDay"`           // 하루종일 진행되는 이벤트인가?
 	Start            string            `json:"start"`            // 시작시간
 	End              string            `json:"end"`              // 끝나는 시간
-	StartStr         string            `json:"startStr"`         //  ISO8601 Time
-	EndStr           string            `json:"endStr"`           //  ISO8601 Time
+	StartStr         string            `json:"startStr"`         // ISO8601 Time
+	EndStr           string            `json:"endStr"`           // ISO8601 Time
 	Title            string            `json:"title"`            // 제목
 	Url              string            `json:"url"`              // 클릭하면 이동되는 URL
 	ClassNames       []string          `json:"classNames"`       // html에 렌더링할 때 attached 할 클레스 이름
