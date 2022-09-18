@@ -25,3 +25,17 @@ type FullCalendarEvent struct {
 	// Constraint // 일정을 설정할 때 제한을 둘때 사용한다.
 	// Overlap // false 또는 함수를 다룬다. Go 자료구조에서는 다루지 않는다.
 }
+
+// https://fullcalendar.io/docs/resource-object
+type FullCalendarResource struct {
+	ID                   string            `json:"id"`                   // ID
+	Title                string            `json:"title"`                // 제목
+	ExtendedProps        map[string]string `json:"extendedProps"`        // 나머지 필요한 기능
+	EventBackgroundColor string            `json:"eventBackgroundColor"` // 배경색
+	EventBorderColor     string            `json:"eventBorderColor"`     // 테두리색
+	EventTextColor       string            `json:"eventTextColor"`       // 글자색
+	EventClassNames      []string          `json:"eventClassNames"`      // html에 렌더링할 때 attached 할 클레스 이름
+	// EventAllow
+	// EventConstraint // 일정을 설정할 때 제한을 둘때 사용한다.
+	// EventOverlap // false 또는 함수를 다룬다. Go 자료구조에서는 다루지 않는다.
+}
