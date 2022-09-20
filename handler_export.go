@@ -198,7 +198,7 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	case "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": // MS-Excel, Google & Libre Excel
+	case "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/docxconverter", "application/haansoftxlsx", "application/kset", "application/vnd.ms-excel.12", "application/vnd.openxmlformats-officedocument.spreadsheetml.shee", "x-softmaker-pm": // MS-Excel, Google & Libre Excel
 		data, err := ioutil.ReadAll(file)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
