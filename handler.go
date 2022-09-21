@@ -243,6 +243,10 @@ func webserver(port string) {
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(assets)))
 	r.PathPrefix("/thumbnail/").Handler(maxAgeHandler(http.StripPrefix("/thumbnail/", http.FileServer(http.Dir(CachedAdminSetting.ThumbnailRootPath)))))
 	r.PathPrefix("/captcha/").Handler(captcha.Server(captcha.StdWidth, captcha.StdHeight)) // Captcha
+
+	// ScanPlate
+	r.HandleFunc("/scanplate", handleScanPlate)
+
 	// Item
 	r.HandleFunc("/", handleIndex)
 	r.HandleFunc("/inputmode", handleInputMode)

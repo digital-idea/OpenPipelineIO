@@ -16,7 +16,8 @@
                 File
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item text-muted" href="/scanplate">ScanPlate(준비중)</a></li>
+                <li><a class="dropdown-item" href="/scanplate">ScanPlate(Alpha)</a></li>
+                <li><a class="dropdown-item text-muted" href="/filebrowser">FileBrowser(Sendbox)</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/importexcel">Import .xlsx</a></li>
                 <li><span class="dropdown-item finger" onclick="exportExcelCurrentPage()">Export Current .xlsx</span></li>
@@ -30,7 +31,7 @@
                 <li><hr class="dropdown-divider"></li>
                 <li><span class="dropdown-item finger" onclick="exportDumpProject()">DB Dump</span></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-muted" href="/report">Report(준비중)</a></li>
+                <li><a class="dropdown-item text-muted" href="/report">Report(Sendbox)</a></li>
               </ul>
           </li>
         {{end}}
@@ -94,6 +95,7 @@
               {{if .Setting.EnableEndpoint}}
                 <li><a class="dropdown-item" href="/endpoints">Endpoint</a></li>
               {{end}}
+              <li><a class="dropdown-item text-muted" href="/equipments">Equipments(Sendbox)</a></li>
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -104,8 +106,8 @@
               <li><hr class="dropdown-divider"></li>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <li><a class="dropdown-item text-muted" href="/software">Software(준비중-프로토콜셋팅)</a></li>
-              <li><a class="dropdown-item text-muted" href="/environment">Environment(준비중-프로토콜셋팅)</a></li>
+              <li><a class="dropdown-item text-muted" href="/software">Software(Sendbox)</a></li>
+              <li><a class="dropdown-item text-muted" href="/environment">Environment(Sendbox)</a></li>
               <li><hr class="dropdown-divider"></li>
             {{end}}
             <li><a class="dropdown-item" href="/divisions">Divisions(본부)</a></li>
@@ -213,6 +215,7 @@
                {{.User.ID}}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item text-muted" href="/inbox">InBox(Sendbox)</a></li>
               <li><a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a></li>
               <li><a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a></li>
               {{if eq .User.ID "guest" "demo" }}

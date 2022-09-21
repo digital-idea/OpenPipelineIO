@@ -16,7 +16,8 @@
                 File
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item text-muted" href="/scanplate">ScanPlate(준비중)</a>
+                <a class="dropdown-item" href="/scanplate">ScanPlate(Alpha)</a>
+                <a class="dropdown-item text-muted" href="/filebrowser">FileBrowser(Sendbox)</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/importexcel">Import .xlsx</a>
                 <span class="dropdown-item finger" onclick="exportExcelCurrentPage()">Export Current .xlsx</span>
@@ -30,7 +31,7 @@
                 <div class="dropdown-divider"></div>
                 <span class="dropdown-item finger" onclick="exportDumpProject()">DB Dump</span>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-muted" href="/report">Report(준비중)</a>
+                <a class="dropdown-item text-muted" href="/report">Report(Sendbox)</a>
               </div>
           </li>
         {{end}}
@@ -93,6 +94,7 @@
               {{if .Setting.EnableEndpoint}}
                 <a class="dropdown-item" href="/endpoints">Endpoint</a>
               {{end}}
+              <a class="dropdown-item text-muted" href="/equipments">Equipments(Sendbox)</a>
               <div class="dropdown-divider"></div>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
@@ -102,8 +104,8 @@
               <div class="dropdown-divider"></div>
             {{end}}
             {{if eq .User.AccessLevel 4 5 6 7 8 9 10 11}}
-              <a class="dropdown-item text-muted" href="/software">Software(준비중-프로토콜셋팅)</a>
-              <a class="dropdown-item text-muted" href="/environment">Environment(준비중-프로토콜셋팅)</a>
+              <a class="dropdown-item text-muted" href="/software">Software(Sendbox)</a>
+              <a class="dropdown-item text-muted" href="/environment">Environment(Sendbox)</a>
               <div class="dropdown-divider"></div>
             {{end}}
             <a class="dropdown-item" href="/divisions">Divisions(본부)</a>
@@ -205,6 +207,7 @@
                {{.User.ID}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item text-muted" href="/inbox">InBox(Sendbox)</a>
               <a class="dropdown-item" href="/user?id={{.User.ID}}">Profile</a>
               <a class="dropdown-item" href="/edituser?id={{.User.ID}}">Edit</a>
               {{if eq .User.ID "guest" "demo" }}
