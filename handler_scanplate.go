@@ -48,6 +48,7 @@ func handleScanPlate(w http.ResponseWriter, r *http.Request) {
 		TasksettingNames []string
 		Stages           []Stage
 		Status           []Status
+		Colorspaces      []string `json:"colorspaces"`
 	}
 	rcp := recipe{}
 	rcp.Projectlist, err = ProjectlistV2(client)
@@ -81,6 +82,11 @@ func handleScanPlate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Setting = CachedAdminSetting
+	rcp.Colorspaces, err = loadOCIOConfig()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	err = TEMPLATES.ExecuteTemplate(w, "scanplate", rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

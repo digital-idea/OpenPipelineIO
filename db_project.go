@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"sort"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -16,5 +17,6 @@ func ProjectlistV2(client *mongo.Client) ([]string, error) {
 	if err != nil {
 		return projects, err
 	}
+	sort.Strings(projects)
 	return projects, nil
 }
