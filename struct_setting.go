@@ -18,6 +18,7 @@ type Setting struct {
 	ProjectPathPermission          string `json:"projectpathpermission"`          // Project경로의 권한
 	ProjectPathUID                 string `json:"projectpathuid"`                 // Project경로의 User ID
 	ProjectPathGID                 string `json:"projectpathgid"`                 // Project경로의 Group ID
+	ScanPlateUploadPath            string `json:"scanplateuploadpath"`            // ScanPlate 업로드 경로
 	ShotRootPath                   string `json:"shotrootpath"`                   // Shot Root 경로 예) /show/{{.Project}}/seq/
 	ShotRootPathPermission         string `json:"shotrootpathpermission"`         // Shot Root 경로의 권한
 	ShotRootPathUID                string `json:"shotrootpathuid"`                // Shot Root 경로의 User ID

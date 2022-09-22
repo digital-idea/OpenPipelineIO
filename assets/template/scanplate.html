@@ -14,19 +14,22 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="uploadway">
-                        <label class="form-check-label finger unselectable text-muted" for="uploadway">이미지 업로드 방식을 사용하십니까?</label>
+                        <input class="form-check-input finger" type="checkbox" id="uploadmethod" onclick="checkUploadMethod()">
+                        <label class="form-check-label finger unselectable text-muted" for="uploadmethod">이미지 업로드 방식을 사용하십니까?</label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <form action="/upload-scanplate" class="dropzone">
-            <div class="fallback">
-                <input name="file" type="file" />
-            </div>
-        </form>
-        <small class="form-text text-mute">업로드할 .jpg, .png, .mov, .dpx, exr 파일을 Drag & Drop 해주세요.</small>
+        <div id="scanplateuploadzone">
+            <form action="/upload-scanplate" class="dropzone">
+                <div class="fallback">
+                    <input name="file" type="file" />
+                </div>
+            </form>
+            <small class="form-text text-muted">업로드할 .jpg, .png, .mov, .dpx, exr 파일을 Drag & Drop 해주세요.</small>
+        </div>
+        
 
         <div class="row pt-2">
             <div class="col-sm">
@@ -204,19 +207,19 @@
             </div>
         </div>
 
-        <!--Attribute Table
-        <div class="row pt-2">
+        <!--Attribute Table-->
+        <div class="row pt-2" hidden>
             <div class="col-sm">
                 <div class="border-table rounded unselectable" id="attributes"></div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" hidden>
             <div class="col">
                 <small class="form-text text-muted float-right">필요시 속성을 추가해 주세요.</small>
                 <span class="add float-right" id="addAttribute">+</span>
                 <span class="add float-right" id="rmAttribute">-</span>
             </div>
-        </div>-->
+        </div>
     </div>
     <div class="text-center pt-5">
         <button type="submit" class="btn btn-outline-warning" id="submitFootages">SUBMIT PROCESS</button>
@@ -232,8 +235,10 @@
 <script src="/assets/js/exports/jspdf.plugin.autotable.min.js"></script>
 <script src="/assets/js/exports/xlsx.full.min.js"></script>
 <script src="/assets/tata/tata.js"></script>
+<script src="/assets/js/scanplate.js"></script>
 
 <script>
+    
     //define some sample data
     var sources = [
         {id:1,dir:"/path/example1",base:"example1.%04d.exr",framein:"1001",frameout:"1005",length:5},
