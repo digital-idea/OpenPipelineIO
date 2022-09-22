@@ -1,0 +1,478 @@
+{{define "scanplate" }}
+{{template "headBootstrap5"}}
+<body>
+{{template "navbar-bootstrap5" .}}
+{{template "modal-bootstrap5" .}}
+
+<div class="container py-5 px-2">
+    <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+        <div class="pt-3 pb-3">
+            <h2 class="text-muted">Scan Plate</h2>
+        </div>
+
+        <div class="row pt-2 pb-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="uploadway">
+                        <label class="form-check-label finger unselectable text-muted" for="uploadway">이미지 업로드 방식을 사용하십니까?</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="/upload-scanplate" class="dropzone">
+            <div class="fallback">
+                <input name="file" type="file" />
+            </div>
+        </form>
+        <small class="form-text text-mute">업로드할 .jpg, .png, .mov, .dpx, exr 파일을 Drag & Drop 해주세요.</small>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="text-muted">Find Path</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Path" id="searchpath">
+                        <button class="btn btn-outline-warning" type="button" id="searchfootages">ScanPath</button>
+                    </div>
+                    <small class="form-text text-danger">OS에서 보안상 제약이 걸린 경로가 포함된 경우, 너무 많은 소스가 존재하는 경로를 설정할 경우 웹서버에 부하를 줄 수 있습니다.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="border-table rounded unselectable" id="source-table"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="w-100 btn-group btn-group-sm rounded-bottom" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-outline-darkmode" id="download-pdf">Download PDF</button>
+                    <button type="button" class="btn btn-outline-darkmode" id="download-xlsx">Download XLSX</button>
+                    <button type="button" class="btn btn-outline-darkmode" id="download-csv">Download CSV</button>
+                    <button type="button" class="btn btn-outline-darkmode" id="download-json">Download JSON</button>
+                    <button type="button" class="btn btn-outline-darkmode" id="download-html">Download HTML</button>
+                    <button type="button" class="btn btn-outline-darkmode" id="print-table">Print Table</button>
+                </div>
+            </div>
+            <small class="form-text text-warning">항목을 드레그하면 연산순서를 바꿀 수 있습니다. 파일명을 더블 클릭하면 연산에서 제거됩니다.</small>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="text-muted">Project</label>
+                            <select id="project" class="form-control">
+                                {{range .Projectlist}}<option value="{{.}}">{{.}}</option>{{end}}
+                            </select>
+                        </div>
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Regular Expression</label>
+                            <input type="text" id="regex" class="form-control" placeholder="&#123;&#123;.Name&#125;&#125;_org_v001.1001.&#123;&#123;.Ext&#125;&#125;">
+                        </div>
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Undistortion Rate</label>
+                            <input type="text" id="undistortionrate" class="form-control" placeholder="{{.Setting.DefaultScaleRatioOfUndistortionPlate}}" value="{{.Setting.DefaultScaleRatioOfUndistortionPlate}}">
+                        </div>
+                        
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="text-muted">OpenPipelineIO DNS</label>
+                            <input type="text" id="dns" class="form-control" placeholder="https://openpipeline.io">
+                        </div>
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Token</label>
+                            <input type="text" id="token" class="form-control" placeholder="">
+                        </div>
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Extension</label>
+                            <select id="extenstion" class="form-control">
+                                <option value=".jpg">.jpg</option>
+                                <option value=".png">.png</option>
+                                <option value=".dpx">.dpx</option>
+                                <option value=".exr">.exr</option>
+                            </select>
+                            <small class="form-text text-muted">Select File Extension</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="text-muted">Colorspace</label>
+                    <span class="preset-button float-end" data-bs-toggle="modal" data-bs-target="#modal-preset-colorspace">Preset</span>
+                    <div class="row">
+                        <div class="col">
+                            <select id="incolorspace" name="incolorspace" class="form-control">
+                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
+                            </select>
+                            <small class="form-text text-muted">In Colorspace</small>
+                        </div>
+                        <div class="col">
+                            <select id="outcolorspace" name="outcolorspace" class="form-control">
+                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
+                            </select>
+                            <small class="form-text text-muted">Out Colorspace</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setplatesize">
+                        <label class="form-check-label finger unselectable text-muted" for="setplatesize">이미지 사이즈로 플레이트 사이즈 등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setundistortionsize">
+                        <label class="form-check-label finger unselectable text-muted" for="setundistortionsize">언디스토션 사이즈 자동등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setrendersize">
+                        <label class="form-check-label finger unselectable text-muted" for="setrendersize">언디스토션 사이즈로 렌더 사이즈 자동등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setinout">
+                        <label class="form-check-label finger unselectable text-muted" for="setinout">IN/OUT 등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setjustinout">
+                        <label class="form-check-label finger unselectable text-muted" for="setjustinout">Just IN/OUT 등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="settimecode">
+                        <label class="form-check-label finger unselectable text-muted" for="settimecode">Timecode IN/OUT 등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="setscanfolder">
+                        <label class="form-check-label finger unselectable text-muted" for="setscanfolder">Scan Folder 등록</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Attribute Table
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="border-table rounded unselectable" id="attributes"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <small class="form-text text-muted float-right">필요시 속성을 추가해 주세요.</small>
+                <span class="add float-right" id="addAttribute">+</span>
+                <span class="add float-right" id="rmAttribute">-</span>
+            </div>
+        </div>-->
+    </div>
+    <div class="text-center pt-5">
+        <button type="submit" class="btn btn-outline-warning" id="submitFootages">SUBMIT PROCESS</button>
+    </div>
+</div>
+
+{{template "footerBootstrap"}}
+</body>
+<script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+<script src="/assets/tabulator5.1/js/tabulator.min.js"></script>
+<script src="/assets/js/exports/jspdf.umd.min.js"></script>
+<script src="/assets/js/exports/jspdf.plugin.autotable.min.js"></script>
+<script src="/assets/js/exports/xlsx.full.min.js"></script>
+<script src="/assets/tata/tata.js"></script>
+
+<script>
+    //define some sample data
+    var sources = [
+        {id:1,dir:"/path/example1",base:"example1.%04d.exr",framein:"1001",frameout:"1005",length:5},
+        {id:2,dir:"/path/example2",base:"example2.%04d.exr",framein:"1001",frameout:"1005",length:5},
+    ];
+    //create Tabulator on DOM element with id "example-table"
+    var table = new Tabulator("#source-table", {
+        height:370, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+        data:sources, //assign data to table
+        layout:"fitColumns", //fit columns to width of table (optional)
+        pagination:"local",
+        paginationSize:10,
+        paginationSizeSelector:[10, 20],
+        movableColumns:true,
+        movableRows:true,
+        reactiveData:true, //turn on data reactivity
+        selectable:false, //make rows selectable
+        paginationCounter:"rows",
+        clipboard:true,
+        clipboardPasteAction:"replace",
+        printAsHtml:true,
+        printHeader:"<h3><center>Sources</center></h3>",
+        printFooter:"<h5></h5>",
+        columns:[ //Define Table Columns
+            {rowHandle:true, formatter:"handle", headerSort:false, frozen:true, width:30, minWidth:30},
+            {title:"Dir", field:"dir", hozAlign: "left", headerHozAlign:"center", headerSort:false},
+            {title:"Base", field:"base", hozAlign:"left", headerHozAlign:"center", headerSort:false, cellDblClick:function(e, cell){cell.getRow().delete();}},
+            {title:"In", field:"framein", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false, editor:"input",},
+            {title:"Out", field:"frameout", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false, editor:"input",},
+            {title:"Length", field:"length", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false},
+        ],
+    });
+
+    var attributes = [];
+    var attributesTable = new Tabulator("#attributes", {
+        height:150, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+        data:attributes, //assign data to table
+        layout:"fitColumns", //fit columns to width of table (optional)
+        reactiveData:true, //turn on data reactivity
+        clipboard:true,
+        columns:[ //Define Table Columns
+            {title:"Key", field:"key", hozAlign: "left", headerHozAlign:"left", headerSort:false, editor:"input", validator:"required"},
+            {title:"Value", field:"value", hozAlign:"left", headerHozAlign:"left", headerSort:false, editor:"input", validator:"required"},
+        ],
+    });
+
+    //print button
+    document.getElementById("addAttribute").addEventListener("click", function(){
+        attributes.push({key:"", value:""});
+    });
+
+    document.getElementById("rmAttribute").addEventListener("click", function(){
+        attributes.pop();
+    });
+
+    //listen for row move
+    table.on("rowMoved", function(row){
+        sources = table.getData(); // 테이블 데이터의 순서가 sources 순서로 되어야 한다.
+        table.replaceData(sources)
+    });
+
+    //trigger download of data.csv file
+    document.getElementById("download-csv").addEventListener("click", function(){
+        table.download("csv", "data.csv");
+    });
+
+    //trigger download of data.json file
+    document.getElementById("download-json").addEventListener("click", function(){
+        table.download("json", "data.json");
+    });
+
+    //trigger download of data.xlsx file
+    document.getElementById("download-xlsx").addEventListener("click", function(){
+        table.download("xlsx", "data.xlsx", {sheetName:"Source Data"});
+    });
+
+    //trigger download of data.pdf file
+    document.getElementById("download-pdf").addEventListener("click", function(){
+        table.download("pdf", "data.pdf", {
+            orientation:"portrait", //set page orientation to portrait
+            title:"Source Data", //add title to report
+        });
+    });
+
+    //trigger download of data.html file
+    document.getElementById("download-html").addEventListener("click", function(){
+        table.download("html", "data.html", {style:true});
+    });
+
+    //print button
+    document.getElementById("print-table").addEventListener("click", function(){
+        table.print("active", true, {columnGroups:false});
+    });
+
+    //submit Footages
+    document.getElementById("submitFootages").addEventListener("click", function(){
+        // error 처리
+        let title = document.getElementById("title").value
+        if (title == "") {
+            tata.error('Error', "Need title", {
+            position: 'tr',
+            duration: 10000,
+            })
+            return
+        }
+        let description = document.getElementById("description").value
+        if (description == "") {
+            tata.error('Error', "Need Description", {
+            position: 'tr',
+            duration: 10000,
+            })
+            return
+        }
+        let author = document.getElementById("author").value
+        if (author == "") {
+            tata.error('Error', "Need Author", {
+            position: 'tr',
+            duration: 10000,
+            })
+            return
+        }
+        let tags = document.getElementById("tags").value
+        if (tags == "") {
+            tata.error('Error', "Need Tags", {
+            position: 'tr',
+            duration: 10000,
+            })
+            return
+        }
+        // going process
+        sources = table.getData();
+        
+        for (let i = 0; i < sources.length; i += 1) {
+            /*
+            // debug
+            
+            console.log(
+                sources[i].dir,
+                sources[i].base,
+                sources[i].framein,
+                sources[i].frameout,
+                document.getElementById("title").value,
+                document.getElementById("description").value,
+                document.getElementById("author").value,
+                document.getElementById("tags").value,
+                document.getElementById("fps").value,
+                document.getElementById("premult").checked,
+                document.getElementById("incolorspace").value,
+                document.getElementById("outcolorspace").value,
+            )
+            */
+            
+            // process
+            fetch('/api/addfootage', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ getCookie("SessionToken"),
+                },
+                body: new URLSearchParams({
+                    "base": sources[i].base,
+                    "dir": sources[i].dir,
+                    "framein": sources[i].framein,
+                    "frameout": sources[i].frameout,
+                    "title": title,
+                    "description": description,
+                    "author": author,
+                    "tags": tags,
+                    "fps": document.getElementById("fps").value,
+                    "premult": document.getElementById("premult").checked,
+                    "incolorspace": document.getElementById("incolorspace").value,
+                    "outcolorspace": document.getElementById("outcolorspace").value,
+                    "attributes": JSON.stringify(attributesTable.getData()),
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
+                }
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+                let button = document.getElementById("submitFootages")
+                button.disabled = true
+                button.classList.remove("btn-outline-warning");
+                button.classList.add("btn-outline-secondary");
+            })
+            .catch((err) => {
+                alert(err)
+            });
+            
+        }
+        // Toast 띄우기
+        tata.success('Submit Process', sources.length + " items have been sent.", {
+            position: 'tr',
+            duration: 10000,
+            onClick: goProcessPage,
+            onClose: null,
+        })
+    });
+
+    document.getElementById("searchfootages").addEventListener("click", function(){
+        fetch('/api/searchfootages', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ getCookie("SessionToken"),
+            },
+            body: new URLSearchParams({
+                "path":  document.getElementById("searchpath").value,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then((data) => {
+                    alert(data);
+                    //return data;
+                })
+            }
+            if (response.ok) {
+                return response.json().then((data) => {
+                    sources = data;
+                    table.replaceData(data); //update data
+                    //table.updateData();
+                    //return
+                })
+            }
+        })
+        .catch((err) => {
+            alert(err);
+            //return err
+        });
+    });
+
+    
+
+    function goProcessPage() {
+        window.location.replace("item-process")
+    }
+</script>
+
+</html>
+{{end}}

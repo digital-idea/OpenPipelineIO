@@ -461,7 +461,7 @@ func handleEditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Users = users
-	rcp.OCIOColorspaces, err = loadOCIOConfig(session)
+	rcp.OCIOColorspaces, err = loadOCIOConfig()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

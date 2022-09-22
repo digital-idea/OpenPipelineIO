@@ -939,3 +939,7 @@ hr {
 	background-color: #232222!important;
 	border-color: #383636!important;
 }
+
+.border-table {
+	border:1px solid #A7A59C !important;
+}

@@ -4,7 +4,6 @@ import (
 	"io/ioutil"
 	"os"
 
-	"gopkg.in/mgo.v2"
 	"gopkg.in/yaml.v3"
 )
 
@@ -34,22 +33,18 @@ type OCIOConfig struct {
 	Roles              map[string]string `yaml:"roles"`
 }
 
-func loadOCIOConfig(session *mgo.Session) ([]string, error) {
+func loadOCIOConfig() ([]string, error) {
 	var results []string
-	s, err := GetAdminSetting(session)
-	if err != nil {
-		return nil, err
-	}
-	if s.OCIOConfig == "" {
+	if CachedAdminSetting.OCIOConfig == "" {
 		return results, nil
 	}
 	// 파일이 존재하는지 체크한다.
-	_, err = os.Stat(s.OCIOConfig)
+	_, err := os.Stat(CachedAdminSetting.OCIOConfig)
 	if err != nil {
 		return nil, err
 	}
 	// OCIO.config 파일을 불러온다.
-	dat, err := ioutil.ReadFile(s.OCIOConfig)
+	dat, err := ioutil.ReadFile(CachedAdminSetting.OCIOConfig)
 	if err != nil {
 		return nil, err
 	}
