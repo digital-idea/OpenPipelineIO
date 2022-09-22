@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -91,5 +95,68 @@ func handleScanPlate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+}
+
+func handleUploadScanPlate(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+
+	buffer := CachedAdminSetting.MultipartFormBufferSize
+	err = r.ParseMultipartForm(int64(buffer)) // grab the multipart form
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	path := CachedAdminSetting.ScanPlateUploadPath
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err = os.MkdirAll(path, 0775)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	for _, files := range r.MultipartForm.File {
+		for _, f := range files {
+			if f.Size == 0 {
+				http.Error(w, "파일사이즈가 0 바이트입니다", http.StatusInternalServerError)
+				return
+			}
+			file, err := f.Open()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				continue
+			}
+			defer file.Close()
+			mimeType := f.Header.Get("Content-Type")
+			switch mimeType {
+			case "image/jpeg", "image/png", "video/quicktime", "image/x-exr", "application/octet-stream":
+				ext := strings.ToLower(filepath.Ext(f.Filename))
+				if ext != ".jpg" && ext != ".png" && ext != ".mov" && ext != ".dpx" && ext != ".exr" { // .jpg .dpx .exr 외에는 허용하지 않는다.
+					http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
+					return
+				}
+				data, err := ioutil.ReadAll(file)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				err = ioutil.WriteFile(path+"/"+f.Filename, data, 0775)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+			default:
+				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
+				return
+			}
+		}
 	}
 }
