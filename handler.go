@@ -247,6 +247,7 @@ func webserver(port string) {
 	// ScanPlate
 	r.HandleFunc("/scanplate", handleScanPlate)
 	r.HandleFunc("/upload-scanplate", handleUploadScanPlate)
+	r.HandleFunc("/api/scanplatetemp", deleteScanPlateTemp).Methods("DELETE")
 
 	// Item
 	r.HandleFunc("/", handleIndex)

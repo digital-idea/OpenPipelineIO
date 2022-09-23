@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -115,13 +116,18 @@ func handleUploadScanPlate(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	path := CachedAdminSetting.ScanPlateUploadPath
+	path := CachedAdminSetting.ScanPlateUploadPath + "/temp"
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err = os.MkdirAll(path, 0775)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	}
+	type recipe struct {
+		Path     string `json:"path"`
+		Ext      string `json:"ext"`
+		Filename string `json:"filename"`
 	}
 	for _, files := range r.MultipartForm.File {
 		for _, f := range files {
@@ -153,10 +159,71 @@ func handleUploadScanPlate(w http.ResponseWriter, r *http.Request) {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+
+				rcp := recipe{}
+				rcp.Path = path
+				rcp.Filename = f.Filename
+				rcp.Ext = ext
+				json, err := json.Marshal(rcp)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+				w.Header().Set("Content-Type", "application/json; charset=utf-8")
+				w.WriteHeader(http.StatusOK)
+				w.Write(json)
 			default:
 				http.Error(w, "허용하지 않는 파일 포맷입니다", http.StatusBadRequest)
 				return
 			}
 		}
 	}
+}
+
+func deleteScanPlateTemp(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, accessLevel, err := TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if accessLevel != AdminAccessLevel {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	path := CachedAdminSetting.ScanPlateUploadPath + "/temp"
+
+	os.RemoveAll(path)
+	os.MkdirAll(path, 0775)
+
+	type recipe struct {
+		Path string `json:"path"`
+	}
+	rcp := recipe{}
+	rcp.Path = path
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
