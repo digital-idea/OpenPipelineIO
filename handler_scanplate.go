@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -222,6 +223,65 @@ func deleteScanPlateTemp(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func handleAPISearchFootages(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	r.ParseForm()
+	path := r.FormValue("path")
+	if path == "" {
+		http.Error(w, "need path value", http.StatusBadRequest)
+		return
+	}
+	typ := r.FormValue("type")
+	if typ == "" {
+		typ = "org"
+	}
+	items, err := searchSeq(path)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// 사용자에게 받은 type을 설정한다.
+	for n, _ := range items {
+		items[n].Type = typ
+	}
+	// 사용자에게 받은 InColorspace를 설정한다.
+	// 사용자에게 받은 OutColorspace를 설정한다.
+	// 사용자에게 받은 Regex값을 이용해서 Name값을 추출한다.
+	fmt.Println(items)
+	data, err := json.Marshal(items)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)

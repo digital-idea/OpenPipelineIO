@@ -96,14 +96,8 @@
                             <input type="text" id="scanplatetoken" class="form-control" placeholder="">
                         </div>
                         <div class="form-group pt-2">
-                            <label class="text-muted">Extension</label>
-                            <select id="extenstion" class="form-control">
-                                <option value=".jpg">.jpg</option>
-                                <option value=".png">.png</option>
-                                <option value=".dpx">.dpx</option>
-                                <option value=".exr">.exr</option>
-                            </select>
-                            <small class="form-text text-muted">Select File Extension</small>
+                            <label class="text-muted">Type</label>
+                            <input type="text" id="scanplate-type" class="form-control" placeholder="org" value="org">
                         </div>
                     </div>
                 </div>
@@ -241,11 +235,16 @@
 <script src="/assets/js/scanplate.js"></script>
 
 <script>
-    
+    let token = ""
+    if (document.getElementById("scanplatetoken").value != "") {
+        token = document.getElementById("scanplatetoken").value
+    } else {
+        token = document.getElementById("token").value
+    }
     //define some sample data
     var sources = [
-        {id:1,dir:"/path/example1",base:"example1.%04d.exr",framein:"1001",frameout:"1005",length:5},
-        {id:2,dir:"/path/example2",base:"example2.%04d.exr",framein:"1001",frameout:"1005",length:5},
+        {id:1,dir:"/scan/path",base:"SS_0010_org_v001.%04d.exr",ext:".exr",framein:"1001",frameout:"1150",length:150,name:"SS_0010",type:"org",incolorspace:"ACES - ACES2065-1",outcolorspace:"Output - Rec.709",width:"4096",height:"2304",timecodein:"10:11:12:03",timecodeout:"10:11:12:08"},
+        {id:2,dir:"/scan/path",base:"SS_0020_org_v001.%04d.exr",ext:".exr",framein:"1001",frameout:"1050",length:1050,name:"SS_0020",type:"org1",incolorspace:"ACES - ACES2065-1",outcolorspace:"Output - Rec.709",width:"4096",height:"2304",timecodein:"10:11:12:09",timecodeout:"10:11:12:13"},
     ];
     //create Tabulator on DOM element with id "example-table"
     var table = new Tabulator("#source-table", {
@@ -267,11 +266,20 @@
         printFooter:"<h5></h5>",
         columns:[ //Define Table Columns
             {rowHandle:true, formatter:"handle", headerSort:false, frozen:true, width:30, minWidth:30},
-            {title:"Dir", field:"dir", hozAlign: "left", headerHozAlign:"center", headerSort:false},
-            {title:"Base", field:"base", hozAlign:"left", headerHozAlign:"center", headerSort:false, cellDblClick:function(e, cell){cell.getRow().delete();}},
-            {title:"In", field:"framein", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false, editor:"input",},
-            {title:"Out", field:"frameout", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false, editor:"input",},
-            {title:"Length", field:"length", hozAlign:"center", headerHozAlign:"center", width:100, headerSort:false},
+            {title:"dir", field:"dir", hozAlign: "left", headerHozAlign:"center", headerSort:false},
+            {title:"base", field:"base", hozAlign:"left", headerHozAlign:"center", headerSort:false, cellDblClick:function(e, cell){cell.getRow().delete();}},
+            {title:"ext", field:"ext", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
+            {title:"name", field:"name", hozAlign:"center", headerHozAlign:"center", headerSort:false, editor:"input",},
+            {title:"type", field:"type", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false, editor:"input",},
+            {title:"in", field:"framein", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false, editor:"input",},
+            {title:"out", field:"frameout", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false, editor:"input",},
+            {title:"num", field:"length", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
+            {title:"colorin", field:"incolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false},
+            {title:"colorout", field:"outcolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false},
+            {title:"timein", field:"timecodein", hozAlign:"center", headerHozAlign:"center", width:84, headerSort:false},
+            {title:"timeout", field:"timecodeout", hozAlign:"center", headerHozAlign:"center", width:84, headerSort:false},
+            {title:"w", field:"width", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
+            {title:"h", field:"height", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
         ],
     });
 
@@ -375,25 +383,6 @@
         sources = table.getData();
         
         for (let i = 0; i < sources.length; i += 1) {
-            /*
-            // debug
-            
-            console.log(
-                sources[i].dir,
-                sources[i].base,
-                sources[i].framein,
-                sources[i].frameout,
-                document.getElementById("title").value,
-                document.getElementById("description").value,
-                document.getElementById("author").value,
-                document.getElementById("tags").value,
-                document.getElementById("fps").value,
-                document.getElementById("premult").checked,
-                document.getElementById("incolorspace").value,
-                document.getElementById("outcolorspace").value,
-            )
-            */
-            
             // process
             fetch('/api/addfootage', {
                 method: 'POST',
@@ -447,10 +436,11 @@
         fetch('/api/searchfootages', {
             method: 'POST',
             headers: {
-                "Authorization": "Basic "+ getCookie("SessionToken"),
+                "Authorization": "Basic "+ token,
             },
             body: new URLSearchParams({
-                "path":  document.getElementById("searchpath").value,
+                "path": document.getElementById("searchpath").value,
+                "type": document.getElementById("scanplate-type").value,
             })
         })
         .then((response) => {
@@ -471,10 +461,8 @@
         })
         .catch((err) => {
             alert(err);
-            //return err
         });
     });
-
     
 
     function goProcessPage() {
