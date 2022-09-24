@@ -9,6 +9,7 @@ type ScanPlate struct {
 	Searchpath    string `json:"searchpath" bson:"searchpath"`       // 시퀀스 검색을 시작한 Endpoint
 	ConvertExt    string `json:"convertext" bson:"convertext"`       // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
 	Type          string `json:"type" bson:"type"`                   // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
+	Name          string `json:"name" bson:"name"`                   // 등록이름
 
 	// 분석을 통해서 구할 수 있는 것
 	Dir         string  `json:"dir" bson:"dir"`                 // 시퀀스 디렉토리

@@ -78,7 +78,8 @@
                         </div>
                         <div class="form-group pt-2">
                             <label class="text-muted">Regular Expression</label>
-                            <input type="text" id="regex" class="form-control" placeholder="&#123;&#123;.Name&#125;&#125;_org_v001.1001.&#123;&#123;.Ext&#125;&#125;">
+                            <input type="text" id="regex" class="form-control" placeholder="(?P<name>\w+)_org_v(?P<version>%\w+)(?P<ext>.\w+)">
+                            <small class="text-muted">레귤러 익스프레션을 입력해주세요.</small>
                         </div>
                         <div class="form-group pt-2">
                             <label class="text-muted">Undistortion Rate</label>
@@ -246,7 +247,30 @@
         {id:1,dir:"/scan/path",base:"SS_0010_org_v001.%04d.exr",ext:".exr",framein:"1001",frameout:"1150",length:150,name:"SS_0010",type:"org",incolorspace:"ACES - ACES2065-1",outcolorspace:"Output - Rec.709",width:"4096",height:"2304",timecodein:"10:11:12:03",timecodeout:"10:11:12:08"},
         {id:2,dir:"/scan/path",base:"SS_0020_org_v001.%04d.exr",ext:".exr",framein:"1001",frameout:"1050",length:1050,name:"SS_0020",type:"org1",incolorspace:"ACES - ACES2065-1",outcolorspace:"Output - Rec.709",width:"4096",height:"2304",timecodein:"10:11:12:09",timecodeout:"10:11:12:13"},
     ];
-    //create Tabulator on DOM element with id "example-table"
+    
+    // Colorspace를 가지고 옵니다.
+    var colorspaces = {}
+    fetch('/api/ociocolorspace', {
+        method: 'GET',
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw Error(response.statusText + " - " + response.url);
+        }
+        return response.json()
+    })
+    .then((data) => {
+        if (data === null) {
+            return
+        }
+        for (let i = 0; i < data.colorspaces.length; i++){
+            colorspaces[data.colorspaces[i]] = data.colorspaces[i]
+        }        
+    })
+    .catch((err) => {
+        alert(err)
+    });
+    
     var table = new Tabulator("#source-table", {
         height:370, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
         data:sources, //assign data to table
@@ -274,8 +298,8 @@
             {title:"in", field:"framein", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false, editor:"input",},
             {title:"out", field:"frameout", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false, editor:"input",},
             {title:"num", field:"length", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
-            {title:"colorin", field:"incolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false},
-            {title:"colorout", field:"outcolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false},
+            {title:"colorin", field:"incolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false, editor:"select", editorParams:{values:colorspaces}},
+            {title:"colorout", field:"outcolorspace", hozAlign:"center", headerHozAlign:"center", headerSort:false, editor:"select", editorParams:{values:colorspaces}},
             {title:"timein", field:"timecodein", hozAlign:"center", headerHozAlign:"center", width:84, headerSort:false},
             {title:"timeout", field:"timecodeout", hozAlign:"center", headerHozAlign:"center", width:84, headerSort:false},
             {title:"w", field:"width", hozAlign:"center", headerHozAlign:"center", width:50, headerSort:false},
@@ -441,6 +465,9 @@
             body: new URLSearchParams({
                 "path": document.getElementById("searchpath").value,
                 "type": document.getElementById("scanplate-type").value,
+                "incolorspace": document.getElementById("incolorspace").value,
+                "outcolorspace": document.getElementById("outcolorspace").value,
+                "regex": document.getElementById("regex").value,
             })
         })
         .then((response) => {
