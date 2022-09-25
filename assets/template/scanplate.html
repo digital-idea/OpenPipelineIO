@@ -96,9 +96,23 @@
                             <label class="text-muted">Token</label>
                             <input type="text" id="scanplatetoken" class="form-control" placeholder="">
                         </div>
-                        <div class="form-group pt-2">
-                            <label class="text-muted">Type</label>
-                            <input type="text" id="scanplate-type" class="form-control" placeholder="org" value="org">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group pt-2">
+                                    <label class="text-muted">Type</label>
+                                    <input type="text" id="scanplate-type" class="form-control" placeholder="org" value="org">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group pt-2">
+                                    <label class="text-muted">Method</label>
+                                    <select id="method" name="method" class="form-control">
+                                        <option value="image">image</option>
+                                        <option value="mov">mov</option>
+                                        <option value="seq">seq</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -468,6 +482,7 @@
                 "incolorspace": document.getElementById("incolorspace").value,
                 "outcolorspace": document.getElementById("outcolorspace").value,
                 "regex": document.getElementById("regex").value,
+                "method": document.getElementById("method").value,
             })
         })
         .then((response) => {

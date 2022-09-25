@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"image"
 	"io/ioutil"
 	"log"
 	"os"
@@ -149,7 +150,17 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 				item.RenderOut = num
 				paths[key] = item
 			} else {
-				// 이전에 수집된 경로가 존재하지 않으면 처리되는 코드
+				var width int
+				var height int
+				// width, height 구하기
+				if ext == ".jpg" || ext == ".jpeg" || ext == ".png" {
+					width, height, err = imageSize(path)
+					if err != nil {
+						log.Printf("error parsing image %q: %v\n", path, err)
+					}
+				}
+
+				// 한번도 처리된적 없는 이미지가 존재하면 처리되는 코드
 				item := ScanPlate{
 					Searchpath: searchpath,
 					Dir:        filepath.Dir(path),
@@ -160,9 +171,73 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 					FrameOut:   num,
 					RenderIn:   num,
 					ConvertExt: ext,
+					Width:      width,
+					Height:     height,
 				}
 				paths[key] = item
 			}
+		default:
+			return nil
+		}
+		return nil
+	})
+	if err != nil {
+		log.Printf("error walking the path %q: %v\n", searchpath, err)
+	}
+	var items []ScanPlate
+	for _, value := range paths {
+		items = append(items, value)
+	}
+	if len(items) == 0 {
+		return nil, errors.New("소스가 존재하지 않습니다")
+	}
+	return items, nil
+}
+
+// searchImage 함수는 탐색할 경로를 입력받고 jpg, png ... 정보를 수집 반환한다.
+func searchImage(searchpath string) ([]ScanPlate, error) {
+	// 경로가 존재하는지 체크한다.
+	_, err := os.Stat(searchpath)
+	if err != nil {
+		return nil, err
+	}
+	paths := make(map[string]ScanPlate)
+	err = filepath.Walk(searchpath, func(path string, info os.FileInfo, err error) error {
+		// 숨김폴더는 스킵한다.
+		if info.IsDir() && strings.HasPrefix(info.Name(), ".") {
+			return nil //filepath.SkipDir
+		}
+		// 숨김파일도 스킵한다.
+		if strings.HasPrefix(info.Name(), ".") {
+			return nil
+		}
+		ext := strings.ToLower(filepath.Ext(path))
+		switch ext {
+		case ".png", ".jpg", ".jpeg":
+			var width int
+			var height int
+			// width, height 구하기
+			if ext == ".jpg" || ext == ".jpeg" || ext == ".png" {
+				width, height, err = imageSize(path)
+				if err != nil {
+					log.Printf("error parsing image %q: %v\n", path, err)
+				}
+			}
+			// 한번도 처리된적 없는 이미지가 존재하면 처리되는 코드
+			item := ScanPlate{
+				Searchpath: searchpath,
+				Dir:        filepath.Dir(path),
+				Base:       filepath.Base(path),
+				Ext:        ext,
+				Length:     1,
+				FrameIn:    1,
+				FrameOut:   1,
+				RenderIn:   1,
+				ConvertExt: ext,
+				Width:      width,
+				Height:     height,
+			}
+			paths[path] = item
 		default:
 			return nil
 		}
@@ -201,4 +276,17 @@ func Seqnum2Sharp(filename string) (string, int, error) {
 		return filename, -1, err
 	}
 	return header + "%0" + strconv.Itoa(len(seq)) + "d" + ext, seqNum, nil
+}
+
+func imageSize(path string) (int, int, error) {
+	reader, err := os.Open(path)
+	if err != nil {
+		return 0, 0, err
+	}
+	defer reader.Close()
+	im, _, err := image.DecodeConfig(reader)
+	if err != nil {
+		return 0, 0, err
+	}
+	return im.Width, im.Height, nil
 }

@@ -265,7 +265,7 @@ func handleAPISearchFootages(w http.ResponseWriter, r *http.Request) {
 	if typ == "" {
 		typ = "org"
 	}
-
+	method := r.FormValue("method")
 	incolorspace := r.FormValue("incolorspace")
 	outcolorspace := r.FormValue("outcolorspace")
 	regex := r.FormValue("regex")
@@ -275,12 +275,21 @@ func handleAPISearchFootages(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	items, err := searchSeq(path)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	var items []ScanPlate
+	if method == "" || method == "image" {
+		items, err = searchImage(path)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		items, err = searchSeq(path)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
+
 	// 사용자에게 받은 type을 설정한다.
 	for n, _ := range items {
 		items[n].Type = typ
