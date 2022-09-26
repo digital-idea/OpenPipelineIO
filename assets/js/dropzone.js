@@ -3606,3 +3606,15 @@ Dropzone.options.reviewStatusModeFileDropzone = {
     });
   }
 }
+
+Dropzone.options.scanplateuploaddropzone = {
+  autoProcessQueue: true,
+  init: function() {
+    this.on("sending", function(file, xhr, formData){
+      formData.append("project", document.getElementById("scanplate-project").value);
+    });
+    this.on("success", function(file, response) {
+      document.getElementById("searchpath").value = response.path
+    });
+  }
+};
