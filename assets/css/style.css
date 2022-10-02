@@ -943,3 +943,26 @@ hr {
 .border-table {
 	border:1px solid #A7A59C !important;
 }
+
+.preset-button {
+	color: #A7A59C;
+	background-color: rgb(55, 54, 52);
+	border:1px solid #A7A59C;
+	border-radius: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.preset-button:hover {
+	color: #000000;
+	background-color: #FFB90B;
+	border:1px solid #FFB90B;
+	border-radius: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	font-size: 12px;
+	cursor: pointer;
+	text-decoration: none;
+}
