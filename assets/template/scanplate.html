@@ -156,7 +156,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setplatesize">
+                        <input class="form-check-input finger" type="checkbox" id="setplatesize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setplatesize">이미지 사이즈로 플레이트 사이즈 등록</label>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setundistortionsize">
+                        <input class="form-check-input finger" type="checkbox" id="setundistortionsize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setundistortionsize">언디스토션 사이즈 자동등록</label>
                     </div>
                 </div>
@@ -178,7 +178,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setrendersize">
+                        <input class="form-check-input finger" type="checkbox" id="setrendersize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setrendersize">언디스토션 사이즈로 렌더 사이즈 자동등록</label>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
         </div>
     </div>
     <div class="text-center pt-5">
-        <button type="submit" class="btn btn-outline-warning" id="submitFootages">SUBMIT PROCESS</button>
+        <button type="submit" class="btn btn-outline-warning" id="submitScanPlate">SUBMIT PROCESS</button>
     </div>
 </div>
 
@@ -393,65 +393,35 @@
     });
 
     //submit Footages
-    document.getElementById("submitFootages").addEventListener("click", function(){
-        // error 처리
-        let title = document.getElementById("title").value
-        if (title == "") {
-            tata.error('Error', "Need title", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let description = document.getElementById("description").value
-        if (description == "") {
-            tata.error('Error', "Need Description", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let author = document.getElementById("author").value
-        if (author == "") {
-            tata.error('Error', "Need Author", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let tags = document.getElementById("tags").value
-        if (tags == "") {
-            tata.error('Error', "Need Tags", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        // going process
+    document.getElementById("submitScanPlate").addEventListener("click", function(){
         sources = table.getData();
-        
         for (let i = 0; i < sources.length; i += 1) {
+            sources[i].project = document.getElementById("scanplate-project").value
+            if (!document.getElementById("setplatesize").checked) {
+                sources[i].width = 0
+                sources[i].height = 0
+            }
+            if (!document.getElementById("setundistortionsize").checked) {
+                sources[i].undistortionwidth = 0
+                sources[i].undistortionheight = 0
+            } else {
+                sources[i].undistortionwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
+                sources[i].undistortionheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
+            }
+            if (!document.getElementById("setrendersize").checked) {
+                sources[i].renderwidth = 0
+                sources[i].renderheight = 0
+            } else {
+                sources[i].renderwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
+                sources[i].renderheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
+            }
             // process
-            fetch('/api/addfootage', {
+            fetch('/api/scanplate', {
                 method: 'POST',
                 headers: {
-                    "Authorization": "Basic "+ getCookie("SessionToken"),
+                    "Authorization": "Basic "+ token,
                 },
-                body: new URLSearchParams({
-                    "base": sources[i].base,
-                    "dir": sources[i].dir,
-                    "framein": sources[i].framein,
-                    "frameout": sources[i].frameout,
-                    "title": title,
-                    "description": description,
-                    "author": author,
-                    "tags": tags,
-                    "fps": document.getElementById("fps").value,
-                    "premult": document.getElementById("premult").checked,
-                    "incolorspace": document.getElementById("incolorspace").value,
-                    "outcolorspace": document.getElementById("outcolorspace").value,
-                    "attributes": JSON.stringify(attributesTable.getData()),
-                })
+                body: JSON.stringify(sources[i]),
             })
             .then((response) => {
                 if (!response.ok) {
@@ -461,7 +431,7 @@
             })
             .then((data) => {
                 console.log(data)
-                let button = document.getElementById("submitFootages")
+                let button = document.getElementById("submitScanPlate")
                 button.disabled = true
                 button.classList.remove("btn-outline-warning");
                 button.classList.add("btn-outline-secondary");
