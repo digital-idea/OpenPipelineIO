@@ -1,0 +1,44 @@
+{{define "modal-colorspace"}}
+    <!-- Modal : Preset Colorspace -->
+    <div class="modal" id="modal-preset-colorspace" tabindex="-1" role="dialog" aria-labeledby="modal-preset-colorspace" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-white" style="background-color: #2e2d2d">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-preset-colorspace-title">Preset Colorspace</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('incolorspace').value='ACES - ACES2065-1';
+                            document.getElementById('outcolorspace').value='Output - Rec.709';
+                            " data-bs-dismiss="modal">
+                            Netflix (ACES2065-1 > Rec.709)
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('incolorspace').value='Utility - sRGB - Texture';
+                            document.getElementById('outcolorspace').value='Utility - sRGB - Texture';
+                            " data-bs-dismiss="modal">
+                            Jpeg, PNG (sRGB > sRGB)
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('incolorspace').value='Input - Panasonic - V-Log - V-Gamut';
+                            document.getElementById('outcolorspace').value='Output - Rec.709';
+                            " data-bs-dismiss="modal">
+                            V-Log (V-Log > Rec.709)
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('incolorspace').value='Input - Sony - S-Log3 - S-Gamut3.Cine';
+                            document.getElementById('outcolorspace').value='Output - Rec.709';
+                            " data-bs-dismiss="modal">
+                            S-Log3.Cine (S-Log3 > Rec.709)
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}

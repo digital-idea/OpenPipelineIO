@@ -2,14 +2,19 @@ package main
 
 type ScanPlate struct {
 	// 사용자 입력값
-	InColorspace  string `json:"incolorspace" bson:"incolorspace"`   // 시퀀스의 IN 컬러스페이스
-	OutColorspace string `json:"outcolorspace" bson:"outcolorspace"` // 시퀀스의 OUT 컬러스페이스
-	RenderIn      int    `json:"renderin" bson:"renderin"`           // 렌더링 할 시작 IN 프레임
-	RenderOut     int    `json:"renderout" bson:"renderout"`         // 렌더링 할 끝 OUT 프레임
-	Searchpath    string `json:"searchpath" bson:"searchpath"`       // 시퀀스 검색을 시작한 Endpoint
-	ConvertExt    string `json:"convertext" bson:"convertext"`       // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
-	Type          string `json:"type" bson:"type"`                   // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
-	Name          string `json:"name" bson:"name"`                   // 등록이름
+	InColorspace       string `json:"incolorspace" bson:"incolorspace"`             // 시퀀스의 IN 컬러스페이스
+	OutColorspace      string `json:"outcolorspace" bson:"outcolorspace"`           // 시퀀스의 OUT 컬러스페이스
+	RenderIn           int    `json:"renderin" bson:"renderin"`                     // 렌더링 할 시작 IN 프레임
+	RenderOut          int    `json:"renderout" bson:"renderout"`                   // 렌더링 할 끝 OUT 프레임
+	Searchpath         string `json:"searchpath" bson:"searchpath"`                 // 시퀀스 검색을 시작한 Endpoint
+	ConvertExt         string `json:"convertext" bson:"convertext"`                 // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
+	Type               string `json:"type" bson:"type"`                             // 만약 소스를 저장할 때 변환하여 저장한다면 사용할 확장자
+	Name               string `json:"name" bson:"name"`                             // 등록이름
+	Project            string `json:"project" bson:"project"`                       // 프로젝트
+	RenderWidth        int    `json:"renderwidth" bson:"renderwidth"`               // 렌더링 가로길이
+	RenderHeight       int    `json:"renderheight" bson:"renderheight"`             // 렌더링 세로길이
+	UndistortionWidth  int    `json:"undistortionwidth" bson:"undistortionwidth"`   // undistortion 가로길이
+	UndistortionHeight int    `json:"undistortionheight" bson:"undistortionheight"` // undistortion세로길이
 
 	// 분석을 통해서 구할 수 있는 것
 	Dir         string  `json:"dir" bson:"dir"`                 // 시퀀스 디렉토리

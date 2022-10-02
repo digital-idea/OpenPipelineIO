@@ -33,6 +33,58 @@
             
         </div>
 
+        <div class="row pt-2">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Method</label>
+                            <select id="method" name="method" class="form-control">
+                                <option value="image">image</option>
+                                <option value="mov">mov</option>
+                                <option value="seq">seq</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group pt-2">
+                            <label class="text-muted">Type</label>
+                            <input type="text" id="scanplate-type" class="form-control" placeholder="org" value="org">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group pt-2">
+                    <label class="text-muted">Name Regular Expression</label>
+                    <span class="preset-button float-end" data-bs-toggle="modal" data-bs-target="#modal-preset-scanplatenameregex">Preset</span>
+                    <input type="text" id="regex" class="form-control" placeholder="(?P<name>\w+)_org_v(?P<version>%\w+)(?P<ext>.\w+)">
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="text-muted">Colorspace</label>
+                    <span class="preset-button float-end" data-bs-toggle="modal" data-bs-target="#modal-preset-colorspace">Preset</span>
+                    <div class="row">
+                        <div class="col">
+                            <select id="incolorspace" name="incolorspace" class="form-control">
+                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
+                            </select>
+                            <small class="form-text text-muted">In Colorspace</small>
+                        </div>
+                        <div class="col">
+                            <select id="outcolorspace" name="outcolorspace" class="form-control">
+                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
+                            </select>
+                            <small class="form-text text-muted">Out Colorspace</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row pt-2">
             <div class="col-sm">
@@ -76,11 +128,7 @@
                                 {{range .Projectlist}}<option value="{{.}}">{{.}}</option>{{end}}
                             </select>
                         </div>
-                        <div class="form-group pt-2">
-                            <label class="text-muted">Regular Expression</label>
-                            <input type="text" id="regex" class="form-control" placeholder="(?P<name>\w+)_org_v(?P<version>%\w+)(?P<ext>.\w+)">
-                            <small class="text-muted">레귤러 익스프레션을 입력해주세요.</small>
-                        </div>
+                        
                         <div class="form-group pt-2">
                             <label class="text-muted">Undistortion Rate</label>
                             <input type="text" id="undistortionrate" class="form-control" placeholder="{{.Setting.DefaultScaleRatioOfUndistortionPlate}}" value="{{.Setting.DefaultScaleRatioOfUndistortionPlate}}">
@@ -92,61 +140,23 @@
                             <label class="text-muted">OpenPipelineIO DNS</label>
                             <input type="text" id="dns" class="form-control" placeholder="https://openpipeline.io">
                         </div>
+                        
                         <div class="form-group pt-2">
                             <label class="text-muted">Token</label>
                             <input type="text" id="scanplatetoken" class="form-control" placeholder="">
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group pt-2">
-                                    <label class="text-muted">Type</label>
-                                    <input type="text" id="scanplate-type" class="form-control" placeholder="org" value="org">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group pt-2">
-                                    <label class="text-muted">Method</label>
-                                    <select id="method" name="method" class="form-control">
-                                        <option value="image">image</option>
-                                        <option value="mov">mov</option>
-                                        <option value="seq">seq</option>
-                                    </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="row pt-2">
-            <div class="col-sm">
-                <div class="form-group">
-                    <label class="text-muted">Colorspace</label>
-                    <span class="preset-button float-end" data-bs-toggle="modal" data-bs-target="#modal-preset-colorspace">Preset</span>
-                    <div class="row">
-                        <div class="col">
-                            <select id="incolorspace" name="incolorspace" class="form-control">
-                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
-                            </select>
-                            <small class="form-text text-muted">In Colorspace</small>
-                        </div>
-                        <div class="col">
-                            <select id="outcolorspace" name="outcolorspace" class="form-control">
-                                {{range .Colorspaces}}<option value="{{.}}">{{.}}</option>{{end}}
-                            </select>
-                            <small class="form-text text-muted">Out Colorspace</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="row pt-2">
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setplatesize">
+                        <input class="form-check-input finger" type="checkbox" id="setplatesize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setplatesize">이미지 사이즈로 플레이트 사이즈 등록</label>
                     </div>
                 </div>
@@ -157,7 +167,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setundistortionsize">
+                        <input class="form-check-input finger" type="checkbox" id="setundistortionsize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setundistortionsize">언디스토션 사이즈 자동등록</label>
                     </div>
                 </div>
@@ -168,7 +178,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setrendersize">
+                        <input class="form-check-input finger" type="checkbox" id="setrendersize" checked>
                         <label class="form-check-label finger unselectable text-muted" for="setrendersize">언디스토션 사이즈로 렌더 사이즈 자동등록</label>
                     </div>
                 </div>
@@ -234,7 +244,7 @@
         </div>
     </div>
     <div class="text-center pt-5">
-        <button type="submit" class="btn btn-outline-warning" id="submitFootages">SUBMIT PROCESS</button>
+        <button type="submit" class="btn btn-outline-warning" id="submitScanPlate">SUBMIT PROCESS</button>
     </div>
 </div>
 
@@ -383,65 +393,35 @@
     });
 
     //submit Footages
-    document.getElementById("submitFootages").addEventListener("click", function(){
-        // error 처리
-        let title = document.getElementById("title").value
-        if (title == "") {
-            tata.error('Error', "Need title", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let description = document.getElementById("description").value
-        if (description == "") {
-            tata.error('Error', "Need Description", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let author = document.getElementById("author").value
-        if (author == "") {
-            tata.error('Error', "Need Author", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        let tags = document.getElementById("tags").value
-        if (tags == "") {
-            tata.error('Error', "Need Tags", {
-            position: 'tr',
-            duration: 10000,
-            })
-            return
-        }
-        // going process
+    document.getElementById("submitScanPlate").addEventListener("click", function(){
         sources = table.getData();
-        
         for (let i = 0; i < sources.length; i += 1) {
+            sources[i].project = document.getElementById("scanplate-project").value
+            if (!document.getElementById("setplatesize").checked) {
+                sources[i].width = 0
+                sources[i].height = 0
+            }
+            if (!document.getElementById("setundistortionsize").checked) {
+                sources[i].undistortionwidth = 0
+                sources[i].undistortionheight = 0
+            } else {
+                sources[i].undistortionwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
+                sources[i].undistortionheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
+            }
+            if (!document.getElementById("setrendersize").checked) {
+                sources[i].renderwidth = 0
+                sources[i].renderheight = 0
+            } else {
+                sources[i].renderwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
+                sources[i].renderheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
+            }
             // process
-            fetch('/api/addfootage', {
+            fetch('/api/scanplate', {
                 method: 'POST',
                 headers: {
-                    "Authorization": "Basic "+ getCookie("SessionToken"),
+                    "Authorization": "Basic "+ token,
                 },
-                body: new URLSearchParams({
-                    "base": sources[i].base,
-                    "dir": sources[i].dir,
-                    "framein": sources[i].framein,
-                    "frameout": sources[i].frameout,
-                    "title": title,
-                    "description": description,
-                    "author": author,
-                    "tags": tags,
-                    "fps": document.getElementById("fps").value,
-                    "premult": document.getElementById("premult").checked,
-                    "incolorspace": document.getElementById("incolorspace").value,
-                    "outcolorspace": document.getElementById("outcolorspace").value,
-                    "attributes": JSON.stringify(attributesTable.getData()),
-                })
+                body: JSON.stringify(sources[i]),
             })
             .then((response) => {
                 if (!response.ok) {
@@ -451,7 +431,7 @@
             })
             .then((data) => {
                 console.log(data)
-                let button = document.getElementById("submitFootages")
+                let button = document.getElementById("submitScanPlate")
                 button.disabled = true
                 button.classList.remove("btn-outline-warning");
                 button.classList.add("btn-outline-secondary");

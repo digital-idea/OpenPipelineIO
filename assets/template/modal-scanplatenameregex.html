@@ -1,0 +1,45 @@
+{{define "modal-scanplatenameregex"}}
+    <!-- Modal : Preset ScanPlate Name Regex -->
+    <div class="modal" id="modal-preset-scanplatenameregex" tabindex="-1" role="dialog" aria-labeledby="modal-preset-scanplatenameregex" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-white" style="background-color: #2e2d2d">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-preset-scanplatenameregex-title">ScanPlate Name RegExpression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_org_v(?P<version>\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_org_v01.jpg
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_(?P<type>\\w+)_v(?P<version>\\w+).(?P<frame>\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_org_v001.0001.jpg
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_mp0_v(?P<version>\\w+).(?P<frame>\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_mp0_v001.0001.jpg
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_plate_v(?P<version>\\w+)_hi.(?P<frame>\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_plate_v001_hi.0001.jpg
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_v(?P<version>\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_v01.jpg
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-darkmode" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
