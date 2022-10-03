@@ -11,6 +11,8 @@ type Setting struct {
 	OCIOConfig                     string `json:"ocioconfig"`                     // OpenColorIO Config Path 설정
 	FFmpeg                         string `json:"ffmpeg"`                         // FFmpeg 경로 셋팅
 	FFmpegThreads                  int    `json:"ffmpegthreads"`                  // FFmpeg 연산 Thread 셋팅
+	OpenImageIO                    string `json:"openimageio"`                    // OpenImageIO 경로
+	Iinfo                          string `json:"iinfo"`                          // iinfo 경로
 	RVPath                         string `json:"rvpath"`                         // RV 경로 셋팅
 	Umask                          string `json:"umask"`                          // Umask 값. 예) 0002
 	RootPath                       string `json:"rootpath"`                       // Root경로 예) /show
