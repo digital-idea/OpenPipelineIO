@@ -153,6 +153,7 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 			} else {
 				var width int
 				var height int
+				var timecode string
 				// width, height 구하기
 				if ext == ".jpg" || ext == ".jpeg" || ext == ".png" {
 					width, height, err = imageSize(path)
@@ -166,19 +167,29 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 					}
 				}
 
+				// timecode 구하기
+				if ext == ".exr" {
+					timecode, err = timecodeFromExrheader(path)
+					if err != nil {
+						log.Printf("error parsing timecode %q: %v\n", path, err)
+					}
+				}
+
 				// 한번도 처리된적 없는 이미지가 존재하면 처리되는 코드
 				item := ScanPlate{
-					Searchpath: searchpath,
-					Dir:        filepath.Dir(path),
-					Base:       filepath.Base(key),
-					Ext:        ext,
-					Length:     1,
-					FrameIn:    num,
-					FrameOut:   num,
-					RenderIn:   num,
-					ConvertExt: ext,
-					Width:      width,
-					Height:     height,
+					Searchpath:  searchpath,
+					Dir:         filepath.Dir(path),
+					Base:        filepath.Base(key),
+					Ext:         ext,
+					Length:      1,
+					FrameIn:     num,
+					FrameOut:    num,
+					RenderIn:    num,
+					ConvertExt:  ext,
+					Width:       width,
+					Height:      height,
+					TimecodeIn:  timecode, // 시작지점에서 한번 연산한다.
+					TimecodeOut: timecode, // 1프레임밖에 없을 수 있다. 디폴트로 저장한다.
 				}
 				paths[key] = item
 			}
@@ -192,6 +203,15 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 	}
 	var items []ScanPlate
 	for _, value := range paths {
+		// timecode in, out 을 이곳에서 처리하는게 좋아보인다.
+		if value.Ext == ".exr" && value.Length > 1 {
+			endframePath := value.Dir + "/" + fmt.Sprintf(value.Base, value.FrameOut)
+			timecodeout, err := timecodeFromExrheader(endframePath)
+			if err != nil {
+				log.Printf("error parsing timecode %q: %v\n", endframePath, err)
+			}
+			value.TimecodeOut = timecodeout
+		}
 		items = append(items, value)
 	}
 	if len(items) == 0 {
@@ -326,4 +346,26 @@ func imageSizeFromIinfo(path string) (int, int, error) {
 		return 0, 0, err
 	}
 	return width, height, nil
+}
+
+func timecodeFromExrheader(path string) (string, error) {
+	_, err := os.Stat(CachedAdminSetting.Exrheader)
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command(CachedAdminSetting.Exrheader, path)
+	stdout, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	re, err := regexp.Compile(`time\s+(\d{2}:\d{2}:\d{2}:\d{2})`)
+	if err != nil {
+		return "", errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(string(stdout))
+	if results == nil {
+		return "", errors.New("there were no results matching the regular expression condition")
+	}
+	timecode := results[1]
+	return timecode, nil
 }
