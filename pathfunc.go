@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -158,6 +159,11 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 					if err != nil {
 						log.Printf("error parsing image %q: %v\n", path, err)
 					}
+				} else if ext == ".exr" || ext == ".dpx" || ext == ".tif" {
+					width, height, err = imageSizeFromIinfo(path)
+					if err != nil {
+						log.Printf("error parsing image %q: %v\n", path, err)
+					}
 				}
 
 				// 한번도 처리된적 없는 이미지가 존재하면 처리되는 코드
@@ -289,4 +295,35 @@ func imageSize(path string) (int, int, error) {
 		return 0, 0, err
 	}
 	return im.Width, im.Height, nil
+}
+
+func imageSizeFromIinfo(path string) (int, int, error) {
+	var width int
+	var height int
+	_, err := os.Stat(CachedAdminSetting.Iinfo)
+	if err != nil {
+		return 0, 0, err
+	}
+	cmd := exec.Command(CachedAdminSetting.Iinfo, path)
+	stdout, err := cmd.Output()
+	if err != nil {
+		return 0, 0, err
+	}
+	re, err := regexp.Compile(`(\d+)\s+x\s+(\d+)`)
+	if err != nil {
+		return 0, 0, errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(string(stdout))
+	if results == nil {
+		return 0, 0, errors.New("there were no results matching the regular expression condition")
+	}
+	width, err = strconv.Atoi(results[1]) // results[0]은 "1920 x 1080" 의 묶음이다.
+	if err != nil {
+		return 0, 0, err
+	}
+	height, err = strconv.Atoi(results[2])
+	if err != nil {
+		return 0, 0, err
+	}
+	return width, height, nil
 }
