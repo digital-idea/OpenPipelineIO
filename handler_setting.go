@@ -153,6 +153,8 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 		threads = 1 // 최소한 1개의 CPU는 셋팅되어야 한다.
 	}
 	s.FFmpegThreads = threads
+	s.OpenImageIO = r.FormValue("OpenImageIO")
+	s.Iinfo = r.FormValue("Iinfo")
 	s.RVPath = r.FormValue("RVPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {
