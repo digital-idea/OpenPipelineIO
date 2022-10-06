@@ -57,8 +57,8 @@ func handleAPIStatisticsDeadlineNum(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := Recipe{}
 	rcp.Projects = make(map[string]int64)
-	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}}                               // 타입이 샷이면서(일반샷,입체샷)
-	dateFilter := bson.D{{"ddline2d", primitive.Regex{Pattern: date, Options: "i"}}, {"$or", shotFilter}} // 날짜가 포함된 아이템 검색
+	shotFilter := bson.A{bson.D{{Key: "type", Value: "org"}}, bson.D{{Key: "type", Value: "left"}}}                               // 타입이 샷이면서(일반샷,입체샷)
+	dateFilter := bson.D{{Key: "ddline2d", Value: primitive.Regex{Pattern: date, Options: "i"}}, {Key: "$or", Value: shotFilter}} // 날짜가 포함된 아이템 검색
 	for _, project := range projects {
 		collection := client.Database("project").Collection(project)
 		count, err := collection.CountDocuments(ctx, dateFilter)
@@ -120,8 +120,8 @@ func handleAPIStatisticsNeedDeadlineNum(w http.ResponseWriter, r *http.Request) 
 	}
 	rcp := Recipe{}
 	rcp.Projects = make(map[string]int64)
-	shotFilter := bson.A{bson.D{{"type", "org"}}, bson.D{{"type", "left"}}} // 타입이 샷이면서(일반샷,입체샷)
-	dateFilter := bson.D{{"ddline2d", ""}, {"$or", shotFilter}}             // 날짜가 포함된 아이템 검색
+	shotFilter := bson.A{bson.D{{Key: "type", Value: "org"}}, bson.D{{Key: "type", Value: "left"}}} // 타입이 샷이면서(일반샷,입체샷)
+	dateFilter := bson.D{{Key: "ddline2d", Value: ""}, {Key: "$or", Value: shotFilter}}             // 날짜가 포함된 아이템 검색
 	for _, project := range projects {
 		collection := client.Database("project").Collection(project)
 		count, err := collection.CountDocuments(ctx, dateFilter)

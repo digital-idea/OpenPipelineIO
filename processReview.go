@@ -15,23 +15,23 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// ProcessMain 함수는 OpenPipelineIO 가 실행되면서 처리될 프로세싱을 진행한다.
-func ProcessMain() {
+// ProcessReviewRender 함수는 OpenPipelineIO 가 실행되면서 처리될 프로세싱을 진행한다.
+func ProcessReviewRender() {
 	// 버퍼 채널을 만든다.
 	jobs := make(chan Review, *flagProcessBufferSize) // 작업을 대기할 버퍼를 만든다.
 	// worker 프로세스를 지정한 개수만큼 실행시킨다.
 	for w := 1; w <= *flagMaxProcessNum; w++ {
-		go worker(jobs)
+		go workerReview(jobs)
 	}
 	// queueingItem을 실행시킨다.
-	go queueingItem(jobs)
+	go queueingReviewItem(jobs)
 
 	// ProcessMain()이 종료되지 않는 역할을 한다.
 	select {}
 }
 
-// worker 합수는 Review 데이터를 jobs로 보낸다.
-func worker(jobs <-chan Review) {
+// workerReview 합수는 Review 데이터를 jobs로 보낸다.
+func workerReview(jobs <-chan Review) {
 	for job := range jobs {
 		// job은 리뷰타입이다.
 		switch job.Type {
@@ -43,8 +43,8 @@ func worker(jobs <-chan Review) {
 	}
 }
 
-// queueingItem 은 연산할 Review 아이템을 jobs 채널에 전송한다.
-func queueingItem(jobs chan<- Review) {
+// queueingReviewItem 은 연산할 Review 아이템을 jobs 채널에 전송한다.
+func queueingReviewItem(jobs chan<- Review) {
 	for {
 		if *flagDebug {
 			fmt.Println("wait 10 sec before review process")
@@ -156,7 +156,6 @@ func processingReviewClipItem(review Review) {
 		}
 		return
 	}
-	return
 }
 
 func processingReviewImageItem(review Review) {
