@@ -680,6 +680,20 @@ func webserver(port string) {
 	r.HandleFunc("/api/pipelinestep/{id}", putPipelinestepHandler).Methods("PUT")
 	r.HandleFunc("/api/pipelinestep/{id}", deletePipelinestepHandler).Methods("DELETE")
 
+	// REST API FullCalendar Event
+	r.HandleFunc("/api/fcevent", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/fcevent", postFCEventHandler).Methods("POST")
+	r.HandleFunc("/api/fcevent/{id}", getFCEventHandler).Methods("GET")
+	r.HandleFunc("/api/fcevent/{id}", putFCEventHandler).Methods("PUT")
+	r.HandleFunc("/api/fcevent/{id}", deleteFCEventHandler).Methods("DELETE")
+
+	// REST API FullCalendar Resource
+	r.HandleFunc("/api/fcresource", helpMethodOptionsHandler).Methods(http.MethodGet, http.MethodPut, http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/api/fcresource", postFCResourceHandler).Methods("POST")
+	r.HandleFunc("/api/fcresource/{id}", getFCResourceHandler).Methods("GET")
+	r.HandleFunc("/api/fcresource/{id}", putFCResourceHandler).Methods("PUT")
+	r.HandleFunc("/api/fcresource/{id}", deleteFCResourceHandler).Methods("DELETE")
+
 	// Deprecated: 사용하지 않는 url, 과거호환성을 위해서 남겨둠
 	r.HandleFunc("/edititem", handleEditItem)                    // legacy
 	r.HandleFunc("/editeditem", handleEditedItem)                // legacy

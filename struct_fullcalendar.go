@@ -1,9 +1,11 @@
 package main
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 //https://fullcalendar.io/docs/event-object
 // https://fullcalendar.io/docs/event-parsing
 type FullCalendarEvent struct {
-	ID               string                    `json:"id"`               // ID
+	ID               primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
 	GroupID          string                    `json:"groupId"`          // 그룹ID
 	AllDay           bool                      `json:"allDay"`           // 하루종일 진행되는 이벤트인가?
 	Start            string                    `json:"start"`            // 시작시간
@@ -33,7 +35,7 @@ type FullCalendarEvent struct {
 // https://fullcalendar.io/docs/resource-object
 // https://fullcalendar.io/docs/resource-parsing
 type FullCalendarResource struct {
-	ID                   string                    `json:"id"`                   // ID
+	ID                   primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
 	Title                string                    `json:"title"`                // 제목
 	ExtendedProps        FullCalendarExtendedProps `json:"extendedProps"`        // 나머지 필요한 기능
 	EventColor           string                    `json:"eventColor"`           // 배경색 + 테두리색
