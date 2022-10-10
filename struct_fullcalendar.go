@@ -35,7 +35,7 @@ type FullCalendarEvent struct {
 // https://fullcalendar.io/docs/resource-object
 // https://fullcalendar.io/docs/resource-parsing
 type FullCalendarResource struct {
-	ID                   primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
+	ID                   string                    `json:"id"`                   // 리소스 ID
 	Title                string                    `json:"title"`                // 제목
 	ExtendedProps        FullCalendarExtendedProps `json:"extendedProps"`        // 나머지 필요한 기능
 	EventColor           string                    `json:"eventColor"`           // 배경색 + 테두리색
@@ -55,7 +55,6 @@ type FullCalendarExtendedProps struct {
 	UserID          string   `json:"userid"`          // User 아이디
 	PartnerCodename string   `json:"partnercodename"` // 파트너사 코드네임
 	Project         string   `json:"project"`         // 프로젝트명, 감독컨펌, 데이터 아웃 날짜를 구하기 위해 프로젝트가 필요하다.
-	Deadline3d      string   `json:"deadline3d"`      // 3D 데드라인(검토하기)
 	Deadline2d      string   `json:"deadline2d"`      // 2D 데드라인(Comp 데드라인과 같다.)
 	Task            string   `json:"task"`            // Task 이름
 	TaskStartDate   string   `json:"taskstartdate"`   // 작업 시작일 RFC3339
