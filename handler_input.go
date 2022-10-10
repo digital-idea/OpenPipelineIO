@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -33,21 +35,22 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Assettags   []string
 		AllAssets   []string
 		SearchOption
-		Searchnum           Infobarnum
-		Totalnum            Infobarnum
-		Projectinfo         Project
-		MailDNS             string
-		Dilog               string
-		Wfs                 string
-		OS                  string
-		TasksettingNames    []string
-		TasksettingOrderMap map[string]float64
-		Dday                string
-		Status              []Status
-		Stages              []Stage
-		AllStatusIDs        []string
-		TotalPageNum        int
-		Setting             Setting
+		Searchnum             Infobarnum
+		Totalnum              Infobarnum
+		Projectinfo           Project
+		MailDNS               string
+		Dilog                 string
+		Wfs                   string
+		OS                    string
+		TasksettingNames      []string
+		TasksettingOrderMap   map[string]float64
+		Dday                  string
+		Status                []Status
+		Stages                []Stage
+		AllStatusIDs          []string
+		TotalPageNum          int
+		Setting               Setting
+		FullCalendarEventJson string
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
@@ -203,6 +206,15 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	// 달력 이벤트를 렌더링한다.
+	fmt.Println(ItemsToFCEvents(items))
+
+	eventJson, err := json.Marshal(ItemsToFCEvents(items))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.FullCalendarEventJson = string(eventJson)
 
 	// 최종적으로 사용된 프로젝트명을 쿠키에 저장한다.
 	cookie := http.Cookie{

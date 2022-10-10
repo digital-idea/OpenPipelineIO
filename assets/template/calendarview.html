@@ -3,5 +3,173 @@
 <div id="calendarview">
 	<div id='calendar' class="p-3"></div>
 <div>
-	
+<script>
+	// init calendar
+    document.addEventListener('DOMContentLoaded', function() {
+		var calendarEl = document.getElementById('calendar');
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+		eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
+			console.log('Event: ' + info.event.title);
+			console.log('Event: ' + info.event.start);
+			console.log('Event: ' + info.event.end);
+			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+			console.log('View: ' + info.view.type);
+		},
+		eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+			console.log('Event: ' + info.event.title);
+			console.log('Event: ' + info.event.resourceId);
+			console.log(info.event)
+			console.log('Event: ' + info.event.start);
+			console.log('Event: ' + info.event.end);
+			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+			console.log('View: ' + info.view.type);
+		},
+		eventResize: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+			console.log('Event: ' + info.event.title);
+			console.log('Event: ' + info.event.start);
+			console.log('Event: ' + info.event.end);
+			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+			console.log('View: ' + info.view.type);
+		},
+		dateClick: function(info) {
+			console.log('Clicked on: ' + info.dateStr);
+			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+			console.log('Current view: ' + info.view.type);
+		},
+
+		customButtons: {
+			addEventButton: {
+			text: '+',
+			click: function() {
+				var title = prompt('Enter title');
+				var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+				var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+				if (!isNaN(date.valueOf())) { // valid?
+                    calendar.addEvent({
+                        title: title,
+                        start: date,
+                        allDay: true
+                    });
+                    alert('Great. Now, update your database...');
+				} else {
+				    alert('Invalid date.');
+				}
+			}
+			}
+		},
+		initialView: 'dayGridMonth',
+		
+		//initialView: 'resourceTimelineMonth',
+		//themeSystem: 'bootstrap5',
+		
+		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+		//timeZone: 'UTC',
+		timeZone: 'local',
+		selectable: true,
+		aspectRatio: 2.35,
+		headerToolbar: {
+			left: 'prev,next today addEventButton',
+			center: 'title',
+			right: 'dayGridMonth,resourceTimelineMonth,listWeek'
+		},
+		editable: true,
+		resourceAreaHeaderContent: 'Shot List',
+		//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
+		resources: [],
+		//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
+		events: [],
+		});
+		//calendar.render();
+	});
+
+	/** enable calendarview */
+	function calendarview() {
+		document.getElementById("listview").style.display="none";
+		document.getElementById("page").style.display="none";
+		//renderCalendar()
+		
+
+		var calendarEl = document.getElementById('calendar');
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+			eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
+				console.log('Event: ' + info.event.title);
+				console.log('Event: ' + info.event.start);
+				console.log('Event: ' + info.event.end);
+				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+				console.log('View: ' + info.view.type);
+			},
+			eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+				console.log('Event: ' + info.event.title);
+				console.log('Event: ' + info.event.resourceId);
+				console.log(info.event)
+				console.log('Event: ' + info.event.start);
+				console.log('Event: ' + info.event.end);
+				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+				console.log('View: ' + info.view.type);
+			},
+			eventResize: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+				console.log('Event: ' + info.event.title);
+				console.log('Event: ' + info.event.start);
+				console.log('Event: ' + info.event.end);
+				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+				console.log('View: ' + info.view.type);
+			},
+			dateClick: function(info) {
+				console.log('Clicked on: ' + info.dateStr);
+				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+				console.log('Current view: ' + info.view.type);
+			},
+
+			customButtons: {
+				addEventButton: {
+				text: '+',
+				click: function() {
+					var title = prompt('Enter title');
+					var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+					var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+
+					if (!isNaN(date.valueOf())) { // valid?
+						calendar.addEvent({
+							title: title,
+							start: date,
+							allDay: true
+						});
+						alert('Great. Now, update your database...');
+					} else {
+						alert('Invalid date.');
+					}
+				}
+				}
+			},
+			initialView: 'dayGridMonth',
+			
+			//initialView: 'resourceTimelineMonth',
+			//themeSystem: 'bootstrap5',
+			
+			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+			//timeZone: 'UTC',
+			timeZone: 'local',
+			selectable: true,
+			aspectRatio: 2.35,
+			headerToolbar: {
+				left: 'prev,next today addEventButton',
+				center: 'title',
+				right: 'dayGridMonth,resourceTimelineMonth,listWeek'
+			},
+			editable: true,
+			resourceAreaHeaderContent: 'Shot List',
+			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
+			resources: [
+				{"id":"a","title":"TEMP,SS_0010","eventColor":"#17E7CF","eventTextColor":"#000000"},
+				{"id":"b","title":"TEMP,SS_0020","eventColor":"#5671FF","eventTextColor":"#000000"},
+				{"id":"c","title":"TEMP,SS_0030","eventColor":"#FEAE01","eventTextColor":"#000000"},
+				{"id":"d","title":"TEMP,SS_0040","eventColor":"#FF978D","eventTextColor":"#000000"},
+			],
+			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
+			events: JSON.parse({{.FullCalendarEventJson}}),
+		});
+		calendar.render();
+	}
+</script>
 {{end}}
