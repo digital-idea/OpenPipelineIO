@@ -51,7 +51,7 @@ type FullCalendarResource struct {
 }
 
 type FullCalendarExtendedProps struct {
-	ItemID          string   `json:"itemid"`          // 아이템 아이디(샷,에셋)
+	ItemName        string   `json:"itemname"`        // 아이템 이름
 	UserID          string   `json:"userid"`          // User 아이디
 	PartnerCodename string   `json:"partnercodename"` // 파트너사 코드네임
 	Project         string   `json:"project"`         // 프로젝트명, 감독컨펌, 데이터 아웃 날짜를 구하기 위해 프로젝트가 필요하다.

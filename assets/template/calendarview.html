@@ -49,6 +49,7 @@
                     calendar.addEvent({
                         title: title,
                         start: date,
+						resourceId: "",
                         allDay: true
                     });
                     alert('Great. Now, update your database...');
@@ -58,26 +59,20 @@
 			}
 			}
 		},
-		initialView: 'dayGridMonth',
-		
-		//initialView: 'resourceTimelineMonth',
-		//themeSystem: 'bootstrap5',
-		
+		initialView: 'resourceTimelineMonth',
 		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-		//timeZone: 'UTC',
-		timeZone: 'local',
+		timeZone: 'local', // 'UTC'
 		selectable: true,
 		aspectRatio: 2.35,
 		headerToolbar: {
 			left: 'prev,next today addEventButton',
 			center: 'title',
-			right: 'dayGridMonth,resourceTimelineMonth,listWeek'
+			right: 'resourceTimelineMonth,dayGridMonth,listWeek'
 		},
 		editable: true,
-		resourceAreaHeaderContent: 'Shot List',
-		//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
+		resourceAreaWidth: "8%",
+		resourceAreaHeaderContent: 'Items',
 		resources: [],
-		//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
 		events: [],
 		});
 		//calendar.render();
@@ -87,9 +82,6 @@
 	function calendarview() {
 		document.getElementById("listview").style.display="none";
 		document.getElementById("page").style.display="none";
-		//renderCalendar()
-		
-
 		var calendarEl = document.getElementById('calendar');
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
@@ -133,6 +125,7 @@
 						calendar.addEvent({
 							title: title,
 							start: date,
+							resourceId: "",
 							allDay: true
 						});
 						alert('Great. Now, update your database...');
@@ -142,24 +135,19 @@
 				}
 				}
 			},
-			initialView: 'dayGridMonth',
-			
-			//initialView: 'resourceTimelineMonth',
-			//themeSystem: 'bootstrap5',
-			
+			initialView: 'resourceTimelineMonth',
 			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-			//timeZone: 'UTC',
-			timeZone: 'local',
+			timeZone: 'local', // 'UTC'
 			selectable: true,
 			aspectRatio: 2.35,
 			headerToolbar: {
 				left: 'prev,next today addEventButton',
 				center: 'title',
-				right: 'dayGridMonth,resourceTimelineMonth,listWeek'
+				right: 'resourceTimelineMonth,dayGridMonth,listWeek'
 			},
 			editable: true,
-			resourceAreaHeaderContent: 'Shot List',
-			resourceGroupField: 'title',
+			resourceAreaWidth: "8%",
+			resourceAreaHeaderContent: 'Items',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
 			resources: JSON.parse({{.FullCalendarResourceJson}}),
 			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
