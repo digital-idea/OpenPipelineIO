@@ -159,13 +159,9 @@
 			},
 			editable: true,
 			resourceAreaHeaderContent: 'Shot List',
+			resourceGroupField: 'title',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
-			resources: [
-				{"id":"a","title":"TEMP,SS_0010","eventColor":"#17E7CF","eventTextColor":"#000000"},
-				{"id":"b","title":"TEMP,SS_0020","eventColor":"#5671FF","eventTextColor":"#000000"},
-				{"id":"c","title":"TEMP,SS_0030","eventColor":"#FEAE01","eventTextColor":"#000000"},
-				{"id":"d","title":"TEMP,SS_0040","eventColor":"#FF978D","eventTextColor":"#000000"},
-			],
+			resources: JSON.parse({{.FullCalendarResourceJson}}),
 			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
 			events: JSON.parse({{.FullCalendarEventJson}}),
 		});

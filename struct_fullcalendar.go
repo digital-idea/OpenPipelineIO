@@ -35,7 +35,7 @@ type FullCalendarEvent struct {
 // https://fullcalendar.io/docs/resource-object
 // https://fullcalendar.io/docs/resource-parsing
 type FullCalendarResource struct {
-	ID                   primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
+	ID                   string                    `json:"id"`                   // 리소스 ID
 	Title                string                    `json:"title"`                // 제목
 	ExtendedProps        FullCalendarExtendedProps `json:"extendedProps"`        // 나머지 필요한 기능
 	EventColor           string                    `json:"eventColor"`           // 배경색 + 테두리색
