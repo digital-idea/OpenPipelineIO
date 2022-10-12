@@ -28,7 +28,9 @@
                 </div>
             </form>
             <div class="pt-2">
-                <small class="form-text text-muted">업로드할 .jpg, .png, .mov, .dpx, exr 파일을 Drag & Drop 해주세요. <span class="badge bg-danger finger" id="clear-dropzone" onclick="DeleteScanPlateTemp()">Delete Uploaded files</span></small>
+                <small class="form-text text-muted">
+                    Drag & drop the file you want to upload.(Allowed file format: .jpg .png .exr .mov .dpx)
+                     <span class="badge bg-danger finger" id="clear-dropzone" onclick="DeleteScanPlateTemp()">Delete Uploaded files</span></small>
             </div>
             
         </div>
@@ -94,7 +96,11 @@
                         <input type="text" class="form-control" placeholder="Path" id="searchpath">
                         <button class="btn btn-outline-warning" type="button" id="searchfootages">ScanPath</button>
                     </div>
-                    <small class="form-text text-danger">OS에서 보안상 제약이 걸린 경로가 포함된 경우, 너무 많은 소스가 존재하는 경로를 설정할 경우 웹서버에 부하를 줄 수 있습니다.</small>
+                    <small class="form-text text-warning">
+                        On the following cases, web server can be overloaded.<br>
+                        - If the OS security policy doesn’t allow the path.<br>
+                        - If there are too many sources on the path.
+                    </small>
                 </div>
             </div>
         </div>
@@ -115,7 +121,9 @@
                     <button type="button" class="btn btn-outline-darkmode" id="print-table">Print Table</button>
                 </div>
             </div>
-            <small class="form-text text-warning">항목을 드레그하면 연산순서를 바꿀 수 있습니다. 파일명을 더블 클릭하면 연산에서 제거됩니다.</small>
+            <small class="form-text text-warning">
+                Drag the item for changing the process order. Double click the base name for deleting.
+            </small>
         </div>
 
         <div class="row pt-2">
@@ -157,7 +165,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setplatesize" checked>
-                        <label class="form-check-label finger unselectable text-muted" for="setplatesize">이미지 사이즈로 플레이트 사이즈 등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setplatesize">Set plate size by image size</label>
                     </div>
                 </div>
             </div>
@@ -168,7 +176,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setundistortionsize" checked>
-                        <label class="form-check-label finger unselectable text-muted" for="setundistortionsize">언디스토션 사이즈 자동등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setundistortionsize">Set undistortion size</label>
                     </div>
                 </div>
             </div>
@@ -179,7 +187,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setrendersize" checked>
-                        <label class="form-check-label finger unselectable text-muted" for="setrendersize">언디스토션 사이즈로 렌더 사이즈 자동등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setrendersize">Set render size by undistortion size</label>
                     </div>
                 </div>
             </div>
@@ -190,7 +198,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setinout">
-                        <label class="form-check-label finger unselectable text-muted" for="setinout">IN/OUT 등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setinout">Set frame IN/OUT</label>
                     </div>
                 </div>
             </div>
@@ -201,7 +209,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setjustinout">
-                        <label class="form-check-label finger unselectable text-muted" for="setjustinout">Just IN/OUT 등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setjustinout">Set just frame IN/OUT</label>
                     </div>
                 </div>
             </div>
@@ -212,7 +220,7 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="settimecode">
-                        <label class="form-check-label finger unselectable text-muted" for="settimecode">Timecode IN/OUT 등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="settimecode">Set Timecode IN/OUT</label>
                     </div>
                 </div>
             </div>
@@ -223,25 +231,56 @@
                 <div class="from-group">
                     <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="setscanfolder">
-                        <label class="form-check-label finger unselectable text-muted" for="setscanfolder">Scan Folder 등록</label>
+                        <label class="form-check-label finger unselectable text-muted" for="setscanfolder">Set scan folder</label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--Attribute Table-->
-        <div class="row pt-2" hidden>
+        <div class="row pt-2">
             <div class="col-sm">
-                <div class="border-table rounded unselectable" id="attributes"></div>
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="createShotFolder">
+                        <label class="form-check-label finger unselectable text-muted" for="createShotFolder">Create Shot folder</label>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row" hidden>
-            <div class="col">
-                <small class="form-text text-muted float-right">필요시 속성을 추가해 주세요.</small>
-                <span class="add float-right" id="addAttribute">+</span>
-                <span class="add float-right" id="rmAttribute">-</span>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="createProxyJpg">
+                        <label class="form-check-label finger unselectable text-muted" for="createProxyJpg">Create proxy jpg</label>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="createProxyMov">
+                        <label class="form-check-label finger unselectable text-muted" for="createProxyMov">Create proxy mov</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="createProxyMovSlate">
+                        <label class="form-check-label finger unselectable text-muted" for="createProxyMovSlate">Create proxy mov slate</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="text-center pt-5">
         <button type="submit" class="btn btn-outline-warning" id="submitScanPlate">SUBMIT PROCESS</button>
