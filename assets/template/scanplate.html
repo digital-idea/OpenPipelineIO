@@ -370,28 +370,6 @@
         ],
     });
 
-    var attributes = [];
-    var attributesTable = new Tabulator("#attributes", {
-        height:150, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
-        data:attributes, //assign data to table
-        layout:"fitColumns", //fit columns to width of table (optional)
-        reactiveData:true, //turn on data reactivity
-        clipboard:true,
-        columns:[ //Define Table Columns
-            {title:"Key", field:"key", hozAlign: "left", headerHozAlign:"left", headerSort:false, editor:"input", validator:"required"},
-            {title:"Value", field:"value", hozAlign:"left", headerHozAlign:"left", headerSort:false, editor:"input", validator:"required"},
-        ],
-    });
-
-    //print button
-    document.getElementById("addAttribute").addEventListener("click", function(){
-        attributes.push({key:"", value:""});
-    });
-
-    document.getElementById("rmAttribute").addEventListener("click", function(){
-        attributes.pop();
-    });
-
     //listen for row move
     table.on("rowMoved", function(row){
         sources = table.getData(); // 테이블 데이터의 순서가 sources 순서로 되어야 한다.
