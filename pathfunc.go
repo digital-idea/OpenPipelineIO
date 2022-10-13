@@ -168,8 +168,8 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 				}
 
 				// timecode 구하기
-				if ext == ".exr" {
-					timecode, err = timecodeFromExrheader(path)
+				if ext == ".exr" || ext == ".dpx" {
+					timecode, err = timecodeFromIinfo(path)
 					if err != nil {
 						log.Printf("error parsing timecode %q: %v\n", path, err)
 					}
@@ -203,10 +203,10 @@ func searchSeq(searchpath string) ([]ScanPlate, error) {
 	}
 	var items []ScanPlate
 	for _, value := range paths {
-		// timecode in, out 을 이곳에서 처리하는게 좋아보인다.
-		if value.Ext == ".exr" && value.Length > 1 {
+		// timecode out 을 이곳에서 처리한다.
+		if (value.Ext == ".exr" || value.Ext == ".dpx") && value.Length > 1 {
 			endframePath := value.Dir + "/" + fmt.Sprintf(value.Base, value.FrameOut)
-			timecodeout, err := timecodeFromExrheader(endframePath)
+			timecodeout, err := timecodeFromIinfo(endframePath)
 			if err != nil {
 				log.Printf("error parsing timecode %q: %v\n", endframePath, err)
 			}
@@ -359,6 +359,28 @@ func timecodeFromExrheader(path string) (string, error) {
 		return "", err
 	}
 	re, err := regexp.Compile(`time\s+(\d{2}:\d{2}:\d{2}:\d{2})`)
+	if err != nil {
+		return "", errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(string(stdout))
+	if results == nil {
+		return "", errors.New("there were no results matching the regular expression condition")
+	}
+	timecode := results[1]
+	return timecode, nil
+}
+
+func timecodeFromIinfo(path string) (string, error) {
+	_, err := os.Stat(CachedAdminSetting.Iinfo)
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command(CachedAdminSetting.Iinfo, "-v", path)
+	stdout, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+	re, err := regexp.Compile(`smpte:TimeCode:\s+(\d{2}:\d{2}:\d{2}:\d{2})`)
 	if err != nil {
 		return "", errors.New("the regular expression is invalid")
 	}
