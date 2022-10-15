@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"time"
 )
 
-func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCalendarResource) {
+func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCalendarResource, error) {
 	events := []FullCalendarEvent{}
 	resources := []FullCalendarResource{}
 	// 프로젝트에 사용될 기본 리소스를 추가한다.
@@ -53,9 +54,20 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.EndEditable = true
 			taskEvent.DurationEditable = true
 			taskEvent.ResourceEditable = false
-			taskEvent.Start = value.Startdate // 작업시작일
 			taskEvent.Title = fmt.Sprintf("%s - %s", task, item.Name)
-			taskEvent.End = value.Date // 최종마감일
+			if value.Startdate == "" {
+				taskEvent.Start = value.Date // 작업마감일을 시작일로 설정한다.
+			} else {
+				taskEvent.Start = value.Startdate // 작업시작일
+			}
+			// fullcalendar 특성상 end 날짜에 1일을 더해야 간트챠트 드로잉시 그래프 모양이 딱 맞다.
+			t, err := time.Parse(time.RFC3339, value.Date)
+			if err != nil {
+				return events, resources, err
+			}
+			t = t.Add(time.Hour * 24)
+			taskEvent.End = t.Format(time.RFC3339)
+
 			taskEvent.ExtendedProps.ItemName = item.Name
 			taskEvent.ExtendedProps.Project = item.Project
 			taskEvent.ExtendedProps.Task = task
@@ -65,9 +77,10 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.ExtendedProps.TaskDeadline = value.Date       // 최종마감일
 			taskEvent.ExtendedProps.TaskPreDeadline = value.Predate // 1차마감일
 			taskEvent.ExtendedProps.TaskStartDate = value.Startdate // 작업시작일
+			taskEvent.ExtendedProps.Key = "tasks"
 			taskEvent.ResourceId = item.Name
 			events = append(events, taskEvent)
 		}
 	}
-	return events, resources
+	return events, resources, nil
 }

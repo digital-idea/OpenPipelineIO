@@ -41,23 +41,30 @@
 					.catch((err) => {
 						alert(err)
 					});
-				} else {
-					console.log(info.event.extendedProps)
+				}
+				if (info.event.extendedProps.key == "tasks") {
 					console.log(info.event.startStr)
-					console.log(info.event.endStr)
-					console.log(info.event.extendedProps.key)
+					d = new Date(info.event.endStr)
+					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
+					let endStr = d.toISOString().split('T')[0]
+					console.log(endStr)
 					console.log(info.event.extendedProps.project)
 					console.log(info.event.extendedProps.itemname)
+					console.log(info.event.extendedProps.task)
 				}
-				
 			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
-				console.log(info.event.extendedProps)
-				console.log(info.event.startStr)
-				console.log(info.event.endStr)
-				console.log(info.event.extendedProps.key)
-				console.log(info.event.extendedProps.project)
-				console.log(info.event.extendedProps.itemname)
+				if (info.event.extendedProps.key == "tasks") {
+					console.log(info.event.startStr)
+					d = new Date(info.event.endStr)
+					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
+					let endStr = d.toISOString().split('T')[0]
+					console.log(endStr)
+					console.log(info.event.extendedProps.project)
+					console.log(info.event.extendedProps.itemname)
+					console.log(info.event.extendedProps.task)
+				}
+				
 			},
 			dateClick: function(info) {
 				console.log('Clicked on: ' + info.dateStr);
