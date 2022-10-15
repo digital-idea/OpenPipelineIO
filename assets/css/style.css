@@ -626,10 +626,23 @@ input[type=checkbox]:checked+div{
 	padding: 15px;
 	border-radius: 10px;
   }
-  
+
   #topbtn:hover {
 	background-color: #555;
   }
+  
+#calendarImageZone {
+	display: block;
+	position: fixed;
+	z-index: 98;
+	font-size: 14px;
+	border: none;
+	outline: none;
+	background-color: rgb(94, 88, 80);
+	color: white;
+	cursor: pointer;
+}
+  
 
 .help-text {
 	line-height: 150%;

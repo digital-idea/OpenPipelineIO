@@ -34,6 +34,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			deadline2dEvent.DurationEditable = true
 			deadline2dEvent.ResourceEditable = false
 			deadline2dEvent.ExtendedProps.ItemName = item.Name
+			deadline2dEvent.ExtendedProps.ItemID = item.ID
 			deadline2dEvent.ExtendedProps.Project = item.Project
 			deadline2dEvent.ExtendedProps.Tags = item.Tag
 			deadline2dEvent.ExtendedProps.Key = "deadline2d"

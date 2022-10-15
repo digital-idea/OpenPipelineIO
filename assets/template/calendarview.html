@@ -1,9 +1,16 @@
 {{define "calendarview" }}
 
+<p id='calendarImageZone'>
+	<img id="calendarThumbnail" src=''>
+</p>
+
 <div id="calendarview">
 	<div id='calendar' class="p-3"></div>
 <div>
+
+
 <script>
+	
 	function calendarview() {
 		document.getElementById("listview").style.display="none";
 		document.getElementById("page").style.display="none";
@@ -72,6 +79,27 @@
 						alert(err)
 					});
 				}
+			},
+			eventMouseEnter: function(info) {
+				let offsetX = -220
+				let offsetY = -240
+				let doc = document.documentElement;
+				let scrollX = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+				let scrollY = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+				let p = document.getElementById("calendarImageZone")
+				p.hidden = false
+				p.style.width = 192
+				p.style.height = 108
+				p.style.top = offsetY - scrollY + info.jsEvent.pageY + "px"
+				p.style.left = offsetX - scrollX + info.jsEvent.pageX + "px"
+				let pathToImage = "/thumbnail/"+info.event.extendedProps.project+"/"+info.event.extendedProps.itemid+".jpg"
+				document.getElementById("calendarThumbnail").src = pathToImage
+				console.log(info.event.extendedProps.project)
+				console.log(info.event.extendedProps.itemid)
+			},
+			eventMouseLeave: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
 			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
 				if (info.event.extendedProps.key == "tasks") {
@@ -165,7 +193,7 @@
 			},
 			editable: true,
 			resourceAreaWidth: "8%",
-			resourcesInitiallyExpanded: true,
+			resourcesInitiallyExpanded: true, // false라면 다 접힌상태로 열린다.
 			resourceAreaHeaderContent: 'Items',
 			resourceGroupField: 'resourcegroup',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
