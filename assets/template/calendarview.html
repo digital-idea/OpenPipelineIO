@@ -4,81 +4,6 @@
 	<div id='calendar' class="p-3"></div>
 <div>
 <script>
-	// init calendar
-    document.addEventListener('DOMContentLoaded', function() {
-		var calendarEl = document.getElementById('calendar');
-		var calendar = new FullCalendar.Calendar(calendarEl, {
-		eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
-			console.log('Event: ' + info.event.title);
-			console.log('Event: ' + info.event.start);
-			console.log('Event: ' + info.event.end);
-			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-			console.log('View: ' + info.view.type);
-		},
-		eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
-			console.log('Event: ' + info.event.title);
-			console.log('Event: ' + info.event.resourceId);
-			console.log(info.event)
-			console.log('Event: ' + info.event.start);
-			console.log('Event: ' + info.event.end);
-			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-			console.log('View: ' + info.view.type);
-		},
-		eventResize: function(info) { // 드레그를 멈출 때 출력하는 이벤트
-			console.log('Event: ' + info.event.title);
-			console.log('Event: ' + info.event.start);
-			console.log('Event: ' + info.event.end);
-			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-			console.log('View: ' + info.view.type);
-		},
-		dateClick: function(info) {
-			console.log('Clicked on: ' + info.dateStr);
-			console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-			console.log('Current view: ' + info.view.type);
-		},
-
-		customButtons: {
-			addEventButton: {
-			text: '+',
-			click: function() {
-				var title = prompt('Enter title');
-				var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-				var date = new Date(dateStr + 'T00:00:00'); // will be in local time
-
-				if (!isNaN(date.valueOf())) { // valid?
-                    calendar.addEvent({
-                        title: title,
-                        start: date,
-						resourceId: "",
-                        allDay: true
-                    });
-                    alert('Great. Now, update your database...');
-				} else {
-				    alert('Invalid date.');
-				}
-			}
-			}
-		},
-		initialView: 'resourceTimelineMonth',
-		schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-		timeZone: 'local', // 'UTC'
-		selectable: true,
-		aspectRatio: 2.35,
-		headerToolbar: {
-			left: 'prev,next today addEventButton',
-			center: 'title',
-			right: 'resourceTimelineMonth,dayGridMonth,listWeek'
-		},
-		editable: true,
-		resourceAreaWidth: "8%",
-		resourceAreaHeaderContent: 'Items',
-		resources: [],
-		events: [],
-		});
-		//calendar.render();
-	});
-
-	/** enable calendarview */
 	function calendarview() {
 		document.getElementById("listview").style.display="none";
 		document.getElementById("page").style.display="none";
@@ -91,13 +16,40 @@
 				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
 				console.log('View: ' + info.view.type);
 			},
-			eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
-				console.log(info.event.extendedProps)
-				console.log(info.event.startStr)
-				console.log(info.event.endStr)
-				console.log(info.event.extendedProps.key)
-				console.log(info.event.extendedProps.project)
-				console.log(info.event.extendedProps.itemname)
+			eventDrop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
+				if (info.event.extendedProps.key == "deadline2d") {
+					fetch('/api/setdeadline2d', {
+						method: 'POST',
+						headers: {
+							"Authorization": "Basic "+ document.getElementById("token").value,
+						},
+						body: new URLSearchParams({
+							project: info.event.extendedProps.project,
+							name: info.event.extendedProps.itemname,
+							date: info.event.startStr,
+						})
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText + " - " + response.url);
+						}
+						return response.json()
+					})
+					.then((data) => {
+						document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
+					})
+					.catch((err) => {
+						alert(err)
+					});
+				} else {
+					console.log(info.event.extendedProps)
+					console.log(info.event.startStr)
+					console.log(info.event.endStr)
+					console.log(info.event.extendedProps.key)
+					console.log(info.event.extendedProps.project)
+					console.log(info.event.extendedProps.itemname)
+				}
+				
 			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
 				console.log(info.event.extendedProps)

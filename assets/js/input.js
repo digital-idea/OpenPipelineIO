@@ -3200,47 +3200,55 @@ function setDeadline2D(project, id, date) {
                 continue
             }
             let id = cboxes[i].getAttribute("id");
-            $.ajax({
-                url: "/api/setdeadline2d",
-                type: "post",
-                data: {
+            fetch('/api/setdeadline2d', {
+                method: 'POST',
+                headers: {
+                    "Authorization": "Basic "+ document.getElementById("token").value,
+                },
+                body: new URLSearchParams({
                     project: project,
                     name: id2name(id),
                     date: date,
                     userid: userid,
-                },
-                headers: {
-                    "Authorization": "Basic "+ token
-                },
-                dataType: "json",
-                success: function(data) {
-                    document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
-                },
-                error: function(request,status,error){
-                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                })
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText + " - " + response.url);
                 }
+                return response.json()
+            })
+            .then((data) => {
+                document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
+            })
+            .catch((err) => {
+                alert(err)
             });
         }
     } else {
-        $.ajax({
-            url: "/api/setdeadline2d",
-            type: "post",
-            data: {
+        fetch('/api/setdeadline2d', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ document.getElementById("token").value,
+            },
+            body: new URLSearchParams({
                 project: project,
                 name: id2name(id),
                 date: date,
                 userid: userid,
-            },
-            headers: {
-                "Authorization": "Basic "+ token
-            },
-            dataType: "json",
-            success: function(data) {
-                document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
-            },
-            error: function(request,status,error){
-                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
             }
+            return response.json()
+        })
+        .then((data) => {
+            document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
+        })
+        .catch((err) => {
+            alert(err)
         });
     }
 }
