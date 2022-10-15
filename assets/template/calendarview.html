@@ -92,20 +92,20 @@
 				console.log('View: ' + info.view.type);
 			},
 			eventDragStop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
-				console.log('Event: ' + info.event.title);
-				console.log('Event: ' + info.event.resourceId);
-				console.log(info.event)
-				console.log('Event: ' + info.event.start);
-				console.log('Event: ' + info.event.end);
-				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-				console.log('View: ' + info.view.type);
+				console.log(info.event.extendedProps)
+				console.log(info.event.startStr)
+				console.log(info.event.endStr)
+				console.log(info.event.extendedProps.key)
+				console.log(info.event.extendedProps.project)
+				console.log(info.event.extendedProps.itemname)
 			},
-			eventResize: function(info) { // 드레그를 멈출 때 출력하는 이벤트
-				console.log('Event: ' + info.event.title);
-				console.log('Event: ' + info.event.start);
-				console.log('Event: ' + info.event.end);
-				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-				console.log('View: ' + info.view.type);
+			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
+				console.log(info.event.extendedProps)
+				console.log(info.event.startStr)
+				console.log(info.event.endStr)
+				console.log(info.event.extendedProps.key)
+				console.log(info.event.extendedProps.project)
+				console.log(info.event.extendedProps.itemname)
 			},
 			dateClick: function(info) {
 				console.log('Clicked on: ' + info.dateStr);
