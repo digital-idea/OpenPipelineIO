@@ -101,6 +101,14 @@
 				document.getElementById("calendarImageZone").hidden = true
 				
 			},
+			eventDragStart: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
+			},
+			eventResizeStart: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
+			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
 				if (info.event.extendedProps.key == "tasks") {
 					d = new Date(info.event.endStr)
