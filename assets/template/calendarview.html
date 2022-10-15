@@ -142,7 +142,22 @@
 			headerToolbar: {
 				left: 'prev,next today addEventButton',
 				center: 'title',
-				right: 'resourceTimelineMonth,dayGridMonth,listWeek'
+				right: 'Gantt Gantt3M Month listWeek'
+			},
+			views: {
+				Gantt: {
+					type: 'resourceTimelineMonth',
+					buttonText: 'Gantt'
+				},
+				Gantt3M: {
+					type: 'resourceTimeline',
+					duration: { days: 90 },
+					buttonText: 'Gantt3M'
+				},
+				Month: {
+					type: 'dayGridMonth',
+					buttonText: 'calendar'
+				}
 			},
 			editable: true,
 			resourceAreaWidth: "8%",
