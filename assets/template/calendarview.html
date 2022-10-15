@@ -41,23 +41,70 @@
 					.catch((err) => {
 						alert(err)
 					});
-				} else {
-					console.log(info.event.extendedProps)
-					console.log(info.event.startStr)
-					console.log(info.event.endStr)
-					console.log(info.event.extendedProps.key)
-					console.log(info.event.extendedProps.project)
-					console.log(info.event.extendedProps.itemname)
 				}
-				
+				if (info.event.extendedProps.key == "tasks") {
+					d = new Date(info.event.endStr)
+					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
+					let endStr = d.toISOString().split('T')[0]
+					fetch('/api/taskduration', {
+						method: 'POST',
+						headers: {
+							"Authorization": "Basic "+ document.getElementById("token").value,
+						},
+						body: new URLSearchParams({
+							project: info.event.extendedProps.project,
+							id: info.event.extendedProps.itemid,
+							task: info.event.extendedProps.task,
+							start: info.event.startStr,
+							end: endStr,
+						})
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText + " - " + response.url);
+						}
+						return response.json()
+					})
+					.then((data) => {
+						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+					})
+					.catch((err) => {
+						alert(err)
+					});
+				}
 			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
-				console.log(info.event.extendedProps)
-				console.log(info.event.startStr)
-				console.log(info.event.endStr)
-				console.log(info.event.extendedProps.key)
-				console.log(info.event.extendedProps.project)
-				console.log(info.event.extendedProps.itemname)
+				if (info.event.extendedProps.key == "tasks") {
+					d = new Date(info.event.endStr)
+					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
+					let endStr = d.toISOString().split('T')[0]
+					fetch('/api/taskduration', {
+						method: 'POST',
+						headers: {
+							"Authorization": "Basic "+ document.getElementById("token").value,
+						},
+						body: new URLSearchParams({
+							project: info.event.extendedProps.project,
+							id: info.event.extendedProps.itemid,
+							task: info.event.extendedProps.task,
+							start: info.event.startStr,
+							end: endStr,
+						})
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText + " - " + response.url);
+						}
+						return response.json()
+					})
+					.then((data) => {
+						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+					})
+					.catch((err) => {
+						alert(err)
+					});
+				}
+				
 			},
 			dateClick: function(info) {
 				console.log('Clicked on: ' + info.dateStr);
@@ -95,7 +142,22 @@
 			headerToolbar: {
 				left: 'prev,next today addEventButton',
 				center: 'title',
-				right: 'resourceTimelineMonth,dayGridMonth,listWeek'
+				right: 'Gantt Gantt3M Month listWeek'
+			},
+			views: {
+				Gantt: {
+					type: 'resourceTimelineMonth',
+					buttonText: 'Gantt'
+				},
+				Gantt3M: {
+					type: 'resourceTimeline',
+					duration: { days: 90 },
+					buttonText: 'Gantt3M'
+				},
+				Month: {
+					type: 'dayGridMonth',
+					buttonText: 'calendar'
+				}
 			},
 			editable: true,
 			resourceAreaWidth: "8%",

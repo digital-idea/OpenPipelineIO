@@ -4151,10 +4151,6 @@ func handleAPISetTaskPredate(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskDate 함수는 아이템의 task에 대한 최종마감일을 설정한다.
 func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project   string `json:"project"`
 		ID        string `json:"id"`
@@ -4182,47 +4178,36 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.ID = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Task = v
-		case "date":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Date = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "need id", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	userid := r.FormValue("userid")
+	if userid == "" {
+		rcp.UserID = "unknown"
+	}
+	rcp.UserID = userid
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "need task", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	date := r.FormValue("date")
+	if date == "" {
+		http.Error(w, "need date", http.StatusBadRequest)
+		return
+	}
+	rcp.Date = date
+
 	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -4247,6 +4232,93 @@ func handleAPISetTaskDate(w http.ResponseWriter, r *http.Request) {
 	}
 	// json 으로 결과 전송
 	rcp.ShortDate = ToShortTime(rcp.Date)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetTaskDuration 함수는 아이템의 task에 대한 시작일, 종료일을 설정한다.
+func handleAPISetTaskDuration(w http.ResponseWriter, r *http.Request) {
+	type Recipe struct {
+		Project    string `json:"project"`
+		ID         string `json:"id"`
+		Start      string `json:"start"`
+		End        string `json:"end"`
+		ShortStart string `json:"shortstart"`
+		ShortEnd   string `json:"shortend"`
+		Task       string `json:"task"`
+		UserID     string `json:"userid"`
+		Error      string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	r.ParseForm()
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "need id", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+	userid := r.FormValue("userid")
+	if userid == "" {
+		rcp.UserID = "unknown"
+	}
+	rcp.UserID = userid
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "need task", http.StatusBadRequest)
+		return
+	}
+	rcp.Task = task
+	start := r.FormValue("start")
+	if start == "" {
+		http.Error(w, "need start", http.StatusBadRequest)
+		return
+	}
+	rcp.Start = start
+	rcp.ShortStart = ToShortTime(rcp.Start)
+	end := r.FormValue("end")
+	if end == "" {
+		http.Error(w, "need end", http.StatusBadRequest)
+		return
+	}
+	rcp.End = end
+	rcp.ShortEnd = ToShortTime(rcp.End)
+
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = SetTaskDuration(session, rcp.Project, rcp.ID, rcp.Task, rcp.Start, rcp.End)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// json 으로 결과 전송
 	data, err := json.Marshal(rcp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

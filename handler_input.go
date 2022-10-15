@@ -208,7 +208,11 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	}
 	// 달력 이벤트를 렌더링한다.
 
-	event, resource := ItemsToFCEventsAndFCResource(items)
+	event, resource, err := ItemsToFCEventsAndFCResource(items)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	eventJson, err := json.Marshal(event)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
