@@ -68,8 +68,9 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			t = t.Add(time.Hour * 24)
 			taskEvent.End = t.Format(time.RFC3339)
 
-			taskEvent.ExtendedProps.ItemName = item.Name
 			taskEvent.ExtendedProps.Project = item.Project
+			taskEvent.ExtendedProps.ItemID = item.ID
+			taskEvent.ExtendedProps.ItemName = item.Name
 			taskEvent.ExtendedProps.Task = task
 			taskEvent.ExtendedProps.Tags = item.Tag
 			taskEvent.ExtendedProps.Pipelinestep = value.Pipelinestep

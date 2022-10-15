@@ -43,26 +43,66 @@
 					});
 				}
 				if (info.event.extendedProps.key == "tasks") {
-					console.log(info.event.startStr)
 					d = new Date(info.event.endStr)
 					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
 					let endStr = d.toISOString().split('T')[0]
-					console.log(endStr)
-					console.log(info.event.extendedProps.project)
-					console.log(info.event.extendedProps.itemname)
-					console.log(info.event.extendedProps.task)
+					fetch('/api/taskduration', {
+						method: 'POST',
+						headers: {
+							"Authorization": "Basic "+ document.getElementById("token").value,
+						},
+						body: new URLSearchParams({
+							project: info.event.extendedProps.project,
+							id: info.event.extendedProps.itemid,
+							task: info.event.extendedProps.task,
+							start: info.event.startStr,
+							end: endStr,
+						})
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText + " - " + response.url);
+						}
+						return response.json()
+					})
+					.then((data) => {
+						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+					})
+					.catch((err) => {
+						alert(err)
+					});
 				}
 			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
 				if (info.event.extendedProps.key == "tasks") {
-					console.log(info.event.startStr)
 					d = new Date(info.event.endStr)
 					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
 					let endStr = d.toISOString().split('T')[0]
-					console.log(endStr)
-					console.log(info.event.extendedProps.project)
-					console.log(info.event.extendedProps.itemname)
-					console.log(info.event.extendedProps.task)
+					fetch('/api/taskduration', {
+						method: 'POST',
+						headers: {
+							"Authorization": "Basic "+ document.getElementById("token").value,
+						},
+						body: new URLSearchParams({
+							project: info.event.extendedProps.project,
+							id: info.event.extendedProps.itemid,
+							task: info.event.extendedProps.task,
+							start: info.event.startStr,
+							end: endStr,
+						})
+					})
+					.then((response) => {
+						if (!response.ok) {
+							throw Error(response.statusText + " - " + response.url);
+						}
+						return response.json()
+					})
+					.then((data) => {
+						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+					})
+					.catch((err) => {
+						alert(err)
+					});
 				}
 				
 			},

@@ -51,6 +51,7 @@ type FullCalendarResource struct {
 }
 
 type FullCalendarExtendedProps struct {
+	ItemID          string   `json:"itemid"`          // 아이템 ID
 	ItemName        string   `json:"itemname"`        // 아이템 이름
 	UserID          string   `json:"userid"`          // User 아이디
 	PartnerCodename string   `json:"partnercodename"` // 파트너사 코드네임

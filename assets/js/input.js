@@ -2937,11 +2937,7 @@ function setTaskDate(project, id, task, date) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    if (data.mov === "") {
-                        document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = "";
-                    } else {
-                        document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
-                    }
+                    document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -2964,11 +2960,7 @@ function setTaskDate(project, id, task, date) {
             },
             dataType: "json",
             success: function(data) {
-                if (data.mov === "") {
-                    document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = "";
-                } else {
-                    document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
-                }
+                document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortdate}</span>`;
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
