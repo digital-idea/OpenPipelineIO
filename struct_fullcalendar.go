@@ -2,7 +2,7 @@ package main
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-//https://fullcalendar.io/docs/event-object
+// https://fullcalendar.io/docs/event-object
 // https://fullcalendar.io/docs/event-parsing
 type FullCalendarEvent struct {
 	ID               primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
@@ -62,4 +62,5 @@ type FullCalendarExtendedProps struct {
 	TaskDeadline    string   `json:"taskdeadline"`    // 2차 마감일 RFC3339
 	Pipelinestep    string   `json:"pipelinestep"`    // pipelinestep
 	Tags            []string `json:"tags"`            // Tags
+	Key             string   `json:"key"`             // db key
 }

@@ -412,9 +412,6 @@ func webserver(port string) {
 	r.HandleFunc("/health", handleHealth)
 	r.HandleFunc("/api/statusinfo", handleAPIStatusInfo).Methods(http.MethodGet, http.MethodOptions)
 
-	// Calendar
-	r.HandleFunc("/calendartest", handleCalendarTest)
-
 	// Statistics
 	r.HandleFunc("/statistics", handleStatistics).Methods(http.MethodGet, http.MethodOptions)                                  // 본부장, 실장
 	r.HandleFunc("/statistics/statusperproject", handleStatisticsStatusPerProject).Methods(http.MethodGet, http.MethodOptions) // 프로젝트별 상태 통계
@@ -515,7 +512,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/setoutputname", handleAPISetOutputName)
 	r.HandleFunc("/api/setrnum", handleAPISetRnum) // legacy
 	r.HandleFunc("/api2/setrnum", handleAPI2SetRnum)
-	r.HandleFunc("/api/setdeadline2d", handleAPISetDeadline2D)
+	r.HandleFunc("/api/setdeadline2d", handleAPISetDeadline2D).Methods("POST")
 	r.HandleFunc("/api/setdeadline3d", handleAPISetDeadline3D)
 	r.HandleFunc("/api/setscantimecodein", handleAPISetScanTimecodeIn)
 	r.HandleFunc("/api/setscantimecodeout", handleAPISetScanTimecodeOut)
