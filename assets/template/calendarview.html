@@ -114,25 +114,25 @@
 
 			customButtons: {
 				addEventButton: {
-				text: '+',
-				click: function() {
-					var title = prompt('Enter title');
-					var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-					var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+					text: '+',
+					click: function() {
+						var title = prompt('Enter title');
+						var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+						var date = new Date(dateStr + 'T00:00:00'); // will be in local time
 
-					if (!isNaN(date.valueOf())) { // valid?
-						calendar.addEvent({
-							title: title,
-							start: date,
-							resourceId: "",
-							allDay: true
-						});
-						alert('Great. Now, update your database...');
-					} else {
-						alert('Invalid date.');
+						if (!isNaN(date.valueOf())) { // valid?
+							calendar.addEvent({
+								title: title,
+								start: date,
+								resourceId: "",
+								allDay: true
+							});
+							alert('Great. Now, update your database...');
+						} else {
+							alert('Invalid date.');
+						}
 					}
-				}
-				}
+				},
 			},
 			initialView: 'resourceTimelineMonth',
 			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -142,7 +142,7 @@
 			headerToolbar: {
 				left: 'prev,next today addEventButton',
 				center: 'title',
-				right: 'Gantt Gantt3M Month listWeek'
+				right: 'Gantt Gantt3M Month List'
 			},
 			views: {
 				Gantt: {
@@ -156,12 +156,18 @@
 				},
 				Month: {
 					type: 'dayGridMonth',
-					buttonText: 'calendar'
-				}
+					buttonText: 'Month'
+				},
+				List: {
+					type: 'listWeek',
+					buttonText: 'List'
+				},
 			},
 			editable: true,
 			resourceAreaWidth: "8%",
+			resourcesInitiallyExpanded: true,
 			resourceAreaHeaderContent: 'Items',
+			resourceGroupField: 'resourcegroup',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
 			resources: JSON.parse({{.FullCalendarResourceJson}}),
 			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'

@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -101,7 +100,7 @@ func postFCEventHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	fc.ID = primitive.NewObjectID()
+
 	err = addFCEvent(client, fc)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
