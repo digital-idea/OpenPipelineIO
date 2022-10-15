@@ -81,7 +81,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			deadline2dEvent.StartEditable = true
 			deadline2dEvent.EndEditable = true
 			deadline2dEvent.DurationEditable = true
-			deadline2dEvent.ResourceEditable = true
+			deadline2dEvent.ResourceEditable = false
 			deadline2dEvent.ExtendedProps.ItemName = item.Name
 			deadline2dEvent.ExtendedProps.Project = item.Project
 			deadline2dEvent.ExtendedProps.Tags = item.Tag
@@ -100,7 +100,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.StartEditable = true
 			taskEvent.EndEditable = true
 			taskEvent.DurationEditable = true
-			taskEvent.ResourceEditable = true
+			taskEvent.ResourceEditable = false
 			taskEvent.Start = value.Startdate // 작업시작일
 			taskEvent.Title = fmt.Sprintf("%s - %s", task, item.Name)
 			taskEvent.End = value.Date // 최종마감일
