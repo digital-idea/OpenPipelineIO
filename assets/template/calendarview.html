@@ -1,9 +1,16 @@
 {{define "calendarview" }}
 
+<p id='calendarImageZone'>
+	<img id="calendarThumbnail" src=''>
+</p>
+
 <div id="calendarview">
 	<div id='calendar' class="p-3"></div>
 <div>
+
+
 <script>
+	
 	function calendarview() {
 		document.getElementById("listview").style.display="none";
 		document.getElementById("page").style.display="none";
@@ -73,6 +80,35 @@
 					});
 				}
 			},
+			eventMouseEnter: function(info) {
+				let offsetX = -220
+				let offsetY = -240
+				let doc = document.documentElement;
+				let scrollX = (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0);
+				let scrollY = (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0);
+				let p = document.getElementById("calendarImageZone")
+				p.hidden = false
+				p.style.width = 192
+				p.style.height = 108
+				p.style.top = offsetY - scrollY + info.jsEvent.pageY + "px"
+				p.style.left = offsetX - scrollX + info.jsEvent.pageX + "px"
+				let pathToImage = "/thumbnail/"+info.event.extendedProps.project+"/"+info.event.extendedProps.itemid+".jpg"
+				document.getElementById("calendarThumbnail").src = pathToImage
+				console.log(info.event.extendedProps.project)
+				console.log(info.event.extendedProps.itemid)
+			},
+			eventMouseLeave: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
+			},
+			eventDragStart: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
+			},
+			eventResizeStart: function(info) {
+				document.getElementById("calendarImageZone").hidden = true
+				
+			},
 			eventResize: function(info) { // 드레그를 리사이즈할 때 출력하는 이벤트
 				if (info.event.extendedProps.key == "tasks") {
 					d = new Date(info.event.endStr)
@@ -114,25 +150,25 @@
 
 			customButtons: {
 				addEventButton: {
-				text: '+',
-				click: function() {
-					var title = prompt('Enter title');
-					var dateStr = prompt('Enter a date in YYYY-MM-DD format');
-					var date = new Date(dateStr + 'T00:00:00'); // will be in local time
+					text: '+',
+					click: function() {
+						var title = prompt('Enter title');
+						var dateStr = prompt('Enter a date in YYYY-MM-DD format');
+						var date = new Date(dateStr + 'T00:00:00'); // will be in local time
 
-					if (!isNaN(date.valueOf())) { // valid?
-						calendar.addEvent({
-							title: title,
-							start: date,
-							resourceId: "",
-							allDay: true
-						});
-						alert('Great. Now, update your database...');
-					} else {
-						alert('Invalid date.');
+						if (!isNaN(date.valueOf())) { // valid?
+							calendar.addEvent({
+								title: title,
+								start: date,
+								resourceId: "",
+								allDay: true
+							});
+							alert('Great. Now, update your database...');
+						} else {
+							alert('Invalid date.');
+						}
 					}
-				}
-				}
+				},
 			},
 			initialView: 'resourceTimelineMonth',
 			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -142,7 +178,7 @@
 			headerToolbar: {
 				left: 'prev,next today addEventButton',
 				center: 'title',
-				right: 'Gantt Gantt3M Month listWeek'
+				right: 'Gantt Gantt3M Month List'
 			},
 			views: {
 				Gantt: {
@@ -156,12 +192,18 @@
 				},
 				Month: {
 					type: 'dayGridMonth',
-					buttonText: 'calendar'
-				}
+					buttonText: 'Month'
+				},
+				List: {
+					type: 'listWeek',
+					buttonText: 'List'
+				},
 			},
 			editable: true,
 			resourceAreaWidth: "8%",
+			resourcesInitiallyExpanded: true, // false라면 다 접힌상태로 열린다.
 			resourceAreaHeaderContent: 'Items',
+			resourceGroupField: 'resourcegroup',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
 			resources: JSON.parse({{.FullCalendarResourceJson}}),
 			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'

@@ -1,11 +1,9 @@
 package main
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
 // https://fullcalendar.io/docs/event-object
 // https://fullcalendar.io/docs/event-parsing
 type FullCalendarEvent struct {
-	ID               primitive.ObjectID        `bson:"_id" json:"id,omitempty"`
+	ID               string                    `json:"id"`               // 리소스 ID
 	GroupID          string                    `json:"groupId"`          // 그룹ID
 	AllDay           bool                      `json:"allDay"`           // 하루종일 진행되는 이벤트인가?
 	Start            string                    `json:"start"`            // 시작시간
@@ -28,8 +26,7 @@ type FullCalendarEvent struct {
 	ExtendedProps    FullCalendarExtendedProps `json:"extendedProps"`    // 나머지 필요한 기능
 	ResourceId       string                    `json:"resourceId"`       // Resource ID
 	ResourceIds      string                    `json:"resorceIds"`       // Resource IDs
-	// Constraint // 일정을 설정할 때 제한을 둘때 사용한다.
-	// Overlap // false 또는 함수를 다룬다. Go 자료구조에서는 다루지 않는다.
+
 }
 
 // https://fullcalendar.io/docs/resource-object
@@ -45,9 +42,7 @@ type FullCalendarResource struct {
 	EventClassNames      []string                  `json:"eventClassNames"`      // html에 렌더링할 때 attached 할 클레스 이름
 	Children             []FullCalendarResource    `json:"children"`             // 자식의 Resource IDs
 	ParentId             string                    `json:"parentId"`             // 부모의 Resource ID
-	// EventAllow
-	// EventConstraint // 일정을 설정할 때 제한을 둘때 사용한다.
-	// EventOverlap // false 또는 함수를 다룬다. Go 자료구조에서는 다루지 않는다.
+	ResourceGroup        string                    `json:"resourcegroup"`        // Resource Group name
 }
 
 type FullCalendarExtendedProps struct {

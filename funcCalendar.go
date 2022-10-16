@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -15,14 +14,14 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 	resources = append(resources, resource)
 
 	for _, item := range items {
-		// 리소스를 추가한다. 간트챠트를 그리기 위해서 필요하다.
-		resource := FullCalendarResource{}
-		resource.ID = item.Name
-		resource.Title = item.Name
-		resources = append(resources, resource)
-
-		// PM이 설정한 마감일로 Event를 만들어서 날짜 이벤트를 만들어야 한다.
 		if item.Ddline2d != "" {
+			// 리소스를 추가한다. 간트챠트를 그리기 위해서 필요하다.
+			resource := FullCalendarResource{}
+			resource.ID = "!Deadline2D-" + item.ID
+			resource.Title = "Deadline"
+			resource.ResourceGroup = item.Name
+			resources = append(resources, resource)
+
 			deadline2dEvent := FullCalendarEvent{}
 			deadline2dEvent.Title = "Deadline - " + item.Name
 			deadline2dEvent.Color = "#BE2625"
@@ -35,18 +34,26 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			deadline2dEvent.DurationEditable = true
 			deadline2dEvent.ResourceEditable = false
 			deadline2dEvent.ExtendedProps.ItemName = item.Name
+			deadline2dEvent.ExtendedProps.ItemID = item.ID
 			deadline2dEvent.ExtendedProps.Project = item.Project
 			deadline2dEvent.ExtendedProps.Tags = item.Tag
 			deadline2dEvent.ExtendedProps.Key = "deadline2d"
-			deadline2dEvent.ResourceId = item.Name
+			deadline2dEvent.ResourceId = "!Deadline2D-" + item.ID
+
 			events = append(events, deadline2dEvent)
 		}
-
 		// Task별로 날짜 Event를 만들어야 한다.
 		for task, value := range item.Tasks {
 			if value.Date == "" && value.Startdate == "" {
 				continue
 			}
+			// 리소스를 추가한다. 간트챠트를 그리기 위해서 필요하다.
+			resource := FullCalendarResource{}
+			resource.ID = item.ID + task
+			resource.Title = task
+			resource.ResourceGroup = item.Name
+			resources = append(resources, resource)
+
 			taskEvent := FullCalendarEvent{}
 			taskEvent.AllDay = true
 			taskEvent.Editable = true
@@ -54,7 +61,8 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.EndEditable = true
 			taskEvent.DurationEditable = true
 			taskEvent.ResourceEditable = false
-			taskEvent.Title = fmt.Sprintf("%s - %s", task, item.Name)
+			taskEvent.ID = item.ID
+			taskEvent.Title = task + " - " + item.Name
 			if value.Startdate == "" {
 				taskEvent.Start = value.Date // 작업마감일을 시작일로 설정한다.
 			} else {
@@ -79,9 +87,11 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.ExtendedProps.TaskPreDeadline = value.Predate // 1차마감일
 			taskEvent.ExtendedProps.TaskStartDate = value.Startdate // 작업시작일
 			taskEvent.ExtendedProps.Key = "tasks"
-			taskEvent.ResourceId = item.Name
+			taskEvent.ResourceId = item.ID + task
 			events = append(events, taskEvent)
 		}
+		// PM이 설정한 마감일로 Event를 만들어서 날짜 이벤트를 만들어야 한다.
+
 	}
 	return events, resources, nil
 }
