@@ -56,11 +56,10 @@ func queueingScanPlateItem(jobs chan<- ScanPlate) {
 		scanPlate, err := GetWaitProcessStatusScanPlate() // 이 함수로 반환되는 아이템은 리뷰 아이템은 상태가 queued가 된 리뷰 아이템이다.
 		if err != nil {
 			// 가지고 올 문서가 없다면 기다렸다가 continue.
-			if err == mongo.ErrNoDocuments {
+			if err != mongo.ErrNoDocuments {
 				if *flagDebug {
 					log.Println(err)
 				}
-				continue
 			}
 			continue
 		}
