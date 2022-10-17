@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -431,7 +432,7 @@ func handleAPIOcioColorspace(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-func handleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
+func postHandleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -481,6 +482,62 @@ func handleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
 	}
 	// Json 값 출력
 	data, err := json.Marshal(scan)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func deleteHandleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, accessLevel, err := TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if accessLevel != AdminAccessLevel {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		http.Error(w, "need id", http.StatusBadRequest)
+		return
+	}
+	// 어떠한 데이터가 삭제되었는지 확인하기 위해서 구한다.
+	s, err := getScanPlate(client, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = rmScanPlate(client, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	data, err := json.Marshal(s)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

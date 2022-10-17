@@ -13,6 +13,7 @@ import (
 
 func addScanPlate(client *mongo.Client, s ScanPlate) error {
 	s.ProcessStatus = "wait"
+	s.CreateTime = time.Now().Format(time.RFC3339)
 	collection := client.Database("OpenPipelineIO").Collection("scanplate")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

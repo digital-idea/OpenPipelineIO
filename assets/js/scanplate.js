@@ -1,4 +1,38 @@
-document.getElementById("scanplateuploadzone").style.display = "none"
+var scanplateUploadZone = document.getElementById("scanplateuploadzone")
+if(scanplateUploadZone){
+    scanplateUploadZone.style.display = "none"
+}
+
+
+function setRmScanPlateModal(id) {
+    document.getElementById("modal-rmscanplate-id").value = id
+}
+
+function rmscanplate() {
+    let id = document.getElementById("modal-rmscanplate-id").value
+    fetch("/api/scanplate/" + id, {
+        method: 'DELETE',
+        headers: {
+            "Authorization": "Basic "+ document.getElementById("token").value,
+        },
+    })
+    .then((response) => {
+        if (!response.ok) {
+            response.text().then(function (text) {
+                tata.error('Error', text, {position: 'tr',duration: 5000,onClose: null})
+                return
+            });
+        }
+        return response.json()
+    })
+    .then((data) => {
+        document.getElementById(data.id).remove();
+        tata.success('Delete', data.id, {position: 'tr',duration: 5000,onClose: null})
+    })
+    .catch((err) => {
+        console.log(err)
+    });
+}
 
 function checkUploadMethod() {
     if (document.getElementById("uploadmethod").checked) {

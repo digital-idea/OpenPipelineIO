@@ -9,49 +9,54 @@
         <h2 class="text-center text-muted">Process ScanPlate</h2>
     </div>
     {{range .ProcessingScanPlates}}
-        <div class="row">
-            <div class="col-3 text-muted">
-                {{.ID.Hex}}
-                <img src="/assets/img/delete.svg" class="finger" data-bs-toggle="modal" data-bs-target="#modal-rmscanplate" onclick="setRmScanPlateModal('{{.ID.Hex}}')">
+        <div id="{{.ID.Hex}}">
+            <div class="row">
+                <div class="col-3 text-muted">
+                    {{.ID.Hex}}
+                    <img src="/assets/img/delete.svg" class="finger" data-bs-toggle="modal" data-bs-target="#modal-rmscanplate" onclick="setRmScanPlateModal('{{.ID.Hex}}')">
+                </div>
+                <div class="col-1 text-muted">
+                    {{.Ext}}
+                </div>
+                <div class="col-1 text-muted">
+                    {{.Project}}
+                </div>
+                <div class="col-1 text-muted">
+                    {{.Name}}
+                </div>
+                <div class="col-1 text-muted">
+                    {{.Type}}
+                </div>
+                <div class="col-4 text-muted">
+                    {{.InColorspace}} > {{.OutColorspace}}
+                </div>
+                <div class="col-1 text-muted">
+                    {{if eq .ProcessStatus "processing"}}
+                        <span class="badge bg-success">processing</span>
+                    {{else if eq .ProcessStatus "wait"}}
+                        <span class="badge bg-warning text-dark">wait</span>
+                    {{else if eq .ProcessStatus "error"}}
+                        <span class="badge bg-danger">error</span>
+                    {{else}}
+                        <span class="badge bg-secondary">done</span>
+                    {{end}}
+                </div>
             </div>
-            <div class="col-1 text-muted">
-                {{.Ext}}
+            <div class="row">
+                <div class="col text-muted">
+                    {{.CreateTime}}
+                </div>
+                <div class="col text-muted">
+                    {{.Error}}
+                </div>
+                <div class="col text-muted">
+                    {{range .Logs}}
+                        {{.}}
+                    {{end}}
+                </div>
             </div>
-            <div class="col-1 text-muted">
-                {{.Project}}
-            </div>
-            <div class="col-1 text-muted">
-                {{.Name}}
-            </div>
-            <div class="col-1 text-muted">
-                {{.Type}}
-            </div>
-            <div class="col-4 text-muted">
-                {{.InColorspace}} > {{.OutColorspace}}
-            </div>
-            <div class="col-1 text-muted">
-                {{if eq .ProcessStatus "processing"}}
-                    <span class="badge bg-success">processing</span>
-                {{else if eq .ProcessStatus "wait"}}
-                    <span class="badge bg-warning text-dark">wait</span>
-                {{else if eq .ProcessStatus "error"}}
-                    <span class="badge bg-danger">error</span>
-                {{else}}
-                    <span class="badge bg-secondary">done</span>
-                {{end}}
-            </div>
+            <hr class="my-1 p-0 m-0 divider">
         </div>
-        <div class="row">
-            <div class="col text-muted">
-                {{.Error}}
-            </div>
-            <div class="col text-muted">
-                {{range .Logs}}
-                    {{.}}
-                {{end}}
-            </div>
-        </div>
-        <hr class="my-1 p-0 m-0 divider">
     {{end}}
 </div>
 
@@ -59,6 +64,6 @@
 </body>
 <script src="/assets/bootstrap-5.0.2/js/bootstrap.min.js"></script>
 <script src="/assets/tata/tata.js"></script>
-
+<script src="/assets/js/scanplate.js"></script>
 </html>
 {{end}}
