@@ -36,8 +36,12 @@ func ProcessScanPlateRender() {
 func workerScanPlate(jobs <-chan ScanPlate) {
 	for job := range jobs {
 		// job은 리뷰타입이다.
-		switch job.Type {
-		case "image":
+		switch job.Ext {
+		case ".jpg", ".png":
+			processingScanPlateImageItem(job)
+		case ".exr", ".dpx":
+			processingScanPlateImageItem(job)
+		case ".mov":
 			processingScanPlateImageItem(job)
 		default:
 			processingScanPlateImageItem(job)
@@ -322,6 +326,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 	resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
 	err = imaging.Save(resizedImage, thumbnailImagePath.String())
+	fmt.Println(err)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {

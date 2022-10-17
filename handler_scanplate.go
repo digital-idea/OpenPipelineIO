@@ -102,6 +102,93 @@ func handleScanPlate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleProcess(w http.ResponseWriter, r *http.Request) {
+	ssid, err := GetSessionID(r)
+	if err != nil {
+		http.Redirect(w, r, "/signin", http.StatusSeeOther)
+		return
+	}
+	if ssid.AccessLevel == 0 {
+		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
+		return
+	}
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	type recipe struct {
+		User
+		SearchOption
+		Setting              Setting
+		Pipelinesteps        []Pipelinestep
+		Projectlist          []string
+		TasksettingNames     []string
+		Stages               []Stage
+		Status               []Status
+		ProcessingScanPlates []ScanPlate
+	}
+	rcp := recipe{}
+	rcp.Projectlist, err = ProjectlistV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.TasksettingNames, err = TaskSettingNamesV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Status, err = AllStatusV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Stages, err = AllStagesV2(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.User, err = getUserV2(client, ssid.ID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Pipelinesteps, err = allPipelinesteps(client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	rcp.Setting = CachedAdminSetting
+	//rcp.ProcessingScanPlates, err = GetUnDoneScanPlate(client)
+	rcp.ProcessingScanPlates, err = allScanPlate(client)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = TEMPLATES.ExecuteTemplate(w, "process", rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleUploadScanPlate(w http.ResponseWriter, r *http.Request) {
 	ssid, err := GetSessionID(r)
 	if err != nil {
@@ -386,7 +473,6 @@ func handleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	scan.ID = primitive.NewObjectID()
-	scan.ProcessStatus = "wait"
 	// 스캔플레이트를 등록합니다.
 	err = addScanPlate(client, scan)
 	if err != nil {
@@ -395,6 +481,66 @@ func handleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
 	}
 	// Json 값 출력
 	data, err := json.Marshal(scan)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+func handleAPIScanPlates(w http.ResponseWriter, r *http.Request) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	err = client.Connect(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(ctx)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// token 체크
+	_, _, err = TokenHandlerV2(r, client)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	scans := []ScanPlate{}
+	var unmarshalErr *json.UnmarshalTypeError
+
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&scans)
+	if err != nil {
+		if errors.As(err, &unmarshalErr) {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+	}
+	for _, scan := range scans {
+		scan.ID = primitive.NewObjectID()
+		err = addScanPlate(client, scan)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// Json 값 출력
+	data, err := json.Marshal(scans)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
