@@ -5,6 +5,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 type ScanPlate struct {
 	// 사용자 입력값
 	ID                 primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	CreateTime         string             `json:"createtime" bson:"createtime"`                 // CreateTime
 	ProcessStatus      string             `json:"processstatus" bson:"processstatus"`           // 연산상태
 	InColorspace       string             `json:"incolorspace" bson:"incolorspace"`             // 시퀀스의 IN 컬러스페이스
 	OutColorspace      string             `json:"outcolorspace" bson:"outcolorspace"`           // 시퀀스의 OUT 컬러스페이스

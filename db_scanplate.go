@@ -12,6 +12,8 @@ import (
 )
 
 func addScanPlate(client *mongo.Client, s ScanPlate) error {
+	s.ProcessStatus = "wait"
+	s.CreateTime = time.Now().Format(time.RFC3339)
 	collection := client.Database("OpenPipelineIO").Collection("scanplate")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -92,7 +94,9 @@ func allScanPlate(client *mongo.Client) ([]ScanPlate, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	var results []ScanPlate
-	cursor, err := collection.Find(ctx, bson.D{})
+	opts := options.Find()
+	opts.SetSort(bson.M{"name": 1})
+	cursor, err := collection.Find(ctx, bson.D{}, opts)
 	if err != nil {
 		return results, err
 	}
@@ -154,4 +158,23 @@ func GetWaitProcessStatusScanPlate() (ScanPlate, error) {
 		return result, err
 	}
 	return result, nil
+}
+
+func GetUnDoneScanPlate(client *mongo.Client) ([]ScanPlate, error) {
+	var results []ScanPlate
+	collection := client.Database("OpenPipelineIO").Collection("scanplate")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	filter := bson.M{"status": bson.M{"$ne": "done"}} // done이 아닌 리스트를 가지고 온다.
+	opts := options.Find()
+	opts.SetSort(bson.M{"name": 1})
+	cursor, err := collection.Find(ctx, filter, opts)
+	if err != nil {
+		return results, err
+	}
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return results, err
+	}
+	return results, nil
 }

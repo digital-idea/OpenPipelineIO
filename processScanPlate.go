@@ -36,8 +36,12 @@ func ProcessScanPlateRender() {
 func workerScanPlate(jobs <-chan ScanPlate) {
 	for job := range jobs {
 		// job은 리뷰타입이다.
-		switch job.Type {
-		case "image":
+		switch job.Ext {
+		case ".jpg", ".png":
+			processingScanPlateImageItem(job)
+		case ".exr", ".dpx":
+			processingScanPlateImageItem(job)
+		case ".mov":
 			processingScanPlateImageItem(job)
 		default:
 			processingScanPlateImageItem(job)
@@ -49,18 +53,17 @@ func workerScanPlate(jobs <-chan ScanPlate) {
 func queueingScanPlateItem(jobs chan<- ScanPlate) {
 	for {
 		if *flagDebug {
-			fmt.Println("wait 10 sec before scanplate process")
+			fmt.Printf("wait %d sec before scanplate process\n", *flagProcessDuration)
 		}
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * time.Duration(*flagProcessDuration))
 		// ProcessStatus가 wait인 item을 가져온다.
 		scanPlate, err := GetWaitProcessStatusScanPlate() // 이 함수로 반환되는 아이템은 리뷰 아이템은 상태가 queued가 된 리뷰 아이템이다.
 		if err != nil {
 			// 가지고 올 문서가 없다면 기다렸다가 continue.
-			if err == mongo.ErrNoDocuments {
+			if err != mongo.ErrNoDocuments {
 				if *flagDebug {
 					log.Println(err)
 				}
-				continue
 			}
 			continue
 		}
@@ -323,6 +326,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 	resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
 	err = imaging.Save(resizedImage, thumbnailImagePath.String())
+	fmt.Println(err)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {

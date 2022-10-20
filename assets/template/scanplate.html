@@ -432,32 +432,33 @@
                 sources[i].renderwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
                 sources[i].renderheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
             }
-            // process
-            fetch('/api/scanplate', {
-                method: 'POST',
-                headers: {
-                    "Authorization": "Basic "+ token,
-                },
-                body: JSON.stringify(sources[i]),
-            })
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error(response.statusText + " - " + response.url);
-                }
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data)
-                let button = document.getElementById("submitScanPlate")
-                button.disabled = true
-                button.classList.remove("btn-outline-warning");
-                button.classList.add("btn-outline-secondary");
-            })
-            .catch((err) => {
-                alert(err)
-            });
-            
         }
+        // process할 scanplate를 대량전송합니다.
+        fetch('/api/scanplates', {
+            method: 'POST',
+            headers: {
+                "Authorization": "Basic "+ token,
+            },
+            body: JSON.stringify(sources),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText + " - " + response.url);
+            }
+            return response.json()
+        })
+        .then((data) => {
+            // 전송버튼 차단
+            let button = document.getElementById("submitScanPlate")
+            button.disabled = true
+            button.classList.remove("btn-outline-warning");
+            button.classList.add("btn-outline-secondary");
+        })
+        .catch((err) => {
+            alert(err)
+        });
+        
+        
         // Toast 띄우기
         tata.success('Submit Process', sources.length + " items have been sent.", {
             position: 'tr',
