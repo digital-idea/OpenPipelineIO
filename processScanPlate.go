@@ -231,7 +231,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		t := Task{
 			Title:        task.Name,
-			Status:       ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			Status:       ASSIGN, // legacy, 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다.
 			StatusV2:     initStatusID,
 			Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 		}
@@ -328,7 +328,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 	resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
 	err = imaging.Save(resizedImage, thumbnailImagePath.String())
-	fmt.Println(err)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {
@@ -346,5 +345,4 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		return
 	}
-	return
 }
