@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"html/template"
@@ -319,6 +321,153 @@ func imageSize(path string) (int, int, error) {
 		return 0, 0, err
 	}
 	return im.Width, im.Height, nil
+}
+
+// inputdeviceDpx 함수는 dpx파일경로를 입력받아서 input device name metadata 값을 반환한다.
+func inputdeviceDpx(path string) (string, error) {
+	if strings.ToLower(filepath.Ext(path)) != ".dpx" {
+		return "", errors.New("확장자가 dpx가 아닙니다.")
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	buffer := bufio.NewReader(f)
+	// dpx파일의 최초 4바이트를 읽어온다.
+	c := make([]byte, 4) // 4자리의 바이트설정.
+	_, err = buffer.Read(c)
+	if err != nil {
+		return "", err
+	}
+	if !(string(c) == "SDPX" || string(c) == "XPDS") {
+		return "", errors.New("파일구조가 DPX 형태가 아닙니다.")
+	}
+	// input device name 을 구하려면 1556 바이트로 이동해야한다.
+	_, err = buffer.Discard(1556 - len(c)) // magicNum을 읽었기 때문에 그 길이만큼 뺀다.
+	if err != nil {
+		return "", err
+	}
+	c = make([]byte, 32) // input device name은 32바이트 ASCII 로 구성되어있다.
+	_, err = buffer.Read(c)
+	if err != nil {
+		return "", err
+	}
+	// input device name값은 big/little endian과 상관없다.
+	str := []byte{}
+	for _, r := range c {
+		if r == 0 {
+			break
+		}
+		str = append(str, r)
+	}
+	return string(str), nil
+}
+
+// imagesizeDpx 함수는 dpx파일경로를 입력받아서 x,y 픽셀수를 반환한다.
+func imagesizeDpx(path string) (uint32, uint32, error) {
+	// dpx파일의 x,y값을 구하기 위해서는..
+	// 772바이트(x), 776바이트(y) 에서 사이즈를 읽으면 된다.
+	if strings.ToLower(filepath.Ext(path)) != ".dpx" {
+		return 0, 0, errors.New("확장자가 dpx가 아닙니다.")
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return 0, 0, err
+	}
+	defer f.Close()
+	buffer := bufio.NewReader(f)
+	// dpx파일의 최초 4바이트를 읽어온다.
+	c := make([]byte, 4) // 4자리의 바이트설정.
+	_, err = buffer.Read(c)
+	if err != nil {
+		return 0, 0, err
+	}
+	if !(string(c) == "SDPX" || string(c) == "XPDS") {
+		return 0, 0, errors.New("파일구조가 DPX 형태가 아닙니다.")
+	}
+	magicNum := string(c)
+	var w uint32
+	var h uint32
+	// X값 구하기.
+	// DPX x값 영역으로 이동한다.
+	// magicNum을 읽었기 때문에 그 길이만큼 뺀다.
+	_, err = buffer.Discard(772 - len(c))
+	if err != nil {
+		return 0, 0, err
+	}
+	_, err = buffer.Read(c)
+	if err != nil {
+		return 0, 0, err
+	}
+	if magicNum == "SDPX" {
+		w = binary.BigEndian.Uint32(c)
+	} else {
+		w = binary.LittleEndian.Uint32(c)
+	}
+	// Y값 구하기.
+	_, err = buffer.Read(c) // 다음 4바이트를 읽는다.
+	if err != nil {
+		return 0, 0, err
+	}
+	if magicNum == "SDPX" {
+		h = binary.BigEndian.Uint32(c)
+	} else {
+		h = binary.LittleEndian.Uint32(c)
+	}
+	return w, h, nil
+}
+
+// timecodeDpx는 dpx파일경로를 받아서 타임코드를 반환한다.
+// 타임코드검색어가 파일에 들어있다면 실제 타임코드와 nil을 반환한다.
+func timecodeDpx(path string) (string, error) {
+	if strings.ToLower(filepath.Ext(path)) != ".dpx" {
+		return "", errors.New("확장자가 dpx가 아닙니다.")
+	}
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	buffer := bufio.NewReader(f)
+	if err != nil {
+		return "", err
+	}
+	// dpx파일의 최초 4바이트를 읽어온다.
+	c := make([]byte, 4) // 4자리의 바이트설정.
+	_, err = buffer.Read(c)
+	if err != nil {
+		return "", err
+	}
+	if !(string(c) == "SDPX" || string(c) == "XPDS") {
+		return "", errors.New("파일구조가 DPX 형태가 아닙니다.")
+	}
+	magicNum := string(c)
+	// Television Area timecode 영역인 1920 바이트로 이동한다.
+	_, err = buffer.Discard(1920 - len(c))
+	if err != nil {
+		return "", err
+	}
+	_, err = buffer.Read(c)
+	if err != nil {
+		return "", err
+	}
+	var timecodeUint32 uint32
+	if magicNum == "SDPX" {
+		timecodeUint32 = binary.BigEndian.Uint32(c)
+	} else {
+		timecodeUint32 = binary.LittleEndian.Uint32(c)
+	}
+	timecode := fmt.Sprintf("%08x", timecodeUint32)
+	return addColons(timecode), nil
+}
+
+// addColons 함수는 타임코드를 받아서 읽기편하도록 콜론을 넣어준다.
+func addColons(timecode string) string {
+	if len(timecode) == 8 {
+		return fmt.Sprintf("%s:%s:%s:%s", timecode[0:2], timecode[2:4], timecode[4:6], timecode[6:8])
+	}
+	return timecode
 }
 
 func imageSizeFromIinfo(path string) (int, int, error) {
