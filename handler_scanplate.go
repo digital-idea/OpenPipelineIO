@@ -175,8 +175,8 @@ func handleProcess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.Setting = CachedAdminSetting
-	//rcp.ProcessingScanPlates, err = GetUnDoneScanPlate(client)
-	rcp.ProcessingScanPlates, err = allScanPlate(client)
+	rcp.ProcessingScanPlates, err = GetUnDoneScanPlate(client)
+	//rcp.ProcessingScanPlates, err = allScanPlate(client)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

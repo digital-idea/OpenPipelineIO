@@ -192,8 +192,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	item.Thummov = thumbnailMovPath.String()
 
 	// 플레이트 경로를 설정합니다.
-	var platePath bytes.Buffer
-	platePathTmpl, err := template.New("platePath").Parse(CachedAdminSetting.PlatePath)
+	item.Platepath, err = PlatePath(item)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {
@@ -201,15 +200,18 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		return
 	}
-	err = platePathTmpl.Execute(&platePath, item)
-	if err != nil {
-		err = SetScanPlateErrStatus(client, scanID, err.Error())
+
+	// 플레이트 경로를 생성합니다.
+	if scan.GenPlatePath {
+		err = GenPlatePath(item.Platepath)
 		if err != nil {
-			log.Println(err)
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
-		return
 	}
-	item.Platepath = platePath.String()
 
 	// Task 셋팅
 	tasks, err := AllTaskSettingsV2(client)
@@ -229,7 +231,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		t := Task{
 			Title:        task.Name,
-			Status:       ASSIGN, // 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다. // legacy
+			Status:       ASSIGN, // legacy, 샷의 경우 합성팀을 무조건 거쳐야 한다. Assign상태로 만든다.
 			StatusV2:     initStatusID,
 			Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
 		}
@@ -326,7 +328,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 	resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
 	err = imaging.Save(resizedImage, thumbnailImagePath.String())
-	fmt.Println(err)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {
@@ -344,5 +345,4 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		return
 	}
-	return
 }
