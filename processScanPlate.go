@@ -53,9 +53,9 @@ func workerScanPlate(jobs <-chan ScanPlate) {
 func queueingScanPlateItem(jobs chan<- ScanPlate) {
 	for {
 		if *flagDebug {
-			fmt.Println("wait 10 sec before scanplate process")
+			fmt.Printf("wait %d sec before scanplate process\n", *flagProcessDuration)
 		}
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * time.Duration(*flagProcessDuration))
 		// ProcessStatus가 wait인 item을 가져온다.
 		scanPlate, err := GetWaitProcessStatusScanPlate() // 이 함수로 반환되는 아이템은 리뷰 아이템은 상태가 queued가 된 리뷰 아이템이다.
 		if err != nil {

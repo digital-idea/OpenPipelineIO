@@ -62,6 +62,7 @@ var (
 	// Process
 	flagProcessBufferSize = flag.Int("processbuffersize", 100, "process buffer size") // 최대 대기 리스트
 	flagMaxProcessNum     = flag.Int("maxprocessnum", 4, "max process number")        // 최대 연산 갯수
+	flagProcessDuration   = flag.Int64("processduration", 10, "process duration")
 	flagReviewRender      = flag.Bool("reviewrender", false, "리뷰 렌더링을 허용하는 옵션")
 	flagScanPlateRender   = flag.Bool("scanplaterender", false, "ScanPlate 렌더링을 허용하는 옵션")
 
