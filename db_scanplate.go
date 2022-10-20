@@ -94,7 +94,9 @@ func allScanPlate(client *mongo.Client) ([]ScanPlate, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	var results []ScanPlate
-	cursor, err := collection.Find(ctx, bson.D{})
+	opts := options.Find()
+	opts.SetSort(bson.M{"name": 1})
+	cursor, err := collection.Find(ctx, bson.D{}, opts)
 	if err != nil {
 		return results, err
 	}
@@ -164,7 +166,9 @@ func GetUnDoneScanPlate(client *mongo.Client) ([]ScanPlate, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	filter := bson.M{"status": bson.M{"$ne": "done"}} // done이 아닌 리스트를 가지고 온다.
-	cursor, err := collection.Find(ctx, filter)
+	opts := options.Find()
+	opts.SetSort(bson.M{"name": 1})
+	cursor, err := collection.Find(ctx, filter, opts)
 	if err != nil {
 		return results, err
 	}

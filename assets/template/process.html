@@ -11,45 +11,45 @@
     {{range .ProcessingScanPlates}}
         <div id="{{.ID.Hex}}">
             <div class="row">
-                <div class="col-3 text-muted">
+                <div class="col-sm-6 col-md-6 col-lg-3 col-xl-3 text-muted">
                     {{.ID.Hex}}
                     <img src="/assets/img/delete.svg" class="finger" data-bs-toggle="modal" data-bs-target="#modal-rmscanplate" onclick="setRmScanPlateModal('{{.ID.Hex}}')">
                 </div>
-                <div class="col-1 text-muted">
+                <div class="col-sm-2 col-md-2 col-lg-1 col-xl-1 text-muted">
                     {{.Ext}}
                 </div>
-                <div class="col-1 text-muted">
+                <div class="col-sm-2 col-md-2 col-lg-1 col-xl-1 text-muted">
                     {{.Project}}
                 </div>
-                <div class="col-1 text-muted">
+                <div class="col-sm-2 col-md-2 col-lg-1 col-xl-1 text-muted">
                     {{.Name}}
                 </div>
-                <div class="col-1 text-muted">
+                <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1 text-muted">
                     {{.Type}}
                 </div>
-                <div class="col-4 text-muted">
+                <div class="col-sm-9 col-md-9 col-lg-4 col-xl-4 text-muted">
                     {{.InColorspace}} > {{.OutColorspace}}
                 </div>
-                <div class="col-1 text-muted">
+                <div class="col-sm-2 col-md-2 col-lg-1 col-xl-1 text-muted" id="processstatus-{{.ID.Hex}}">
                     {{if eq .ProcessStatus "processing"}}
-                        <span class="badge bg-success">processing</span>
+                        <span class="badge bg-success finger" data-bs-toggle="modal" data-bs-target="#modal-scanplateprocessstatus" onclick="SetScanPlateProcessStatusModal('{{.ID.Hex}}', 'processing')">processing</span>
                     {{else if eq .ProcessStatus "wait"}}
-                        <span class="badge bg-warning text-dark">wait</span>
+                        <span class="badge bg-warning text-dark finger" data-bs-toggle="modal" data-bs-target="#modal-scanplateprocessstatus" onclick="SetScanPlateProcessStatusModal('{{.ID.Hex}}', 'wait')">wait</span>
                     {{else if eq .ProcessStatus "error"}}
-                        <span class="badge bg-danger">error</span>
+                        <span class="badge bg-danger finger" data-bs-toggle="modal" data-bs-target="#modal-scanplateprocessstatus" onclick="SetScanPlateProcessStatusModal('{{.ID.Hex}}', 'error')">error</span>
                     {{else}}
-                        <span class="badge bg-secondary">done</span>
+                        <span class="badge bg-secondary finger" data-bs-toggle="modal" data-bs-target="#modal-scanplateprocessstatus" onclick="SetScanPlateProcessStatusModal('{{.ID.Hex}}', 'done')">done</span>
                     {{end}}
                 </div>
             </div>
             <div class="row">
-                <div class="col text-muted">
+                <div class="col-sm-6 col-md-6 col-lg-1 col-xl-1 text-muted">
                     {{.CreateTime}}
                 </div>
-                <div class="col text-muted">
+                <div class="col-sm-3 col-md-6 col-lg-1 col-xl-1 text-muted">
                     {{.Error}}
                 </div>
-                <div class="col text-muted">
+                <div class="col-sm-3 col-md-6 col-lg-1 col-xl-1 text-muted">
                     {{range .Logs}}
                         {{.}}
                     {{end}}
