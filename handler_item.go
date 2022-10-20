@@ -10,14 +10,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 	"unicode"
 
 	"github.com/digital-idea/dipath"
 	"github.com/disintegration/imaging"
-	"golang.org/x/sys/unix"
 	"gopkg.in/mgo.v2"
 )
 
@@ -674,162 +672,41 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		// 폴더 생성 옵션을 체크하면 폴더를 생성한다.
 		if mkdir {
-			var shotRootPath bytes.Buffer
-			var seqPath bytes.Buffer
-			var shotPath bytes.Buffer
-			shotRootPathTmpl, err := template.New("shotRootPath").Parse(admin.ShotRootPath)
+			shotRootPath, err := ShotRootPath(i)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
 			}
-			err = shotRootPathTmpl.Execute(&shotRootPath, i)
+			err = GenShotRootPath(shotRootPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
 			}
-			seqPathTmpl, err := template.New("seqPath").Parse(admin.SeqPath)
+			seqPath, err := SeqPath(i)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
 			}
-			err = seqPathTmpl.Execute(&seqPath, i)
+			err = GenSeqPath(seqPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
 			}
-			shotPathTmpl, err := template.New("shotPath").Parse(admin.ShotPath)
+			shotPath, err := ShotPath(i)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
 			}
-			err = shotPathTmpl.Execute(&shotPath, i)
+			err = GenShotPath(shotPath)
 			if err != nil {
 				s.Error = err.Error()
 				fails = append(fails, s)
 				continue
-			}
-			// Umask를 셋팅한다.
-			if admin.Umask == "" {
-				unix.Umask(0)
-			} else {
-				umask, err := strconv.Atoi(admin.Umask)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				unix.Umask(umask)
-			}
-			// ShotRootPath를 점검하고 없다면 경로를 생성한다.
-			if _, err := os.Stat(shotRootPath.String()); os.IsNotExist(err) {
-				per, err := strconv.ParseInt(admin.ShotRootPathPermission, 8, 64)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				err = os.MkdirAll(shotRootPath.String(), os.FileMode(per))
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-				if admin.ShotRootPathUID != "" && admin.ShotRootPathGID != "" {
-					uid, err := strconv.Atoi(admin.ShotRootPathUID)
-					if err != nil {
-						s.Error = err.Error()
-						fails = append(fails, s)
-						continue
-					}
-					gid, err := strconv.Atoi(admin.ShotRootPathGID)
-					if err != nil {
-						s.Error = err.Error()
-						fails = append(fails, s)
-						continue
-					}
-					err = os.Chown(shotRootPath.String(), uid, gid)
-					if err != nil {
-						s.Error = err.Error()
-						fails = append(fails, s)
-						continue
-					}
-				}
-			}
-			// 개별 샷 경로를 생성한다.
-			per, err := strconv.ParseInt(admin.ShotPathPermission, 8, 64)
-			if err != nil {
-				s.Error = err.Error()
-				fails = append(fails, s)
-				continue
-			}
-			err = os.MkdirAll(shotPath.String(), os.FileMode(per))
-			if err != nil {
-				s.Error = err.Error()
-				fails = append(fails, s)
-				continue
-			}
-			// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-			if admin.ShotPathUID != "" && admin.ShotPathGID != "" {
-				uid, err := strconv.Atoi(admin.ShotPathUID)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				gid, err := strconv.Atoi(admin.ShotPathGID)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				err = os.Chown(shotPath.String(), uid, gid)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-			}
-			// Seq 경로의 Permission을 설정한다.
-			if admin.SeqPathPermission != "" {
-				per, err := strconv.ParseInt(admin.SeqPathPermission, 8, 64)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				err = os.Chmod(seqPath.String(), os.FileMode(per))
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-			}
-			// Seq 경로의 UID, GID를 설정한다.
-			if admin.SeqPathUID != "" && admin.SeqPathGID != "" {
-				uid, err := strconv.Atoi(admin.SeqPathUID)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				gid, err := strconv.Atoi(admin.SeqPathGID)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
-				err = os.Chown(seqPath.String(), uid, gid)
-				if err != nil {
-					s.Error = err.Error()
-					fails = append(fails, s)
-					continue
-				}
 			}
 		}
 		success = append(success, s)
@@ -1030,168 +907,43 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		}
 		// 폴더 생성 옵션을 체크하면 폴더를 생성한다.
 		if mkdir {
-			adminSetting, err := GetAdminSetting(session)
+			assetRootPath, err := AssetRootPath(i)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
 			}
-			var assetRootPath bytes.Buffer
-			var assetTypePath bytes.Buffer
-			var assetPath bytes.Buffer
-			assetRootPathTmpl, err := template.New("assetRootPath").Parse(adminSetting.AssetRootPath)
+			err = GenAssetRootPath(assetRootPath)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
 			}
-			err = assetRootPathTmpl.Execute(&assetRootPath, i)
+
+			assetTypePath, err := AssetTypePath(i)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
 			}
-			AssetTypePathTmpl, err := template.New("assetTypePath").Parse(adminSetting.AssetTypePath)
+			err = GenAssetTypePath(assetTypePath)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
 			}
-			err = AssetTypePathTmpl.Execute(&assetTypePath, i)
+
+			assetPath, err := AssetPath(i)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
 			}
-			assetPathTmpl, err := template.New("assetPath").Parse(adminSetting.AssetPath)
+			err = GenAssetPath(assetPath)
 			if err != nil {
 				a.Error = err.Error()
 				fails = append(fails, a)
 				continue
-			}
-			err = assetPathTmpl.Execute(&assetPath, i)
-			if err != nil {
-				a.Error = err.Error()
-				fails = append(fails, a)
-				continue
-			}
-			// Umask를 셋팅한다.
-			if adminSetting.Umask == "" {
-				unix.Umask(0)
-			} else {
-				umask, err := strconv.Atoi(adminSetting.Umask)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				unix.Umask(umask)
-			}
-			// ShotRootPath를 점검하고 없다면 경로를 생성한다.
-			if _, err := os.Stat(assetRootPath.String()); os.IsNotExist(err) {
-				per, err := strconv.ParseInt(adminSetting.AssetRootPathPermission, 8, 64)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				err = os.MkdirAll(assetRootPath.String(), os.FileMode(per))
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-				if adminSetting.AssetRootPathUID != "" && adminSetting.AssetRootPathGID != "" {
-					uid, err := strconv.Atoi(adminSetting.AssetRootPathUID)
-					if err != nil {
-						a.Error = err.Error()
-						fails = append(fails, a)
-						continue
-					}
-					gid, err := strconv.Atoi(adminSetting.AssetRootPathGID)
-					if err != nil {
-						a.Error = err.Error()
-						fails = append(fails, a)
-						continue
-					}
-					err = os.Chown(assetRootPath.String(), uid, gid)
-					if err != nil {
-						a.Error = err.Error()
-						fails = append(fails, a)
-						continue
-					}
-				}
-			}
-			// 개별 샷 경로를 생성한다.
-			per, err := strconv.ParseInt(adminSetting.AssetPathPermission, 8, 64)
-			if err != nil {
-				a.Error = err.Error()
-				fails = append(fails, a)
-				continue
-			}
-			err = os.MkdirAll(assetPath.String(), os.FileMode(per))
-			if err != nil {
-				a.Error = err.Error()
-				fails = append(fails, a)
-				continue
-			}
-			// admin 셋팅에 UID와 GID가 선언되어 있다면, 설정을 해줍니다.
-			if adminSetting.AssetPathUID != "" && adminSetting.AssetPathGID != "" {
-				uid, err := strconv.Atoi(adminSetting.AssetPathUID)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				gid, err := strconv.Atoi(adminSetting.AssetPathGID)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				err = os.Chown(assetPath.String(), uid, gid)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-			}
-			// AssetType 경로의 Permission을 설정한다.
-			if adminSetting.AssetTypePathPermission != "" {
-				per, err := strconv.ParseInt(adminSetting.AssetTypePathPermission, 8, 64)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				err = os.Chmod(assetTypePath.String(), os.FileMode(per))
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-			}
-			// Seq 경로의 UID, GID를 설정한다.
-			if adminSetting.AssetTypePathUID != "" && adminSetting.AssetTypePathGID != "" {
-				uid, err := strconv.Atoi(adminSetting.AssetTypePathUID)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				gid, err := strconv.Atoi(adminSetting.AssetTypePathGID)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
-				err = os.Chown(assetTypePath.String(), uid, gid)
-				if err != nil {
-					a.Error = err.Error()
-					fails = append(fails, a)
-					continue
-				}
 			}
 		}
 		success = append(success, a)

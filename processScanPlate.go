@@ -192,8 +192,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	item.Thummov = thumbnailMovPath.String()
 
 	// 플레이트 경로를 설정합니다.
-	var platePath bytes.Buffer
-	platePathTmpl, err := template.New("platePath").Parse(CachedAdminSetting.PlatePath)
+	item.Platepath, err = PlatePath(item)
 	if err != nil {
 		err = SetScanPlateErrStatus(client, scanID, err.Error())
 		if err != nil {
@@ -201,15 +200,18 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		return
 	}
-	err = platePathTmpl.Execute(&platePath, item)
-	if err != nil {
-		err = SetScanPlateErrStatus(client, scanID, err.Error())
+
+	// 플레이트 경로를 생성합니다.
+	if scan.GenPlatePath {
+		err = GenPlatePath(item.Platepath)
 		if err != nil {
-			log.Println(err)
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
-		return
 	}
-	item.Platepath = platePath.String()
 
 	// Task 셋팅
 	tasks, err := AllTaskSettingsV2(client)

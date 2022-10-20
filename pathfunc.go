@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"html/template"
 	"image"
 	"io/ioutil"
 	"log"
@@ -12,6 +14,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"golang.org/x/sys/unix"
 )
 
 // userTemppath 함수는 id를 받아서 각 유저별 Temp 경로를 생성 반환한다.
@@ -390,4 +394,378 @@ func timecodeFromIinfo(path string) (string, error) {
 	}
 	timecode := results[1]
 	return timecode, nil
+}
+
+func PlatePath(item Item) (string, error) {
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.PlatePath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func ShotRootPath(item Item) (string, error) {
+	// /Users/woong/show/{{.Project}}/seq
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.ShotRootPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func ShotPath(item Item) (string, error) {
+	// /Users/woong/show/{{.Project}}/seq
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.ShotPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func SeqPath(item Item) (string, error) {
+	// /Users/woong/show/{{.Project}}/seq
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.SeqPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func AssetRootPath(item Item) (string, error) {
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.AssetRootPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func AssetTypePath(item Item) (string, error) {
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.AssetTypePath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func AssetPath(item Item) (string, error) {
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.AssetPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
+func GenPlatePath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.PlatePathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.PlatePathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.PlatePathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenShotRootPath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.ShotRootPathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.ShotRootPathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.ShotRootPathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenShotPath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.ShotPathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.ShotPathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.ShotPathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenSeqPath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.SeqPathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.SeqPathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.SeqPathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenAssetRootPath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.AssetRootPathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.AssetRootPathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.AssetRootPathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenAssetTypePath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.AssetTypePathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.AssetTypePathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.AssetTypePathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GenAssetPath(path string) error {
+	// 존재하면 폴더를 만들필요가 없다. 바로 리턴한다.
+	if _, err := os.Stat(path); !os.IsNotExist(err) {
+		return nil
+	}
+	if CachedAdminSetting.Umask == "" {
+		unix.Umask(0)
+	} else {
+		umask, err := strconv.Atoi(CachedAdminSetting.Umask)
+		if err != nil {
+			return err
+		}
+		unix.Umask(umask)
+	}
+	// 퍼미션을 가지고 온다.
+	per, err := strconv.ParseInt(CachedAdminSetting.AssetPathPermission, 8, 64)
+	if err != nil {
+		return err
+	}
+	// 폴더를 생성한다.
+	err = os.MkdirAll(path, os.FileMode(per))
+	if err != nil {
+		return err
+	}
+	// uid, gid 를 설정한다.
+	uid, err := strconv.Atoi(CachedAdminSetting.AssetPathUID)
+	if err != nil {
+		return err
+	}
+	gid, err := strconv.Atoi(CachedAdminSetting.AssetPathGID)
+	if err != nil {
+		return err
+	}
+	err = os.Chown(path, uid, gid)
+	if err != nil {
+		return err
+	}
+	return nil
 }

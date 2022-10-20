@@ -123,8 +123,8 @@ func SetScanPlateErrStatus(client *mongo.Client, id, errmsg string) error {
 	update := bson.M{
 		"$set": bson.M{
 			"processstatus": "error",
+			"error":         errmsg,
 		},
-		"$push": bson.M{"logs": errmsg},
 	}
 	err = collection.FindOneAndUpdate(ctx, filter, update).Err()
 	if err != nil {
@@ -165,7 +165,7 @@ func GetUnDoneScanPlate(client *mongo.Client) ([]ScanPlate, error) {
 	collection := client.Database("OpenPipelineIO").Collection("scanplate")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	filter := bson.M{"status": bson.M{"$ne": "done"}} // done이 아닌 리스트를 가지고 온다.
+	filter := bson.M{"processstatus": bson.M{"$ne": "done"}} // done이 아닌 리스트를 가지고 온다.
 	opts := options.Find()
 	opts.SetSort(bson.M{"name": 1})
 	cursor, err := collection.Find(ctx, filter, opts)

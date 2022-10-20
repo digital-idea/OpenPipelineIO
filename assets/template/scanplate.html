@@ -241,8 +241,8 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="createShotFolder">
-                        <label class="form-check-label finger unselectable text-muted" for="createShotFolder">Create Shot folder</label>
+                        <input class="form-check-input finger" type="checkbox" id="genplatepath">
+                        <label class="form-check-label finger unselectable text-muted" for="genplatepath">Create Plate Path</label>
                     </div>
                 </div>
             </div>
@@ -413,11 +413,16 @@
     document.getElementById("submitScanPlate").addEventListener("click", function(){
         sources = table.getData();
         for (let i = 0; i < sources.length; i += 1) {
+            // 플레이트 경로 생성여부
+            sources[i].genplatepath = document.getElementById("genplatepath").checked
+            // 프로젝트 설정
             sources[i].project = document.getElementById("scanplate-project").value
+            // 플레이트 사이즈
             if (!document.getElementById("setplatesize").checked) {
                 sources[i].width = 0
                 sources[i].height = 0
             }
+            // 언디스토션 사이트
             if (!document.getElementById("setundistortionsize").checked) {
                 sources[i].undistortionwidth = 0
                 sources[i].undistortionheight = 0
@@ -425,6 +430,7 @@
                 sources[i].undistortionwidth = Math.round(sources[i].width * document.getElementById("undistortionrate").value)
                 sources[i].undistortionheight = Math.round(sources[i].height * document.getElementById("undistortionrate").value)
             }
+            // 렌더사이즈
             if (!document.getElementById("setrendersize").checked) {
                 sources[i].renderwidth = 0
                 sources[i].renderheight = 0
