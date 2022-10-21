@@ -734,6 +734,28 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
+	// 만약 DNS와 Token값 모두 존재하면 item 정보와 썸네일을 해당 DNS로 전송한다.
+	if scan.DNS != "" && scan.Token != "" {
+		// 데이터 전송
+		err = SendItemOpenPipelineIO(scan, item)
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+
+		err = SendImageOpenPipelineIO(scan, item, thumbnailImagePath.String())
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
+
 	// 연산 상태를 done 으로 바꾼다.
 	err = SetScanPlateProcessStatus(client, scanID, "done")
 	if err != nil {

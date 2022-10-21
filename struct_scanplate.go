@@ -47,4 +47,6 @@ type ScanPlate struct {
 	SetTimecode        bool               `json:"settimecode" bson:"settimecode"`               // Timecode 설정여부
 	LutPath            string             `json:"lutpath" bson:"lutpath"`                       // Lut Path
 	ProxyRatio         int                `json:"proxyratio" bson:"proxyratio"`                 // Proxy Ratio
+	DNS                string             `json:"dns" bson:"dns"`                               // OpenPipelineIO DNS
+	Token              string             `json:"token" bson:"token"`                           // OpenPipelineIO Token
 }
