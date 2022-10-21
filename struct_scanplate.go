@@ -40,4 +40,5 @@ type ScanPlate struct {
 	Error        string  `json:"error" bson:"error"`               // 에러기록
 	GenPlatePath bool    `json:"genplatepath" bson:"genplatepath"` // 플레이트 경로 생성
 	CopyPlate    bool    `json:"copyplate" bson:"copyplate"`       // 플레이트 복사여부
+	ProxyJpg     bool    `json:"proxyjpg" bson:"proxyjpg"`         // Proxy Jpg 생성여부
 }

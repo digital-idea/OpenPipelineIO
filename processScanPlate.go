@@ -394,6 +394,46 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
+	// Proxy Jpg 옵션이 켜 있다면 Proxy jpg를 생성한다.
+	if scan.ProxyJpg {
+		// Proxy Jpg 가 생성될 경로를 만든다.
+		err = GenPlatePath(item.Platepath + "_jpg")
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
+			filename := fmt.Sprintf(scan.Base, i)
+			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
+			dst := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(filename, ".exr", ".jpg", -1))
+
+			args := []string{
+				src,
+				"--colorconfig",
+				CachedAdminSetting.OCIOConfig,
+				"--colorconvert",
+				scan.InColorspace,
+				scan.OutColorspace,
+				"-o",
+				dst,
+			}
+			if *flagDebug {
+				fmt.Println(CachedAdminSetting.OpenImageIO, strings.Join(args, " "))
+			}
+			err = exec.Command(CachedAdminSetting.OpenImageIO, args...).Run()
+			if err != nil {
+				err = SetScanPlateErrStatus(client, scanID, err.Error())
+				if err != nil {
+					log.Println(err)
+				}
+				return
+			}
+		}
+	}
+
 	// 연산 상태를 done 으로 바꾼다.
 	err = SetScanPlateProcessStatus(client, scanID, "done")
 	if err != nil {
