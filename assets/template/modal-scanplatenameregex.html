@@ -20,6 +20,11 @@
                             SS_0010_org.0001.jpg
                         </button>
                         <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_(?P<type>\\w+).(?P<frame>\\W\\w+)(?P<ext>.\\w+)';
+                            " data-bs-dismiss="modal">
+                            SS_0010_org.%04d.exr
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
                             document.getElementById('regex').value='(?P<name>\\w+)_(?P<type>\\w+)_v(?P<version>\\w+).(?P<frame>\\w+)(?P<ext>.\\w+)';
                             " data-bs-dismiss="modal">
                             SS_0010_org_v001.0001.jpg

@@ -8,8 +8,10 @@ import (
 	"image"
 	"log"
 	"os"
+	"os/exec"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/disintegration/imaging"
@@ -201,18 +203,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		return
 	}
 
-	// 플레이트 경로를 생성합니다.
-	if scan.GenPlatePath {
-		err = GenPlatePath(item.Platepath)
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-	}
-
 	// Task 셋팅
 	tasks, err := AllTaskSettingsV2(client)
 	if err != nil {
@@ -273,17 +263,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		return
 	}
 
-	// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
-	if _, err := os.Stat(thumbnailImagePath.String()); os.IsExist(err) {
-		err = os.Remove(thumbnailImagePath.String())
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-	}
 	// 썸네일 경로를 생성한다.
 	path, _ := path.Split(thumbnailImagePath.String())
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -309,31 +288,110 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	thumbnailData, err := os.Open(item.Scanname)
-	if err != nil {
-		err = SetScanPlateErrStatus(client, scanID, err.Error())
+	// 썸네일 이미지가 이미 존재하는 경우 이미지 파일을 지운다.
+	if _, err := os.Stat(thumbnailImagePath.String()); os.IsExist(err) {
+		err = os.Remove(thumbnailImagePath.String())
 		if err != nil {
-			log.Println(err)
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
-		return
 	}
-	// 사용자가 업로드한 데이터를 이미지 자료구조로 만들고 리사이즈 한다.
-	img, _, err := image.Decode(thumbnailData) // 전송된 바이트 파일을 이미지 자료구조로 변환한다.
-	if err != nil {
-		err = SetScanPlateErrStatus(client, scanID, err.Error())
+
+	if scan.Ext == ".jpg" || scan.Ext == ".png" {
+		// .jpg, .png 라면 바로 썸네일을 처리한다.
+		thumbnailData, err := os.Open(item.Scanname)
 		if err != nil {
-			log.Println(err)
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
-		return
+		// 사용자가 업로드한 데이터를 이미지 자료구조로 만들고 리사이즈 한다.
+		img, _, err := image.Decode(thumbnailData) // 전송된 바이트 파일을 이미지 자료구조로 변환한다.
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
+		err = imaging.Save(resizedImage, thumbnailImagePath.String())
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	} else if scan.Ext == ".exr" {
+		// 중간 프레임을 구한다.
+		middleFrame := scan.FrameIn + (scan.FrameOut-scan.FrameIn)/2
+		filename := fmt.Sprintf(scan.Base, middleFrame)
+		src := fmt.Sprintf("%s/%s", scan.Dir, filename)
+		dst := thumbnailImagePath.String()
+
+		// oiiotool을 이용해서 썸네일 경로에 바로 쓰기 한다.
+		args := []string{
+			src,
+			"--colorconfig",
+			CachedAdminSetting.OCIOConfig,
+			"--colorconvert",
+			scan.InColorspace,
+			scan.OutColorspace,
+			"--fit",
+			fmt.Sprintf("%dx%d", CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
+			"-o",
+			dst,
+		}
+		if *flagDebug {
+			fmt.Println(CachedAdminSetting.OpenImageIO, strings.Join(args, " "))
+		}
+		err = exec.Command(CachedAdminSetting.OpenImageIO, args...).Run()
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	} else if scan.Ext == ".mov" {
+		fmt.Println("mov")
 	}
-	resizedImage := imaging.Fill(img, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight, imaging.Center, imaging.Lanczos)
-	err = imaging.Save(resizedImage, thumbnailImagePath.String())
-	if err != nil {
-		err = SetScanPlateErrStatus(client, scanID, err.Error())
+
+	// 디스크 물리적인 연산을 수행합니다.
+
+	// 플레이트 경로를 생성합니다.
+	if scan.GenPlatePath {
+		err = GenPlatePath(item.Platepath)
 		if err != nil {
-			log.Println(err)
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
-		return
+	}
+
+	// 플레이트 복사가 필요하다면 플레이트를 복사합니다.
+	if scan.CopyPlate {
+		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
+			filename := fmt.Sprintf(scan.Base, i)
+			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
+			dst := fmt.Sprintf("%s/%s", item.Platepath, filename)
+			err = CopyPlate(src, dst)
+			if err != nil {
+				err = SetScanPlateErrStatus(client, scanID, err.Error())
+				if err != nil {
+					log.Println(err)
+				}
+				return
+			}
+		}
 	}
 
 	// 연산 상태를 done 으로 바꾼다.

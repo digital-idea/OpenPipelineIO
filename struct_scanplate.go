@@ -19,7 +19,7 @@ type ScanPlate struct {
 	RenderWidth        int                `json:"renderwidth" bson:"renderwidth"`               // 렌더링 가로길이
 	RenderHeight       int                `json:"renderheight" bson:"renderheight"`             // 렌더링 세로길이
 	UndistortionWidth  int                `json:"undistortionwidth" bson:"undistortionwidth"`   // undistortion 가로길이
-	UndistortionHeight int                `json:"undistortionheight" bson:"undistortionheight"` // undistortion세로길이
+	UndistortionHeight int                `json:"undistortionheight" bson:"undistortionheight"` // undistortion 세로길이
 
 	// 분석을 통해서 구할 수 있는 것
 	Dir          string  `json:"dir" bson:"dir"`                   // 시퀀스 디렉토리
@@ -39,4 +39,5 @@ type ScanPlate struct {
 	Rollmedia    string  `json:"rollmedia" bson:"rollmedia"`       // 촬영한 데이터라면, 카메라에서 생성된 데이터 이름
 	Error        string  `json:"error" bson:"error"`               // 에러기록
 	GenPlatePath bool    `json:"genplatepath" bson:"genplatepath"` // 플레이트 경로 생성
+	CopyPlate    bool    `json:"copyplate" bson:"copyplate"`       // 플레이트 복사여부
 }
