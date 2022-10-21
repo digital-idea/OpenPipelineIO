@@ -136,6 +136,20 @@
                                 {{range .Projectlist}}<option value="{{.}}">{{.}}</option>{{end}}
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label class="text-muted">Mov Fps</label>
+                            <select id="fps" class="form-control">
+                                <option value="23.98">23.98</option>
+                                <option value="23.976">23.976</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="29.97">29.97</option>
+                                <option value="30">30</option>
+                                <option value="59.94">59.94</option>
+                                <option value="60">60</option>
+                            </select>
+                        </div>
                         
                         <div class="form-group pt-2">
                             <label class="text-muted">Undistortion Rate</label>
@@ -197,29 +211,18 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setinout">
-                        <label class="form-check-label finger unselectable text-muted" for="setinout">Set frame IN/OUT</label>
+                        <input class="form-check-input finger" type="checkbox" id="setframe" checked>
+                        <label class="form-check-label finger unselectable text-muted" for="setframe">Set Frame IN/OUT</label>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
 
         <div class="row pt-2">
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setjustinout">
-                        <label class="form-check-label finger unselectable text-muted" for="setjustinout">Set just frame IN/OUT</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row pt-2">
-            <div class="col-sm">
-                <div class="from-group">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="settimecode">
+                        <input class="form-check-input finger" type="checkbox" id="settimecode" checked>
                         <label class="form-check-label finger unselectable text-muted" for="settimecode">Set Timecode IN/OUT</label>
                     </div>
                 </div>
@@ -230,8 +233,8 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="setscanfolder">
-                        <label class="form-check-label finger unselectable text-muted" for="setscanfolder">Set scan folder</label>
+                        <input class="form-check-input finger" type="checkbox" id="setscanfolder" checked>
+                        <label class="form-check-label finger unselectable text-muted" for="setscanfolder">Set Scan folder</label>
                     </div>
                 </div>
             </div>
@@ -241,7 +244,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="genplatepath">
+                        <input class="form-check-input finger" type="checkbox" id="genplatepath" checked>
                         <label class="form-check-label finger unselectable text-muted" for="genplatepath">Create Plate Path</label>
                     </div>
                 </div>
@@ -252,7 +255,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="copyplate">
+                        <input class="form-check-input finger" type="checkbox" id="copyplate" checked>
                         <label class="form-check-label finger unselectable text-muted" for="copyplate">Copy Plate</label>
                     </div>
                 </div>
@@ -263,7 +266,7 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="proxyjpg">
+                        <input class="form-check-input finger" type="checkbox" id="proxyjpg" checked>
                         <label class="form-check-label finger unselectable text-muted" for="proxyjpg">Proxy JPG</label>
                     </div>
                 </div>
@@ -296,8 +299,8 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="createProxyMov">
-                        <label class="form-check-label finger unselectable text-muted" for="createProxyMov">Create proxy mov</label>
+                        <input class="form-check-input finger" type="checkbox" id="genmov" checked>
+                        <label class="form-check-label finger unselectable text-muted" for="genmov">Create Mov</label>
                     </div>
                 </div>
             </div>
@@ -307,8 +310,8 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
-                        <input class="form-check-input finger" type="checkbox" id="createProxyMovSlate">
-                        <label class="form-check-label finger unselectable text-muted" for="createProxyMovSlate">Create proxy mov slate</label>
+                        <input class="form-check-input finger" type="checkbox" id="genmovslate" checked>
+                        <label class="form-check-label finger unselectable text-muted" for="genmovslate">Create Mov Slate</label>
                     </div>
                 </div>
             </div>
@@ -446,6 +449,10 @@
     document.getElementById("submitScanPlate").addEventListener("click", function(){
         sources = table.getData();
         for (let i = 0; i < sources.length; i += 1) {
+            // Set Frame
+            sources[i].setframe = document.getElementById("setframe").checked
+            // Set Timecode
+            sources[i].settimecode = document.getElementById("settimecode").checked
             // 플레이트 경로 생성여부
             sources[i].genplatepath = document.getElementById("genplatepath").checked
             // 플레이트 복사여부
@@ -456,6 +463,10 @@
             sources[i].proxyhalfjpg = document.getElementById("proxyhalfjpg").checked
             // Proxy Half Exr 생성여부
             sources[i].proxyhalfexr = document.getElementById("proxyhalfexr").checked
+            // mov 생성
+            sources[i].fps = document.getElementById("fps").value
+            sources[i].genmov = document.getElementById("genmov").checked
+            sources[i].genmovslate = document.getElementById("genmovslate").checked
             // 프로젝트 설정
             sources[i].project = document.getElementById("scanplate-project").value
             // 플레이트 사이즈

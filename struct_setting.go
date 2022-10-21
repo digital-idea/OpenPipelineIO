@@ -90,4 +90,5 @@ type Setting struct {
 	EnableRocketChat                     bool    `json:"enablerocketchat"`                     // 로켓쳇 활성화
 	EnableEndpoint                       bool    `json:"enableendpoint"`                       // Endpoint 활성화
 	FullcalendarSchedulerLicenseKey      string  `json:"fullcalendarschedulerlicensekey"`      // Fullcalendar License Key
+	SlateFontPath                        string  `json:"slatefontpath"`                        // Slate에 사용되는 폰트 경로
 }

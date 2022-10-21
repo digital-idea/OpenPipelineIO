@@ -18,29 +18,31 @@ type ScanPlate struct {
 	Project            string             `json:"project" bson:"project"`                       // 프로젝트
 	RenderWidth        int                `json:"renderwidth" bson:"renderwidth"`               // 렌더링 가로길이
 	RenderHeight       int                `json:"renderheight" bson:"renderheight"`             // 렌더링 세로길이
-	UndistortionWidth  int                `json:"undistortionwidth" bson:"undistortionwidth"`   // undistortion 가로길이
-	UndistortionHeight int                `json:"undistortionheight" bson:"undistortionheight"` // undistortion 세로길이
-
-	// 분석을 통해서 구할 수 있는 것
-	Dir          string  `json:"dir" bson:"dir"`                   // 시퀀스 디렉토리
-	Base         string  `json:"base" bson:"base"`                 // 파일명(시퀀스 숫자 제외)
-	Ext          string  `json:"ext" bson:"ext"`                   // 확장자
-	Digitnum     int     `json:"digitnum" bson:"digitnum"`         // 시퀀스 자릿수
-	FrameIn      int     `json:"framein" bson:"framein"`           // 시작프레임
-	FrameOut     int     `json:"frameout" bson:"frameout"`         // 끝프레임
-	Width        int     `json:"width" bson:"width"`               // 가로길이
-	Height       int     `json:"height" bson:"height"`             // 세로길이
-	TimecodeIn   string  `json:"timecodein" bson:"timecodein"`     // 시작 타임코드
-	TimecodeOut  string  `json:"timecodeout" bson:"timecodeout"`   // 마지막 타임코드
-	Length       int     `json:"length" bson:"length"`             // 소스 길이
-	InputCodec   string  `json:"inputcodec" bson:"inputcodec"`     // 소스 코덱
-	OutputCodec  string  `json:"outputcodec" bson:"outputcodec"`   // 설정하는 아웃풋 코덱. 웹이라서 일반적으로 H.264를 사용한다.
-	Fps          float64 `json:"fps" bson:"fps"`                   // FPS
-	Rollmedia    string  `json:"rollmedia" bson:"rollmedia"`       // 촬영한 데이터라면, 카메라에서 생성된 데이터 이름
-	Error        string  `json:"error" bson:"error"`               // 에러기록
-	GenPlatePath bool    `json:"genplatepath" bson:"genplatepath"` // 플레이트 경로 생성
-	CopyPlate    bool    `json:"copyplate" bson:"copyplate"`       // 플레이트 복사여부
-	ProxyJpg     bool    `json:"proxyjpg" bson:"proxyjpg"`         // Proxy .jpg 생성여부
-	ProxyHalfJpg bool    `json:"proxyhalfjpg" bson:"proxyhalfjpg"` // Proxy half .jpg 생성여부
-	ProxyHalfExr bool    `json:"proxyhalfexr" bson:"proxyhalfexr"` // Proxy half .exr 생성여부
+	UndistortionWidth  int                `json:"undistortionwidth" bson:"undistortionwidth"`   // Undistortion 가로길이
+	UndistortionHeight int                `json:"undistortionheight" bson:"undistortionheight"` // Undistortion 세로길이
+	Dir                string             `json:"dir" bson:"dir"`                               // 시퀀스 디렉토리
+	Base               string             `json:"base" bson:"base"`                             // 파일명(시퀀스 숫자 제외)
+	Ext                string             `json:"ext" bson:"ext"`                               // 확장자
+	Digitnum           int                `json:"digitnum" bson:"digitnum"`                     // 시퀀스 자릿수
+	FrameIn            int                `json:"framein" bson:"framein"`                       // 시작프레임
+	FrameOut           int                `json:"frameout" bson:"frameout"`                     // 끝프레임
+	Width              int                `json:"width" bson:"width"`                           // 가로길이
+	Height             int                `json:"height" bson:"height"`                         // 세로길이
+	TimecodeIn         string             `json:"timecodein" bson:"timecodein"`                 // 시작 타임코드
+	TimecodeOut        string             `json:"timecodeout" bson:"timecodeout"`               // 마지막 타임코드
+	Length             int                `json:"length" bson:"length"`                         // 소스 길이
+	InputCodec         string             `json:"inputcodec" bson:"inputcodec"`                 // 소스 코덱
+	OutputCodec        string             `json:"outputcodec" bson:"outputcodec"`               // 설정하는 아웃풋 코덱. 웹이라서 일반적으로 H.264를 사용한다.
+	Fps                string             `json:"fps" bson:"fps"`                               // FPS
+	Rollmedia          string             `json:"rollmedia" bson:"rollmedia"`                   // 촬영한 데이터라면, 카메라에서 생성된 데이터 이름
+	Error              string             `json:"error" bson:"error"`                           // 에러기록
+	GenPlatePath       bool               `json:"genplatepath" bson:"genplatepath"`             // 플레이트 경로 생성
+	GenMov             bool               `json:"genmov" bson:"genmov"`                         // mov 생성
+	GenMovSlate        bool               `json:"genmovslate" bson:"genmovslate"`               // mov 슬레이트 생성
+	CopyPlate          bool               `json:"copyplate" bson:"copyplate"`                   // 플레이트 복사여부
+	ProxyJpg           bool               `json:"proxyjpg" bson:"proxyjpg"`                     // Proxy .jpg 생성여부
+	ProxyHalfJpg       bool               `json:"proxyhalfjpg" bson:"proxyhalfjpg"`             // Proxy half .jpg 생성여부
+	ProxyHalfExr       bool               `json:"proxyhalfexr" bson:"proxyhalfexr"`             // Proxy half .exr 생성여부
+	SetFrame           bool               `json:"setframe" bson:"setframe"`                     // 프레임 설정여부
+	SetTimecode        bool               `json:"settimecode" bson:"settimecode"`               // Timecode 설정여부
 }
