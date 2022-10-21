@@ -89,6 +89,15 @@
         </div>
 
         <div class="row pt-2">
+            <div class="col">
+                <div class="form-group pt-2">
+                    <label class="text-muted">Lut Path</label>
+                    <input type="text" id="lutpath" class="form-control" placeholder="/path/name.cube">
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
             <div class="col-sm">
                 <div class="form-group">
                     <label class="text-muted">Scan Plate Path</label>
@@ -467,6 +476,7 @@
             sources[i].fps = document.getElementById("fps").value
             sources[i].genmov = document.getElementById("genmov").checked
             sources[i].genmovslate = document.getElementById("genmovslate").checked
+            sources[i].lutpath = document.getElementById("lutpath").value
             // 프로젝트 설정
             sources[i].project = document.getElementById("scanplate-project").value
             // 플레이트 사이즈

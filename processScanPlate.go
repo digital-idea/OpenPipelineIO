@@ -396,7 +396,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			"1",
 			"-y",
 			"-vf",
-			fmt.Sprintf("thumbnail,scale=%d:%d", CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
+			fmt.Sprintf("lut3d=%s,thumbnail,scale=%d:%d", scan.LutPath, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
 			dst,
 		}
 		if *flagDebug {
@@ -642,6 +642,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		args = append(args, "nosound")
 
 		if scan.GenMovSlate {
+			scan.ProxyRatio = 2
 			slate := GenSlateString(scan)
 			args = append(args, []string{"-vf", slate}...)
 		}
@@ -688,6 +689,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			"-y",
 		}
 		if scan.GenMovSlate {
+			scan.ProxyRatio = 2
 			slate := GenSlateString(scan)
 			args = append(args, []string{"-vf", slate}...)
 		}
