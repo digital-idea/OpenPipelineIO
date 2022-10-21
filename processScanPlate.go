@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/agorman/go-timecode/v2"
 	"github.com/disintegration/imaging"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -156,8 +157,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	if scan.SetFrame {
 		item.PlateIn = scan.FrameIn
 		item.PlateOut = scan.FrameOut
-		item.JustIn = scan.FrameIn
-		item.JustOut = scan.FrameOut
 		item.ScanIn = scan.FrameIn
 		item.ScanOut = scan.FrameOut
 		item.ScanFrame = scan.Length
@@ -165,9 +164,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 
 	if scan.SetTimecode {
 		item.ScanTimecodeIn = scan.TimecodeIn
-		item.JustTimecodeIn = scan.TimecodeIn
 		item.ScanTimecodeOut = scan.TimecodeOut
-		item.JustTimecodeOut = scan.TimecodeOut
 	}
 
 	// 썸네일 이미지 경로를 설정합니다.
@@ -377,7 +374,44 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			return
 		}
 	} else if scan.Ext == ".mov" {
-		fmt.Println("mov")
+		// mov라면 중간 프레임을 가지고 와서 썸네일을 만든다.
+		middleFrame := scan.Length / 2
+		tc := timecode.FromFrames(timecode.R2997DF, uint64(middleFrame))
+		middleTimecode, err := shortTimecode(tc.String())
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		src := fmt.Sprintf("%s/%s", scan.Dir, scan.Base)
+		dst := thumbnailImagePath.String()
+		args := []string{
+			"-i",
+			src,
+			"-ss",
+			middleTimecode, // 00:01:30:14 -> 00:01:30 형태로 변경한다.
+			"-frames:v",
+			"1",
+			"-y",
+			"-vf",
+			fmt.Sprintf("thumbnail,scale=%d:%d", CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
+			dst,
+		}
+		if *flagDebug {
+			fmt.Println(CachedAdminSetting.FFmpeg, strings.Join(args, " "))
+		}
+		err = exec.Command(CachedAdminSetting.FFmpeg, args...).Run()
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	} else {
+		return
 	}
 
 	// 디스크 물리적인 연산을 수행합니다.
@@ -395,7 +429,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// 플레이트 복사가 필요하다면 플레이트를 복사합니다.
-	if scan.CopyPlate {
+	if scan.CopyPlate && scan.Ext == ".exr" {
 		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
 			filename := fmt.Sprintf(scan.Base, i)
 			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
@@ -411,8 +445,21 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
+	if scan.CopyPlate && scan.Ext == ".mov" {
+		src := fmt.Sprintf("%s/%s", scan.Dir, scan.Base)
+		dst := fmt.Sprintf("%s/%s", item.Platepath, scan.Base)
+		err = CopyPlate(src, dst)
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+	}
+
 	// Proxy Jpg 옵션이 켜 있다면 Proxy jpg를 생성한다.
-	if scan.ProxyJpg {
+	if scan.ProxyJpg && scan.Ext == ".exr" {
 		// Proxy Jpg 가 생성될 경로를 만든다.
 		err = GenPlatePath(item.Platepath + "_jpg")
 		if err != nil {
@@ -452,7 +499,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// Proxy Half Jpg 옵션이 켜 있다면 Proxy half jpg를 생성한다.
-	if scan.ProxyHalfJpg {
+	if scan.ProxyHalfJpg && scan.Ext == ".exr" {
 		err = GenPlatePath(item.Platepath + "_jpg_half")
 		if err != nil {
 			err = SetScanPlateErrStatus(client, scanID, err.Error())
@@ -493,7 +540,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// Proxy Half Exr 옵션이 켜 있다면 Proxy half exr을 생성한다.
-	if scan.ProxyHalfExr {
+	if scan.ProxyHalfExr && scan.Ext == ".exr" {
 		err = GenPlatePath(item.Platepath + "_half")
 		if err != nil {
 			err = SetScanPlateErrStatus(client, scanID, err.Error())
@@ -529,7 +576,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// mov를 위한 jpg를 생성한다.
-	if scan.GenMov {
+	if scan.GenMov && scan.Ext == ".exr" {
 		// mov를 만들 Proxy Jpg 가 생성될 경로를 만든다.
 		err = GenPlatePath(item.Platepath + "_jpg_for_mov")
 		if err != nil {
@@ -570,8 +617,8 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	// mov를 만든다.
-	if scan.GenMov {
+	// exr mov를 만든다.
+	if scan.GenMov && scan.Ext == ".exr" {
 		src := fmt.Sprintf("%s_jpg_for_mov/%s", item.Platepath, strings.Replace(scan.Base, ".exr", ".jpg", -1))
 		args := []string{
 			"-f",
@@ -626,8 +673,54 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
+	// exr mov를 만든다.
+	if scan.GenMov && scan.Ext == ".mov" {
+		src := fmt.Sprintf("%s/%s", item.Platepath, scan.Base)
+		args := []string{
+			"-i",
+			src,
+			"-pix_fmt",
+			"yuv420p",
+			"-c:v",
+			"libx264",
+			"-qscale:v",
+			"7",
+			"-y",
+		}
+		if scan.GenMovSlate {
+			slate := GenSlateString(scan)
+			args = append(args, []string{"-vf", slate}...)
+		}
+
+		dst, err := ThumbnailMovPath(item)
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		args = append(args, dst) // mov가 생성되는 경로
+		if *flagDebug {
+			fmt.Println(CachedAdminSetting.FFmpeg, strings.Join(args, " "))
+		}
+		cmd := exec.Command(CachedAdminSetting.FFmpeg, args...)
+		var out bytes.Buffer
+		var stderr bytes.Buffer
+		cmd.Stdout = &out
+		cmd.Stderr = &stderr
+		err = cmd.Run()
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, stderr.String())
+			if err != nil {
+				log.Println(stderr.String())
+			}
+			return
+		}
+	}
+
 	// mov를 생성했다면 생성에 필요한 jpg 폴더를 제거한다.
-	if scan.GenMov {
+	if scan.GenMov && scan.Ext == ".exr" {
 		src := fmt.Sprintf("%s_jpg_for_mov", item.Platepath)
 		err := os.RemoveAll(src)
 		if err != nil {

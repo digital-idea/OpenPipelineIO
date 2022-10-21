@@ -32,3 +32,10 @@ func ToDday(str string) (string, error) {
 	}
 	return fmt.Sprintf("D%s%d", sign, int(days)), nil
 }
+
+func shortTimecode(timecode string) (string, error) {
+	if !(regexpTimecode.MatchString(timecode) || timecode == "") {
+		return "", fmt.Errorf("%s 문자열은 00:00:00:00 형식의 문자열이 아닙니다", timecode)
+	}
+	return timecode[0:8], nil
+}
