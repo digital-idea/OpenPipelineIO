@@ -372,6 +372,12 @@ func handleAPISearchFootages(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+	} else if method == "mov" {
+		items, err = searchMovs(path)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	} else {
 		items, err = searchSeq(path)
 		if err != nil {

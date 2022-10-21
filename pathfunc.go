@@ -18,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/agorman/go-timecode/v2"
 	"golang.org/x/sys/unix"
 )
 
@@ -289,6 +290,94 @@ func searchImage(searchpath string) ([]ScanPlate, error) {
 	return items, nil
 }
 
+// searchMovs 함수는 탐색할 경로를 입력받고 mov 정보를 수집 반환한다.
+func searchMovs(searchpath string) ([]ScanPlate, error) {
+	// 경로가 존재하는지 체크한다.
+	_, err := os.Stat(searchpath)
+	if err != nil {
+		return nil, err
+	}
+	paths := make(map[string]ScanPlate)
+	err = filepath.Walk(searchpath, func(path string, info os.FileInfo, err error) error {
+		// 숨김폴더는 스킵한다.
+		if info.IsDir() && strings.HasPrefix(info.Name(), ".") {
+			return nil //filepath.SkipDir
+		}
+		// 숨김파일도 스킵한다.
+		if strings.HasPrefix(info.Name(), ".") {
+			return nil
+		}
+		ext := strings.ToLower(filepath.Ext(path))
+		switch ext {
+		case ".mov":
+			var width int
+			var height int
+			var timecodeIn string
+			var timecodeOut string
+			var length int
+			var fps string
+			// width, height, timecode 구하기
+			if ext == ".mov" {
+				width, height, err = movSizeFromFFprobe(path)
+				if err != nil {
+					log.Printf("error parsing mov size %q: %v\n", path, err)
+				}
+				length, err = movDurationFromFFprobe(path)
+				if err != nil {
+					log.Printf("error parsing mov duration %q: %v\n", path, err)
+				}
+				timecodeIn, err = movTimecodeInFromFFprobe(path)
+				if err != nil {
+					log.Printf("error parsing mov timecode %q: %v\n", path, err)
+				}
+				tc, err := timecode.Parse(timecode.R30, timecodeIn)
+				if err != nil {
+					log.Printf("error parsing mov timecode %q: %v\n", path, err)
+				}
+				timecodeOut = tc.Add(uint64(length)).String()
+				fps, err = movFpsFromFFprobe(path)
+				if err != nil {
+					log.Printf("error parsing mov %q: %v\n", path, err)
+				}
+			}
+
+			// 한번도 처리된적 없는 이미지가 존재하면 처리되는 코드
+			item := ScanPlate{
+				Searchpath:  searchpath,
+				Dir:         filepath.Dir(path),
+				Base:        filepath.Base(path),
+				Ext:         ext,
+				Length:      length,
+				FrameIn:     1,
+				FrameOut:    length,
+				RenderIn:    1,
+				RenderOut:   length,
+				ConvertExt:  ext,
+				Width:       width,
+				Height:      height,
+				TimecodeIn:  timecodeIn,
+				TimecodeOut: timecodeOut,
+				Fps:         fps,
+			}
+			paths[path] = item
+		default:
+			return nil
+		}
+		return nil
+	})
+	if err != nil {
+		log.Printf("error walking the path %q: %v\n", searchpath, err)
+	}
+	var items []ScanPlate
+	for _, value := range paths {
+		items = append(items, value)
+	}
+	if len(items) == 0 {
+		return nil, errors.New("no sources")
+	}
+	return items, nil
+}
+
 // Seqnum2Sharp 함수는 경로와 파일명을 받아서 시퀀스부분을 #문자열로 바꾸고 시퀀스의 숫자를 int로 바꾼다.
 // "test.0002.jpg" -> "test.####.jpg", 2, nil
 func Seqnum2Sharp(filename string) (string, int, error) {
@@ -312,6 +401,19 @@ func Seqnum2Sharp(filename string) (string, int, error) {
 }
 
 func imageSize(path string) (int, int, error) {
+	reader, err := os.Open(path)
+	if err != nil {
+		return 0, 0, err
+	}
+	defer reader.Close()
+	im, _, err := image.DecodeConfig(reader)
+	if err != nil {
+		return 0, 0, err
+	}
+	return im.Width, im.Height, nil
+}
+
+func movSize(path string) (int, int, error) {
 	reader, err := os.Open(path)
 	if err != nil {
 		return 0, 0, err
@@ -500,6 +602,114 @@ func imageSizeFromIinfo(path string) (int, int, error) {
 		return 0, 0, err
 	}
 	return width, height, nil
+}
+
+func movSizeFromFFprobe(path string) (int, int, error) {
+	var width int
+	var height int
+	_, err := os.Stat(CachedAdminSetting.FFprobe)
+	if err != nil {
+		return 0, 0, err
+	}
+	cmd := exec.Command(CachedAdminSetting.FFprobe, path)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		return 0, 0, err
+	}
+	re, err := regexp.Compile(`\s+(\d+)x(\d+),`)
+	if err != nil {
+		return 0, 0, errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(stderr.String())
+	if results == nil {
+		return 0, 0, errors.New("there were no results matching the regular expression condition")
+	}
+	width, err = strconv.Atoi(results[1]) // results[0]은 "1920 x 1080" 의 묶음이다.
+	if err != nil {
+		return 0, 0, err
+	}
+	height, err = strconv.Atoi(results[2])
+	if err != nil {
+		return 0, 0, err
+	}
+	return width, height, nil
+}
+
+func movTimecodeInFromFFprobe(path string) (string, error) {
+	_, err := os.Stat(CachedAdminSetting.FFprobe)
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command(CachedAdminSetting.FFprobe, path)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		return "", err
+	}
+	re, err := regexp.Compile(`<StartTimecode>(\d{2}:\d{2}:\d{2}:\d{2})</StartTimecode>`)
+	if err != nil {
+		return "", errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(stderr.String())
+	if results == nil {
+		return "", errors.New("there were no results matching the regular expression condition")
+	}
+	timecode := results[1]
+	return timecode, nil
+}
+
+func movDurationFromFFprobe(path string) (int, error) {
+	_, err := os.Stat(CachedAdminSetting.FFprobe)
+	if err != nil {
+		return 0, err
+	}
+	cmd := exec.Command(CachedAdminSetting.FFprobe, path)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		return 0, err
+	}
+	re, err := regexp.Compile(`<Duration>(\d+)</Duration>`)
+	if err != nil {
+		return 0, errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(stderr.String())
+	if results == nil {
+		return 0, errors.New("there were no results matching the regular expression condition")
+	}
+	duration, err := strconv.Atoi(results[1])
+	if err != nil {
+		return 0, err
+	}
+	return duration, nil
+}
+
+func movFpsFromFFprobe(path string) (string, error) {
+	_, err := os.Stat(CachedAdminSetting.FFprobe)
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command(CachedAdminSetting.FFprobe, path)
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	if err != nil {
+		return "", err
+	}
+	re, err := regexp.Compile(`<FrameRate>([0-9.]+)([a-z]*)</FrameRate>`)
+	if err != nil {
+		return "", errors.New("the regular expression is invalid")
+	}
+	results := re.FindStringSubmatch(stderr.String())
+	if results == nil {
+		return "", errors.New("there were no results matching the regular expression condition")
+	}
+	fps := results[1]
+	return fps, nil
 }
 
 func timecodeFromExrheader(path string) (string, error) {

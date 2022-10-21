@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.0.2
+	github.com/agorman/go-timecode/v2 v2.0.3 // indirect
 	github.com/alfg/mp4 v0.0.0-20200917033056-6857ee13db2a
 	github.com/amarburg/go-quicktime v0.0.0-20180102160802-53825554ea37
 	github.com/ashwanthkumar/slack-go-webhook v0.0.0-20181208062437-4a19b1a876b7
@@ -24,6 +25,6 @@ require (
 	golang.org/x/sys v0.0.0-20190614160838-b47fdc937951
 	golang.org/x/tools v0.0.0-20190614205625-5aca471b1d59 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+	gopkg.in/yaml.v3 v3.0.1
 	moul.io/http2curl v1.0.0 // indirect
 )
