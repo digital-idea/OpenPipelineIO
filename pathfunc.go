@@ -1175,6 +1175,8 @@ func GenSlateString(scan ScanPlate) string {
 	fade := "0.3"
 	border := 50
 	borderColor := "black"
+	lut := fmt.Sprintf("lut3d=%s", scan.LutPath)
+	scale := fmt.Sprintf("scale=%d:%d,setsar=1:1", scan.Width/scan.ProxyRatio, scan.Height/scan.ProxyRatio)
 	topArea := fmt.Sprintf("drawbox=x=0:y=0:w=iw:h=%d:color=%s@%s:width=iw:height=%d:t=%d", border, borderColor, fade, border, border)
 	bottomArea := fmt.Sprintf("drawbox=x=0:y=ih-50:w=iw:h=ih:color=%s@%s:width=iw:height=50:t=50", borderColor, fade)
 	leftTop := fmt.Sprintf("drawtext=fontfile=%s: text='%s': fontsize=%s: x=10: y=((50-th)/2) : fontcolor=%s", font, scan.Project, fontSize, fontColor)
@@ -1184,6 +1186,7 @@ func GenSlateString(scan ScanPlate) string {
 	centerBottom := fmt.Sprintf("drawtext=fontfile=%s: timecode='%s': r=%s: fontsize=%s: x=(w-tw)/2: y=h-50+((50-th)/2): fontcolor=%s", font, strings.Replace(scan.TimecodeIn, ":", "\\:", -1), scan.Fps, fontSize, fontColor)
 	rightBottom := fmt.Sprintf("drawtext=fontfile=%s: text='%%{n}': start_number=%d: r=%s: fontsize=%s: x=(w-tw-10): y=h-50+((50-th)/2): fontcolor=%s", font, scan.FrameIn, fontSize, scan.Fps, fontColor)
 	template := []string{
+		lut, scale,
 		topArea, bottomArea,
 		leftTop, centerTop, rightTop,
 		leftBottom, centerBottom, rightBottom,

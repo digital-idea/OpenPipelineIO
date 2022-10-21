@@ -45,4 +45,6 @@ type ScanPlate struct {
 	ProxyHalfExr       bool               `json:"proxyhalfexr" bson:"proxyhalfexr"`             // Proxy half .exr 생성여부
 	SetFrame           bool               `json:"setframe" bson:"setframe"`                     // 프레임 설정여부
 	SetTimecode        bool               `json:"settimecode" bson:"settimecode"`               // Timecode 설정여부
+	LutPath            string             `json:"lutpath" bson:"lutpath"`                       // Lut Path
+	ProxyRatio         int                `json:"proxyratio" bson:"proxyratio"`                 // Proxy Ratio
 }
