@@ -274,6 +274,17 @@
             <div class="col-sm">
                 <div class="from-group">
                     <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="proxyhalfjpg">
+                        <label class="form-check-label finger unselectable text-muted" for="proxyhalfjpg">Proxy Half JPG</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-sm">
+                <div class="from-group">
+                    <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="createProxyMov">
                         <label class="form-check-label finger unselectable text-muted" for="createProxyMov">Create proxy mov</label>
                     </div>
@@ -430,6 +441,8 @@
             sources[i].copyplate = document.getElementById("copyplate").checked
             // Proxy Jpg 생성여부
             sources[i].proxyjpg = document.getElementById("proxyjpg").checked
+            // Proxy Half Jpg 생성여부
+            sources[i].proxyhalfjpg = document.getElementById("proxyhalfjpg").checked
             // 프로젝트 설정
             sources[i].project = document.getElementById("scanplate-project").value
             // 플레이트 사이즈

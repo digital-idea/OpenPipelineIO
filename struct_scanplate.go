@@ -41,4 +41,5 @@ type ScanPlate struct {
 	GenPlatePath bool    `json:"genplatepath" bson:"genplatepath"` // 플레이트 경로 생성
 	CopyPlate    bool    `json:"copyplate" bson:"copyplate"`       // 플레이트 복사여부
 	ProxyJpg     bool    `json:"proxyjpg" bson:"proxyjpg"`         // Proxy Jpg 생성여부
+	ProxyHalfJpg bool    `json:"proxyhalfjpg" bson:"proxyhalfjpg"` // Proxy half Jpg 생성여부
 }
