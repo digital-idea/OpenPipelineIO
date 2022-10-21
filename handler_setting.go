@@ -145,6 +145,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.ExcludeProject = r.FormValue("ExcludeProject")
 	s.OCIOConfig = r.FormValue("OCIOConfig")
 	s.FFmpeg = r.FormValue("FFmpeg")
+	s.FFprobe = r.FormValue("FFprobe")
 	threads, err := strconv.Atoi(r.FormValue("FFmpegThreads"))
 	if err != nil {
 		threads = 1
