@@ -559,6 +559,19 @@ func PlatePath(item Item) (string, error) {
 	return path.String(), nil
 }
 
+func ThumbnailMovPath(item Item) (string, error) {
+	var path bytes.Buffer
+	pathTmpl, err := template.New("temp").Parse(CachedAdminSetting.ThumbnailMovPath)
+	if err != nil {
+		return "", err
+	}
+	err = pathTmpl.Execute(&path, item)
+	if err != nil {
+		return "", err
+	}
+	return path.String(), nil
+}
+
 func ShotRootPath(item Item) (string, error) {
 	// /Users/woong/show/{{.Project}}/seq
 	var path bytes.Buffer
@@ -943,4 +956,38 @@ func CopyPlate(src, dst string) error {
 	defer destination.Close()
 	_, err = io.Copy(destination, source)
 	return err
+}
+
+func GenSlateString(scan ScanPlate) string {
+	font := CachedAdminSetting.SlateFontPath
+	fontSize := "30"
+	fontColor := "white"
+	fade := "0.3"
+	border := 50
+	borderColor := "black"
+	topArea := fmt.Sprintf("drawbox=x=0:y=0:w=iw:h=%d:color=%s@%s:width=iw:height=%d:t=%d", border, borderColor, fade, border, border)
+	bottomArea := fmt.Sprintf("drawbox=x=0:y=ih-50:w=iw:h=ih:color=%s@%s:width=iw:height=50:t=50", borderColor, fade)
+	leftTop := fmt.Sprintf("drawtext=fontfile=%s: text='%s': fontsize=%s: x=10: y=((50-th)/2) : fontcolor=%s", font, scan.Project, fontSize, fontColor)
+	centerTop := fmt.Sprintf("drawtext=fontfile=%s: text='%s': fontsize=%s: x=(w-tw)/2: y=((50-th)/2) : fontcolor=%s", font, scan.Name, fontSize, fontColor)
+	rightTop := fmt.Sprintf("drawtext=fontfile=%s: text='%%{localtime\\:%%Y-%%m-%%d %%a %%T}': fontsize=%s: x=(w-tw-10): y=((50-th)/2) : fontcolor=%s", font, fontSize, fontColor)
+	leftBottom := fmt.Sprintf("drawtext=fontfile=%s: text='Plate %s': fontsize=%s: x=10: y=h-50+((50-th)/2): fontcolor=%s", font, scan.Type, fontSize, fontColor)
+	centerBottom := fmt.Sprintf("drawtext=fontfile=%s: timecode='%s': r=%s: fontsize=%s: x=(w-tw)/2: y=h-50+((50-th)/2): fontcolor=%s", font, strings.Replace(scan.TimecodeIn, ":", "\\:", -1), scan.Fps, fontSize, fontColor)
+	rightBottom := fmt.Sprintf("drawtext=fontfile=%s: text='%%{n}': start_number=%d: r=%s: fontsize=%s: x=(w-tw-10): y=h-50+((50-th)/2): fontcolor=%s", font, scan.FrameIn, fontSize, scan.Fps, fontColor)
+	template := []string{
+		topArea, bottomArea,
+		leftTop, centerTop, rightTop,
+		leftBottom, centerBottom, rightBottom,
+	}
+	return strings.Join(template, ",")
+}
+
+func MakeEven(n int) int {
+	if n == 0 {
+		return 0
+	}
+	if n%2 == 0 {
+		return n
+	} else {
+		return n - 1
+	}
 }

@@ -156,6 +156,7 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.OpenImageIO = r.FormValue("OpenImageIO")
 	s.Iinfo = r.FormValue("Iinfo")
 	s.Exrheader = r.FormValue("Exrheader")
+	s.SlateFontPath = r.FormValue("SlateFontPath")
 	s.RVPath = r.FormValue("RVPath")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {

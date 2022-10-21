@@ -153,6 +153,23 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	item.SetSeq()
 	item.SetCut()
 
+	if scan.SetFrame {
+		item.PlateIn = scan.FrameIn
+		item.PlateOut = scan.FrameOut
+		item.JustIn = scan.FrameIn
+		item.JustOut = scan.FrameOut
+		item.ScanIn = scan.FrameIn
+		item.ScanOut = scan.FrameOut
+		item.ScanFrame = scan.Length
+	}
+
+	if scan.SetTimecode {
+		item.ScanTimecodeIn = scan.TimecodeIn
+		item.JustTimecodeIn = scan.TimecodeIn
+		item.ScanTimecodeOut = scan.TimecodeOut
+		item.JustTimecodeOut = scan.TimecodeOut
+	}
+
 	// 썸네일 이미지 경로를 설정합니다.
 	var thumbnailImagePath bytes.Buffer
 	thumbnailImagePathTmpl, err := template.New("thumbnailImagePath").Parse(CachedAdminSetting.ThumbnailImagePath)
@@ -508,6 +525,117 @@ func processingScanPlateImageItem(scan ScanPlate) {
 				}
 				return
 			}
+		}
+	}
+
+	// mov를 위한 jpg를 생성한다.
+	if scan.GenMov {
+		// mov를 만들 Proxy Jpg 가 생성될 경로를 만든다.
+		err = GenPlatePath(item.Platepath + "_jpg_for_mov")
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
+			filename := fmt.Sprintf(scan.Base, i)
+			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
+			dst := fmt.Sprintf("%s_jpg_for_mov/%s", item.Platepath, strings.Replace(filename, ".exr", ".jpg", -1))
+
+			args := []string{
+				src,
+				"--colorconfig",
+				CachedAdminSetting.OCIOConfig,
+				"--colorconvert",
+				scan.InColorspace,
+				scan.OutColorspace,
+				"--fit",
+				fmt.Sprintf("%dx%d", MakeEven(scan.Width), MakeEven(scan.Height)), // mov에 slate 를 넣기위해서는 가로 세로 모두 짝수 픽셀이어야 한다.
+				"-o",
+				dst,
+			}
+			if *flagDebug {
+				fmt.Println(CachedAdminSetting.OpenImageIO, strings.Join(args, " "))
+			}
+			err = exec.Command(CachedAdminSetting.OpenImageIO, args...).Run()
+			if err != nil {
+				err = SetScanPlateErrStatus(client, scanID, err.Error())
+				if err != nil {
+					log.Println(err)
+				}
+				return
+			}
+		}
+	}
+
+	// mov를 만든다.
+	if scan.GenMov {
+		src := fmt.Sprintf("%s_jpg_for_mov/%s", item.Platepath, strings.Replace(scan.Base, ".exr", ".jpg", -1))
+		args := []string{
+			"-f",
+			"image2",
+			"-start_number",
+			strconv.Itoa(scan.FrameIn),
+			"-r",
+			scan.Fps,
+			"-y",
+			"-i",
+			src,
+			"-pix_fmt",
+			"yuv420p",
+			"-c:v",
+			"libx264",
+			"-qscale:v",
+			"7",
+		}
+		// 다른 사운드 코덱이라면 사운드클 체크한다.
+		args = append(args, "-c:a")
+		args = append(args, "nosound")
+
+		if scan.GenMovSlate {
+			slate := GenSlateString(scan)
+			args = append(args, []string{"-vf", slate}...)
+		}
+
+		dst, err := ThumbnailMovPath(item)
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		args = append(args, dst) // mov가 생성되는 경로
+		if *flagDebug {
+			fmt.Println(CachedAdminSetting.FFmpeg, strings.Join(args, " "))
+		}
+		cmd := exec.Command(CachedAdminSetting.FFmpeg, args...)
+		var out bytes.Buffer
+		var stderr bytes.Buffer
+		cmd.Stdout = &out
+		cmd.Stderr = &stderr
+		err = cmd.Run()
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, stderr.String())
+			if err != nil {
+				log.Println(stderr.String())
+			}
+			return
+		}
+	}
+
+	// mov를 생성했다면 생성에 필요한 jpg 폴더를 제거한다.
+	if scan.GenMov {
+		src := fmt.Sprintf("%s_jpg_for_mov", item.Platepath)
+		err := os.RemoveAll(src)
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
 		}
 	}
 
