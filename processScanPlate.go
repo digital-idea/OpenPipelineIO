@@ -475,6 +475,42 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
+	// Proxy Half Exr 옵션이 켜 있다면 Proxy half exr을 생성한다.
+	if scan.ProxyHalfExr {
+		err = GenPlatePath(item.Platepath + "_half")
+		if err != nil {
+			err = SetScanPlateErrStatus(client, scanID, err.Error())
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
+			filename := fmt.Sprintf(scan.Base, i)
+			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
+			dst := fmt.Sprintf("%s_half/%s", item.Platepath, filename)
+
+			args := []string{
+				src,
+				"--resize",
+				fmt.Sprintf("%dx%d", scan.Width/2, scan.Height/2),
+				"-o",
+				dst,
+			}
+			if *flagDebug {
+				fmt.Println(CachedAdminSetting.OpenImageIO, strings.Join(args, " "))
+			}
+			err = exec.Command(CachedAdminSetting.OpenImageIO, args...).Run()
+			if err != nil {
+				err = SetScanPlateErrStatus(client, scanID, err.Error())
+				if err != nil {
+					log.Println(err)
+				}
+				return
+			}
+		}
+	}
+
 	// 연산 상태를 done 으로 바꾼다.
 	err = SetScanPlateProcessStatus(client, scanID, "done")
 	if err != nil {
