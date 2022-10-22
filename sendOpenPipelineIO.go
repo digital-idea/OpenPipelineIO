@@ -53,7 +53,7 @@ func SendImageOpenPipelineIO(scan ScanPlate, item Item, path string) error {
 		scan.DNS + "/api/uploadthumbnail",
 	}
 
-	err := exec.Command("/usr/bin/curl", args...).Run()
+	err := exec.Command(CachedAdminSetting.Curl, args...).Run()
 	if err != nil {
 		return err
 	}

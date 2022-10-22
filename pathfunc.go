@@ -712,28 +712,6 @@ func movFpsFromFFprobe(path string) (string, error) {
 	return fps, nil
 }
 
-func timecodeFromExrheader(path string) (string, error) {
-	_, err := os.Stat(CachedAdminSetting.Exrheader)
-	if err != nil {
-		return "", err
-	}
-	cmd := exec.Command(CachedAdminSetting.Exrheader, path)
-	stdout, err := cmd.Output()
-	if err != nil {
-		return "", err
-	}
-	re, err := regexp.Compile(`time\s+(\d{2}:\d{2}:\d{2}:\d{2})`)
-	if err != nil {
-		return "", errors.New("the regular expression is invalid")
-	}
-	results := re.FindStringSubmatch(string(stdout))
-	if results == nil {
-		return "", errors.New("there were no results matching the regular expression condition")
-	}
-	timecode := results[1]
-	return timecode, nil
-}
-
 func timecodeFromIinfo(path string) (string, error) {
 	_, err := os.Stat(CachedAdminSetting.Iinfo)
 	if err != nil {
