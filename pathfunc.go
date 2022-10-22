@@ -1163,11 +1163,13 @@ func GenSlateString(scan ScanPlate) string {
 	leftBottom := fmt.Sprintf("drawtext=fontfile=%s: text='Plate %s': fontsize=%s: x=10: y=h-50+((50-th)/2): fontcolor=%s", font, scan.Type, fontSize, fontColor)
 	centerBottom := fmt.Sprintf("drawtext=fontfile=%s: timecode='%s': r=%s: fontsize=%s: x=(w-tw)/2: y=h-50+((50-th)/2): fontcolor=%s", font, strings.Replace(scan.TimecodeIn, ":", "\\:", -1), scan.Fps, fontSize, fontColor)
 	rightBottom := fmt.Sprintf("drawtext=fontfile=%s: text='%%{n}': start_number=%d: r=%s: fontsize=%s: x=(w-tw-10): y=h-50+((50-th)/2): fontcolor=%s", font, scan.FrameIn, fontSize, scan.Fps, fontColor)
+	divisibleByError := "pad=ceil(iw/2)*2:ceil(ih/2)*2"
 	template := []string{
 		lut, scale,
 		topArea, bottomArea,
 		leftTop, centerTop, rightTop,
 		leftBottom, centerBottom, rightBottom,
+		divisibleByError,
 	}
 	return strings.Join(template, ",")
 }
