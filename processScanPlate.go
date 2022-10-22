@@ -396,7 +396,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			"1",
 			"-y",
 			"-vf",
-			fmt.Sprintf("lut3d=%s,thumbnail,scale=%d:%d", scan.LutPath, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
+			fmt.Sprintf("pad=ceil(iw/2)*2:ceil(ih/2)*2,lut3d=%s,thumbnail,scale=%d:%d", scan.LutPath, CachedAdminSetting.ThumbnailImageWidth, CachedAdminSetting.ThumbnailImageHeight),
 			dst,
 		}
 		if *flagDebug {
@@ -575,51 +575,9 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	// mov를 위한 jpg를 생성한다.
-	if scan.GenMov && scan.Ext == ".exr" {
-		// mov를 만들 Proxy Jpg 가 생성될 경로를 만든다.
-		err = GenPlatePath(item.Platepath + "_jpg_for_mov")
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
-			filename := fmt.Sprintf(scan.Base, i)
-			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
-			dst := fmt.Sprintf("%s_jpg_for_mov/%s", item.Platepath, strings.Replace(filename, ".exr", ".jpg", -1))
-
-			args := []string{
-				src,
-				"--colorconfig",
-				CachedAdminSetting.OCIOConfig,
-				"--colorconvert",
-				scan.InColorspace,
-				scan.OutColorspace,
-				"--fit",
-				fmt.Sprintf("%dx%d", MakeEven(scan.Width), MakeEven(scan.Height)), // mov에 slate 를 넣기위해서는 가로 세로 모두 짝수 픽셀이어야 한다.
-				"-o",
-				dst,
-			}
-			if *flagDebug {
-				fmt.Println(CachedAdminSetting.OpenImageIO, strings.Join(args, " "))
-			}
-			err = exec.Command(CachedAdminSetting.OpenImageIO, args...).Run()
-			if err != nil {
-				err = SetScanPlateErrStatus(client, scanID, err.Error())
-				if err != nil {
-					log.Println(err)
-				}
-				return
-			}
-		}
-	}
-
 	// exr mov를 만든다.
 	if scan.GenMov && scan.Ext == ".exr" {
-		src := fmt.Sprintf("%s_jpg_for_mov/%s", item.Platepath, strings.Replace(scan.Base, ".exr", ".jpg", -1))
+		src := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(scan.Base, ".exr", ".jpg", -1))
 		args := []string{
 			"-f",
 			"image2",
@@ -642,7 +600,11 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		args = append(args, "nosound")
 
 		if scan.GenMovSlate {
-			scan.ProxyRatio = 2
+			if scan.Width > 2048 {
+				scan.ProxyRatio = 2
+			} else {
+				scan.ProxyRatio = 1
+			}
 			slate := GenSlateString(scan)
 			args = append(args, []string{"-vf", slate}...)
 		}
@@ -674,7 +636,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	// exr mov를 만든다.
+	// mov Plate이용해서 mov를 만든다.
 	if scan.GenMov && scan.Ext == ".mov" {
 		src := fmt.Sprintf("%s/%s", item.Platepath, scan.Base)
 		args := []string{
@@ -689,7 +651,12 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			"-y",
 		}
 		if scan.GenMovSlate {
-			scan.ProxyRatio = 2
+			if scan.Width > 2048 {
+				scan.ProxyRatio = 2
+			} else {
+				scan.ProxyRatio = 1
+			}
+
 			slate := GenSlateString(scan)
 			args = append(args, []string{"-vf", slate}...)
 		}
@@ -716,19 +683,6 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			err = SetScanPlateErrStatus(client, scanID, stderr.String())
 			if err != nil {
 				log.Println(stderr.String())
-			}
-			return
-		}
-	}
-
-	// mov를 생성했다면 생성에 필요한 jpg 폴더를 제거한다.
-	if scan.GenMov && scan.Ext == ".exr" {
-		src := fmt.Sprintf("%s_jpg_for_mov", item.Platepath)
-		err := os.RemoveAll(src)
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
 			}
 			return
 		}
