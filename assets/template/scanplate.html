@@ -458,6 +458,9 @@
     document.getElementById("submitScanPlate").addEventListener("click", function(){
         sources = table.getData();
         for (let i = 0; i < sources.length; i += 1) {
+            // Set Dns, token
+            sources[i].dns = document.getElementById("dns").value
+            sources[i].token = document.getElementById("scanplatetoken").value
             // Set Frame
             sources[i].setframe = document.getElementById("setframe").checked
             // Set Timecode
