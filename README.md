@@ -63,7 +63,7 @@ sudo openpipelineio -http :80 &> openpipelineio.log& # openpipelineio.log 파일
 
 > 여러분이 macOS를 사용한다면 기본적으로 80포트는 아파치 서버가 사용중일 수 있습니다. 80포트에 실행되는 아파치 서버를 종료하기 위해서 `$ sudo apachectl stop` 를 터미널에 입력해주세요.
 
-OpenPipelineIO는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [dilink-웹프로토콜](https://github.com/digital-idea/dilink)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 편리한 OpenPipelineIO를 활용할 수 있습니다.
+OpenPipelineIO는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [웹프로토콜](https://github.com/lazypic/opio)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 편리한 OpenPipelineIO를 활용할 수 있습니다.
 
 ```bash
 dilog -http :8080

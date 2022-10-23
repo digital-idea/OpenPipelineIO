@@ -716,7 +716,7 @@ function setCameraPubPath() {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("campubpath-"+data.id).innerHTML = `<a href="dilink://${data.path}" class="text-badge ml-1">${data.path}</a>`;
+            document.getElementById("campubpath-"+data.id).innerHTML = `<a href="${data.protocol}://${data.path}" class="text-badge ml-1">${data.path}</a>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -1236,7 +1236,7 @@ function addComment() {
 							</div>`
                         } else {
                             newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+								<a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1285,7 +1285,7 @@ function addComment() {
 							</div>`
                     } else {
                         newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+								<a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1342,7 +1342,7 @@ function editComment() {
 							</div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-								<a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+								<a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
 									<img src="/assets/img/link.svg" class="finger">
 								</a>
 								<span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -1559,7 +1559,7 @@ function setDetailCommentsModal(project, id) {
                 cmt.append(br)
                 if (comments[i].media !== "") {
                     let link = document.createElement("a")
-                    let protocol = "dilink://"
+                    let protocol = document.getElementById("protocol").value + "://"
                     if (comments[i].media.startsWith("http")) {
                         protocol = ""
                     }
@@ -1660,7 +1660,7 @@ function editReviewComment() {
             if (data.media.startsWith("http") || data.media.startsWith("rvlink")) {
                 document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", data.media)
             } else {
-                document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", "dilink://" + data.media)
+                document.getElementById(`reviewcomment-${data.id}-${data.time}-media`).setAttribute("href", data.protocol + "://" + data.media)
             }
         },
         error: function(request,status,error){
@@ -1780,7 +1780,7 @@ function addSource(project, id, title, path) {
                     if (path.startsWith("http")) {
                         source = `<div id="source-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                     } else {
-                        source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
+                        source = `<div id="source-${data.name}-${data.title}"><a href="${data.protocol}://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                     }
                     document.getElementById("sources-"+data.name).innerHTML = document.getElementById("sources-"+data.name).innerHTML + source;
                     // 요소갯수에 따라 버튼을 설정한다.
@@ -1822,7 +1822,7 @@ function addSource(project, id, title, path) {
                 if (path.startsWith("http")) {
                     source = `<div id="source-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                 } else {
-                    source = `<div id="source-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
+                    source = `<div id="source-${data.name}-${data.title}"><a href="${data.protocol}://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                 }
                 document.getElementById("sources-"+data.name).innerHTML = document.getElementById("sources-"+data.name).innerHTML + source;
                 // 요소갯수에 따라 버튼을 설정한다.
@@ -1967,7 +1967,7 @@ function addReference(project, id, title, path) {
                     if (path.startsWith("http")) {
                         ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                     } else {
-                        ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
+                        ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.protocol}://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                     }
                     document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
                     // 요소갯수에 따라 버튼을 설정한다.
@@ -2009,7 +2009,7 @@ function addReference(project, id, title, path) {
                 if (path.startsWith("http")) {
                     ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}">${data.title}</a></div>`;
                 } else {
-                    ref = `<div id="reference-${data.name}-${data.title}"><a href="dilink://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
+                    ref = `<div id="reference-${data.name}-${data.title}"><a href="${data.protocol}://${data.path}" class="badge badge-outline-darkmode ml-1" alt="${data.userid}" title="${data.userid}" onclick="copyClipboard('${data.path}')">${data.title}</a></div>`;
                 }
                 document.getElementById("references-"+data.name).innerHTML = document.getElementById("references-"+data.name).innerHTML + ref;
                 // 요소갯수에 따라 버튼을 설정한다.
@@ -2223,7 +2223,7 @@ function setThummov(path) {
         },
         dataType: "json",
         success: function(data) {
-            document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="play">PLAY</a>`;
+            document.getElementById("button-thumbplay-"+data.name).innerHTML = `<a href="${data.protocol}://${data.path}" class="play">PLAY</a>`;
         },
         error: function(request,status,error){
             alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -2333,7 +2333,7 @@ function setRetimeplate(project, id, path) {
             if (data.path === "") {
                 document.getElementById("button-retime-"+data.name).innerHTML = "";
             } else {
-                document.getElementById("button-retime-"+data.name).innerHTML = `<a href="dilink://${data.path}" class="badge badge-danger">R</a>`;
+                document.getElementById("button-retime-"+data.name).innerHTML = `<a href="${data.protocol}://${data.path}" class="badge badge-danger">R</a>`;
             }
         },
         error: function(request,status,error){
@@ -2479,7 +2479,7 @@ function setTaskMov(project, id, task, mov) {
             if (data.mov === "") {
                 document.getElementById(`${data.id}-task-${data.task}-playbutton`).innerHTML = "";
             } else {
-                document.getElementById(`${data.id}-task-${data.task}-playbutton`).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="dilink://${data.mov}">▶</a>`;
+                document.getElementById(`${data.id}-task-${data.task}-playbutton`).innerHTML = `<a class="mt-1 ml-1 badge badge-light" href="${data.protocol}://${data.mov}">▶</a>`;
             }
         },
         error: function(request,status,error){
@@ -5328,7 +5328,7 @@ function addReviewComment() {
                     </div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+                        <a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -5381,7 +5381,7 @@ function addReviewCommentText(text) {
                     </div>`
                 } else {
                     newComment += `<div class="row pl-3 pt-3 pb-1">
-                        <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+                        <a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
                             <img src="/assets/img/link.svg" class="finger">
                         </a>
                         <span class="text-white pl-2 small">${data.mediatitle}</span>
@@ -6094,7 +6094,7 @@ document.onkeydown = function(e) {
 };
 
 function rvplay(id) {
-    // review id의 데이터를 가지고 path값을 구하고 dilink를 통해 rv player에 연결한다.
+    // review id의 데이터를 가지고 path값을 구하고 프로토콜을 통해 rv player에 연결한다.
     $.ajax({
         url: "/api/review",
         type: "post",
@@ -6107,7 +6107,7 @@ function rvplay(id) {
         dataType: "json",
         success: function(data) {
             let link = document.createElement('a');
-            link.href = "dilink://" + data.path;
+            link.href = document.getElementById("protocol").value + "://" + data.path;
             document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
             link.click();
             link.remove();
@@ -6130,7 +6130,7 @@ function playOriginal(project, name) {
         dataType: "json",
         success: function(data) {
             let link = document.createElement('a');
-            link.href = "dilink://" + data.thummov; // 썸네일 동영상이 보통은 썸네일을 플레이할 때의 Original Plate 이다.
+            link.href = document.getElementById("protocol").value + "://" + data.thummov; // 썸네일 동영상이 보통은 썸네일을 플레이할 때의 Original Plate 이다.
             document.body.appendChild(link); // firefox에서는 꼭 DOM구조를 지켜야 한다.
             link.click();
             link.remove();
@@ -6346,7 +6346,7 @@ function addReviewStatusModeComment() {
                 </div>`
             } else {
                 newComment += `<div class="row pl-3 pt-3 pb-1">
-                    <a href="dilink://${data.media}" onclick="copyClipboard('${data.media}')">
+                    <a href="${data.protocol}://${data.media}" onclick="copyClipboard('${data.media}')">
                         <img src="/assets/img/link.svg" class="finger">
                     </a>
                     <span class="text-white pl-2 small">${data.mediatitle}</span>

@@ -321,8 +321,10 @@ func handleAPISetThummov(w http.ResponseWriter, r *http.Request) {
 		Path    string `json:"path"`
 		UserID  string `json:"userid"`
 		Error   string `json:"error"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -735,15 +735,17 @@ func handleAPI2SetTaskMov(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		ID      string `json:"id"`
-		Task    string `json:"task"`
-		Mov     string `json:"mov"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		ID       string `json:"id"`
+		Task     string `json:"task"`
+		Mov      string `json:"mov"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -2156,12 +2158,14 @@ func handleAPISetCameraPubPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		ID      string `json:"id"`
-		Path    string `json:"path"`
-		UserID  string `json:"userid"`
+		Project  string `json:"project"`
+		ID       string `json:"id"`
+		Path     string `json:"path"`
+		UserID   string `json:"userid"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -4560,13 +4564,15 @@ func handleAPISetRetimePlate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		Path    string `json:"path"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		Path     string `json:"path"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -6190,8 +6196,10 @@ func handleAPIAddComment(w http.ResponseWriter, r *http.Request) {
 		UserID     string `json:"userid"`
 		AuthorName string `json:"authorname"`
 		Error      string `json:"error"`
+		Protocol   string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -6282,8 +6290,10 @@ func handleAPIEditComment(w http.ResponseWriter, r *http.Request) {
 		Media      string `json:"media"`
 		UserID     string `json:"userid"`
 		AuthorName string `json:"authorname"`
+		Protocol   string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -6447,15 +6457,17 @@ func handleAPIAddSource(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		ID      string `json:"id"`
-		Title   string `json:"title"`
-		Path    string `json:"path"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		ID       string `json:"id"`
+		Title    string `json:"title"`
+		Path     string `json:"path"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -6637,15 +6649,17 @@ func handleAPIAddReference(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type Recipe struct {
-		Project string `json:"project"`
-		Name    string `json:"name"`
-		ID      string `json:"id"`
-		Title   string `json:"title"`
-		Path    string `json:"path"`
-		UserID  string `json:"userid"`
-		Error   string `json:"error"`
+		Project  string `json:"project"`
+		Name     string `json:"name"`
+		ID       string `json:"id"`
+		Title    string `json:"title"`
+		Path     string `json:"path"`
+		UserID   string `json:"userid"`
+		Error    string `json:"error"`
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
