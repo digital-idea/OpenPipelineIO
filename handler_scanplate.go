@@ -438,6 +438,22 @@ func handleAPIOcioColorspace(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+func handleAPIProtocol(w http.ResponseWriter, r *http.Request) {
+	type recipe struct {
+		Protocol string `json:"protocol"`
+	}
+	rcp := recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func postHandleAPIScanPlate(w http.ResponseWriter, r *http.Request) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(*flagMongoDBURI))
 	if err != nil {
