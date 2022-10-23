@@ -133,7 +133,7 @@
 						<!--Retime-->
 						<div class="row" id="button-retime-{{.Name}}">
 							{{if .Retimeplate}}
-								<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
+								<a href="{{$.Setting.Protocol}}{{.Retimeplate}}" class="badge badge-danger">R</a>
 							{{end}}
 						</div>
 						<!--Just Mark-->
@@ -204,7 +204,7 @@
 			<div class="row">
 				<div class="mx-auto pt-1 row">
 					<div id="button-thumbplay-{{.Name}}">
-						<a href="dilink://{{.Thummov}}" class="play">PLAY</a>
+						<a href="{{$.Setting.Protocol}}://{{.Thummov}}" class="play">PLAY</a>
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 						<div id="button-thumb-{{.Name}}">

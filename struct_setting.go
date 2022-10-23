@@ -92,4 +92,5 @@ type Setting struct {
 	EnableEndpoint                       bool    `json:"enableendpoint"`                       // Endpoint 활성화
 	FullcalendarSchedulerLicenseKey      string  `json:"fullcalendarschedulerlicensekey"`      // Fullcalendar License Key
 	SlateFontPath                        string  `json:"slatefontpath"`                        // Slate에 사용되는 폰트 경로
+	Protocol                             string  `json:"protocol"`                             // 프로토콜 이름
 }
