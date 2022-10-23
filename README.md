@@ -25,7 +25,6 @@ OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 �
 1. 달력, 간트챠트 <https://fullcalendar.io> - 진행중
 1. InBox 구조: 메시지, 팔로우 기능: <https://github.com/gorilla/websocket>
 1. 장비관리 툴
-1. 웹 스캔 툴: 도토리의 multi clip, multi footage 연동 - 진행중
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
 1. 샷 파일 브라우져
 1. Data Mining: Machine learning을 위한 데이터 수집
