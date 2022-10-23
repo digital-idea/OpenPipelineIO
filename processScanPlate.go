@@ -342,7 +342,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			}
 			return
 		}
-	} else if scan.Ext == ".exr" {
+	} else if scan.Ext == ".exr" || scan.Ext == ".dpx" {
 		// 중간 프레임을 구한다.
 		middleFrame := scan.FrameIn + (scan.FrameOut-scan.FrameIn)/2
 		filename := fmt.Sprintf(scan.Base, middleFrame)
@@ -428,8 +428,8 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	// 플레이트 복사가 필요하다면 플레이트를 복사합니다.
-	if scan.CopyPlate && scan.Ext == ".exr" {
+	// exr, dpx 플레이트를 복사합니다.
+	if scan.CopyPlate && (scan.Ext == ".exr" || scan.Ext == ".dpx") {
 		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
 			filename := fmt.Sprintf(scan.Base, i)
 			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
@@ -444,7 +444,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			}
 		}
 	}
-
+	// mov 플레이트를 복사합니다.
 	if scan.CopyPlate && scan.Ext == ".mov" {
 		src := fmt.Sprintf("%s/%s", scan.Dir, scan.Base)
 		dst := fmt.Sprintf("%s/%s", item.Platepath, scan.Base)
@@ -459,7 +459,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// Proxy Jpg 옵션이 켜 있다면 Proxy jpg를 생성한다.
-	if scan.ProxyJpg && scan.Ext == ".exr" {
+	if scan.ProxyJpg && (scan.Ext == ".exr" || scan.Ext == ".dpx") {
 		// Proxy Jpg 가 생성될 경로를 만든다.
 		err = GenPlatePath(item.Platepath + "_jpg")
 		if err != nil {
@@ -472,7 +472,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
 			filename := fmt.Sprintf(scan.Base, i)
 			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
-			dst := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(filename, ".exr", ".jpg", -1))
+			dst := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(filename, scan.Ext, ".jpg", -1))
 
 			args := []string{
 				src,
@@ -499,7 +499,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// Proxy Half Jpg 옵션이 켜 있다면 Proxy half jpg를 생성한다.
-	if scan.ProxyHalfJpg && scan.Ext == ".exr" {
+	if scan.ProxyHalfJpg && (scan.Ext == ".exr" || scan.Ext == ".dpx") {
 		err = GenPlatePath(item.Platepath + "_jpg_half")
 		if err != nil {
 			err = SetScanPlateErrStatus(client, scanID, err.Error())
@@ -511,7 +511,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		for i := scan.FrameIn; i <= scan.FrameOut; i++ {
 			filename := fmt.Sprintf(scan.Base, i)
 			src := fmt.Sprintf("%s/%s", scan.Dir, filename)
-			dst := fmt.Sprintf("%s_jpg_half/%s", item.Platepath, strings.Replace(filename, ".exr", ".jpg", -1))
+			dst := fmt.Sprintf("%s_jpg_half/%s", item.Platepath, strings.Replace(filename, scan.Ext, ".jpg", -1))
 
 			args := []string{
 				src,
@@ -540,7 +540,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 	}
 
 	// Proxy Half Exr 옵션이 켜 있다면 Proxy half exr을 생성한다.
-	if scan.ProxyHalfExr && scan.Ext == ".exr" {
+	if scan.ProxyHalfExr && (scan.Ext == ".exr" || scan.Ext == ".dpx") {
 		err = GenPlatePath(item.Platepath + "_half")
 		if err != nil {
 			err = SetScanPlateErrStatus(client, scanID, err.Error())
@@ -575,9 +575,9 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 	}
 
-	// exr mov를 만든다.
-	if scan.GenMov && scan.Ext == ".exr" {
-		src := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(scan.Base, ".exr", ".jpg", -1))
+	// exr, dpx라면 mov를 만든다.
+	if scan.GenMov && (scan.Ext == ".exr" || scan.Ext == ".dpx") {
+		src := fmt.Sprintf("%s_jpg/%s", item.Platepath, strings.Replace(scan.Base, scan.Ext, ".jpg", -1))
 		args := []string{
 			"-f",
 			"image2",
