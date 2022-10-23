@@ -518,11 +518,14 @@ func Protocol(s string) string {
 	if strings.HasPrefix(s, "slack://") {
 		return "slack"
 	}
-	return "dilink"
+	return CachedAdminSetting.Protocol
 }
 
 // RmProtocol 템플릿 함수는 프로토콜 문자열을 반환한다.
 func RmProtocol(s string) string {
+	if strings.HasPrefix(s, CachedAdminSetting.Protocol+"://") {
+		return strings.TrimLeft(s, CachedAdminSetting.Protocol+"://")
+	}
 	if strings.HasPrefix(s, "http://") {
 		return strings.TrimLeft(s, "http://")
 	}
@@ -538,8 +541,8 @@ func RmProtocol(s string) string {
 	if strings.HasPrefix(s, "mailto://") {
 		return strings.TrimLeft(s, "mailto://")
 	}
-	if strings.HasPrefix(s, "dilink://") {
-		return strings.TrimLeft(s, "dilink://")
+	if strings.HasPrefix(s, "rvlink://") {
+		return strings.TrimLeft(s, "rvlink://")
 	}
 	if strings.HasPrefix(s, "git://") {
 		return strings.TrimLeft(s, "git://")

@@ -133,7 +133,7 @@
 						<!--Retime-->
 						<div class="row" id="button-retime-{{.Name}}">
 							{{if .Retimeplate}}
-								<a href="dilink://{{.Retimeplate}}" class="badge badge-danger">R</a>
+								<a href="{{$.Setting.Protocol}}{{.Retimeplate}}" class="badge badge-danger">R</a>
 							{{end}}
 						</div>
 						<!--Just Mark-->
@@ -204,7 +204,7 @@
 			<div class="row">
 				<div class="mx-auto pt-1 row">
 					<div id="button-thumbplay-{{.Name}}">
-						<a href="dilink://{{.Thummov}}" class="play">PLAY</a>
+						<a href="{{$.Setting.Protocol}}://{{.Thummov}}" class="play">PLAY</a>
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 						<div id="button-thumb-{{.Name}}">
@@ -219,9 +219,9 @@
 					</div>
 					<div id="button-dir-{{.Name}}">
 						{{if eq .Type "asset" -}}	
-							<a href="dilink:///show/{{.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
+							<a href="{{$.Setting.Protocol}}:///show/{{.Project}}/assets/{{.Assettype}}/{{.Name}}" class="badge badge-darkmode ml-1">F</a>
 						{{- else -}}
-							<a href="dilink://{{Parentpath .Platepath}}" class="badge badge-darkmode ml-1">F</a>
+							<a href="{{$.Setting.Protocol}}://{{Parentpath .Platepath}}" class="badge badge-darkmode ml-1">F</a>
 						{{- end}}
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
@@ -292,7 +292,7 @@
 							</div>
 							<div id="{{$id}}-task-{{.Title}}-playbutton">
 								{{if .Mov }}
-									<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
+									<a class="mt-1 ml-1 badge badge-light" href="{{$.Setting.Protocol}}://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
 								{{end}}
 							</div>
 							<div id="{{$id}}-task-{{.Title}}-publish">
@@ -438,7 +438,7 @@
 				</div>
 				<div id="campubpath-{{.ID}}">
 					{{if .ProductionCam.PubPath}}
-						<a href="dilink://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
+						<a href="{{$.Setting.Protocol}}://{{.ProductionCam.PubPath}}" class="text-badge ml-1">{{.ProductionCam.PubPath}}</a>
 					{{end}}
 				</div>
 				<div id="camprojection-{{.ID}}">

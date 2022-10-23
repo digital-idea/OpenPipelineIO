@@ -959,8 +959,10 @@ func handleAPIAddReviewComment(w http.ResponseWriter, r *http.Request) {
 		Frame                int    `json:"frame"`
 		FrameComment         bool   `json:"framecomment"`
 		ProductionStartFrame int    `json:"productionstartframe"` // UX 를 그릴 때 필요하다.
+		Protocol string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -1141,8 +1143,10 @@ func handleAPIAddReviewStatusModeComment(w http.ResponseWriter, r *http.Request)
 		Frame                int    `json:"frame"`
 		FrameComment         bool   `json:"framecomment"`
 		ProductionStartFrame int    `json:"productionstartframe"` // UX 를 그릴 때 필요하다.
+		Protocol             string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
@@ -1310,8 +1314,10 @@ func handleAPIEditReviewComment(w http.ResponseWriter, r *http.Request) {
 		UserID               string `json:"userid"`
 		Frame                int    `json:"frame"`
 		ProductionStartFrame int    `json:"productionstartframe"`
+		Protocol             string `json:"protocol"`
 	}
 	rcp := Recipe{}
+	rcp.Protocol = CachedAdminSetting.Protocol
 	rcp.ProductionStartFrame = CachedAdminSetting.ProductionStartFrame
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {

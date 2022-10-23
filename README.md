@@ -25,7 +25,6 @@ OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 �
 1. 달력, 간트챠트 <https://fullcalendar.io> - 진행중
 1. InBox 구조: 메시지, 팔로우 기능: <https://github.com/gorilla/websocket>
 1. 장비관리 툴
-1. 웹 스캔 툴: 도토리의 multi clip, multi footage 연동 - 진행중
 1. 소프트웨어 등록, 환경변수 관리 -> JWT토큰 정보를 uri로 보내는 형태의 웹프로토콜
 1. 샷 파일 브라우져
 1. Data Mining: Machine learning을 위한 데이터 수집
@@ -63,7 +62,7 @@ sudo openpipelineio -http :80 &> openpipelineio.log& # openpipelineio.log 파일
 
 > 여러분이 macOS를 사용한다면 기본적으로 80포트는 아파치 서버가 사용중일 수 있습니다. 80포트에 실행되는 아파치 서버를 종료하기 위해서 `$ sudo apachectl stop` 를 터미널에 입력해주세요.
 
-OpenPipelineIO는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [dilink-웹프로토콜](https://github.com/digital-idea/dilink)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 편리한 OpenPipelineIO를 활용할 수 있습니다.
+OpenPipelineIO는 [wfs-웹파일시스템](https://github.com/digital-idea/wfs), [dilog-로그서버](https://github.com/digital-idea/dilog), [웹프로토콜](https://github.com/lazypic/opio)과 같이 연동됩니다. 아래 서비스 실행 및 프로토콜 설치도 같이 진행하면 더욱 편리한 OpenPipelineIO를 활용할 수 있습니다.
 
 ```bash
 dilog -http :8080

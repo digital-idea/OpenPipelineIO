@@ -1,6 +1,7 @@
 {{define "navbar" }}
 <input type="hidden" id="token" value="{{$.User.Token}}">
 <input type="hidden" id="userid" value="{{$.User.ID}}">
+<input type="hidden" id="protocol" value="{{$.Setting.Protocol}}">
 
 <nav class="navbar navbar-expand-lg navbar-darkmode">
     <a class="navbar-brand" href="/">{{.Setting.AppName}}</a>

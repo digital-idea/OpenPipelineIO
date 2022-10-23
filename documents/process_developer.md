@@ -67,7 +67,7 @@ $ go run /usr/local/go/src/crypto/tls/generate_cert.go -host="openpipeline.io" -
 ## 배포
 
 항상 바이너리 파일 하나를 지향합니다.
-설치 서버 bin 폴더에 openpipelineio, dilink, dilog, wfs 파일을 배포합니다.
+설치 서버 bin 폴더에 openpipelineio, protocol, dilog, wfs 파일을 배포합니다.
 
 ## 자동실행
 

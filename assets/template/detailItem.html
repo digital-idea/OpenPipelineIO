@@ -127,7 +127,7 @@
 						<!--Retime-->
 						<div class="row" id="button-retime-{{$.Item.Name}}">
 							{{if $.Item.Retimeplate}}
-								<a href="dilink://{{$.Item.Retimeplate}}" class="badge badge-danger">R</a>
+								<a href="{{$.Setting.Protocol}}://{{$.Item.Retimeplate}}" class="badge badge-danger">R</a>
 							{{end}}
 						</div>
 						<!--Just Mark-->
@@ -198,7 +198,7 @@
 			<div class="row">
 				<div class="mx-auto pt-1 row">
 					<div id="button-thumbplay-{{$.Item.Name}}">
-						<a href="dilink://{{$.Item.Thummov}}" class="play">PLAY</a>
+						<a href="{{$.Setting.Protocol}}://{{$.Item.Thummov}}" class="play">PLAY</a>
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
 						<div id="button-thumb-{{$.Item.Name}}">
@@ -210,9 +210,9 @@
 					{{end}}
 					<div id="button-dir-{{$.Item.Name}}">
 						{{if eq $.Item.Type "asset" -}}	
-							<a href="dilink:///show/{{$.Item.Project}}/assets/{{$.Item.Assettype}}/{{$.Item.Name}}" class="badge badge-darkmode ml-1">F</a>
+							<a href="{{$.Setting.Protocol}}:///show/{{$.Item.Project}}/assets/{{$.Item.Assettype}}/{{$.Item.Name}}" class="badge badge-darkmode ml-1">F</a>
 						{{- else -}}
-							<a href="dilink://{{Parentpath $.Item.Platepath}}" class="badge badge-darkmode ml-1">F</a>
+							<a href="{{$.Setting.Protocol}}://{{Parentpath $.Item.Platepath}}" class="badge badge-darkmode ml-1">F</a>
 						{{- end}}
 					</div>
 					{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
@@ -284,7 +284,7 @@
 							</div>
 							<div id="{{$.Item.ID}}-task-{{.Title}}-playbutton">
 								{{if .Mov }}
-									<a class="mt-1 ml-1 badge badge-light" href="dilink://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
+									<a class="mt-1 ml-1 badge badge-light" href="{{$.Setting.Protocol}}://{{if $beforemov}}{{$beforemov}};{{end}}{{.Mov}}{{if $aftermov}};{{$aftermov}}{{end}}">▶</a>
 								{{end}}
 							</div>
 							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
@@ -420,7 +420,7 @@
 				</div>
 				<div id="campubpath-{{$.Item.ID}}">
 					{{if $.Item.ProductionCam.PubPath}}
-						<a href="dilink://{{$.Item.ProductionCam.PubPath}}" class="text-badge ml-1">{{$.Item.ProductionCam.PubPath}}</a>
+						<a href="{{$.Setting.Protocol}}://{{$.Item.ProductionCam.PubPath}}" class="text-badge ml-1">{{$.Item.ProductionCam.PubPath}}</a>
 					{{end}}
 				</div>
 				<div id="camprojection-{{$.Item.ID}}">
@@ -568,7 +568,7 @@
 					</div>
 					{{range SortByCreatetimeForPublishes $publishes}}
 						<div class="row ml-3 mt-1">
-							<a href="dilink://{{.Path}}" class="text-warning small">{{.Path}}</a>
+							<a href="{{$.Setting.Protocol}}://{{.Path}}" class="text-warning small">{{.Path}}</a>
 							<img src="/assets/img/copy.svg" class="finger" onclick="copyClipboardAndMessage('{{.Path}}')">
 							<small id="publish-{{$.Item.Project}}-{{$.Item.ID}}-{{$task}}-{{$key}}-{{.Createtime}}" value="{{.Createtime}}" class="font-italic pl-3">
 								{{if eq .Status "usethis" }}
@@ -612,7 +612,7 @@
 								<span class="badge badge-warning ml-1 mr-1">Update {{ToHumantime .Createtime}}</span>
 							{{end}}
 							{{if .IsOutput}}
-								<a href="dilink://{{.OutputDataPath}}" class="badge badge-darkmode ml-1 mr-1">Output Data: {{.OutputDataPath}}</a>
+								<a href="{{$.Setting.Protocol}}://{{.OutputDataPath}}" class="badge badge-darkmode ml-1 mr-1">Output Data: {{.OutputDataPath}}</a>
 							{{end}}
 							
 							{{if eq $.User.AccessLevel 3 4 5 6 7 8 9 10 11}}
