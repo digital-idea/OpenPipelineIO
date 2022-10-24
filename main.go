@@ -24,10 +24,6 @@ var (
 	DBPORT = ":27017"
 	// DBNAME 값은 데이터베이스 이름이다.
 	DBNAME = "csi" // legacy
-	// WFS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	WFS = "http://127.0.0.1:8081"
-	// DILOG 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
-	DILOG = "http://127.0.0.1:8080"
 	// DNS 값은 서비스 DNS 값입니다.
 	DNS = "openpipeline.io"
 	// MAILDNS 값은 컴파일 단계에서 회사에 따라 값이 바뀐다.
@@ -69,9 +65,6 @@ var (
 	// RV
 	flagRVPath = flag.String("rvpath", "/opt/rv-Linux-x86-64-7.0.0/bin/rv", "rvplayer path")
 	flagPlay   = flag.Bool("play", false, "Play RV")
-	// Etc Service
-	flagDILOG = flag.String("dilog", DILOG, "dilog webserver url and port. ex) "+DILOG)
-	flagWFS   = flag.String("wfs", WFS, "wfs webserver url and port. ex) "+WFS)
 
 	// Commandline Args
 	flagAdd                = flag.String("add", "", "add project, add item(shot, asset)")

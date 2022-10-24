@@ -109,7 +109,6 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	type recipe struct {
-		Wfs     string
 		User    User
 		Devmode bool
 		SearchOption
@@ -140,7 +139,6 @@ func handleHelp(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Devmode = *flagDevmode
 	rcp.User = u
-	rcp.Wfs = *flagWFS
 	rcp.Stages, err = AllStages(session)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

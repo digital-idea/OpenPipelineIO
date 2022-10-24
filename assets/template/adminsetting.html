@@ -455,13 +455,19 @@
                     <div class="col form-group">
                         <label for="ZimbraWebmailEndpoint">Zimbra Webmail Endpoint</label>
                         <input type="text" class="form-control" id="ZimbraWebmailEndpoint" name="ZimbraWebmailEndpoint" placeholder="https://zimbra.mail.server/zimbra/?view=compose&to=" value={{.Setting.ZimbraWebmailEndpoint}}>
-                        <small class="form-text text-muted">Zimbra Webmail Endpoint를 입력합니다.</small>
+                        <small class="form-text text-muted">Zimbra Webmail Endpoint</small>
                     </div>
                     <div class="col form-group">
-                        <label for="RVPath">RV Path</label>
-                        <input type="text" class="form-control" id="RVPath" name="RVPath" placeholder="/opt/rv-Linux-x86-64-7.0.0/bin/rv" value={{.Setting.RVPath}}>
-                        <small class="form-text text-muted">RV Player Path를 설정합니다.</small>
+                        <label for="WFS">Web File System URL</label>
+                        <input type="text" class="form-control" id="WFS" name="WFS" placeholder="" value={{.Setting.WFS}}>
+                        <small class="form-text text-muted">Web file system url</small>
                     </div>
+                    <div class="col form-group">
+                        <label for="LogServer">Log Server URL</label>
+                        <input type="text" class="form-control" id="LogServer" name="LogServer" placeholder="" value={{.Setting.LogServer}}>
+                        <small class="form-text text-muted">Log Server URL</small>
+                    </div>
+                    
                 </div>
                 <div class="row">
                     <div class="col form-group">
@@ -473,6 +479,11 @@
                         <label for="OCIOConfig">OpenColorIO Configs Path</label>
                         <input type="text" class="form-control" id="OCIOConfig" name="OCIOConfig" placeholder="/path/OpenColorIO-Configs/aces_1.0.3/config.ocio" value={{.Setting.OCIOConfig}}>
                         <small class="form-text text-muted">OpenColorIO Configs Path를 설정합니다.</small>
+                    </div>
+                    <div class="col form-group">
+                        <label for="RVPath">RV Path</label>
+                        <input type="text" class="form-control" id="RVPath" name="RVPath" placeholder="/opt/rv-Linux-x86-64-7.0.0/bin/rv" value={{.Setting.RVPath}}>
+                        <small class="form-text text-muted">RV Player Path를 설정합니다.</small>
                     </div>
                 </div>
                 <div class="row">
