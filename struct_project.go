@@ -100,7 +100,7 @@ type Project struct {
 	AWSProfile               string        `json:"awsprofile"`               // AWS Profile 이름
 	AWSLocalpath             string        `json:"awslocalpath"`             // AWS S3와 동기화할 로컬경로
 	SlackWebhookURL          string        `json:"slackwebhookurl"`          // Slack Webhook URL
-	FxElement                string        `json:"fxelement"`                // 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다. // legacy
+	FxElement                string        `json:"fxelement"`                // legacy 프로젝트에 사용하는 FX elemets 이다. 이 정보는 houdini pluto 에서 사용된다.
 	Deadline                 string        `json:"deadline"`                 // 마감일
 	Edit                     string        `json:"edit"`                     // 편집실이름, 담당자
 	EditContact              string        `json:"editcontact"`              // 편집실 연락처
