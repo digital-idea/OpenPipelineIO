@@ -160,6 +160,8 @@ func handleAdminSettingSubmit(w http.ResponseWriter, r *http.Request) {
 	s.SlateFontPath = r.FormValue("SlateFontPath")
 	s.RVPath = r.FormValue("RVPath")
 	s.Protocol = r.FormValue("Protocol")
+	s.LogServer = r.FormValue("LogServer")
+	s.WFS = r.FormValue("WFS")
 	ratio, err := strconv.ParseFloat(r.FormValue("DefaultScaleRatioOfUndistortionPlate"), 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

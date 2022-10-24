@@ -93,4 +93,6 @@ type Setting struct {
 	FullcalendarSchedulerLicenseKey      string  `json:"fullcalendarschedulerlicensekey"`      // Fullcalendar License Key
 	SlateFontPath                        string  `json:"slatefontpath"`                        // Slate에 사용되는 폰트 경로
 	Protocol                             string  `json:"protocol"`                             // 프로토콜 이름
+	WFS                                  string  `json:"wfs"`                                  // Web File system URL
+	LogServer                            string  `json:"logserver"`                            // Log Server URL
 }

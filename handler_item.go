@@ -181,8 +181,6 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 		Devmode     bool
 		Projectinfo Project
 		SearchOption
-		Dilog               string
-		Wfs                 string
 		Item                Item
 		TasksettingNames    []string
 		TasksettingOrderMap map[string]float64
@@ -193,8 +191,6 @@ func handleItemDetail(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp := recipe{}
 	rcp.Setting = CachedAdminSetting
-	rcp.Wfs = *flagWFS
-	rcp.Dilog = *flagDILOG
 	err = rcp.SearchOption.LoadCookie(session, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

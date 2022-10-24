@@ -38,8 +38,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		Totalnum                 Infobarnum
 		Projectinfo              Project
 		MailDNS                  string
-		Dilog                    string
-		Wfs                      string
 		OS                       string
 		TasksettingNames         []string
 		TasksettingOrderMap      map[string]float64
@@ -57,8 +55,6 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 	_, rcp.OS, _ = GetInfoFromRequestHeader(r)
 	rcp.Devmode = *flagDevmode
 	rcp.MailDNS = *flagMailDNS
-	rcp.Dilog = *flagDILOG
-	rcp.Wfs = *flagWFS
 
 	rcp.SessionID = ssid.ID
 	session, err := mgo.Dial(*flagDBIP)

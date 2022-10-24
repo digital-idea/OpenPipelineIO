@@ -124,7 +124,7 @@ $ touch io.openpipeline.plist
     <key>ProgramArguments</key>
     <array>
       <string>/usr/local/bin</string>
-      <string>OpenPipelineIO</string>
+      <string>openpipelineio</string>
       <string>-http=:443</string>
       <string>-dilog=http://openpipeline.io:8080</string>
       <string>-wfs=http://openpipeline.io:8081</string>
