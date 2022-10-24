@@ -639,10 +639,9 @@
 					<input type="text" name="MayaCropMaskSize" class="form-control" placeholder="maya cropmask size" value="{{.Project.MayaCropMaskSize}}" onkeyup="star2mult(event)">
 				</div>
 				<div class="form-group pt-3">
-					<label>FX 셋팅</label><br>
-					<small class="form-text text-muted">프로젝트에서 자주 사용하는 FX팀 후디니 테스크. ex) fire, water, splash ...</small><br>
-					<small class="form-text text-danger">이 옵션은 multitask가 추가되어 삭제될 예정입니다.</small>
-					<input type="text" name="FxElement" class="form-control" placeholder="maya cropmask size" value="{{.Project.FxElement}}">
+					<label>FX 셋팅</label>
+					<small class="form-text text-muted" hidden>프로젝트에서 자주 사용하는 FX팀 후디니 테스크. ex) fire, water, splash ...</small><br><!--legacy-->
+					<input type="text" name="FxElement" class="form-control" placeholder="maya cropmask size" value="{{.Project.FxElement}}" hidden><!--legacy-->
 					<small class="form-text text-muted">Houdini Import Scale. 기본값 0.1</small>
 					<input type="text" name="HoudiniImportScale" class="form-control" placeholder="Houdini Import Scale" value="{{.Project.HoudiniImportScale}}">
 				</div>

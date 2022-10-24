@@ -293,7 +293,7 @@ func handleEditTasksettingSubmit(w http.ResponseWriter, r *http.Request) {
 	order := r.FormValue("order")
 	excelorder := r.FormValue("excelorder")
 	pipelinestep := r.FormValue("pipelinestep")
-	category := r.FormValue("category")
+	category := r.FormValue("category") // legacy
 	initGenerate := str2bool(r.FormValue("initgenerate"))
 	t, err := getTaskSetting(session, id)
 	if err != nil {

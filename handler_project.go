@@ -376,7 +376,7 @@ func handleEditProjectSubmit(w http.ResponseWriter, r *http.Request) {
 	renewal.LutOutColorspace = r.FormValue("LutOutColorspace")
 	renewal.Description = r.FormValue("Description")
 	renewal.NukeGizmo = r.FormValue("NukeGizmo")
-	renewal.FxElement = r.FormValue("FxElement")
+	renewal.FxElement = r.FormValue("FxElement") // legacy
 	renewal.MayaCropMaskSize = r.FormValue("MayaCropMaskSize")
 	cropaspectratio, err := strconv.ParseFloat(r.FormValue("CropAspectRatio"), 64)
 	if err == nil {
