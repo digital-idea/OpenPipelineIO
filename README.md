@@ -33,13 +33,10 @@ OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 �
 
 ### 데이터베이스(mongoDB) 설치 및 서비스 실행
 
-CentOS
-
 - [CentOS7에서 mongoDB 설정](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
-
-macOS
-
+- [데비안 리눅스에서 설지하기](documents/install_debian.md)
 - [macOS에서 설치하기](documents/install_macOS.md)
+
 
 ### 실행하기
 
