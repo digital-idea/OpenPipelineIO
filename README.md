@@ -33,24 +33,10 @@ OpenPipelineIO는 영화, 드라마, 전시영상, 애니메이션, 게임 등 �
 
 ### 데이터베이스(mongoDB) 설치 및 서비스 실행
 
-CentOS
-
 - [CentOS7에서 mongoDB 설정](https://github.com/cgiseminar/curriculum/blob/master/docs/install_mongodb.md)
+- [데비안 리눅스에서 설지하기](documents/install_debian.md)
+- [macOS에서 설치하기](documents/install_macOS.md)
 
-macOS
-
-```bash
-brew uninstall mongodb
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-Windows
-
-- <https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi>
-- Download: <https://www.mongodb.com/download-center/community?jmp=docs>
-- Setup: <https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows-unattended/>
 
 ### 실행하기
 
