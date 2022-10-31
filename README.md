@@ -39,18 +39,7 @@ CentOS
 
 macOS
 
-```bash
-brew uninstall mongodb
-brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
-```
-
-Windows
-
-- <https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi>
-- Download: <https://www.mongodb.com/download-center/community?jmp=docs>
-- Setup: <https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows-unattended/>
+- [macOS에서 설치하기](documents/install_macOS.md)
 
 ### 실행하기
 
