@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -205,7 +206,13 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		return
 	}
-	item.Thummov = thumbnailMovPath.String()
+	movPath := thumbnailMovPath.String()
+	if scan.UseOriginalNameForMov {
+		// 만약 원본이름을 따라가고 싶다면 이곳에서 값을 바꾼다.
+		// "/show/test/plate/EP04_035_0040_main1_v001.%04d.exr"
+		movPath = filepath.Dir(movPath) + "/" + TrimDotRight(scan.Base) + ".mov"
+	}
+	item.Thummov = movPath
 
 	// 플레이트 경로를 설정합니다.
 	item.Platepath, err = PlatePath(item)
@@ -387,6 +394,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 		}
 		src := fmt.Sprintf("%s/%s", scan.Dir, scan.Base)
 		dst := thumbnailImagePath.String()
+
 		args := []string{
 			"-i",
 			src,
@@ -609,15 +617,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			args = append(args, []string{"-vf", slate}...)
 		}
 
-		dst, err := ThumbnailMovPath(item)
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-		args = append(args, dst) // mov가 생성되는 경로
+		args = append(args, movPath) // mov가 생성되는 경로
 		if *flagDebug {
 			fmt.Println(CachedAdminSetting.FFmpeg, strings.Join(args, " "))
 		}
@@ -661,15 +661,7 @@ func processingScanPlateImageItem(scan ScanPlate) {
 			args = append(args, []string{"-vf", slate}...)
 		}
 
-		dst, err := ThumbnailMovPath(item)
-		if err != nil {
-			err = SetScanPlateErrStatus(client, scanID, err.Error())
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-		args = append(args, dst) // mov가 생성되는 경로
+		args = append(args, movPath) // mov가 생성되는 경로
 		if *flagDebug {
 			fmt.Println(CachedAdminSetting.FFmpeg, strings.Join(args, " "))
 		}
