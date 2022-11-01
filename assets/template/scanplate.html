@@ -269,6 +269,12 @@
                 </div>
                 <div class="from-group">
                     <div class="form-check form-switch">
+                        <input class="form-check-input finger" type="checkbox" id="useoriginalnameformov" checked>
+                        <label class="form-check-label finger unselectable text-muted" for="useoriginalnameformov">Use Original Name for mov</label>
+                    </div>
+                </div>
+                <div class="from-group">
+                    <div class="form-check form-switch">
                         <input class="form-check-input finger" type="checkbox" id="genmovslate" checked>
                         <label class="form-check-label finger unselectable text-muted" for="genmovslate">Create Mov Slate</label>
                     </div>
@@ -429,6 +435,7 @@
             sources[i].genmov = document.getElementById("genmov").checked
             sources[i].genmovslate = document.getElementById("genmovslate").checked
             sources[i].lutpath = document.getElementById("lutpath").value
+            sources[i].useoriginalnameformov = document.getElementById("useoriginalnameformov").checked
             // 프로젝트 설정
             sources[i].project = document.getElementById("scanplate-project").value
             // 플레이트 사이즈
@@ -526,8 +533,7 @@
     
 
     function goProcessPage() {
-        window.location.replace("item-process")
-    }
+        window.location.replace("process")
 </script>
 
 </html>

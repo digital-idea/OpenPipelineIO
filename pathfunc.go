@@ -1184,3 +1184,10 @@ func MakeEven(n int) int {
 		return n - 1
 	}
 }
+
+func TrimDotRight(path string) string {
+	if !strings.Contains(path, ".") {
+		return path
+	}
+	return strings.Split(path, ".")[0]
+}
