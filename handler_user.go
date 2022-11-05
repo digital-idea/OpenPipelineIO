@@ -453,8 +453,8 @@ func OrganizationsFormToOrganizations(session *mgo.Session, s string) ([]Organiz
 	orgs := strings.Split(s, ":")
 	for _, org := range orgs {
 		parts := strings.Split(org, ",")
-		if len(parts) != 6 {
-			return results, errors.New("조직 정보가 충분하지 않습니다")
+		if len(parts) != 6 { // [ Primary여부(true||false), Division, Department, Team, Role, Position ] 총 6개의 마디로 되어있다.
+			continue
 		}
 		org := Organization{}
 		if parts[0] == "true" {
