@@ -63,6 +63,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			taskEvent.ResourceEditable = false
 			taskEvent.ID = item.ID
 			taskEvent.Title = task + " - " + item.Name
+
 			if value.Startdate == "" {
 				taskEvent.Start = value.Date // 작업마감일을 시작일로 설정한다.
 			} else {
@@ -71,7 +72,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 			// fullcalendar 특성상 end 날짜에 1일을 더해야 간트챠트 드로잉시 그래프 모양이 딱 맞다.
 			t, err := time.Parse(time.RFC3339, value.Date)
 			if err != nil {
-				return events, resources, err
+				continue // 사용자가 날짜에 이상하게 문자를 넣거나 하더라도 에러가 나면 안된다. 그냥 넘긴다.
 			}
 			t = t.Add(time.Hour * 24)
 			taskEvent.End = t.Format(time.RFC3339)
