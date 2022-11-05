@@ -29,7 +29,7 @@ func usage() {
 	fmt.Fprintf(os.Stderr, "\n")
 	fmt.Fprintf(os.Stderr, "에셋 추가:\n")
 	fmt.Fprintf(os.Stderr, "$ openpipelineio -add item -project [projectName] -name [assetName] -type asset\n")
-	fmt.Fprintf(os.Stderr, "  -assettype [char|env|global|prop|comp|plant|vehicle|group] -assettags [component|assembly]\n")
+	fmt.Fprintf(os.Stderr, "  -assettype [char|env|global|prop|comp|plant|vehicle|global|group] -assettags [component|assembly]\n")
 	fmt.Fprintf(os.Stderr, "\n")
 	flag.PrintDefaults()
 	os.Exit(2)

@@ -108,7 +108,7 @@ func isMov(path string) bool {
 // 에셋타입이 유효한지 체크하는 함수이다.
 func validAssettype(typ string) (bool, error) {
 	switch typ {
-	case "char", "comp", "env", "fx", "matte", "plant", "prop", "vehicle", "concept":
+	case "char", "comp", "env", "fx", "matte", "plant", "prop", "vehicle", "concept", "global":
 		return true, nil
 	default:
 		return false, fmt.Errorf("%s 이름을 에셋타입으로 사용할 수 없습니다", typ)
