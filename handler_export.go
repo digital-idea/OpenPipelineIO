@@ -168,6 +168,7 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/signin", http.StatusSeeOther)
 		return
 	}
+
 	if ssid.AccessLevel == 0 {
 		http.Redirect(w, r, "/invalidaccess", http.StatusSeeOther)
 		return
@@ -179,7 +180,9 @@ func handleUploadExcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+
 	mimeType := header.Header.Get("Content-Type")
+
 	switch mimeType {
 	case "text/csv":
 		data, err := ioutil.ReadAll(file)

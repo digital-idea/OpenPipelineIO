@@ -2426,12 +2426,12 @@ func SetShotType(session *mgo.Session, project, name, shottype string) (string, 
 		return "", fmt.Errorf("%s 는 asset type 입니다. 변경할 수 없습니다", name)
 	}
 	id := name + "_" + typ
-	err = validShottype(shottype)
+	err = validShottype(strings.ToLower(shottype))
 	if err != nil {
 		return id, err
 	}
 	c := session.DB("project").C(project)
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": shottype, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"shottype": strings.ToLower(shottype), "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return id, err
 	}
