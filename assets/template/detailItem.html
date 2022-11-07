@@ -118,7 +118,7 @@
 								</div>
 							{{end}}
 							<div id="shottype-{{$.Item.Name}}">
-								<span class="badge badge-light ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{$.Item.Project}}','{{$.Item.ID}}')"{{end}}>{{if $.Item.Shottype}}{{$.Item.Shottype}}{{else}}none{{end}}</span>
+								<span class="badge badge-light finger ml-1" {{if eq $.User.AccessLevel 5 6 7 8 9 10 11}} data-toggle="modal" data-target="#modal-shottype" onclick="setShottypeModal('{{$.Item.Project}}','{{$.Item.ID}}')"{{end}}>{{if $.Item.Shottype}}{{$.Item.Shottype}}{{else}}none{{end}}</span>
 							</div>
 						{{end}}
 					</div>
