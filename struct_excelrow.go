@@ -50,8 +50,8 @@ func (r *Excelrow) checkerror(session *mgo.Session, project string) {
 		r.NameError = "Shot, Asset 이름 형태가 아닙니다"
 		r.Errornum++
 	}
-	if r.Shottype != "" && !(r.Shottype == "2d" || r.Shottype == "3d" || r.Shottype == "2D" || r.Shottype == "3D" || r.Shottype == "2.5d" || r.Shottype == "2.5D") {
-		r.ShottypeError = "혀용되는 샷 타입이 아닙니다"
+	if !(r.Shottype == "" || r.Shottype == "2d" || r.Shottype == "3d" || r.Shottype == "2D" || r.Shottype == "3D" || r.Shottype == "2.5d" || r.Shottype == "2.5D") {
+		r.ShottypeError = "Not support shotype: 2d, 3d, 2.5d"
 		r.Errornum++
 	}
 	if r.Link != "" {
