@@ -51,7 +51,7 @@ func (r *Excelrow) checkerror(session *mgo.Session, project string) {
 		r.Errornum++
 	}
 	if !(r.Shottype == "" || r.Shottype == "2d" || r.Shottype == "3d" || r.Shottype == "2D" || r.Shottype == "3D" || r.Shottype == "2.5d" || r.Shottype == "2.5D") {
-		r.ShottypeError = "Not support shotype: 2d, 3d, 2.5d"
+		r.ShottypeError = "support shotype: 2d, 3d, 2.5d"
 		r.Errornum++
 	}
 	if r.Link != "" {
