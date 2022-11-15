@@ -21,14 +21,14 @@
 				<input class="form-control" id="searchbox-searchword" placeholder="Search word.." type="text" name="Searchword" value="{{.SearchOption.Searchword}}">
 				<div class="input-group-append">
 					<select name="Sortkey" id="searchbox-sortkey" class="custom-select">
-						<option value="id" {{if eq $.SearchOption.Sortkey "id" }}selected{{end}}>정렬: 샷네임</option>
-						<option value="rnum" {{if eq $.SearchOption.Sortkey "rnum" }}selected{{end}}>정렬: 롤넘버</option>
-						<option value="ddline3d" {{if eq $.SearchOption.Sortkey "ddline3d" }}selected{{end}}>정렬: 3D마감</option>
-						<option value="ddline2d" {{if eq $.SearchOption.Sortkey "ddline2d" }}selected{{end}}>정렬: 2D마감</option>
-						<option value="scanframe" {{if eq $.SearchOption.Sortkey "scanframe" }}selected{{end}}>정렬: 스캔길이</option>
-						<option value="scantime" {{if eq $.SearchOption.Sortkey "scantime" }}selected{{end}}>정렬: 스캔날짜</option>
-						<option value="taskpredate" {{if eq $.SearchOption.Sortkey "taskpredate" }}selected{{end}}>정렬: Task 1차마감</option>
-						<option value="taskdate" {{if eq $.SearchOption.Sortkey "taskdate" }}selected{{end}}>정렬: Task 2차마감</option>
+						<option value="id" {{if eq $.SearchOption.Sortkey "id" }}selected{{end}}>Sort: Name</option>
+						<option value="rnum" {{if eq $.SearchOption.Sortkey "rnum" }}selected{{end}}>Sort: Rnum</option>
+						<option value="ddline3d" {{if eq $.SearchOption.Sortkey "ddline3d" }}selected{{end}}>Sort: Deadline 3D</option>
+						<option value="ddline2d" {{if eq $.SearchOption.Sortkey "ddline2d" }}selected{{end}}>Sort: Deadline 2D</option>
+						<option value="scanframe" {{if eq $.SearchOption.Sortkey "scanframe" }}selected{{end}}>Sort: Scan Length</option>
+						<option value="scantime" {{if eq $.SearchOption.Sortkey "scantime" }}selected{{end}}>Sort: Scan Date</option>
+						<option value="taskpredate" {{if eq $.SearchOption.Sortkey "taskpredate" }}selected{{end}}>Sort: Task Deadline 1st</option>
+						<option value="taskdate" {{if eq $.SearchOption.Sortkey "taskdate" }}selected{{end}}>Sort: Task Deadline 2nd</option>
 					</select>
 				</div>
 				<div class="input-group-append">
