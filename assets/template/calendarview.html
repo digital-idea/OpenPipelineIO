@@ -10,18 +10,17 @@
 
 
 <script>
-	
 	function calendarview() {
 		document.getElementById("listview").style.display="none";
 		document.getElementById("page").style.display="none";
 		var calendarEl = document.getElementById('calendar');
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			eventClick: function(info) { // 아이템을 클릭할 때 발생하는 이벤트
-				console.log('Event: ' + info.event.title);
-				console.log('Event: ' + info.event.start);
-				console.log('Event: ' + info.event.end);
-				console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-				console.log('View: ' + info.view.type);
+				//console.log('Event: ' + info.event.title);
+				//console.log('Event: ' + info.event.start);
+				//console.log('Event: ' + info.event.end);
+				//console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+				//console.log('View: ' + info.view.type);
 			},
 			eventDrop: function(info) { // 드레그를 멈출 때 출력하는 이벤트
 				if (info.event.extendedProps.key == "deadline2d") {
@@ -44,12 +43,13 @@
 					})
 					.then((data) => {
 						document.getElementById("deadline2d-"+data.name).innerHTML = `<span class="black-opbg" data-toggle="modal" data-target="#deadline2d" onclick="setDeadline2dModal('${data.project}','${data.id}')">2D:${data.shortdate}</span>`;
+						
 					})
 					.catch((err) => {
 						alert(err)
 					});
 				}
-				if (info.event.extendedProps.key == "tasks") {
+				if (info.event.extendedProps.key == "tasks") { // 테스크를 드레그할 때
 					d = new Date(info.event.endStr)
 					d = new Date(d.getTime() - (60 * 60 * 24 * 1000))
 					let endStr = d.toISOString().split('T')[0]
@@ -74,6 +74,8 @@
 					})
 					.then((data) => {
 						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+						// 이곳에서 이벤트를 업데이트 해야한다.
+						console.log(info)
 					})
 					.catch((err) => {
 						alert(err)
@@ -94,8 +96,8 @@
 				p.style.left = offsetX - scrollX + info.jsEvent.pageX + "px"
 				let pathToImage = "/thumbnail/"+info.event.extendedProps.project+"/"+info.event.extendedProps.itemid+".jpg"
 				document.getElementById("calendarThumbnail").src = pathToImage
-				console.log(info.event.extendedProps.project)
-				console.log(info.event.extendedProps.itemid)
+				//console.log(info.event.extendedProps.project)
+				//console.log(info.event.extendedProps.itemid)
 			},
 			eventMouseLeave: function(info) {
 				document.getElementById("calendarImageZone").hidden = true
@@ -135,6 +137,7 @@
 					})
 					.then((data) => {
 						document.getElementById(`${data.id}-task-${data.task}-date`).innerHTML = `<span class="mt-1 ml-1 badge badge-darkmode">${data.shortend}</span>`;
+						
 					})
 					.catch((err) => {
 						alert(err)
@@ -206,9 +209,10 @@
 			resourceGroupField: 'resourcegroup',
 			//resources: 'https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors',
 			resources: JSON.parse({{.FullCalendarResourceJson}}),
-			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
+			//events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline',
 			events: JSON.parse({{.FullCalendarEventJson}}),
 		});
+		
 		calendar.render();
 	}
 </script>

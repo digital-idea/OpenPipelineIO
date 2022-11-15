@@ -2305,9 +2305,12 @@ func SetDeadline2D(session *mgo.Session, project, name, date string) (string, er
 		return "", err
 	}
 	id := name + "_" + typ
-	fullTime, err := ditime.ToFullTime(19, date)
-	if err != nil {
-		return id, err
+	fullTime := ""
+	if date != "" {
+		fullTime, err = ditime.ToFullTime(19, date)
+		if err != nil {
+			return id, err
+		}
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline2d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
@@ -2329,9 +2332,12 @@ func SetDeadline3D(session *mgo.Session, project, name, date string) (string, er
 		return "", err
 	}
 	id := name + "_" + typ
-	fullTime, err := ditime.ToFullTime(19, date)
-	if err != nil {
-		return id, err
+	fullTime := ""
+	if date != "" {
+		fullTime, err = ditime.ToFullTime(19, date)
+		if err != nil {
+			return id, err
+		}
 	}
 	c := session.DB("project").C(project)
 	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"ddline3d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})

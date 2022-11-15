@@ -4679,6 +4679,7 @@ function listview() {
     document.getElementById("listview").style.display="block";
     document.getElementById("page").style.display="block";
     document.getElementById("calendar").innerHTML = "";
+    document.location.reload(); // 새로고침을 해야한다. 달력 간트챠트의 데이터를 새로 그리기 위해
 }
 
 

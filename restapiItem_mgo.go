@@ -3916,10 +3916,6 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 	}
 	rcp.Name = name
 	date := r.FormValue("date")
-	if date == "" {
-		http.Error(w, "date name", http.StatusBadRequest)
-		return
-	}
 	rcp.Date = date
 	userid := r.FormValue("userid")
 	if userid == "" {
@@ -3956,12 +3952,8 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetDeadline3D 함수는 아이템의 3D 마감일을 설정한다.
+// handleAPISetDeadline3D 함수는 아이템의 2D 마감일을 설정한다.
 func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project   string `json:"project"`
 		Name      string `json:"name"`
@@ -3989,40 +3981,25 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "date":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Date = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "need name", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+	date := r.FormValue("date")
+	rcp.Date = date
+	userid := r.FormValue("userid")
+	if userid == "" {
+		rcp.UserID = "unknown"
+	}
+	rcp.UserID = userid
 	id, err := SetDeadline3D(session, rcp.Project, rcp.Name, rcp.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -4043,7 +4020,11 @@ func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 	}
 	// json 으로 결과 전송
 	rcp.ShortDate = ToShortTime(rcp.Date) // 웹사이트에 렌더링시 사용한다.
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
