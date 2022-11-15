@@ -209,6 +209,7 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	eventJson, err := json.Marshal(event)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -221,7 +222,8 @@ func handleInputMode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rcp.FullCalendarResourceJson = string(resourceJson)
-
+	// fmt.Println(rcp.FullCalendarResourceJson)
+	// fmt.Println(rcp.FullCalendarEventJson)
 	// 최종적으로 사용된 프로젝트명을 쿠키에 저장한다.
 	cookie := http.Cookie{
 		Name:   "Project",
