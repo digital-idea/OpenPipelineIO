@@ -3952,7 +3952,7 @@ func handleAPISetDeadline2D(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
-// handleAPISetDeadline3D 함수는 아이템의 2D 마감일을 설정한다.
+// handleAPISetDeadline3D 함수는 아이템의 3D 마감일을 설정한다.
 func handleAPISetDeadline3D(w http.ResponseWriter, r *http.Request) {
 	type Recipe struct {
 		Project   string `json:"project"`
