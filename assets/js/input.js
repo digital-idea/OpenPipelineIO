@@ -28,36 +28,56 @@ var SELECT_COLOR = "rgb(255, 196, 35)" // 선택된 색상
 var NON_SELECT_COLOR = "rgb(167, 165, 157)" // 기본 색상
 
 // modal이 뜨면 오토포커스가 되어야 한다.
-$('#modal-addcomment').on('shown.bs.modal', function () {
-    $('#modal-addcomment-text').trigger('focus')
-})
-$('#modal-editcomment').on('shown.bs.modal', function () {
-    $('#modal-editcomment-text').trigger('focus')
-})
-$('#modal-setnote').on('shown.bs.modal', function () {
-    $('#modal-setnote-text').trigger('focus')
-})
-$('#modal-addsource').on('shown.bs.modal', function () {
-    $('#modal-addsource-subject').trigger('focus')
-})
-$('#modal-rmsource').on('shown.bs.modal', function () {
-    $('#modal-rmsource-subject').trigger('focus')
-})
-$('#modal-setrnum').on('shown.bs.modal', function () {
-    $('#modal-setrnum-text').trigger('focus')
-})
-$('#modal-addtag').on('shown.bs.modal', function () {
-    $('#modal-addtag-text').trigger('focus')
-})
-$('#modal-rmtag').on('shown.bs.modal', function () {
-    $('#modal-rmtag-text').trigger('focus')
-})
-$('#modal-deadline2d').on('shown.bs.modal', function () {
-    $('#modal-deadline2d-date').trigger('focus')
-})
-$('#modal-deadline3d').on('shown.bs.modal', function () {
-    $('#modal-deadline3d-date').trigger('focus')
-})
+if (document.getElementById("modal-addcomment") !== null) {
+    $('#modal-addcomment').on('shown.bs.modal', function () {
+        $('#modal-addcomment-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-editcomment") !== null) {
+    $('#modal-editcomment').on('shown.bs.modal', function () {
+        $('#modal-editcomment-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-setnote") !== null) {
+    $('#modal-setnote').on('shown.bs.modal', function () {
+        $('#modal-setnote-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-addsource") !== null) {
+    $('#modal-addsource').on('shown.bs.modal', function () {
+        $('#modal-addsource-subject').trigger('focus')
+    })
+}
+if (document.getElementById("modal-rmsource") !== null) {
+    $('#modal-rmsource').on('shown.bs.modal', function () {
+        $('#modal-rmsource-subject').trigger('focus')
+    })
+}
+if (document.getElementById("modal-setrnum") !== null) {
+    $('#modal-setrnum').on('shown.bs.modal', function () {
+        $('#modal-setrnum-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-addtag") !== null) {
+    $('#modal-addtag').on('shown.bs.modal', function () {
+        $('#modal-addtag-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-rmtag") !== null) {
+    $('#modal-rmtag').on('shown.bs.modal', function () {
+        $('#modal-rmtag-text').trigger('focus')
+    })
+}
+if (document.getElementById("modal-deadline2d") !== null) {
+    $('#modal-deadline2d').on('shown.bs.modal', function () {
+        $('#modal-deadline2d-date').trigger('focus')
+    })
+}
+if (document.getElementById("modal-deadline3d") !== null) {
+    $('#modal-deadline3d').on('shown.bs.modal', function () {
+        $('#modal-deadline3d-date').trigger('focus')
+    })
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
