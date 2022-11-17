@@ -513,6 +513,7 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 	season := r.FormValue("Season")
 	episode := r.FormValue("Episode")
 	mkdir := str2bool(r.FormValue("Mkdir"))
+	genTask := str2bool(r.FormValue("GenTask"))
 	setRendersize := str2bool(r.FormValue("SetRendersize"))
 	netflixID := r.FormValue("NetflixID")
 	f := func(c rune) bool {
@@ -635,23 +636,25 @@ func handleAddShotSubmit(w http.ResponseWriter, r *http.Request) {
 			i.Status = NONE // legacy
 			i.StatusV2 = "none"
 		}
-		// 기본적으로 생성해야할 Task를 추가한다.
-		if i.Type == "org" || i.Type == "left" {
-			i.Tasks = make(map[string]Task)
-			for _, task := range tasks {
-				if !task.InitGenerate {
-					continue
+		if genTask {
+			// 기본적으로 생성해야할 Task를 추가한다.
+			if i.Type == "org" || i.Type == "left" {
+				i.Tasks = make(map[string]Task)
+				for _, task := range tasks {
+					if !task.InitGenerate {
+						continue
+					}
+					if task.Type != "shot" {
+						continue
+					}
+					t := Task{
+						Title:        task.Name,
+						Status:       ASSIGN, // legacy
+						StatusV2:     initStatus,
+						Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
+					}
+					i.Tasks[task.Name] = t
 				}
-				if task.Type != "shot" {
-					continue
-				}
-				t := Task{
-					Title:        task.Name,
-					Status:       ASSIGN, // legacy
-					StatusV2:     initStatus,
-					Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
-				}
-				i.Tasks[task.Name] = t
 			}
 		}
 		err = i.CheckError()
@@ -837,6 +840,7 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 	construction := r.FormValue("Construction")
 	crowdAsset := str2bool(r.FormValue("CrowdAsset"))
 	mkdir := str2bool(r.FormValue("Mkdir"))
+	genTask := str2bool(r.FormValue("GenTask"))
 	netflixID := r.FormValue("NetflixID")
 	f := func(c rune) bool {
 		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
@@ -878,22 +882,24 @@ func handleAddAssetSubmit(w http.ResponseWriter, r *http.Request) {
 		i.Assettags = []string{assettype, construction}
 		i.CrowdAsset = crowdAsset
 		i.NetflixID = netflixID
-		// 기본적으로 생성해야할 Task를 추가한다.
-		i.Tasks = make(map[string]Task)
-		for _, task := range tasks {
-			if !task.InitGenerate {
-				continue
+		if genTask {
+			// 기본적으로 생성해야할 Task를 추가한다.
+			i.Tasks = make(map[string]Task)
+			for _, task := range tasks {
+				if !task.InitGenerate {
+					continue
+				}
+				if task.Type != "asset" {
+					continue
+				}
+				t := Task{
+					Title:        task.Name,
+					Status:       ASSIGN, // legacy
+					StatusV2:     initStatusID,
+					Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
+				}
+				i.Tasks[task.Name] = t
 			}
-			if task.Type != "asset" {
-				continue
-			}
-			t := Task{
-				Title:        task.Name,
-				Status:       ASSIGN, // legacy
-				StatusV2:     initStatusID,
-				Pipelinestep: task.Pipelinestep, // 파이프라인 스텝을 설정한다.
-			}
-			i.Tasks[task.Name] = t
 		}
 		err = addItem(session, project, i)
 		if err != nil {
