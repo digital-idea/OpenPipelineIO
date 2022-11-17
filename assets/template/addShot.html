@@ -16,17 +16,12 @@
                     <option value="{{.}}" {{if eq $.SearchOption.Project .}}selected{{end}}>{{.}}</option>
                 {{end}}
                 </select>
-                <small class="form-text text-muted">샷을 생성할 프로젝트를 선택해주세요.</small>
             </div>
             <div class="row pt-3">
                 <div class="col">
                     <div class="form-group">
                         <label><span class="text-danger">*</span>Name</label>
                         <input type="text" name="Name" class="form-control" placeholder="예) SS_0010">
-                        <small class="form-text text-muted">샷 이름을 작성해주세요. 예) SS_0010</small>
-                        <small class="form-text text-muted">" " 띄어쓰기 또는 "," 문자를 이용해서 동시에 여러샷을 생성할 수 있습니다.</small>
-                        <small class="form-text text-muted">&nbsp;&nbsp;예) SS_0010 SS_0020</small>
-                        <small class="form-text text-muted">MS Excel, Google Spreadsheet, Apple Numbers, LibreOffice Spreadsheet 의 Cell 데이터를 Copy & Paste 하여 사용가능합니다.</small>
                     </div>
                 </div>
             </div>
@@ -44,14 +39,11 @@
                         <label class="btn btn-darkmode" for="btnradio1" onclick="setTypeAddShot('org',true)">Org ( Default )</label>
                     
                         <input type="radio" class="btn-check" name="addshot-type" id="btnradio2" autocomplete="off">
-                        <label class="btn btn-darkmode" for="btnradio2" onclick="setTypeAddShot('left',true)">Stereo(입체)</label>
+                        <label class="btn btn-darkmode" for="btnradio2" onclick="setTypeAddShot('left',true)">Stereo</label>
 
                         <input type="radio" class="btn-check" name="addshot-type" id="btnradio3" autocomplete="off">
-                        <label class="btn btn-darkmode" for="btnradio3" onclick="setTypeAddShot('',false)">Custom(직접입력)</label>
+                        <label class="btn btn-darkmode" for="btnradio3" onclick="setTypeAddShot('',false)">Custom</label>
                     </div>
-                </div>
-                <div class="col-12">
-                    <small class="form-text text-muted">Type 이름을 버튼을 눌러 설정하거나 직접 입력해주세요.</small>
                 </div>
             </div>
 
@@ -61,21 +53,18 @@
                     <div class="form-group">
                         <label for="Season">Season</label>
                         <input type="text" class="form-control" id="Season" name="Season" placeholder="Season">
-                        <small class="form-text text-muted">넷플릭스 프로젝트에 활용</small>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label for="Episode">Episode</label>
                         <input type="text" class="form-control" id="Episode" name="Episode" placeholder="Episode">
-                        <small class="form-text text-muted">넷플릭스 프로젝트에 활용</small>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
-                        <label for="netflixid">NetflixID</label>
+                        <label for="netflixid">Netflix ID</label>
                         <input type="text" class="form-control" id="netflixid" name="NetflixID" placeholder="NetflixID">
-                        <small class="form-text text-muted">NetflixID</small>
                     </div>
                 </div>
             </div>
@@ -85,19 +74,19 @@
                     <div class="from-group">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="SetRendersize" name="SetRendersize" value="true" checked>
-                            <label class="form-check-label" for="SetRendersize">자동으로 렌더사이즈 입력하기</label>
+                            <label class="form-check-label" for="SetRendersize">Set Rendersize</label>
                         </div>
                     </div>
                     <div class="from-group">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="Mkdir" name="Mkdir" value="true">
-                            <label class="form-check-label" for="Mkdir">샷 디렉토리 생성하기</label>
+                            <label class="form-check-label" for="Mkdir">Create Shot Folder</label>
                         </div>
                     </div>
                     <div class="from-group">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="GenTask" name="GenTask" value="true" checked>
-                            <label class="form-check-label" for="GenTask">등록된 Task 자동 생성</label>
+                            <label class="form-check-label" for="GenTask">Create Registered Tasks</label>
                         </div>
                     </div>
                 </div>
