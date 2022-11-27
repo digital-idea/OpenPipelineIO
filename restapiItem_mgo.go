@@ -7192,10 +7192,6 @@ func handleAPISetTaskLevel(w http.ResponseWriter, r *http.Request) {
 
 // handleAPITask 함수는 Task정보를 가지고온다.
 func handleAPITask(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project     string `json:"project"`
 		Name        string `json:"name"`
@@ -7217,40 +7213,27 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.RequestTask = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "need name", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "need task", http.StatusBadRequest)
+		return
+	}
+	rcp.RequestTask = task
+
 	id, t, err := GetTask(session, rcp.Project, rcp.Name, rcp.RequestTask)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -7261,9 +7244,14 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 	// 웹에 표시를 위해서 FullTime을 NormalTime으로 변경
 	rcp.Task.Startdate = ToNormalTime(rcp.Task.Startdate)
 	rcp.Task.Predate = ToNormalTime(rcp.Task.Predate)
+	rcp.Task.Startdate2nd = ToNormalTime(rcp.Task.Startdate2nd)
 	rcp.Task.Date = ToNormalTime(rcp.Task.Date)
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

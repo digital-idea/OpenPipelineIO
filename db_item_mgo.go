@@ -2386,7 +2386,7 @@ func SetTaskStartdate2nd(session *mgo.Session, project, id, task, date string) e
 	if err != nil {
 		return err
 	}
-	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate2d": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate2nd": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
 	if err != nil {
 		return err
 	}
