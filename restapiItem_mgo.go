@@ -3682,10 +3682,6 @@ func handleAPI2SetTaskUser(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskStartdate 함수는 아이템의 task에 대한 시작일을 설정한다.
 func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
@@ -3780,10 +3776,6 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskStartdate2nd 함수는 아이템의 task에 대한 2차 시작일을 설정한다.
 func handleAPISetTaskStartdate2nd(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
@@ -3842,7 +3834,6 @@ func handleAPISetTaskStartdate2nd(w http.ResponseWriter, r *http.Request) {
 		}
 		rcp.ID = rcp.Name + "_" + typ
 	}
-
 	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
