@@ -3778,6 +3778,104 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 }
 
+// handleAPISetTaskStartdate2nd 함수는 아이템의 task에 대한 2차 시작일을 설정한다.
+func handleAPISetTaskStartdate2nd(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Name    string `json:"name"`
+		Date    string `json:"date"`
+		Task    string `json:"task"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	rcp.Project = r.FormValue("project")
+	if rcp.Project == "" {
+		if err != nil {
+			http.Error(w, "프로젝트가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Name = r.FormValue("name")
+	if rcp.Name == "" {
+		if err != nil {
+			http.Error(w, "name이 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Task = r.FormValue("task")
+	if rcp.Task == "" {
+		if err != nil {
+			http.Error(w, "task가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Date = r.FormValue("date") // 마감일이 빈 문자열이 될 수 있다.
+	rcp.ID = r.FormValue("id")
+	if rcp.ID == "" {
+		typ, err := Type(session, rcp.Project, rcp.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rcp.ID = rcp.Name + "_" + typ
+	}
+
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = SetTaskStartdate2nd(session, rcp.Project, rcp.ID, rcp.Task, rcp.Date)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task StartDate2nd: %s", rcp.Task, rcp.Date), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task StartDate2nd: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 // handleAPISetTaskUserNote 함수는 아이템의 task에 대한 시작일을 설정한다.
 func handleAPISetTaskUserNote(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

@@ -556,6 +556,7 @@ func webserver(port string) {
 	r.HandleFunc("/api/settaskresultday", handleAPISetTaskResultDay)
 	r.HandleFunc("/api/settaskpredate", handleAPISetTaskPredate)
 	r.HandleFunc("/api/settaskstartdate", handleAPISetTaskStartdate)
+	r.HandleFunc("/api/settaskstartdate2nd", handleAPISetTaskStartdate2nd)
 	r.HandleFunc("/api/task", handleAPITask)
 	r.HandleFunc("/api/shottype", handleAPIShottype)
 	r.HandleFunc("/api/setcrowdasset", handleAPISetCrowdAsset)
