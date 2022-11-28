@@ -53,9 +53,7 @@ type FullCalendarExtendedProps struct {
 	Project         string   `json:"project"`         // 프로젝트명, 감독컨펌, 데이터 아웃 날짜를 구하기 위해 프로젝트가 필요하다.
 	Deadline2d      string   `json:"deadline2d"`      // 2D 데드라인(Comp 데드라인과 같다.)
 	Task            string   `json:"task"`            // Task 이름
-	TaskStartDate   string   `json:"taskstartdate"`   // 작업 시작일 RFC3339
-	TaskPreDeadline string   `json:"taskpredeadline"` // 1차 마감일 RFC3339
-	TaskDeadline    string   `json:"taskdeadline"`    // 2차 마감일 RFC3339
+	DeadlineType    string   `json:"deadlinetype"`    // 1st, 2nd
 	Pipelinestep    string   `json:"pipelinestep"`    // pipelinestep
 	Tags            []string `json:"tags"`            // Tags
 	Key             string   `json:"key"`             // db key

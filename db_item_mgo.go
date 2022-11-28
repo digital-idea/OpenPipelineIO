@@ -2293,6 +2293,52 @@ func SetTaskDuration(session *mgo.Session, project, id, task, start, end string)
 	return nil
 }
 
+// SetTaskDuration1st 함수는 item에 1차 마감일 start, end 일을 셋팅한다.
+func SetTaskDuration1st(session *mgo.Session, project, id, task, start, end string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	startTime, err := ditime.ToFullTime(10, start)
+	if err != nil {
+		return err
+	}
+	endTime, err := ditime.ToFullTime(19, end)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate": startTime, "tasks." + task + ".predate": endTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetTaskDuration2nd 함수는 item에 2차 마감일 start, end 일을 셋팅한다.
+func SetTaskDuration2nd(session *mgo.Session, project, id, task, start, end string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	startTime, err := ditime.ToFullTime(10, start)
+	if err != nil {
+		return err
+	}
+	endTime, err := ditime.ToFullTime(19, end)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate2nd": startTime, "tasks." + task + ".date": endTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetDeadline2D 함수는 item에 2D마감일을 셋팅한다.
 func SetDeadline2D(session *mgo.Session, project, name, date string) (string, error) {
 	session.SetMode(mgo.Monotonic, true)

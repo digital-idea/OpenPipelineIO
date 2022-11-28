@@ -24,7 +24,7 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 
 			deadline2dEvent := FullCalendarEvent{}
 			deadline2dEvent.Title = "Deadline - " + item.Name
-			deadline2dEvent.Color = "#BE2625"
+			deadline2dEvent.Color = "#0A610C"
 			deadline2dEvent.Start = item.Ddline2d
 			deadline2dEvent.End = item.Ddline2d
 			deadline2dEvent.AllDay = true
@@ -44,54 +44,85 @@ func ItemsToFCEventsAndFCResource(items []Item) ([]FullCalendarEvent, []FullCale
 		}
 		// Task별로 날짜 Event를 만들어야 한다.
 		for task, value := range item.Tasks {
-			if value.Date == "" && value.Startdate == "" {
-				continue
+			if value.Predate != "" || value.Date != "" {
+				// 리소스를 추가한다. 간트챠트를 그리기 위해서 필요하다.
+				resource := FullCalendarResource{}
+				resource.ID = item.ID + task
+				resource.Title = task
+				resource.ResourceGroup = item.Name
+				resources = append(resources, resource)
 			}
-			// 리소스를 추가한다. 간트챠트를 그리기 위해서 필요하다.
-			resource := FullCalendarResource{}
-			resource.ID = item.ID + task
-			resource.Title = task
-			resource.ResourceGroup = item.Name
-			resources = append(resources, resource)
-
-			taskEvent := FullCalendarEvent{}
-			taskEvent.AllDay = true
-			taskEvent.Editable = true
-			taskEvent.StartEditable = true
-			taskEvent.EndEditable = true
-			taskEvent.DurationEditable = true
-			taskEvent.ResourceEditable = false
-			taskEvent.ID = item.ID
-			taskEvent.Title = task + " - " + item.Name
-
-			if value.Startdate == "" {
-				taskEvent.Start = value.Date // 작업마감일을 시작일로 설정한다.
-			} else {
-				taskEvent.Start = value.Startdate // 작업시작일
+			if value.Predate != "" {
+				taskEvent := FullCalendarEvent{}
+				taskEvent.AllDay = true
+				taskEvent.Editable = true
+				taskEvent.StartEditable = true
+				taskEvent.EndEditable = true
+				taskEvent.DurationEditable = true
+				taskEvent.ResourceEditable = false
+				taskEvent.ID = item.ID
+				taskEvent.Color = "#93E57B"
+				taskEvent.TextColor = "#000000"
+				taskEvent.Title = task + " - " + item.Name
+				taskEvent.Start = value.Startdate // 작업 시작일 설정
+				if value.Startdate == "" {
+					taskEvent.Start = value.Predate // 작업마감일을 시작일로 설정한다.
+				}
+				// fullcalendar 특성상 end 날짜에 1일을 더해야 간트챠트 드로잉시 그래프 모양이 딱 맞다.
+				t, err := time.Parse(time.RFC3339, value.Predate)
+				if err != nil {
+					continue // 사용자가 날짜에 이상하게 문자를 넣거나 하더라도 에러가 나면 안된다. 그냥 넘긴다.
+				}
+				t = t.Add(time.Hour * 24)
+				taskEvent.End = t.Format(time.RFC3339)
+				taskEvent.ExtendedProps.Project = item.Project
+				taskEvent.ExtendedProps.ItemID = item.ID
+				taskEvent.ExtendedProps.ItemName = item.Name
+				taskEvent.ExtendedProps.Task = task
+				taskEvent.ExtendedProps.Tags = item.Tag
+				taskEvent.ExtendedProps.Pipelinestep = value.Pipelinestep
+				taskEvent.ExtendedProps.UserID = value.UserID
+				taskEvent.ExtendedProps.DeadlineType = "1st"
+				taskEvent.ExtendedProps.Key = "tasks"
+				taskEvent.ResourceId = item.ID + task
+				events = append(events, taskEvent)
 			}
-			// fullcalendar 특성상 end 날짜에 1일을 더해야 간트챠트 드로잉시 그래프 모양이 딱 맞다.
-			t, err := time.Parse(time.RFC3339, value.Date)
-			if err != nil {
-				continue // 사용자가 날짜에 이상하게 문자를 넣거나 하더라도 에러가 나면 안된다. 그냥 넘긴다.
+			if value.Date != "" {
+				taskEvent := FullCalendarEvent{}
+				taskEvent.AllDay = true
+				taskEvent.Editable = true
+				taskEvent.StartEditable = true
+				taskEvent.EndEditable = true
+				taskEvent.DurationEditable = true
+				taskEvent.ResourceEditable = false
+				taskEvent.ID = item.ID
+				taskEvent.Color = "#29AF1D"
+				taskEvent.TextColor = "#000000"
+				taskEvent.Title = task + " - " + item.Name
+				taskEvent.Start = value.Startdate2nd // 작업 시작일 설정
+				if value.Startdate2nd == "" {
+					taskEvent.Start = value.Date // 작업마감일을 시작일로 설정한다.
+				}
+				// fullcalendar 특성상 end 날짜에 1일을 더해야 간트챠트 드로잉시 그래프 모양이 딱 맞다.
+				t, err := time.Parse(time.RFC3339, value.Date)
+				if err != nil {
+					continue // 사용자가 날짜에 이상하게 문자를 넣거나 하더라도 에러가 나면 안된다. 그냥 넘긴다.
+				}
+				t = t.Add(time.Hour * 24)
+				taskEvent.End = t.Format(time.RFC3339)
+				taskEvent.ExtendedProps.Project = item.Project
+				taskEvent.ExtendedProps.ItemID = item.ID
+				taskEvent.ExtendedProps.ItemName = item.Name
+				taskEvent.ExtendedProps.Task = task
+				taskEvent.ExtendedProps.Tags = item.Tag
+				taskEvent.ExtendedProps.Pipelinestep = value.Pipelinestep
+				taskEvent.ExtendedProps.UserID = value.UserID
+				taskEvent.ExtendedProps.DeadlineType = "2nd"
+				taskEvent.ExtendedProps.Key = "tasks"
+				taskEvent.ResourceId = item.ID + task
+				events = append(events, taskEvent)
 			}
-			t = t.Add(time.Hour * 24)
-			taskEvent.End = t.Format(time.RFC3339)
-
-			taskEvent.ExtendedProps.Project = item.Project
-			taskEvent.ExtendedProps.ItemID = item.ID
-			taskEvent.ExtendedProps.ItemName = item.Name
-			taskEvent.ExtendedProps.Task = task
-			taskEvent.ExtendedProps.Tags = item.Tag
-			taskEvent.ExtendedProps.Pipelinestep = value.Pipelinestep
-			taskEvent.ExtendedProps.UserID = value.UserID
-			taskEvent.ExtendedProps.TaskDeadline = value.Date       // 최종마감일
-			taskEvent.ExtendedProps.TaskPreDeadline = value.Predate // 1차마감일
-			taskEvent.ExtendedProps.TaskStartDate = value.Startdate // 작업시작일
-			taskEvent.ExtendedProps.Key = "tasks"
-			taskEvent.ResourceId = item.ID + task
-			events = append(events, taskEvent)
 		}
-		// PM이 설정한 마감일로 Event를 만들어서 날짜 이벤트를 만들어야 한다.
 
 	}
 	return events, resources, nil
