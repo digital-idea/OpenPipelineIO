@@ -3682,10 +3682,6 @@ func handleAPI2SetTaskUser(w http.ResponseWriter, r *http.Request) {
 
 // handleAPISetTaskStartdate 함수는 아이템의 task에 대한 시작일을 설정한다.
 func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project string `json:"project"`
 		ID      string `json:"id"`
@@ -3763,6 +3759,99 @@ func handleAPISetTaskStartdate(w http.ResponseWriter, r *http.Request) {
 	}
 	// slack log
 	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task StartDate: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPISetTaskStartdate2nd 함수는 아이템의 task에 대한 2차 시작일을 설정한다.
+func handleAPISetTaskStartdate2nd(w http.ResponseWriter, r *http.Request) {
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		Name    string `json:"name"`
+		Date    string `json:"date"`
+		Task    string `json:"task"`
+		UserID  string `json:"userid"`
+		Error   string `json:"error"`
+	}
+	rcp := Recipe{}
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	rcp.UserID, _, err = TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	r.ParseForm()
+	rcp.Project = r.FormValue("project")
+	if rcp.Project == "" {
+		if err != nil {
+			http.Error(w, "프로젝트가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Name = r.FormValue("name")
+	if rcp.Name == "" {
+		if err != nil {
+			http.Error(w, "name이 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Task = r.FormValue("task")
+	if rcp.Task == "" {
+		if err != nil {
+			http.Error(w, "task가 빈 문자열 입니다", http.StatusBadRequest)
+			return
+		}
+	}
+	rcp.Date = r.FormValue("date") // 마감일이 빈 문자열이 될 수 있다.
+	rcp.ID = r.FormValue("id")
+	if rcp.ID == "" {
+		typ, err := Type(session, rcp.Project, rcp.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		rcp.ID = rcp.Name + "_" + typ
+	}
+	err = HasTask(session, rcp.Project, rcp.ID, rcp.Task)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = SetTaskStartdate2nd(session, rcp.Project, rcp.ID, rcp.Task, rcp.Date)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Set %s Task StartDate2nd: %s", rcp.Task, rcp.Date), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, rcp.Project, fmt.Sprintf("Set %s Task StartDate2nd: %s\nProject: %s, Name: %s, Author: %s", rcp.Task, rcp.Date, rcp.Project, rcp.Name, rcp.UserID))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -7103,10 +7192,6 @@ func handleAPISetTaskLevel(w http.ResponseWriter, r *http.Request) {
 
 // handleAPITask 함수는 Task정보를 가지고온다.
 func handleAPITask(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
 	type Recipe struct {
 		Project     string `json:"project"`
 		Name        string `json:"name"`
@@ -7128,40 +7213,27 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	for key, values := range r.PostForm {
-		switch key {
-		case "userid":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			if rcp.UserID == "unknown" && v != "" {
-				rcp.UserID = v
-			}
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.Name = v
-		case "task":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			rcp.RequestTask = v
-		}
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
 	}
+	rcp.Project = project
+
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "need name", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+
+	task := r.FormValue("task")
+	if task == "" {
+		http.Error(w, "need task", http.StatusBadRequest)
+		return
+	}
+	rcp.RequestTask = task
+
 	id, t, err := GetTask(session, rcp.Project, rcp.Name, rcp.RequestTask)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -7172,9 +7244,14 @@ func handleAPITask(w http.ResponseWriter, r *http.Request) {
 	// 웹에 표시를 위해서 FullTime을 NormalTime으로 변경
 	rcp.Task.Startdate = ToNormalTime(rcp.Task.Startdate)
 	rcp.Task.Predate = ToNormalTime(rcp.Task.Predate)
+	rcp.Task.Startdate2nd = ToNormalTime(rcp.Task.Startdate2nd)
 	rcp.Task.Date = ToNormalTime(rcp.Task.Date)
 	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)

@@ -241,8 +241,8 @@ function setEditTaskModal(project, id, task) {
         },
         dataType: "json",
         success: function(data) {
-            
             document.getElementById('modal-edittask-startdate').value=data.task.startdate;
+            document.getElementById('modal-edittask-startdate2nd').value=data.task.startdate2nd;
             document.getElementById('modal-edittask-predate').value=data.task.predate;
             document.getElementById('modal-edittask-date').value=data.task.date;
             document.getElementById('modal-edittask-expectday').value=data.task.expectday;
@@ -3002,7 +3002,7 @@ function setTaskStartdate(project, id, task, date) {
             let id = cboxes[i].getAttribute("id")
             $.ajax({
                 url: "/api/settaskstartdate",
-                type: "post",
+                type: "POST",
                 data: {
                     project: project,
                     id: id,
@@ -3015,7 +3015,7 @@ function setTaskStartdate(project, id, task, date) {
                 },
                 dataType: "json",
                 success: function(data) {
-                    console.log(data.date);
+                    //console.log(data.date);
                 },
                 error: function(request,status,error){
                     alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
@@ -3039,6 +3039,64 @@ function setTaskStartdate(project, id, task, date) {
             dataType: "json",
             success: function(data) {
                 console.log(data.date);
+            },
+            error: function(request,status,error){
+                alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+}
+
+function setTaskStartdate2nd(project, id, task, date) {
+    let token = document.getElementById("token").value;
+    let userid = document.getElementById("userid").value;
+    if (isMultiInput()) {
+        let cboxes = document.getElementsByName('selectID');
+        for (var i = 0; i < cboxes.length; ++i) {
+            if(cboxes[i].checked === false) {
+                continue
+            }
+            sleep(200)
+            let id = cboxes[i].getAttribute("id")
+            $.ajax({
+                url: "/api/settaskstartdate2nd",
+                type: "post",
+                data: {
+                    project: project,
+                    id: id,
+                    task: task,
+                    date: date,
+                    userid: userid,
+                },
+                headers: {
+                    "Authorization": "Basic "+ token
+                },
+                dataType: "json",
+                success: function(data) {
+                    //console.log(data.date);
+                },
+                error: function(request,status,error){
+                    alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+    } else {
+        $.ajax({
+            url: "/api/settaskstartdate2nd",
+            type: "post",
+            data: {
+                project: project,
+                id: id,
+                task: task,
+                date: date,
+                userid: userid,
+            },
+            headers: {
+                "Authorization": "Basic "+ token
+            },
+            dataType: "json",
+            success: function(data) {
+                //console.log(data.date);
             },
             error: function(request,status,error){
                 alert("code:"+request.status+"\n"+"status:"+status+"\n"+"msg:"+request.responseText+"\n"+"error:"+error);

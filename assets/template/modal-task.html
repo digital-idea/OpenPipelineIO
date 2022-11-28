@@ -67,8 +67,8 @@
     </div>
 
     <!-- Modal: Edit Task-->
-    <div class="modal fade" id="modal-edittask" tabindex="-1" role="dialog" aria-labelledby="modal-edittask" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal" id="modal-edittask" tabindex="-1" role="dialog" aria-labelledby="modal-edittask" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content bg-darkmode">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-edittask-title">Edit Task</h5>
@@ -79,21 +79,19 @@
                 <div class="modal-body mb-0 pb-0">
                     <div class="row">
                         <div class="col-8 form-group">
-                            <label class="col-form-label col-form-label-sm">User</label>
+                            <label class="col-form-label col-form-label-sm">Artist</label>
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-9">
                                     <input type="text" class="form-control form-control-sm searchuser" id="modal-edittask-user" autocomplete="off">
                                 </div>
-                                <div class="col-4">
-                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser()">SET USER</button>
+                                <div class="col-3">
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="setTaskUser()">SET ARTIST</button>
                                 </div>
                             </div>
-                            <small class="form-text text-mute">사용자 이름만 입력해주세요.</small>
                         </div>
                         <div class="col-4 form-group">
                             <label class="col-form-label col-form-label-sm">User Comment</label>
-                            <input type="text" class="form-control form-control-sm" id="modal-edittask-usercomment" placeholder="참고정보" onchange="setTaskUserComment()">
-                            <small class="form-text text-mute">아티스트명 뒷쪽 메모</small>
+                            <input type="text" class="form-control form-control-sm" id="modal-edittask-usercomment" placeholder="" onchange="setTaskUserComment()">
                         </div>
                     </div>
                     
@@ -103,14 +101,12 @@
                     <input type="hidden" class="form-control" id="modal-edittask-id">
                     <div class="row">
                         <div class="col form-group">
-                            <label class="col-form-label">Task:</label>
+                            <label class="col-form-label">Task</label>
                             <input type="text" class="form-control form-control-sm" id="modal-edittask-task" disabled>
-                            <small class="form-text text-mute">Task 이름</small>
                         </div>
                         <div class="col form-group">
                             <label class="col-form-label">Pipelinestep</label>
-                            <select class="form-control form-control-sm" id="modal-edittask-pipelinestep" onchange="setTaskPipelinestep(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-pipelinestep').value)">
-                            </select>
+                            <select class="form-control form-control-sm" id="modal-edittask-pipelinestep" onchange="setTaskPipelinestep(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, document.getElementById('modal-edittask-pipelinestep').value)"></select>
                         </div>
                         {{if eq $.SearchOption.SearchbarTemplate "searchbarV1" }}
                             <div class="col form-group">
@@ -126,7 +122,6 @@
                                     <option value="1">hold</option>
                                     <option value="0">none</option>
                                 </select>
-                                <small class="form-text text-mute">상태를 설정합니다.</small>
                             </div>
                         {{else}}
                             <!--Status v2-->
@@ -137,22 +132,21 @@
                                         <option value="{{.ID}}">{{.ID}}</option>
                                     {{end}}
                                 </select>
-                                <small class="form-text text-mute">상태를 설정합니다.</small>
                             </div>
                         {{end}}
                     </div>
                     
                     <div class="form-group">
-                        <label class="col-form-label">Media Path:</label>
+                        <label class="col-form-label">Media Path (.mov, .mp4, .rv, .png, .jpg)</label>
                         <input type="text" class="form-control form-control-sm" id="modal-edittask-path" onchange="setTaskMov(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
                     </div>
                     <div class="row">
                         <div class="col-4 form-group">
-                            <label class="col-form-label col-form-label-sm">예상일수</label>
+                            <label class="col-form-label col-form-label-sm">Plan Days / 예상일수</label>
                             <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-expectday" onchange="setTaskExpectDay(this.value)">
                         </div>
                         <div class="col-4 form-group">
-                            <label class="col-form-label col-form-label-sm">작업일수</label>
+                            <label class="col-form-label col-form-label-sm">Actual Days / 실제작업일수</label>
                             <input type="number" min="0" max="365" step="1" class="form-control form-control-sm" id="modal-edittask-resultday" onchange="setTaskResultDay(this.value)">
                         </div>
                         <div class="col-4 form-group">
@@ -161,26 +155,30 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4 form-group">
-                            <label class="col-form-label col-form-label-sm">시작일</label>
+                        <div class="col-3 form-group">
+                            <label class="col-form-label col-form-label-sm">Start 1st / 1차시작</label>
                             <input type=date class="form-control form-control-sm" id="modal-edittask-startdate" value="" onchange="setTaskStartdate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
-                            <small class="form-text text-mute">작업 시작일</small>
+                            
                         </div>
-                        <div class="col-4 form-group">
-                            <label class="col-form-label col-form-label-sm">1차마감</label>
+                        <div class="col-3 form-group">
+                            <label class="col-form-label col-form-label-sm">Deadline 1st / 1차마감</label>
                             <input type=date class="form-control form-control-sm" id="modal-edittask-predate" value="" onchange="setTaskPredate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
-                            <small class="form-text text-mute">협업을 위한 중간 마감일</small>
+                            
                         </div>
-                        <div class="col-4 form-group">
-                            <label class="col-form-label col-form-label-sm">2차마감</label>
+                        <div class="col-3 form-group">
+                            <label class="col-form-label col-form-label-sm">Start 2nd / 2차시작</label>
+                            <input type=date class="form-control form-control-sm" id="modal-edittask-startdate2nd" value="" onchange="setTaskStartdate2nd(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)"  placeholder="YYYY-MM-DD" >
+                            
+                        </div>
+                        <div class="col-3 form-group">
+                            <label class="col-form-label col-form-label-sm">Deadline 2nd / 2차마감</label>
                             <input type=date class="form-control form-control-sm" id="modal-edittask-date" value="" onchange="setTaskDate(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)" placeholder="YYYY-MM-DD">
-                            <small class="form-text text-mute">최종마감일</small>
+                            
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="multi-input-link" class="col-form-label col-form-label-sm">공지사항</label>
-                        <input type="text" id="modal-edittask-usernote" class="form-control form-control-sm" value="" placeholder="공지사항" onchange="setTaskUserNote(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
-                        <small class="form-text text-mute">Task 작업에 참고할 공지사항</small>
+                        <label for="multi-input-link" class="col-form-label col-form-label-sm">Task Notice / 공지사항</label>
+                        <input type="text" id="modal-edittask-usernote" class="form-control form-control-sm" value="" placeholder="" onchange="setTaskUserNote(document.getElementById('modal-edittask-project').value, document.getElementById('modal-edittask-id').value, document.getElementById('modal-edittask-task').value, this.value)">
                     </div>
                     
                 </div>			

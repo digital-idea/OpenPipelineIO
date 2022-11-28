@@ -2370,6 +2370,29 @@ func SetTaskStartdate(session *mgo.Session, project, id, task, date string) erro
 	return nil
 }
 
+// SetTaskStartdate2nd 함수는 item에 task의 2차 startdate 값을 셋팅한다.
+func SetTaskStartdate2nd(session *mgo.Session, project, id, task, date string) error {
+	session.SetMode(mgo.Monotonic, true)
+	err := HasProject(session, project)
+	if err != nil {
+		return err
+	}
+	c := session.DB("project").C(project)
+	err = HasTask(session, project, id, task)
+	if err != nil {
+		return err
+	}
+	fullTime, err := ditime.ToFullTime(19, date)
+	if err != nil {
+		return err
+	}
+	err = c.Update(bson.M{"id": id}, bson.M{"$set": bson.M{"tasks." + task + ".startdate2nd": fullTime, "updatetime": time.Now().Format(time.RFC3339)}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // SetTaskUserNote 함수는 item에 task의 user note 값을 셋팅한다.
 func SetTaskUserNote(session *mgo.Session, project, name, task, usernote string) error {
 	session.SetMode(mgo.Monotonic, true)
