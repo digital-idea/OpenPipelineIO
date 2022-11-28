@@ -913,24 +913,25 @@ hr {
 }
 
 .fc-day-sun {
-	color: #ff5252!important;
+	color: #ff5252!important; /*일요일 색상*/
 }
 
 .fc-day-sat {
-	color: #ff4f4f!important;
+	color: #ff4f4f!important; /*토요일 색상*/
 }
 
 .fc-day-today {
-	background-color: #424040!important;
+	background-color: #5E5E5E!important; /*오늘날짜 배경*/
+	color: #000000!important;
 }
 
 .fc-daygrid-day-number {
-	color: #9e9e9e!important;
+	color: #9e9e9e!important; /*한달 달력뷰 글씨 색상*/
 }
 
 
 .fc-datagrid-cell-main {
-	color: #9e9e9e!important;
+	color: #9e9e9e!important; /*간트챠트 왼쪽 리소스 색상*/
 }
 
 .fc-list-event-title {
@@ -944,13 +945,17 @@ hr {
 
 
 .fc-cell-shaded {
-	color: #b3aeae!important;
+	color: #b3aeae!important; /*리스트뷰 색상*/
 	background-color: #424040!important;
 }
 
 .fc-button-primary {
 	background-color: #232222!important;
 	border-color: #383636!important;
+}
+
+.fc-timeline-slot {
+	border-color: #3C3C3C!important; /*달력뷰의 세로선*/
 }
 
 .border-table {
