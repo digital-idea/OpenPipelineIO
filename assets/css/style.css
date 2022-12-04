@@ -785,6 +785,17 @@ span.player-rv {
     width: 36px;
 }
 
+span.link-solid {
+    background: url(/assets/img/link-solid.svg) no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+	filter: invert(55%) sepia(4%) saturate(19%) hue-rotate(12deg) brightness(97%) contrast(87%); /*#888888*/
+	/*https://codepen.io/sosuke/pen/Pjoqqp*/
+}
+
 span.player-original {
     background: url(/assets/img/player-original.svg) no-repeat center center;
     background-size: contain;
