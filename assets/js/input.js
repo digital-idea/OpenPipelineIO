@@ -5737,6 +5737,9 @@ function selectReviewItem(id) {
     video.src = `/reviewdata?id=${id}&ext=${ext}`;
     video.autoplay = true;
     video.loop = true;
+    video.defaultMuted = false; // Sound 처리
+    video.muted = false; // Sound 처리
+    video.volume = 0.5; // Sound 처리
     video.setAttribute("id", "currentvideo");
 
     // 이미지 객체를 생성한다.

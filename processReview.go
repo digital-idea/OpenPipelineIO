@@ -281,12 +281,9 @@ func genMp4(item Review) error {
 		"7",
 		"-vf",
 		"pad=ceil(iw/2)*2:ceil(ih/2)*2", // 영상의 세로 픽셀이 홀수일때 연산되지 않는다. 이 옵션이 필요하다.
-		"-an",
 		"-pix_fmt",
 		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
-		"-threads",
-		strconv.Itoa(CachedAdminSetting.FFmpegThreads), // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
-		CachedAdminSetting.ReviewDataPath + "/" + item.ID.Hex() + ".mp4",
+
 	}
 	if CachedAdminSetting.AudioCodec == "nosound" {
 		// nosound라면 사운드를 넣지 않는 옵션을 추가한다.
@@ -296,6 +293,10 @@ func genMp4(item Review) error {
 		args = append(args, "-c:a")
 		args = append(args, CachedAdminSetting.AudioCodec)
 	}
+
+	args = append(args, "-threads")
+	args = append(args, strconv.Itoa(CachedAdminSetting.FFmpegThreads)) // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
+	args = append(args, CachedAdminSetting.ReviewDataPath+"/"+item.ID.Hex()+".mp4")
 	err := exec.Command(CachedAdminSetting.FFmpeg, args...).Run()
 	if err != nil {
 		return err
