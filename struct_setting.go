@@ -95,4 +95,5 @@ type Setting struct {
 	Protocol                             string  `json:"protocol"`                             // 프로토콜 이름
 	WFS                                  string  `json:"wfs"`                                  // Web File system URL
 	LogServer                            string  `json:"logserver"`                            // Log Server URL
+	AudioCodec                           string  `json:"audiocodec"`                           // 오디오 코덱
 }

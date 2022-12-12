@@ -564,6 +564,22 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="text-muted">Audio Codec</label>
+                            <select name="audiocodec" class="form-control">
+                                <option value="nosound" {{if eq .Setting.AudioCodec "nosound" "" }}selected{{end}}>No Sound</option>
+                                <option value="copy" {{if eq .Setting.AudioCodec "copy" }}selected{{end}}>Copy Original</option>
+                                <option value="ac3" {{if eq .Setting.AudioCodec "ac3" }}selected{{end}}>Audio Coding-3(ac3)</option>
+                                <option value="aac" {{if eq .Setting.AudioCodec "aac" }}selected{{end}}>Advanced Adio Coding(aac)</option>
+                                <option value="mp3" {{if eq .Setting.AudioCodec "mp3" }}selected{{end}}>MPEG-1 Audio Layer-3(mp3)</option>
+                                <option value="dtc" {{if eq .Setting.AudioCodec "dca" }}selected{{end}}>DCA (DTS Coherent Acoustics)</option>
+                                <option value="flac" {{if eq .Setting.AudioCodec "flac" }}selected{{end}}>Free Lossless Audio Codec(flac)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col form-group">
                         <label>페이지당 아이템갯수</label>
                         <select name="ItemNumberOfPage" class="form-control">
