@@ -112,7 +112,7 @@ func processingReviewClipItem(review Review) {
 		return
 	}
 	// mp4를 생성한다.
-	err = genMp4(CachedAdminSetting, review)
+	err = genMp4(review)
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -121,7 +121,7 @@ func processingReviewClipItem(review Review) {
 		return
 	}
 	// 생성된 .mp4 파일이 mp4 자료구조를 같는지 체크한다.
-	err = checkMp4FileStruct(CachedAdminSetting, review)
+	err = checkMp4FileStruct(review)
 	if err != nil {
 		err = setErrReview(session, reviewID, err.Error())
 		if err != nil {
@@ -231,7 +231,6 @@ func processingReviewImageItem(review Review) {
 		}
 		return
 	}
-	return
 }
 
 // checkQuicktimeFileStruct 함수는 리뷰 아이템 정보를 이용해서 atom 구조가 정상인지 체크한다.
@@ -253,8 +252,8 @@ func checkQuicktimeFileStruct(item Review) error {
 }
 
 // checkMp4FileStruct 함수는 리뷰 아이템 정보를 mp4 구조가 정상인지 체크한다.
-func checkMp4FileStruct(admin Setting, item Review) error {
-	file, err := os.Open(admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4")
+func checkMp4FileStruct(item Review) error {
+	file, err := os.Open(CachedAdminSetting.ReviewDataPath + "/" + item.ID.Hex() + ".mp4")
 	if err != nil {
 		return err
 	}
@@ -271,7 +270,7 @@ func checkMp4FileStruct(admin Setting, item Review) error {
 }
 
 // genMp4 는 리뷰 아이템 정보를 이용해서 .mp4 동영상을 만든다.
-func genMp4(admin Setting, item Review) error {
+func genMp4(item Review) error {
 	args := []string{
 		"-y",
 		"-i",
@@ -282,36 +281,23 @@ func genMp4(admin Setting, item Review) error {
 		"7",
 		"-vf",
 		"pad=ceil(iw/2)*2:ceil(ih/2)*2", // 영상의 세로 픽셀이 홀수일때 연산되지 않는다. 이 옵션이 필요하다.
-		"-an",
 		"-pix_fmt",
 		"yuv420p", // 이 옵션이 없다면 Prores로 동영상을 만들때 크롬에서만 재생된다.
-		"-threads",
-		strconv.Itoa(CachedAdminSetting.FFmpegThreads), // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
-		admin.ReviewDataPath + "/" + item.ID.Hex() + ".mp4",
-	}
-	err := exec.Command(admin.FFmpeg, args...).Run()
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
-// genOgg 는 리뷰 아이템 정보를 이용해서 .ogg 동영상을 만든다.
-func genOgg(admin Setting, item Review) error {
-	args := []string{
-		"-y",
-		"-i",
-		item.Path,
-		"-c:v",
-		"libtheora",
-		"-qscale:v",
-		"7",
-		"-an",
-		"-threads",
-		strconv.Itoa(CachedAdminSetting.FFmpegThreads), // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
-		admin.ReviewDataPath + "/" + item.ID.Hex() + ".ogg",
 	}
-	err := exec.Command(admin.FFmpeg, args...).Run()
+	if CachedAdminSetting.AudioCodec == "nosound" {
+		// nosound라면 사운드를 넣지 않는 옵션을 추가한다.
+		args = append(args, "-an")
+	} else {
+		// 다른 사운드 코덱이라면 사운드클 체크한다.
+		args = append(args, "-c:a")
+		args = append(args, CachedAdminSetting.AudioCodec)
+	}
+
+	args = append(args, "-threads")
+	args = append(args, strconv.Itoa(CachedAdminSetting.FFmpegThreads)) // 웹서버의 부하를 줄이기 위해서 서버수가 적다면 쓰레드 1개만 사용한다.
+	args = append(args, CachedAdminSetting.ReviewDataPath+"/"+item.ID.Hex()+".mp4")
+	err := exec.Command(CachedAdminSetting.FFmpeg, args...).Run()
 	if err != nil {
 		return err
 	}
