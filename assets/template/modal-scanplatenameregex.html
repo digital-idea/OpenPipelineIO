@@ -40,6 +40,14 @@
                             SS_0010_plate_v001_hi.0001.jpg
                         </button>
                         <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_main(?P<other>\\w+).(?P<frame>\\w+)(?P<ext>.\\w+)';" data-bs-dismiss="modal">
+                            SS_0010_main1_v001.0001.exr
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
+                            document.getElementById('regex').value='(?P<name>\\w+)_main(?P<other>\\w+).(?P<frame>\\w+)(?P<ext>.\\w+)';" data-bs-dismiss="modal">
+                            SS_0010_main1_retime_v001.0001.exr
+                        </button>
+                        <button class="btn btn-outline-darkmode" onclick="
                             document.getElementById('regex').value='(?P<name>\\w+)_v(?P<version>\\w+)(?P<ext>.\\w+)';
                             " data-bs-dismiss="modal">
                             SS_0010_v01.jpg
