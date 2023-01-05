@@ -15,72 +15,6 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// handleAPIRmItemID 함수는 아이템을 삭제한다.
-func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	session, err := mgo.Dial(*flagDBIP)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	defer session.Close()
-	_, level, err := TokenHandler(r, session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	}
-
-	if PmAccessLevel > level {
-		http.Error(w, "권한이 낮아서 삭제할 수 없습니다.", http.StatusUnauthorized)
-		return
-	}
-
-	var project string
-	var id string
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	for key, values := range r.PostForm {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			project = v
-		case "id":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			id = v
-		default:
-			http.Error(w, key+"키는 사용할 수 없습니다.(project, id 키값만 사용가능합니다.)", http.StatusBadRequest)
-			return
-		}
-	}
-	err = rmItemID(session, project, id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	type recipe struct {
-		Project string `json:"project"`
-		ID      string `json:"id"`
-	}
-	rcp := recipe{}
-	rcp.Project = project
-	rcp.ID = id
-	// json 으로 결과 전송
-	data, _ := json.Marshal(rcp)
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
-}
-
 // handleAPI2Item 함수는 아이템 자료구조를 불러온다.
 func handleAPI2GetItem(w http.ResponseWriter, r *http.Request) {
 	session, err := mgo.Dial(*flagDBIP)
@@ -227,61 +161,156 @@ func handleAPITimeinfo(w http.ResponseWriter, r *http.Request) {
 
 // handleAPIRmItem 함수는 아이템을 삭제한다.
 func handleAPIRmItem(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Post Only", http.StatusMethodNotAllowed)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	session, err := mgo.Dial(*flagDBIP)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer session.Close()
-	_, _, err = TokenHandler(r, session)
+
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		Name    string `json:"name"`
+		Type    string `json:"typ"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	userID, accessLevel, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if PmAccessLevel > accessLevel {
+		http.Error(w, "need permission", http.StatusUnauthorized)
+		return
+	}
+	rcp.UserID = userID
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+
+	name := r.FormValue("name")
+	if name == "" {
+		http.Error(w, "need name", http.StatusBadRequest)
+		return
+	}
+	rcp.Name = name
+
+	typ := r.FormValue("type")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
+	}
+	rcp.Type = typ
+
+	err = rmItem(session, project, name, typ)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Remove Item: Project: %s, ID: %s_%s", project, name, typ), project, name, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, project, fmt.Sprintf("Remove Item: \nProject: %s, ID: %s_%s, Author: %s", project, name, typ, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
+// handleAPIRmItemID 함수는 아이템을 삭제한다.
+func handleAPIRmItemID(w http.ResponseWriter, r *http.Request) {
+	session, err := mgo.Dial(*flagDBIP)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer session.Close()
+	userID, level, err := TokenHandler(r, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
-	var project string
-	var name string
-	var typ string
-	info := r.PostForm
-	for key, values := range info {
-		switch key {
-		case "project":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			project = v
-		case "name":
-			v, err := PostFormValueInList(key, values)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-			name = v
-		case "type":
-			if len(values) == 1 {
-				typ = values[0]
-			} else {
-				typ = ""
-			}
-		default:
-			http.Error(w, key+"키는 사용할 수 없습니다.(project, name 키값만 사용가능합니다.)", http.StatusBadRequest)
-			return
-		}
-	}
-	err = rmItem(session, project, name, typ)
-	if err != nil {
-		fmt.Fprintf(w, "{\"error\":\"%v\"}\n", err)
+	if PmAccessLevel > level {
+		http.Error(w, "need permission", http.StatusUnauthorized)
 		return
 	}
-	fmt.Fprintf(w, "{\"error\":\"%s\"}\n", "")
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	type Recipe struct {
+		Project string `json:"project"`
+		ID      string `json:"id"`
+		UserID  string `json:"userid"`
+	}
+	rcp := Recipe{}
+	rcp.UserID = userID
+
+	r.ParseForm() // 받은 문자를 파싱합니다. 파싱되면 map이 됩니다.
+	project := r.FormValue("project")
+	if project == "" {
+		http.Error(w, "need project", http.StatusBadRequest)
+		return
+	}
+	rcp.Project = project
+
+	id := r.FormValue("id")
+	if id == "" {
+		http.Error(w, "need id", http.StatusBadRequest)
+		return
+	}
+	rcp.ID = id
+
+	err = rmItemID(session, project, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// log
+	err = dilog.Add(*flagDBIP, host, fmt.Sprintf("Remove Item: Project: %s, ID: %s", project, rcp.ID), rcp.Project, rcp.ID, "csi3", rcp.UserID, 180)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// slack log
+	err = slacklog(session, project, fmt.Sprintf("Remove Item: \nProject: %s, ID: %s, Author: %s", rcp.Project, rcp.ID, rcp.UserID))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// json 으로 결과 전송
+	data, err := json.Marshal(rcp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
 }
 
 // handleAPISearchname 함수는 입력 문자열을 포함하는 샷,에셋 정보를 검색한다.

@@ -2,12 +2,14 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"os/user"
 	"strings"
 	"time"
 
+	"github.com/digital-idea/dilog"
 	"gopkg.in/mgo.v2"
 )
 
@@ -387,6 +389,17 @@ func rmItemCmd(project, name, typ string) {
 	}
 	defer session.Close()
 	err = rmItem(session, project, name, typ)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// log
+	err = dilog.Add(*flagDBIP, "command", fmt.Sprintf("Remove Item: Project: %s, ID: %s_%s", project, name, typ), project, name+"_"+typ, "csi3", user.Username, 180)
+	if err != nil {
+		log.Fatal(err)
+
+	}
+	// slack log
+	err = slacklog(session, project, fmt.Sprintf("Remove Item: \nProject: %s, ID: %s_%s, Author: %s", project, name, typ, user.Username))
 	if err != nil {
 		log.Fatal(err)
 	}
