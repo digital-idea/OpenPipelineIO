@@ -21,9 +21,8 @@ require (
 	github.com/shurcooL/vfsgen v0.0.0-20181202132449-6a9ea43bcacd
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	go.mongodb.org/mongo-driver v1.5.1
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
-	golang.org/x/sys v0.1.0
-	golang.org/x/tools v0.0.0-20190614205625-5aca471b1d59 // indirect
+	golang.org/x/crypto v0.17.0
+	golang.org/x/sys v0.15.0
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce
 	gopkg.in/yaml.v3 v3.0.1
 	moul.io/http2curl v1.0.0 // indirect
